@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # ===== MySQL =====
+  mysql:
+    image: mysql:8.0
+    container_name: devmatch-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: devmatch
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # ===== Redis =====
+  redis:
+    image: redis:7-alpine
+    container_name: devmatch-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # ===== Spring Boot Backend =====
+  backend:
+    build: ./backend
+    container_name: devmatch-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      DB_PASSWORD: root
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/devmatch?useSSL=false&serverTimezone=Asia/Seoul
+    depends_on:
+      - mysql
+      - redis
+
+volumes:
+  mysql_data:
+  redis_data:
