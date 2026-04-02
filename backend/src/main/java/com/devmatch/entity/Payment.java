@@ -11,28 +11,23 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "payments")
 @EntityListeners(AuditingEntityListener.class)
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
+@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor @Builder
 public class Payment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "matching_id", nullable = false, unique = true)
-    private Matching matching;
+    @Column(name = "matching_id", nullable = false, unique = true)
+    private Long matchingId;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(name = "order_id", nullable = false, unique = true, length = 100)
     private String orderId;
 
-    @Column(unique = true, length = 200)
+    @Column(name = "payment_key", unique = true, length = 200)
     private String paymentKey;
 
     @Column(nullable = false)
@@ -43,25 +38,27 @@ public class Payment {
     @Builder.Default
     private PaymentStatus status = PaymentStatus.PENDING;
 
-    @Column(length = 500)
+    @Column(name = "cancel_reason", length = 500)
     private String cancelReason;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    // — 변경 메서드 —
+
     public void confirm(String paymentKey) {
-        this.paymentKey = paymentKey;
         this.status = PaymentStatus.CONFIRMED;
+        this.paymentKey = paymentKey;
     }
 
-    public void cancel(String reason) {
+    public void cancel(String cancelReason) {
         this.status = PaymentStatus.CANCELLED;
-        this.cancelReason = reason;
+        this.cancelReason = cancelReason;
     }
 
     public void fail() {

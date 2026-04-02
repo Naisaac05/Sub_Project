@@ -3,65 +3,79 @@ package com.devmatch.service;
 import com.devmatch.dto.session.AvailabilityRequest;
 import com.devmatch.dto.session.AvailabilityResponse;
 import com.devmatch.entity.MentorAvailability;
-import com.devmatch.entity.User;
-import com.devmatch.exception.UserNotFoundException;
 import com.devmatch.repository.MentorAvailabilityRepository;
-import com.devmatch.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AvailabilityService {
 
     private final MentorAvailabilityRepository availabilityRepository;
-    private final UserRepository userRepository;
 
+    /**
+     * 멘토 가용 시간 추가
+     */
     @Transactional
     public AvailabilityResponse addAvailability(Long mentorId, AvailabilityRequest request) {
-        User mentor = userRepository.findById(mentorId)
-                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
+        // 중복 확인
+        boolean exists = availabilityRepository.existsByMentorIdAndDayOfWeekAndStartTimeAndEndTime(
+                mentorId, request.getDayOfWeek(), request.getStartTime(), request.getEndTime());
+
+        if (exists) {
+            throw new IllegalArgumentException("이미 등록된 가용 시간입니다");
+        }
 
         MentorAvailability availability = MentorAvailability.builder()
-                .mentor(mentor)
-                .dayOfWeek(DayOfWeek.valueOf(request.getDayOfWeek().toUpperCase()))
+                .mentorId(mentorId)
+                .dayOfWeek(request.getDayOfWeek())
                 .startTime(request.getStartTime())
                 .endTime(request.getEndTime())
                 .build();
 
-        availability = availabilityRepository.save(availability);
-        return AvailabilityResponse.from(availability);
+        MentorAvailability saved = availabilityRepository.save(availability);
+        return AvailabilityResponse.from(saved);
     }
 
-    public List<AvailabilityResponse> getMyAvailabilities(Long mentorId) {
-        return availabilityRepository.findByMentorId(mentorId)
-                .stream()
-                .map(AvailabilityResponse::from)
-                .collect(Collectors.toList());
-    }
-
-    public List<AvailabilityResponse> getMentorAvailabilities(Long mentorId) {
+    /**
+     * 내 가용 시간 목록 (멘토용)
+     */
+    public List<AvailabilityResponse> getMyAvailability(Long mentorId) {
         return availabilityRepository.findByMentorIdAndIsActiveTrue(mentorId)
                 .stream()
                 .map(AvailabilityResponse::from)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 특정 멘토의 가용 시간 조회 (멘티용)
+     */
+    public List<AvailabilityResponse> getMentorAvailability(Long mentorId) {
+        return availabilityRepository.findByMentorIdAndIsActiveTrue(mentorId)
+                .stream()
+                .map(AvailabilityResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 가용 시간 삭제 (비활성화)
+     */
     @Transactional
     public void deleteAvailability(Long mentorId, Long availabilityId) {
         MentorAvailability availability = availabilityRepository.findById(availabilityId)
-                .orElseThrow(() -> new UserNotFoundException("가용 시간을 찾을 수 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("가용 시간을 찾을 수 없습니다: " + availabilityId));
 
-        if (!availability.getMentor().getId().equals(mentorId)) {
-            throw new UserNotFoundException("본인의 가용 시간만 삭제할 수 있습니다");
+        if (!availability.getMentorId().equals(mentorId)) {
+            throw new IllegalArgumentException("본인의 가용 시간만 삭제할 수 있습니다");
         }
 
-        availabilityRepository.delete(availability);
+        availability.deactivate();
     }
 }

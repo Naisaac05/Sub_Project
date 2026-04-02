@@ -2,6 +2,7 @@ package com.devmatch.dto.session;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class AvailabilityRequest {
 
     @NotBlank(message = "요일은 필수입니다")

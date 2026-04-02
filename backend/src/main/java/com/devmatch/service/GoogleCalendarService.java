@@ -1,103 +1,141 @@
 package com.devmatch.service;
 
-import com.devmatch.entity.MentoringSession;
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.UUID;
 
 /**
- * Google Calendar & Meet 연동 서비스.
- *
- * 현재는 Google Cloud Console 설정 전이므로 스텁 구현입니다.
- * 실제 Google API 연동 시 이 클래스의 메서드 내부만 교체하면 됩니다.
- *
- * 실제 구현 시 필요한 작업:
- * 1. Google Cloud Console에서 Calendar API 활성화
- * 2. OAuth2 또는 Service Account 인증 설정
- * 3. com.google.api.services.calendar.Calendar 클라이언트 초기화
- * 4. Event 생성 시 conferenceDataVersion=1로 Meet 링크 자동 생성
+ * Google Calendar API를 통해 멘토링 일정을 생성/삭제합니다.
+ * Calendar bean이 null이면 스텁 모드로 동작합니다 (로그만 출력).
  */
 @Slf4j
 @Service
 public class GoogleCalendarService {
 
+    private final Calendar calendar;
+
+    public GoogleCalendarService(@Nullable Calendar calendar) {
+        this.calendar = calendar;
+        if (calendar == null) {
+            log.info("[GoogleCalendar] 스텁 모드로 초기화됨 — credentials 없이 동작합니다.");
+        } else {
+            log.info("[GoogleCalendar] 실제 Google Calendar API 클라이언트로 초기화됨.");
+        }
+    }
+
     /**
-     * Google Calendar 이벤트를 생성하고 Meet 링크를 반환합니다.
+     * Google Calendar에 멘토링 세션 이벤트를 생성하고
+     * Google Meet 링크를 자동 생성합니다.
      *
-     * @param session 멘토링 세션 정보
-     * @return 생성 결과 (meetLink, calendarEventId) 또는 실패 시 null
+     * @return Map with "meetLink" and "calendarEventId", or null if stub mode
      */
-    public GoogleEventResult createEvent(MentoringSession session) {
-        try {
-            // TODO: 실제 Google Calendar API 연동 시 아래 코드를 교체
-            //
-            // Calendar service = getCalendarService();
-            // Event event = new Event()
-            //     .setSummary("DevMatch 멘토링 - " + session.getCategory())
-            //     .setDescription("멘토: " + session.getMentor().getName()
-            //         + " / 멘티: " + session.getMentee().getName())
-            //     .setStart(new EventDateTime()
-            //         .setDateTime(toGoogleDateTime(session.getSessionDate(), session.getStartTime()))
-            //         .setTimeZone("Asia/Seoul"))
-            //     .setEnd(new EventDateTime()
-            //         .setDateTime(toGoogleDateTime(session.getSessionDate(), session.getEndTime()))
-            //         .setTimeZone("Asia/Seoul"))
-            //     .setAttendees(List.of(
-            //         new EventAttendee().setEmail(session.getMentor().getEmail()),
-            //         new EventAttendee().setEmail(session.getMentee().getEmail())))
-            //     .setConferenceData(new ConferenceData()
-            //         .setCreateRequest(new CreateConferenceRequest()
-            //             .setRequestId(UUID.randomUUID().toString())
-            //             .setConferenceSolutionKey(new ConferenceSolutionKey().setType("hangoutsMeet"))));
-            //
-            // Event created = service.events().insert("primary", event)
-            //     .setConferenceDataVersion(1)
-            //     .execute();
-            //
-            // String meetLink = created.getHangoutLink();
-            // String eventId = created.getId();
-
-            log.info("Google Calendar 이벤트 생성 요청 — 세션 ID: {}, 날짜: {}, 시간: {}-{}",
-                    session.getId(), session.getSessionDate(),
-                    session.getStartTime(), session.getEndTime());
-
-            // 스텁: Google API 미설정 상태에서는 null 반환
-            log.warn("Google Calendar API가 설정되지 않았습니다. Meet 링크 없이 세션이 생성됩니다.");
+    public Map<String, String> createMentoringEvent(
+            String mentorEmail,
+            String menteeEmail,
+            String category,
+            LocalDate sessionDate,
+            LocalTime startTime,
+            LocalTime endTime,
+            String memo
+    ) {
+        // 스텁 모드
+        if (calendar == null) {
+            log.info("[GoogleCalendar STUB] 이벤트 생성 요청 — mentor: {}, mentee: {}, date: {}, time: {}-{}",
+                    mentorEmail, menteeEmail, sessionDate, startTime, endTime);
             return null;
+        }
 
-        } catch (Exception e) {
-            log.error("Google Calendar 이벤트 생성 실패: {}", e.getMessage(), e);
+        try {
+            // 이벤트 기본 정보
+            Event event = new Event()
+                    .setSummary("[DevMatch] " + category + " 멘토링 세션")
+                    .setDescription(memo != null ? memo : "DevMatch 멘토링 세션");
+
+            // 시간 설정 (Asia/Seoul)
+            ZoneId seoulZone = ZoneId.of("Asia/Seoul");
+            ZonedDateTime start = ZonedDateTime.of(sessionDate, startTime, seoulZone);
+            ZonedDateTime end = ZonedDateTime.of(sessionDate, endTime, seoulZone);
+
+            event.setStart(new EventDateTime()
+                    .setDateTime(new DateTime(start.toInstant().toEpochMilli()))
+                    .setTimeZone("Asia/Seoul"));
+            event.setEnd(new EventDateTime()
+                    .setDateTime(new DateTime(end.toInstant().toEpochMilli()))
+                    .setTimeZone("Asia/Seoul"));
+
+            // 참석자 (멘토 + 멘티)
+            EventAttendee mentor = new EventAttendee().setEmail(mentorEmail);
+            EventAttendee mentee = new EventAttendee().setEmail(menteeEmail);
+            event.setAttendees(Arrays.asList(mentor, mentee));
+
+            // Google Meet 자동 생성
+            ConferenceData conferenceData = new ConferenceData();
+            CreateConferenceRequest createRequest = new CreateConferenceRequest()
+                    .setRequestId(UUID.randomUUID().toString())
+                    .setConferenceSolutionKey(new ConferenceSolutionKey().setType("hangoutsMeet"));
+            conferenceData.setCreateRequest(createRequest);
+            event.setConferenceData(conferenceData);
+
+            // 이벤트 생성 API 호출
+            Event created = calendar.events()
+                    .insert("primary", event)
+                    .setConferenceDataVersion(1)
+                    .setSendUpdates("all")
+                    .execute();
+
+            String meetLink = null;
+            if (created.getConferenceData() != null &&
+                created.getConferenceData().getEntryPoints() != null) {
+                meetLink = created.getConferenceData().getEntryPoints().stream()
+                        .filter(ep -> "video".equals(ep.getEntryPointType()))
+                        .map(ep -> ep.getUri())
+                        .findFirst()
+                        .orElse(null);
+            }
+
+            log.info("[GoogleCalendar] 이벤트 생성 완료 — eventId: {}, meetLink: {}",
+                    created.getId(), meetLink);
+
+            return Map.of(
+                    "calendarEventId", created.getId(),
+                    "meetLink", meetLink != null ? meetLink : ""
+            );
+
+        } catch (IOException e) {
+            log.error("[GoogleCalendar] 이벤트 생성 실패: {}", e.getMessage());
             return null;
         }
     }
 
     /**
-     * Google Calendar 이벤트를 삭제합니다.
-     *
-     * @param calendarEventId 삭제할 이벤트 ID
+     * Google Calendar에서 이벤트를 삭제합니다.
      */
     public void deleteEvent(String calendarEventId) {
-        if (calendarEventId == null) {
+        if (calendar == null) {
+            log.info("[GoogleCalendar STUB] 이벤트 삭제 요청 — eventId: {}", calendarEventId);
             return;
         }
+
         try {
-            // TODO: 실제 Google Calendar API 연동 시 아래 코드를 교체
-            // Calendar service = getCalendarService();
-            // service.events().delete("primary", calendarEventId).execute();
-
-            log.info("Google Calendar 이벤트 삭제 요청 — 이벤트 ID: {}", calendarEventId);
-            log.warn("Google Calendar API가 설정되지 않았습니다. 이벤트 삭제를 건너뜁니다.");
-
-        } catch (Exception e) {
-            log.error("Google Calendar 이벤트 삭제 실패: {}", e.getMessage(), e);
+            calendar.events()
+                    .delete("primary", calendarEventId)
+                    .setSendUpdates("all")
+                    .execute();
+            log.info("[GoogleCalendar] 이벤트 삭제 완료 — eventId: {}", calendarEventId);
+        } catch (IOException e) {
+            log.error("[GoogleCalendar] 이벤트 삭제 실패: {}", e.getMessage());
         }
     }
-
-    /**
-     * Google Calendar 이벤트 생성 결과
-     */
-    public record GoogleEventResult(String calendarEventId, String meetLink) {}
 }
