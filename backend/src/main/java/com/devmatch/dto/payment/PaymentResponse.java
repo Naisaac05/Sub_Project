@@ -1,34 +1,39 @@
 package com.devmatch.dto.payment;
 
 import com.devmatch.entity.Payment;
+import com.devmatch.entity.PaymentStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
+@Builder
 public class PaymentResponse {
 
     private Long id;
+    private Long userId;
+    private Long matchingId;
     private String orderId;
     private String paymentKey;
     private Integer amount;
-    private String status;
-    private Long matchingId;
+    private PaymentStatus status;
     private String cancelReason;
     private LocalDateTime createdAt;
 
     public static PaymentResponse from(Payment payment) {
-        return new PaymentResponse(
-                payment.getId(),
-                payment.getOrderId(),
-                payment.getPaymentKey(),
-                payment.getAmount(),
-                payment.getStatus().name(),
-                payment.getMatching().getId(),
-                payment.getCancelReason(),
-                payment.getCreatedAt()
-        );
+        return PaymentResponse.builder()
+                .id(payment.getId())
+                .userId(payment.getUserId())
+                .matchingId(payment.getMatchingId())
+                .orderId(payment.getOrderId())
+                .paymentKey(payment.getPaymentKey())
+                .amount(payment.getAmount())
+                .status(payment.getStatus())
+                .cancelReason(payment.getCancelReason())
+                .createdAt(payment.getCreatedAt())
+                .build();
     }
 }

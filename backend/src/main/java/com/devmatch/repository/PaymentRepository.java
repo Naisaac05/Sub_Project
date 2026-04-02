@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
+    List<Payment> findByUserIdOrderByCreatedAtDesc(Long userId);
+
     Optional<Payment> findByOrderId(String orderId);
 
     Optional<Payment> findByPaymentKey(String paymentKey);
 
-    Optional<Payment> findByMatchingId(Long matchingId);
-
-    List<Payment> findByUserIdOrderByCreatedAtDesc(Long userId);
-
     boolean existsByMatchingId(Long matchingId);
+
+    Optional<Payment> findByMatchingId(Long matchingId);
 }
