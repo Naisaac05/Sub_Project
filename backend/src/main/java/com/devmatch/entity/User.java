@@ -11,11 +11,14 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-@Getter @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor @Builder
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true, length = 100)
@@ -46,7 +49,15 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public void updateName(String name) { this.name = name; }
-    public void updatePassword(String encodedPassword) { this.password = encodedPassword; }
-    public void updateRole(Role role) { this.role = role; }
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
+    public void updateRole(Role role) {
+        this.role = role;
+    }
 }
