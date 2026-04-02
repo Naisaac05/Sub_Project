@@ -4,9 +4,9 @@ spring:
 
   # ===== Database (MySQL) =====
   datasource:
-    url: jdbc:mysql://localhost:3306/devmatch?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3307/devmatch?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: ${DB_PASSWORD:root}
+    password: ${DB_PASSWORD:adminuser}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   # ===== JPA / Hibernate =====
