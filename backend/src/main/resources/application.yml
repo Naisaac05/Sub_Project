@@ -63,3 +63,10 @@ toss:
   payments:
     secret-key: ${TOSS_SECRET_KEY:test_sk_your_key}
     client-key: ${TOSS_CLIENT_KEY:test_ck_your_key}
+    base-url: https://api.tosspayments.com/v1
+
+# ===== Google Calendar =====
+google:
+  calendar:
+    credentials-path: ${GOOGLE_CREDENTIALS_PATH:classpath:google-credentials.json}
+    application-name: DevMatch
