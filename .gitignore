@@ -1,1 +1,15 @@
 node_modules
+.next/
+out/
+build/
+bin/
+.gradle/
+.idea/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
+.env
+*.iml
+*.ipr
+*.iws
