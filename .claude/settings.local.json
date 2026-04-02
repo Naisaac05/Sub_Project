@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:f-lab.kr)",
+      "WebFetch(domain:www.inflearn.com)",
+      "Bash(npx next:*)",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/gradle/gradle/v8.12.1/gradle/wrapper/gradle-wrapper.jar\" -o \"C:/Users/aucu2/Sub_Project/backend/gradle/wrapper/gradle-wrapper.jar\")"
+    ]
+  }
+}
