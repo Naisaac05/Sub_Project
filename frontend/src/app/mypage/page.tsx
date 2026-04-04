@@ -6,7 +6,10 @@ import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import { useAuth } from '@/contexts/AuthContext';
 import { updateMyProfile } from '@/lib/auth';
-import { User, Mail, Shield, Calendar, Edit3, Save, X, Loader2, ArrowLeft } from 'lucide-react';
+import { User, Mail, Shield, Calendar, Edit3, Save, X, Loader2, ArrowLeft, FileText, Users, Trophy, ArrowRight } from 'lucide-react';
+import { getMyResults } from '@/lib/test';
+import { getMyMatchingsAsMentee } from '@/lib/matching';
+import type { TestResultResponse, MatchingResponse } from '@/lib/types';
 
 export default function MyPage() {
   const router = useRouter();
@@ -17,6 +20,8 @@ export default function MyPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [recentResults, setRecentResults] = useState<TestResultResponse[]>([]);
+  const [recentMatchings, setRecentMatchings] = useState<MatchingResponse[]>([]);
 
   // 비로그인 시 로그인 페이지로 리다이렉트
   useEffect(() => {
@@ -24,6 +29,23 @@ export default function MyPage() {
       router.replace('/auth/login');
     }
   }, [isLoading, isLoggedIn, router]);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    const fetchData = async () => {
+      try {
+        const [resultsRes, matchingsRes] = await Promise.all([
+          getMyResults(),
+          getMyMatchingsAsMentee(),
+        ]);
+        if (resultsRes.success) setRecentResults(resultsRes.data.slice(0, 3));
+        if (matchingsRes.success) setRecentMatchings(matchingsRes.data.slice(0, 3));
+      } catch {
+        // silently fail — these are supplementary sections
+      }
+    };
+    fetchData();
+  }, [isLoggedIn]);
 
   // 편집 모드 시작 시 현재 값으로 초기화
   const startEditing = () => {
@@ -92,6 +114,14 @@ export default function MyPage() {
   const roleLabel = user?.role === 'MENTOR' ? '멘토' : user?.role === 'ADMIN' ? '관리자' : '멘티';
   const roleColor = user?.role === 'MENTOR' ? 'text-violet-400 bg-violet-500/10' :
     user?.role === 'ADMIN' ? 'text-amber-400 bg-amber-500/10' : 'text-blue-400 bg-blue-500/10';
+
+  // 매칭 상태 배지 설정
+  const statusConfig: Record<string, { label: string; color: string }> = {
+    PENDING: { label: '대기 중', color: 'text-amber-400 bg-amber-500/10' },
+    ACCEPTED: { label: '수락됨', color: 'text-green-400 bg-green-500/10' },
+    REJECTED: { label: '거절됨', color: 'text-red-400 bg-red-500/10' },
+    CANCELLED: { label: '취소됨', color: 'text-gray-400 bg-gray-500/10' },
+  };
 
   // 로딩 중
   if (isLoading || !user) {
@@ -292,6 +322,134 @@ export default function MyPage() {
                   </>
                 )}
               </div>
+            </div>
+          </div>
+
+          {/* 최근 테스트 결과 */}
+          <div className="glass-card rounded-2xl overflow-hidden shadow-2xl shadow-black/20 mt-6">
+            <div className="px-8 py-6">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                    <FileText size={18} className="text-blue-400" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-white">최근 테스트 결과</h2>
+                </div>
+                <Link
+                  href="/tests/results"
+                  className="flex items-center gap-1 text-sm text-gray-500 hover:text-blue-400 transition-colors"
+                >
+                  전체 보기
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+
+              {recentResults.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 text-center">
+                  <Trophy size={32} className="text-gray-600 mb-3" />
+                  <p className="text-gray-500 text-sm mb-3">아직 응시한 테스트가 없습니다</p>
+                  <Link
+                    href="/tests"
+                    className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                  >
+                    테스트 보러 가기 →
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {recentResults.map((result) => (
+                    <div
+                      key={result.id}
+                      className="flex items-center gap-4 p-4 rounded-xl bg-white/3 border border-white/5"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white text-sm font-medium truncate">{result.testTitle}</p>
+                        <p className="text-gray-500 text-xs mt-0.5">
+                          {new Date(result.submittedAt).toLocaleDateString('ko-KR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-white text-sm font-semibold">
+                          {result.totalScore}<span className="text-gray-500 font-normal">/100</span>
+                        </span>
+                        <span
+                          className={`px-2.5 py-0.5 rounded-md text-xs font-medium ${
+                            result.passed
+                              ? 'text-green-400 bg-green-500/10'
+                              : 'text-red-400 bg-red-500/10'
+                          }`}
+                        >
+                          {result.passed ? '합격' : '불합격'}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 최근 매칭 내역 */}
+          <div className="glass-card rounded-2xl overflow-hidden shadow-2xl shadow-black/20 mt-6 mb-12">
+            <div className="px-8 py-6">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-violet-500/10 flex items-center justify-center">
+                    <Users size={18} className="text-violet-400" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-white">최근 매칭 내역</h2>
+                </div>
+                <Link
+                  href="/matching"
+                  className="flex items-center gap-1 text-sm text-gray-500 hover:text-violet-400 transition-colors"
+                >
+                  전체 보기
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+
+              {recentMatchings.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 text-center">
+                  <Users size={32} className="text-gray-600 mb-3" />
+                  <p className="text-gray-500 text-sm mb-3">매칭 내역이 없습니다</p>
+                  <Link
+                    href="/mentors"
+                    className="text-sm text-violet-400 hover:text-violet-300 transition-colors"
+                  >
+                    멘토 찾아보기 →
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {recentMatchings.map((matching) => {
+                    const status = statusConfig[matching.status] ?? { label: matching.status, color: 'text-gray-400 bg-gray-500/10' };
+                    return (
+                      <div
+                        key={matching.id}
+                        className="flex items-center gap-4 p-4 rounded-xl bg-white/3 border border-white/5"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white text-sm font-medium truncate">{matching.mentorName}</p>
+                          <p className="text-gray-500 text-xs mt-0.5">
+                            {matching.category} · {new Date(matching.createdAt).toLocaleDateString('ko-KR', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            })}
+                          </p>
+                        </div>
+                        <span className={`px-2.5 py-0.5 rounded-md text-xs font-medium shrink-0 ${status.color}`}>
+                          {status.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>

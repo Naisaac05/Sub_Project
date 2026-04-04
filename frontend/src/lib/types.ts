@@ -60,3 +60,91 @@ export interface MentorProfileResponse {
   bio: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
 }
+
+// ─── Test DTOs ───
+export interface TestListResponse {
+  id: number;
+  title: string;
+  category: string;
+  difficulty: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+  timeLimit: number;
+  questionCount: number;
+  passingScore: number;
+}
+
+export interface QuestionResponse {
+  id: number;
+  content: string;
+  options: string[];
+  score: number;
+  orderIndex: number;
+}
+
+export interface TestDetailResponse {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  difficulty: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+  timeLimit: number;
+  passingScore: number;
+  questions: QuestionResponse[];
+}
+
+export interface AnswerRequest {
+  questionId: number;
+  selectedAnswer: number;
+}
+
+export interface TestSubmitRequest {
+  answers: AnswerRequest[];
+}
+
+export interface TestResultResponse {
+  id: number;
+  testId: number;
+  testTitle: string;
+  category: string;
+  totalScore: number;
+  correctCount: number;
+  questionCount: number;
+  passed: boolean;
+  submittedAt: string;
+}
+
+// ─── Matching DTOs ───
+export interface MentorRecommendResponse {
+  mentorId: number;
+  name: string;
+  specialty: string[];
+  careerYears: number;
+  company: string;
+  bio: string;
+  matchScore: number;
+}
+
+export interface MatchingRequest {
+  mentorId: number;
+  category: string;
+  testResultId?: number;
+  message?: string;
+}
+
+export interface MatchingResponse {
+  id: number;
+  menteeId: number;
+  menteeName: string;
+  mentorId: number;
+  mentorName: string;
+  category: string;
+  message: string;
+  status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELLED';
+  rejectedReason: string | null;
+  testScore: number | null;
+  createdAt: string;
+}
+
+export interface MatchingAcceptRequest {
+  accepted: boolean;
+  rejectedReason?: string;
+}

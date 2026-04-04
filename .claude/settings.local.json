@@ -4,7 +4,10 @@
       "WebFetch(domain:f-lab.kr)",
       "WebFetch(domain:www.inflearn.com)",
       "Bash(npx next:*)",
-      "Bash(curl -sL \"https://raw.githubusercontent.com/gradle/gradle/v8.12.1/gradle/wrapper/gradle-wrapper.jar\" -o \"C:/Users/aucu2/Sub_Project/backend/gradle/wrapper/gradle-wrapper.jar\")"
+      "Bash(curl -sL \"https://raw.githubusercontent.com/gradle/gradle/v8.12.1/gradle/wrapper/gradle-wrapper.jar\" -o \"C:/Users/aucu2/Sub_Project/backend/gradle/wrapper/gradle-wrapper.jar\")",
+      "Bash(./gradlew bootRun)",
+      "Bash(curl -s http://localhost:8080/api/tests -H 'Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJqYXZhLm1lbnRvckBkZXZtYXRjaC5jb20iLCJyb2xlIjoiTUVOVE9SIiwiaWF0IjoxNzc1MjcwNTQxLCJleHAiOjE3NzUyNzQxNDF9.T7ju59ihIakgolpRb8gjsd44odn60EJQUSgOvlCpEy7Htpl4JH0o0WmCJwbz9MAg')",
+      "Bash(curl -s -X POST http://localhost:8080/api/tests/1/submit -H 'Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJqYXZhLm1lbnRvckBkZXZtYXRjaC5jb20iLCJyb2xlIjoiTUVOVE9SIiwiaWF0IjoxNzc1MjcwNTQxLCJleHAiOjE3NzUyNzQxNDF9.T7ju59ihIakgolpRb8gjsd44odn60EJQUSgOvlCpEy7Htpl4JH0o0WmCJwbz9MAg' -H 'Content-Type: application/json' -d '{\"answers\":[{\"questionId\":1,\"selectedAnswer\":0},{\"questionId\":2,\"selectedAnswer\":1},{\"questionId\":3,\"selectedAnswer\":2},{\"questionId\":4,\"selectedAnswer\":1},{\"questionId\":5,\"selectedAnswer\":1},{\"questionId\":6,\"selectedAnswer\":1},{\"questionId\":7,\"selectedAnswer\":3},{\"questionId\":8,\"selectedAnswer\":2},{\"questionId\":9,\"selectedAnswer\":1},{\"questionId\":10,\"selectedAnswer\":1}]}')"
     ]
   }
 }

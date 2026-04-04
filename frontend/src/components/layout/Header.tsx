@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
+import { Menu, X, User, LogOut, ChevronDown, FileText, Users } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const navItems = [
@@ -126,6 +126,24 @@ export default function Header() {
                         <User size={16} />
                         마이페이지
                       </Link>
+                      <Link
+                        href="/tests/results"
+                        onClick={() => setDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
+                                 hover:text-white hover:bg-white/5 transition-colors"
+                      >
+                        <FileText size={16} />
+                        테스트 결과
+                      </Link>
+                      <Link
+                        href="/matching"
+                        onClick={() => setDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
+                                 hover:text-white hover:bg-white/5 transition-colors"
+                      >
+                        <Users size={16} />
+                        매칭 내역
+                      </Link>
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
@@ -208,6 +226,22 @@ export default function Header() {
                              hover:bg-white/5 transition-colors"
                   >
                     마이페이지
+                  </Link>
+                  <Link
+                    href="/tests/results"
+                    onClick={() => setMobileOpen(false)}
+                    className="px-4 py-3 text-gray-300 hover:text-white text-center rounded-lg
+                             hover:bg-white/5 transition-colors"
+                  >
+                    테스트 결과
+                  </Link>
+                  <Link
+                    href="/matching"
+                    onClick={() => setMobileOpen(false)}
+                    className="px-4 py-3 text-gray-300 hover:text-white text-center rounded-lg
+                             hover:bg-white/5 transition-colors"
+                  >
+                    매칭 내역
                   </Link>
                   <button
                     onClick={handleLogout}
