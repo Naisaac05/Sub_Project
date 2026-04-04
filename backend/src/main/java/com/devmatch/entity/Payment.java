@@ -21,7 +21,12 @@ public class Payment {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "matching_id", nullable = false, unique = true)
+    // 신청서 연결 (결제는 신청서 기반으로 생성됨)
+    @Column(name = "application_id", nullable = false)
+    private Long applicationId;
+
+    // 매칭 연결 (결제 후 추천→선택 완료 시 세팅됨, 처음에는 null)
+    @Column(name = "matching_id", unique = true)
     private Long matchingId;
 
     @Column(name = "order_id", nullable = false, unique = true, length = 100)
@@ -37,6 +42,30 @@ public class Payment {
     @Column(nullable = false, length = 20)
     @Builder.Default
     private PaymentStatus status = PaymentStatus.PENDING;
+
+    // 수강 방식: "IMMEDIATE" (즉시 시작) or "EARLY_BIRD" (얼리버드)
+    @Column(name = "course_type", length = 20)
+    private String courseType;
+
+    // 묶음 결제 개월 수
+    @Column(name = "months_bundled")
+    @Builder.Default
+    private Integer monthsBundled = 1;
+
+    // 연장 회차 (0=최초 결제, 1=1회 연장, 2=2회 연장...)
+    @Column(name = "renewal_count")
+    @Builder.Default
+    private Integer renewalCount = 0;
+
+    // 적용된 할인 금액 (원)
+    @Column(name = "discount_applied")
+    @Builder.Default
+    private Integer discountApplied = 0;
+
+    // 할부 개월 수
+    @Column(name = "installment_months")
+    @Builder.Default
+    private Integer installmentMonths = 0;
 
     @Column(name = "cancel_reason", length = 500)
     private String cancelReason;
@@ -63,5 +92,9 @@ public class Payment {
 
     public void fail() {
         this.status = PaymentStatus.FAILED;
+    }
+
+    public void linkMatching(Long matchingId) {
+        this.matchingId = matchingId;
     }
 }
