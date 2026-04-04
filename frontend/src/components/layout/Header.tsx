@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 const navItems = [
   { label: '멘토 찾기', href: '/mentors' },
   { label: '실력 테스트', href: '/tests' },
+  { label: '수강 신청', href: '/apply' },
   { label: '커뮤니티', href: '/community' },
   { label: 'FAQ', href: '/faq' },
 ];

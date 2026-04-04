@@ -41,12 +41,12 @@ spring:
 
 # ===== Server =====
 server:
-  port: 8080
+  port: 8081
 
 # ===== JWT =====
 jwt:
   secret: ${JWT_SECRET:your-256-bit-secret-key-here-change-in-production}
-  access-token-expiration: 3600000    # 1시간 (ms)
+  access-token-expiration: 3600000 # 1시간 (ms)
   refresh-token-expiration: 604800000 # 7일 (ms)
 
 # ===== Swagger =====

@@ -34,7 +34,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DB_PASSWORD: root
+      DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/devmatch?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
     depends_on:
       - mysql
