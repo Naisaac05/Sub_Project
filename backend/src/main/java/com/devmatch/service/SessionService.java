@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,6 +26,7 @@ public class SessionService {
     private final MentoringSessionRepository sessionRepository;
     private final UserRepository userRepository;
     private final GoogleCalendarService googleCalendarService;
+    private final JitsiMeetService jitsiMeetService;
 
     /**
      * 멘토링 세션 생성
@@ -58,32 +58,11 @@ public class SessionService {
 
         MentoringSession saved = sessionRepository.save(session);
 
-        // Google Calendar 이벤트 생성 시도
-        try {
-            // 사용자 이메일 조회
-            String menteeEmail = userRepository.findById(userId)
-                    .map(u -> u.getEmail())
-                    .orElse("mentee@devmatch.kr");
-
-            Map<String, String> calendarResult = googleCalendarService.createMentoringEvent(
-                    "mentor@devmatch.kr",  // Matching 연동 시 실제 멘토 이메일로 교체
-                    menteeEmail,
-                    saved.getCategory(),
-                    saved.getSessionDate(),
-                    saved.getStartTime(),
-                    saved.getEndTime(),
-                    saved.getMemo()
-            );
-
-            if (calendarResult != null) {
-                saved.updateMeetLink(calendarResult.get("meetLink"));
-                saved.updateCalendarEventId(calendarResult.get("calendarEventId"));
-                log.info("[Session] Google Calendar 연동 성공 — sessionId: {}", saved.getId());
-            }
-        } catch (Exception e) {
-            // Calendar 연동 실패해도 세션은 유지
-            log.warn("[Session] Google Calendar 연동 실패 (세션은 유지) — {}", e.getMessage());
-        }
+        // Jitsi Meet 링크 생성
+        String meetLink = jitsiMeetService.generateMeetLink(
+                saved.getMatchingId(), saved.getSessionDate());
+        saved.updateMeetLink(meetLink);
+        log.info("[Session] Jitsi Meet 링크 생성 — sessionId: {}, link: {}", saved.getId(), meetLink);
 
         return SessionResponse.from(saved);
     }
