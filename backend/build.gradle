@@ -45,6 +45,9 @@ dependencies {
     implementation 'com.google.apis:google-api-services-calendar:v3-rev20250115-2.0.0'
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.37.0'
 
+    // PDF Generation (Certificate)
+    implementation 'com.github.librepdf:openpdf:2.0.3'
+
     // Database
     runtimeOnly 'com.mysql:mysql-connector-j'
 
