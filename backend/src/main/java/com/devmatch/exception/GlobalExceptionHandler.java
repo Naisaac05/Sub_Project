@@ -84,6 +84,38 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(e.getMessage()));
     }
 
+    // ===== LMS =====
+
+    @ExceptionHandler(LmsAccessDeniedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleLmsAccessDenied(LmsAccessDeniedException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(CurriculumNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleCurriculumNotFound(CurriculumNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(AssignmentNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAssignmentNotFound(AssignmentNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(NoteNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNoteNotFound(NoteNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(ResumeNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleResumeNotFound(ResumeNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
     // ===== Phase 5: 결제 & 커뮤니티 =====
 
     @ExceptionHandler(PaymentNotFoundException.class)
