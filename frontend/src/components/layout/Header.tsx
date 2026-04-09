@@ -3,13 +3,14 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Menu, X, User, LogOut, ChevronDown, FileText, Users } from 'lucide-react';
+import { Menu, X, User, LogOut, ChevronDown, FileText, Users, GraduationCap } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const navItems = [
   { label: '멘토 찾기', href: '/mentors' },
   { label: '실력 테스트', href: '/tests' },
   { label: '수강 신청', href: '/apply' },
+  { label: 'LMS', href: '/lms/dashboard' },
   { label: '커뮤니티', href: '/community' },
   { label: 'FAQ', href: '/faq' },
 ];
