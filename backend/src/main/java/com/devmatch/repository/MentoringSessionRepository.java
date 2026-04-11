@@ -20,4 +20,6 @@ public interface MentoringSessionRepository extends JpaRepository<MentoringSessi
     List<MentoringSession> findByMenteeIdOrMentorIdOrderBySessionDateDesc(Long menteeId, Long mentorId);
 
     List<MentoringSession> findByStatusAndMentorId(SessionStatus status, Long mentorId);
+
+    List<MentoringSession> findByMatchingIdOrderBySessionDateDesc(Long matchingId);
 }

@@ -20,7 +20,7 @@ public class MentoringSession {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "matching_id", nullable = false, unique = true)
+    @Column(name = "matching_id", nullable = false)
     private Long matchingId;
 
     @Column(name = "mentee_id", nullable = false)
@@ -79,5 +79,11 @@ public class MentoringSession {
 
     public void updateCalendarEventId(String calendarEventId) {
         this.calendarEventId = calendarEventId;
+    }
+
+    public void updateSchedule(LocalDate newDate, LocalTime newStart, LocalTime newEnd) {
+        this.sessionDate = newDate;
+        this.startTime = newStart;
+        this.endTime = newEnd;
     }
 }
