@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import { useAuth } from '@/contexts/AuthContext';
 import { updateMyProfile } from '@/lib/auth';
-import { User, Mail, Shield, Calendar, Edit3, Save, X, Loader2, ArrowLeft, FileText, Users, Trophy, ArrowRight } from 'lucide-react';
+import { User, Mail, Shield, Calendar, Edit3, Save, X, Loader2, ArrowLeft, FileText, Users, Trophy, ArrowRight, GraduationCap } from 'lucide-react';
 import { getMyResults } from '@/lib/test';
 import { getMyMatchingsAsMentee } from '@/lib/matching';
 import type { TestResultResponse, MatchingResponse } from '@/lib/types';
@@ -121,6 +121,7 @@ export default function MyPage() {
     ACCEPTED: { label: '수락됨', color: 'text-green-400 bg-green-500/10' },
     REJECTED: { label: '거절됨', color: 'text-red-400 bg-red-500/10' },
     CANCELLED: { label: '취소됨', color: 'text-gray-400 bg-gray-500/10' },
+    TRIAL: { label: '체험 중', color: 'text-cyan-400 bg-cyan-500/10' },
   };
 
   // 로딩 중
@@ -442,9 +443,20 @@ export default function MyPage() {
                             })}
                           </p>
                         </div>
-                        <span className={`px-2.5 py-0.5 rounded-md text-xs font-medium shrink-0 ${status.color}`}>
-                          {status.label}
-                        </span>
+                        {(matching.status === 'ACCEPTED' || matching.status === 'TRIAL') ? (
+                          <button
+                            onClick={() => router.push(`/lms/dashboard?matchingId=${matching.id}`)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
+                                     bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors shrink-0"
+                          >
+                            <GraduationCap size={14} />
+                            LMS
+                          </button>
+                        ) : (
+                          <span className={`px-2.5 py-0.5 rounded-md text-xs font-medium shrink-0 ${status.color}`}>
+                            {status.label}
+                          </span>
+                        )}
                       </div>
                     );
                   })}

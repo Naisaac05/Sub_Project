@@ -94,3 +94,37 @@ export interface CertificateEligibilityResponse {
   assignmentSubmitRate: number; requiredProgress: number;
   requiredAttendance: number; requiredAssignmentRate: number;
 }
+
+// ─── Session (LMS context) ───
+export type SessionStatus = 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
+export interface SessionListResponse {
+  id: number; matchingId: number; menteeId: number; mentorId: number;
+  category: string; sessionDate: string; startTime: string; endTime: string;
+  status: SessionStatus; meetLink: string | null; memo: string | null;
+  hasPendingChangeRequest: boolean; createdAt: string;
+}
+
+// ─── Time Slot ───
+export interface TimeSlotResponse {
+  id: number; matchingId: number; slotDate: string;
+  startTime: string; endTime: string; isBooked: boolean;
+}
+export interface TimeSlotCreateRequest {
+  slotDate: string; startTime: string; endTime: string;
+}
+
+// ─── Booking ───
+export interface BookSessionRequest { slotId: number; memo?: string; }
+
+// ─── Change Request ───
+export type ChangeRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+export interface ChangeRequestResponse {
+  id: number; sessionId: number; requesterId: number;
+  newDate: string; newStartTime: string; newEndTime: string;
+  reason: string | null; status: ChangeRequestStatus;
+  createdAt: string; respondedAt: string | null;
+}
+export interface ChangeRequestCreateRequest {
+  sessionId: number; newDate: string; newStartTime: string;
+  newEndTime: string; reason?: string;
+}

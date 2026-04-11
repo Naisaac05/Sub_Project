@@ -56,6 +56,11 @@ function StatusBadge({ status }: { status: MatchingResponse['status'] }) {
       className: 'bg-gray-50 text-gray-500 border border-gray-200',
       icon: <AlertCircle size={12} />,
     },
+    TRIAL: {
+      label: '체험 중',
+      className: 'bg-cyan-50 text-cyan-600 border border-cyan-200',
+      icon: <Clock size={12} />,
+    },
   };
 
   const { label, className, icon } = config[status];
