@@ -6,6 +6,8 @@ import type {
   NoteResponse, NoteCreateRequest, NoteCommentRequest, ResumeResponse,
   ResumeFeedbackRequest, MockInterviewResponse, MockInterviewCreateRequest,
   CertificateEligibilityResponse,
+  SessionListResponse, TimeSlotResponse, TimeSlotCreateRequest,
+  BookSessionRequest, ChangeRequestResponse, ChangeRequestCreateRequest,
 } from './lms-types';
 
 export const getDashboard = (matchingId: number) =>
@@ -60,3 +62,35 @@ export const checkEligibility = (matchingId: number) =>
   apiClient.get<ApiResponse<CertificateEligibilityResponse>>(`/lms/certificate/eligibility/${matchingId}`);
 export const downloadCertificate = (matchingId: number) =>
   apiClient.get(`/lms/certificate/${matchingId}/download`, { responseType: 'blob' });
+
+// ─── LMS Sessions ───
+export const getLmsSessions = (matchingId: number) =>
+  apiClient.get<ApiResponse<SessionListResponse[]>>(`/lms/sessions/${matchingId}`);
+export const completeLmsSession = (matchingId: number, sessionId: number) =>
+  apiClient.put<ApiResponse<SessionListResponse>>(`/lms/sessions/${matchingId}/${sessionId}/complete`);
+export const cancelLmsSession = (matchingId: number, sessionId: number) =>
+  apiClient.put<ApiResponse<SessionListResponse>>(`/lms/sessions/${matchingId}/${sessionId}/cancel`);
+
+// ─── Time Slots ───
+export const getTimeSlots = (matchingId: number, month: string) =>
+  apiClient.get<ApiResponse<TimeSlotResponse[]>>(`/lms/sessions/${matchingId}/slots`, { params: { month } });
+export const getAvailableSlots = (matchingId: number, date: string) =>
+  apiClient.get<ApiResponse<TimeSlotResponse[]>>(`/lms/sessions/${matchingId}/slots/available`, { params: { date } });
+export const createTimeSlot = (matchingId: number, data: TimeSlotCreateRequest) =>
+  apiClient.post<ApiResponse<TimeSlotResponse>>(`/lms/sessions/${matchingId}/slots`, data);
+export const deleteTimeSlot = (matchingId: number, slotId: number) =>
+  apiClient.delete<ApiResponse<void>>(`/lms/sessions/${matchingId}/slots/${slotId}`);
+
+// ─── Booking ───
+export const bookSession = (matchingId: number, data: BookSessionRequest) =>
+  apiClient.post<ApiResponse<SessionListResponse>>(`/lms/sessions/${matchingId}/book`, data);
+
+// ─── Change Requests ───
+export const getChangeRequests = (matchingId: number, sessionId: number) =>
+  apiClient.get<ApiResponse<ChangeRequestResponse[]>>(`/lms/sessions/${matchingId}/change-requests`, { params: { sessionId } });
+export const createChangeRequest = (matchingId: number, data: ChangeRequestCreateRequest) =>
+  apiClient.post<ApiResponse<ChangeRequestResponse>>(`/lms/sessions/${matchingId}/change-request`, data);
+export const approveChangeRequest = (matchingId: number, requestId: number) =>
+  apiClient.put<ApiResponse<ChangeRequestResponse>>(`/lms/sessions/${matchingId}/change-request/${requestId}/approve`);
+export const rejectChangeRequest = (matchingId: number, requestId: number) =>
+  apiClient.put<ApiResponse<ChangeRequestResponse>>(`/lms/sessions/${matchingId}/change-request/${requestId}/reject`);

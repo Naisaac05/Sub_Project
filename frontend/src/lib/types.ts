@@ -138,7 +138,7 @@ export interface MatchingResponse {
   mentorName: string;
   category: string;
   message: string;
-  status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELLED';
+  status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELLED' | 'TRIAL';
   rejectedReason: string | null;
   testScore: number | null;
   createdAt: string;
