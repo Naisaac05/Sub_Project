@@ -37,6 +37,12 @@ export interface CurriculumCreateRequest {
   matchingId: number; title: string; description?: string; totalWeeks: number;
   startDate: string; endDate: string; discordUrl?: string; weeks: CurriculumWeekRequest[];
 }
+export interface CurriculumLimitResponse {
+  maxWeeks: number;
+  monthsBundled: number;
+  paymentDate: string | null;
+  hasConfirmedPayment: boolean;
+}
 
 // ─── Assignment ───
 export interface SubmissionResponse {
@@ -96,7 +102,7 @@ export interface CertificateEligibilityResponse {
 }
 
 // ─── Session (LMS context) ───
-export type SessionStatus = 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
+export type SessionStatus = 'PENDING' | 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
 export interface SessionListResponse {
   id: number; matchingId: number; menteeId: number; mentorId: number;
   category: string; sessionDate: string; startTime: string; endTime: string;
@@ -108,6 +114,7 @@ export interface SessionListResponse {
 export interface TimeSlotResponse {
   id: number; matchingId: number; slotDate: string;
   startTime: string; endTime: string; isBooked: boolean;
+  proposedByMentee: boolean;
 }
 export interface TimeSlotCreateRequest {
   slotDate: string; startTime: string; endTime: string;
@@ -115,6 +122,11 @@ export interface TimeSlotCreateRequest {
 
 // ─── Booking ───
 export interface BookSessionRequest { slotId: number; memo?: string; }
+
+// ─── Mentor direct session (free time) ───
+export interface DirectSessionCreateRequest {
+  sessionDate: string; startTime: string; endTime: string; memo?: string;
+}
 
 // ─── Change Request ───
 export type ChangeRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED';

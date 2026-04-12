@@ -55,6 +55,26 @@ public class LmsSessionController {
                 lmsSessionService.cancelSession(user.getUserId(), matchingId, sessionId)));
     }
 
+    @Operation(summary = "멘티 예약 승인 (PENDING → SCHEDULED)")
+    @PutMapping("/{sessionId}/approve")
+    public ResponseEntity<ApiResponse<SessionListResponse>> approveSession(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable Long matchingId,
+            @PathVariable Long sessionId) {
+        return ResponseEntity.ok(ApiResponse.success("예약이 승인되었습니다",
+                lmsSessionService.approveSession(user.getUserId(), matchingId, sessionId)));
+    }
+
+    @Operation(summary = "멘티 예약 거절 (PENDING → CANCELLED)")
+    @PutMapping("/{sessionId}/reject")
+    public ResponseEntity<ApiResponse<SessionListResponse>> rejectSession(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable Long matchingId,
+            @PathVariable Long sessionId) {
+        return ResponseEntity.ok(ApiResponse.success("예약이 거절되었습니다",
+                lmsSessionService.rejectSession(user.getUserId(), matchingId, sessionId)));
+    }
+
     // ─── Time Slots ───
 
     @Operation(summary = "월별 가용시간 슬롯 조회")
@@ -88,6 +108,26 @@ public class LmsSessionController {
                 lmsSessionService.createSlot(user.getUserId(), matchingId, request)));
     }
 
+    @Operation(summary = "멘티 희망 시간 제안")
+    @PostMapping("/slots/propose")
+    public ResponseEntity<ApiResponse<TimeSlotResponse>> proposeSlot(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable Long matchingId,
+            @Valid @RequestBody TimeSlotCreateRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(
+                "희망 시간이 제안되었습니다",
+                lmsSessionService.proposeSlot(user.getUserId(), matchingId, request)));
+    }
+
+    @Operation(summary = "멘티 제안 시간 목록 조회")
+    @GetMapping("/slots/proposed")
+    public ResponseEntity<ApiResponse<List<TimeSlotResponse>>> getProposedSlots(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable Long matchingId) {
+        return ResponseEntity.ok(ApiResponse.success(
+                lmsSessionService.getProposedSlots(user.getUserId(), matchingId)));
+    }
+
     @Operation(summary = "가용시간 슬롯 삭제 (멘토)")
     @DeleteMapping("/slots/{slotId}")
     public ResponseEntity<ApiResponse<Void>> deleteSlot(
@@ -96,6 +136,19 @@ public class LmsSessionController {
             @PathVariable Long slotId) {
         lmsSessionService.deleteSlot(user.getUserId(), matchingId, slotId);
         return ResponseEntity.ok(ApiResponse.success("가용시간이 삭제되었습니다", null));
+    }
+
+    // ─── Mentor direct session ───
+
+    @Operation(summary = "세션 바로 등록 (멘토, 시간 자유 입력)")
+    @PostMapping("/direct")
+    public ResponseEntity<ApiResponse<SessionListResponse>> createSessionDirect(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable Long matchingId,
+            @Valid @RequestBody DirectSessionCreateRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(
+                "세션이 등록되었습니다",
+                lmsSessionService.createSessionDirect(user.getUserId(), matchingId, request)));
     }
 
     // ─── Booking ───

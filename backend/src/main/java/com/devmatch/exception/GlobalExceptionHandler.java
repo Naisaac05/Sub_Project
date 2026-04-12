@@ -1,6 +1,7 @@
 package com.devmatch.exception;
 
 import com.devmatch.dto.common.ApiResponse;
+import com.devmatch.service.RefreshSessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ApiResponse<Void>> handleInvalidToken(InvalidTokenException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(RefreshSessionService.InvalidRefreshSessionException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidRefreshSession(
+            RefreshSessionService.InvalidRefreshSessionException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ApiResponse.error(e.getMessage()));
     }
@@ -99,6 +107,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CurriculumNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleCurriculumNotFound(CurriculumNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(CurriculumWeekLimitException.class)
+    public ResponseEntity<ApiResponse<Void>> handleCurriculumWeekLimit(CurriculumWeekLimitException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.error(e.getMessage()));
     }
 

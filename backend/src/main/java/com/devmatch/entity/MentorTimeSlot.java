@@ -38,6 +38,10 @@ public class MentorTimeSlot {
     @Builder.Default
     private Boolean isBooked = false;
 
+    @Column(name = "proposed_by_mentee", nullable = false)
+    @Builder.Default
+    private Boolean proposedByMentee = false;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
