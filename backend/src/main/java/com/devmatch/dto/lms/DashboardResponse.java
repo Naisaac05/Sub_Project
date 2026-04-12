@@ -13,7 +13,7 @@ public class DashboardResponse {
 
     private int progressRate;
     private int attendanceRate;
-    private long dDay;
+    private String mentoringEndDate;
     private AssignmentStats assignmentStats;
     private NextSessionInfo nextSession;
     private List<ActivityItem> recentActivities;

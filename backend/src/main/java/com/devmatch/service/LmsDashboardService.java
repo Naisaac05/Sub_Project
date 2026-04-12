@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -30,16 +29,18 @@ public class LmsDashboardService {
     public DashboardResponse getDashboard(Long userId, Long matchingId) {
         Matching matching = lmsAccessService.validateAccess(userId, matchingId);
 
-        // 진도율: 완료 주차 / 전체 주차
+        // 커리큘럼 로딩 (1회) — 진도율, discordUrl, 종료일 공통 사용
+        Curriculum curriculum = curriculumRepository.findByMatchingId(matchingId).orElse(null);
         int progressRate = 0;
         String discordUrl = null;
-        if (curriculumRepository.existsByMatchingId(matchingId)) {
-            Curriculum curriculum = curriculumRepository.findByMatchingId(matchingId).orElse(null);
-            if (curriculum != null && curriculum.getTotalWeeks() > 0) {
+        String mentoringEndDate = null;
+        if (curriculum != null) {
+            if (curriculum.getTotalWeeks() > 0) {
                 long completedWeeks = weekRepository.countByCurriculumIdAndIsCompletedTrue(curriculum.getId());
                 progressRate = (int) ((completedWeeks * 100) / curriculum.getTotalWeeks());
-                discordUrl = curriculum.getDiscordUrl();
             }
+            discordUrl = curriculum.getDiscordUrl();
+            mentoringEndDate = curriculum.getEndDate() != null ? curriculum.getEndDate().toString() : null;
         }
 
         // 출석률: 완료 세션 / 전체 세션 (CANCELLED 제외)
@@ -57,15 +58,6 @@ public class LmsDashboardService {
                 .filter(s -> s.getStatus() == SessionStatus.COMPLETED)
                 .count();
         int attendanceRate = totalSessions > 0 ? (int) ((completedSessions * 100) / totalSessions) : 0;
-
-        // D-Day: 커리큘럼 종료일까지 남은 일수
-        long dDay = 0;
-        if (curriculumRepository.existsByMatchingId(matchingId)) {
-            Curriculum curriculum = curriculumRepository.findByMatchingId(matchingId).orElse(null);
-            if (curriculum != null) {
-                dDay = ChronoUnit.DAYS.between(LocalDate.now(), curriculum.getEndDate());
-            }
-        }
 
         // 과제 통계
         List<Assignment> assignments = assignmentRepository.findByMatchingIdOrderByCreatedAtDesc(matchingId);
@@ -137,7 +129,7 @@ public class LmsDashboardService {
         return DashboardResponse.builder()
                 .progressRate(progressRate)
                 .attendanceRate(attendanceRate)
-                .dDay(dDay)
+                .mentoringEndDate(mentoringEndDate)
                 .assignmentStats(DashboardResponse.AssignmentStats.builder()
                         .total(totalAssignments)
                         .submitted(submittedAssignments)
