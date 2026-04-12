@@ -40,12 +40,14 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String generateRefreshToken(Long userId) {
+    public String generateRefreshToken(Long userId, String sessionId, int generation) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + refreshTokenExpiration);
 
         return Jwts.builder()
                 .subject(String.valueOf(userId))
+                .claim("sid", sessionId)
+                .claim("gen", generation)
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(secretKey)
@@ -62,18 +64,24 @@ public class JwtTokenProvider {
     }
 
     public Long getUserIdFromToken(String token) {
-        Claims claims = getClaims(token);
-        return Long.parseLong(claims.getSubject());
+        return Long.parseLong(getClaims(token).getSubject());
     }
 
     public String getEmailFromToken(String token) {
-        Claims claims = getClaims(token);
-        return claims.get("email", String.class);
+        return getClaims(token).get("email", String.class);
     }
 
     public Role getRoleFromToken(String token) {
-        Claims claims = getClaims(token);
-        return Role.valueOf(claims.get("role", String.class));
+        return Role.valueOf(getClaims(token).get("role", String.class));
+    }
+
+    public String getSessionIdFromToken(String token) {
+        return getClaims(token).get("sid", String.class);
+    }
+
+    public int getGenerationFromToken(String token) {
+        Integer gen = getClaims(token).get("gen", Integer.class);
+        return gen != null ? gen : 0;
     }
 
     public long getRefreshTokenExpiration() {

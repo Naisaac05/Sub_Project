@@ -1,30 +1,20 @@
 /**
  * Token Storage Utilities
- * api.ts와 auth.ts 양쪽에서 사용하는 토큰 관리 함수들입니다.
- * 순환 의존성 방지를 위해 별도 모듈로 분리합니다.
+ * Access token만 localStorage에 저장합니다.
+ * Refresh token은 HttpOnly 쿠키(/api/auth, SameSite=Strict)로 서버가 관리합니다.
  */
 
-const TOKEN_KEYS = {
-  ACCESS: 'accessToken',
-  REFRESH: 'refreshToken',
-} as const;
+const ACCESS_TOKEN_KEY = 'accessToken';
 
 export function getAccessToken(): string | null {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem(TOKEN_KEYS.ACCESS);
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
 }
 
-export function getRefreshToken(): string | null {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem(TOKEN_KEYS.REFRESH);
+export function setAccessToken(accessToken: string): void {
+  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
 }
 
-export function setTokens(accessToken: string, refreshToken: string): void {
-  localStorage.setItem(TOKEN_KEYS.ACCESS, accessToken);
-  localStorage.setItem(TOKEN_KEYS.REFRESH, refreshToken);
-}
-
-export function clearTokens(): void {
-  localStorage.removeItem(TOKEN_KEYS.ACCESS);
-  localStorage.removeItem(TOKEN_KEYS.REFRESH);
+export function clearAccessToken(): void {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
 }
