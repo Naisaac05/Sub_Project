@@ -1,13 +1,15 @@
 import type { LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 interface StatCardProps {
   label: string;
   value: string | number;
   icon: LucideIcon;
   color?: string;
+  href?: string;
 }
 
-export default function StatCard({ label, value, icon: Icon, color = 'blue' }: StatCardProps) {
+export default function StatCard({ label, value, icon: Icon, color = 'blue', href }: StatCardProps) {
   const colorMap: Record<string, string> = {
     blue: 'from-blue-500 to-cyan-400',
     green: 'from-green-500 to-emerald-400',
@@ -15,8 +17,8 @@ export default function StatCard({ label, value, icon: Icon, color = 'blue' }: S
     orange: 'from-orange-500 to-amber-400',
   };
 
-  return (
-    <div className="bg-[#0f1420] border border-white/5 rounded-2xl p-6">
+  const content = (
+    <>
       <div className="flex items-center justify-between mb-4">
         <span className="text-gray-400 text-sm">{label}</span>
         <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${colorMap[color] || colorMap.blue} flex items-center justify-center`}>
@@ -24,6 +26,21 @@ export default function StatCard({ label, value, icon: Icon, color = 'blue' }: S
         </div>
       </div>
       <p className="text-white text-3xl font-bold">{value}</p>
-    </div>
+    </>
   );
+
+  const baseClass = 'bg-[#0f1420] border border-white/5 rounded-2xl p-6 h-full';
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={`${baseClass} block group transition-colors hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400`}
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return <div className={baseClass}>{content}</div>;
 }
