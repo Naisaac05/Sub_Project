@@ -6,6 +6,7 @@ bin/
 .gradle/
 .idea/
 .vscode/
+.claude/
 *.log
 .DS_Store
 Thumbs.db
