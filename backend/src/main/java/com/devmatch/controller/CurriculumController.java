@@ -2,6 +2,7 @@ package com.devmatch.controller;
 
 import com.devmatch.dto.common.ApiResponse;
 import com.devmatch.dto.lms.CurriculumCreateRequest;
+import com.devmatch.dto.lms.CurriculumLimitResponse;
 import com.devmatch.dto.lms.CurriculumResponse;
 import com.devmatch.security.CustomUserDetails;
 import com.devmatch.service.CurriculumService;
@@ -48,6 +49,15 @@ public class CurriculumController {
             @Valid @RequestBody CurriculumCreateRequest request) {
         CurriculumResponse response = curriculumService.update(user.getUserId(), id, request);
         return ResponseEntity.ok(ApiResponse.success("커리큘럼이 수정되었습니다", response));
+    }
+
+    @Operation(summary = "결제 기반 주차 제한 조회", description = "결제한 개월 수 × 4주 기준의 최대 주차 수를 반환합니다")
+    @GetMapping("/{matchingId}/limit")
+    public ResponseEntity<ApiResponse<CurriculumLimitResponse>> getLimit(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable Long matchingId) {
+        CurriculumLimitResponse response = curriculumService.getLimit(user.getUserId(), matchingId);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @Operation(summary = "주차 완료 토글")

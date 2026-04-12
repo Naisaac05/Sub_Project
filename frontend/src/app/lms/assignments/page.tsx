@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { ClipboardList, Plus, Loader2, Clock, Star, ExternalLink } from 'lucide-react';
+import { ClipboardList, Plus, Loader2, Clock, ExternalLink } from 'lucide-react';
 import { getAssignments, createAssignment, submitAssignment, feedbackAssignment } from '@/lib/lms';
 import type { AssignmentResponse, AssignmentType } from '@/lib/lms-types';
 
@@ -24,7 +24,7 @@ export default function AssignmentsPage() {
 
   const [createForm, setCreateForm] = useState({ type: 'TASK' as AssignmentType, title: '', description: '', dueDate: '' });
   const [submitForm, setSubmitForm] = useState({ submissionUrl: '', submissionNote: '' });
-  const [fbForm, setFbForm] = useState({ feedbackContent: '', grade: '' });
+  const [fbForm, setFbForm] = useState({ feedbackContent: '' });
 
   const fetchData = async () => {
     if (!matchingId) return;
@@ -63,7 +63,7 @@ export default function AssignmentsPage() {
     if (!feedbackModal) return;
     setSubmitting(true); setError('');
     try {
-      await feedbackAssignment(feedbackModal.id, { feedbackContent: fbForm.feedbackContent, grade: fbForm.grade || undefined });
+      await feedbackAssignment(feedbackModal.id, { feedbackContent: fbForm.feedbackContent });
       setFeedbackModal(null);
       fetchData();
     } catch (e: any) { setError(e.response?.data?.message || '피드백 작성에 실패했습니다'); }
@@ -143,7 +143,6 @@ export default function AssignmentsPage() {
                         <div className="mt-2 pt-2 border-t border-white/5">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="text-green-400 text-xs font-medium">멘토 피드백</span>
-                            {a.submission.grade && <span className="flex items-center gap-0.5 text-amber-400 text-xs"><Star size={10} />{a.submission.grade}</span>}
                           </div>
                           <p className="text-gray-300 text-sm">{a.submission.feedbackContent}</p>
                         </div>
@@ -157,7 +156,7 @@ export default function AssignmentsPage() {
                       className="px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors">제출</button>
                   )}
                   {isMentor && a.status === 'SUBMITTED' && (
-                    <button onClick={() => { setFbForm({ feedbackContent: '', grade: '' }); setFeedbackModal(a); }}
+                    <button onClick={() => { setFbForm({ feedbackContent: '' }); setFeedbackModal(a); }}
                       className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors">피드백</button>
                   )}
                 </div>
@@ -177,7 +176,7 @@ export default function AssignmentsPage() {
               <div>
                 <label className="text-gray-400 text-sm">타입</label>
                 <select value={createForm.type} onChange={e => setCreateForm({ ...createForm, type: e.target.value as AssignmentType })}
-                  className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50">
+                  className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50 [&>option]:bg-gray-900 [&>option]:text-white">
                   <option value="TASK">과제</option>
                   <option value="CODE_REVIEW">코드리뷰</option>
                 </select>
@@ -251,14 +250,6 @@ export default function AssignmentsPage() {
                 <label className="text-gray-400 text-sm">피드백 내용</label>
                 <textarea value={fbForm.feedbackContent} onChange={e => setFbForm({ ...fbForm, feedbackContent: e.target.value })} rows={4}
                   className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50 resize-none" />
-              </div>
-              <div>
-                <label className="text-gray-400 text-sm">등급</label>
-                <select value={fbForm.grade} onChange={e => setFbForm({ ...fbForm, grade: e.target.value })}
-                  className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50">
-                  <option value="">선택 안함</option>
-                  <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="F">F</option>
-                </select>
               </div>
             </div>
             <div className="flex gap-3 mt-6">

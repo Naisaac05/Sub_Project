@@ -1,13 +1,14 @@
 import apiClient from './api';
 import type { ApiResponse } from './types';
 import type {
-  DashboardResponse, EnrollmentResponse, CurriculumResponse, CurriculumCreateRequest,
+  DashboardResponse, EnrollmentResponse, CurriculumResponse, CurriculumCreateRequest, CurriculumLimitResponse,
   AssignmentResponse, AssignmentCreateRequest, SubmissionRequest, FeedbackRequest,
   NoteResponse, NoteCreateRequest, NoteCommentRequest, ResumeResponse,
   ResumeFeedbackRequest, MockInterviewResponse, MockInterviewCreateRequest,
   CertificateEligibilityResponse,
   SessionListResponse, TimeSlotResponse, TimeSlotCreateRequest,
-  BookSessionRequest, ChangeRequestResponse, ChangeRequestCreateRequest,
+  BookSessionRequest, DirectSessionCreateRequest,
+  ChangeRequestResponse, ChangeRequestCreateRequest,
 } from './lms-types';
 
 export const getDashboard = (matchingId: number) =>
@@ -22,6 +23,8 @@ export const updateCurriculum = (id: number, data: Partial<CurriculumCreateReque
   apiClient.put<ApiResponse<CurriculumResponse>>(`/lms/curriculum/${id}`, data);
 export const toggleWeekComplete = (weekId: number) =>
   apiClient.put<ApiResponse<void>>(`/lms/curriculum/weeks/${weekId}/complete`);
+export const getCurriculumLimit = (matchingId: number) =>
+  apiClient.get<ApiResponse<CurriculumLimitResponse>>(`/lms/curriculum/${matchingId}/limit`);
 export const createAssignment = (data: AssignmentCreateRequest) =>
   apiClient.post<ApiResponse<AssignmentResponse>>('/lms/assignments', data);
 export const getAssignments = (matchingId: number, type?: string) =>
@@ -70,6 +73,10 @@ export const completeLmsSession = (matchingId: number, sessionId: number) =>
   apiClient.put<ApiResponse<SessionListResponse>>(`/lms/sessions/${matchingId}/${sessionId}/complete`);
 export const cancelLmsSession = (matchingId: number, sessionId: number) =>
   apiClient.put<ApiResponse<SessionListResponse>>(`/lms/sessions/${matchingId}/${sessionId}/cancel`);
+export const approveLmsSession = (matchingId: number, sessionId: number) =>
+  apiClient.put<ApiResponse<SessionListResponse>>(`/lms/sessions/${matchingId}/${sessionId}/approve`);
+export const rejectLmsSession = (matchingId: number, sessionId: number) =>
+  apiClient.put<ApiResponse<SessionListResponse>>(`/lms/sessions/${matchingId}/${sessionId}/reject`);
 
 // ─── Time Slots ───
 export const getTimeSlots = (matchingId: number, month: string) =>
@@ -80,10 +87,18 @@ export const createTimeSlot = (matchingId: number, data: TimeSlotCreateRequest) 
   apiClient.post<ApiResponse<TimeSlotResponse>>(`/lms/sessions/${matchingId}/slots`, data);
 export const deleteTimeSlot = (matchingId: number, slotId: number) =>
   apiClient.delete<ApiResponse<void>>(`/lms/sessions/${matchingId}/slots/${slotId}`);
+export const proposeTimeSlot = (matchingId: number, data: TimeSlotCreateRequest) =>
+  apiClient.post<ApiResponse<TimeSlotResponse>>(`/lms/sessions/${matchingId}/slots/propose`, data);
+export const getProposedSlots = (matchingId: number) =>
+  apiClient.get<ApiResponse<TimeSlotResponse[]>>(`/lms/sessions/${matchingId}/slots/proposed`);
 
 // ─── Booking ───
 export const bookSession = (matchingId: number, data: BookSessionRequest) =>
   apiClient.post<ApiResponse<SessionListResponse>>(`/lms/sessions/${matchingId}/book`, data);
+
+// ─── Mentor direct session (free time) ───
+export const createLmsSessionDirect = (matchingId: number, data: DirectSessionCreateRequest) =>
+  apiClient.post<ApiResponse<SessionListResponse>>(`/lms/sessions/${matchingId}/direct`, data);
 
 // ─── Change Requests ───
 export const getChangeRequests = (matchingId: number, sessionId: number) =>
