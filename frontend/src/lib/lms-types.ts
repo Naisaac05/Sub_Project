@@ -7,7 +7,7 @@ export type NoteType = 'SESSION_REVIEW' | 'WEEKLY_JOURNAL';
 export interface DashboardResponse {
   progressRate: number;
   attendanceRate: number;
-  dDay: number;
+  mentoringEndDate: string | null;
   assignmentStats: { total: number; submitted: number; reviewed: number; };
   nextSession: { id: number; date: string; startTime: string; endTime: string; meetLink: string; category: string; } | null;
   recentActivities: { type: string; title: string; createdAt: string; }[];
