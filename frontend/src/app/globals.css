@@ -24,7 +24,8 @@ body {
 
 /* Hero mesh gradient */
 .hero-gradient {
-  background:
+  background-color: #0a0e1a;
+  background-image:
     radial-gradient(ellipse 80% 50% at 20% 40%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
     radial-gradient(ellipse 60% 60% at 80% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 55%),
     radial-gradient(ellipse 50% 80% at 60% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),

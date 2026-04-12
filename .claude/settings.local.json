@@ -7,7 +7,21 @@
       "Bash(curl -sL \"https://raw.githubusercontent.com/gradle/gradle/v8.12.1/gradle/wrapper/gradle-wrapper.jar\" -o \"C:/Users/aucu2/Sub_Project/backend/gradle/wrapper/gradle-wrapper.jar\")",
       "Bash(./gradlew bootRun)",
       "Bash(curl -s http://localhost:8080/api/tests -H 'Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJqYXZhLm1lbnRvckBkZXZtYXRjaC5jb20iLCJyb2xlIjoiTUVOVE9SIiwiaWF0IjoxNzc1MjcwNTQxLCJleHAiOjE3NzUyNzQxNDF9.T7ju59ihIakgolpRb8gjsd44odn60EJQUSgOvlCpEy7Htpl4JH0o0WmCJwbz9MAg')",
-      "Bash(curl -s -X POST http://localhost:8080/api/tests/1/submit -H 'Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJqYXZhLm1lbnRvckBkZXZtYXRjaC5jb20iLCJyb2xlIjoiTUVOVE9SIiwiaWF0IjoxNzc1MjcwNTQxLCJleHAiOjE3NzUyNzQxNDF9.T7ju59ihIakgolpRb8gjsd44odn60EJQUSgOvlCpEy7Htpl4JH0o0WmCJwbz9MAg' -H 'Content-Type: application/json' -d '{\"answers\":[{\"questionId\":1,\"selectedAnswer\":0},{\"questionId\":2,\"selectedAnswer\":1},{\"questionId\":3,\"selectedAnswer\":2},{\"questionId\":4,\"selectedAnswer\":1},{\"questionId\":5,\"selectedAnswer\":1},{\"questionId\":6,\"selectedAnswer\":1},{\"questionId\":7,\"selectedAnswer\":3},{\"questionId\":8,\"selectedAnswer\":2},{\"questionId\":9,\"selectedAnswer\":1},{\"questionId\":10,\"selectedAnswer\":1}]}')"
+      "Bash(curl -s -X POST http://localhost:8080/api/tests/1/submit -H 'Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJqYXZhLm1lbnRvckBkZXZtYXRjaC5jb20iLCJyb2xlIjoiTUVOVE9SIiwiaWF0IjoxNzc1MjcwNTQxLCJleHAiOjE3NzUyNzQxNDF9.T7ju59ihIakgolpRb8gjsd44odn60EJQUSgOvlCpEy7Htpl4JH0o0WmCJwbz9MAg' -H 'Content-Type: application/json' -d '{\"answers\":[{\"questionId\":1,\"selectedAnswer\":0},{\"questionId\":2,\"selectedAnswer\":1},{\"questionId\":3,\"selectedAnswer\":2},{\"questionId\":4,\"selectedAnswer\":1},{\"questionId\":5,\"selectedAnswer\":1},{\"questionId\":6,\"selectedAnswer\":1},{\"questionId\":7,\"selectedAnswer\":3},{\"questionId\":8,\"selectedAnswer\":2},{\"questionId\":9,\"selectedAnswer\":1},{\"questionId\":10,\"selectedAnswer\":1}]}')",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npm install:*)",
+      "Bash(npm audit:*)",
+      "Bash(npm ls:*)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(netstat -ano)",
+      "Bash(curl:*)",
+      "Bash(docker exec:*)",
+      "Bash(powershell:*)",
+      "Bash(ls -la /c/Users/aucu2/Sub_Project/backend/src/main/java/com/devmatch/exception/GlobalExceptionHandler.java /c/Users/aucu2/Sub_Project/backend/build/classes/java/main/com/devmatch/entity/*.class)",
+      "Bash(docker cp:*)",
+      "Bash(docker stop:*)"
     ]
   }
 }
