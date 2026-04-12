@@ -1,6 +1,7 @@
 package com.devmatch.service;
 
-import com.devmatch.dto.auth.*;
+import com.devmatch.dto.auth.LoginRequest;
+import com.devmatch.dto.auth.SignupRequest;
 import com.devmatch.dto.user.UserResponse;
 import com.devmatch.entity.User;
 import com.devmatch.exception.DuplicateEmailException;
@@ -9,12 +10,9 @@ import com.devmatch.exception.InvalidTokenException;
 import com.devmatch.repository.UserRepository;
 import com.devmatch.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +22,9 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final StringRedisTemplate redisTemplate;
+    private final RefreshSessionService refreshSessionService;
 
-    private static final String REFRESH_TOKEN_PREFIX = "refreshToken:";
+    public record AuthTokens(String accessToken, String refreshToken) {}
 
     @Transactional
     public UserResponse signup(SignupRequest request) {
@@ -44,7 +42,7 @@ public class AuthService {
         return UserResponse.from(savedUser);
     }
 
-    public TokenResponse login(LoginRequest request) {
+    public AuthTokens login(LoginRequest request, String deviceInfo, String ip) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new InvalidCredentialsException("이메일 또는 비밀번호가 올바르지 않습니다"));
 
@@ -53,53 +51,28 @@ public class AuthService {
         }
 
         String accessToken = jwtTokenProvider.generateAccessToken(user.getId(), user.getEmail(), user.getRole());
-        String refreshToken = jwtTokenProvider.generateRefreshToken(user.getId());
+        RefreshSessionService.IssuedSession session =
+                refreshSessionService.createSession(user.getId(), deviceInfo, ip);
 
-        // Redis에 Refresh Token 저장
-        redisTemplate.opsForValue().set(
-                REFRESH_TOKEN_PREFIX + user.getId(),
-                refreshToken,
-                jwtTokenProvider.getRefreshTokenExpiration(),
-                TimeUnit.MILLISECONDS
-        );
-
-        return TokenResponse.of(accessToken, refreshToken);
+        return new AuthTokens(accessToken, session.refreshToken());
     }
 
-    public TokenResponse refresh(TokenRefreshRequest request) {
-        String refreshToken = request.getRefreshToken();
-
-        if (!jwtTokenProvider.validateToken(refreshToken)) {
-            throw new InvalidTokenException("유효하지 않은 Refresh Token입니다");
+    public AuthTokens refresh(String presentedRefreshToken) {
+        if (presentedRefreshToken == null || presentedRefreshToken.isBlank()) {
+            throw new InvalidTokenException("Refresh Token이 없습니다");
         }
 
-        Long userId = jwtTokenProvider.getUserIdFromToken(refreshToken);
+        RefreshSessionService.IssuedSession rotated = refreshSessionService.rotate(presentedRefreshToken);
 
-        // Redis에 저장된 Refresh Token과 비교
-        String storedToken = redisTemplate.opsForValue().get(REFRESH_TOKEN_PREFIX + userId);
-        if (storedToken == null || !storedToken.equals(refreshToken)) {
-            throw new InvalidTokenException("만료되었거나 유효하지 않은 Refresh Token입니다");
-        }
-
-        // 사용자 정보 조회 후 새 토큰 발급
+        Long userId = jwtTokenProvider.getUserIdFromToken(rotated.refreshToken());
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new InvalidTokenException("사용자를 찾을 수 없습니다"));
 
         String newAccessToken = jwtTokenProvider.generateAccessToken(user.getId(), user.getEmail(), user.getRole());
-        String newRefreshToken = jwtTokenProvider.generateRefreshToken(user.getId());
-
-        // Redis에 새 Refresh Token 저장 (기존 것 덮어쓰기)
-        redisTemplate.opsForValue().set(
-                REFRESH_TOKEN_PREFIX + userId,
-                newRefreshToken,
-                jwtTokenProvider.getRefreshTokenExpiration(),
-                TimeUnit.MILLISECONDS
-        );
-
-        return TokenResponse.of(newAccessToken, newRefreshToken);
+        return new AuthTokens(newAccessToken, rotated.refreshToken());
     }
 
-    public void logout(Long userId) {
-        redisTemplate.delete(REFRESH_TOKEN_PREFIX + userId);
+    public void logout(String presentedRefreshToken) {
+        refreshSessionService.revokeByToken(presentedRefreshToken);
     }
 }
