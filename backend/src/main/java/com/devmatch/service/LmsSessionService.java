@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Set;
@@ -63,11 +64,32 @@ public class LmsSessionService {
         if (!session.getMatchingId().equals(matchingId)) {
             throw new LmsAccessDeniedException("해당 매칭의 세션이 아닙니다");
         }
-        if (session.getStatus() != SessionStatus.SCHEDULED) {
-            throw new InvalidSessionStateException("예정 상태의 세션만 취소할 수 있습니다");
+        if (session.getStatus() != SessionStatus.SCHEDULED && session.getStatus() != SessionStatus.PENDING) {
+            throw new InvalidSessionStateException("예정 또는 승인 대기 상태의 세션만 취소할 수 있습니다");
+        }
+        if (hasStarted(session)) {
+            throw new InvalidSessionStateException("이미 시작된 세션은 취소할 수 없습니다");
         }
         session.cancel();
+        unbookMatchingSlot(session);
         return SessionListResponse.from(session, false);
+    }
+
+    private void unbookMatchingSlot(MentoringSession session) {
+        timeSlotRepository
+                .findByMatchingIdAndSlotDateBetweenOrderBySlotDateAscStartTimeAsc(
+                        session.getMatchingId(), session.getSessionDate(), session.getSessionDate())
+                .stream()
+                .filter(s -> s.getStartTime().equals(session.getStartTime())
+                        && s.getEndTime().equals(session.getEndTime())
+                        && s.getIsBooked())
+                .findFirst()
+                .ifPresent(MentorTimeSlot::unbook);
+    }
+
+    private boolean hasStarted(MentoringSession session) {
+        return LocalDateTime.of(session.getSessionDate(), session.getStartTime())
+                .isBefore(LocalDateTime.now());
     }
 
     // ─── Time Slots ───
@@ -85,8 +107,36 @@ public class LmsSessionService {
     public List<TimeSlotResponse> getAvailableSlots(Long userId, Long matchingId, LocalDate date) {
         lmsAccessService.validateAccess(userId, matchingId);
         return timeSlotRepository
-                .findByMatchingIdAndSlotDateAndIsBookedFalseOrderByStartTimeAsc(matchingId, date)
+                .findByMatchingIdAndSlotDateAndIsBookedFalseAndProposedByMenteeFalseOrderByStartTimeAsc(matchingId, date)
                 .stream().map(TimeSlotResponse::from).toList();
+    }
+
+    public List<TimeSlotResponse> getProposedSlots(Long userId, Long matchingId) {
+        lmsAccessService.validateAccess(userId, matchingId);
+        return timeSlotRepository
+                .findByMatchingIdAndProposedByMenteeTrueOrderBySlotDateAscStartTimeAsc(matchingId)
+                .stream().map(TimeSlotResponse::from).toList();
+    }
+
+    @Transactional
+    public TimeSlotResponse proposeSlot(Long userId, Long matchingId, TimeSlotCreateRequest request) {
+        Matching matching = lmsAccessService.validateMenteeAccess(userId, matchingId);
+        if (request.getEndTime().isBefore(request.getStartTime()) || request.getEndTime().equals(request.getStartTime())) {
+            throw new InvalidSessionStateException("종료 시간은 시작 시간 이후여야 합니다");
+        }
+        if (timeSlotRepository.existsByMatchingIdAndSlotDateAndStartTimeAndEndTime(
+                matchingId, request.getSlotDate(), request.getStartTime(), request.getEndTime())) {
+            throw new SessionAlreadyExistsException("동일한 시간대의 슬롯이 이미 존재합니다");
+        }
+        MentorTimeSlot slot = MentorTimeSlot.builder()
+                .mentorId(matching.getMentor().getId())
+                .matchingId(matchingId)
+                .slotDate(request.getSlotDate())
+                .startTime(request.getStartTime())
+                .endTime(request.getEndTime())
+                .proposedByMentee(true)
+                .build();
+        return TimeSlotResponse.from(timeSlotRepository.save(slot));
     }
 
     @Transactional
@@ -111,7 +161,7 @@ public class LmsSessionService {
 
     @Transactional
     public void deleteSlot(Long userId, Long matchingId, Long slotId) {
-        lmsAccessService.validateMentorAccess(userId, matchingId);
+        Matching matching = lmsAccessService.validateAccess(userId, matchingId);
         MentorTimeSlot slot = timeSlotRepository.findById(slotId)
                 .orElseThrow(() -> new TimeSlotNotFoundException("슬롯을 찾을 수 없습니다: " + slotId));
         if (!slot.getMatchingId().equals(matchingId)) {
@@ -120,7 +170,35 @@ public class LmsSessionService {
         if (slot.getIsBooked()) {
             throw new InvalidSessionStateException("이미 예약된 슬롯은 삭제할 수 없습니다");
         }
+        boolean isMentor = matching.getMentor().getId().equals(userId);
+        if (slot.getProposedByMentee() && isMentor) {
+            // mentor can dismiss mentee proposals
+        } else if (!slot.getProposedByMentee() && !isMentor) {
+            throw new LmsAccessDeniedException("멘토만 가용시간 슬롯을 삭제할 수 있습니다");
+        }
         timeSlotRepository.delete(slot);
+    }
+
+    // ─── Mentor direct session creation (free time) ───
+
+    @Transactional
+    public SessionListResponse createSessionDirect(Long userId, Long matchingId, DirectSessionCreateRequest request) {
+        Matching matching = lmsAccessService.validateMentorAccess(userId, matchingId);
+        if (request.getEndTime().isBefore(request.getStartTime())
+                || request.getEndTime().equals(request.getStartTime())) {
+            throw new InvalidSessionStateException("종료 시간은 시작 시간 이후여야 합니다");
+        }
+        MentoringSession session = MentoringSession.builder()
+                .matchingId(matchingId)
+                .menteeId(matching.getMentee().getId())
+                .mentorId(userId)
+                .category(matching.getCategory())
+                .sessionDate(request.getSessionDate())
+                .startTime(request.getStartTime())
+                .endTime(request.getEndTime())
+                .memo(request.getMemo())
+                .build();
+        return SessionListResponse.from(sessionRepository.save(session), false);
     }
 
     // ─── Booking ───
@@ -146,8 +224,40 @@ public class LmsSessionService {
                 .startTime(slot.getStartTime())
                 .endTime(slot.getEndTime())
                 .memo(request.getMemo())
+                .status(SessionStatus.PENDING)
                 .build();
         sessionRepository.save(session);
+        return SessionListResponse.from(session, false);
+    }
+
+    @Transactional
+    public SessionListResponse approveSession(Long userId, Long matchingId, Long sessionId) {
+        lmsAccessService.validateMentorAccess(userId, matchingId);
+        MentoringSession session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new SessionNotFoundException("세션을 찾을 수 없습니다: " + sessionId));
+        if (!session.getMatchingId().equals(matchingId)) {
+            throw new LmsAccessDeniedException("해당 매칭의 세션이 아닙니다");
+        }
+        if (session.getStatus() != SessionStatus.PENDING) {
+            throw new InvalidSessionStateException("승인 대기 상태의 세션만 승인할 수 있습니다");
+        }
+        session.approve();
+        return SessionListResponse.from(session, false);
+    }
+
+    @Transactional
+    public SessionListResponse rejectSession(Long userId, Long matchingId, Long sessionId) {
+        lmsAccessService.validateMentorAccess(userId, matchingId);
+        MentoringSession session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new SessionNotFoundException("세션을 찾을 수 없습니다: " + sessionId));
+        if (!session.getMatchingId().equals(matchingId)) {
+            throw new LmsAccessDeniedException("해당 매칭의 세션이 아닙니다");
+        }
+        if (session.getStatus() != SessionStatus.PENDING) {
+            throw new InvalidSessionStateException("승인 대기 상태의 세션만 거절할 수 있습니다");
+        }
+        session.cancel();
+        unbookMatchingSlot(session);
         return SessionListResponse.from(session, false);
     }
 
@@ -169,6 +279,9 @@ public class LmsSessionService {
         }
         if (session.getStatus() != SessionStatus.SCHEDULED) {
             throw new InvalidSessionStateException("예정 상태의 세션만 변경 요청할 수 있습니다");
+        }
+        if (hasStarted(session)) {
+            throw new InvalidSessionStateException("이미 시작된 세션은 변경 요청할 수 없습니다");
         }
         if (changeRequestRepository.existsBySessionIdAndStatus(session.getId(), ChangeRequestStatus.PENDING)) {
             throw new SessionAlreadyExistsException("이미 대기 중인 변경 요청이 있습니다");
@@ -197,6 +310,9 @@ public class LmsSessionService {
         }
         MentoringSession session = sessionRepository.findById(cr.getSessionId())
                 .orElseThrow(() -> new SessionNotFoundException("세션을 찾을 수 없습니다"));
+        if (hasStarted(session)) {
+            throw new InvalidSessionStateException("이미 시작된 세션은 변경할 수 없습니다");
+        }
         session.updateSchedule(cr.getNewDate(), cr.getNewStartTime(), cr.getNewEndTime());
         cr.approve();
         return ChangeRequestResponse.from(cr);

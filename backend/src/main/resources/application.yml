@@ -49,6 +49,16 @@ jwt:
   access-token-expiration: 3600000 # 1시간 (ms)
   refresh-token-expiration: 604800000 # 7일 (ms)
 
+# ===== Auth Cookie =====
+app:
+  auth:
+    refresh-cookie:
+      name: refresh_token
+      path: /api/auth
+      secure: ${REFRESH_COOKIE_SECURE:false} # 운영에서는 true (HTTPS)
+      same-site: Strict
+    reuse-window-seconds: 300 # 재사용 탐지 윈도우 (5분)
+
 # ===== Swagger =====
 springdoc:
   default-consumes-media-type: application/json

@@ -73,6 +73,10 @@ public class MentoringSession {
         this.status = SessionStatus.COMPLETED;
     }
 
+    public void approve() {
+        this.status = SessionStatus.SCHEDULED;
+    }
+
     public void updateMeetLink(String meetLink) {
         this.meetLink = meetLink;
     }

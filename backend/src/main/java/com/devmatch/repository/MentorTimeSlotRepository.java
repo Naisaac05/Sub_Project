@@ -15,6 +15,11 @@ public interface MentorTimeSlotRepository extends JpaRepository<MentorTimeSlot, 
     List<MentorTimeSlot> findByMatchingIdAndSlotDateAndIsBookedFalseOrderByStartTimeAsc(
             Long matchingId, LocalDate date);
 
+    List<MentorTimeSlot> findByMatchingIdAndSlotDateAndIsBookedFalseAndProposedByMenteeFalseOrderByStartTimeAsc(
+            Long matchingId, LocalDate date);
+
+    List<MentorTimeSlot> findByMatchingIdAndProposedByMenteeTrueOrderBySlotDateAscStartTimeAsc(Long matchingId);
+
     boolean existsByMatchingIdAndSlotDateAndStartTimeAndEndTime(
             Long matchingId, LocalDate date, LocalTime startTime, LocalTime endTime);
 }

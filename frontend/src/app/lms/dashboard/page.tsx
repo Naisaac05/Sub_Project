@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { TrendingUp, Calendar, ClipboardList, Clock, MessageCircle, Video } from 'lucide-react';
+import { TrendingUp, Calendar, ClipboardList, MessageCircle, Video } from 'lucide-react';
 import StatCard from '@/components/lms/StatCard';
+import DDayStatCard from '@/components/lms/DDayStatCard';
 import ActivityFeed from '@/components/lms/ActivityFeed';
 import { getDashboard } from '@/lib/lms';
+import { computeSessionDday, computeEndDateDday } from '@/lib/lms-dday';
 import type { DashboardResponse } from '@/lib/lms-types';
 
 export default function DashboardPage() {
@@ -48,11 +50,40 @@ export default function DashboardPage() {
       </div>
 
       {/* 통계 카드 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="진도율" value={`${data.progressRate}%`} icon={TrendingUp} color="blue" />
-        <StatCard label="출석률" value={`${data.attendanceRate}%`} icon={Calendar} color="green" />
-        <StatCard label="과제" value={`${data.assignmentStats.submitted}/${data.assignmentStats.total}`} icon={ClipboardList} color="purple" />
-        <StatCard label="D-Day" value={`D-${data.dDay}`} icon={Clock} color="orange" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+        <StatCard
+          label="진도율"
+          value={`${data.progressRate}%`}
+          icon={TrendingUp}
+          color="blue"
+          href={`/lms/curriculum?matchingId=${matchingId}`}
+        />
+        <StatCard
+          label="출석률"
+          value={`${data.attendanceRate}%`}
+          icon={Calendar}
+          color="green"
+          href={`/lms/sessions?matchingId=${matchingId}`}
+        />
+        <StatCard
+          label="과제"
+          value={`${data.assignmentStats.submitted}/${data.assignmentStats.total}`}
+          icon={ClipboardList}
+          color="purple"
+          href={`/lms/assignments?matchingId=${matchingId}`}
+        />
+        <DDayStatCard
+          sessionDday={computeSessionDday(
+            data.nextSession?.date ?? null,
+            data.nextSession?.startTime ?? null,
+            data.nextSession?.endTime ?? null
+          )}
+          sessionDate={data.nextSession?.date ?? null}
+          sessionStartTime={data.nextSession?.startTime ?? null}
+          endDateDday={computeEndDateDday(data.mentoringEndDate)}
+          endDate={data.mentoringEndDate}
+          matchingId={matchingId}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

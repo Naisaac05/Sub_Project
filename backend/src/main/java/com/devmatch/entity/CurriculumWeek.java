@@ -50,4 +50,13 @@ public class CurriculumWeek {
             this.completedAt = LocalDateTime.now();
         }
     }
+
+    public void updateContent(Integer weekNumber, String title, String description,
+                              List<String> topics, List<String> resources) {
+        this.weekNumber = weekNumber;
+        this.title = title;
+        this.description = description;
+        this.topics = topics;
+        this.resources = resources;
+    }
 }
