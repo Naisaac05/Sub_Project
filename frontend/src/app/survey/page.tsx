@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import {
@@ -405,6 +405,24 @@ function StepRecommendation({ onBack }: { onBack: () => void }) {
    메인 페이지
    ──────────────────────────────────────────── */
 export default function SurveyPage() {
+  const searchParams = useSearchParams();
+  const applicationId = searchParams.get('applicationId');
+
+  useEffect(() => {
+    if (applicationId) {
+      // 결제 확인 API 호출 (상태를 PAYMENT_COMPLETED로 변경)
+      fetch(`http://localhost:8080/api/applications/${applicationId}/confirm-payment`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(res => res.json())
+      .then(data => console.log('Payment confirmed:', data))
+      .catch(console.error);
+    }
+  }, [applicationId]);
+
   const [step, setStep] = useState(1);
   const [survey, setSurvey] = useState({
     feedbackPreference: '',

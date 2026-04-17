@@ -1,12 +1,13 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { LayoutDashboard, BookOpen, Video, ClipboardList, NotebookPen, Briefcase, Award } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Video, ClipboardList, NotebookPen, Briefcase, Award, Globe } from 'lucide-react';
 
 const menuItems = [
   { label: '대시보드', href: '/lms/dashboard', icon: LayoutDashboard },
   { label: '커리큘럼', href: '/lms/curriculum', icon: BookOpen },
   { label: '멘토링 세션', href: '/lms/sessions', icon: Video },
+  { label: '화상회의', href: '/lms/video-meetings', icon: Globe },
   { label: '과제 / 코드리뷰', href: '/lms/assignments', icon: ClipboardList },
   { label: '학습 노트', href: '/lms/notes', icon: NotebookPen },
   { label: '취업 지원', href: '/lms/career', icon: Briefcase },

@@ -6,12 +6,12 @@
 
 ## 파일 목록
 
-| 파일 | 용도 |
-| --- | --- |
-| `devmatch-full-dump.sql` | 스키마 + 데이터 풀 덤프. 비어있는 DB에 한 번에 복원할 때 사용. |
-| `devmatch-schema.sql` | 스키마(DDL)만. 구조 비교/리뷰용. |
-| `devmatch-data-only.sql` | INSERT 만. 이미 Hibernate가 만든 스키마 위에 데이터만 얹을 때 사용. |
-| `seed-lms.sql` | LMS(매칭/커리큘럼/세션/과제/노트/캘린더) 전용 시드. `backend/src/main/resources/seed-lms.sql`의 사본. |
+| 파일                     | 용도                                                                                                  |
+| ------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `devmatch-full-dump.sql` | 스키마 + 데이터 풀 덤프. 비어있는 DB에 한 번에 복원할 때 사용.                                        |
+| `devmatch-schema.sql`    | 스키마(DDL)만. 구조 비교/리뷰용.                                                                      |
+| `devmatch-data-only.sql` | INSERT 만. 이미 Hibernate가 만든 스키마 위에 데이터만 얹을 때 사용.                                   |
+| `seed-lms.sql`           | LMS(매칭/커리큘럼/세션/과제/노트/캘린더) 전용 시드. `backend/src/main/resources/seed-lms.sql`의 사본. |
 
 > 비고: 일반 테스트/문제/멘토 더미데이터는 백엔드 부팅 시 `DataInitializer`(CommandLineRunner) 가 자동으로 채웁니다. LMS 시드는 자동 생성되지 않으므로 `seed-lms.sql`을 별도로 적용해야 합니다.
 
@@ -34,6 +34,10 @@ PowerShell:
 
 ```powershell
 Get-Content backend/data/devmatch-full-dump.sql | docker exec -i devmatch-mysql mysql -uroot -padminuser devmatch
+```
+
+```cmd.exe /c "docker exec -i devmatch-mysql mysql -uroot -padminuser devmatch < backend\data\devmatch-full-dump.sql"
+
 ```
 
 ### B. 백엔드를 한 번 띄운 뒤 LMS 시드만 추가
