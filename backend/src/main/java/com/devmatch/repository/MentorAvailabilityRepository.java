@@ -14,4 +14,6 @@ public interface MentorAvailabilityRepository extends JpaRepository<MentorAvaila
     boolean existsByMentorIdAndDayOfWeekAndStartTimeAndEndTime(
             Long mentorId, String dayOfWeek,
             java.time.LocalTime startTime, java.time.LocalTime endTime);
+
+    List<MentorAvailability> findByIsWaitingTrueAndIsActiveTrue();
 }

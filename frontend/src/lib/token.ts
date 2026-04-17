@@ -5,8 +5,8 @@
  */
 
 const TOKEN_KEYS = {
-  ACCESS: 'accessToken',
-  REFRESH: 'refreshToken',
+  ACCESS: 'devmatch_accessToken',
+  REFRESH: 'devmatch_refreshToken',
 } as const;
 
 export function getAccessToken(): string | null {

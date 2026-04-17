@@ -20,6 +20,7 @@ public class DataInitializer implements CommandLineRunner {
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
     private final MentorProfileRepository mentorProfileRepository;
+    private final MentorAvailabilityRepository mentorAvailabilityRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -615,6 +616,16 @@ public class DataInitializer implements CommandLineRunner {
                 .company(company)
                 .bio(bio)
                 .status(MentorStatus.APPROVED)
+                .build());
+
+        // 가용성 데이터 추가 (자동 매칭을 위해 필수)
+        mentorAvailabilityRepository.save(MentorAvailability.builder()
+                .mentorId(user.getId())
+                .isWaiting(true)
+                .isActive(true)
+                .dayOfWeek("MONDAY")
+                .startTime(java.time.LocalTime.of(9, 0))
+                .endTime(java.time.LocalTime.of(18, 0))
                 .build());
     }
 }

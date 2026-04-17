@@ -100,14 +100,14 @@ public class LmsDashboardService {
                 activities.add(DashboardResponse.ActivityItem.builder()
                         .type("ASSIGNMENT")
                         .title(a.getTitle())
-                        .createdAt(a.getCreatedAt().toString())
+                        .createdAt(a.getCreatedAt() != null ? a.getCreatedAt().toString() : "N/A")
                         .build()));
 
         noteRepository.findByMatchingIdOrderByCreatedAtDesc(matchingId).stream().limit(3).forEach(n ->
                 activities.add(DashboardResponse.ActivityItem.builder()
                         .type("NOTE")
                         .title(n.getTitle())
-                        .createdAt(n.getCreatedAt().toString())
+                        .createdAt(n.getCreatedAt() != null ? n.getCreatedAt().toString() : "N/A")
                         .build()));
 
         matchingSessions.stream()
@@ -116,10 +116,14 @@ public class LmsDashboardService {
                 .forEach(s -> activities.add(DashboardResponse.ActivityItem.builder()
                         .type("SESSION")
                         .title(s.getCategory() + " 세션 완료")
-                        .createdAt(s.getUpdatedAt().toString())
+                        .createdAt(s.getUpdatedAt() != null ? s.getUpdatedAt().toString() : "N/A")
                         .build()));
 
-        activities.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
+        activities.sort((a, b) -> {
+            if (a.getCreatedAt().equals("N/A")) return 1;
+            if (b.getCreatedAt().equals("N/A")) return -1;
+            return b.getCreatedAt().compareTo(a.getCreatedAt());
+        });
         List<DashboardResponse.ActivityItem> topActivities = activities.stream().limit(5).toList();
 
         // 멘토 정보
