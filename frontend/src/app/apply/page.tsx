@@ -1,503 +1,320 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { loadPaymentWidget, PaymentWidgetInstance } from '@tosspayments/payment-widget-sdk';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import {
-  ArrowRight,
-  ArrowLeft,
-  Check,
-  Sparkles,
-  Zap,
-  BookOpen,
-  Code2,
-  Layers,
-  Clock,
-  CreditCard,
-  Tag,
-  ChevronDown,
-} from 'lucide-react';
+import { Check, Sparkles, Send } from 'lucide-react';
+import { submitApplication } from '@/lib/application';
+import { useAuth } from '@/contexts/AuthContext';
 
-/* ───── 가격 정책 상수 (백엔드와 동기화) ───── */
-const BASE_PRICE = 990_000;
-const RENEWAL_PRICES = [990_000, 990_000, 890_000, 790_000];
-const BUNDLE_DISCOUNTS: Record<number, number> = {
-  1: 0, 2: 0, 3: 0.05, 4: 0.10, 5: 0.15, 6: 0.20,
-};
+/* ───── Option Data ───── */
+const LANGUAGES = ['Java', 'Javascript', 'Python', 'TypeScript', 'C++', 'Go', 'Rust', 'Swift', 'Kotlin', '기타'];
+const PLATFORMS = ['없음', '웹', '안드로이드', 'iOS', '데이터', 'AI', '게임', '임베디드', 'DevOps/인프라', '기타'];
+const LEARNING_PATHS = ['대학교', '부트캠프', '국비학원', '온라인 강의', '외부활동', '독학', '배우지 않음'];
+const STUDY_HOURS = ['2시간 미만', '2~4시간', '4~6시간', '풀타임'];
+const REFERRAL_SOURCES = ['SNS 광고', 'Github', '검색', '지인추천', '블로그', '커뮤니티', '기타'];
 
-function getUnitPrice(renewal: number) {
-  if (renewal >= RENEWAL_PRICES.length) return RENEWAL_PRICES[RENEWAL_PRICES.length - 1];
-  return RENEWAL_PRICES[renewal];
-}
-function getBundleRate(months: number) {
-  if (months >= 6) return 0.20;
-  return BUNDLE_DISCOUNTS[months] ?? 0;
-}
-function formatPrice(n: number) {
-  return n.toLocaleString('ko-KR');
-}
-
-/* ───── 옵션 데이터 ───── */
-const LEVELS = [
-  { value: 'BEGINNER', label: '입문', desc: '프로그래밍을 처음 시작하거나, 기초 문법을 배우는 단계', icon: BookOpen, color: 'text-emerald-500', bg: 'bg-emerald-50', border: 'border-emerald-200' },
-  { value: 'INTERMEDIATE', label: '중급', desc: '간단한 프로젝트를 만들 수 있고, 기본 개념을 이해하는 단계', icon: Code2, color: 'text-blue-500', bg: 'bg-blue-50', border: 'border-blue-200' },
-  { value: 'ADVANCED', label: '심화', desc: '실무 경험이 있으며, 아키텍처와 성능 최적화에 관심 있는 단계', icon: Layers, color: 'text-violet-500', bg: 'bg-violet-50', border: 'border-violet-200' },
-];
-
-const STACKS = [
-  'Java', 'Spring Boot', 'Python', 'Django', 'JavaScript', 'TypeScript',
-  'React', 'Next.js', 'Vue.js', 'Node.js', 'Go', 'Rust',
-  'AWS', 'Docker', 'Kubernetes', 'MySQL', 'PostgreSQL', 'MongoDB',
-];
-
-const CATEGORIES = [
-  { value: 'backend', label: 'Backend 개발' },
-  { value: 'frontend', label: 'Frontend 개발' },
-  { value: 'fullstack', label: 'Fullstack 개발' },
-  { value: 'devops', label: 'DevOps / 인프라' },
-  { value: 'mobile', label: '모바일 (iOS/Android)' },
-  { value: 'data', label: 'Data / AI / ML' },
-];
-
-/* ────────────────────────────────────────────
-   STEP 1: 기본 정보 입력
-   ──────────────────────────────────────────── */
-function StepBasicInfo({
-  form, setForm, onNext,
-}: {
-  form: any; setForm: (f: any) => void; onNext: () => void;
-}) {
-  const isValid = form.currentLevel && form.targetTechStack.length > 0 && form.careerGoal.trim() && form.category;
-
-  return (
-    <div className="animate-fade-in-up">
-      {/* 현재 레벨 */}
-      <div className="mb-10">
-        <label className="block text-sm font-bold text-gray-900 mb-4">현재 실력 수준</label>
-        <div className="grid sm:grid-cols-3 gap-4">
-          {LEVELS.map((lv) => {
-            const selected = form.currentLevel === lv.value;
-            return (
-              <button
-                key={lv.value}
-                onClick={() => setForm({ ...form, currentLevel: lv.value })}
-                className={`relative p-5 rounded-2xl border-2 text-left transition-all duration-300
-                  ${selected
-                    ? `${lv.border} ${lv.bg} shadow-lg scale-[1.02]`
-                    : 'border-gray-100 bg-white hover:border-gray-200 hover:shadow-md'
-                  }`}
-              >
-                {selected && (
-                  <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white shadow flex items-center justify-center">
-                    <Check size={14} className={lv.color} />
-                  </div>
-                )}
-                <lv.icon size={24} className={selected ? lv.color : 'text-gray-400'} />
-                <p className={`mt-3 font-bold ${selected ? 'text-gray-900' : 'text-gray-700'}`}>{lv.label}</p>
-                <p className="mt-1 text-xs text-gray-500 leading-relaxed">{lv.desc}</p>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 카테고리 */}
-      <div className="mb-10">
-        <label className="block text-sm font-bold text-gray-900 mb-4">희망 코스</label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {CATEGORIES.map((cat) => {
-            const selected = form.category === cat.value;
-            return (
-              <button
-                key={cat.value}
-                onClick={() => setForm({ ...form, category: cat.value })}
-                className={`px-4 py-3 rounded-xl border text-sm font-medium transition-all duration-200
-                  ${selected
-                    ? 'border-blue-300 bg-blue-50 text-blue-700 shadow-sm'
-                    : 'border-gray-100 text-gray-600 hover:border-gray-200 hover:bg-gray-50'
-                  }`}
-              >
-                {cat.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 기술 스택 */}
-      <div className="mb-10">
-        <label className="block text-sm font-bold text-gray-900 mb-2">목표 기술 스택</label>
-        <p className="text-xs text-gray-500 mb-4">배우고 싶은 기술을 선택해주세요 (복수 선택)</p>
-        <div className="flex flex-wrap gap-2">
-          {STACKS.map((s) => {
-            const selected = form.targetTechStack.includes(s);
-            return (
-              <button
-                key={s}
-                onClick={() => {
-                  const updated = selected
-                    ? form.targetTechStack.filter((t: string) => t !== s)
-                    : [...form.targetTechStack, s];
-                  setForm({ ...form, targetTechStack: updated });
-                }}
-                className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200
-                  ${selected
-                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md shadow-blue-500/20'
-                    : 'bg-gray-50 text-gray-600 border border-gray-100 hover:border-gray-200 hover:bg-gray-100'
-                  }`}
-              >
-                {s}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 목표 커리어 */}
-      <div className="mb-10">
-        <label className="block text-sm font-bold text-gray-900 mb-2">목표 커리어</label>
-        <input
-          type="text"
-          value={form.careerGoal}
-          onChange={(e) => setForm({ ...form, careerGoal: e.target.value })}
-          placeholder="예: 네카라쿠배 백엔드 개발자, 스타트업 풀스택 개발자"
-          className="w-full px-5 py-4 rounded-xl border border-gray-200 bg-gray-50/50
-                   text-gray-900 placeholder:text-gray-400 text-sm
-                   focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300
-                   transition-all duration-200"
-        />
-      </div>
-
-      {/* 다음 */}
-      <button
-        onClick={onNext}
-        disabled={!isValid}
-        className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2
-                   transition-all duration-300
-                   ${isValid
-                     ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30 hover:scale-[1.01]'
-                     : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                   }`}
-      >
-        다음 단계로
-        <ArrowRight size={18} />
-      </button>
-    </div>
-  );
-}
-
-/* ────────────────────────────────────────────
-   STEP 2: 코스 & 결제 옵션
-   ──────────────────────────────────────────── */
-function StepPaymentOptions({
-  form, setForm, onNext, onBack,
-}: {
-  form: any; setForm: (f: any) => void; onNext: () => void; onBack: () => void;
-}) {
-  const renewalCount = 0; // 신규 유저
-  const unitPrice = getUnitPrice(renewalCount);
-  const rawTotal = unitPrice * form.desiredMonths;
-  const bundleRate = getBundleRate(form.desiredMonths);
-  const discountAmount = Math.round(rawTotal * bundleRate);
-  const finalPrice = rawTotal - discountAmount;
-
-  return (
-    <div className="animate-fade-in-up">
-      {/* 수강 방식 */}
-      <div className="mb-10">
-        <label className="block text-sm font-bold text-gray-900 mb-4">수강 방식</label>
-        <div className="grid sm:grid-cols-2 gap-4">
-          {/* 즉시 시작 */}
-          <button
-            onClick={() => setForm({ ...form, courseType: 'IMMEDIATE' })}
-            className={`relative p-6 rounded-2xl border-2 text-left transition-all duration-300
-              ${form.courseType === 'IMMEDIATE'
-                ? 'border-blue-300 bg-blue-50/50 shadow-lg'
-                : 'border-gray-100 bg-white hover:border-gray-200 hover:shadow-md'
-              }`}
-          >
-            {form.courseType === 'IMMEDIATE' && (
-              <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
-                <Check size={14} className="text-white" />
-              </div>
-            )}
-            <Zap size={22} className={form.courseType === 'IMMEDIATE' ? 'text-blue-500' : 'text-gray-400'} />
-            <p className="mt-3 font-bold text-gray-900">즉시 시작</p>
-            <p className="mt-1 text-xs text-gray-500 leading-relaxed">
-              결제 직후 멘토 추천 및 선택이 진행되며,<br />바로 멘토링을 시작할 수 있습니다.
-            </p>
-          </button>
-
-          {/* 얼리버드 */}
-          <button
-            onClick={() => setForm({ ...form, courseType: 'EARLY_BIRD' })}
-            className={`relative p-6 rounded-2xl border-2 text-left transition-all duration-300
-              ${form.courseType === 'EARLY_BIRD'
-                ? 'border-violet-300 bg-violet-50/50 shadow-lg'
-                : 'border-gray-100 bg-white hover:border-gray-200 hover:shadow-md'
-              }`}
-          >
-            {form.courseType === 'EARLY_BIRD' && (
-              <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-violet-500 flex items-center justify-center">
-                <Check size={14} className="text-white" />
-              </div>
-            )}
-            <Clock size={22} className={form.courseType === 'EARLY_BIRD' ? 'text-violet-500' : 'text-gray-400'} />
-            <p className="mt-3 font-bold text-gray-900">얼리버드</p>
-            <p className="mt-1 text-xs text-gray-500 leading-relaxed">
-              다음 달 첫째 주에 시작합니다.<br />전월 20일경 멘토 선택 알림이 발송됩니다.
-            </p>
-          </button>
-        </div>
-      </div>
-
-      {/* 수강 기간 (고정) */}
-      <div className="mb-10">
-        <label className="block text-sm font-bold text-gray-900 mb-4">수강 기간</label>
-        
-        <div className="p-5 rounded-2xl bg-blue-50 border border-blue-100 flex items-start gap-4">
-          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-            <Tag size={20} className="text-blue-600" />
-          </div>
-          <div>
-            <h4 className="text-sm font-bold text-blue-900 mb-1">최초 등록 시 최소 4개월 과정으로 고정됩니다.</h4>
-            <p className="text-xs text-blue-700 leading-relaxed">
-              기본기를 확실히 다지고 프로젝트까지 완주하기 위해 4개월 과정으로 시작합니다.<br/>
-              (첫 과정 수료 후에는 1개월 단위 추가 연장이 가능합니다.)
-            </p>
-          </div>
-        </div>
-
-        {form.desiredMonths >= 3 && (
-          <div className="mt-4 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-100">
-            <Tag size={14} className="text-emerald-600" />
-            <span className="text-xs font-semibold text-emerald-700">
-              {form.desiredMonths}개월 묶음 할인 {Math.round(bundleRate * 100)}% 적용!
-            </span>
-          </div>
-        )}
-      </div>
-
-      {/* 가격 요약 카드 */}
-      <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-gray-50 to-white border border-gray-100">
-        <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <CreditCard size={16} className="text-blue-500" />
-          결제 예상 금액
-        </h3>
-
-        <div className="space-y-3">
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-500">월 수강료</span>
-            <span className="text-gray-700">{formatPrice(unitPrice)}원</span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-500">수강 기간</span>
-            <span className="text-gray-700">× {form.desiredMonths}개월</span>
-          </div>
-          {discountAmount > 0 && (
-            <div className="flex justify-between text-sm">
-              <span className="text-emerald-600 font-medium">묶음 할인 ({Math.round(bundleRate * 100)}%)</span>
-              <span className="text-emerald-600 font-bold">-{formatPrice(discountAmount)}원</span>
-            </div>
-          )}
-          <div className="pt-3 mt-3 border-t border-gray-100 flex justify-between items-baseline">
-            <span className="text-sm font-bold text-gray-900">총 결제 금액</span>
-            <div className="text-right">
-              {discountAmount > 0 && (
-                <p className="text-xs text-gray-400 line-through">{formatPrice(rawTotal)}원</p>
-              )}
-              <p className="text-2xl font-extrabold text-blue-600 font-[Outfit]">
-                {formatPrice(finalPrice)}<span className="text-sm font-bold ml-0.5">원</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 버튼 */}
-      <div className="flex gap-3">
-        <button
-          onClick={onBack}
-          className="px-6 py-4 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm
-                   hover:bg-gray-50 transition-all duration-200 flex items-center gap-2"
-        >
-          <ArrowLeft size={16} />
-          이전
-        </button>
-        <button
-          onClick={onNext}
-          disabled={!form.courseType}
-          className={`flex-1 py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2
-                     transition-all duration-300
-                     ${form.courseType
-                       ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30 hover:scale-[1.01]'
-                       : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                     }`}
-        >
-          결제하기 — {formatPrice(finalPrice)}원
-          <ArrowRight size={18} />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-/* ────────────────────────────────────────────
-   STEP 3: 토스 결제 위젯
-   ──────────────────────────────────────────── */
-const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
-const customerKey = 'test_customer_key_123'; // 더미 유저 키
-
-function StepPaymentWidget({ form, finalPrice, onBack }: { form: any, finalPrice: number, onBack: () => void }) {
+export default function ApplyPage() {
   const router = useRouter();
-  const paymentWidgetRef = useRef<PaymentWidgetInstance | null>(null);
-  const paymentMethodsWidgetRef = useRef<any>(null);
-
+  const { user, isLoggedIn, isLoading } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // 로그인 체크: 로딩 완료 후 로그인 상태가 아니면 로그인 페이지로
   useEffect(() => {
-    (async () => {
-      const paymentWidget = await loadPaymentWidget(clientKey, customerKey);
-      
-      const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
-        '#payment-widget',
-        { value: finalPrice },
-        { variantKey: 'DEFAULT' }
-      );
+    if (!isLoading && !isLoggedIn) {
+      alert("로그인이 필요한 페이지입니다.");
+      router.push('/auth/login?redirect=/apply');
+    }
+  }, [isLoading, isLoggedIn, router]);
 
-      paymentWidget.renderAgreement(
-        '#agreement',
-        { variantKey: 'AGREEMENT' }
-      );
+  const [form, setForm] = useState({
+    menteeId: 0, 
+    currentLevel: 'BEGINNER',
+    targetTechStack: 'Java, Spring',
+    careerGoal: '백엔드 개발자',
+    category: 'backend',
+    courseType: 'IMMEDIATE',
+    desiredMonths: 4,
+    languages: [] as string[],
+    platforms: [] as string[],
+    isCsMajor: null as boolean | null,
+    learningPaths: [] as string[],
+    careerYears: '',
+    githubUrl: '',
+    projectCount: '',
+    projectDescription: '',
+    weekdayStudyHours: '',
+    weekendStudyHours: '',
+    goal: '',
+    personality: '',
+    selfIntroduction: '',
+    referralSources: [] as string[],
+    referralCode: '',
+    termsAgreed: false,
+  });
 
-      paymentWidgetRef.current = paymentWidget;
-      paymentMethodsWidgetRef.current = paymentMethodsWidget;
-    })();
-  }, [finalPrice]);
-
-  const handlePayment = async () => {
-    const paymentWidget = paymentWidgetRef.current;
-    
-    try {
-      await paymentWidget?.requestPayment({
-        orderId: Math.random().toString(36).substring(2, 11),
-        orderName: `${CATEGORIES.find(c => c.value === form.category)?.label} 멘토링 (${form.desiredMonths}개월)`,
-        successUrl: window.location.origin + '/survey', // 결제 성공 시 바로 성향 조사로 이동
-        failUrl: window.location.origin + '/apply',
-        customerEmail: 'customer123@gmail.com',
-        customerName: '홍길동',
-      });
-    } catch (error) {
-      console.error(error);
+  const toggleArray = (field: keyof typeof form, value: string) => {
+    const arr = form[field] as string[];
+    if (arr.includes(value)) {
+      setForm({ ...form, [field]: arr.filter(v => v !== value) });
+    } else {
+      setForm({ ...form, [field]: [...arr, value] });
     }
   };
 
-  return (
-    <div className="animate-fade-in-up">
-      <div className="mb-4">
-        <h2 className="text-xl font-bold text-gray-900 px-4 pt-4">결제 수단 선택</h2>
-        <div id="payment-widget" className="w-full" />
-      </div>
-      <div id="agreement" className="mb-8 w-full" />
+  const isFormValid = () => {
+    return (
+      form.languages.length > 0 &&
+      form.platforms.length > 0 &&
+      form.isCsMajor !== null &&
+      form.learningPaths.length > 0 &&
+      form.careerYears !== '' &&
+      form.projectCount !== '' &&
+      form.projectDescription.trim() !== '' &&
+      form.weekdayStudyHours !== '' &&
+      form.weekendStudyHours !== '' &&
+      form.goal !== '' &&
+      form.personality !== '' &&
+      form.selfIntroduction.trim() !== '' &&
+      form.referralSources.length > 0 &&
+      form.termsAgreed
+    );
+  };
 
-      <div className="flex gap-3 px-4 pb-4">
-        <button
-          onClick={onBack}
-          className="px-6 py-4 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm
-                   hover:bg-gray-50 transition-all duration-200 flex items-center gap-2"
-        >
-          <ArrowLeft size={16} />
-          이전
-        </button>
-        <button
-          onClick={handlePayment}
-          className="flex-1 py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2
-                     transition-all duration-300 bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30 hover:scale-[1.01]"
-        >
-          {formatPrice(finalPrice)}원 결제하기
-          <ArrowRight size={18} />
-        </button>
-      </div>
+  const handleSubmit = async () => {
+    if (!isLoggedIn || !user) {
+      alert("로그인이 필요합니다.");
+      router.push('/auth/login');
+      return;
+    }
+
+    if (!isFormValid()) {
+      alert("필수 항목을 모두 입력해주세요.");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    try {
+      const submissionData = {
+        ...form,
+        menteeId: user.id
+      };
+
+      // @ts-ignore
+      const response = await submitApplication(submissionData);
+      
+      // 백엔드는 ApplicationResponse를 직접 반환 (ApiResponse 래퍼 없음)
+      // HTTP 200 + 응답 데이터 존재 = 성공
+      const data = response.data ?? response; // axios 응답 또는 직접 데이터
+      
+      if (data && data.id) {
+        if (data.autoMatched) {
+          alert("🎉 지원서가 자동 매칭되어 승인되었습니다! 결제 단계로 이동합니다.");
+          window.location.href = `/apply/payment?applicationId=${data.id}`;
+        } else {
+          alert("제출이 완료되었습니다. 검토 후 결과를 알려드립니다.");
+          window.location.href = '/';
+        }
+      } else {
+        alert("제출이 완료되었습니다. 검토 후 결과를 알려드립니다.");
+        window.location.href = '/';
+      }
+    } catch (e: any) {
+      console.error('지원서 제출 오류:', e);
+      const msg = e?.response?.data?.message || e?.message || "제출 중 오류가 발생했습니다.";
+      alert(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+    <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2 border-b border-gray-100 pb-3">
+      {children}
+    </h3>
+  );
+
+  const QuestionLabel = ({ children, required = true }: { children: React.ReactNode, required?: boolean }) => (
+    <label className="block text-base font-bold text-gray-900 mb-3">
+      <span className="text-blue-500 mr-1">Q.</span> {children}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </label>
+  );
+
+  const MultiChip = ({ options, field }: { options: string[], field: keyof typeof form }) => (
+    <div className="flex flex-wrap gap-2">
+      {options.map(opt => {
+        const selected = (form[field] as string[]).includes(opt);
+        return (
+          <button
+            key={opt}
+            onClick={() => toggleArray(field, opt)}
+            className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
+              ${selected 
+                ? 'bg-blue-50 text-blue-700 border-2 border-blue-200 shadow-sm' 
+                : 'bg-white text-gray-600 border-2 border-gray-100 hover:border-gray-200 hover:bg-gray-50'}`}
+          >
+            {opt}
+          </button>
+        )
+      })}
     </div>
   );
-}
 
-/* ────────────────────────────────────────────
-   메인 페이지
-   ──────────────────────────────────────────── */
-export default function ApplyPage() {
-  const [step, setStep] = useState(1);
-  const [form, setForm] = useState({
-    currentLevel: '',
-    targetTechStack: [] as string[],
-    careerGoal: '',
-    category: '',
-    courseType: '',
-    desiredMonths: 4, // 최초 4개월로 고정
-  });
-
-  const steps = [
-    { num: 1, label: '기본 정보' },
-    { num: 2, label: '옵션 선택' },
-    { num: 3, label: '결제하기' },
-  ];
-
-  /* 최종 가격 계산 (Step 3에서 사용) */
-  const unitPrice = getUnitPrice(0);
-  const rawTotal = unitPrice * form.desiredMonths;
-  const bundleRate = getBundleRate(form.desiredMonths);
-  const discountAmount = Math.round(rawTotal * bundleRate);
-  const finalPrice = rawTotal - discountAmount;
+  const RadioGroup = ({ options, field }: { options: string[], field: keyof typeof form }) => (
+    <div className="flex flex-wrap gap-3">
+      {options.map(opt => {
+        const selected = form[field] === opt;
+        return (
+          <button
+            key={opt}
+            onClick={() => setForm({ ...form, [field]: opt })}
+            className={`flex items-center gap-2 px-4 py-3 rounded-xl border-2 transition-all duration-200
+              ${selected 
+                ? 'border-blue-500 bg-blue-50/30' 
+                : 'border-gray-100 bg-white hover:border-gray-200'}`}
+          >
+            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center
+              ${selected ? 'border-blue-500' : 'border-gray-300'}`}>
+              {selected && <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />}
+            </div>
+            <span className={`text-sm ${selected ? 'font-bold text-blue-900' : 'font-medium text-gray-700'}`}>
+              {opt}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
 
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-white pt-24 pb-20">
-        <div className="max-w-2xl mx-auto px-6">
-          {/* 헤더 */}
-          <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full
-                           bg-blue-50 text-blue-600 text-xs font-bold tracking-wider uppercase mb-4">
-              <Sparkles size={12} />
-              Apply
+      <main className="min-h-screen bg-[#F8FAFC] py-24">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="mb-12">
+            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-100/50 text-blue-700 text-sm font-bold tracking-wider mb-4">
+              <Sparkles size={14} /> DevMatch Mentoring
             </span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-3">
-              수강 신청하기
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-4 leading-tight">
+              시작이 반!<br/>깊이 있는 개발자가 되기 위한 첫걸음.
             </h1>
-            <p className="text-gray-500">나에게 맞는 코스를 선택하고, 멘토링을 시작하세요.</p>
+            <p className="text-gray-500 text-lg leading-relaxed">
+              작성에 들인 노력만큼 잘 맞는 멘토님을 만나실 수 있을 겁니다 :)
+            </p>
           </div>
 
-          {/* 스텝 인디케이터 */}
-          <div className="flex items-center justify-center gap-0 mb-12">
-            {steps.map((s, i) => (
-              <div key={s.num} className="flex items-center">
-                <div className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold
-                                 transition-all duration-300
-                                 ${step >= s.num
-                                   ? 'bg-blue-500 text-white shadow-md shadow-blue-500/30'
-                                   : 'bg-gray-100 text-gray-400'
-                                 }`}>
-                    {step > s.num ? <Check size={14} /> : s.num}
-                  </div>
-                  <span className={`text-sm font-medium hidden sm:block
-                                   ${step >= s.num ? 'text-gray-900' : 'text-gray-400'}`}>
-                    {s.label}
-                  </span>
+          <div className="space-y-8 bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-gray-100">
+            <section className="mb-12">
+              <SectionTitle>개발 배경</SectionTitle>
+              <div className="space-y-8">
+                <div>
+                  <QuestionLabel>사용해보신 언어를 모두 골라주세요.</QuestionLabel>
+                  <MultiChip options={LANGUAGES} field="languages" />
                 </div>
-                {i < steps.length - 1 && (
-                  <div className={`w-12 sm:w-20 h-0.5 mx-3 rounded-full transition-all duration-500
-                                 ${step > s.num ? 'bg-blue-500' : 'bg-gray-200'}`} />
-                )}
+                <div>
+                  <QuestionLabel>경험해보신 플랫폼을 모두 골라주세요.</QuestionLabel>
+                  <MultiChip options={PLATFORMS} field="platforms" />
+                </div>
+                <div>
+                  <QuestionLabel>컴퓨터 전공자이신가요?</QuestionLabel>
+                  <div className="flex gap-4">
+                    <button onClick={() => setForm({ ...form, isCsMajor: true })} className={`flex-1 py-4 rounded-xl border-2 text-center font-bold ${form.isCsMajor === true ? 'border-blue-500 text-blue-700 bg-blue-50' : 'border-gray-100 text-gray-500'}`}>전공자</button>
+                    <button onClick={() => setForm({ ...form, isCsMajor: false })} className={`flex-1 py-4 rounded-xl border-2 text-center font-bold ${form.isCsMajor === false ? 'border-blue-500 text-blue-700 bg-blue-50' : 'border-gray-100 text-gray-500'}`}>비전공자</button>
+                  </div>
+                </div>
+                <div>
+                  <QuestionLabel>어떤 경로로 개발을 배우셨나요?</QuestionLabel>
+                  <MultiChip options={LEARNING_PATHS} field="learningPaths" />
+                </div>
+                <div>
+                  <QuestionLabel>개발자로 일한 경력이 있으신가요?</QuestionLabel>
+                  <RadioGroup options={['경력 없음', '3년차 미만', '5년차 미만', '10년차 미만']} field="careerYears" />
+                </div>
               </div>
-            ))}
-          </div>
+            </section>
 
-          {/* 스텝 내용 */}
-          {step === 1 && <StepBasicInfo form={form} setForm={setForm} onNext={() => setStep(2)} />}
-          {step === 2 && <StepPaymentOptions form={form} setForm={setForm} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
-          {step === 3 && <StepPaymentWidget form={form} finalPrice={finalPrice} onBack={() => setStep(2)} />}
+            <section className="mb-12">
+              <SectionTitle>프로젝트 경험</SectionTitle>
+              <div className="space-y-8">
+                <div>
+                  <QuestionLabel required={false}>Github 주소를 입력해주세요.</QuestionLabel>
+                  <input type="text" value={form.githubUrl} onChange={e => setForm({...form, githubUrl: e.target.value})} placeholder="https://github.com/username" className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 focus:ring-0 transition-colors" />
+                </div>
+                <div>
+                  <QuestionLabel>개발 프로젝트를 몇 개 해보셨나요?</QuestionLabel>
+                  <RadioGroup options={['없음', '1개', '2개', '3개', '4개', '5개', '6개 이상']} field="projectCount" />
+                </div>
+                <div>
+                  <QuestionLabel>현재까지 어떤 것들을 개발해보셨나요?</QuestionLabel>
+                  <textarea value={form.projectDescription} onChange={e => setForm({...form, projectDescription: e.target.value})} placeholder="학교나 회사에서 한 것들, 토이프로젝트 무엇이든 좋습니다." rows={5} className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 transition-colors resize-none" />
+                </div>
+              </div>
+            </section>
+
+            <section className="mb-12">
+              <SectionTitle>학습 계획 및 성향</SectionTitle>
+              <div className="space-y-8">
+                <div>
+                  <QuestionLabel>평일에 들일 수 있는 공부시간이 얼마나 되시나요?</QuestionLabel>
+                  <RadioGroup options={STUDY_HOURS} field="weekdayStudyHours" />
+                </div>
+                <div>
+                  <QuestionLabel>주말에 들일 수 있는 공부시간이 얼마나 되시나요?</QuestionLabel>
+                  <RadioGroup options={STUDY_HOURS} field="weekendStudyHours" />
+                </div>
+                <div>
+                  <QuestionLabel>현재 본인이 원하는 것에 제일 가까운 것은 무엇인가요?</QuestionLabel>
+                  <RadioGroup options={['취업', '이직', '성장']} field="goal" />
+                </div>
+                <div>
+                  <QuestionLabel>본인의 성격은 어떤 편인가요?</QuestionLabel>
+                  <RadioGroup options={['외향적', '내향적']} field="personality" />
+                </div>
+                <div>
+                  <QuestionLabel>자유롭게 본인을 소개해주세요.</QuestionLabel>
+                  <textarea value={form.selfIntroduction} onChange={e => setForm({...form, selfIntroduction: e.target.value})} placeholder="자기소개를 입력해주세요." rows={5} className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 transition-colors resize-none" />
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <SectionTitle>기타</SectionTitle>
+              <div className="space-y-8">
+                <div>
+                  <QuestionLabel>DevMatch를 어떤 경로로 알게 되셨나요?</QuestionLabel>
+                  <MultiChip options={REFERRAL_SOURCES} field="referralSources" />
+                </div>
+                <div className="pt-6 border-t border-gray-100">
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors
+                      ${form.termsAgreed ? 'bg-blue-500 border-blue-500 text-white' : 'border-gray-300 group-hover:border-blue-400'}`}>
+                      {form.termsAgreed && <Check size={16} strokeWidth={3} />}
+                    </div>
+                    <span className="text-gray-900 font-medium select-none">
+                      [필수] 서비스 이용 약관 및 개인정보 처리방침에 동의합니다.
+                    </span>
+                    <input type="checkbox" checked={form.termsAgreed} onChange={e => setForm({...form, termsAgreed: e.target.checked})} className="hidden" />
+                  </label>
+                </div>
+              </div>
+            </section>
+
+            <div className="mt-12">
+              <button
+                onClick={handleSubmit}
+                disabled={!isFormValid() || isSubmitting}
+                className={`w-full py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all duration-300
+                  ${isFormValid() && !isSubmitting
+                    ? 'bg-gray-900 text-white hover:bg-gray-800 shadow-xl'
+                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+              >
+                {isSubmitting ? '제출 중...' : '지원서 제출하기'}
+                {!isSubmitting && <Send size={20} />}
+              </button>
+            </div>
+          </div>
         </div>
       </main>
       <Footer />
