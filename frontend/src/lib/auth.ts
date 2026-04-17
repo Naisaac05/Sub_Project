@@ -1,5 +1,5 @@
 import apiClient from './api';
-import { setTokens, clearTokens } from './token';
+import { setAccessToken, clearAccessToken } from './token';
 import type {
   ApiResponse,
   SignupRequest,
@@ -10,7 +10,10 @@ import type {
 } from './types';
 
 // Re-export token utilities for convenience
-export { getAccessToken, getRefreshToken, clearTokens } from './token';
+export { getAccessToken, clearAccessToken } from './token';
+
+// Back-compat alias used by AuthContext
+export const clearTokens = clearAccessToken;
 
 // ─── Auth API ───
 
@@ -20,25 +23,20 @@ export async function signup(data: SignupRequest): Promise<ApiResponse<UserRespo
   return res.data;
 }
 
-/** 로그인 — 성공 시 토큰을 localStorage에 저장 */
+/** 로그인 — 성공 시 access token을 localStorage에 저장 (refresh token은 HttpOnly 쿠키) */
 export async function login(data: LoginRequest): Promise<ApiResponse<TokenResponse>> {
   const res = await apiClient.post<ApiResponse<TokenResponse>>('/auth/login', data);
   if (res.data.success && res.data.data) {
-    setTokens(res.data.data.accessToken, res.data.data.refreshToken);
+    setAccessToken(res.data.data.accessToken);
   }
   return res.data;
 }
 
-/** 토큰 갱신 */
+/** 토큰 갱신 — refresh token은 쿠키로 자동 전송 */
 export async function refresh(): Promise<ApiResponse<TokenResponse>> {
-  const { getRefreshToken } = await import('./token');
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) {
-    throw new Error('No refresh token available');
-  }
-  const res = await apiClient.post<ApiResponse<TokenResponse>>('/auth/refresh', { refreshToken });
+  const res = await apiClient.post<ApiResponse<TokenResponse>>('/auth/refresh');
   if (res.data.success && res.data.data) {
-    setTokens(res.data.data.accessToken, res.data.data.refreshToken);
+    setAccessToken(res.data.data.accessToken);
   }
   return res.data;
 }
@@ -50,7 +48,7 @@ export async function logout(): Promise<void> {
   } catch {
     // 서버 에러가 나도 클라이언트 토큰은 삭제
   } finally {
-    clearTokens();
+    clearAccessToken();
   }
 }
 

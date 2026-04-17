@@ -1,15 +1,16 @@
 import axios from 'axios';
-import { getAccessToken, getRefreshToken, setTokens, clearTokens } from './token';
+import { getAccessToken, setAccessToken, clearAccessToken } from './token';
 import type { ApiResponse, TokenResponse } from './types';
 
 /**
  * DevMatch API 클라이언트
- * Spring Boot 백엔드 (localhost:8080)와 통신합니다.
- * next.config.js의 rewrite로 /api/* → localhost:8080/api/* 프록시됩니다.
+ * Spring Boot 백엔드와 /api 프리픽스로 통신하며, refresh token은 HttpOnly 쿠키로
+ * 서버가 관리합니다 (클라이언트는 access token만 직접 들고 있음).
  */
 const apiClient = axios.create({
   baseURL: '/api',
   timeout: 10000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -52,7 +53,6 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // 401이 아니거나, 이미 재시도한 요청이거나, refresh/login 요청 자체인 경우 바로 reject
     if (
       error.response?.status !== 401 ||
       originalRequest._retry ||
@@ -62,7 +62,6 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // 이미 refresh 진행 중이면 큐에 대기
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
@@ -76,14 +75,13 @@ apiClient.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      const refreshToken = getRefreshToken();
-      if (!refreshToken) {
-        throw new Error('No refresh token');
-      }
-
-      const res = await axios.post<ApiResponse<TokenResponse>>('/api/auth/refresh', { refreshToken });
+      const res = await axios.post<ApiResponse<TokenResponse>>(
+        '/api/auth/refresh',
+        null,
+        { withCredentials: true }
+      );
       if (res.data.success && res.data.data) {
-        setTokens(res.data.data.accessToken, res.data.data.refreshToken);
+        setAccessToken(res.data.data.accessToken);
         processQueue(null);
         originalRequest.headers.Authorization = `Bearer ${res.data.data.accessToken}`;
         return apiClient(originalRequest);
@@ -91,7 +89,7 @@ apiClient.interceptors.response.use(
       throw new Error('Refresh failed');
     } catch (refreshError) {
       processQueue(refreshError);
-      clearTokens();
+      clearAccessToken();
       if (typeof window !== 'undefined') {
         window.location.href = '/auth/login';
       }

@@ -16,6 +16,7 @@ public class TimeSlotResponse {
     private LocalTime startTime;
     private LocalTime endTime;
     private Boolean isBooked;
+    private Boolean proposedByMentee;
 
     public static TimeSlotResponse from(MentorTimeSlot slot) {
         return TimeSlotResponse.builder()
@@ -25,6 +26,7 @@ public class TimeSlotResponse {
                 .startTime(slot.getStartTime())
                 .endTime(slot.getEndTime())
                 .isBooked(slot.getIsBooked())
+                .proposedByMentee(slot.getProposedByMentee())
                 .build();
     }
 }

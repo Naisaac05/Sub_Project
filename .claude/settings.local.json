@@ -21,7 +21,13 @@
       "Bash(powershell:*)",
       "Bash(ls -la /c/Users/aucu2/Sub_Project/backend/src/main/java/com/devmatch/exception/GlobalExceptionHandler.java /c/Users/aucu2/Sub_Project/backend/build/classes/java/main/com/devmatch/entity/*.class)",
       "Bash(docker cp:*)",
-      "Bash(docker stop:*)"
+      "Bash(docker stop:*)",
+      "Bash(docker start:*)",
+      "Bash(python:*)",
+      "Bash(tasklist)",
+      "Bash(./gradlew compileJava -q)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(tasklist:*)"
     ]
   }
 }

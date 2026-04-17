@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { updateMyProfile } from '@/lib/auth';
 import { User, Mail, Shield, Calendar, Edit3, Save, X, Loader2, ArrowLeft, FileText, Users, Trophy, ArrowRight, GraduationCap } from 'lucide-react';
 import { getMyResults } from '@/lib/test';
-import { getMyMatchingsAsMentee } from '@/lib/matching';
+import { getMyMatchingsAsMentee, getMyMatchingsAsMentor } from '@/lib/matching';
 import type { TestResultResponse, MatchingResponse } from '@/lib/types';
 
 export default function MyPage() {
@@ -34,9 +34,11 @@ export default function MyPage() {
     if (!isLoggedIn) return;
     const fetchData = async () => {
       try {
+        const matchingsPromise =
+          user?.role === 'MENTOR' ? getMyMatchingsAsMentor() : getMyMatchingsAsMentee();
         const [resultsRes, matchingsRes] = await Promise.all([
           getMyResults(),
-          getMyMatchingsAsMentee(),
+          matchingsPromise,
         ]);
         if (resultsRes.success) setRecentResults(resultsRes.data.slice(0, 3));
         if (matchingsRes.success) setRecentMatchings(matchingsRes.data.slice(0, 3));
@@ -45,7 +47,7 @@ export default function MyPage() {
       }
     };
     fetchData();
-  }, [isLoggedIn]);
+  }, [isLoggedIn, user?.role]);
 
   // 편집 모드 시작 시 현재 값으로 초기화
   const startEditing = () => {
@@ -434,7 +436,9 @@ export default function MyPage() {
                         className="flex items-center gap-4 p-4 rounded-xl bg-white/3 border border-white/5"
                       >
                         <div className="flex-1 min-w-0">
-                          <p className="text-white text-sm font-medium truncate">{matching.mentorName}</p>
+                          <p className="text-white text-sm font-medium truncate">
+                            {user?.role === 'MENTOR' ? matching.menteeName : matching.mentorName}
+                          </p>
                           <p className="text-gray-500 text-xs mt-0.5">
                             {matching.category} · {new Date(matching.createdAt).toLocaleDateString('ko-KR', {
                               year: 'numeric',

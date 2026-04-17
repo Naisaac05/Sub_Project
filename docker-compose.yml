@@ -23,6 +23,13 @@ services:
     restart: unless-stopped
     ports:
       - "6379:6379"
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --save 900 1
+      --save 300 10
+      --save 60 10000
     volumes:
       - redis_data:/data
 

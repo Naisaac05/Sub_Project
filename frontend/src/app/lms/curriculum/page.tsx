@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { BookOpen, CheckCircle, Circle, Plus, Loader2, ExternalLink } from 'lucide-react';
-import { getCurriculum, createCurriculum, updateCurriculum, toggleWeekComplete } from '@/lib/lms';
-import type { CurriculumResponse, CurriculumWeekResponse, CurriculumWeekRequest } from '@/lib/lms-types';
+import { getCurriculum, createCurriculum, updateCurriculum, toggleWeekComplete, getCurriculumLimit } from '@/lib/lms';
+import type { CurriculumResponse, CurriculumWeekResponse, CurriculumWeekRequest, CurriculumLimitResponse } from '@/lib/lms-types';
 
 export default function CurriculumPage() {
   const searchParams = useSearchParams();
@@ -14,6 +14,7 @@ export default function CurriculumPage() {
   const isMentor = user?.role === 'MENTOR';
 
   const [curriculum, setCurriculum] = useState<CurriculumResponse | null>(null);
+  const [limit, setLimit] = useState<CurriculumLimitResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [createModal, setCreateModal] = useState(false);
   const [weekModal, setWeekModal] = useState<{ editing?: CurriculumWeekResponse } | null>(null);
@@ -21,7 +22,7 @@ export default function CurriculumPage() {
   const [error, setError] = useState('');
 
   // Create form
-  const [createForm, setCreateForm] = useState({ title: '', description: '', totalWeeks: 8, startDate: '', endDate: '' });
+  const [createForm, setCreateForm] = useState({ title: '', description: '', totalWeeks: 4, startDate: '', endDate: '' });
   // Week form
   const [weekForm, setWeekForm] = useState<CurriculumWeekRequest>({ weekNumber: 1, title: '', description: '', topics: [], resources: [] });
   const [topicInput, setTopicInput] = useState('');
@@ -36,9 +37,22 @@ export default function CurriculumPage() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchData(); }, [matchingId]);
+  const fetchLimit = async () => {
+    if (!matchingId) return;
+    try {
+      const res = await getCurriculumLimit(matchingId);
+      setLimit(res.data.data);
+    } catch { setLimit(null); }
+  };
+
+  useEffect(() => { fetchData(); fetchLimit(); }, [matchingId]);
+
+  const maxWeeks = limit?.maxWeeks ?? 0;
+  const atLimit = maxWeeks > 0 && (curriculum?.weeks.length ?? 0) >= maxWeeks;
 
   const handleToggle = async (weekId: number) => {
+    if (isMentor) return;
+    setError('');
     try {
       await toggleWeekComplete(weekId);
       fetchData();
@@ -100,10 +114,23 @@ export default function CurriculumPage() {
           <BookOpen size={48} className="mx-auto text-gray-600 mb-4" />
           <p className="text-gray-400 mb-4">아직 등록된 커리큘럼이 없습니다.</p>
           {isMentor && (
-            <button onClick={() => setCreateModal(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-blue-500">
-              <Plus size={16} />커리큘럼 만들기
-            </button>
+            <>
+              <button onClick={() => {
+                  setError('');
+                  setCreateForm(f => ({ ...f, totalWeeks: Math.min(f.totalWeeks || 4, maxWeeks || 4) }));
+                  setCreateModal(true);
+                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-blue-500">
+                <Plus size={16} />커리큘럼 만들기
+              </button>
+              {limit && (
+                <p className="text-xs text-gray-500 mt-3">
+                  {limit.hasConfirmedPayment
+                    ? `결제 ${limit.monthsBundled}개월 기준 최대 ${limit.maxWeeks}주차까지 설정 가능`
+                    : `결제 미확인 — 기본 ${limit.maxWeeks}주차까지 설정 가능`}
+                </p>
+              )}
+            </>
           )}
         </div>
         {createModal && renderCreateModal()}
@@ -130,8 +157,13 @@ export default function CurriculumPage() {
             </div>
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="text-gray-400 text-sm">총 주차</label>
-                <input type="number" value={createForm.totalWeeks} onChange={e => setCreateForm({ ...createForm, totalWeeks: Number(e.target.value) })} min={1}
+                <label className="text-gray-400 text-sm">총 주차{maxWeeks > 0 && <span className="text-gray-500"> (최대 {maxWeeks})</span>}</label>
+                <input type="number" value={createForm.totalWeeks}
+                  onChange={e => {
+                    const v = Number(e.target.value);
+                    setCreateForm({ ...createForm, totalWeeks: maxWeeks > 0 ? Math.min(v, maxWeeks) : v });
+                  }}
+                  min={1} max={maxWeeks > 0 ? maxWeeks : undefined}
                   className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50" />
               </div>
               <div>
@@ -166,13 +198,27 @@ export default function CurriculumPage() {
           {curriculum.description && <p className="text-gray-400 mt-1">{curriculum.description}</p>}
         </div>
         {isMentor && (
-          <button onClick={() => {
-            setWeekForm({ weekNumber: (curriculum.weeks.length || 0) + 1, title: '', description: '', topics: [], resources: [] });
-            setTopicInput(''); setResourceInput('');
-            setWeekModal({});
-          }} className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 transition-colors">
-            <Plus size={16} />주차 추가
-          </button>
+          <div className="flex flex-col items-end gap-1">
+            <button
+              onClick={() => {
+                if (atLimit) return;
+                setError('');
+                setWeekForm({ weekNumber: (curriculum.weeks.length || 0) + 1, title: '', description: '', topics: [], resources: [] });
+                setTopicInput(''); setResourceInput('');
+                setWeekModal({});
+              }}
+              disabled={atLimit}
+              title={atLimit ? `결제한 ${limit?.monthsBundled ?? ''}개월(${maxWeeks}주차) 한도에 도달했습니다` : undefined}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-500/10">
+              <Plus size={16} />주차 추가
+            </button>
+            {limit && maxWeeks > 0 && (
+              <p className="text-[11px] text-gray-500">
+                {curriculum.weeks.length}/{maxWeeks}주차
+                {limit.hasConfirmedPayment ? ` · 결제 ${limit.monthsBundled}개월` : ' · 결제 미확인'}
+              </p>
+            )}
+          </div>
         )}
       </div>
 
@@ -192,15 +238,22 @@ export default function CurriculumPage() {
         {curriculum.weeks.sort((a, b) => a.weekNumber - b.weekNumber).map(week => (
           <div key={week.id} className="bg-[#0f1420] border border-white/5 rounded-2xl p-6">
             <div className="flex items-start gap-4">
-              <button onClick={() => handleToggle(week.id)} className="mt-0.5 shrink-0">
-                {week.isCompleted ? <CheckCircle size={22} className="text-green-400" /> : <Circle size={22} className="text-gray-600 hover:text-blue-400 transition-colors" />}
-              </button>
+              {isMentor ? (
+                <div className="mt-0.5 shrink-0" title="멘티만 완료 처리할 수 있습니다">
+                  {week.isCompleted ? <CheckCircle size={22} className="text-green-400" /> : <Circle size={22} className="text-gray-600" />}
+                </div>
+              ) : (
+                <button onClick={() => handleToggle(week.id)} className="mt-0.5 shrink-0">
+                  {week.isCompleted ? <CheckCircle size={22} className="text-green-400" /> : <Circle size={22} className="text-gray-600 hover:text-blue-400 transition-colors" />}
+                </button>
+              )}
               <div className="flex-1">
                 <div className="flex items-center gap-3">
                   <span className="text-blue-400 text-xs font-semibold">{week.weekNumber}주차</span>
                   <h3 className={`text-white font-semibold ${week.isCompleted ? 'line-through opacity-60' : ''}`}>{week.title}</h3>
                   {isMentor && (
                     <button onClick={() => {
+                      setError('');
                       setWeekForm({ weekNumber: week.weekNumber, title: week.title, description: week.description || '', topics: [...week.topics], resources: [...week.resources] });
                       setTopicInput(''); setResourceInput('');
                       setWeekModal({ editing: week });
