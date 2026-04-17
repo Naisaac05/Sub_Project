@@ -1,0 +1,236 @@
+# DevMatch 수강신청 폼 + 멘토 스케줄링 + 화상회의 구현 계획서
+
+## 프로젝트 분석 요약
+
+**DevMatch**는 프로그래밍 멘토링 매칭 플랫폼으로, Spring Boot(백엔드) + Next.js(프론트엔드) 아키텍처입니다.
+
+**현재 상태:**
+- `/apply` 페이지: 3단계 폼 (기본정보 → 옵션 → 결제)으로, 지원서와 결제가 합쳐져 있음
+- 멘토 Availability: `MentorAvailability` (요일/시간 패턴) + `MentorTimeSlot` (날짜별 슬롯) 이미 존재
+- LMS: 대시보드, 커리큘럼, 세션, 과제, 노트, 취업, 수료증 메뉴 존재. **화상회의 전용 탭 없음**
+- 결제: Toss Payments SDK 연동 완료
+
+---
+
+## User Review Required
+
+> [!IMPORTANT]
+> **결제 시점 분리:** 기획서에는 `지원서 제출 → 합격 → 결제` 분리 흐름이 제안되어 있으나, 현재 코드는 즉시 결제입니다. 아래 계획에서는 **기존 결제 흐름을 유지**하면서 새 지원서 폼을 `/apply`에 추가하고, 결제는 `/apply/payment`로 분리합니다.
+
+> [!IMPORTANT]
+> **멘토 승인:** 멘토가 시간대를 설정 → 멘티가 선택 → 멘토가 승인하는 3단계 흐름을 구현합니다. 기존 `MentorAvailability` + `MentorTimeSlot` 엔티티를 활용합니다.
+
+---
+
+## Proposed Changes
+
+### 컴포넌트 1: 수강신청 지원서 폼 (F-Lab 스타일)
+
+기존 3단계 `기본정보 + 옵션 + 결제`를 **지원서 폼** + **결제 페이지**로 분리합니다.
+
+---
+
+#### Backend
+
+##### [MODIFY] [Application.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/entity/Application.java)
+- 기존 `currentLevel`, `targetTechStack`, `careerGoal`, `category`, `courseType`, `desiredMonths` 필드 유지
+- **추가 필드:**
+  - `languages` (List\<String\>) — 사용 언어
+  - `platforms` (List\<String\>) — 경험 플랫폼  
+  - `isCsMajor` (Boolean) — 전공 여부
+  - `learningPaths` (List\<String\>) — 학습 경로
+  - `careerYears` (String) — 경력
+  - `githubUrl` (String, nullable) — Github 주소
+  - `projectCount` (String) — 프로젝트 수
+  - `projectDescription` (String) — 개발 경험
+  - `weekdayStudyHours` (String) — 평일 공부시간
+  - `weekendStudyHours` (String) — 주말 공부시간
+  - `goal` (String) — 취업/이직/성장
+  - `personality` (String) — 외향/내향
+  - `selfIntroduction` (String) — 자기소개
+  - `referralSources` (List\<String\>) — 유입 경로
+  - `referralCode` (String, nullable) — 추천 코드
+  - `termsAgreed` (Boolean) — 약관 동의
+  - `submittedAt` (LocalDateTime) — 제출일
+  - `reviewedBy` (Long, nullable) — 검토한 멘토/관리자 ID
+  - `rejectedReason` (String, nullable) — 불합격 사유
+- status enum을 `DRAFT`, `SUBMITTED`, `ACCEPTED`, `REJECTED`, `PAYMENT_COMPLETED` 로 확장
+
+##### [NEW] [ApplicationStatus.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/entity/ApplicationStatus.java)
+```java
+public enum ApplicationStatus {
+    DRAFT, SUBMITTED, ACCEPTED, REJECTED, PAYMENT_COMPLETED
+}
+```
+
+##### [NEW] [ApplicationRequest.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/dto/application/ApplicationRequest.java)
+- spec 기획서의 전체 필드를 담는 Request DTO
+
+##### [NEW] [ApplicationResponse.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/dto/application/ApplicationResponse.java)
+- 지원서 응답 DTO (상태, 작성일, 검토 결과 포함)
+
+##### [MODIFY] [ApplicationRepository.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/repository/ApplicationRepository.java)
+- `findByMenteeIdAndStatus()`, `findByStatus()`, `findByMenteeIdOrderByCreatedAtDesc()` 추가
+
+##### [NEW] [ApplicationService.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/service/ApplicationService.java)
+- `createApplication()` — 초안 저장
+- `updateApplication()` — 수정
+- `submitApplication()` — 최종 제출 (DRAFT → SUBMITTED)
+- `getMyApplications()` — 내 지원서 목록
+- `getApplication()` — 상세 조회
+- `reviewApplication()` — [멘토/관리자] 합격/불합격 처리
+
+##### [NEW] [ApplicationController.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/controller/ApplicationController.java)
+- `POST /api/applications` — 생성
+- `PUT /api/applications/{id}` — 수정
+- `POST /api/applications/{id}/submit` — 제출
+- `GET /api/applications/me` — 내 지원서 목록
+- `GET /api/applications/{id}` — 상세 조회
+- `PUT /api/applications/{id}/review` — [멘토/관리자] 검토
+
+---
+
+#### Frontend
+
+##### [MODIFY] [page.tsx (apply)](file:///c:/Users/User/Desktop/Sub_Project/frontend/src/app/apply/page.tsx)
+- **완전 교체:** F-Lab 스타일 Q&A 단일 스크롤 페이지로 변경
+- 4개 섹션: 개발 배경 / 프로젝트 경험 / 학습 계획 및 성향 / 기타
+- `multi-chip` (복수선택), `radio` (단일선택), `textarea` (서술형), `text` (단답형) UI
+- 유효성 검사 + 하단 제출 버튼
+- 제출 완료 시 완료 화면 표시
+
+##### [NEW] [page.tsx (apply/payment)](file:///c:/Users/User/Desktop/Sub_Project/frontend/src/app/apply/payment/page.tsx)
+- 기존 `StepPaymentOptions` + `StepPaymentWidget` 코드를 이동
+- applicationId 기반 결제 연동 (기존 Toss 로직 재사용)
+
+##### [NEW] [page.tsx (apply/complete)](file:///c:/Users/User/Desktop/Sub_Project/frontend/src/app/apply/complete/page.tsx)
+- 제출 완료 안내 페이지
+
+---
+
+### 컴포넌트 2: 멘토 시간 설정 → 멘티 선택 → 멘토 승인
+
+기존 `MentorAvailability` + `MentorTimeSlot` + `SessionsPage` 구조를 **승인** 흐름으로 확장합니다.
+
+---
+
+#### Backend
+
+##### [MODIFY] [MentoringSession.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/entity/MentoringSession.java)
+- `confirmedByMentor` (Boolean, 기본값 false) 필드 추가
+- `confirmByMentor()` 메서드 추가
+
+##### [MODIFY] [SessionStatus.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/entity/SessionStatus.java)
+- `PENDING_APPROVAL` 상태 추가 (멘티가 예약 후, 멘토 승인 대기)
+
+##### [MODIFY] [LmsSessionService.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/service/LmsSessionService.java)
+- `bookSession()` → status를 `PENDING_APPROVAL`로 생성
+- `confirmSession()` (새 메서드) → 멘토가 승인 → status를 `SCHEDULED`로 변경
+- `rejectSession()` (새 메서드) → 멘토가 거절 → status를 `CANCELLED`로 변경 + 슬롯 해제
+- 주 1시간 고정 제약 조건 검증 로직 추가
+
+##### [MODIFY] [LmsSessionController.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/controller/LmsSessionController.java)
+- `PUT /api/lms/{matchingId}/sessions/{sessionId}/confirm` — 멘토 승인
+- `PUT /api/lms/{matchingId}/sessions/{sessionId}/reject` — 멘토 거절
+
+---
+
+#### Frontend
+
+##### [MODIFY] [sessions/page.tsx (LMS)](file:///c:/Users/User/Desktop/Sub_Project/frontend/src/app/lms/sessions/page.tsx)
+- 멘토 뷰: 승인 요청 목록 표시 + 승인/거절 버튼 추가
+- 멘티 뷰: 예약 후 "승인 대기 중" 상태 표시
+- 주 1시간 제약 안내 UI 추가
+
+##### [MODIFY] [lms.ts](file:///c:/Users/User/Desktop/Sub_Project/frontend/src/lib/lms.ts)
+- `confirmSession()`, `rejectSession()` API 함수 추가
+
+##### [MODIFY] [lms-types.ts](file:///c:/Users/User/Desktop/Sub_Project/frontend/src/lib/lms-types.ts)
+- `PENDING_APPROVAL` 상태 추가
+
+---
+
+### 컴포넌트 3: LMS 화상회의 탭
+
+LMS 사이드바에 **화상회의** 메뉴를 추가하고, 멘토가 회의 URL(Google Meet, Zoom 등)을 설정할 수 있는 페이지를 만듭니다.
+
+---
+
+#### Backend
+
+##### [NEW] [VideoMeeting.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/entity/VideoMeeting.java)
+```
+VideoMeeting {
+    id: Long (PK)
+    matchingId: Long (FK → Matching)
+    sessionId: Long (FK → MentoringSession, nullable)
+    platform: String ("GOOGLE_MEET" | "ZOOM" | "DISCORD" | "OTHER")
+    meetingUrl: String
+    title: String
+    description: String (nullable)
+    password: String (nullable)  // Zoom 비밀번호 등
+    scheduledAt: LocalDateTime
+    duration: Integer  // 분 단위
+    createdBy: Long (FK → User)
+    createdAt: LocalDateTime
+    updatedAt: LocalDateTime
+}
+```
+
+##### [NEW] [VideoMeetingRepository.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/repository/VideoMeetingRepository.java)
+
+##### [NEW] [VideoMeetingService.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/service/VideoMeetingService.java)
+- `createMeeting()`, `updateMeeting()`, `deleteMeeting()`, `getMeetings()`, `getMeeting()`
+
+##### [NEW] [VideoMeetingController.java](file:///c:/Users/User/Desktop/Sub_Project/backend/src/main/java/com/devmatch/controller/VideoMeetingController.java)
+- `POST /api/lms/{matchingId}/meetings` — 회의 생성
+- `GET /api/lms/{matchingId}/meetings` — 회의 목록
+- `PUT /api/lms/{matchingId}/meetings/{id}` — 수정
+- `DELETE /api/lms/{matchingId}/meetings/{id}` — 삭제
+
+##### DTOs
+- [NEW] `VideoMeetingRequest.java`, `VideoMeetingResponse.java`
+
+---
+
+#### Frontend
+
+##### [NEW] [meetings/page.tsx (LMS)](file:///c:/Users/User/Desktop/Sub_Project/frontend/src/app/lms/meetings/page.tsx)
+- 플랫폼 선택 (Google Meet / Zoom / Discord / 기타)
+- URL 입력 + 비밀번호 (선택) + 일정 설정
+- 회의 목록 표시 (예정/지난 회의)
+- 원클릭 참가 버튼 (새 탭에서 URL 열기)
+- 멘토: 회의 생성/편집/삭제
+- 멘티: 회의 참가만 가능
+
+##### [MODIFY] [LmsSidebar.tsx](file:///c:/Users/User/Desktop/Sub_Project/frontend/src/components/lms/LmsSidebar.tsx)
+- `화상회의` 메뉴 항목 추가 (sessions와 meetings 사이)
+
+##### [MODIFY] [lms.ts](file:///c:/Users/User/Desktop/Sub_Project/frontend/src/lib/lms.ts)
+- 화상회의 관련 API 함수 추가
+
+##### [MODIFY] [lms-types.ts](file:///c:/Users/User/Desktop/Sub_Project/frontend/src/lib/lms-types.ts)
+- `VideoMeetingResponse`, `VideoMeetingRequest` 타입 추가
+
+---
+
+## Open Questions
+
+> [!IMPORTANT]
+> 1. **지원서 검토 주체:** 지원서를 멘토가 검토? 관리자가 검토? 아니면 둘 다 가능하도록? → 현재 계획은 **멘토 + 관리자 둘 다** 가능하도록 구현합니다.
+> 2. **자동 승인:** MVP에서 지원서를 자동 승인(제출 즉시 ACCEPTED)으로 할지, 수동 검토를 필수로 할지? → 현재 계획은 **수동 검토***(멘토/관리자가 ACCEPTED/REJECTED 처리)* 입니다.
+> 3. **주 1시간 고정:** 인당 주 1시간으로 고정 — 혹시 코스에 따라 시간이 달라지는 경우가 있나요?
+
+---
+
+## Verification Plan
+
+### Automated Tests
+- `npm run dev` 로 프론트엔드 실행 후 `/apply` 페이지 동작 확인
+- 백엔드 Swagger (`/swagger-ui.html`)에서 새 API 엔드포인트 테스트
+- `./gradlew build` 로 백엔드 빌드 성공 확인
+
+### Manual Verification
+- `/apply` 지원서 폼 UI 렌더링 및 유효성 검사 확인
+- LMS 화상회의 탭에서 회의 생성/참가 흐름 확인
+- 세션 예약 → 멘토 승인 흐름 확인

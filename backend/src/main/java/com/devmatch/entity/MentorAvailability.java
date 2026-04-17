@@ -17,6 +17,11 @@ public class MentorAvailability {
     @Column(name = "mentor_id", nullable = false)
     private Long mentorId;
 
+    // 대기 중인 멘토 여부 (true = 해당 커리큘럼에 대해 대기 중) 
+    @Column(name = "is_waiting", nullable = false)
+    @Builder.Default
+    private Boolean isWaiting = false;
+
     @Column(name = "day_of_week", nullable = false, length = 10)
     private String dayOfWeek;
 
