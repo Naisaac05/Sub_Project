@@ -22,10 +22,13 @@ public class DataInitializer implements CommandLineRunner {
     private final MentorProfileRepository mentorProfileRepository;
     private final MentorAvailabilityRepository mentorAvailabilityRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MentoringCourseRepository mentoringCourseRepository;
 
     @Override
     @Transactional
     public void run(String... args) {
+        initMentoringCourses();
+
         if (testRepository.count() > 0) {
             log.info("테스트 데이터가 이미 존재합니다. 초기화를 건너뜁니다.");
             return;
@@ -594,6 +597,110 @@ public class DataInitializer implements CommandLineRunner {
                 .correctAnswer(correctAnswer)
                 .score(10)
                 .build());
+    }
+
+    // ──────────────────────────────────────────────
+    //  멘토링 코스 (12개)
+    // ──────────────────────────────────────────────
+    private void initMentoringCourses() {
+        if (mentoringCourseRepository.count() > 0) {
+            log.info("멘토링 코스가 이미 존재합니다. 시드 건너뜀.");
+            return;
+        }
+
+        record Seed(String key, String title, String subtitle, String icon,
+                    String descTitle, String descText, String boxesJson, int order) {}
+
+        List<Seed> seeds = List.of(
+            new Seed("java-backend", "AI+ Java 백엔드",
+                "깊이 있는 학습과 고퀄리티 프로젝트 수행을 통해 채용 경쟁력을 높이는 1:1 심화형 멘토링 코스",
+                "☕",
+                "실전 백엔드 역량,\n기본기부터 AI 서빙까지.",
+                "Java/Spring 생태계를 깊게 다루며 실무에서 바로 쓰이는 아키텍처를 학습합니다.",
+                "[]", 1),
+            new Seed("node-backend", "Node.js Backend + AI",
+                "실시간 통신과 고성능 비동기 서버 아키텍처를 마스터하는 심화형 멘토링",
+                "JS",
+                "단순한 CRUD를 넘어\n고성능 비동기 아키텍처를 다룹니다.",
+                "JavaScript/TypeScript 백엔드 환경에서 Event Loop의 이해부터 Redis, Socket.io 활용까지.",
+                "[]", 2),
+            new Seed("python-backend", "Python Backend + AI",
+                "백엔드 생태계와 AI 서빙을 결합한 최적의 실무 밀착 멘토링",
+                "🐍",
+                "데이터와 백엔드의 브릿지,\nPython 서버 서빙 최적화.",
+                "동기/비동기 프레임워크의 장단점을 파악하고 최신 FastAPI 생태계를 익힙니다.",
+                "[]", 3),
+            new Seed("frontend", "Frontend + AI",
+                "프론트엔드 성능 최적화와 트러블슈팅, 최신 기술 스택을 다루는 심화 코스",
+                "⚛️",
+                "보이는 것 그 이상,\n사용자 경험(UX)과 성능의 극대화를 이룹니다.",
+                "Next.js의 SSR/SSG/ISR 혼합 렌더링, Web Vitals 최적화, 상태관리 패턴 등.",
+                "[]", 4),
+            new Seed("android", "Android + AI",
+                "모던 안드로이드 앱 아키텍처와 Compose, 성능 최적화 마스터 과정",
+                "🤖",
+                "안드로이드 네이티브의 끝판왕,\n안정적이고 유려한 앱을 만듭니다.",
+                "Jetpack Compose와 MVVM/MVI 아키텍처, Memory Leak 방지 기술 등.",
+                "[]", 5),
+            new Seed("ios", "iOS + AI",
+                "모던 iOS 앱 아키텍처와 SwiftUI 마스터 과정",
+                "🍎",
+                "부드러운 경험을 만드는\n최상급 iOS 애플리케이션",
+                "SwiftUI, Combine 기반의 선언형 패러다임과 TCA 등 최신 iOS 생태계.",
+                "[]", 6),
+            new Seed("flutter", "Flutter + AI",
+                "크로스 플랫폼의 한계를 뛰어넘는 최적화 및 네이티브 연동",
+                "🦋",
+                "하나의 코드로 두 배의 가치를,\n크로스 플랫폼의 완성.",
+                "단순 UI 클론을 넘어 렌더링 최적화, 상태관리 패턴, 네이티브 연동까지.",
+                "[]", 7),
+            new Seed("react-native", "React Native + AI",
+                "웹 개발 경험으로 시작하는 최고 수준의 앱 배포",
+                "📱",
+                "웹과 모바일의 브릿지,\n빠른 속도로 시장을 선점합니다.",
+                "React 생태계를 그대로 활용하며 최신 JSI 아키텍처와 애니메이션 최적화를 배웁니다.",
+                "[]", 8),
+            new Seed("devops", "DevOps 엔지니어 육성",
+                "CI/CD 빌드 파이프라인부터 클라우드 네이티브 아키텍처까지",
+                "⚙️",
+                "인프라를 코드로 구성하고,\n자동화로 생산성을 극대화합니다.",
+                "AWS IaC(Terraform), 클러스터 오케스트레이션(K8s) 등 DevOps 툴체인.",
+                "[]", 9),
+            new Seed("firststep", "First Step: Java Backend",
+                "비전공자/입문자도 따라할 수 있는 탄탄한 웹 백엔드 첫걸음",
+                "🌱",
+                "처음이라고 두려워 마세요,\n기본부터 든든하게 다집니다.",
+                "Java 언어 기초부터 Spring Boot 서버 배포까지 끝맺음하는 과정.",
+                "[]", 10),
+            new Seed("distributed-lock", "분산 락 Deep Dive",
+                "수만 명의 선착순 트래픽을 놓치지 않고 완벽히 제어하는 특강",
+                "🔒",
+                "단 한 건의 동시성 오류도 용납하지 않는\n초정밀 트래픽 제어.",
+                "티켓팅, 수강신청 등 극단적인 동시성 상황 시스템 설계.",
+                "[]", 11),
+            new Seed("kafka", "Kafka Deep Dive",
+                "대규모 메시지 큐와 이벤트 드리븐 설계 패턴 완전 정복",
+                "📨",
+                "시스템 간의 완벽한 징검다리,\n이벤트 기반 아키텍처.",
+                "Kafka의 내부 동작 원리와 MSA 환경에서의 활용을 심층 실습.",
+                "[]", 12)
+        );
+
+        seeds.forEach(s -> mentoringCourseRepository.save(
+            MentoringCourse.builder()
+                .courseKey(s.key())
+                .title(s.title())
+                .subtitle(s.subtitle())
+                .iconString(s.icon())
+                .descriptionTitle(s.descTitle())
+                .descriptionText(s.descText())
+                .boxesJson(s.boxesJson())
+                .displayOrder(s.order())
+                .active(true)
+                .build()
+        ));
+
+        log.info("멘토링 코스 {}개 시드 완료", seeds.size());
     }
 
     private void createMentor(String name, String email, String encodedPassword,
