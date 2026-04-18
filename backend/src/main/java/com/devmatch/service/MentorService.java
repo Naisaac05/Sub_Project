@@ -2,8 +2,13 @@ package com.devmatch.service;
 
 import com.devmatch.dto.mentor.MentorApplyRequest;
 import com.devmatch.dto.mentor.MentorProfileResponse;
-import com.devmatch.entity.*;
+import com.devmatch.entity.MentorProfile;
+import com.devmatch.entity.MentorProfileHistory;
+import com.devmatch.entity.MentorStatus;
+import com.devmatch.entity.MentoringCourse;
+import com.devmatch.entity.User;
 import com.devmatch.exception.AlreadyAppliedException;
+import com.devmatch.exception.CourseNotFoundException;
 import com.devmatch.exception.UserNotFoundException;
 import com.devmatch.repository.MentorProfileHistoryRepository;
 import com.devmatch.repository.MentorProfileRepository;
@@ -32,19 +37,26 @@ public class MentorService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
 
-        List<MentoringCourse> courses = courseService.findActiveByKeys(request.getCourseKeys());
-
         Optional<MentorProfile> existingOpt = mentorProfileRepository.findByUserId(userId);
+        if (existingOpt.isPresent()) {
+            MentorStatus currentStatus = existingOpt.get().getStatus();
+            if (currentStatus == MentorStatus.PENDING) {
+                throw new AlreadyAppliedException("이미 심사 중인 신청이 있습니다");
+            }
+            if (currentStatus == MentorStatus.APPROVED) {
+                throw new AlreadyAppliedException("이미 승인된 멘토입니다");
+            }
+        }
+
+        List<MentoringCourse> courses = courseService.findActiveByKeys(request.getCourseKeys());
+        if (courses.size() != request.getCourseKeys().size()) {
+            throw new CourseNotFoundException("유효하지 않거나 비활성화된 코스가 포함되어 있습니다");
+        }
+
         MentorProfile profile;
 
         if (existingOpt.isPresent()) {
             MentorProfile existing = existingOpt.get();
-            if (existing.getStatus() == MentorStatus.PENDING) {
-                throw new AlreadyAppliedException("이미 심사 중인 신청이 있습니다");
-            }
-            if (existing.getStatus() == MentorStatus.APPROVED) {
-                throw new AlreadyAppliedException("이미 승인된 멘토입니다");
-            }
             existing.updateFromRequest(
                     new HashSet<>(courses),
                     request.getTechStack(),
@@ -78,7 +90,7 @@ public class MentorService {
 
         historyRepository.save(MentorProfileHistory.builder()
                 .userId(userId)
-                .courseKeys(request.getCourseKeys())
+                .courseKeys(courses.stream().map(MentoringCourse::getCourseKey).toList())
                 .techStack(request.getTechStack())
                 .careerYears(request.getCareerYears())
                 .company(request.getCompany())
@@ -99,6 +111,7 @@ public class MentorService {
         MentorProfile profile = mentorProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException("멘토 프로필을 찾을 수 없습니다"));
 
+        // TODO: admin review flow — Phase 후속
         String rejectedReason = null;
         if (profile.getStatus() == MentorStatus.REJECTED) {
             rejectedReason = historyRepository.findTopByUserIdOrderBySubmittedAtDesc(userId)

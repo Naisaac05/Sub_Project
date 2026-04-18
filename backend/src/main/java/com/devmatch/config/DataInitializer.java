@@ -55,7 +55,7 @@ public class DataInitializer implements CommandLineRunner {
         // BEGINNER
         Test t = createTest("Java 기초 문법 테스트",
                 "Java 언어의 기본 문법과 핵심 개념을 평가합니다. 변수, 타입, 조건문, 반복문, 배열, 클래스 기초 등을 다룹니다.",
-                "Java", Difficulty.BEGINNER, 15, 60, 10);
+                "java-backend", Difficulty.BEGINNER, 15, 60, 10);
         q(t, 1, "Java에서 정수형 변수를 선언하는 올바른 방법은?",
                 List.of("int number = 10;", "number int = 10;", "integer number = 10;", "var: int number = 10;"), 0);
         q(t, 2, "Java에서 문자열을 비교할 때 올바른 방법은?",
@@ -81,7 +81,7 @@ public class DataInitializer implements CommandLineRunner {
         // INTERMEDIATE
         t = createTest("Java 중급 심화 테스트",
                 "컬렉션, 제네릭, 스트림, 람다, OOP 심화 원칙 등 Java 중급 개념을 평가합니다.",
-                "Java", Difficulty.INTERMEDIATE, 20, 65, 10);
+                "java-backend", Difficulty.INTERMEDIATE, 20, 65, 10);
         q(t, 1, "ArrayList와 LinkedList의 차이에 대한 설명으로 올바른 것은?",
                 List.of("ArrayList는 삽입/삭제가 빠르다", "LinkedList는 인덱스 접근이 빠르다",
                         "ArrayList는 인덱스 접근이 O(1)이다", "둘 다 동기화가 보장된다"), 2);
@@ -110,7 +110,7 @@ public class DataInitializer implements CommandLineRunner {
         // ADVANCED
         t = createTest("Java 고급 아키텍처 테스트",
                 "JVM 내부 구조, GC 알고리즘, 동시성, 디자인 패턴 등 Java 고급 지식을 평가합니다.",
-                "Java", Difficulty.ADVANCED, 25, 70, 10);
+                "java-backend", Difficulty.ADVANCED, 25, 70, 10);
         q(t, 1, "JVM 메모리 영역 중 객체 인스턴스가 저장되는 곳은?",
                 List.of("Stack", "Heap", "Method Area", "PC Register"), 1);
         q(t, 2, "G1 GC의 특징으로 올바르지 않은 것은?",
@@ -152,7 +152,7 @@ public class DataInitializer implements CommandLineRunner {
         // BEGINNER
         Test t = createTest("Spring 입문 테스트",
                 "Spring Boot의 기본 개념, IoC/DI, 어노테이션, REST API 기초를 평가합니다.",
-                "Spring", Difficulty.BEGINNER, 15, 60, 10);
+                "java-backend", Difficulty.BEGINNER, 15, 60, 10);
         q(t, 1, "Spring의 핵심 개념인 IoC(Inversion of Control)란?",
                 List.of("개발자가 직접 객체를 생성하고 관리한다", "프레임워크가 객체의 생성과 생명주기를 관리한다",
                         "모든 객체를 싱글턴으로 만든다", "인터페이스를 반드시 사용해야 한다"), 1);
@@ -180,7 +180,7 @@ public class DataInitializer implements CommandLineRunner {
         // INTERMEDIATE
         t = createTest("Spring 중급 실무 테스트",
                 "Spring MVC 동작 흐름, JPA 매핑, 트랜잭션, Spring Security 기초 등을 평가합니다.",
-                "Spring", Difficulty.INTERMEDIATE, 20, 65, 10);
+                "java-backend", Difficulty.INTERMEDIATE, 20, 65, 10);
         q(t, 1, "Spring MVC에서 클라이언트 요청의 처리 순서로 올바른 것은?",
                 List.of("Filter → Controller → Service → DispatcherServlet",
                         "DispatcherServlet → HandlerMapping → Controller → ViewResolver",
@@ -215,7 +215,7 @@ public class DataInitializer implements CommandLineRunner {
         // ADVANCED
         t = createTest("Spring 고급 아키텍처 테스트",
                 "트랜잭션 전파/격리, 영속성 컨텍스트, 캐시, MSA 패턴 등 고급 지식을 평가합니다.",
-                "Spring", Difficulty.ADVANCED, 25, 70, 10);
+                "java-backend", Difficulty.ADVANCED, 25, 70, 10);
         q(t, 1, "트랜잭션 전파 속성 REQUIRES_NEW의 동작은?",
                 List.of("기존 트랜잭션에 참여한다", "항상 새로운 트랜잭션을 시작하고 기존 트랜잭션을 보류한다",
                         "트랜잭션 없이 실행한다", "기존 트랜잭션이 없으면 예외를 발생시킨다"), 1);
@@ -254,7 +254,7 @@ public class DataInitializer implements CommandLineRunner {
         // BEGINNER
         Test t = createTest("React 기초 테스트",
                 "JSX 문법, 컴포넌트, Props, useState, 이벤트 핸들링 등 React 기초를 평가합니다.",
-                "React", Difficulty.BEGINNER, 15, 60, 10);
+                "frontend", Difficulty.BEGINNER, 15, 60, 10);
         q(t, 1, "React에서 컴포넌트의 상태를 관리하기 위해 사용하는 Hook은?",
                 List.of("useEffect", "useContext", "useState", "useRef"), 2);
         q(t, 2, "JSX에서 JavaScript 표현식을 사용할 때 감싸는 기호는?",
@@ -281,7 +281,7 @@ public class DataInitializer implements CommandLineRunner {
         // INTERMEDIATE
         t = createTest("React 중급 실무 테스트",
                 "useEffect, Custom Hook, 상태 관리, React Router, 성능 최적화 등을 평가합니다.",
-                "React", Difficulty.INTERMEDIATE, 20, 65, 10);
+                "frontend", Difficulty.INTERMEDIATE, 20, 65, 10);
         q(t, 1, "useEffect의 의존성 배열(dependency array)이 빈 배열 []일 때 동작은?",
                 List.of("매 렌더링마다 실행", "컴포넌트 마운트 시 1회만 실행",
                         "상태 변경 시마다 실행", "실행되지 않는다"), 1);
@@ -315,7 +315,7 @@ public class DataInitializer implements CommandLineRunner {
         // ADVANCED
         t = createTest("React 고급 심화 테스트",
                 "가상 DOM, Fiber, 서버 컴포넌트, Concurrent 기능, 렌더링 전략 등 고급 주제를 평가합니다.",
-                "React", Difficulty.ADVANCED, 25, 70, 10);
+                "frontend", Difficulty.ADVANCED, 25, 70, 10);
         q(t, 1, "React의 가상 DOM(Virtual DOM)이 성능에 기여하는 방식은?",
                 List.of("DOM을 사용하지 않는다", "변경된 부분만 계산(diff)하여 실제 DOM에 최소한의 업데이트를 적용한다",
                         "모든 DOM을 매번 다시 생성한다", "WebWorker에서 DOM을 처리한다"), 1);
@@ -355,7 +355,7 @@ public class DataInitializer implements CommandLineRunner {
         // BEGINNER
         Test t = createTest("Python 기초 문법 테스트",
                 "변수, 타입, 리스트, 딕셔너리, 조건문, 반복문, 함수 등 Python 기초를 평가합니다.",
-                "Python", Difficulty.BEGINNER, 15, 60, 10);
+                "python-backend", Difficulty.BEGINNER, 15, 60, 10);
         q(t, 1, "Python에서 리스트의 마지막 요소에 접근하는 방법은?",
                 List.of("list[0]", "list[-1]", "list.last()", "list.end()"), 1);
         q(t, 2, "Python에서 딕셔너리를 생성하는 올바른 방법은?",
@@ -382,7 +382,7 @@ public class DataInitializer implements CommandLineRunner {
         // INTERMEDIATE
         t = createTest("Python 중급 심화 테스트",
                 "클래스/OOP, 데코레이터, 제너레이터, 컴프리헨션, 예외 처리 등을 평가합니다.",
-                "Python", Difficulty.INTERMEDIATE, 20, 65, 10);
+                "python-backend", Difficulty.INTERMEDIATE, 20, 65, 10);
         q(t, 1, "Python에서 리스트 컴프리헨션의 올바른 문법은?",
                 List.of("[x for x in range(10) if x > 5]", "[for x in range(10): x if x > 5]",
                         "[x if x > 5 for x in range(10)]", "[x in range(10) for if x > 5]"), 0);
@@ -414,7 +414,7 @@ public class DataInitializer implements CommandLineRunner {
         // ADVANCED
         t = createTest("Python 고급 아키텍처 테스트",
                 "GIL, 메타클래스, 디스크립터, asyncio, 메모리 관리 등 Python 고급 주제를 평가합니다.",
-                "Python", Difficulty.ADVANCED, 25, 70, 10);
+                "python-backend", Difficulty.ADVANCED, 25, 70, 10);
         q(t, 1, "Python GIL(Global Interpreter Lock)의 영향은?",
                 List.of("멀티프로세싱이 불가능하다", "CPU-bound 작업에서 멀티스레딩의 성능 이점이 제한된다",
                         "I/O-bound 작업에서도 병렬 처리가 불가능하다", "메모리 사용량이 증가한다"), 1);
@@ -455,7 +455,7 @@ public class DataInitializer implements CommandLineRunner {
         // BEGINNER
         Test t = createTest("알고리즘 기초 테스트",
                 "시간/공간 복잡도, 기본 자료구조, 정렬, 탐색 등 알고리즘 기초를 평가합니다.",
-                "Algorithm", Difficulty.BEGINNER, 15, 60, 10);
+                "firststep", Difficulty.BEGINNER, 15, 60, 10);
         q(t, 1, "시간 복잡도 O(n)의 의미는?",
                 List.of("항상 일정한 시간이 걸린다", "입력 크기에 비례하여 시간이 증가한다",
                         "입력 크기의 제곱에 비례한다", "로그 시간이 걸린다"), 1);
@@ -486,7 +486,7 @@ public class DataInitializer implements CommandLineRunner {
         // INTERMEDIATE
         t = createTest("알고리즘 중급 테스트",
                 "이진 탐색, 해시, 트리, 그래프 탐색, DP 기초 등 중급 알고리즘을 평가합니다.",
-                "Algorithm", Difficulty.INTERMEDIATE, 20, 65, 10);
+                "firststep", Difficulty.INTERMEDIATE, 20, 65, 10);
         q(t, 1, "이진 탐색(Binary Search)의 전제 조건은?",
                 List.of("데이터가 연결 리스트에 저장", "데이터가 정렬되어 있어야 한다",
                         "데이터가 해시 테이블에 저장", "데이터 크기가 2의 거듭제곱"), 1);
@@ -516,7 +516,7 @@ public class DataInitializer implements CommandLineRunner {
         // ADVANCED
         t = createTest("알고리즘 고급 테스트",
                 "고급 DP, 최단 경로, 세그먼트 트리, 그래프 고급 알고리즘 등을 평가합니다.",
-                "Algorithm", Difficulty.ADVANCED, 25, 70, 10);
+                "firststep", Difficulty.ADVANCED, 25, 70, 10);
         q(t, 1, "다익스트라 알고리즘의 시간 복잡도는? (우선순위 큐 사용 시)",
                 List.of("O(V^2)", "O(V + E)", "O((V + E) log V)", "O(V * E)"), 2);
         q(t, 2, "벨만-포드 알고리즘이 다익스트라보다 유리한 경우는?",

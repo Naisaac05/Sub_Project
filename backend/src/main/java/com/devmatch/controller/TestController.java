@@ -25,7 +25,7 @@ public class TestController {
 
     private final TestService testService;
 
-    @Operation(summary = "테스트 목록 조회", description = "분야별 필터링 가능 (?category=Java)")
+    @Operation(summary = "테스트 목록 조회", description = "분야별 필터링 가능 (?category=java-backend)")
     @GetMapping
     public ResponseEntity<ApiResponse<List<TestListResponse>>> getTests(
             @RequestParam(required = false) String category) {
