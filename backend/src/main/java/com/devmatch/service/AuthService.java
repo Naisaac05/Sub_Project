@@ -3,6 +3,7 @@ package com.devmatch.service;
 import com.devmatch.dto.auth.LoginRequest;
 import com.devmatch.dto.auth.SignupRequest;
 import com.devmatch.dto.user.UserResponse;
+import com.devmatch.entity.Role;
 import com.devmatch.entity.User;
 import com.devmatch.exception.DuplicateEmailException;
 import com.devmatch.exception.InvalidCredentialsException;
@@ -10,6 +11,7 @@ import com.devmatch.exception.InvalidTokenException;
 import com.devmatch.repository.UserRepository;
 import com.devmatch.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -24,7 +27,8 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshSessionService refreshSessionService;
 
-    public record AuthTokens(String accessToken, String refreshToken) {}
+    public record AuthTokens(String accessToken, String refreshToken) {
+    }
 
     @Transactional
     public UserResponse signup(SignupRequest request) {
@@ -36,6 +40,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
+                .role(Role.valueOf(request.getRole()))
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -43,18 +48,26 @@ public class AuthService {
     }
 
     public AuthTokens login(LoginRequest request, String deviceInfo, String ip) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new InvalidCredentialsException("이메일 또는 비밀번호가 올바르지 않습니다"));
+        log.info("Login attempt for email: {}", request.getEmail());
 
-        boolean isGanadaBypass = "ganada@devmatch.com".equals(request.getEmail()) && "password123".equals(request.getPassword());
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> {
+                    log.warn("Login failed: User not found for email: {}", request.getEmail());
+                    return new InvalidCredentialsException("이메일 또는 비밀번호가 올바르지 않습니다");
+                });
+
+        boolean isGanadaBypass = "ganada@devmatch.com".equals(request.getEmail())
+                && "password123".equals(request.getPassword());
 
         if (!isGanadaBypass && !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            log.warn("Login failed: Password mismatch for email: {}", request.getEmail());
             throw new InvalidCredentialsException("이메일 또는 비밀번호가 올바르지 않습니다");
         }
 
+        log.info("Login successful for email: {}, userId: {}, role: {}", user.getEmail(), user.getId(), user.getRole());
+
         String accessToken = jwtTokenProvider.generateAccessToken(user.getId(), user.getEmail(), user.getRole());
-        RefreshSessionService.IssuedSession session =
-                refreshSessionService.createSession(user.getId(), deviceInfo, ip);
+        RefreshSessionService.IssuedSession session = refreshSessionService.createSession(user.getId(), deviceInfo, ip);
 
         return new AuthTokens(accessToken, session.refreshToken());
     }

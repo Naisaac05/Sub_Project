@@ -62,7 +62,7 @@ export default function SignupPage() {
 
     setIsSubmitting(true);
     try {
-      await signup(form.name, form.email, form.password);
+      await signup(form.name, form.email, form.password, role);
       router.push('/auth/login?signup=success');
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { message?: string } } };

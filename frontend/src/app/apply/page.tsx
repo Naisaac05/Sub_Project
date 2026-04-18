@@ -48,6 +48,7 @@ export default function ApplyPage() {
     weekendStudyHours: '',
     goal: '',
     personality: '',
+    phone: '',
     selfIntroduction: '',
     referralSources: [] as string[],
     referralCode: '',
@@ -76,6 +77,7 @@ export default function ApplyPage() {
       form.weekendStudyHours !== '' &&
       form.goal !== '' &&
       form.personality !== '' &&
+      form.phone !== '' &&
       form.selfIntroduction.trim() !== '' &&
       form.referralSources.length > 0 &&
       form.termsAgreed
@@ -106,10 +108,12 @@ export default function ApplyPage() {
       
       // 백엔드는 ApplicationResponse를 직접 반환 (ApiResponse 래퍼 없음)
       // HTTP 200 + 응답 데이터 존재 = 성공
-      const data = response.data ?? response; // axios 응답 또는 직접 데이터
+      const data = response.data ?? response;
+      console.log('지원서 제출 응답:', data);
       
       if (data && data.id) {
-        if (data.autoMatched) {
+        // 백엔드에서 autoMatched가 true로 오거나, 프론트에서 IMMEDIATE인 경우 결제로 이동
+        if (data.autoMatched === true || form.courseType === 'IMMEDIATE') {
           alert("🎉 지원서가 자동 매칭되어 승인되었습니다! 결제 단계로 이동합니다.");
           window.location.href = `/apply/payment?applicationId=${data.id}`;
         } else {
@@ -257,12 +261,12 @@ export default function ApplyPage() {
               <SectionTitle>학습 계획 및 성향</SectionTitle>
               <div className="space-y-8">
                 <div>
-                  <QuestionLabel>평일에 들일 수 있는 공부시간이 얼마나 되시나요?</QuestionLabel>
-                  <RadioGroup options={STUDY_HOURS} field="weekdayStudyHours" />
+                  <QuestionLabel>평일 멘토링이 가능한 희망 시간대를 적어주세요. (예: 월/수/금 저녁 8시~10시)</QuestionLabel>
+                  <input type="text" value={form.weekdayStudyHours} onChange={e => setForm({...form, weekdayStudyHours: e.target.value})} placeholder="자유롭게 기재해주세요." className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 focus:ring-0 transition-colors" />
                 </div>
                 <div>
-                  <QuestionLabel>주말에 들일 수 있는 공부시간이 얼마나 되시나요?</QuestionLabel>
-                  <RadioGroup options={STUDY_HOURS} field="weekendStudyHours" />
+                  <QuestionLabel>주말 멘토링이 가능한 희망 시간대를 적어주세요. (예: 토요일 오후 2시~5시)</QuestionLabel>
+                  <input type="text" value={form.weekendStudyHours} onChange={e => setForm({...form, weekendStudyHours: e.target.value})} placeholder="자유롭게 기재해주세요." className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 focus:ring-0 transition-colors" />
                 </div>
                 <div>
                   <QuestionLabel>현재 본인이 원하는 것에 제일 가까운 것은 무엇인가요?</QuestionLabel>
@@ -271,6 +275,10 @@ export default function ApplyPage() {
                 <div>
                   <QuestionLabel>본인의 성격은 어떤 편인가요?</QuestionLabel>
                   <RadioGroup options={['외향적', '내향적']} field="personality" />
+                </div>
+                <div>
+                  <QuestionLabel>연락 가능한 핸드폰 번호를 적어주세요. (예: 010-1234-5678)</QuestionLabel>
+                  <input type="text" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} placeholder="010-0000-0000" className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 focus:ring-0 transition-colors" />
                 </div>
                 <div>
                   <QuestionLabel>자유롭게 본인을 소개해주세요.</QuestionLabel>

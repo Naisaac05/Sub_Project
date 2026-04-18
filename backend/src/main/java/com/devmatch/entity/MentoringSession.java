@@ -52,6 +52,9 @@ public class MentoringSession {
     @Column(name = "calendar_event_id", length = 200)
     private String calendarEventId;
 
+    @Column(length = 200)
+    private String title;
+
     @Column(length = 1000)
     private String memo;
 
@@ -83,6 +86,10 @@ public class MentoringSession {
 
     public void updateCalendarEventId(String calendarEventId) {
         this.calendarEventId = calendarEventId;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
     }
 
     public void updateSchedule(LocalDate newDate, LocalTime newStart, LocalTime newEnd) {
