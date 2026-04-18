@@ -106,7 +106,7 @@ export type SessionStatus = 'PENDING' | 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
 export interface SessionListResponse {
   id: number; matchingId: number; menteeId: number; mentorId: number;
   category: string; sessionDate: string; startTime: string; endTime: string;
-  status: SessionStatus; meetLink: string | null; memo: string | null;
+  status: SessionStatus; title?: string | null; meetLink: string | null; memo: string | null;
   hasPendingChangeRequest: boolean; createdAt: string;
 }
 
