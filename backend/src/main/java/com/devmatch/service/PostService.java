@@ -36,75 +36,70 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final UserRepository userRepository;
 
-    // ===== 게시글 =====
-
     @Transactional
     public PostResponse createPost(Long userId, PostCreateRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         Post post = Post.builder()
                 .author(user)
+                .category(request.getCategory())
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build();
 
-        post = postRepository.save(post);
-        return PostResponse.from(post, false);
+        return PostResponse.from(postRepository.save(post), false);
     }
 
     public Page<PostResponse> getPosts(Long userId, Pageable pageable) {
         return postRepository.findAllByOrderByCreatedAtDesc(pageable)
-                .map(post -> {
-                    boolean liked = postLikeRepository.existsByPostIdAndUserId(post.getId(), userId);
-                    return PostResponse.from(post, liked);
-                });
+                .map(post -> PostResponse.from(
+                        post,
+                        postLikeRepository.existsByPostIdAndUserId(post.getId(), userId)
+                ));
     }
 
+    @Transactional
     public PostResponse getPost(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다"));
+                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
 
-        boolean liked = postLikeRepository.existsByPostIdAndUserId(postId, userId);
-        return PostResponse.from(post, liked);
+        post.incrementViewCount();
+        return PostResponse.from(post, postLikeRepository.existsByPostIdAndUserId(postId, userId));
     }
 
     @Transactional
     public PostResponse updatePost(Long userId, Long postId, PostCreateRequest request) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다"));
+                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
 
         if (!post.getAuthor().getId().equals(userId)) {
-            throw new UnauthorizedPostException("본인의 게시글만 수정할 수 있습니다");
+            throw new UnauthorizedPostException("본인이 작성한 게시글만 수정할 수 있습니다.");
         }
 
-        post.update(request.getTitle(), request.getContent());
-
-        boolean liked = postLikeRepository.existsByPostIdAndUserId(postId, userId);
-        return PostResponse.from(post, liked);
+        post.update(request.getTitle(), request.getContent(), request.getCategory());
+        return PostResponse.from(post, postLikeRepository.existsByPostIdAndUserId(postId, userId));
     }
 
     @Transactional
     public void deletePost(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다"));
+                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
 
         if (!post.getAuthor().getId().equals(userId)) {
-            throw new UnauthorizedPostException("본인의 게시글만 삭제할 수 있습니다");
+            throw new UnauthorizedPostException("본인이 작성한 게시글만 삭제할 수 있습니다.");
         }
 
         postRepository.delete(post);
     }
 
-    // ===== 좋아요 =====
-
     @Transactional
     public PostResponse toggleLike(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다"));
+                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         Optional<PostLike> existingLike = postLikeRepository.findByPostIdAndUserId(postId, userId);
 
@@ -114,11 +109,7 @@ public class PostService {
             post.decrementLikeCount();
             liked = false;
         } else {
-            PostLike postLike = PostLike.builder()
-                    .post(post)
-                    .user(user)
-                    .build();
-            postLikeRepository.save(postLike);
+            postLikeRepository.save(PostLike.builder().post(post).user(user).build());
             post.incrementLikeCount();
             liked = true;
         }
@@ -126,15 +117,13 @@ public class PostService {
         return PostResponse.from(post, liked);
     }
 
-    // ===== 댓글 =====
-
     @Transactional
     public CommentResponse createComment(Long userId, Long postId, CommentCreateRequest request) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다"));
+                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
 
         Comment comment = Comment.builder()
                 .post(post)
@@ -142,15 +131,13 @@ public class PostService {
                 .content(request.getContent())
                 .build();
 
-        comment = commentRepository.save(comment);
         post.incrementCommentCount();
-
-        return CommentResponse.from(comment);
+        return CommentResponse.from(commentRepository.save(comment));
     }
 
     public List<CommentResponse> getComments(Long postId) {
         if (!postRepository.existsById(postId)) {
-            throw new PostNotFoundException("게시글을 찾을 수 없습니다");
+            throw new PostNotFoundException("게시글을 찾을 수 없습니다.");
         }
 
         return commentRepository.findByPostIdOrderByCreatedAtAsc(postId).stream()
@@ -161,16 +148,17 @@ public class PostService {
     @Transactional
     public void deleteComment(Long userId, Long postId, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다"));
+                .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다."));
 
         if (!comment.getPost().getId().equals(postId)) {
-            throw new CommentNotFoundException("해당 게시글의 댓글이 아닙니다");
+            throw new CommentNotFoundException("해당 게시글의 댓글이 아닙니다.");
         }
 
         if (!comment.getAuthor().getId().equals(userId)) {
-            throw new UnauthorizedPostException("본인의 댓글만 삭제할 수 있습니다");
+            throw new UnauthorizedPostException("본인이 작성한 댓글만 삭제할 수 있습니다.");
         }
 
         commentRepository.delete(comment);
+        comment.getPost().decrementCommentCount();
     }
 }
