@@ -57,4 +57,17 @@ public class MentoringCourse {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    public void updateContent(String title, String subtitle, String iconString,
+                              String descriptionTitle, String descriptionText, String boxesJson,
+                              int displayOrder, boolean active) {
+        this.title = title;
+        this.subtitle = subtitle;
+        this.iconString = iconString;
+        this.descriptionTitle = descriptionTitle;
+        this.descriptionText = descriptionText;
+        this.boxesJson = boxesJson;
+        this.displayOrder = displayOrder;
+        this.active = active;
+    }
 }
