@@ -18,6 +18,9 @@ public class VideoMeeting {
     @Column(name = "platform", nullable = false)
     private String platform; // e.g., "Zoom", "Google Meet"
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "url", nullable = false)
     private String url;
 

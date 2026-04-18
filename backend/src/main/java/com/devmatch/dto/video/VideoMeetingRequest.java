@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VideoMeetingRequest {
     private Long sessionId;
+    private String title;
     private String platform;
     private String url;
 }

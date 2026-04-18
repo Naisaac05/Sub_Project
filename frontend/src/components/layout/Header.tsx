@@ -7,7 +7,11 @@ import { Menu, X, User, LogOut, ChevronDown, FileText, Users, GraduationCap } fr
 import { useAuth } from '@/contexts/AuthContext';
 
 const navItems = [
-  { label: '멘토 찾기', href: '/mentors' },
+  { 
+    label: '멘토링 코스', 
+    href: '/mentors',
+    hasMegamenu: true
+  },
   { label: '실력 테스트', href: '/tests' },
   { label: '수강 신청', href: '/apply' },
   { label: 'LMS', href: '/lms/dashboard' },
@@ -62,16 +66,74 @@ export default function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1 group/nav">
             {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg
-                         hover:bg-white/5 transition-all duration-200"
+              <div 
+                key={item.label} 
+                className={`relative ${item.hasMegamenu ? 'group/mega' : ''}`}
               >
-                {item.label}
-              </Link>
+                <Link
+                  href={item.href}
+                  className="px-4 py-6 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-200 flex items-center gap-1"
+                >
+                  {item.label}
+                  {item.hasMegamenu && <ChevronDown size={14} className="opacity-70 group-hover/mega:rotate-180 transition-transform" />}
+                </Link>
+
+                {/* Desktop Mega Menu for Course */}
+                {item.hasMegamenu && (
+                  <div className="absolute top-[100%] left-[-200px] w-screen max-w-[1280px] bg-[#373c44] border-y border-white/10 shadow-xl opacity-0 invisible group-hover/mega:opacity-100 group-hover/mega:visible transition-all duration-300 cursor-default">
+                    <div className="max-w-7xl px-6 py-10 flex gap-20 text-sm">
+                      {/* Column 1 */}
+                      <div className="space-y-4">
+                        <h3 className="font-bold text-white mb-2">취준생/5년차 미만 멘토링</h3>
+                        <ul className="space-y-3 font-semibold text-gray-300">
+                          <li><Link href="/mentors/java-backend" className="hover:text-white">Java/Kotlin Backend + AI</Link></li>
+                          <li><Link href="/mentors/node-backend" className="hover:text-white">Node.js Backend + AI</Link></li>
+                          <li><Link href="/mentors/python-backend" className="hover:text-white">Python Backend + AI</Link></li>
+                          <li><Link href="/mentors/frontend" className="hover:text-white">Frontend + AI</Link></li>
+                          <li><Link href="/mentors/android" className="hover:text-white">Android + AI</Link></li>
+                          <li><Link href="/mentors/ios" className="hover:text-white">iOS + AI</Link></li>
+                          <li><Link href="/mentors/flutter" className="hover:text-white">Flutter + AI</Link></li>
+                        </ul>
+                      </div>
+                      {/* Column 2 */}
+                      <div className="space-y-4 pt-9">
+                        <ul className="space-y-3 font-semibold text-gray-300">
+                          <li><Link href="/mentors/react-native" className="hover:text-white">React Native + AI</Link></li>
+                          <li><Link href="/mentors/devops" className="hover:text-white">Devops</Link></li>
+                          <li><Link href="/mentors/data-engineer" className="hover:text-white">Data Engineer + AI</Link></li>
+                          <li><Link href="/mentors/ml-engineer" className="hover:text-white">ML Engineer</Link></li>
+                          <li><Link href="/mentors/game-server" className="hover:text-white">Game Server</Link></li>
+                          <li><Link href="/mentors/short-term" className="hover:text-white">단기 취업/이직</Link></li>
+                        </ul>
+                      </div>
+                      {/* Column 3 */}
+                      <div className="space-y-4">
+                        <h3 className="font-bold text-white mb-2">First Step</h3>
+                        <ul className="space-y-3 font-semibold text-gray-300">
+                          <li><Link href="/mentors/firststep" className="hover:text-white">Java Backend + AI</Link></li>
+                        </ul>
+                      </div>
+                      {/* Column 4 */}
+                      <div className="space-y-4">
+                        <h3 className="font-bold text-white mb-2">F5: Deep Dive</h3>
+                        <ul className="space-y-3 font-semibold text-gray-300">
+                          <li><Link href="/mentors/distributed-lock" className="hover:text-white">분산 락 Deep Dive</Link></li>
+                          <li><Link href="/mentors/kafka" className="hover:text-white">Kafka Deep Dive</Link></li>
+                        </ul>
+                      </div>
+                      {/* Column 5 */}
+                      <div className="space-y-4">
+                        <h3 className="font-bold text-white mb-2">5년차 이상 멘토링</h3>
+                        <ul className="space-y-3 font-semibold text-gray-300">
+                          <li><Link href="/mentors/expert-msa" className="hover:text-white">Kotlin/MSA 최고급 과정</Link></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
 
@@ -146,6 +208,17 @@ export default function Header() {
                         <Users size={16} />
                         매칭 내역
                       </Link>
+                      {user.role === 'MENTOR' && (
+                        <Link
+                          href="/lms/assignments"
+                          onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
+                                   hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                          <FileText size={16} />
+                          배정 목록
+                        </Link>
+                      )}
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
@@ -245,6 +318,16 @@ export default function Header() {
                   >
                     매칭 내역
                   </Link>
+                  {user.role === 'MENTOR' && (
+                    <Link
+                      href="/lms/assignments"
+                      onClick={() => setMobileOpen(false)}
+                      className="px-4 py-3 text-gray-300 hover:text-white text-center rounded-lg
+                               hover:bg-white/5 transition-colors"
+                    >
+                      배정 목록
+                    </Link>
+                  )}
                   <button
                     onClick={handleLogout}
                     className="px-4 py-3 text-red-400 hover:text-red-300 text-center rounded-lg

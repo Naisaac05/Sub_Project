@@ -10,6 +10,7 @@ export interface SignupRequest {
   email: string;
   password: string;
   name: string;
+  role: 'MENTEE' | 'MENTOR';
 }
 
 export interface LoginRequest {
