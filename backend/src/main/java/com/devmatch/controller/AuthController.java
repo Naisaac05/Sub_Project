@@ -14,6 +14,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -29,6 +30,7 @@ import java.time.Duration;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
     private final AuthService authService;
@@ -50,8 +52,11 @@ public class AuthController {
             HttpServletRequest httpRequest) {
         String deviceInfo = header(httpRequest, "User-Agent");
         String ip = clientIp(httpRequest);
+        log.info("Auth API: login request received: email={}, deviceInfo={}, ip={}", request.getEmail(), deviceInfo, ip);
 
         AuthService.AuthTokens tokens = authService.login(request, deviceInfo, ip);
+
+        log.info("Auth API: login success for email={}", request.getEmail());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, buildRefreshCookie(tokens.refreshToken()).toString())

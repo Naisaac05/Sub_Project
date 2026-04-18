@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class SignupRequest {
 
@@ -21,4 +23,7 @@ public class SignupRequest {
     @NotBlank(message = "이름은 필수입니다")
     @Size(min = 2, max = 50, message = "이름은 2~50자여야 합니다")
     private String name;
+
+    @NotBlank(message = "역할은 필수입니다")
+    private String role; // MENTEE or MENTOR
 }

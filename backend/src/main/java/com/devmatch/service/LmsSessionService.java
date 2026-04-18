@@ -5,6 +5,7 @@ import com.devmatch.entity.*;
 import com.devmatch.exception.*;
 import com.devmatch.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,6 +26,8 @@ public class LmsSessionService {
     private final MentoringSessionRepository sessionRepository;
     private final MentorTimeSlotRepository timeSlotRepository;
     private final SessionChangeRequestRepository changeRequestRepository;
+    private final GoogleCalendarService googleCalendarService;
+    private final JitsiMeetService jitsiMeetService;
 
     // ─── Sessions ───
 
@@ -198,7 +202,33 @@ public class LmsSessionService {
                 .endTime(request.getEndTime())
                 .memo(request.getMemo())
                 .build();
-        return SessionListResponse.from(sessionRepository.save(session), false);
+
+        MentoringSession saved = sessionRepository.save(session);
+        generateAndSaveMeetLink(matching, saved);
+        return SessionListResponse.from(saved, false);
+    }
+
+    private void generateAndSaveMeetLink(Matching matching, MentoringSession session) {
+        var calendarResult = googleCalendarService.createMentoringEvent(
+                matching.getMentor().getEmail(),
+                matching.getMentee().getEmail(),
+                matching.getCategory(),
+                session.getSessionDate(),
+                session.getStartTime(),
+                session.getEndTime(),
+                session.getMemo()
+        );
+
+        if (calendarResult != null && calendarResult.get("meetLink") != null && !calendarResult.get("meetLink").isBlank()) {
+            session.updateMeetLink(calendarResult.get("meetLink"));
+            session.updateCalendarEventId(calendarResult.get("calendarEventId"));
+            log.info("[LMS Session] Google Meet 링크 생성 완료 — sessionId: {}, link: {}", session.getId(), session.getMeetLink());
+        } else {
+            String meetLink = jitsiMeetService.generateMeetLink(
+                    session.getMatchingId(), session.getSessionDate());
+            session.updateMeetLink(meetLink);
+            log.info("[LMS Session] Google Meet 생성 실패로 Jitsi Meet 대체 — sessionId: {}, link: {}", session.getId(), meetLink);
+        }
     }
 
     // ─── Booking ───
@@ -242,6 +272,9 @@ public class LmsSessionService {
             throw new InvalidSessionStateException("승인 대기 상태의 세션만 승인할 수 있습니다");
         }
         session.approve();
+        // 승인 시 Google Calendar/Meet 링크 생성
+        Matching matching = lmsAccessService.validateAccess(userId, matchingId);
+        generateAndSaveMeetLink(matching, session);
         return SessionListResponse.from(session, false);
     }
 
@@ -315,6 +348,18 @@ public class LmsSessionService {
         }
         session.updateSchedule(cr.getNewDate(), cr.getNewStartTime(), cr.getNewEndTime());
         cr.approve();
+
+        // 시간 변경 시 Google Calendar 업데이트
+        if (session.getCalendarEventId() != null) {
+            googleCalendarService.updateEvent(
+                    session.getCalendarEventId(),
+                    session.getCategory(),
+                    session.getSessionDate(),
+                    session.getStartTime(),
+                    session.getEndTime()
+            );
+        }
+
         return ChangeRequestResponse.from(cr);
     }
 

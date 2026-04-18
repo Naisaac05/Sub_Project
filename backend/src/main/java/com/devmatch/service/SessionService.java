@@ -2,13 +2,12 @@ package com.devmatch.service;
 
 import com.devmatch.dto.session.SessionCreateRequest;
 import com.devmatch.dto.session.SessionResponse;
+import com.devmatch.entity.Matching;
 import com.devmatch.entity.MentoringSession;
 import com.devmatch.entity.SessionStatus;
-import com.devmatch.exception.InvalidSessionStateException;
-import com.devmatch.exception.SessionAlreadyExistsException;
-import com.devmatch.exception.SessionNotFoundException;
+import com.devmatch.exception.*;
+import com.devmatch.repository.MatchingRepository;
 import com.devmatch.repository.MentoringSessionRepository;
-import com.devmatch.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 public class SessionService {
 
     private final MentoringSessionRepository sessionRepository;
-    private final UserRepository userRepository;
+    private final MatchingRepository matchingRepository;
     private final GoogleCalendarService googleCalendarService;
     private final JitsiMeetService jitsiMeetService;
 
@@ -41,15 +40,21 @@ public class SessionService {
             throw new SessionAlreadyExistsException("이미 해당 매칭에 대한 세션이 존재합니다");
         }
 
-        // 세션 생성
-        // 참고: 실제로는 Matching 엔티티에서 mentorId, menteeId, category를 가져와야 하지만
-        // Phase 3 Matching 엔티티는 팀원이 구현할 예정이므로,
-        // 여기서는 요청자를 menteeId로 설정합니다.
+        // 매칭 정보 조회
+        Matching matching = matchingRepository.findById(request.getMatchingId())
+                .orElseThrow(() -> new MatchingNotFoundException("매칭을 찾을 수 없습니다: " + request.getMatchingId()));
+
+        // 권한 확인 (멘티 혹은 멘토만 세션 생성 가능)
+        if (!matching.getMentee().getId().equals(userId) && !matching.getMentor().getId().equals(userId)) {
+            throw new InvalidSessionStateException("해당 매칭의 당사자만 세션을 생성할 수 있습니다");
+        }
+
+        // 세션 엔티티 생성
         MentoringSession session = MentoringSession.builder()
-                .matchingId(request.getMatchingId())
-                .menteeId(userId)
-                .mentorId(0L)  // Matching 연동 시 실제 멘토 ID로 교체
-                .category("General")  // Matching 연동 시 실제 카테고리로 교체
+                .matchingId(matching.getId())
+                .menteeId(matching.getMentee().getId())
+                .mentorId(matching.getMentor().getId())
+                .category(matching.getCategory())
                 .sessionDate(request.getSessionDate())
                 .startTime(request.getStartTime())
                 .endTime(request.getEndTime())
@@ -58,11 +63,28 @@ public class SessionService {
 
         MentoringSession saved = sessionRepository.save(session);
 
-        // Jitsi Meet 링크 생성
-        String meetLink = jitsiMeetService.generateMeetLink(
-                saved.getMatchingId(), saved.getSessionDate());
-        saved.updateMeetLink(meetLink);
-        log.info("[Session] Jitsi Meet 링크 생성 — sessionId: {}, link: {}", saved.getId(), meetLink);
+        // 1. Google Calendar 이벤트 & Meet 링크 생성 시도
+        var calendarResult = googleCalendarService.createMentoringEvent(
+                matching.getMentor().getEmail(),
+                matching.getMentee().getEmail(),
+                matching.getCategory(),
+                saved.getSessionDate(),
+                saved.getStartTime(),
+                saved.getEndTime(),
+                saved.getMemo()
+        );
+
+        if (calendarResult != null && calendarResult.get("meetLink") != null && !calendarResult.get("meetLink").isBlank()) {
+            saved.updateMeetLink(calendarResult.get("meetLink"));
+            saved.updateCalendarEventId(calendarResult.get("calendarEventId"));
+            log.info("[Session] Google Meet 링크 생성 완료 — sessionId: {}, link: {}", saved.getId(), saved.getMeetLink());
+        } else {
+            // 2. Google Calendar 실패 시 Jitsi Meet로 대체 (Fallback)
+            String meetLink = jitsiMeetService.generateMeetLink(
+                    saved.getMatchingId(), saved.getSessionDate());
+            saved.updateMeetLink(meetLink);
+            log.info("[Session] Google Meet 생성 실패로 Jitsi Meet 대체 — sessionId: {}, link: {}", saved.getId(), meetLink);
+        }
 
         return SessionResponse.from(saved);
     }

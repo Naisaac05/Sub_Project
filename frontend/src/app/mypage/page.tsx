@@ -49,6 +49,7 @@ export default function MyPage() {
     fetchData();
   }, [isLoggedIn, user?.role]);
 
+
   // 편집 모드 시작 시 현재 값으로 초기화
   const startEditing = () => {
     setEditForm({ name: user?.name || '', password: '', passwordConfirm: '' });

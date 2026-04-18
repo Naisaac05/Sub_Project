@@ -120,6 +120,47 @@ public class GoogleCalendarService {
     }
 
     /**
+     * Google Calendar 이벤트를 업데이트합니다.
+     */
+    public void updateEvent(
+            String calendarEventId,
+            String summary,
+            LocalDate sessionDate,
+            LocalTime startTime,
+            LocalTime endTime
+    ) {
+        if (calendar == null) {
+            log.info("[GoogleCalendar STUB] 이벤트 업데이트 요청 — eventId: {}, summary: {}, date: {}, time: {}-{}",
+                    calendarEventId, summary, sessionDate, startTime, endTime);
+            return;
+        }
+
+        try {
+            Event event = calendar.events().get("primary", calendarEventId).execute();
+            event.setSummary(summary != null ? "Mentoring: " + summary : event.getSummary());
+
+            ZoneId seoulZone = ZoneId.of("Asia/Seoul");
+            ZonedDateTime start = ZonedDateTime.of(sessionDate, startTime, seoulZone);
+            ZonedDateTime end = ZonedDateTime.of(sessionDate, endTime, seoulZone);
+
+            event.setStart(new EventDateTime()
+                    .setDateTime(new DateTime(start.toInstant().toEpochMilli()))
+                    .setTimeZone("Asia/Seoul"));
+            event.setEnd(new EventDateTime()
+                    .setDateTime(new DateTime(end.toInstant().toEpochMilli()))
+                    .setTimeZone("Asia/Seoul"));
+
+            calendar.events().update("primary", calendarEventId, event)
+                    .setSendUpdates("all")
+                    .execute();
+
+            log.info("[GoogleCalendar] 이벤트 업데이트 완료 — eventId: {}", calendarEventId);
+        } catch (IOException e) {
+            log.error("[GoogleCalendar] 이벤트 업데이트 실패: {}", e.getMessage());
+        }
+    }
+
+    /**
      * Google Calendar에서 이벤트를 삭제합니다.
      */
     public void deleteEvent(String calendarEventId) {
