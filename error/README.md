@@ -39,3 +39,5 @@
 - [2026-04-12 — LMS 커리큘럼에서 주차 추가가 실제로 저장되지 않음 (+ 잔상 에러)](2026-04-12-lms-curriculum-week-add-fails.md)
 - [2026-04-12 — LMS 커리큘럼 주차가 여전히 반영 안 됨 → 백엔드 재시작 필요](2026-04-12-lms-curriculum-weeks-persist-restart.md)
 - [2026-04-12 — Refresh token 세션 재설계 (Redis 세션 + HttpOnly 쿠키 + rotation/reuse detection)](2026-04-12-auth-refresh-token-session-redesign.md)
+- [2026-04-18 — 회원가입 시 MENTOR를 선택해도 항상 MENTEE로 저장됨 (stale build로 실행된 백엔드)](2026-04-18-signup-role-always-mentee-stale-build.md)
+- [2026-04-18 — Course API 코드 리뷰 지적사항 4건 반영 (CourseNotFoundException, ResponseEntity, Swagger, 테스트)](2026-04-18-course-api-review-fixes.md)
