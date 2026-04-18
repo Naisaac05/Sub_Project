@@ -19,7 +19,6 @@ public class ApplicationRequest {
     private String category;
     private String courseType;
     private Integer desiredMonths;
-    // New fields
     private List<String> languages;
     private List<String> platforms;
     private Boolean isCsMajor;
