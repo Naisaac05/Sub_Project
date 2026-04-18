@@ -12,7 +12,7 @@ public class MentorRecommendResponse {
 
     private Long mentorId;
     private String name;
-    private List<String> specialty;
+    private List<String> courseKeys;
     private Integer careerYears;
     private String company;
     private String bio;
@@ -22,7 +22,7 @@ public class MentorRecommendResponse {
         return new MentorRecommendResponse(
                 profile.getUser().getId(),
                 profile.getUser().getName(),
-                profile.getSpecialty(),
+                profile.getCourses().stream().map(c -> c.getCourseKey()).toList(),
                 profile.getCareerYears(),
                 profile.getCompany(),
                 profile.getBio(),

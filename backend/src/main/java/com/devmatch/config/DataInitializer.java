@@ -558,15 +558,15 @@ public class DataInitializer implements CommandLineRunner {
         String encoded = passwordEncoder.encode("mentor1234!");
 
         createMentor("김자바", "java.mentor@devmatch.com", encoded,
-                List.of("Java", "Spring"), 8, "네이버", "Java/Spring 전문 멘토입니다. 대규모 서비스 설계 경험이 풍부합니다.");
+                List.of("java-backend", "firststep"), 8, "네이버", "Java/Spring 전문 멘토입니다. 대규모 서비스 설계 경험이 풍부합니다.");
         createMentor("이스프링", "spring.mentor@devmatch.com", encoded,
-                List.of("Spring", "DevOps"), 5, "카카오", "Spring 기반 MSA 설계와 DevOps 파이프라인 구축 경험이 있습니다.");
+                List.of("java-backend", "devops"), 5, "카카오", "Spring 기반 MSA 설계와 DevOps 파이프라인 구축 경험이 있습니다.");
         createMentor("박리액트", "react.mentor@devmatch.com", encoded,
-                List.of("React", "Node.js"), 6, "라인", "React와 Node.js 풀스택 개발 멘토입니다.");
+                List.of("frontend", "node-backend"), 6, "라인", "React와 Node.js 풀스택 개발 멘토입니다.");
         createMentor("최파이썬", "python.mentor@devmatch.com", encoded,
-                List.of("Python", "Algorithm"), 7, "쿠팡", "Python 백엔드와 알고리즘 전문 멘토입니다.");
+                List.of("python-backend"), 7, "쿠팡", "Python 백엔드와 알고리즘 전문 멘토입니다.");
         createMentor("정풀스택", "fullstack.mentor@devmatch.com", encoded,
-                List.of("Java", "React", "Spring"), 10, "토스", "10년차 풀스택 개발자입니다. 서비스 전체 아키텍처 설계를 도와드립니다.");
+                List.of("java-backend", "frontend", "kafka"), 10, "토스", "10년차 풀스택 개발자입니다. 서비스 전체 아키텍처 설계를 도와드립니다.");
 
         log.info("멘토 초기 데이터 {}명 삽입 완료", mentorProfileRepository.count());
     }
@@ -704,7 +704,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createMentor(String name, String email, String encodedPassword,
-                              List<String> specialty, int careerYears, String company, String bio) {
+                              List<String> courseKeys, int careerYears, String company, String bio) {
         if (userRepository.existsByEmail(email)) {
             return;
         }
@@ -716,9 +716,12 @@ public class DataInitializer implements CommandLineRunner {
                 .role(Role.MENTOR)
                 .build());
 
+        java.util.List<MentoringCourse> foundCourses =
+                mentoringCourseRepository.findAllByCourseKeyInAndActiveTrue(courseKeys);
+
         mentorProfileRepository.save(MentorProfile.builder()
                 .user(user)
-                .specialty(specialty)
+                .courses(new java.util.HashSet<>(foundCourses))
                 .careerYears(careerYears)
                 .company(company)
                 .bio(bio)

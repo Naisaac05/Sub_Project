@@ -1,6 +1,7 @@
 package com.devmatch.service;
 
 import com.devmatch.entity.MentorAvailability;
+import com.devmatch.entity.MentoringCourse;
 import com.devmatch.entity.MentorProfile;
 import com.devmatch.entity.MentorStatus;
 import com.devmatch.entity.RecommendedMentor;
@@ -83,10 +84,10 @@ public class RecommendationService {
 
     /**
      * 가중치 1: 기술 스택 일치도 (최대 40점)
-     * 멘토의 specialty 목록과 멘티의 techStack 키워드를 교차 비교
+     * 멘토의 courses courseKey 목록과 멘티의 techStack 키워드를 교차 비교
      */
     private int calculateTechScore(SurveyResponse survey, MentorProfile mentor) {
-        if (mentor.getSpecialty() == null || mentor.getSpecialty().isEmpty()
+        if (mentor.getCourses() == null || mentor.getCourses().isEmpty()
                 || survey.getTechStack() == null || survey.getTechStack().isBlank()) {
             return 5; // 데이터 부족 시 최소 점수
         }
@@ -95,7 +96,8 @@ public class RecommendationService {
                 .map(s -> s.trim().toLowerCase())
                 .collect(Collectors.toSet());
 
-        long matchCount = mentor.getSpecialty().stream()
+        long matchCount = mentor.getCourses().stream()
+                .map(MentoringCourse::getCourseKey)
                 .filter(s -> menteeStacks.contains(s.toLowerCase().trim()))
                 .count();
 
