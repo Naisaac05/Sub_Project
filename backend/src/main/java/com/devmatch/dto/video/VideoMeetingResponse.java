@@ -12,6 +12,7 @@ public class VideoMeetingResponse {
     private Long id;
     private Long sessionId;
     private String platform;
+    private String title;
     private String url;
     private LocalDateTime createdAt;
 
@@ -21,6 +22,7 @@ public class VideoMeetingResponse {
                 .id(entity.getId())
                 .sessionId(entity.getSessionId())
                 .platform(entity.getPlatform())
+                .title(entity.getTitle())
                 .url(entity.getUrl())
                 .createdAt(entity.getCreatedAt())
                 .build();

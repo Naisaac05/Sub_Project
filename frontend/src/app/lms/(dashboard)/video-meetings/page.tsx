@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import LmsSidebar from '@/components/lms/LmsSidebar';
 import { useAuth } from '@/contexts/AuthContext';
+import apiClient from '@/lib/api';
 import { Globe, Video, Check, Link as LinkIcon, ExternalLink } from 'lucide-react';
 
 export default function VideoMeetingsPage() {
@@ -18,6 +19,7 @@ export default function VideoMeetingsPage() {
 
   // Form state
   const [editingSessionId, setEditingSessionId] = useState<number | null>(null);
+  const [title, setTitle] = useState('');
   const [platform, setPlatform] = useState('Google Meet');
   const [url, setUrl] = useState('');
 
@@ -30,7 +32,7 @@ export default function VideoMeetingsPage() {
         { id: 102, sessionDate: '2026-05-08', startTime: '19:00', endTime: '20:00', status: 'SCHEDULED' },
       ]);
       setMeetings({
-        101: { platform: 'Google Meet', url: 'https://meet.google.com/abc-defg-hij' }
+        101: { title: '프로젝트 킥오프', platform: 'Google Meet', url: 'https://meet.google.com/abc-defg-hij', createdAt: new Date().toISOString() }
       });
       setLoading(false);
     }, 500);
@@ -39,13 +41,10 @@ export default function VideoMeetingsPage() {
   const handleSave = async (sessionId: number) => {
     // Call the newly implemented backend API
     try {
-      const res = await fetch('/api/video-meetings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId, platform, url })
-      });
-      const data = await res.json();
-      setMeetings(prev => ({ ...prev, [sessionId]: data }));
+      const res = await apiClient.post('/video-meetings', { sessionId, title, platform, url });
+      if (res.data.success) {
+        setMeetings(prev => ({ ...prev, [sessionId]: res.data.data }));
+      }
       setEditingSessionId(null);
     } catch (e) {
       console.error(e);
@@ -82,10 +81,14 @@ export default function VideoMeetingsPage() {
                         SESSION #{session.id}
                       </span>
                       <span className="text-gray-400 text-sm">{session.sessionDate} {session.startTime}~{session.endTime}</span>
+                      {meeting && (
+                        <span className="text-gray-500 text-xs">등록: {new Date(meeting.createdAt).toLocaleString()}</span>
+                      )}
                     </div>
                     <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                       <Video size={18} className="text-gray-400" />
-                      {meeting ? meeting.platform : '미등록 상태'}
+                      {meeting?.title || meeting?.platform || '미등록 상태'}
+                      {meeting?.title && <span className="text-sm font-normal text-gray-400">({meeting.platform})</span>}
                     </h3>
                   </div>
 
@@ -94,6 +97,7 @@ export default function VideoMeetingsPage() {
                       <button
                         onClick={() => {
                           setEditingSessionId(session.id);
+                          setTitle('');
                           setPlatform('Google Meet');
                           setUrl('');
                         }}
@@ -111,6 +115,7 @@ export default function VideoMeetingsPage() {
                           <button
                             onClick={() => {
                               setEditingSessionId(session.id);
+                              setTitle(meeting.title || '');
                               setPlatform(meeting.platform);
                               setUrl(meeting.url);
                             }}
@@ -134,6 +139,16 @@ export default function VideoMeetingsPage() {
 
                 {isEditing && (
                   <div className="mt-5 pt-5 border-t border-white/10 flex flex-col gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">화상회의 제목</label>
+                      <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="예: 프로젝트 킥오프 미팅"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-blue-500 focus:outline-none"
+                      />
+                    </div>
                     <div className="grid sm:grid-cols-[200px_1fr] gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-400 mb-2">플랫폼</label>

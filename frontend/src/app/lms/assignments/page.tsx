@@ -1,267 +1,220 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/contexts/AuthContext';
-import { ClipboardList, Plus, Loader2, Clock, ExternalLink } from 'lucide-react';
-import { getAssignments, createAssignment, submitAssignment, feedbackAssignment } from '@/lib/lms';
-import type { AssignmentResponse, AssignmentType } from '@/lib/lms-types';
+import { 
+  Check, 
+  X, 
+  Loader2, 
+  ArrowLeft, 
+  FileText, 
+  Calendar, 
+  Clock, 
+  Users,
+  AlertCircle,
+  Briefcase
+} from 'lucide-react';
 
 export default function AssignmentsPage() {
-  const searchParams = useSearchParams();
-  const matchingId = Number(searchParams.get('matchingId'));
-  const { user } = useAuth();
-  const isMentor = user?.role === 'MENTOR';
-
-  const [assignments, setAssignments] = useState<AssignmentResponse[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<string>('');
-  const [createModal, setCreateModal] = useState(false);
-  const [submitModal, setSubmitModal] = useState<AssignmentResponse | null>(null);
-  const [feedbackModal, setFeedbackModal] = useState<AssignmentResponse | null>(null);
-  const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
+  const { user, isLoggedIn, isLoading } = useAuth();
+  const [assignments, setAssignments] = useState<any[]>([]);
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const [createForm, setCreateForm] = useState({ type: 'TASK' as AssignmentType, title: '', description: '', dueDate: '' });
-  const [submitForm, setSubmitForm] = useState({ submissionUrl: '', submissionNote: '' });
-  const [fbForm, setFbForm] = useState({ feedbackContent: '' });
+  useEffect(() => {
+    if (!isLoading && !isLoggedIn) {
+      router.replace('/auth/login');
+    }
+  }, [isLoading, isLoggedIn, router]);
 
-  const fetchData = async () => {
-    if (!matchingId) return;
+  useEffect(() => {
+    if (isLoggedIn && user?.role === 'MENTOR') {
+      fetchAssignments();
+    } else if (!isLoading && user?.role !== 'MENTOR') {
+      // 멘토가 아니면 접근 불가
+      setError('멘토만 접근 가능한 페이지입니다.');
+      setIsPageLoading(false);
+    }
+  }, [isLoggedIn, user?.role, isLoading]);
+
+  const fetchAssignments = async () => {
+    setIsPageLoading(true);
     try {
-      const res = await getAssignments(matchingId, filter || undefined);
-      setAssignments(res.data.data || []);
-    } catch { /* ignore */ }
-    finally { setLoading(false); }
+      const res = await fetch(`http://localhost:8080/api/applications/my-assignments`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAssignments(data);
+      } else {
+        setError('배정 목록이 없습니다.');
+      }
+    } catch (e) {
+      console.error(e);
+      setError('배정 목록이 없습니다.');
+    } finally {
+      setIsPageLoading(false);
+    }
   };
 
-  useEffect(() => { fetchData(); }, [matchingId, filter]);
-
-  const handleCreate = async () => {
-    setSubmitting(true); setError('');
+  const handleAssignmentAction = async (id: number, action: 'approve' | 'reject') => {
     try {
-      await createAssignment({ matchingId, ...createForm, dueDate: createForm.dueDate || undefined });
-      setCreateModal(false);
-      setCreateForm({ type: 'TASK', title: '', description: '', dueDate: '' });
-      fetchData();
-    } catch (e: any) { setError(e.response?.data?.message || '생성에 실패했습니다'); }
-    finally { setSubmitting(false); }
+      const res = await fetch(`http://localhost:8080/api/applications/${id}/${action}`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      });
+      if (res.ok) {
+        alert(action === 'approve' ? '매칭이 수락되었습니다!' : '매칭을 거절했습니다.');
+        fetchAssignments();
+      } else {
+        alert('처리 중 오류가 발생했습니다.');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('서버와 통신 중 오류가 발생했습니다.');
+    }
   };
 
-  const handleSubmit = async () => {
-    if (!submitModal) return;
-    setSubmitting(true); setError('');
-    try {
-      await submitAssignment(submitModal.id, { submissionUrl: submitForm.submissionUrl, submissionNote: submitForm.submissionNote || undefined });
-      setSubmitModal(null);
-      fetchData();
-    } catch (e: any) { setError(e.response?.data?.message || '제출에 실패했습니다'); }
-    finally { setSubmitting(false); }
-  };
-
-  const handleFeedback = async () => {
-    if (!feedbackModal) return;
-    setSubmitting(true); setError('');
-    try {
-      await feedbackAssignment(feedbackModal.id, { feedbackContent: fbForm.feedbackContent });
-      setFeedbackModal(null);
-      fetchData();
-    } catch (e: any) { setError(e.response?.data?.message || '피드백 작성에 실패했습니다'); }
-    finally { setSubmitting(false); }
-  };
-
-  const statusLabel: Record<string, string> = { ASSIGNED: '미제출', SUBMITTED: '제출됨', REVIEWED: '리뷰 완료' };
-  const statusColor: Record<string, string> = {
-    ASSIGNED: 'bg-amber-500/10 text-amber-400',
-    SUBMITTED: 'bg-blue-500/10 text-blue-400',
-    REVIEWED: 'bg-green-500/10 text-green-400',
-  };
-  const typeLabel: Record<string, string> = { TASK: '과제', CODE_REVIEW: '코드리뷰' };
-
-  if (loading) {
-    return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" /></div>;
+  if (isLoading || isPageLoading) {
+    return (
+      <>
+        <Header />
+        <main className="min-h-screen hero-gradient grid-pattern flex items-center justify-center pt-16">
+          <Loader2 size={32} className="animate-spin text-blue-400" />
+        </main>
+      </>
+    );
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-white">과제 / 코드리뷰</h1>
-          <p className="text-gray-400 mt-1">과제를 확인하고 제출하세요</p>
-        </div>
-        {isMentor && (
-          <button onClick={() => setCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 transition-colors">
-            <Plus size={16} />과제 만들기
-          </button>
-        )}
-      </div>
+    <>
+      <Header />
+      <main className="min-h-screen hero-gradient grid-pattern pt-28 pb-20">
+        <div className="orb w-[400px] h-[400px] bg-blue-600/15 -top-20 -left-20" />
+        <div className="orb w-[300px] h-[300px] bg-violet-600/10 bottom-20 right-10" />
 
-      {/* Filter Tabs */}
-      <div className="flex gap-2">
-        {[{ label: '전체', value: '' }, { label: '과제', value: 'TASK' }, { label: '코드리뷰', value: 'CODE_REVIEW' }].map(tab => (
-          <button key={tab.value} onClick={() => setFilter(tab.value)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${filter === tab.value ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
-            {tab.label}
-          </button>
-        ))}
-      </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-6">
+          {/* Header */}
+          <div className="mb-10">
+            <Link
+              href="/mypage"
+              className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-300 text-sm mb-6 transition-colors"
+            >
+              <ArrowLeft size={16} />
+              마이페이지로 돌아가기
+            </Link>
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <FileText size={24} className="text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-white tracking-tight">배정 목록</h1>
+                <p className="text-gray-400 mt-1">새로 배정된 멘티 신청서를 확인하고 매칭을 진행하세요.</p>
+              </div>
+            </div>
+          </div>
 
-      {error && <p className="text-red-400 text-sm">{error}</p>}
+          {error ? (
+            <div className="glass-card rounded-2xl p-12 text-center border-red-500/20">
+              <AlertCircle size={40} className="text-red-400 mx-auto mb-4" />
+              <p className="text-white font-medium">{error}</p>
+              <button 
+                onClick={() => router.push('/')}
+                className="mt-6 px-6 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all"
+              >
+                홈으로 이동
+              </button>
+            </div>
+          ) : assignments.length === 0 ? (
+            <div className="glass-card rounded-2xl p-20 text-center">
+              <div className="w-20 h-20 rounded-3xl bg-white/3 flex items-center justify-center mx-auto mb-6">
+                <Briefcase size={36} className="text-gray-600" />
+              </div>
+              <h2 className="text-xl font-bold text-white mb-2">대기 중인 신청서가 없습니다</h2>
+              <p className="text-gray-500">새로운 멘티가 배정되면 여기에 표시됩니다.</p>
+            </div>
+          ) : (
+            <div className="grid gap-6">
+              {assignments.map((app) => (
+                <div 
+                  key={app.id} 
+                  className="glass-card rounded-2xl p-6 sm:p-8 border border-white/5 hover:border-white/10 transition-all duration-300 shadow-xl"
+                >
+                  <div className="flex flex-col lg:flex-row gap-8">
+                    {/* Left: Info */}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-bold uppercase tracking-wider">
+                          {app.category}
+                        </span>
+                        <span className="px-3 py-1 rounded-full bg-violet-500/10 text-violet-400 text-xs font-bold uppercase tracking-wider">
+                          {app.courseType}
+                        </span>
+                      </div>
+                      
+                      <h3 className="text-xl font-bold text-white mb-4">
+                        {app.userName} 멘티의 신청서
+                      </h3>
 
-      {assignments.length === 0 ? (
-        <div className="text-center py-20">
-          <ClipboardList size={48} className="mx-auto text-gray-600 mb-4" />
-          <p className="text-gray-400">아직 등록된 과제가 없습니다.</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {assignments.map(a => (
-            <div key={a.id} className="bg-[#0f1420] border border-white/5 rounded-2xl p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="px-2 py-0.5 rounded text-xs bg-violet-500/10 text-violet-400">{typeLabel[a.type]}</span>
-                    <span className={`px-2 py-0.5 rounded text-xs ${statusColor[a.status]}`}>{statusLabel[a.status]}</span>
-                  </div>
-                  <h3 className="text-white font-semibold">{a.title}</h3>
-                  {a.description && <p className="text-gray-400 text-sm mt-1 line-clamp-2">{a.description}</p>}
-                  {a.dueDate && (
-                    <div className="flex items-center gap-1.5 mt-2 text-gray-500 text-xs">
-                      <Clock size={12} />마감: {a.dueDate}
-                    </div>
-                  )}
-                  {/* Submission Info */}
-                  {a.submission && (
-                    <div className="mt-3 p-3 rounded-xl bg-white/3 border border-white/5">
-                      <a href={a.submission.submissionUrl} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-cyan-400 text-sm hover:text-cyan-300">
-                        <ExternalLink size={14} />{a.submission.submissionUrl}
-                      </a>
-                      {a.submission.submissionNote && <p className="text-gray-400 text-xs mt-1">{a.submission.submissionNote}</p>}
-                      {a.submission.feedbackContent && (
-                        <div className="mt-2 pt-2 border-t border-white/5">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-green-400 text-xs font-medium">멘토 피드백</span>
-                          </div>
-                          <p className="text-gray-300 text-sm">{a.submission.feedbackContent}</p>
+                      <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                        <div className="p-4 rounded-xl bg-white/3 border border-white/5">
+                          <p className="text-gray-500 text-xs mb-1">목표 커리어</p>
+                          <p className="text-white text-sm font-medium">{app.careerGoal}</p>
                         </div>
-                      )}
+                        <div className="p-4 rounded-xl bg-white/3 border border-white/5">
+                          <p className="text-gray-500 text-xs mb-1">현재 실력 레벨</p>
+                          <p className="text-white text-sm font-medium">{app.currentLevel}</p>
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-black/20 border border-white/5">
+                        <p className="text-gray-300 font-bold text-sm mb-3 flex items-center gap-2">
+                          <Clock size={16} className="text-blue-400" />
+                          희망 학습 시간
+                        </p>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1">평일</p>
+                            <p className="text-gray-300 text-sm">{app.weekdayStudyHours}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1">주말</p>
+                            <p className="text-gray-300 text-sm">{app.weekendStudyHours}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  )}
+
+                    {/* Right: Actions */}
+                    <div className="lg:w-48 flex flex-col gap-3 justify-center shrink-0 border-t lg:border-t-0 lg:border-l border-white/5 pt-6 lg:pt-0 lg:pl-8">
+                      <button 
+                        onClick={() => handleAssignmentAction(app.id, 'approve')}
+                        className="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30 transition-all flex items-center justify-center gap-2"
+                      >
+                        <Check size={18} />
+                        수락 및 매칭
+                      </button>
+                      <button 
+                        onClick={() => handleAssignmentAction(app.id, 'reject')}
+                        className="w-full py-4 rounded-xl bg-white/5 hover:bg-red-500/10 text-gray-400 hover:text-red-400 font-bold text-sm border border-white/10 hover:border-red-500/20 transition-all flex items-center justify-center gap-2"
+                      >
+                        <X size={18} />
+                        거절
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex gap-2 shrink-0 ml-4">
-                  {!isMentor && a.status === 'ASSIGNED' && (
-                    <button onClick={() => { setSubmitForm({ submissionUrl: '', submissionNote: '' }); setSubmitModal(a); }}
-                      className="px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors">제출</button>
-                  )}
-                  {isMentor && a.status === 'SUBMITTED' && (
-                    <button onClick={() => { setFbForm({ feedbackContent: '' }); setFeedbackModal(a); }}
-                      className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors">피드백</button>
-                  )}
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
-
-      {/* Create Modal */}
-      {createModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backdropFilter: 'blur(6px)', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="glass-card rounded-2xl w-full max-w-md p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">과제 만들기</h3>
-            {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
-            <div className="space-y-4">
-              <div>
-                <label className="text-gray-400 text-sm">타입</label>
-                <select value={createForm.type} onChange={e => setCreateForm({ ...createForm, type: e.target.value as AssignmentType })}
-                  className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50 [&>option]:bg-gray-900 [&>option]:text-white">
-                  <option value="TASK">과제</option>
-                  <option value="CODE_REVIEW">코드리뷰</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-gray-400 text-sm">제목</label>
-                <input type="text" value={createForm.title} onChange={e => setCreateForm({ ...createForm, title: e.target.value })}
-                  className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50" />
-              </div>
-              <div>
-                <label className="text-gray-400 text-sm">설명</label>
-                <textarea value={createForm.description} onChange={e => setCreateForm({ ...createForm, description: e.target.value })} rows={3}
-                  className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50 resize-none" />
-              </div>
-              <div>
-                <label className="text-gray-400 text-sm">마감일</label>
-                <input type="date" value={createForm.dueDate} onChange={e => setCreateForm({ ...createForm, dueDate: e.target.value })}
-                  className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50" />
-              </div>
-            </div>
-            <div className="flex gap-3 mt-6">
-              <button onClick={() => setCreateModal(false)} className="flex-1 py-2.5 rounded-xl text-gray-400 text-sm border border-white/10 hover:bg-white/5">취소</button>
-              <button onClick={handleCreate} disabled={submitting || !createForm.title}
-                className="flex-1 py-2.5 rounded-xl text-white text-sm font-bold bg-gradient-to-r from-blue-600 to-blue-500 disabled:opacity-60">
-                {submitting ? <Loader2 size={16} className="animate-spin mx-auto" /> : '생성'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Submit Modal */}
-      {submitModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backdropFilter: 'blur(6px)', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="glass-card rounded-2xl w-full max-w-md p-6">
-            <h3 className="text-lg font-semibold text-white mb-2">과제 제출</h3>
-            <p className="text-gray-400 text-sm mb-4">{submitModal.title}</p>
-            {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
-            <div className="space-y-4">
-              <div>
-                <label className="text-gray-400 text-sm">GitHub URL</label>
-                <input type="url" value={submitForm.submissionUrl} onChange={e => setSubmitForm({ ...submitForm, submissionUrl: e.target.value })} placeholder="https://github.com/..."
-                  className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50" />
-              </div>
-              <div>
-                <label className="text-gray-400 text-sm">메모</label>
-                <textarea value={submitForm.submissionNote} onChange={e => setSubmitForm({ ...submitForm, submissionNote: e.target.value })} rows={2} placeholder="제출 관련 메모"
-                  className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-blue-500/50 resize-none" />
-              </div>
-            </div>
-            <div className="flex gap-3 mt-6">
-              <button onClick={() => setSubmitModal(null)} className="flex-1 py-2.5 rounded-xl text-gray-400 text-sm border border-white/10 hover:bg-white/5">취소</button>
-              <button onClick={handleSubmit} disabled={submitting || !submitForm.submissionUrl}
-                className="flex-1 py-2.5 rounded-xl text-white text-sm font-bold bg-gradient-to-r from-blue-600 to-blue-500 disabled:opacity-60">
-                {submitting ? <Loader2 size={16} className="animate-spin mx-auto" /> : '제출'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Feedback Modal */}
-      {feedbackModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backdropFilter: 'blur(6px)', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="glass-card rounded-2xl w-full max-w-md p-6">
-            <h3 className="text-lg font-semibold text-white mb-2">피드백 작성</h3>
-            <p className="text-gray-400 text-sm mb-4">{feedbackModal.title}</p>
-            {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
-            <div className="space-y-4">
-              <div>
-                <label className="text-gray-400 text-sm">피드백 내용</label>
-                <textarea value={fbForm.feedbackContent} onChange={e => setFbForm({ ...fbForm, feedbackContent: e.target.value })} rows={4}
-                  className="w-full mt-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-blue-500/50 resize-none" />
-              </div>
-            </div>
-            <div className="flex gap-3 mt-6">
-              <button onClick={() => setFeedbackModal(null)} className="flex-1 py-2.5 rounded-xl text-gray-400 text-sm border border-white/10 hover:bg-white/5">취소</button>
-              <button onClick={handleFeedback} disabled={submitting || !fbForm.feedbackContent}
-                className="flex-1 py-2.5 rounded-xl text-white text-sm font-bold bg-gradient-to-r from-green-600 to-green-500 disabled:opacity-60">
-                {submitting ? <Loader2 size={16} className="animate-spin mx-auto" /> : '피드백 등록'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+      </main>
+      <Footer />
+    </>
   );
 }

@@ -45,4 +45,7 @@ public class ApplicationResponse {
     private ApplicationStatus status;
     private Boolean autoMatched;
     private LocalDateTime submittedAt;
+    
+    // New fields for mentor assignment
+    private Long assignedMentorId;
 }

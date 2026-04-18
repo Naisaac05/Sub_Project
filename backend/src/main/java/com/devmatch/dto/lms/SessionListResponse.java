@@ -21,6 +21,7 @@ public class SessionListResponse {
     private LocalTime startTime;
     private LocalTime endTime;
     private SessionStatus status;
+    private String title;
     private String meetLink;
     private String memo;
     private boolean hasPendingChangeRequest;
@@ -37,6 +38,7 @@ public class SessionListResponse {
                 .startTime(s.getStartTime())
                 .endTime(s.getEndTime())
                 .status(s.getStatus())
+                .title(s.getTitle())
                 .meetLink(s.getMeetLink())
                 .memo(s.getMemo())
                 .hasPendingChangeRequest(hasPendingChange)

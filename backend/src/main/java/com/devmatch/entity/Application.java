@@ -3,7 +3,8 @@ package com.devmatch.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
-import com.devmatch.entity.StringListConverter;
+import java.util.Set;
+import java.util.HashSet;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -107,6 +108,9 @@ public class Application {
     @Column(name = "personality")
     private String personality;
 
+    @Column(name = "phone", length = 20)
+    private String phone;
+
     @Column(name = "self_introduction", columnDefinition = "TEXT")
     private String selfIntroduction;
 
@@ -129,6 +133,18 @@ public class Application {
     @Column(name = "rejected_reason", columnDefinition = "TEXT")
     private String rejectedReason;
 
+    // 할당된 멘토 (멘티 수 가장 적은 순 + 가입 순)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_mentor_id")
+    private User assignedMentor;
+
+    // 이 신청서를 거절한 멘토 ID 목록
+    @ElementCollection
+    @CollectionTable(name = "application_rejected_mentors", joinColumns = @JoinColumn(name = "application_id"))
+    @Column(name = "mentor_id")
+    @Builder.Default
+    private Set<Long> rejectedMentors = new HashSet<>();
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -148,5 +164,25 @@ public class Application {
     public void acceptAutoMatch() {
         this.status = ApplicationStatus.ACCEPTED;
         this.autoMatched = true;
+    }
+
+    // 멘토 재할당
+    public void assignMentor(User mentor) {
+        this.assignedMentor = mentor;
+        this.status = ApplicationStatus.PENDING_MENTOR_APPROVAL;
+    }
+
+    // 현재 할당된 멘토가 거절함
+    public void rejectByCurrentMentor() {
+        if (this.assignedMentor != null) {
+            this.rejectedMentors.add(this.assignedMentor.getId());
+            this.assignedMentor = null;
+        }
+    }
+
+    // 매칭 실패 (모두 거절 등)
+    public void markMatchingFailed() {
+        this.status = ApplicationStatus.MATCHING_FAILED;
+        this.assignedMentor = null;
     }
 }
