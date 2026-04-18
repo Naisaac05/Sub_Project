@@ -32,43 +32,34 @@ public class Application {
     @JoinColumn(name = "mentee_id", nullable = false)
     private User mentee;
 
-    // 현재 실력 수준 (예: "BEGINNER", "INTERMEDIATE", "ADVANCED")
     @Column(name = "current_level", nullable = false, length = 50)
     private String currentLevel;
 
-    // 목표 기술 스택 (예: "Java, Spring Boot, JPA")
     @Column(name = "target_tech_stack", nullable = false, length = 500)
     private String targetTechStack;
 
-    // 목표 커리어 (예: "백엔드 개발자", "풀스택 개발자")
     @Column(name = "career_goal", nullable = false, length = 200)
     private String careerGoal;
 
-    // 희망 코스 카테고리 (예: "Java Backend", "Frontend React")
     @Column(nullable = false, length = 50)
     private String category;
 
-    // 수강 방식: "IMMEDIATE" (즉시 시작) or "EARLY_BIRD" (얼리버드)
     @Column(name = "course_type", nullable = false, length = 20)
     private String courseType;
 
-    // 희망 수강 개월 수
     @Column(name = "desired_months", nullable = false)
     @Builder.Default
     private Integer desiredMonths = 1;
 
-    // 신청서 상태
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     @Builder.Default
     private ApplicationStatus status = ApplicationStatus.SUBMITTED;
 
-    // 자동 매칭 여부 기록
     @Column(nullable = false)
     @Builder.Default
     private Boolean autoMatched = false;
 
-    // New fields per spec
     @Convert(converter = StringListConverter.class)
     @Column(name = "languages", columnDefinition = "TEXT")
     private List<String> languages;
@@ -133,12 +124,10 @@ public class Application {
     @Column(name = "rejected_reason", columnDefinition = "TEXT")
     private String rejectedReason;
 
-    // 할당된 멘토 (멘티 수 가장 적은 순 + 가입 순)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_mentor_id")
     private User assignedMentor;
 
-    // 이 신청서를 거절한 멘토 ID 목록
     @ElementCollection
     @CollectionTable(name = "application_rejected_mentors", joinColumns = @JoinColumn(name = "application_id"))
     @Column(name = "mentor_id")
@@ -166,13 +155,11 @@ public class Application {
         this.autoMatched = true;
     }
 
-    // 멘토 재할당
     public void assignMentor(User mentor) {
         this.assignedMentor = mentor;
         this.status = ApplicationStatus.PENDING_MENTOR_APPROVAL;
     }
 
-    // 현재 할당된 멘토가 거절함
     public void rejectByCurrentMentor() {
         if (this.assignedMentor != null) {
             this.rejectedMentors.add(this.assignedMentor.getId());
@@ -180,7 +167,6 @@ public class Application {
         }
     }
 
-    // 매칭 실패 (모두 거절 등)
     public void markMatchingFailed() {
         this.status = ApplicationStatus.MATCHING_FAILED;
         this.assignedMentor = null;
