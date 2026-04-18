@@ -2,6 +2,7 @@ package com.devmatch.service;
 
 import com.devmatch.dto.course.CourseResponse;
 import com.devmatch.entity.MentoringCourse;
+import com.devmatch.exception.CourseNotFoundException;
 import com.devmatch.repository.MentoringCourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,15 +26,11 @@ public class CourseService {
 
     public CourseResponse findByKey(String courseKey) {
         MentoringCourse course = courseRepository.findByCourseKey(courseKey)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 코스: " + courseKey));
+                .orElseThrow(() -> new CourseNotFoundException("코스를 찾을 수 없습니다: " + courseKey));
         return CourseResponse.from(course);
     }
 
     public List<MentoringCourse> findActiveByKeys(List<String> courseKeys) {
-        List<MentoringCourse> courses = courseRepository.findAllByCourseKeyInAndActiveTrue(courseKeys);
-        if (courses.size() != courseKeys.size()) {
-            throw new IllegalArgumentException("존재하지 않거나 비활성화된 코스 키가 포함되어 있습니다");
-        }
-        return courses;
+        return courseRepository.findAllByCourseKeyInAndActiveTrue(courseKeys);
     }
 }
