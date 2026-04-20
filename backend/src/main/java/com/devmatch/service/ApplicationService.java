@@ -62,17 +62,10 @@ public class ApplicationService {
 
         application = applicationRepository.save(application);
 
-        // 이전: 여기서 autoMatchAndApprove() 호출 (자동 매칭)
-        // 현재: 결제 후(confirmPayment) 멘토 배정을 시도함. 일단 SUBMITTED 상태로 보존.
-
         return convertToResponse(application);
     }
 
-    /**
-     * 멘티가 적은 순(우선) -> 가입 순(ID) 1순위 멘토를 찾아 할당합니다.
-     */
     public void assignNextAvailableMentor(Application application) {
-        // 이미 멘토들이 모두 거절한 상태거나 완료된 상태면 스킵
         if (application.getStatus() == ApplicationStatus.MATCHING_FAILED ||
             application.getStatus() == ApplicationStatus.ACCEPTED) {
             return;
@@ -80,7 +73,6 @@ public class ApplicationService {
 
         Set<Long> rejectedMentorIds = application.getRejectedMentors();
 
-        // 모든 멘토 목록을 가져와서 (Role = MENTOR) 거절 명단에 없는 멘토만 필터링
         List<User> eligibleMentors = userRepository.findByRole(Role.MENTOR).stream()
                 .filter(u -> !rejectedMentorIds.contains(u.getId()))
                 .collect(Collectors.toList());
@@ -90,7 +82,6 @@ public class ApplicationService {
             return;
         }
 
-        // 우선순위 정렬: 1) 진행중(ACCEPTED/TRIAL) 멘티 수 ASC, 2) User ID ASC
         User nextMentor = eligibleMentors.stream()
                 .min(Comparator.comparingInt((User m) -> matchingRepository.countByMentorIdAndStatusIn(
                         m.getId(), Arrays.asList(MatchingStatus.ACCEPTED, MatchingStatus.TRIAL)))
@@ -108,11 +99,8 @@ public class ApplicationService {
     public Application confirmPayment(Long applicationId) {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new com.devmatch.exception.UserNotFoundException("Application not found with ID: " + applicationId));
-        
-        // PAYMENT_COMPLETED 지만, 바로 PENDING_MENTOR_APPROVAL 로 넘어감
+
         application.markPaid();
-        
-        // 결제 완료 시 시스템이 순서대로 멘토 한 명을 자동 할당
         assignNextAvailableMentor(application);
         return application;
     }
@@ -122,12 +110,10 @@ public class ApplicationService {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid application ID"));
 
-        // 자신이 할당받은 신청서인지 확인
         if (application.getAssignedMentor() == null || !application.getAssignedMentor().getId().equals(mentorId)) {
-            throw new IllegalStateException("해당 신청인에 대한 할당 권한이 없습니다.");
+            throw new IllegalStateException("해당 신청서는 현재 멘토가 승인할 수 없는 상태입니다.");
         }
 
-        // Matching 생성
         Matching matching = Matching.builder()
                 .mentee(application.getMentee())
                 .mentor(application.getAssignedMentor())
@@ -137,7 +123,6 @@ public class ApplicationService {
                 .build();
         matchingRepository.save(matching);
 
-        // Application 상태 업데이트
         application.acceptAutoMatch();
         return convertToResponse(application);
     }
@@ -148,13 +133,10 @@ public class ApplicationService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid application ID"));
 
         if (application.getAssignedMentor() == null || !application.getAssignedMentor().getId().equals(mentorId)) {
-            throw new IllegalStateException("해당 신청인에 대한 할당 권한이 없습니다.");
+            throw new IllegalStateException("해당 신청서는 현재 멘토가 거절할 수 없는 상태입니다.");
         }
 
-        // 현재 멘토 거절 처리 및 명단 등록
         application.rejectByCurrentMentor();
-
-        // 다음 멘토 재할당 검색
         assignNextAvailableMentor(application);
         return convertToResponse(application);
     }

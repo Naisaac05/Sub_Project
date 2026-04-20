@@ -31,6 +31,9 @@ public class Post {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @Column(nullable = false, length = 50)
+    private String category;
+
     @Column(nullable = false)
     @Builder.Default
     private Integer likeCount = 0;
@@ -38,6 +41,10 @@ public class Post {
     @Column(nullable = false)
     @Builder.Default
     private Integer commentCount = 0;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer viewCount = 0;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -47,9 +54,10 @@ public class Post {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public void update(String title, String content) {
+    public void update(String title, String content, String category) {
         this.title = title;
         this.content = content;
+        this.category = category;
     }
 
     public void incrementLikeCount() {
@@ -62,5 +70,13 @@ public class Post {
 
     public void incrementCommentCount() {
         this.commentCount++;
+    }
+
+    public void decrementCommentCount() {
+        if (this.commentCount > 0) this.commentCount--;
+    }
+
+    public void incrementViewCount() {
+        this.viewCount++;
     }
 }

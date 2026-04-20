@@ -16,15 +16,14 @@ import java.util.List;
 public class ApplicationResponse {
     private Long id;
     private Long menteeId;
-    
+
     private String currentLevel;
     private String targetTechStack;
     private String careerGoal;
     private String category;
     private String courseType;
     private Integer desiredMonths;
-    
-    // New fields
+
     private List<String> languages;
     private List<String> platforms;
     private Boolean isCsMajor;
@@ -45,7 +44,6 @@ public class ApplicationResponse {
     private ApplicationStatus status;
     private Boolean autoMatched;
     private LocalDateTime submittedAt;
-    
-    // New fields for mentor assignment
+
     private Long assignedMentorId;
 }

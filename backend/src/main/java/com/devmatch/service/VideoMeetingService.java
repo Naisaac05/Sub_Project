@@ -50,8 +50,8 @@ public class VideoMeetingService {
     }
 
     public VideoMeetingResponse findBySessionId(Long sessionId) {
-        VideoMeeting vm = videoMeetingRepository.findBySessionId(sessionId)
-                .orElseThrow(() -> new RuntimeException("Video meeting not found for session: " + sessionId));
-        return VideoMeetingResponse.from(vm);
+        return videoMeetingRepository.findBySessionId(sessionId)
+                .map(VideoMeetingResponse::from)
+                .orElse(null);
     }
 }

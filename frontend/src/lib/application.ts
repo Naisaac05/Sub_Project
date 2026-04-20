@@ -27,7 +27,6 @@ export interface ApplicationRequest {
   termsAgreed: boolean;
 }
 
-/** 멘토링 신청서 제출 */
 export async function submitApplication(data: ApplicationRequest): Promise<ApiResponse<any>> {
   const res = await apiClient.post<ApiResponse<any>>('/applications/submit', data);
   return res.data;
