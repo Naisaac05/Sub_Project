@@ -85,9 +85,9 @@ function MentorCard({ mentor, onApply }: MentorCardProps) {
         </div>
       </div>
 
-      {/* Specialty tags */}
+      {/* Course tags */}
       <div className="flex flex-wrap gap-1.5">
-        {mentor.specialty.map((tag) => (
+        {mentor.courseKeys.map((tag) => (
           <span
             key={tag}
             className="px-2.5 py-1 rounded-full text-xs font-medium
@@ -199,7 +199,7 @@ function MatchingModal({
             <p className="text-gray-900 font-semibold text-sm">{mentor.name}</p>
             <p className="text-gray-500 text-xs truncate">{mentor.company}</p>
             <div className="flex flex-wrap gap-1 mt-1">
-              {mentor.specialty.slice(0, 3).map((tag) => (
+              {mentor.courseKeys.slice(0, 3).map((tag) => (
                 <span
                   key={tag}
                   className="px-1.5 py-0.5 rounded text-xs bg-blue-100 text-blue-600"
