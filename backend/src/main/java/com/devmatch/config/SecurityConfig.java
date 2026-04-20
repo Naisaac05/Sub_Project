@@ -43,6 +43,8 @@ public class SecurityConfig {
                     "/swagger-ui.html",
                     "/v3/api-docs/**"
                 ).permitAll()
+                // Courses
+                .requestMatchers("/api/courses/**").permitAll()
                 // 관리자 전용
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // 나머지 API는 인증 필요

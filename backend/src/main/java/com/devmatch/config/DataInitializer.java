@@ -22,10 +22,13 @@ public class DataInitializer implements CommandLineRunner {
     private final MentorProfileRepository mentorProfileRepository;
     private final MentorAvailabilityRepository mentorAvailabilityRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MentoringCourseRepository mentoringCourseRepository;
 
     @Override
     @Transactional
     public void run(String... args) {
+        initMentoringCourses();
+
         if (testRepository.count() > 0) {
             log.info("테스트 데이터가 이미 존재합니다. 초기화를 건너뜁니다.");
             return;
@@ -52,7 +55,7 @@ public class DataInitializer implements CommandLineRunner {
         // BEGINNER
         Test t = createTest("Java 기초 문법 테스트",
                 "Java 언어의 기본 문법과 핵심 개념을 평가합니다. 변수, 타입, 조건문, 반복문, 배열, 클래스 기초 등을 다룹니다.",
-                "Java", Difficulty.BEGINNER, 15, 60, 10);
+                "java-backend", Difficulty.BEGINNER, 15, 60, 10);
         q(t, 1, "Java에서 정수형 변수를 선언하는 올바른 방법은?",
                 List.of("int number = 10;", "number int = 10;", "integer number = 10;", "var: int number = 10;"), 0);
         q(t, 2, "Java에서 문자열을 비교할 때 올바른 방법은?",
@@ -78,7 +81,7 @@ public class DataInitializer implements CommandLineRunner {
         // INTERMEDIATE
         t = createTest("Java 중급 심화 테스트",
                 "컬렉션, 제네릭, 스트림, 람다, OOP 심화 원칙 등 Java 중급 개념을 평가합니다.",
-                "Java", Difficulty.INTERMEDIATE, 20, 65, 10);
+                "java-backend", Difficulty.INTERMEDIATE, 20, 65, 10);
         q(t, 1, "ArrayList와 LinkedList의 차이에 대한 설명으로 올바른 것은?",
                 List.of("ArrayList는 삽입/삭제가 빠르다", "LinkedList는 인덱스 접근이 빠르다",
                         "ArrayList는 인덱스 접근이 O(1)이다", "둘 다 동기화가 보장된다"), 2);
@@ -107,7 +110,7 @@ public class DataInitializer implements CommandLineRunner {
         // ADVANCED
         t = createTest("Java 고급 아키텍처 테스트",
                 "JVM 내부 구조, GC 알고리즘, 동시성, 디자인 패턴 등 Java 고급 지식을 평가합니다.",
-                "Java", Difficulty.ADVANCED, 25, 70, 10);
+                "java-backend", Difficulty.ADVANCED, 25, 70, 10);
         q(t, 1, "JVM 메모리 영역 중 객체 인스턴스가 저장되는 곳은?",
                 List.of("Stack", "Heap", "Method Area", "PC Register"), 1);
         q(t, 2, "G1 GC의 특징으로 올바르지 않은 것은?",
@@ -149,7 +152,7 @@ public class DataInitializer implements CommandLineRunner {
         // BEGINNER
         Test t = createTest("Spring 입문 테스트",
                 "Spring Boot의 기본 개념, IoC/DI, 어노테이션, REST API 기초를 평가합니다.",
-                "Spring", Difficulty.BEGINNER, 15, 60, 10);
+                "java-backend", Difficulty.BEGINNER, 15, 60, 10);
         q(t, 1, "Spring의 핵심 개념인 IoC(Inversion of Control)란?",
                 List.of("개발자가 직접 객체를 생성하고 관리한다", "프레임워크가 객체의 생성과 생명주기를 관리한다",
                         "모든 객체를 싱글턴으로 만든다", "인터페이스를 반드시 사용해야 한다"), 1);
@@ -177,7 +180,7 @@ public class DataInitializer implements CommandLineRunner {
         // INTERMEDIATE
         t = createTest("Spring 중급 실무 테스트",
                 "Spring MVC 동작 흐름, JPA 매핑, 트랜잭션, Spring Security 기초 등을 평가합니다.",
-                "Spring", Difficulty.INTERMEDIATE, 20, 65, 10);
+                "java-backend", Difficulty.INTERMEDIATE, 20, 65, 10);
         q(t, 1, "Spring MVC에서 클라이언트 요청의 처리 순서로 올바른 것은?",
                 List.of("Filter → Controller → Service → DispatcherServlet",
                         "DispatcherServlet → HandlerMapping → Controller → ViewResolver",
@@ -212,7 +215,7 @@ public class DataInitializer implements CommandLineRunner {
         // ADVANCED
         t = createTest("Spring 고급 아키텍처 테스트",
                 "트랜잭션 전파/격리, 영속성 컨텍스트, 캐시, MSA 패턴 등 고급 지식을 평가합니다.",
-                "Spring", Difficulty.ADVANCED, 25, 70, 10);
+                "java-backend", Difficulty.ADVANCED, 25, 70, 10);
         q(t, 1, "트랜잭션 전파 속성 REQUIRES_NEW의 동작은?",
                 List.of("기존 트랜잭션에 참여한다", "항상 새로운 트랜잭션을 시작하고 기존 트랜잭션을 보류한다",
                         "트랜잭션 없이 실행한다", "기존 트랜잭션이 없으면 예외를 발생시킨다"), 1);
@@ -251,7 +254,7 @@ public class DataInitializer implements CommandLineRunner {
         // BEGINNER
         Test t = createTest("React 기초 테스트",
                 "JSX 문법, 컴포넌트, Props, useState, 이벤트 핸들링 등 React 기초를 평가합니다.",
-                "React", Difficulty.BEGINNER, 15, 60, 10);
+                "frontend", Difficulty.BEGINNER, 15, 60, 10);
         q(t, 1, "React에서 컴포넌트의 상태를 관리하기 위해 사용하는 Hook은?",
                 List.of("useEffect", "useContext", "useState", "useRef"), 2);
         q(t, 2, "JSX에서 JavaScript 표현식을 사용할 때 감싸는 기호는?",
@@ -278,7 +281,7 @@ public class DataInitializer implements CommandLineRunner {
         // INTERMEDIATE
         t = createTest("React 중급 실무 테스트",
                 "useEffect, Custom Hook, 상태 관리, React Router, 성능 최적화 등을 평가합니다.",
-                "React", Difficulty.INTERMEDIATE, 20, 65, 10);
+                "frontend", Difficulty.INTERMEDIATE, 20, 65, 10);
         q(t, 1, "useEffect의 의존성 배열(dependency array)이 빈 배열 []일 때 동작은?",
                 List.of("매 렌더링마다 실행", "컴포넌트 마운트 시 1회만 실행",
                         "상태 변경 시마다 실행", "실행되지 않는다"), 1);
@@ -312,7 +315,7 @@ public class DataInitializer implements CommandLineRunner {
         // ADVANCED
         t = createTest("React 고급 심화 테스트",
                 "가상 DOM, Fiber, 서버 컴포넌트, Concurrent 기능, 렌더링 전략 등 고급 주제를 평가합니다.",
-                "React", Difficulty.ADVANCED, 25, 70, 10);
+                "frontend", Difficulty.ADVANCED, 25, 70, 10);
         q(t, 1, "React의 가상 DOM(Virtual DOM)이 성능에 기여하는 방식은?",
                 List.of("DOM을 사용하지 않는다", "변경된 부분만 계산(diff)하여 실제 DOM에 최소한의 업데이트를 적용한다",
                         "모든 DOM을 매번 다시 생성한다", "WebWorker에서 DOM을 처리한다"), 1);
@@ -352,7 +355,7 @@ public class DataInitializer implements CommandLineRunner {
         // BEGINNER
         Test t = createTest("Python 기초 문법 테스트",
                 "변수, 타입, 리스트, 딕셔너리, 조건문, 반복문, 함수 등 Python 기초를 평가합니다.",
-                "Python", Difficulty.BEGINNER, 15, 60, 10);
+                "python-backend", Difficulty.BEGINNER, 15, 60, 10);
         q(t, 1, "Python에서 리스트의 마지막 요소에 접근하는 방법은?",
                 List.of("list[0]", "list[-1]", "list.last()", "list.end()"), 1);
         q(t, 2, "Python에서 딕셔너리를 생성하는 올바른 방법은?",
@@ -379,7 +382,7 @@ public class DataInitializer implements CommandLineRunner {
         // INTERMEDIATE
         t = createTest("Python 중급 심화 테스트",
                 "클래스/OOP, 데코레이터, 제너레이터, 컴프리헨션, 예외 처리 등을 평가합니다.",
-                "Python", Difficulty.INTERMEDIATE, 20, 65, 10);
+                "python-backend", Difficulty.INTERMEDIATE, 20, 65, 10);
         q(t, 1, "Python에서 리스트 컴프리헨션의 올바른 문법은?",
                 List.of("[x for x in range(10) if x > 5]", "[for x in range(10): x if x > 5]",
                         "[x if x > 5 for x in range(10)]", "[x in range(10) for if x > 5]"), 0);
@@ -411,7 +414,7 @@ public class DataInitializer implements CommandLineRunner {
         // ADVANCED
         t = createTest("Python 고급 아키텍처 테스트",
                 "GIL, 메타클래스, 디스크립터, asyncio, 메모리 관리 등 Python 고급 주제를 평가합니다.",
-                "Python", Difficulty.ADVANCED, 25, 70, 10);
+                "python-backend", Difficulty.ADVANCED, 25, 70, 10);
         q(t, 1, "Python GIL(Global Interpreter Lock)의 영향은?",
                 List.of("멀티프로세싱이 불가능하다", "CPU-bound 작업에서 멀티스레딩의 성능 이점이 제한된다",
                         "I/O-bound 작업에서도 병렬 처리가 불가능하다", "메모리 사용량이 증가한다"), 1);
@@ -452,7 +455,7 @@ public class DataInitializer implements CommandLineRunner {
         // BEGINNER
         Test t = createTest("알고리즘 기초 테스트",
                 "시간/공간 복잡도, 기본 자료구조, 정렬, 탐색 등 알고리즘 기초를 평가합니다.",
-                "Algorithm", Difficulty.BEGINNER, 15, 60, 10);
+                "firststep", Difficulty.BEGINNER, 15, 60, 10);
         q(t, 1, "시간 복잡도 O(n)의 의미는?",
                 List.of("항상 일정한 시간이 걸린다", "입력 크기에 비례하여 시간이 증가한다",
                         "입력 크기의 제곱에 비례한다", "로그 시간이 걸린다"), 1);
@@ -483,7 +486,7 @@ public class DataInitializer implements CommandLineRunner {
         // INTERMEDIATE
         t = createTest("알고리즘 중급 테스트",
                 "이진 탐색, 해시, 트리, 그래프 탐색, DP 기초 등 중급 알고리즘을 평가합니다.",
-                "Algorithm", Difficulty.INTERMEDIATE, 20, 65, 10);
+                "firststep", Difficulty.INTERMEDIATE, 20, 65, 10);
         q(t, 1, "이진 탐색(Binary Search)의 전제 조건은?",
                 List.of("데이터가 연결 리스트에 저장", "데이터가 정렬되어 있어야 한다",
                         "데이터가 해시 테이블에 저장", "데이터 크기가 2의 거듭제곱"), 1);
@@ -513,7 +516,7 @@ public class DataInitializer implements CommandLineRunner {
         // ADVANCED
         t = createTest("알고리즘 고급 테스트",
                 "고급 DP, 최단 경로, 세그먼트 트리, 그래프 고급 알고리즘 등을 평가합니다.",
-                "Algorithm", Difficulty.ADVANCED, 25, 70, 10);
+                "firststep", Difficulty.ADVANCED, 25, 70, 10);
         q(t, 1, "다익스트라 알고리즘의 시간 복잡도는? (우선순위 큐 사용 시)",
                 List.of("O(V^2)", "O(V + E)", "O((V + E) log V)", "O(V * E)"), 2);
         q(t, 2, "벨만-포드 알고리즘이 다익스트라보다 유리한 경우는?",
@@ -555,15 +558,15 @@ public class DataInitializer implements CommandLineRunner {
         String encoded = passwordEncoder.encode("mentor1234!");
 
         createMentor("김자바", "java.mentor@devmatch.com", encoded,
-                List.of("Java", "Spring"), 8, "네이버", "Java/Spring 전문 멘토입니다. 대규모 서비스 설계 경험이 풍부합니다.");
+                List.of("java-backend", "firststep"), 8, "네이버", "Java/Spring 전문 멘토입니다. 대규모 서비스 설계 경험이 풍부합니다.");
         createMentor("이스프링", "spring.mentor@devmatch.com", encoded,
-                List.of("Spring", "DevOps"), 5, "카카오", "Spring 기반 MSA 설계와 DevOps 파이프라인 구축 경험이 있습니다.");
+                List.of("java-backend", "devops"), 5, "카카오", "Spring 기반 MSA 설계와 DevOps 파이프라인 구축 경험이 있습니다.");
         createMentor("박리액트", "react.mentor@devmatch.com", encoded,
-                List.of("React", "Node.js"), 6, "라인", "React와 Node.js 풀스택 개발 멘토입니다.");
+                List.of("frontend", "node-backend"), 6, "라인", "React와 Node.js 풀스택 개발 멘토입니다.");
         createMentor("최파이썬", "python.mentor@devmatch.com", encoded,
-                List.of("Python", "Algorithm"), 7, "쿠팡", "Python 백엔드와 알고리즘 전문 멘토입니다.");
+                List.of("python-backend"), 7, "쿠팡", "Python 백엔드와 알고리즘 전문 멘토입니다.");
         createMentor("정풀스택", "fullstack.mentor@devmatch.com", encoded,
-                List.of("Java", "React", "Spring"), 10, "토스", "10년차 풀스택 개발자입니다. 서비스 전체 아키텍처 설계를 도와드립니다.");
+                List.of("java-backend", "frontend", "kafka"), 10, "토스", "10년차 풀스택 개발자입니다. 서비스 전체 아키텍처 설계를 도와드립니다.");
 
         log.info("멘토 초기 데이터 {}명 삽입 완료", mentorProfileRepository.count());
     }
@@ -596,8 +599,167 @@ public class DataInitializer implements CommandLineRunner {
                 .build());
     }
 
+    // ──────────────────────────────────────────────
+    //  멘토링 코스 (17개)
+    // ──────────────────────────────────────────────
+    private void initMentoringCourses() {
+        record Seed(String key, String title, String subtitle, String icon,
+                    String descTitle, String descText, String boxesJson, int order) {}
+
+        List<Seed> seeds = List.of(
+            new Seed("java-backend", "AI+ Java 백엔드",
+                "깊이 있는 학습과 고퀄리티 프로젝트 수행을 통해 채용 경쟁력을 높이는 1:1 심화형 멘토링 코스",
+                "☕",
+                "단순히 \"써봤다\"를 넘어\n제대로 알고 대답할 수 있도록 교육합니다.",
+                "MSA, Kafka까지 써봤다 하더라도 이 기술들은 국비/부트캠프에서도 다루는 흔한 스펙이고 이제 누구나 쉽게 쓸 수 있는 것들이기에,\n\"왜 썼는지\"를 깊게 설명하지 못하고 \"써봤다\"만으로는 채용 시장에서 경쟁력을 가지기 어렵습니다.",
+                "[{\"icon\":\"Layout\",\"title\":\"기본기\",\"color\":\"cyan\",\"tags\":[\"컴퓨터 사이언스\",\"Java\",\"Effective Java\"],\"desc\":\"무작정 프레임워크를 쓰는 것을 넘어 CS 지식과 Java 언어 자체의 기본기를 확립합니다.\"},{\"icon\":\"Code2\",\"title\":\"응용\",\"color\":\"blue\",\"tags\":[\"Kotlin\",\"Spring Boot\",\"JPA/QueryDSL\",\"Spring Security\"],\"desc\":\"Spring의 내부 구조를 파고들고, JPA 연관관계 매핑과 최적화, Kotlin 기반 설계 등을 배웁니다.\"},{\"icon\":\"Database\",\"title\":\"심화 / 프로젝트\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"대규모 트래픽 아키텍처\",\"Redis 분산락\",\"Kafka\",\"Docker & K8s\",\"MSA\"],\"desc\":\"동시성 제어(Redis), MQ(Kafka)를 이용한 비동기 통신 설계 등 실제 트래픽 이슈들을 실무 관점에서 다루어 포트폴리오를 고도화합니다.\"}]",
+                1),
+            new Seed("node-backend", "Node.js Backend + AI",
+                "실시간 통신과 고성능 비동기 서버 아키텍처를 마스터하는 심화형 멘토링",
+                "JS",
+                "단순한 CRUD를 넘어\n고성능 비동기 아키텍처를 다룹니다.",
+                "JavaScript/TypeScript 백엔드 환경에서 Event Loop의 이해부터 Redis, Socket.io를 활용한 대규모 트래픽 처리를 경험해보세요.",
+                "[{\"icon\":\"Layout\",\"title\":\"코어\",\"color\":\"cyan\",\"tags\":[\"TypeScript\",\"Node.js Core\",\"Event Loop\"],\"desc\":\"JS/TS의 타입 시스템과 Node.js 런타임의 핵심 아키텍처를 이해합니다.\"},{\"icon\":\"Code2\",\"title\":\"프레임워크\",\"color\":\"blue\",\"tags\":[\"NestJS\",\"Express\",\"TypeORM\",\"Prisma\"],\"desc\":\"가장 많이 쓰이는 NestJS 생태계와 ORM을 활용해 클린 아키텍처 기반 서버를 구축합니다.\"},{\"icon\":\"Database\",\"title\":\"심화 / 실시간 통신\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Socket.io\",\"Redis Pub/Sub\",\"WebRTC\",\"AWS / K8s\"],\"desc\":\"채팅, 알림, 실시간 서비스 등 Node.js가 가장 잘하는 분야의 아키텍처를 설계하고 배포합니다.\"}]",
+                2),
+            new Seed("python-backend", "Python Backend + AI",
+                "백엔드 생태계와 AI 서빙을 결합한 최적의 실무 밀착 멘토링",
+                "🐍",
+                "데이터와 백엔드의 브릿지,\nPython 서버 서빙 최적화.",
+                "Django, FastAPI의 깊은 이해와 더불어 AI 모델(PyTorch/LLM)을 어떻게 빠르고 안정적으로 서빙할 수 있는지 학습합니다.",
+                "[{\"icon\":\"Layout\",\"title\":\"기본기\",\"color\":\"cyan\",\"tags\":[\"Python\",\"Django\",\"FastAPI\"],\"desc\":\"동기/비동기 프레임워크의 장단점을 파악하고 최신 FastAPI 생태계를 익힙니다.\"},{\"icon\":\"Cpu\",\"title\":\"AI 서빙\",\"color\":\"blue\",\"tags\":[\"LLM 연동\",\"ONNX\",\"Triton Server\"],\"desc\":\"인공지능 모델을 마이크로서비스 형태로 서빙하기 위한 아키텍처를 구축해봅니다.\"},{\"icon\":\"Database\",\"title\":\"인프라/스케일링\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Celery\",\"Redis\",\"Docker Compose\",\"Gunicorn\"],\"desc\":\"병렬 처리와 비동기 큐 워커를 활용하여 Python 서버의 한계를 깨는 확장성 설계를 다룹니다.\"}]",
+                3),
+            new Seed("frontend", "Frontend + AI",
+                "프론트엔드 성능 최적화와 트러블슈팅, 최신 기술 스택을 다루는 심화 코스",
+                "⚛️",
+                "보이는 것 그 이상,\n사용자 경험(UX)과 성능의 극대화를 이룹니다.",
+                "Next.js의 SSR/SSG/ISR 혼합 렌더링, Web Vitals 최적화, 상태관리 패턴 등 프론트엔드 엔진의 동작 원리를 뜯어봅니다.",
+                "[{\"icon\":\"Layout\",\"title\":\"코어 UI\",\"color\":\"cyan\",\"tags\":[\"React\",\"TypeScript\",\"브라우저 렌더링\"],\"desc\":\"Virtual DOM의 이해와 브라우저 렌더링 파이프라인 최적화를 실습합니다.\"},{\"icon\":\"Code2\",\"title\":\"메타 프레임워크\",\"color\":\"blue\",\"tags\":[\"Next.js\",\"App Router\",\"State Management\"],\"desc\":\"모던 웹 개발의 핵심인 Next.js App Router 생태계와 서버 단 데이터 페칭을 고도화합니다.\"},{\"icon\":\"Layers\",\"title\":\"UX & 성능 고도화\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"CI/CD\",\"Web Vitals\",\"Framer Motion\",\"Micro-Frontend\"],\"desc\":\"웹 성능 최적화, 마이크로 프론트엔드 아키텍처 및 화려하고 자연스러운 인터랙션을 구현하여 압도적인 포트폴리오를 만듭니다.\"}]",
+                4),
+            new Seed("android", "Android + AI",
+                "모던 안드로이드 앱 아키텍처와 Compose, 성능 최적화 마스터 과정",
+                "🤖",
+                "안드로이드 네이티브의 끝판왕,\n안정적이고 유려한 앱을 만듭니다.",
+                "Jetpack Compose와 MVVM/MVI 아키텍처, Memory Leak 방지 기술 등 현업 안드로이드 팀이 선호하는 필수 역량을 다집니다.",
+                "[{\"icon\":\"Smartphone\",\"title\":\"기본 & 패러다임\",\"color\":\"cyan\",\"tags\":[\"Kotlin\",\"Coroutines\",\"Flow\"],\"desc\":\"Kotlin의 강력한 비동기 처리와 선언형 프로그래밍 방식을 완벽하게 이해합니다.\"},{\"icon\":\"Layout\",\"title\":\"UI & 아키텍처\",\"color\":\"blue\",\"tags\":[\"Jetpack Compose\",\"MVVM/MVI\",\"Hilt\"],\"desc\":\"기존 XML 뷰에서 탈피하여 100% Compose 기반으로 앱 UI 레이어를 설계하고 의존성 주입을 다룹니다.\"},{\"icon\":\"Server\",\"title\":\"심화 / 오프라인 퍼스트\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Room\",\"WorkManager\",\"Modularization\",\"ExoPlayer\"],\"desc\":\"대규모 앱 스케일링을 위한 멀티 모듈 아키텍처 설계와 로컬 캐싱 전략을 통한 오프라인 최적화를 실습합니다.\"}]",
+                5),
+            new Seed("devops", "DevOps 엔지니어 육성",
+                "CI/CD 빌드 파이프라인부터 클라우드 네이티브 아키텍처까지",
+                "⚙️",
+                "인프라를 코드로 구성하고,\n자동화로 생산성을 극대화합니다.",
+                "AWS 환경에서의 IaC(Terraform), 클러스터 오케스트레이션(K8s) 등 실무에서 환영받는 DevOps 툴체인을 경험합니다.",
+                "[{\"icon\":\"Cloud\",\"title\":\"클라우드 & IaC\",\"color\":\"cyan\",\"tags\":[\"AWS\",\"Terraform\",\"Linux\"],\"desc\":\"AWS의 심화 네트워킹과 컴퓨팅 리소스를 코드로 정의하고 프로비저닝 합니다.\"},{\"icon\":\"Server\",\"title\":\"CI/CD\",\"color\":\"blue\",\"tags\":[\"GitHub Actions\",\"Jenkins\",\"ArgoCD\"],\"desc\":\"개발부터 배포까지 무중단 스무스 파이프라인을 구축하여 빌드 시간을 획기적으로 줄여봅니다.\"},{\"icon\":\"Layers\",\"title\":\"컨테이너 오케스트레이션\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Docker\",\"Kubernetes\",\"Helm\",\"Prometheus\"],\"desc\":\"K8s 클러스터 운영 및 로깅/모니터링 체계를 바탕으로 장애 복원력(Resiliency)을 갖춘 인프라를 설계합니다.\"}]",
+                6),
+            new Seed("ios", "iOS + AI",
+                "모던 iOS 앱 아키텍처와 SwiftUI 마스터 과정",
+                "🍎",
+                "부드러운 경험을 만드는\n최상급 iOS 애플리케이션",
+                "SwiftUI, Combine 기반의 선언형 패러다임과 TCA(The Composable Architecture) 등 최신 iOS 생태계를 학습합니다.",
+                "[{\"icon\":\"Smartphone\",\"title\":\"기본 & 패러다임\",\"color\":\"cyan\",\"tags\":[\"Swift\",\"SwiftUI\",\"Combine\"],\"desc\":\"Swift 언어의 핵심과 SwiftUI의 선언적 UI 구성 방식을 완벽하게 이해합니다.\"},{\"icon\":\"Layout\",\"title\":\"모던 아키텍처\",\"color\":\"blue\",\"tags\":[\"TCA\",\"MVVM\",\"Clean Architecture\"],\"desc\":\"대규모 애플리케이션에서 상태를 예측 가능하게 관리하기 위한 현대적 아키텍처를 도입해봅니다.\"},{\"icon\":\"Server\",\"title\":\"퍼포먼스/최적화\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"CoreData\",\"Memory Management\",\"Instruments\"],\"desc\":\"Memory Leak 방지와 앱 크래시 분석, 렌더링 최적화를 통한 프리미엄 사용자 경험을 제공합니다.\"}]",
+                7),
+            new Seed("flutter", "Flutter + AI",
+                "크로스 플랫폼의 한계를 뛰어넘는 최적화 및 네이티브 연동",
+                "🦋",
+                "하나의 코드로 두 배의 가치를,\n크로스 플랫폼의 완성.",
+                "단순 UI 클론을 넘어 렌더링 최적화, 상태관리 패턴, 그리고 네이티브(채널) 연동까지 깊게 파고드는 전문가 과정입니다.",
+                "[{\"icon\":\"Smartphone\",\"title\":\"Dart & 코어\",\"color\":\"cyan\",\"tags\":[\"Dart\",\"Widget Lifecycle\",\"Element Tree\"],\"desc\":\"Flutter 엔진이 화면을 그리는 3가지 트리(Widget, Element, RenderObject)의 동작 원리를 이해합니다.\"},{\"icon\":\"Layout\",\"title\":\"상태 관리\",\"color\":\"blue\",\"tags\":[\"Provider\",\"Riverpod\",\"Bloc\"],\"desc\":\"현업에서 가장 많이 쓰이는 상태관리 라이브러리들을 비교하고 상황에 맞게 최적화합니다.\"},{\"icon\":\"Layers\",\"title\":\"네이티브 & 심화\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Method Channel\",\"Isolates\",\"CI/CD\"],\"desc\":\"스레드(Isolate) 분리를 통한 성능 최적화와 결제, 푸시 등 네이티브 연동을 마스터합니다.\"}]",
+                8),
+            new Seed("react-native", "React Native + AI",
+                "웹 개발 경험으로 시작하는 최고 수준의 앱 배포",
+                "📱",
+                "웹과 모바일의 브릿지,\n빠른 속도로 시장을 선점합니다.",
+                "React 생태계를 그대로 활용하며, 브릿지의 한계를 넘기 위한 최신 JSI 아키텍처와 애니메이션 최적화를 배웁니다.",
+                "[{\"icon\":\"Smartphone\",\"title\":\"코어 개념\",\"color\":\"cyan\",\"tags\":[\"React\",\"Metro\",\"Native Bridge\"],\"desc\":\"React Native의 브릿지 통신 원리와 동작 메커니즘을 뜯어봅니다.\"},{\"icon\":\"Layout\",\"title\":\"UI & 애니메이션\",\"color\":\"blue\",\"tags\":[\"Reanimated\",\"Gesture Handler\",\"Skia\"],\"desc\":\"선언형 애니메이션을 작성하여 60fps를 방어하는 네이티브 수준의 UI를 렌더링합니다.\"},{\"icon\":\"Layers\",\"title\":\"인프라 & 배포\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Expo EAS\",\"CodePush\",\"App Store Connect\"],\"desc\":\"OTA 업데이트를 구상하고 원클릭 배포 파이프라인을 구축하여 유지보수 비용을 최소화합니다.\"}]",
+                9),
+            new Seed("data-engineer", "Data Engineer + AI",
+                "대용량 데이터 파이프라인 구축 및 실시간 스트리밍 처리 기술",
+                "📊",
+                "데이터의 강이 흐르는\n견고한 파이프라인 설계.",
+                "빅데이터 에코시스템(Hadoop, Spark)부터 최신 모던 데이터 스택(Airflow, dbt)까지 대용량 데이터를 안전하고 빠르게 처리하는 아키텍처를 학습합니다.",
+                "[{\"icon\":\"Database\",\"title\":\"데이터 수집 & 저장\",\"color\":\"cyan\",\"tags\":[\"Hadoop\",\"S3\",\"Data Lake\"],\"desc\":\"다양한 소스에서 발생한 데이터를 분산 저장소에 안정적으로 적재하는 기초를 다룹니다.\"},{\"icon\":\"Cloud\",\"title\":\"스트리밍 & 배치\",\"color\":\"blue\",\"tags\":[\"Spark\",\"Kafka\",\"Flink\"],\"desc\":\"실시간 데이터 처리와 대규모 배치 트랜잭션을 구현하여 데이터의 정합성을 보장합니다.\"},{\"icon\":\"Layers\",\"title\":\"파이프라인 자동화\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Airflow\",\"dbt\",\"Snowflake\"],\"desc\":\"복잡한 데이터 파이프라인을 시각적으로 오케스트레이션하고 데이터 웨어하우스(DW)에 최적화합니다.\"}]",
+                10),
+            new Seed("ml-engineer", "ML Engineer",
+                "머신러닝 모델의 학습, 평가 및 프로덕션 환경 배포의 모든 것",
+                "🧠",
+                "연구를 넘어 실전으로,\n살아 숨쉬는 AI 시스템 구축.",
+                "모델 아키텍처 설계와 하이퍼파라미터 튜닝을 넘어, MLOps 기반으로 모델을 지속 가능하게 서비스하는 기술을 배웁니다.",
+                "[{\"icon\":\"Cpu\",\"title\":\"모델링 코어\",\"color\":\"cyan\",\"tags\":[\"PyTorch\",\"TensorFlow\",\"Scikit-Learn\"],\"desc\":\"심층 신경망(DNN)의 기초 구조부터 시계열, 비전, 자연어 등 분야별 실무형 모델 아키텍처를 실습합니다.\"},{\"icon\":\"Layout\",\"title\":\"서빙 아키텍처\",\"color\":\"blue\",\"tags\":[\"FastAPI\",\"ONNX\",\"Triton Server\"],\"desc\":\"무거운 AI 모델을 압축, 최적화하여 짧은 레이턴시를 보장하는 API 서버 형태를 구축해봅니다.\"},{\"icon\":\"Server\",\"title\":\"MLOps 파이프라인\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Kubeflow\",\"MLflow\",\"Docker/K8s\"],\"desc\":\"모델 개발, 배포, 모니터링 라이프사이클 전체를 자동화해 안정성 높은 AI 서비스를 유지합니다.\"}]",
+                11),
+            new Seed("game-server", "Game Server",
+                "초당 수천 번의 인터랙션을 처리하는 실시간 멀티플레이 서버 아키텍처",
+                "🎮",
+                "0.01초의 딜레이도 허용하지 않는\n극한의 게임 서버 튜닝.",
+                "C++/C#을 기반으로 한 소켓 프로그래밍부터 동시성 제어, 매치메이킹 시스템 등 실제 게임 서버의 코어 로직을 작성합니다.",
+                "[{\"icon\":\"Code2\",\"title\":\"네트워크 & 코어\",\"color\":\"cyan\",\"tags\":[\"C++/C#\",\"TCP/UDP\",\"IOCP\"],\"desc\":\"운영체제의 네트워크 I/O 구조를 뜯어보고 효율적인 소켓 입출력 통신망을 구현합니다.\"},{\"icon\":\"Server\",\"title\":\"멀티스레딩 & 동기화\",\"color\":\"blue\",\"tags\":[\"Lock-free\",\"Deadlock 방지\",\"Memory Pool\"],\"desc\":\"멀티스레드 환경의 크리티컬 섹션 제어부터 메모리 풀링 최적화 기술을 파고듭니다.\"},{\"icon\":\"Layers\",\"title\":\"분산 & 매치메이킹\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Redis\",\"gRPC\",\"AWS GameLift\"],\"desc\":\"글로벌 서비스 상황의 데이터 동기화와 원활한 유저 매치메이킹 레이어를 구축합니다.\"}]",
+                12),
+            new Seed("short-term", "단기 취업/이직",
+                "빠른 속도로 실무 역량을 증명하고 목표하는 기업에 합격하는 1개월 밀착 코스",
+                "⚡",
+                "군더더기 없이 핵심만,\n합격을 위한 가장 빠른 지름길.",
+                "알고리즘 코딩테스트부터 과제형 전형, 모의 면접, 이력서 첨삭 등 채용의 A to Z를 함께하는 극강의 단기 매니지먼트 멘토링입니다.",
+                "[{\"icon\":\"Code2\",\"title\":\"코딩테스트/과제\",\"color\":\"cyan\",\"tags\":[\"알고리즘\",\"자료구조\",\"리팩토링\"],\"desc\":\"자주 출제되는 유형을 족집게처럼 짚어주며 깔끔하게 과제를 완성하는 전략을 배웁니다.\"},{\"icon\":\"Layout\",\"title\":\"서류/포트폴리오\",\"color\":\"blue\",\"tags\":[\"이력서\",\"Readme\",\"트러블슈팅\"],\"desc\":\"내가 한 경험을 가장 돋보이게 작성하는 이력서 레이아웃과 서술 방식을 1:1로 피드백합니다.\"},{\"icon\":\"Users\",\"title\":\"모의 면접\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"CS 질문\",\"인성 면접\",\"기술 심층 면접\"],\"desc\":\"실제 면접관 출신 멘토와 함께 예상 질문 리스트를 도출하고 꼬리물기 압박 면접을 대비합니다.\"}]",
+                13),
+            new Seed("firststep", "First Step: Java Backend",
+                "비전공자/입문자도 따라할 수 있는 탄탄한 웹 백엔드 첫걸음",
+                "🌱",
+                "처음이라고 두려워 마세요,\n기본부터 든든하게 다집니다.",
+                "Java 언어의 기초부터 시작해 웹의 동작 원리와 Spring Boot를 활용한 첫 서버 배포까지 끝맺음하는 과정입니다.",
+                "[{\"icon\":\"Code2\",\"title\":\"언어의 기초\",\"color\":\"cyan\",\"tags\":[\"Java 17\",\"객체지향\",\"컬렉션\"],\"desc\":\"변수, 반복문부터 시작해 객체지향 4대 특징과 SOLID 프로그래밍 관점을 쉽게 이해합니다.\"},{\"icon\":\"Layout\",\"title\":\"웹 프레임워크\",\"color\":\"blue\",\"tags\":[\"Spring Boot\",\"REST API\",\"MySQL\"],\"desc\":\"간단한 게시판 형식의 API를 만들고, 데이터베이스에 정보를 지속적으로 저장하는 법을 실습합니다.\"},{\"icon\":\"Cloud\",\"title\":\"내 생의 첫 배포\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"AWS EC2\",\"Linux\",\"GitHub\"],\"desc\":\"클라우드 환경에 내 서버를 올려보고 전 세계 누구나 접속할 수 있도록 포트폴리오 첫 줄을 장식합니다.\"}]",
+                14),
+            new Seed("distributed-lock", "분산 락 (Distributed Lock) Deep Dive",
+                "수만 명의 선착순 트래픽을 놓치지 않고 완벽히 제어하는 특강",
+                "🔒",
+                "단 한 건의 동시성 오류도 용납하지 않는\n초정밀 트래픽 제어.",
+                "티켓팅, 수강신청, 타임세일 이벤트와 같은 극단적인 동시성 상황에서 정합성을 지키기 위한 시스템을 집중 설계합니다.",
+                "[{\"icon\":\"Database\",\"title\":\"RDB Lock 전략\",\"color\":\"cyan\",\"tags\":[\"Pessimistic Lock\",\"Optimistic Lock\",\"JPA\"],\"desc\":\"데이터베이스의 배타 락, 공유 락 개념을 파고들며 가장 기초적인 동시성 제어를 구현합니다.\"},{\"icon\":\"Server\",\"title\":\"분산 환경의 락\",\"color\":\"blue\",\"tags\":[\"Redis\",\"Lettuce\",\"Redisson\"],\"desc\":\"여러 대의 서버 인스턴스에서도 정합성이 깨지지 않도록 Redis 기반 분산 락 메커니즘을 적용합니다.\"},{\"icon\":\"Cpu\",\"title\":\"도메인 적용\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"쿠폰 발급\",\"결제 트랜잭션\",\"재고 차감\"],\"desc\":\"Spring의 AOP나 Facade 패턴을 활용해 비즈니스 로직과 락 기능을 우아하게 분리하고 테스트 코드로 검증합니다.\"}]",
+                15),
+            new Seed("kafka", "Kafka Deep Dive",
+                "대규모 메시지 큐와 이벤트 드리븐 설계 패턴 완전 정복",
+                "📨",
+                "시스템 간의 완벽한 징검다리,\n이벤트 기반 아키텍처.",
+                "결합도를 낮추고 처리량을 높여주는 Kafka의 내부 동작 원리를 파악하고, 실제 MSA 환경에서 어떻게 활용하는지 심층 실습합니다.",
+                "[{\"icon\":\"Server\",\"title\":\"Kafka 코어\",\"color\":\"cyan\",\"tags\":[\"Broker\",\"Topic & Partition\",\"Offset\"],\"desc\":\"Kafka의 튼튼한 분산 저장 원리와 Replication, Zookeeper(또는 KRaft) 체제에 대해 학습합니다.\"},{\"icon\":\"Code2\",\"title\":\"프로듀싱 & 컨슈밍\",\"color\":\"blue\",\"tags\":[\"Spring Kafka\",\"Ack 튜닝\",\"Idempotence\"],\"desc\":\"메시지를 유실하지 않기 위한 설정과 중복 처리를 막기 위한 At-Least/Exactly-Once 전략을 실습합니다.\"},{\"icon\":\"Layers\",\"title\":\"EDA 기반 서비스 분리\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Event-Driven\",\"Outbox Pattern\",\"Saga\"],\"desc\":\"데이터베이스 트랜잭션과 메시지 발행을 일치시키는 Transactional Outbox 패턴 등 고급 MSA 주제를 다룹니다.\"}]",
+                16),
+            new Seed("expert-msa", "Kotlin/MSA 최고급 과정",
+                "현업 시니어 및 테크리드를 위한 엔터프라이즈 아키텍처 설계",
+                "🏛️",
+                "수백 개의 마이크로 서비스,\n복잡성 속에서 질서를 찾습니다.",
+                "모놀리식 분리를 고민하거나 트래픽 임계점에 도달한 시스템을 책임지는 시니어 개발자들을 위한 1:1 맞춤형 컨설팅 및 교육입니다.",
+                "[{\"icon\":\"Code2\",\"title\":\"도메인 주도 설계\",\"color\":\"cyan\",\"tags\":[\"DDD\",\"Clean Architecture\",\"Hexagonal\"],\"desc\":\"비즈니스 도메인을 명확하게 분리하여 마이크로서비스 간의 경계(Bounded Context)를 정의하는 법을 체득합니다.\"},{\"icon\":\"Layers\",\"title\":\"마이크로서비스 핵심\",\"color\":\"blue\",\"tags\":[\"Spring Cloud\",\"API Gateway\",\"Circuit Breaker\"],\"desc\":\"서비스 디스커버리와 장애 전파 차단을 위한 기술 스택을 도입해 안정적인 백엔드망을 오케스트레이션합니다.\"},{\"icon\":\"Database\",\"title\":\"분산 모니터링 & 트랜잭션\",\"color\":\"indigo\",\"isWide\":true,\"tags\":[\"Spring Cloud Data Flow\",\"Zipkin\",\"2PC/Saga\"],\"desc\":\"흩어진 서비스의 로그를 추적하고, 시스템 전체에 걸친 분산 트랜잭션을 최종적 정합성(Eventual Consistency)으로 해결합니다.\"}]",
+                17)
+        );
+
+        boolean anyChange = false;
+        for (Seed s : seeds) {
+            var existingOpt = mentoringCourseRepository.findByCourseKey(s.key());
+            if (existingOpt.isPresent()) {
+                var existing = existingOpt.get();
+                if (existing.getBoxesJson() == null || "[]".equals(existing.getBoxesJson())) {
+                    existing.updateContent(s.title(), s.subtitle(), s.icon(),
+                        s.descTitle(), s.descText(), s.boxesJson(), s.order(), true);
+                    mentoringCourseRepository.save(existing);
+                    anyChange = true;
+                }
+            } else {
+                mentoringCourseRepository.save(MentoringCourse.builder()
+                    .courseKey(s.key())
+                    .title(s.title())
+                    .subtitle(s.subtitle())
+                    .iconString(s.icon())
+                    .descriptionTitle(s.descTitle())
+                    .descriptionText(s.descText())
+                    .boxesJson(s.boxesJson())
+                    .displayOrder(s.order())
+                    .active(true)
+                    .build());
+                anyChange = true;
+            }
+        }
+        if (anyChange) log.info("멘토링 코스 시드 업데이트 완료 (17개)");
+        else log.info("멘토링 코스 시드 변경 없음.");
+    }
+
     private void createMentor(String name, String email, String encodedPassword,
-                              List<String> specialty, int careerYears, String company, String bio) {
+                              List<String> courseKeys, int careerYears, String company, String bio) {
         if (userRepository.existsByEmail(email)) {
             return;
         }
@@ -609,9 +771,12 @@ public class DataInitializer implements CommandLineRunner {
                 .role(Role.MENTOR)
                 .build());
 
+        java.util.List<MentoringCourse> foundCourses =
+                mentoringCourseRepository.findAllByCourseKeyInAndActiveTrue(courseKeys);
+
         mentorProfileRepository.save(MentorProfile.builder()
                 .user(user)
-                .specialty(specialty)
+                .courses(new java.util.HashSet<>(foundCourses))
                 .careerYears(careerYears)
                 .company(company)
                 .bio(bio)

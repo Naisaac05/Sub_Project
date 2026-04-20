@@ -1,15 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import { useAuth } from '@/contexts/AuthContext';
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginPageInner />
+    </Suspense>
+  );
+}
+
+function LoginPageInner() {
   const router = useRouter();
-  const { login, isLoggedIn, isLoading: authLoading } = useAuth();
+  const searchParams = useSearchParams();
+  const redirectParam = searchParams?.get('redirect') ?? null;
+  const { login, isLoggedIn, isLoading: authLoading, user } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -17,12 +27,20 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 이미 로그인 상태이면 홈으로 리다이렉트
+  // 로그인 성공(또는 이미 로그인 상태) 시 역할 기반 라우팅
+  // redirect 쿼리 > MENTOR 이면 /mentor/status > 그 외 /
   useEffect(() => {
-    if (!authLoading && isLoggedIn) {
+    if (authLoading) return;
+    if (!isLoggedIn || !user) return;
+
+    if (redirectParam) {
+      router.replace(redirectParam);
+    } else if (user.role === 'MENTOR') {
+      router.replace('/mentor/status');
+    } else {
       router.replace('/');
     }
-  }, [authLoading, isLoggedIn, router]);
+  }, [authLoading, isLoggedIn, user, router, redirectParam]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +54,7 @@ export default function LoginPage() {
     setIsSubmitting(true);
     try {
       await login(email, password);
-      router.push('/');
+      // 라우팅은 상단 useEffect가 담당 (user 상태가 반영된 뒤 역할 기반 분기)
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { message?: string } } };
       if (axiosError.response?.data?.message) {

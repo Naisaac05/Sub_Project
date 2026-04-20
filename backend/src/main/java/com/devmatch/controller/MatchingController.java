@@ -26,7 +26,7 @@ public class MatchingController {
 
     private final MatchingService matchingService;
 
-    @Operation(summary = "멘토 추천", description = "테스트 결과 기반 멘토 추천 (?category=Java)")
+    @Operation(summary = "멘토 추천", description = "테스트 결과 기반 멘토 추천 (?category=java-backend)")
     @GetMapping("/recommend")
     public ResponseEntity<ApiResponse<List<MentorRecommendResponse>>> recommendMentors(
             @AuthenticationPrincipal CustomUserDetails userDetails,

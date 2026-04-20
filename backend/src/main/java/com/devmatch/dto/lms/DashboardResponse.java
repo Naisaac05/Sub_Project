@@ -47,7 +47,7 @@ public class DashboardResponse {
     @Getter @AllArgsConstructor @Builder
     public static class MentorInfo {
         private String name;
-        private List<String> specialty;
+        private List<String> courseKeys;
         private String email;
     }
 
