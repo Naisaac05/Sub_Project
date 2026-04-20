@@ -110,6 +110,12 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(e.getMessage()));
     }
 
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleCourseNotFound(CourseNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
     @ExceptionHandler(CurriculumWeekLimitException.class)
     public ResponseEntity<ApiResponse<Void>> handleCurriculumWeekLimit(CurriculumWeekLimitException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -37,11 +37,46 @@ export interface UserUpdateRequest {
   password?: string;
 }
 
+// ─── Course DTOs ───
+export interface CourseSummary {
+  courseKey: string;
+  title: string;
+  iconString: string;
+}
+
+export interface MentoringCourseBox {
+  icon?: string;
+  title: string;
+  color?: string;
+  tags: string[];
+  desc: string;
+  isWide?: boolean;
+}
+
+export interface MentoringCourseDetail {
+  id: number;
+  courseKey: string;
+  title: string;
+  subtitle: string;
+  iconString: string;
+  descriptionTitle: string;
+  descriptionText: string;
+  boxes: MentoringCourseBox[];
+  displayOrder: number;
+  active: boolean;
+}
+
 // ─── Mentor DTOs ───
 export interface MentorApplyRequest {
-  specialty: string[];
+  courseKeys: string[];
+  techStack?: string[];
   careerYears: number;
   company?: string;
+  jobTitle?: string;
+  portfolioUrl?: string;
+  education?: string;
+  certifications?: string[];
+  preferredMenteeLevel?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'ANY';
   bio?: string;
 }
 
@@ -50,11 +85,18 @@ export interface MentorProfileResponse {
   userId: number;
   name: string;
   email: string;
-  specialty: string[];
+  courses: CourseSummary[];
+  techStack: string[];
   careerYears: number;
   company: string;
+  jobTitle: string;
+  portfolioUrl: string;
+  education: string;
+  certifications: string[];
+  preferredMenteeLevel: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'ANY' | null;
   bio: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  rejectedReason: string | null;
 }
 
 // ─── Test DTOs ───
@@ -112,7 +154,7 @@ export interface TestResultResponse {
 export interface MentorRecommendResponse {
   mentorId: number;
   name: string;
-  specialty: string[];
+  courseKeys: string[];
   careerYears: number;
   company: string;
   bio: string;

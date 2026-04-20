@@ -11,7 +11,7 @@ export interface DashboardResponse {
   assignmentStats: { total: number; submitted: number; reviewed: number; };
   nextSession: { id: number; date: string; startTime: string; endTime: string; meetLink: string; category: string; } | null;
   recentActivities: { type: string; title: string; createdAt: string; }[];
-  mentorInfo: { name: string; specialty: string[]; email: string; };
+  mentorInfo: { name: string; courseKeys: string[]; email: string; };
   communicationLinks: { discord: string | null; jitsiMeet: string | null; };
 }
 

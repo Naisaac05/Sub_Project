@@ -26,8 +26,8 @@ public class MatchingService {
         // APPROVED 멘토 중 해당 분야 전문가 필터링
         List<MentorProfile> approvedMentors = mentorProfileRepository.findByStatus(MentorStatus.APPROVED)
                 .stream()
-                .filter(profile -> profile.getSpecialty() != null
-                        && profile.getSpecialty().contains(category))
+                .filter(profile -> profile.getCourses() != null
+                        && profile.getCourses().stream().anyMatch(c -> c.getCourseKey().equals(category)))
                 .collect(Collectors.toList());
 
         // 사용자의 해당 분야 최근 테스트 결과 조회

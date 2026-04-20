@@ -123,7 +123,7 @@ public class LmsDashboardService {
         MentorProfile mentorProfile = mentorProfileRepository.findByUserId(mentor.getId()).orElse(null);
         DashboardResponse.MentorInfo mentorInfo = DashboardResponse.MentorInfo.builder()
                 .name(mentor.getName())
-                .specialty(mentorProfile != null ? mentorProfile.getSpecialty() : List.of())
+                .courseKeys(mentorProfile != null ? mentorProfile.getCourses().stream().map(c -> c.getCourseKey()).toList() : List.of())
                 .email(mentor.getEmail())
                 .build();
 
