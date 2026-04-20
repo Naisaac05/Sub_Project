@@ -1,14 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import { useAuth } from '@/contexts/AuthContext';
+import * as authService from '@/lib/auth';
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginPageInner />
+    </Suspense>
+  );
+}
+
+function LoginPageInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectParam = searchParams?.get('redirect') ?? null;
   const { login, isLoggedIn, isLoading: authLoading } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -20,9 +31,9 @@ export default function LoginPage() {
   // 이미 로그인 상태이면 홈으로 리다이렉트
   useEffect(() => {
     if (!authLoading && isLoggedIn) {
-      router.replace('/');
+      router.replace(redirectParam || '/');
     }
-  }, [authLoading, isLoggedIn, router]);
+  }, [authLoading, isLoggedIn, router, redirectParam]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +47,22 @@ export default function LoginPage() {
     setIsSubmitting(true);
     try {
       await login(email, password);
-      router.push('/');
+
+      // redirect 쿼리가 있으면 우선, 없고 MENTOR 역할이면 멘토 상태 페이지로
+      if (redirectParam) {
+        router.push(redirectParam);
+      } else {
+        try {
+          const profileRes = await authService.getMyProfile();
+          if (profileRes.success && profileRes.data.role === 'MENTOR') {
+            router.push('/mentor/status');
+            return;
+          }
+        } catch {
+          // 프로필 조회 실패 시 홈으로
+        }
+        router.push('/');
+      }
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { message?: string } } };
       if (axiosError.response?.data?.message) {

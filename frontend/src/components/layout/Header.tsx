@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Menu, X, User, LogOut, ChevronDown, FileText, Users, GraduationCap } from 'lucide-react';
+import { Menu, X, User, LogOut, ChevronDown, FileText, Users, GraduationCap, Briefcase } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const navItems = [
@@ -209,15 +209,26 @@ export default function Header() {
                         매칭 내역
                       </Link>
                       {user.role === 'MENTOR' && (
-                        <Link
-                          href="/lms/assignments"
-                          onClick={() => setDropdownOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
-                                   hover:text-white hover:bg-white/5 transition-colors"
-                        >
-                          <FileText size={16} />
-                          배정 목록
-                        </Link>
+                        <>
+                          <Link
+                            href="/mentor/status"
+                            onClick={() => setDropdownOpen(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
+                                     hover:text-white hover:bg-white/5 transition-colors"
+                          >
+                            <Briefcase size={16} />
+                            멘토 신청/상태
+                          </Link>
+                          <Link
+                            href="/lms/assignments"
+                            onClick={() => setDropdownOpen(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
+                                     hover:text-white hover:bg-white/5 transition-colors"
+                          >
+                            <FileText size={16} />
+                            배정 목록
+                          </Link>
+                        </>
                       )}
                       <button
                         onClick={handleLogout}
@@ -319,14 +330,24 @@ export default function Header() {
                     매칭 내역
                   </Link>
                   {user.role === 'MENTOR' && (
-                    <Link
-                      href="/lms/assignments"
-                      onClick={() => setMobileOpen(false)}
-                      className="px-4 py-3 text-gray-300 hover:text-white text-center rounded-lg
-                               hover:bg-white/5 transition-colors"
-                    >
-                      배정 목록
-                    </Link>
+                    <>
+                      <Link
+                        href="/mentor/status"
+                        onClick={() => setMobileOpen(false)}
+                        className="px-4 py-3 text-gray-300 hover:text-white text-center rounded-lg
+                                 hover:bg-white/5 transition-colors"
+                      >
+                        멘토 신청/상태
+                      </Link>
+                      <Link
+                        href="/lms/assignments"
+                        onClick={() => setMobileOpen(false)}
+                        className="px-4 py-3 text-gray-300 hover:text-white text-center rounded-lg
+                                 hover:bg-white/5 transition-colors"
+                      >
+                        배정 목록
+                      </Link>
+                    </>
                   )}
                   <button
                     onClick={handleLogout}
