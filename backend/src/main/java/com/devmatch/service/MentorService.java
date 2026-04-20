@@ -9,6 +9,8 @@ import com.devmatch.entity.MentoringCourse;
 import com.devmatch.entity.User;
 import com.devmatch.exception.AlreadyAppliedException;
 import com.devmatch.exception.CourseNotFoundException;
+import com.devmatch.exception.InvalidMentorReviewStateException;
+import com.devmatch.exception.MentorProfileNotFoundException;
 import com.devmatch.exception.UserNotFoundException;
 import com.devmatch.repository.MentorProfileHistoryRepository;
 import com.devmatch.repository.MentorProfileRepository;
@@ -111,7 +113,6 @@ public class MentorService {
         MentorProfile profile = mentorProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException("멘토 프로필을 찾을 수 없습니다"));
 
-        // TODO: admin review flow — Phase 후속
         String rejectedReason = null;
         if (profile.getStatus() == MentorStatus.REJECTED) {
             rejectedReason = historyRepository.findTopByUserIdOrderBySubmittedAtDesc(userId)
@@ -119,5 +120,58 @@ public class MentorService {
                     .orElse(null);
         }
         return MentorProfileResponse.from(profile, rejectedReason);
+    }
+
+    public List<MentorProfileResponse> findAllForAdmin(MentorStatus statusFilter) {
+        List<MentorProfile> profiles = (statusFilter == null)
+                ? mentorProfileRepository.findAll()
+                : mentorProfileRepository.findByStatus(statusFilter);
+
+        return profiles.stream()
+                .map(profile -> {
+                    String rejectedReason = null;
+                    if (profile.getStatus() == MentorStatus.REJECTED) {
+                        rejectedReason = historyRepository
+                                .findTopByUserIdOrderBySubmittedAtDesc(profile.getUser().getId())
+                                .map(MentorProfileHistory::getRejectedReason)
+                                .orElse(null);
+                    }
+                    return MentorProfileResponse.from(profile, rejectedReason);
+                })
+                .toList();
+    }
+
+    @Transactional
+    public MentorProfileResponse approve(Long profileId, Long adminUserId) {
+        MentorProfile profile = mentorProfileRepository.findById(profileId)
+                .orElseThrow(() -> new MentorProfileNotFoundException("멘토 프로필을 찾을 수 없습니다"));
+
+        if (profile.getStatus() != MentorStatus.PENDING) {
+            throw new InvalidMentorReviewStateException("이미 심사가 완료된 신청입니다");
+        }
+
+        profile.markApproved();
+
+        historyRepository.findTopByUserIdOrderBySubmittedAtDesc(profile.getUser().getId())
+                .ifPresent(history -> history.markApproved(adminUserId));
+
+        return MentorProfileResponse.from(profile, null);
+    }
+
+    @Transactional
+    public MentorProfileResponse reject(Long profileId, Long adminUserId, String reason) {
+        MentorProfile profile = mentorProfileRepository.findById(profileId)
+                .orElseThrow(() -> new MentorProfileNotFoundException("멘토 프로필을 찾을 수 없습니다"));
+
+        if (profile.getStatus() != MentorStatus.PENDING) {
+            throw new InvalidMentorReviewStateException("이미 심사가 완료된 신청입니다");
+        }
+
+        profile.markRejected();
+
+        historyRepository.findTopByUserIdOrderBySubmittedAtDesc(profile.getUser().getId())
+                .ifPresent(history -> history.markRejected(adminUserId, reason));
+
+        return MentorProfileResponse.from(profile, reason);
     }
 }
