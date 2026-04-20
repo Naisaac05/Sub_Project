@@ -1,310 +1,448 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Brain,
+  CheckCircle2,
+  Cloud,
+  Database,
+  ExternalLink,
+  Layers,
+  Layout,
+  MessageSquarePlus,
+  PencilLine,
+  Server,
+  Smartphone,
+  Star,
+} from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { Database, Code2, Layout, Server, Cpu, Smartphone, Layers, Cloud, Users, type LucideIcon } from 'lucide-react';
-import React from 'react';
-import { fetchCourse } from '@/lib/courses';
-import type { MentoringCourseDetail } from '@/lib/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { getMyMatchingsAsMentee } from '@/lib/matching';
+import {
+  getCourseBySlug,
+  getEnrollmentPlans,
+  matchesCourseCategory,
+  type CourseCatalogItem,
+  type CourseReview,
+} from '@/lib/course-catalog';
+import type { MatchingResponse } from '@/lib/types';
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  Database,
-  Code2,
-  Layout,
-  Server,
-  Cpu,
-  Smartphone,
-  Layers,
-  Cloud,
-  Users,
+const iconMap = {
+  server: Server,
+  database: Database,
+  layout: Layout,
+  smartphone: Smartphone,
+  cloud: Cloud,
+  brain: Brain,
+  layers: Layers,
 };
 
-export default function CourseDetailPage() {
-  const params = useParams();
-  const router = useRouter();
-  const courseKey = params.id as string;
+const badgeColorMap = {
+  blue: 'border-blue-400/30 bg-blue-400/10 text-blue-300',
+  red: 'border-red-400/30 bg-red-400/10 text-red-300',
+  orange: 'border-orange-400/30 bg-orange-400/10 text-orange-300',
+};
 
-  const [course, setCourse] = useState<MentoringCourseDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+type ReviewFormState = {
+  rating: number;
+  content: string;
+};
+
+const FALLBACK_COURSE: CourseCatalogItem = {
+  slug: 'fallback',
+  title: '멘토링 코스',
+  shortTitle: '멘토링 코스',
+  categoryLabel: 'Mentoring',
+  iconKey: 'layout',
+  summary: '선택한 과정 정보를 불러오지 못해 기본 안내를 보여주고 있습니다.',
+  headline: '과정 정보가 아직 준비되지 않았습니다.',
+  description: '코스 목록으로 돌아가 현재 열려 있는 과정을 확인해 주세요.',
+  level: '안내',
+  durationLabel: '확인 필요',
+  matchKeywords: [],
+  outcomes: ['현재 열려 있는 코스 확인', '오픈 예정 과정 살펴보기'],
+  sections: [
+    {
+      title: '안내',
+      summary: '존재하지 않거나 아직 공개되지 않은 코스입니다.',
+      bullets: ['멘토링 코스 목록으로 이동', '오픈된 과정 확인', '준비 중인 과정 살펴보기'],
+    },
+  ],
+  availability: 'upcoming',
+  comingSoonNote: '코스 목록으로 돌아가 현재 열려 있는 트랙을 확인해 주세요.',
+};
+
+function getStoredReviews(slug: string) {
+  if (typeof window === 'undefined') {
+    return [];
+  }
+
+  const raw = window.localStorage.getItem(`course-reviews:${slug}`);
+  if (!raw) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as CourseReview[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveStoredReviews(slug: string, reviews: CourseReview[]) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  window.localStorage.setItem(`course-reviews:${slug}`, JSON.stringify(reviews));
+}
+
+export default function CourseDetailPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const { user, isLoading: authLoading } = useAuth();
+  const course = useMemo(() => getCourseBySlug(params?.id) ?? FALLBACK_COURSE, [params?.id]);
+  const Icon = iconMap[course.iconKey];
+  const enrollmentPlans = useMemo(() => getEnrollmentPlans(), []);
+
+  const [reviews, setReviews] = useState<CourseReview[]>([]);
+  const [reviewForm, setReviewForm] = useState<ReviewFormState>({ rating: 5, content: '' });
+  const [reviewMessage, setReviewMessage] = useState('');
+  const [canWriteReview, setCanWriteReview] = useState(false);
+  const [reviewLoading, setReviewLoading] = useState(true);
 
   useEffect(() => {
-    fetchCourse(courseKey)
-      .then(setCourse)
-      .catch(() => setCourse(null))
-      .finally(() => setLoading(false));
-  }, [courseKey]);
+    setReviews(getStoredReviews(course.slug));
+  }, [course.slug]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-white bg-black">로딩 중…</div>;
-  if (!course) return <div className="min-h-screen flex items-center justify-center text-white bg-black">코스를 찾을 수 없습니다.</div>;
+  useEffect(() => {
+    const checkReviewPermission = async () => {
+      if (authLoading) {
+        return;
+      }
 
-  const bgGradients = {
-    cyan: 'from-cyan-500 to-blue-500',
-    blue: 'from-blue-500 to-indigo-500',
-    indigo: 'from-indigo-500 to-purple-500',
-  };
-  const textGradients = {
-    cyan: 'text-cyan-400',
-    blue: 'text-blue-400',
-    indigo: 'text-indigo-400',
+      if (!user || user.role !== 'MENTEE' || course.availability !== 'open') {
+        setCanWriteReview(false);
+        setReviewLoading(false);
+        return;
+      }
+
+      try {
+        const response = await getMyMatchingsAsMentee();
+        const eligible = response.data.some((matching: MatchingResponse) => {
+          const canReviewStatus =
+            matching.status === 'ACCEPTED' || matching.status === 'TRIAL' || matching.status === 'CANCELLED';
+          return canReviewStatus && matchesCourseCategory(course, matching.category);
+        });
+        setCanWriteReview(eligible);
+      } catch {
+        setCanWriteReview(false);
+      } finally {
+        setReviewLoading(false);
+      }
+    };
+
+    void checkReviewPermission();
+  }, [authLoading, course, user]);
+
+  const existingReview = user ? reviews.find((review) => review.authorId === user.id) : undefined;
+
+  const handleCreateReview = () => {
+    if (!user || !canWriteReview) {
+      setReviewMessage('후기는 실제 수강 중이거나 수강 이력이 있는 멘티만 작성할 수 있습니다.');
+      return;
+    }
+
+    const content = reviewForm.content.trim();
+    if (!content) {
+      setReviewMessage('후기 내용을 입력해 주세요.');
+      return;
+    }
+
+    const nextReview: CourseReview = {
+      authorId: user.id,
+      authorName: user.name,
+      rating: reviewForm.rating,
+      content,
+      createdAt: new Date().toISOString(),
+    };
+
+    const nextReviews = [nextReview, ...reviews.filter((review) => review.authorId !== user.id)];
+    setReviews(nextReviews);
+    saveStoredReviews(course.slug, nextReviews);
+    setReviewForm({ rating: 5, content: '' });
+    setReviewMessage('후기가 등록되었습니다.');
   };
 
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-black">
-        {/* Hero Section */}
-        <section className="relative pt-32 pb-24 overflow-hidden border-b border-white/10" style={{ background: 'radial-gradient(ellipse at top, #0A192F 0%, #000000 100%)' }}>
-          <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+      <main className="min-h-screen bg-[#050B14] pt-24 text-white">
+        <section className="border-b border-white/10 bg-[radial-gradient(circle_at_top_left,_rgba(0,102,255,0.18),_transparent_36%),radial-gradient(circle_at_bottom_right,_rgba(0,168,255,0.14),_transparent_28%),#050B14]">
+          <div className="mx-auto max-w-6xl px-6 py-16">
+            <Link
+              href="/mentors"
+              className="inline-flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors hover:text-white"
+            >
+              <ArrowLeft size={16} />
+              멘토링 코스 목록으로 돌아가기
+            </Link>
 
-          <div className="max-w-6xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-between">
-            <div className="md:w-1/2 text-left mb-10 md:mb-0">
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 whitespace-pre-line">
-                {course.title}
-              </h1>
-              <p className="text-gray-300 text-lg leading-relaxed mb-8 max-w-md">
-                {course.subtitle}
-              </p>
-              <button
-                onClick={() => router.push('/apply')}
-                className="px-8 py-3 bg-[#0066FF] hover:bg-blue-600 text-white font-bold rounded-lg transition-colors text-sm"
-              >
-                신청하러 가기
-              </button>
-            </div>
+            <div className="mt-10 grid items-center gap-10 md:grid-cols-[1.2fr_0.8fr]">
+              <div>
+                <span className="rounded-full border border-blue-400/20 bg-blue-400/10 px-4 py-1.5 text-xs font-bold tracking-wider text-blue-300">
+                  {course.categoryLabel}
+                </span>
+                <h1 className="mt-6 break-keep text-4xl font-extrabold tracking-tight sm:text-5xl">
+                  {course.title}
+                </h1>
+                <p className="mt-5 break-keep text-xl leading-8 text-gray-300">{course.headline}</p>
+                <p className="mt-5 break-keep text-base leading-8 text-gray-400">{course.description}</p>
 
-            <div className="md:w-1/2 flex justify-center md:justify-end">
-              <div className="w-64 h-64 rounded-3xl bg-gradient-to-br from-[#00A8FF] to-[#0066FF] flex items-center justify-center p-8 shadow-[0_0_50px_rgba(0,102,255,0.4)] relative border-4 border-[#0F2A52]">
-                <div className="w-full h-full border-4 border-white/20 rounded-2xl flex items-center justify-center relative overflow-hidden">
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                   <span className="text-8xl font-bold text-white drop-shadow-lg z-10">{course.iconString}</span>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <span className="rounded-full bg-white/5 px-4 py-2 text-sm font-medium text-gray-200">
+                    {course.level}
+                  </span>
+                  <span className="rounded-full bg-white/5 px-4 py-2 text-sm font-medium text-gray-200">
+                    {course.durationLabel}
+                  </span>
+                  <span
+                    className={`rounded-full px-4 py-2 text-sm font-medium ${
+                      course.availability === 'open'
+                        ? 'bg-emerald-400/10 text-emerald-300'
+                        : 'bg-amber-400/10 text-amber-300'
+                    }`}
+                  >
+                    {course.availability === 'open' ? '현재 신청 가능' : '오픈 예정'}
+                  </span>
                 </div>
+
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <button
+                    onClick={() => router.push('/apply')}
+                    className="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-500"
+                  >
+                    신청하기 <ArrowRight size={16} />
+                  </button>
+                  <button
+                    onClick={() => document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-gray-200 transition-colors hover:bg-white/10"
+                  >
+                    후기 보기
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-[2rem] border border-blue-500/20 bg-gradient-to-br from-blue-500/15 to-cyan-400/10 p-8">
+                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-blue-500/15 text-blue-300">
+                  <Icon size={38} />
+                </div>
+                <h2 className="mt-8 text-2xl font-bold text-white">이 과정을 통해 얻는 것</h2>
+                <ul className="mt-6 space-y-4">
+                  {course.outcomes.map((outcome) => (
+                    <li key={outcome} className="flex items-start gap-3 text-sm leading-6 text-gray-200">
+                      <CheckCircle2 size={18} className="mt-1 shrink-0 text-cyan-300" />
+                      <span className="break-keep">{outcome}</span>
+                    </li>
+                  ))}
+                </ul>
+                {course.comingSoonNote && (
+                  <p className="mt-8 rounded-2xl bg-white/5 p-4 text-sm leading-6 text-gray-300">
+                    {course.comingSoonNote}
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </section>
 
-        {/* Info Box Section */}
-        <section className="border-b border-white/10 bg-[#0A0A0A]">
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-white/10 text-gray-400 text-sm">
-
-            <div className="p-8 flex-1">
-              <h3 className="text-gray-500 font-bold mb-4 text-center text-xs">대상</h3>
-              <ul className="space-y-2 list-disc list-inside">
-                <li>신입, 경력(2년 이하) 채용자<br/>(이직자 가능)</li>
-                <li>개발 경험이 있는 비전공</li>
-                <li>전공자 미취업</li>
-              </ul>
-            </div>
-
-            <div className="p-8 flex-1">
-              <h3 className="text-gray-500 font-bold mb-4 text-center text-xs">멘토링 방식</h3>
-              <ul className="space-y-2 list-disc list-inside">
-                <li>1대1 온라인 화상 방식</li>
-                <li>프로젝트 스터디/코드 리뷰</li>
-                <li>녹화본/스크립트 제공</li>
-                <li>이력서/면접/포트폴리오 코칭</li>
-              </ul>
-            </div>
-
-            <div className="p-8 flex-1">
-              <h3 className="text-gray-500 font-bold mb-4 text-center text-xs">멤버십 기간</h3>
-              <ul className="space-y-2 list-disc list-inside">
-                <li>기본 4개월 (주 1회 기준)</li>
-                <li>개인 맞춤 학습진도 진행</li>
-                <li>월 멤버십 연장 가능</li>
-              </ul>
-            </div>
-
-            <div className="p-8 flex-1">
-              <h3 className="text-gray-500 font-bold mb-4 text-center text-xs">진행 시간</h3>
-              <ul className="space-y-2 list-disc list-inside">
-                <li>주 1회 1시간 화상 멘토링<br/>(상담/진도 체크 위주)</li>
-                <li>메신저 상시 소통</li>
-                <li>Github 상시 코드 리뷰</li>
-              </ul>
-            </div>
-
+        <section className="mx-auto max-w-6xl px-6 py-16">
+          <div className="grid gap-6 md:grid-cols-3">
+            {course.sections.map((section) => (
+              <article key={section.title} className="rounded-3xl border border-white/10 bg-white/[0.03] p-7">
+                <h2 className="text-xl font-bold text-white">{section.title}</h2>
+                <p className="mt-3 break-keep text-sm leading-7 text-gray-400">{section.summary}</p>
+                <ul className="mt-5 space-y-3">
+                  {section.bullets.map((bullet) => (
+                    <li key={bullet} className="flex items-start gap-3 text-sm leading-6 text-gray-200">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-400" />
+                      <span className="break-keep">{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
           </div>
         </section>
 
-        {/* Sticky Nav */}
-        <div className="sticky top-16 z-40 bg-black/80 backdrop-blur-md border-b border-white/10 flex justify-center text-xs font-bold text-gray-400">
-           <div className="flex w-full max-w-4xl justify-around py-4">
-             <span className="text-white">커리큘럼</span>
-             <span className="hover:text-white cursor-pointer" onClick={() => {
-                document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' });
-             }}>후기</span>
-             <span className="transition-colors hover:text-white cursor-pointer text-[#0066FF]" onClick={() => router.push('/apply')}>신청하기</span>
-           </div>
-        </div>
+        <section id="reviews" className="border-y border-white/5 bg-[#08111d] py-16">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-white">수강생 후기</h2>
+                <p className="mt-3 break-keep text-sm leading-7 text-gray-400">
+                  실제로 작성된 후기만 노출합니다. 아직 등록된 후기가 없으면 빈 상태로 안내합니다.
+                </p>
+              </div>
+              <div className="rounded-2xl bg-white/5 px-4 py-3 text-sm text-gray-300">
+                {reviewLoading
+                  ? '수강 이력을 확인하는 중입니다.'
+                  : canWriteReview
+                    ? '이 과정의 실제 수강 이력이 확인되어 후기를 작성할 수 있습니다.'
+                    : '후기는 실제 수강 중이거나 수강 이력이 있는 멘티만 작성할 수 있습니다.'}
+              </div>
+            </div>
 
-        {/* Content Section */}
-        <section className="py-24 bg-black">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-6 whitespace-pre-line">
-              {course.descriptionTitle}
-            </h2>
-
-            <div className="w-12 h-1 bg-gray-800 mx-auto mb-6"></div>
-
-            <p className="text-gray-400 text-sm leading-relaxed mb-16 whitespace-pre-line">
-              {course.descriptionText}
-            </p>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              {course.boxes.map((box, idx) => {
-                const Icon = box.icon ? ICON_MAP[box.icon] : null;
-                return (
-                  <div key={idx} className={`border border-[#0066FF]/30 bg-[#001433]/50 rounded-xl p-6 text-left relative overflow-hidden ${box.isWide ? 'md:col-span-2 mt-4' : ''}`}>
-                    <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${(bgGradients as any)[box.color ?? 'cyan']}`}></div>
-                    <h4 className={`${(textGradients as any)[box.color ?? 'cyan']} text-sm font-bold mb-4 flex items-center gap-2`}>
-                      {Icon && <Icon size={16} />}
-                      {box.title}
-                    </h4>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {box.tags.map((tag: string) => (
-                        <span key={tag} className="px-3 py-1 bg-blue-900/30 border border-blue-800 rounded text-gray-300 text-xs">{tag}</span>
-                      ))}
-                    </div>
-                    <p className="text-gray-400 text-xs leading-relaxed">
-                      {box.desc}
+            <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_380px]">
+              <div className="space-y-4">
+                {reviews.length === 0 ? (
+                  <div className="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-8">
+                    <p className="text-lg font-semibold text-white">아직 등록된 후기가 없습니다.</p>
+                    <p className="mt-3 break-keep text-sm leading-7 text-gray-400">
+                      첫 후기는 실제 수강 중이거나 수강 이력이 있는 멘티가 남길 수 있습니다.
                     </p>
                   </div>
-                );
-              })}
-            </div>
-
-          </div>
-        </section>
-
-        {/* Reviews Section */}
-        <section id="reviews" className="py-24 bg-[#050B14] border-t border-white/5">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-12">
-              수강생 후기
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-6 text-left">
-              <div className="bg-[#0A111E] p-6 rounded-xl border border-white/10">
-                <div className="flex items-center gap-1 mb-4 text-[#0066FF]">
-                  {'★★★★★'}
-                </div>
-                <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                  "학원에서 수박 겉핥기로 배웠던 부분들을 바닥까지 파헤쳐 볼 수 있었습니다. 진짜 현업에서 고민하는 문제들을 멘토님이 1:1로 지도해주셔서 결국 좋은 핏의 기업에 합격할 수 있었습니다."
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-900 text-xs flex justify-center items-center font-bold text-white">익명</div>
-                  <span className="text-gray-500 text-xs">최종 합격자 / 주니어</span>
-                </div>
+                ) : (
+                  reviews.map((review) => (
+                    <article key={`${review.authorId}-${review.createdAt}`} className="rounded-3xl border border-white/10 bg-white/[0.03] p-7">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="text-lg font-semibold text-white">{review.authorName}</p>
+                          <p className="text-xs text-gray-500">
+                            {new Date(review.createdAt).toLocaleDateString('ko-KR')}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1 text-amber-300">
+                          {Array.from({ length: review.rating }).map((_, index) => (
+                            <Star key={index} size={14} className="fill-current" />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="mt-5 break-keep text-sm leading-7 text-gray-300">{review.content}</p>
+                    </article>
+                  ))
+                )}
               </div>
 
-              <div className="bg-[#0A111E] p-6 rounded-xl border border-white/10">
-                <div className="flex items-center gap-1 mb-4 text-[#0066FF]">
-                  {'★★★★★'}
-                </div>
-                <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                  "그동안 해왔던 사이드 프로젝트의 아키텍처를 분리하고 동시성 제어까지 적용해보니 시야가 확 트였습니다. 가장 좋았던 것은 이력서 리뷰와 코드 리뷰를 현직자 시선에서 집중적으로 진행해주신 점이었습니다."
-                </p>
+              <aside className="rounded-3xl border border-white/10 bg-white/[0.04] p-7">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-purple-900 text-xs flex justify-center items-center font-bold text-white">익명</div>
-                  <span className="text-gray-500 text-xs">이직 성공 / 실무 2년차</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-20 mb-8 max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[
-                  {
-                    id: 'IMMEDIATE',
-                    title: '즉시 시작',
-                    badge: '시작일 선택 가능',
-                    badgeColor: 'bg-blue-900/30 text-blue-400 border-blue-800/50',
-                    desc: '결제 즉시 멘토님 매칭 (시작일 선택 가능)',
-                    duration: '4개월',
-                    originalPrice: 5980000,
-                    price: 4680000,
-                    monthly: '390,000원 / 12개월(무이자)',
-                  },
-                  {
-                    id: 'EARLY_BIRD_6',
-                    title: '6월 시작 얼리버드',
-                    badge: '마감 D-13',
-                    badgeColor: 'bg-red-900/30 text-red-400 border-red-800/50',
-                    desc: '6월 내 멘토님 매칭, 시작일 선택 가능',
-                    duration: '4개월',
-                    originalPrice: 4980000,
-                    price: 4580000,
-                    monthly: '381,000원 / 12개월(무이자)',
-                  },
-                  {
-                    id: 'EARLY_BIRD_7',
-                    title: '7월 시작 얼리버드',
-                    badge: '마감 D-13',
-                    badgeColor: 'bg-orange-900/30 text-orange-400 border-orange-800/50',
-                    desc: '7월 내 멘토님 매칭, 시작일 선택 가능',
-                    duration: '4개월',
-                    originalPrice: 4980000,
-                    price: 4480000,
-                    monthly: '373,000원 / 12개월(무이자)',
-                  }
-                ].map((plan) => (
-                  <div key={plan.id} className="bg-[#0a111a] border border-white/10 rounded-2xl p-8 flex flex-col text-left transition-all hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10">
-                    <div className="flex justify-between items-start mb-6">
-                      <h3 className="text-xl font-bold text-white tracking-tight">{plan.title}</h3>
-                      <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold border ${plan.badgeColor}`}>
-                        {plan.badge}
-                      </span>
-                    </div>
-
-                    <div className="space-y-4 mb-8 flex-grow">
-                      <div>
-                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">시작</p>
-                        <p className="text-sm text-gray-300 font-medium leading-relaxed">{plan.desc}</p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">기간</p>
-                        <p className="text-sm text-gray-300 font-bold">{plan.duration}</p>
-                      </div>
-                    </div>
-
-                    <div className="pt-6 border-t border-white/5 mb-6">
-                      <p className="text-xs text-gray-500 line-through mb-1">{(plan.originalPrice).toLocaleString()}원</p>
-                      <p className="text-3xl font-black text-white tracking-tighter">
-                        {(plan.price).toLocaleString()}<span className="text-sm font-bold text-gray-400 ml-0.5 tracking-normal">원</span>
-                      </p>
-                    </div>
-
-                    <div className="p-4 bg-white/5 rounded-xl mb-6">
-                      <p className="text-xs text-gray-300 mb-1 flex items-center gap-1">
-                        <span className="w-1 h-1 rounded-full bg-blue-500"></span>
-                        {plan.monthly}
-                      </p>
-                      <p className="text-[10px] text-gray-500 leading-tight">
-                        *최대 할인 적용시 금액<br/>
-                        *12개월 무이자 할부는 일부 카드사만 해당됩니다.
-                      </p>
-                    </div>
-
-                    <button
-                      onClick={() => router.push('/apply')}
-                      className="w-full py-4 rounded-xl font-bold text-sm bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all"
-                    >
-                      해당 플랜으로 지원하기
-                    </button>
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-500/15 text-blue-300">
+                    <MessageSquarePlus size={20} />
                   </div>
-                ))}
-              </div>
-            </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">후기 작성</h3>
+                    <p className="text-sm text-gray-400">가짜 후기는 노출하지 않습니다.</p>
+                  </div>
+                </div>
 
+                {existingReview && (
+                  <div className="mt-6 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm text-emerald-200">
+                    이미 이 과정에 후기를 남겼습니다. 새로 등록하면 기존 후기가 최신 내용으로 교체됩니다.
+                  </div>
+                )}
+
+                <div className="mt-6">
+                  <label className="mb-3 block text-sm font-semibold text-gray-200">별점</label>
+                  <div className="flex gap-2">
+                    {[5, 4, 3, 2, 1].map((rating) => (
+                      <button
+                        key={rating}
+                        onClick={() => setReviewForm((prev) => ({ ...prev, rating }))}
+                        className={`rounded-2xl px-3 py-2 text-sm font-semibold transition-colors ${
+                          reviewForm.rating === rating
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                        }`}
+                        disabled={!canWriteReview}
+                      >
+                        {rating}점
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <label className="mb-3 block text-sm font-semibold text-gray-200">후기 내용</label>
+                  <textarea
+                    value={reviewForm.content}
+                    onChange={(event) => setReviewForm((prev) => ({ ...prev, content: event.target.value }))}
+                    placeholder={
+                      canWriteReview
+                        ? '실제 수강 경험을 바탕으로 도움이 되었던 점을 남겨 주세요.'
+                        : '실제 수강 이력이 있는 멘티에게만 후기 작성이 열립니다.'
+                    }
+                    className="min-h-[180px] w-full rounded-2xl border border-white/10 bg-white/5 p-4 text-sm leading-7 text-white outline-none transition-colors placeholder:text-gray-500 focus:border-blue-500"
+                    disabled={!canWriteReview}
+                  />
+                </div>
+
+                {reviewMessage && (
+                  <p className="mt-4 break-keep text-sm leading-6 text-gray-300">{reviewMessage}</p>
+                )}
+
+                <button
+                  onClick={handleCreateReview}
+                  disabled={!canWriteReview}
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-400"
+                >
+                  <PencilLine size={16} />
+                  후기 등록하기
+                </button>
+              </aside>
+            </div>
           </div>
         </section>
 
+        <section className="mx-auto max-w-6xl px-6 py-16">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-white">신청하기</h2>
+            <p className="mt-3 break-keep text-sm leading-7 text-gray-400">
+              얼리버드 차수는 현재 날짜를 기준으로 자동 계산되며, 각 차수의 마감일은 해당 월 10일 기준으로 표시됩니다.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-3">
+            {enrollmentPlans.map((plan) => (
+              <article key={plan.id} className="flex flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-7">
+                <div className="flex items-start justify-between gap-4">
+                  <h3 className="break-keep text-2xl font-bold text-white">{plan.title}</h3>
+                  <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${badgeColorMap[plan.badgeTone]}`}>
+                    {plan.badge}
+                  </span>
+                </div>
+                <p className="mt-4 break-keep text-sm leading-7 text-gray-400">{plan.desc}</p>
+
+                <div className="mt-6 rounded-2xl bg-white/5 p-4">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">진행 기간</p>
+                  <p className="mt-2 text-sm font-medium text-gray-200">{plan.duration}</p>
+                </div>
+
+                <div className="mt-6 border-t border-white/5 pt-6">
+                  <p className="text-sm text-gray-500 line-through">
+                    {plan.originalPrice.toLocaleString('ko-KR')}원
+                  </p>
+                  <p className="mt-2 text-3xl font-extrabold tracking-tight text-white">
+                    {plan.price.toLocaleString('ko-KR')}원
+                  </p>
+                  <p className="mt-2 text-sm text-gray-400">{plan.monthly}</p>
+                </div>
+
+                <button
+                  onClick={() => router.push('/apply')}
+                  className="mt-8 inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-5 py-4 text-sm font-bold text-white transition-colors hover:bg-blue-500"
+                >
+                  이 플랜으로 신청하기
+                  <ExternalLink size={16} />
+                </button>
+              </article>
+            ))}
+          </div>
+        </section>
       </main>
       <Footer />
     </>

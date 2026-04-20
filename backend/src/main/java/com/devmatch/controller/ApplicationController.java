@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/applications")
 @RequiredArgsConstructor
 public class ApplicationController {
-    
+
     private final ApplicationService applicationService;
 
     @PostMapping("/submit")
@@ -27,8 +27,6 @@ public class ApplicationController {
     public ResponseEntity<ApplicationResponse> confirmPayment(@PathVariable Long id) {
         return ResponseEntity.ok(applicationService.convertToResponse(applicationService.confirmPayment(id)));
     }
-
-    // --- 멘토 전용 매칭 API ---
 
     @GetMapping("/my-assignments")
     public ResponseEntity<List<ApplicationResponse>> getMyAssignments(@AuthenticationPrincipal CustomUserDetails user) {

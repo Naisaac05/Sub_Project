@@ -13,8 +13,10 @@ public class PostResponse {
     private Long id;
     private Long authorId;
     private String authorName;
+    private String category;
     private String title;
     private String content;
+    private Integer viewCount;
     private Integer likeCount;
     private Integer commentCount;
     private Boolean liked;
@@ -25,8 +27,10 @@ public class PostResponse {
                 post.getId(),
                 post.getAuthor().getId(),
                 post.getAuthor().getName(),
+                post.getCategory(),
                 post.getTitle(),
                 post.getContent(),
+                post.getViewCount(),
                 post.getLikeCount(),
                 post.getCommentCount(),
                 liked,
