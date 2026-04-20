@@ -5,12 +5,12 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { Database, Code2, Layout, Server, Cpu, Smartphone, Layers, Cloud, Users } from 'lucide-react';
+import { Database, Code2, Layout, Server, Cpu, Smartphone, Layers, Cloud, Users, type LucideIcon } from 'lucide-react';
 import React from 'react';
 import { fetchCourse } from '@/lib/courses';
 import type { MentoringCourseDetail } from '@/lib/types';
 
-const ICON_MAP: Record<string, React.ComponentType<{ size?: number }>> = {
+const ICON_MAP: Record<string, LucideIcon> = {
   Database,
   Code2,
   Layout,
