@@ -42,3 +42,4 @@
 - [2026-04-18 — 회원가입 시 MENTOR를 선택해도 항상 MENTEE로 저장됨 (stale build로 실행된 백엔드)](2026-04-18-signup-role-always-mentee-stale-build.md)
 - [2026-04-18 — Course API 코드 리뷰 지적사항 4건 반영 (CourseNotFoundException, ResponseEntity, Swagger, 테스트)](2026-04-18-course-api-review-fixes.md)
 - [2026-04-18 — Phase B 멘토 리팩터 — JPA PersistentSet 갱신 버그, Test 카테고리 슬러그 불일치, 이력 무결성 drift](2026-04-18-mentor-refactor-jpa-fixes.md)
+- [2026-04-20 — ICON_MAP 타입 불일치 — ComponentType<{size?: number}> vs LucideIcon](2026-04-20-icon-map-lucide-type-mismatch.md)
