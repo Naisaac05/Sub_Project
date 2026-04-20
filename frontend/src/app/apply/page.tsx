@@ -6,6 +6,8 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Check, Sparkles, Send } from 'lucide-react';
 import { submitApplication } from '@/lib/application';
+import { fetchCourseSummaries } from '@/lib/courses';
+import type { CourseSummary } from '@/lib/types';
 import { useAuth } from '@/contexts/AuthContext';
 
 /* ───── Option Data ───── */
@@ -19,6 +21,11 @@ export default function ApplyPage() {
   const router = useRouter();
   const { user, isLoggedIn, isLoading } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [courseOptions, setCourseOptions] = useState<CourseSummary[]>([]);
+
+  useEffect(() => {
+    fetchCourseSummaries().then(setCourseOptions).catch(() => setCourseOptions([]));
+  }, []);
   
   // 로그인 체크: 로딩 완료 후 로그인 상태가 아니면 로그인 페이지로
   useEffect(() => {
@@ -33,7 +40,7 @@ export default function ApplyPage() {
     currentLevel: 'BEGINNER',
     targetTechStack: 'Java, Spring',
     careerGoal: '백엔드 개발자',
-    category: 'backend',
+    category: '',
     courseType: 'IMMEDIATE',
     desiredMonths: 4,
     languages: [] as string[],
@@ -66,6 +73,7 @@ export default function ApplyPage() {
 
   const isFormValid = () => {
     return (
+      form.category !== '' &&
       form.languages.length > 0 &&
       form.platforms.length > 0 &&
       form.isCsMajor !== null &&
@@ -210,6 +218,25 @@ export default function ApplyPage() {
           </div>
 
           <div className="space-y-8 bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-gray-100">
+            <section className="mb-12">
+              <SectionTitle>멘토링 코스 선택</SectionTitle>
+              <div className="space-y-8">
+                <div>
+                  <QuestionLabel>관심 있는 멘토링 코스를 선택해주세요.</QuestionLabel>
+                  <select
+                    className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 focus:ring-0 transition-colors bg-white text-gray-900"
+                    value={form.category}
+                    onChange={e => setForm({ ...form, category: e.target.value })}
+                  >
+                    <option value="">카테고리 선택…</option>
+                    {courseOptions.map(c => (
+                      <option key={c.courseKey} value={c.courseKey}>{c.title}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </section>
+
             <section className="mb-12">
               <SectionTitle>개발 배경</SectionTitle>
               <div className="space-y-8">
