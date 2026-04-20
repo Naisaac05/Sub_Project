@@ -43,3 +43,4 @@
 - [2026-04-18 — Course API 코드 리뷰 지적사항 4건 반영 (CourseNotFoundException, ResponseEntity, Swagger, 테스트)](2026-04-18-course-api-review-fixes.md)
 - [2026-04-18 — Phase B 멘토 리팩터 — JPA PersistentSet 갱신 버그, Test 카테고리 슬러그 불일치, 이력 무결성 drift](2026-04-18-mentor-refactor-jpa-fixes.md)
 - [2026-04-20 — ICON_MAP 타입 불일치 — ComponentType<{size?: number}> vs LucideIcon](2026-04-20-icon-map-lucide-type-mismatch.md)
+- [2026-04-20 — 로그인 직후 MENTOR가 `/mentor/status`가 아닌 랜딩으로 가는 경쟁 조건](2026-04-20-login-redirect-race-mentor-to-landing.md)
