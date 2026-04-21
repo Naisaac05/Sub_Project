@@ -19,9 +19,20 @@ const navItems = [
   { label: 'FAQ', href: '/faq' },
 ];
 
+const MENTOR_STATUS_BADGE: Record<'PENDING' | 'REJECTED', { label: string; className: string }> = {
+  PENDING: {
+    label: '승인 대기중',
+    className: 'bg-amber-500/15 text-amber-300',
+  },
+  REJECTED: {
+    label: '반려됨',
+    className: 'bg-red-500/15 text-red-300',
+  },
+};
+
 export default function Header() {
   const router = useRouter();
-  const { user, isLoggedIn, isLoading, logout } = useAuth();
+  const { user, mentorStatus, isLoggedIn, isLoading, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -174,10 +185,17 @@ export default function Header() {
                     <div className="px-4 py-3 border-b border-white/5">
                       <p className="text-white text-sm font-semibold">{user.name}</p>
                       <p className="text-gray-500 text-xs mt-0.5">{user.email}</p>
-                      <span className="inline-block mt-1.5 px-2 py-0.5 rounded-md text-xs font-medium
-                                     bg-blue-500/10 text-blue-400">
-                        {roleLabel}
-                      </span>
+                      <div className="mt-1.5 flex items-center gap-1.5">
+                        <span className="inline-block px-2 py-0.5 rounded-md text-xs font-medium
+                                       bg-blue-500/10 text-blue-400">
+                          {roleLabel}
+                        </span>
+                        {user.role === 'MENTOR' && mentorStatus && mentorStatus !== 'APPROVED' ? (
+                          <span className={`inline-block px-2 py-0.5 rounded-md text-xs font-medium ${MENTOR_STATUS_BADGE[mentorStatus].className}`}>
+                            {MENTOR_STATUS_BADGE[mentorStatus].label}
+                          </span>
+                        ) : null}
+                      </div>
                     </div>
                     {/* 메뉴 항목 */}
                     <div className="py-1">
@@ -313,7 +331,14 @@ export default function Header() {
                     </div>
                     <div>
                       <p className="text-white text-sm font-semibold">{user.name}</p>
-                      <p className="text-gray-500 text-xs">{roleLabel}</p>
+                      <div className="flex items-center gap-1.5">
+                        <p className="text-gray-500 text-xs">{roleLabel}</p>
+                        {user.role === 'MENTOR' && mentorStatus && mentorStatus !== 'APPROVED' ? (
+                          <span className={`inline-block px-1.5 py-0.5 rounded-md text-[10px] font-medium ${MENTOR_STATUS_BADGE[mentorStatus].className}`}>
+                            {MENTOR_STATUS_BADGE[mentorStatus].label}
+                          </span>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                   <Link

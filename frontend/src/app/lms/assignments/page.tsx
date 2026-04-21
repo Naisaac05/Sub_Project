@@ -13,6 +13,7 @@ import {
   Send,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import MentorApprovedGate from '@/components/guards/MentorApprovedGate';
 import { createAssignment, feedbackAssignment, getAssignments, submitAssignment } from '@/lib/lms';
 import { getMyMatchingsAsMentee, getMyMatchingsAsMentor } from '@/lib/matching';
 import type { AssignmentCreateRequest, AssignmentResponse, AssignmentType } from '@/lib/lms-types';
@@ -523,14 +524,16 @@ export default function AssignmentsPage() {
   // useSearchParams() 사용으로 정적 프리렌더링 시 에러가 발생하므로
   // Suspense 경계로 감싸 클라이언트 렌더링 바운더리를 제공한다.
   return (
-    <Suspense
-      fallback={
-        <div className="mx-auto max-w-5xl px-4 py-10">
-          <div className="h-8 w-48 animate-pulse rounded bg-slate-200" />
-        </div>
-      }
-    >
-      <AssignmentsPageInner />
-    </Suspense>
+    <MentorApprovedGate>
+      <Suspense
+        fallback={
+          <div className="mx-auto max-w-5xl px-4 py-10">
+            <div className="h-8 w-48 animate-pulse rounded bg-slate-200" />
+          </div>
+        }
+      >
+        <AssignmentsPageInner />
+      </Suspense>
+    </MentorApprovedGate>
   );
 }
