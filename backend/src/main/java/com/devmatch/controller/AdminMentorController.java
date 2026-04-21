@@ -38,6 +38,14 @@ public class AdminMentorController {
         return ResponseEntity.ok(ApiResponse.success(profiles));
     }
 
+    @Operation(summary = "멘토 신청 단건 조회 (관리자)")
+    @GetMapping("/{profileId}")
+    public ResponseEntity<ApiResponse<MentorProfileResponse>> get(
+            @PathVariable Long profileId) {
+        MentorProfileResponse profile = mentorService.findByIdForAdmin(profileId);
+        return ResponseEntity.ok(ApiResponse.success(profile));
+    }
+
     @Operation(summary = "멘토 신청 승인")
     @PostMapping("/{profileId}/approve")
     public ResponseEntity<ApiResponse<MentorProfileResponse>> approve(
