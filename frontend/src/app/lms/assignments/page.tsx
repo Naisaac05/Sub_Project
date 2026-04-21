@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   CheckCircle2,
@@ -33,7 +33,7 @@ const TYPE_META: Record<AssignmentType, { label: string; icon: typeof ClipboardL
   },
 };
 
-export default function AssignmentsPage() {
+function AssignmentsPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryMatchingId = Number(searchParams.get('matchingId'));
@@ -516,5 +516,21 @@ export default function AssignmentsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AssignmentsPage() {
+  // useSearchParams() 사용으로 정적 프리렌더링 시 에러가 발생하므로
+  // Suspense 경계로 감싸 클라이언트 렌더링 바운더리를 제공한다.
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-5xl px-4 py-10">
+          <div className="h-8 w-48 animate-pulse rounded bg-slate-200" />
+        </div>
+      }
+    >
+      <AssignmentsPageInner />
+    </Suspense>
   );
 }
