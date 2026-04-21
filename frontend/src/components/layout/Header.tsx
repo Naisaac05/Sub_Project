@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Menu, X, User, LogOut, ChevronDown, FileText, Users, GraduationCap, Briefcase } from 'lucide-react';
+import { Menu, X, User, LogOut, ChevronDown, FileText, Users, GraduationCap, Briefcase, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const navItems = [
@@ -230,6 +230,17 @@ export default function Header() {
                           </Link>
                         </>
                       )}
+                      {user.role === 'ADMIN' && (
+                        <Link
+                          href="/admin/mentor"
+                          onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
+                                   hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                          <ShieldCheck size={16} />
+                          관리자 콘솔
+                        </Link>
+                      )}
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
@@ -348,6 +359,16 @@ export default function Header() {
                         배정 목록
                       </Link>
                     </>
+                  )}
+                  {user.role === 'ADMIN' && (
+                    <Link
+                      href="/admin/mentor"
+                      onClick={() => setMobileOpen(false)}
+                      className="px-4 py-3 text-gray-300 hover:text-white text-center rounded-lg
+                               hover:bg-white/5 transition-colors"
+                    >
+                      관리자 콘솔
+                    </Link>
                   )}
                   <button
                     onClick={handleLogout}
