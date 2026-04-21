@@ -122,6 +122,20 @@ public class MentorService {
         return MentorProfileResponse.from(profile, rejectedReason);
     }
 
+    public MentorProfileResponse findByIdForAdmin(Long profileId) {
+        MentorProfile profile = mentorProfileRepository.findById(profileId)
+                .orElseThrow(() -> new MentorProfileNotFoundException("멘토 프로필을 찾을 수 없습니다"));
+
+        String rejectedReason = null;
+        if (profile.getStatus() == MentorStatus.REJECTED) {
+            rejectedReason = historyRepository
+                    .findTopByUserIdOrderBySubmittedAtDesc(profile.getUser().getId())
+                    .map(MentorProfileHistory::getRejectedReason)
+                    .orElse(null);
+        }
+        return MentorProfileResponse.from(profile, rejectedReason);
+    }
+
     public List<MentorProfileResponse> findAllForAdmin(MentorStatus statusFilter) {
         List<MentorProfile> profiles = (statusFilter == null)
                 ? mentorProfileRepository.findAll()

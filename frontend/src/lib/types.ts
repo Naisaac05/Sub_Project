@@ -97,6 +97,8 @@ export interface MentorProfileResponse {
   bio: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
   rejectedReason: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // ─── Test DTOs ───
