@@ -146,7 +146,7 @@ function TagInput({
  * ─────────────────────────────── */
 export default function MentorApplyPage() {
   const router = useRouter();
-  const { isLoggedIn, isLoading: authLoading, user } = useAuth();
+  const { isLoggedIn, isLoading: authLoading, user, refreshMentorStatus } = useAuth();
 
   const [courses, setCourses] = useState<CourseSummary[]>([]);
   const [profileLoading, setProfileLoading] = useState(true);
@@ -280,6 +280,8 @@ export default function MentorApplyPage() {
 
     try {
       await applyAsMentor(payload);
+      // 신청 성공 시 AuthContext 의 mentorStatus 를 최신(PENDING) 으로 갱신 → Header 뱃지 즉시 반영.
+      await refreshMentorStatus();
       router.push('/mentor/status');
     } catch (e: any) {
       const msg =
