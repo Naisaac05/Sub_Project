@@ -54,6 +54,18 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(e.getMessage()));
     }
 
+    @ExceptionHandler(MentorProfileNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMentorProfileNotFound(MentorProfileNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidMentorReviewStateException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidMentorReviewState(InvalidMentorReviewStateException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
     @ExceptionHandler(TestNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleTestNotFound(TestNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
