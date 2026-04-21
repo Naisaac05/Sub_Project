@@ -54,3 +54,4 @@
 - [2026-04-20 멘토 프로필 반려 사유(`rejectedReason`) 백엔드 갭 — 관리자 엔드포인트 부재](2026-04-20-mentor-profile-rejected-reason-backend-missing.md)
 - [2026-04-21 Windows worktree 제거 시 `frontend/node_modules` 파일 잠금 — Gradle Daemon + Defender 복합 원인, rename-then-delete 우회](2026-04-21-windows-worktree-remove-file-lock.md)
 - [2026-04-21 `/lms/assignments` Next.js 빌드 실패 — `useSearchParams()` Suspense 경계 부재](2026-04-21-lms-assignments-suspense-prerender.md)
+- [2026-04-21 Pencil MCP — 새 I() 삽입 프레임의 자식이 부모 composite 뷰에서 렌더 안 됨](2026-04-21-pencil-mcp-new-inserts-render-blank.md)

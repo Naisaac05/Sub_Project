@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -30,6 +31,8 @@ public class MentorProfileResponse {
     private String bio;
     private MentorStatus status;
     private String rejectedReason;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static MentorProfileResponse from(MentorProfile p, String rejectedReason) {
         return MentorProfileResponse.builder()
@@ -49,6 +52,8 @@ public class MentorProfileResponse {
                 .bio(p.getBio())
                 .status(p.getStatus())
                 .rejectedReason(rejectedReason)
+                .createdAt(p.getCreatedAt())
+                .updatedAt(p.getUpdatedAt())
                 .build();
     }
 }
