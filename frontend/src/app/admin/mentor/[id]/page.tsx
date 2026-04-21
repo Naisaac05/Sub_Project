@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 
 import {
   approveMentor,
-  listMentorApplications,
+  getMentorApplication,
   rejectMentor,
 } from '@/lib/admin-mentor';
 import type { MentorProfileResponse } from '@/lib/types';
@@ -62,22 +62,25 @@ export default function AdminMentorDetailPage() {
     setError(null);
     setNotFound(false);
     try {
-      // 백엔드에 단건 조회 엔드포인트가 없어, 전체 목록에서 id 매칭.
-      // 다음 이터레이션에서 GET /api/admin/mentor/{id} 추가 예정.
-      const all = await listMentorApplications();
-      const found = all.find((m) => m.id === profileId);
-      if (!found) {
+      const found = await getMentorApplication(profileId);
+      setProfile(found);
+    } catch (e) {
+      const status = (e as { response?: { status?: number } })?.response
+        ?.status;
+      if (status === 404) {
         setNotFound(true);
       } else {
-        setProfile(found);
+        const message =
+          (
+            e as {
+              response?: { data?: { message?: string } };
+              message?: string;
+            }
+          )?.response?.data?.message ??
+          (e as Error)?.message ??
+          '프로필을 불러오지 못했습니다.';
+        setError(message);
       }
-    } catch (e) {
-      const message =
-        (e as { response?: { data?: { message?: string } }; message?: string })
-          ?.response?.data?.message ??
-        (e as Error)?.message ??
-        '프로필을 불러오지 못했습니다.';
-      setError(message);
     } finally {
       setLoading(false);
     }
@@ -193,7 +196,14 @@ export default function AdminMentorDetailPage() {
           </h1>
           <MentorStatusBadge status={profile.status} />
         </div>
-        <p className="mt-1 text-sm text-slate-600">{profile.email}</p>
+        <p className="mt-1 text-sm text-slate-600">
+          {profile.createdAt ? (
+            <>
+              신청일 {profile.createdAt.slice(0, 10)} ·{' '}
+            </>
+          ) : null}
+          {profile.email}
+        </p>
       </div>
 
       {/* A. 신청자 */}

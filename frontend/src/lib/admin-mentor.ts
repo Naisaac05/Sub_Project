@@ -19,6 +19,18 @@ export async function listMentorApplications(
 }
 
 /**
+ * 관리자: 멘토 신청 단건 조회. 404 시 rejected.
+ */
+export async function getMentorApplication(
+  profileId: number,
+): Promise<MentorProfileResponse> {
+  const res = await apiClient.get<ApiResponse<MentorProfileResponse>>(
+    `/admin/mentor/${profileId}`,
+  );
+  return res.data.data;
+}
+
+/**
  * 관리자: 멘토 신청 승인. PENDING 이 아니면 409.
  */
 export async function approveMentor(
