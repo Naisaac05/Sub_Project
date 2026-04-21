@@ -52,3 +52,4 @@
 - [2026-04-20 로그인 직후 MENTOR가 `/mentor/status`가 아닌 랜딩으로 가는 경쟁 조건](2026-04-20-login-redirect-race-mentor-to-landing.md)
 - [2026-04-20 `/mentor/apply` 제공 가능한 코스 목록 비어 있음 (백엔드를 main 폴더에서 실행)](2026-04-20-mentor-apply-courses-empty-backend-wrong-folder.md)
 - [2026-04-20 멘토 프로필 반려 사유(`rejectedReason`) 백엔드 갭 — 관리자 엔드포인트 부재](2026-04-20-mentor-profile-rejected-reason-backend-missing.md)
+- [2026-04-21 Windows worktree 제거 시 `frontend/node_modules` 파일 잠금 — Gradle Daemon + Defender 복합 원인, rename-then-delete 우회](2026-04-21-windows-worktree-remove-file-lock.md)
