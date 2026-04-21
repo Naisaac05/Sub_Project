@@ -3,13 +3,19 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ChevronRight, Search, RefreshCw, Inbox } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  RefreshCw,
+  Inbox,
+} from 'lucide-react';
 
 import {
   listMentorApplications,
   type AdminMentorStatus,
 } from '@/lib/admin-mentor';
-import type { MentorProfileResponse } from '@/lib/types';
+import type { MentorProfileResponse, PageResponse } from '@/lib/types';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -39,22 +45,38 @@ function parseStatus(raw: string | null): AdminMentorStatus {
   return 'PENDING';
 }
 
+const PAGE_SIZE = 20;
+
+function parsePage(raw: string | null): number {
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 0 ? n : 0;
+}
+
 function AdminMentorListInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentStatus = parseStatus(searchParams.get('status'));
+  const currentPage = parsePage(searchParams.get('page'));
 
-  const [applications, setApplications] = useState<MentorProfileResponse[]>([]);
+  const [page, setPage] = useState<PageResponse<MentorProfileResponse> | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState('');
 
-  async function load(status: AdminMentorStatus) {
+  const applications = page?.content ?? [];
+
+  async function load(status: AdminMentorStatus, pageIndex: number) {
     setLoading(true);
     setError(null);
     try {
-      const data = await listMentorApplications(status);
-      setApplications(data);
+      const data = await listMentorApplications({
+        status,
+        page: pageIndex,
+        size: PAGE_SIZE,
+      });
+      setPage(data);
     } catch (e) {
       const message =
         (e as { response?: { data?: { message?: string } }; message?: string })
@@ -68,13 +90,33 @@ function AdminMentorListInner() {
   }
 
   useEffect(() => {
-    void load(currentStatus);
-  }, [currentStatus]);
+    void load(currentStatus, currentPage);
+  }, [currentStatus, currentPage]);
+
+  function updateParams(next: { status?: string; page?: number }) {
+    const params = new URLSearchParams(searchParams);
+    if (next.status !== undefined) params.set('status', next.status);
+    if (next.page !== undefined) {
+      if (next.page === 0) {
+        params.delete('page');
+      } else {
+        params.set('page', String(next.page));
+      }
+    }
+    router.replace(`/admin/mentor?${params.toString()}`, { scroll: false });
+  }
 
   function handleStatusChange(next: string) {
-    const params = new URLSearchParams(searchParams);
-    params.set('status', next);
-    router.replace(`/admin/mentor?${params.toString()}`, { scroll: false });
+    // 탭 전환 시 페이지는 0으로 리셋.
+    updateParams({ status: next, page: 0 });
+  }
+
+  function handlePrev() {
+    if (page && !page.first) updateParams({ page: currentPage - 1 });
+  }
+
+  function handleNext() {
+    if (page && !page.last) updateParams({ page: currentPage + 1 });
   }
 
   const filtered = useMemo(() => {
@@ -106,9 +148,9 @@ function AdminMentorListInner() {
             {STATUSES.map((s) => (
               <TabsTrigger key={s} value={s}>
                 {STATUS_LABELS[s]}
-                {s === currentStatus && applications.length > 0 && !loading ? (
+                {s === currentStatus && page && !loading ? (
                   <span className="ml-1.5 text-xs text-slate-500">
-                    ({applications.length})
+                    ({page.totalElements})
                   </span>
                 ) : null}
               </TabsTrigger>
@@ -139,7 +181,7 @@ function AdminMentorListInner() {
             <Button
               size="sm"
               variant="outline"
-              onClick={() => void load(currentStatus)}
+              onClick={() => void load(currentStatus, currentPage)}
               className="shrink-0 gap-1.5"
             >
               <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
@@ -233,7 +275,37 @@ function AdminMentorListInner() {
         </Table>
       </div>
 
-      {/* TODO: 서버 페이징이 추가되면 여기에 Pagination 컴포넌트 삽입. 20건 초과 시 보강. */}
+      {/* 페이지네이션 — 서버 페이징. 총 페이지 2 이상일 때만 노출. */}
+      {page && page.totalPages > 1 ? (
+        <div className="flex items-center justify-between pt-2 text-sm">
+          <span className="text-slate-500">
+            총 {page.totalElements}건 · {page.number + 1} / {page.totalPages}{' '}
+            페이지
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePrev}
+              disabled={page.first || loading}
+              className="gap-1"
+            >
+              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+              이전
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleNext}
+              disabled={page.last || loading}
+              className="gap-1"
+            >
+              다음
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
