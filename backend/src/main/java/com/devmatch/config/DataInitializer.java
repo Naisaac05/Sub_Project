@@ -28,6 +28,7 @@ public class DataInitializer implements CommandLineRunner {
     @Transactional
     public void run(String... args) {
         initMentoringCourses();
+        initDefaultAdmin();
 
         if (testRepository.count() > 0) {
             log.info("테스트 데이터가 이미 존재합니다. 초기화를 건너뜁니다.");
@@ -756,6 +757,20 @@ public class DataInitializer implements CommandLineRunner {
         }
         if (anyChange) log.info("멘토링 코스 시드 업데이트 완료 (17개)");
         else log.info("멘토링 코스 시드 변경 없음.");
+    }
+
+    private void initDefaultAdmin() {
+        String email = "admin@devmatch.com";
+        if (userRepository.existsByEmail(email)) {
+            return;
+        }
+        userRepository.save(User.builder()
+                .email(email)
+                .password(passwordEncoder.encode("Admin1234!"))
+                .name("DevMatch Admin")
+                .role(Role.ADMIN)
+                .build());
+        log.info("기본 ADMIN 계정 시드 완료: {}", email);
     }
 
     private void createMentor(String name, String email, String encodedPassword,
