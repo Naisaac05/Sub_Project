@@ -5,6 +5,18 @@ export interface ApiResponse<T> {
   data: T;
 }
 
+// Spring Data Page<T> 응답 중 프론트에서 실제 쓰는 필드만.
+export interface PageResponse<T> {
+  content: T[];
+  number: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+}
+
 // ─── Auth DTOs ───
 export interface SignupRequest {
   email: string;

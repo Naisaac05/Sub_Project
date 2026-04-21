@@ -1,20 +1,33 @@
 import apiClient from './api';
-import type { ApiResponse, MentorProfileResponse } from './types';
+import type {
+  ApiResponse,
+  MentorProfileResponse,
+  PageResponse,
+} from './types';
 
 export type AdminMentorStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
+export interface ListMentorApplicationsParams {
+  status?: AdminMentorStatus;
+  page?: number; // 0-indexed
+  size?: number; // default backend=20
+}
+
 /**
- * 관리자: 멘토 신청 목록 조회.
- * @param status - 필터. 미지정 시 전체 반환 (백엔드 기본 동작).
+ * 관리자: 멘토 신청 목록 조회 (페이징).
  */
 export async function listMentorApplications(
-  status?: AdminMentorStatus,
-): Promise<MentorProfileResponse[]> {
-  const params = status ? { status } : undefined;
-  const res = await apiClient.get<ApiResponse<MentorProfileResponse[]>>(
-    '/admin/mentor',
-    { params },
-  );
+  params: ListMentorApplicationsParams = {},
+): Promise<PageResponse<MentorProfileResponse>> {
+  const res = await apiClient.get<
+    ApiResponse<PageResponse<MentorProfileResponse>>
+  >('/admin/mentor', {
+    params: {
+      ...(params.status ? { status: params.status } : {}),
+      ...(params.page !== undefined ? { page: params.page } : {}),
+      ...(params.size !== undefined ? { size: params.size } : {}),
+    },
+  });
   return res.data.data;
 }
 

@@ -16,6 +16,8 @@ import com.devmatch.repository.MentorProfileHistoryRepository;
 import com.devmatch.repository.MentorProfileRepository;
 import com.devmatch.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -136,23 +138,21 @@ public class MentorService {
         return MentorProfileResponse.from(profile, rejectedReason);
     }
 
-    public List<MentorProfileResponse> findAllForAdmin(MentorStatus statusFilter) {
-        List<MentorProfile> profiles = (statusFilter == null)
-                ? mentorProfileRepository.findAll()
-                : mentorProfileRepository.findByStatus(statusFilter);
+    public Page<MentorProfileResponse> findAllForAdmin(MentorStatus statusFilter, Pageable pageable) {
+        Page<MentorProfile> page = (statusFilter == null)
+                ? mentorProfileRepository.findAll(pageable)
+                : mentorProfileRepository.findByStatus(statusFilter, pageable);
 
-        return profiles.stream()
-                .map(profile -> {
-                    String rejectedReason = null;
-                    if (profile.getStatus() == MentorStatus.REJECTED) {
-                        rejectedReason = historyRepository
-                                .findTopByUserIdOrderBySubmittedAtDesc(profile.getUser().getId())
-                                .map(MentorProfileHistory::getRejectedReason)
-                                .orElse(null);
-                    }
-                    return MentorProfileResponse.from(profile, rejectedReason);
-                })
-                .toList();
+        return page.map(profile -> {
+            String rejectedReason = null;
+            if (profile.getStatus() == MentorStatus.REJECTED) {
+                rejectedReason = historyRepository
+                        .findTopByUserIdOrderBySubmittedAtDesc(profile.getUser().getId())
+                        .map(MentorProfileHistory::getRejectedReason)
+                        .orElse(null);
+            }
+            return MentorProfileResponse.from(profile, rejectedReason);
+        });
     }
 
     @Transactional
