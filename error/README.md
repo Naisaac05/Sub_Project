@@ -51,4 +51,4 @@
 - [2026-04-20 ICON_MAP 타입 불일치 — ComponentType<{size?: number}> vs LucideIcon](2026-04-20-icon-map-lucide-type-mismatch.md)
 - [2026-04-20 로그인 직후 MENTOR가 `/mentor/status`가 아닌 랜딩으로 가는 경쟁 조건](2026-04-20-login-redirect-race-mentor-to-landing.md)
 - [2026-04-20 `/mentor/apply` 제공 가능한 코스 목록 비어 있음 (백엔드를 main 폴더에서 실행)](2026-04-20-mentor-apply-courses-empty-backend-wrong-folder.md)
-- [2026-04-20 멘토 프로필 반려 사유(`rejectedReason`) 백엔드 누락 — 엔티티/관리자 엔드포인트 부재](2026-04-20-mentor-profile-rejected-reason-backend-missing.md)
+- [2026-04-20 멘토 프로필 반려 사유(`rejectedReason`) 백엔드 갭 — 관리자 엔드포인트 부재](2026-04-20-mentor-profile-rejected-reason-backend-missing.md)
