@@ -60,3 +60,6 @@ export default function AssignmentsPage() {
   - fallback 은 실제 UI 와 layout shift 가 최소화되도록 skeleton 제공.
 - 같은 세션에서 작성한 `/admin/mentor/page.tsx` 는 처음부터 Suspense 래핑 패턴을 적용 — 신규 페이지는 모두 이 패턴을 따른다.
 - `main` 에 이미 머지된 상태였음 → 다른 기존 페이지에도 같은 이슈가 있을 가능성 점검 필요 (follow-up). `useSearchParams` 를 grep 해서 래핑 여부 전수 검증을 다음 이터레이션에 수행.
+- **2026-04-21 follow-up audit 결과 — 전수 통과.** `useSearchParams` 사용 15 파일 모두 안전:
+  - Suspense 로 감싼 7 페이지: `survey`, `payment/success`, `matching/recommend`, `lms/assignments`, `auth/login`, `apply/payment`, `admin/mentor` → ○ 정적 프리렌더.
+  - [`(dashboard)/layout.tsx`](../frontend/src/app/lms/(dashboard)/layout.tsx:3) 의 `export const dynamic = 'force-dynamic'` 덕에 `lms/(dashboard)/*` 7 페이지 + `LmsSidebar` 는 ƒ 동적 렌더 → 프리렌더 스킵이라 Suspense 불필요. `next build` 30/30 통과로 실증됨.
