@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import MentorApprovedGate from '@/components/guards/MentorApprovedGate';
 import { useAuth } from '@/contexts/AuthContext';
 import { getMyMatchingsAsMentee, getMyMatchingsAsMentor, acceptMatching } from '@/lib/matching';
 import type { MatchingResponse } from '@/lib/types';
@@ -323,7 +324,7 @@ function MentorCard({ matching, onUpdate }: MentorCardProps) {
   );
 }
 
-export default function MatchingPage() {
+function MatchingPageInner() {
   const router = useRouter();
   const { user, isLoading: authLoading, isLoggedIn } = useAuth();
 
@@ -562,5 +563,13 @@ export default function MatchingPage() {
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function MatchingPage() {
+  return (
+    <MentorApprovedGate>
+      <MatchingPageInner />
+    </MentorApprovedGate>
   );
 }
