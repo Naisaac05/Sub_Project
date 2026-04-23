@@ -130,9 +130,9 @@ export function PaymentRefundDialog({ open, onOpenChange, detail, onSuccess }: P
           <Alert variant="destructive">
             <AlertDescription>
               <ul className="list-disc pl-4 space-y-1">
-                <li>Toss 결제 취소 API가 호출되어 전액 환불 처리됩니다.</li>
-                <li>연결된 매칭이 있을 경우 함께 취소되며 멘토에게 알림이 전송됩니다.</li>
-                <li>이 작업은 감사 로그에 기록되며 되돌릴 수 없습니다.</li>
+                <li>토스페이먼츠에 환불 요청이 전송됩니다 (취소 불가).</li>
+                <li>연결된 매칭이 함께 취소되어 멘티의 LMS 접근이 차단됩니다.</li>
+                <li>본 작업은 감사 로그에 기록됩니다.</li>
               </ul>
             </AlertDescription>
           </Alert>
