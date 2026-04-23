@@ -55,7 +55,7 @@ package com.devmatch.entity;
 
 @Entity
 @Table(name = "admin_audit_log", indexes = {
-    @Index(name = "idx_audit_admin_createdAt", columnList = "admin_id, createdAt"),
+    @Index(name = "idx_audit_admin_created_at", columnList = "admin_id, created_at"),
     @Index(name = "idx_audit_target", columnList = "target_type, target_id")
 })
 @EntityListeners(AuditingEntityListener.class)
@@ -257,7 +257,7 @@ CREATE TABLE admin_audit_log (
   reason VARCHAR(500),
   metadata TEXT,
   created_at DATETIME(6) NOT NULL,
-  INDEX idx_audit_admin_createdAt (admin_id, created_at),
+  INDEX idx_audit_admin_created_at (admin_id, created_at),
   INDEX idx_audit_target (target_type, target_id)
 );
 ```
