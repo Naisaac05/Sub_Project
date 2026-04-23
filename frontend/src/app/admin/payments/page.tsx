@@ -25,27 +25,33 @@ const STATUS_TABS: Array<{ value: PaymentStatus | 'ALL'; label: string }> = [
 
 const PAGE_SIZE = 20;
 
+function parseDateOrUndef(v: string): Date | undefined {
+  if (!v) return undefined;
+  const d = new Date(v);
+  return Number.isNaN(d.getTime()) ? undefined : d;
+}
+
 export default function AdminPaymentsPage() {
   const sp = useSearchParams();
   const router = useRouter();
 
-  const initStatus = (sp.get('status') as PaymentStatus | null) ?? 'ALL';
-  const initQ = sp.get('q') ?? '';
-  const initPage = Number(sp.get('page') ?? 0);
-  const initFrom = sp.get('from') ?? '';
-  const initTo = sp.get('to') ?? '';
+  const getParam = (k: string) => sp?.get(k) ?? null;
+
+  const initStatus = (getParam('status') as PaymentStatus | null) ?? 'ALL';
+  const initQ = getParam('q') ?? '';
+  const rawPage = Number(getParam('page') ?? 0);
+  const initPage = Number.isFinite(rawPage) ? Math.max(0, Math.trunc(rawPage)) : 0;
+  const initFrom = getParam('from') ?? '';
+  const initTo = getParam('to') ?? '';
 
   const [status, setStatus] = useState<PaymentStatus | 'ALL'>(initStatus);
   const [q, setQ] = useState(initQ);
   const [page, setPage] = useState(initPage);
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
-    if (initFrom && initTo) {
-      return { from: new Date(initFrom), to: new Date(initTo) };
-    }
-    if (initFrom) {
-      return { from: new Date(initFrom), to: undefined };
-    }
-    return undefined;
+    const f = parseDateOrUndef(initFrom);
+    const t = parseDateOrUndef(initTo);
+    if (!f && !t) return undefined;
+    return { from: f, to: t };
   });
 
   const [data, setData] = useState<PageResponse<AdminPaymentListItem> | null>(null);
@@ -58,6 +64,7 @@ export default function AdminPaymentsPage() {
 
   // Fetch list
   useEffect(() => {
+    let ignore = false;
     setLoading(true);
     setError(null);
     listPayments({
@@ -68,19 +75,27 @@ export default function AdminPaymentsPage() {
       page,
       size: PAGE_SIZE,
     })
-      .then(setData)
+      .then((d) => { if (!ignore) setData(d); })
       .catch((e: unknown) => {
+        if (ignore) return;
         const err = e as { response?: { data?: { message?: string } } };
         setError(err?.response?.data?.message ?? String(e));
       })
-      .finally(() => setLoading(false));
+      .finally(() => { if (!ignore) setLoading(false); });
+    return () => { ignore = true; };
   }, [status, q, fromStr, toStr, page]);
 
   // Fetch summary
   useEffect(() => {
+    let ignore = false;
     getPaymentSummary(fromStr, toStr)
-      .then(setSummary)
-      .catch(() => setSummary(undefined));
+      .then((s) => { if (!ignore) setSummary(s); })
+      .catch((e) => {
+        if (ignore) return;
+        console.error('[admin-payments] summary fetch failed', e);
+        setSummary(undefined);
+      });
+    return () => { ignore = true; };
   }, [fromStr, toStr]);
 
   // URL sync

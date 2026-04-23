@@ -11,7 +11,7 @@ export interface PageResponse<T> {
 }
 
 export interface ListParams {
-  status?: Exclude<PaymentStatus, never> | string;
+  status?: PaymentStatus | 'ALL';
   q?: string;
   from?: string;
   to?: string;
@@ -29,7 +29,9 @@ export async function listPayments(params: ListParams): Promise<PageResponse<Adm
   if (params.page != null) apiParams.page = params.page;
   if (params.size != null) apiParams.size = params.size;
   const res = await apiClient.get<ApiResponse<PageResponse<AdminPaymentListItem>>>('/admin/payments', { params: apiParams });
-  return res.data.data!;
+  const body = res.data.data;
+  if (!body) throw new Error(res.data.message ?? 'Empty response');
+  return body;
 }
 
 export async function getPaymentSummary(from?: string, to?: string): Promise<AdminPaymentSummary> {
@@ -37,15 +39,21 @@ export async function getPaymentSummary(from?: string, to?: string): Promise<Adm
   if (from) params.from = from;
   if (to) params.to = to;
   const res = await apiClient.get<ApiResponse<AdminPaymentSummary>>('/admin/payments/summary', { params });
-  return res.data.data!;
+  const body = res.data.data;
+  if (!body) throw new Error(res.data.message ?? 'Empty response');
+  return body;
 }
 
 export async function getPaymentDetail(id: number): Promise<AdminPaymentDetail> {
   const res = await apiClient.get<ApiResponse<AdminPaymentDetail>>(`/admin/payments/${id}`);
-  return res.data.data!;
+  const body = res.data.data;
+  if (!body) throw new Error(res.data.message ?? 'Empty response');
+  return body;
 }
 
 export async function refundPayment(id: number, reason: string): Promise<AdminPaymentDetail> {
   const res = await apiClient.post<ApiResponse<AdminPaymentDetail>>(`/admin/payments/${id}/refund`, { reason });
-  return res.data.data!;
+  const body = res.data.data;
+  if (!body) throw new Error(res.data.message ?? 'Empty response');
+  return body;
 }
