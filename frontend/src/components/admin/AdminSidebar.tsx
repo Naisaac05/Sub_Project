@@ -2,13 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserCheck, Users, CreditCard, FileText } from 'lucide-react';
+import { UserCheck, Users, CreditCard, FileText, ShieldCheck } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const NAV_ITEMS: Array<{
   href: string;
   label: string;
   icon: typeof Users;
   match: (pathname: string) => boolean;
+  requireSuperAdmin?: boolean;
 }> = [
   {
     href: '/admin/mentor',
@@ -34,16 +36,26 @@ const NAV_ITEMS: Array<{
     icon: FileText,
     match: (p) => p === '/admin/posts' || p.startsWith('/admin/posts/'),
   },
+  {
+    href: '/admin/admins',
+    label: '관리자 계정',
+    icon: ShieldCheck,
+    match: (p) => p === '/admin/admins' || p.startsWith('/admin/admins/'),
+    requireSuperAdmin: true,
+  },
 ];
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+  const items = NAV_ITEMS.filter((it) => !it.requireSuperAdmin || isSuperAdmin);
 
   return (
     <aside className="hidden w-[220px] shrink-0 border-r border-slate-200 bg-white md:block">
       <nav className="py-6">
         <ul className="space-y-1 px-3">
-          {NAV_ITEMS.map((item) => {
+          {items.map((item) => {
             const isActive = item.match(pathname ?? '');
             const Icon = item.icon;
             return (
