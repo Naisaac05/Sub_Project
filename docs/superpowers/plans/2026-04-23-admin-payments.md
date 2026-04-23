@@ -4,7 +4,7 @@
 
 **Goal:** 관리자가 `/admin/payments` 에서 전체 결제를 조회 · 요약 파악 · 강제 환불(전액) 할 수 있게 한다. 환불 시 연관 매칭이 소프트 캐스케이드로 취소되어 LMS 접근이 자동 차단된다.
 
-**Architecture:** 접근법 1(기존 엔티티 확장). `AdminPaymentService` 가 기존 `TossPaymentService.cancelPayment` 를 재사용하고 `AdminAuditLogService`(Common) 를 호출. `PaymentRepository` 에 `JpaSpecificationExecutor` 를 믹스인하여 다중 필터. FE 는 shadcn `popover + calendar` 신규 설치 후 목록·상세 페이지 + 환불 다이얼로그. Feature 1 의 인라인 공용 UI 를 본 피처 착수 직전 `components/admin/common/` 으로 이관(lazy 추출).
+**Architecture:** 접근법 1(기존 엔티티 확장). `AdminPaymentService` 가 기존 `TossPaymentService.cancelPayment` 를 재사용하고 `AdminAuditLogService`(Common) 를 호출. `PaymentRepository` 에 `JpaSpecificationExecutor` 를 믹스인하여 다중 필터. FE 는 shadcn `popover + calendar` 신규 설치 후 목록·상세 페이지 + 환불 다이얼로그. Feature 2 재사용용 공용 UI 3종(`AdminListHeader / AdminTabs / AdminStatusBadge`) 은 본 피처 착수 직전 신규 설계·생성하고 Feature 1 도 이 컴포넌트를 사용하도록 리팩터 (기존 `Pagination / DebouncedSearchInput` 은 이미 공용화되어 있어 이동 없이 재사용).
 
 **Tech Stack:** Spring Boot 3 / Java 17 / JPA(Hibernate) / Spring Security 6 / JUnit 5 + Mockito — Next.js App Router / React 18 / shadcn-ui / react-hook-form + zod / TanStack Query — MySQL 8 / Redis.
 
@@ -47,23 +47,26 @@
 
 **신규 파일**
 
-- `frontend/app/(admin)/payments/page.tsx` — 목록
-- `frontend/app/(admin)/payments/[id]/page.tsx` — 상세
-- `frontend/app/(admin)/payments/_components/PaymentListTable.tsx`
-- `frontend/app/(admin)/payments/_components/PaymentSummaryCards.tsx`
-- `frontend/app/(admin)/payments/_components/PaymentDetailSection.tsx`
-- `frontend/app/(admin)/payments/_components/PaymentRefundDialog.tsx`
-- `frontend/app/(admin)/payments/_api/adminPaymentApi.ts`
-- `frontend/app/(admin)/payments/_types.ts`
+- `frontend/src/app/admin/payments/page.tsx` — 목록
+- `frontend/src/app/admin/payments/[id]/page.tsx` — 상세
+- `frontend/src/app/admin/payments/_components/PaymentListTable.tsx`
+- `frontend/src/app/admin/payments/_components/PaymentSummaryCards.tsx`
+- `frontend/src/app/admin/payments/_components/PaymentDetailSection.tsx`
+- `frontend/src/app/admin/payments/_components/PaymentRefundDialog.tsx`
+- `frontend/src/app/admin/payments/_api/adminPaymentApi.ts`
+- `frontend/src/app/admin/payments/_types.ts`
 
-**추출 파일 (Feature 1 인라인 → 공용)**
+**공용 컴포넌트 신규 파일 (Task 0, Task 13)**
 
-- `frontend/components/admin/common/AdminListHeader.tsx`
-- `frontend/components/admin/common/AdminTabs.tsx`
-- `frontend/components/admin/common/AdminPagination.tsx`
-- `frontend/components/admin/common/AdminSearchInput.tsx`
-- `frontend/components/admin/common/AdminDateRangePicker.tsx`
-- `frontend/components/admin/common/AdminStatusBadge.tsx`
+- `frontend/src/components/admin/AdminListHeader.tsx` (Task 0)
+- `frontend/src/components/admin/AdminTabs.tsx` (Task 0)
+- `frontend/src/components/admin/AdminStatusBadge.tsx` (Task 0)
+- `frontend/src/components/admin/AdminDateRangePicker.tsx` (Task 13 — popover+calendar 설치 후)
+
+**기존 공용 컴포넌트 (변경·이동 없음, import 만)**
+
+- `frontend/src/components/admin/Pagination.tsx`
+- `frontend/src/components/admin/DebouncedSearchInput.tsx`
 
 ### 문서
 
@@ -72,60 +75,154 @@
 
 ---
 
-## Task 0: 공용 FE 컴포넌트 추출 (Lazy 추출 시점)
+## Task 0: 공용 FE 컴포넌트 신규 생성 + Feature 1 리팩터
 
-**목적:** Feature 1 (회원 관리) 에서 인라인 구현된 공용 UI 6개를 `components/admin/common/` 으로 이관하고 Feature 1 import 경로를 업데이트. 기능 변경 없음. Feature 2 가 동일 UI 를 import 할 수 있도록 준비.
+**목적:** Feature 2 가 재사용할 3개의 공용 UI (`AdminListHeader`, `AdminTabs`, `AdminStatusBadge`) 를 신규 설계·생성하고, Feature 1 (회원 관리) 를 이 컴포넌트들을 사용하도록 리팩터. 기존 `Pagination` / `DebouncedSearchInput` 은 이미 `frontend/src/components/admin/` 에 존재하므로 이동·변경하지 않는다.
+
+**전제 확인 (2026-04-23 컨트롤러 검증):**
+- Feature 1 실제 경로: `frontend/src/app/admin/users/page.tsx` (목록), `frontend/src/app/admin/users/[id]/page.tsx` (상세), `frontend/src/app/admin/admins/page.tsx` (SUPER_ADMIN 전용) — route group 미사용
+- Feature 1 은 인라인으로 `ROLE_TABS / STATUS_TABS` 배열을 선언하고 `<button>` 매핑 jsx 를 직접 작성 (컴포넌트 아님)
+- Feature 1 은 인라인으로 `ROLE_BADGE / STATUS_BADGE: Record<Enum, string>` 맵을 선언하고 `<span className={MAP[value]}>` 매핑 jsx 를 직접 작성 (컴포넌트 아님)
+- `AdminListHeader` 에 해당하는 것은 페이지 상단 제목 + 설명 + 우측 액션(있으면)  의 인라인 JSX — 재사용 가능한 형태로 뽑히지 않았다
+- 따라서 "추출" 이 아니라 "신규 설계 + Feature 1 마이그레이션"
 
 **Files:**
-- Create: `frontend/components/admin/common/AdminListHeader.tsx`
-- Create: `frontend/components/admin/common/AdminTabs.tsx`
-- Create: `frontend/components/admin/common/AdminPagination.tsx`
-- Create: `frontend/components/admin/common/AdminSearchInput.tsx`
-- Create: `frontend/components/admin/common/AdminStatusBadge.tsx`
+- Create: `frontend/src/components/admin/AdminListHeader.tsx`
+- Create: `frontend/src/components/admin/AdminTabs.tsx`
+- Create: `frontend/src/components/admin/AdminStatusBadge.tsx`
+- Modify: `frontend/src/app/admin/users/page.tsx`
+- Modify: `frontend/src/app/admin/users/[id]/page.tsx`
+- Modify: `frontend/src/app/admin/admins/page.tsx` (존재할 경우)
 - (Task 13 에서 `AdminDateRangePicker.tsx` 추가 — 본 피처에서 신규 설치하는 popover+calendar 의존)
-- Modify: Feature 1 의 `frontend/app/(admin)/users/**/*.tsx` — 추출된 컴포넌트 import 로 전환
 
-- [ ] **Step 1: Feature 1 의 인라인 정의 5개 위치 파악**
+**비 범위 (하지 않음):**
+- `Pagination.tsx` / `DebouncedSearchInput.tsx` 의 위치 이동 (불필요한 churn)
+- 이 컴포넌트들의 내부 동작 변경
 
-Feature 1 의 페이지들을 훑어 인라인으로 정의된 헬퍼 컴포넌트 5개를 식별한다.
+### Step 1: `AdminStatusBadge.tsx` 생성
 
-Run:
-```bash
-rg -n "^(function|const) (AdminListHeader|AdminTabs|AdminPagination|AdminSearchInput|AdminStatusBadge)\b" frontend/app/\(admin\)/users
-```
+라벨 + 색상 클래스로 배지를 렌더하는 제네릭 컴포넌트. value 를 모르는 채로 매핑 책임을 호출 측에 둔다.
 
-산출물: 각 컴포넌트의 원본 경로·라인 기록 (로컬 메모).
-
-- [ ] **Step 2: `components/admin/common/` 디렉터리 생성 + `AdminListHeader.tsx` 로 이동**
-
-Feature 1 에서 가져온 `AdminListHeader` 정의 전체(타입 포함)를 새 파일로 옮긴다. export default 또는 named export 는 Feature 1 에서 사용한 방식에 맞춘다.
-
-- [ ] **Step 3: Feature 1 의 `AdminListHeader` 인라인 정의 제거 + import 로 교체**
-
-변경 예 (경로·이름은 Feature 1 실제 기준으로 맞추기):
 ```tsx
-// 기존 인라인 정의 삭제
-import { AdminListHeader } from "@/components/admin/common/AdminListHeader";
+// frontend/src/components/admin/AdminStatusBadge.tsx
+type Props = {
+  label: string;
+  className?: string; // e.g. "bg-emerald-100 text-emerald-800"
+};
+
+export function AdminStatusBadge({ label, className = 'bg-zinc-100 text-zinc-700' }: Props) {
+  return (
+    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${className}`}>
+      {label}
+    </span>
+  );
+}
 ```
 
-- [ ] **Step 4: 동일 패턴으로 `AdminTabs`, `AdminPagination`, `AdminSearchInput`, `AdminStatusBadge` 이관**
+### Step 2: `AdminTabs.tsx` 생성
 
-각각 Step 2+3 을 반복.
+제네릭 탭 스트립. value/label 배열과 현재 값·onChange 만 받는다 (shadcn tabs 재사용 여부는 구현자 판단).
 
-- [ ] **Step 5: 타입 체크 + 빌드**
+```tsx
+// frontend/src/components/admin/AdminTabs.tsx
+type TabItem<V extends string> = { value: V; label: string };
+
+type Props<V extends string> = {
+  items: TabItem<V>[];
+  value: V;
+  onChange: (next: V) => void;
+  ariaLabel?: string;
+};
+
+export function AdminTabs<V extends string>({ items, value, onChange, ariaLabel }: Props<V>) {
+  return (
+    <div role="tablist" aria-label={ariaLabel} className="inline-flex gap-1 rounded-lg border border-slate-200 bg-white p-1">
+      {items.map((t) => {
+        const active = t.value === value;
+        return (
+          <button
+            key={t.value}
+            role="tab"
+            aria-selected={active}
+            onClick={() => onChange(t.value)}
+            className={`px-3 py-1.5 text-sm rounded-md transition ${
+              active ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            {t.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+```
+
+- 구현자는 Feature 1 의 기존 탭 시각 규격 (색/패딩) 을 먼저 확인해 일치시킨다. 위 클래스는 초안이며, Feature 1 의 현재 스타일이 다르면 **Feature 1 규격을 그대로 복사** 한다 (시각적 회귀 금지).
+
+### Step 3: `AdminListHeader.tsx` 생성
+
+페이지 상단 (제목 + 설명 + 우측 액션 슬롯). 액션은 `actions?: ReactNode` 로 받아 호출 측에서 자유 구성.
+
+```tsx
+// frontend/src/components/admin/AdminListHeader.tsx
+import type { ReactNode } from 'react';
+
+type Props = {
+  title: string;
+  description?: string;
+  actions?: ReactNode;
+};
+
+export function AdminListHeader({ title, description, actions }: Props) {
+  return (
+    <header className="flex items-end justify-between gap-4 pb-4 border-b border-slate-200 mb-6">
+      <div>
+        <h1 className="text-xl font-semibold text-slate-900">{title}</h1>
+        {description && <p className="mt-1 text-sm text-slate-500">{description}</p>}
+      </div>
+      {actions && <div className="shrink-0">{actions}</div>}
+    </header>
+  );
+}
+```
+
+- Feature 1 의 현재 제목 영역 스타일을 확인해 시각적 회귀 없이 이식할 것.
+
+### Step 4: Feature 1 `users/page.tsx` 리팩터
+
+- `ROLE_TABS` / `STATUS_TABS` 배열은 유지 (데이터). 기존 인라인 `<button>` 매핑 JSX 를 `<AdminTabs items={ROLE_TABS} value={role} onChange={setRole} ariaLabel="역할 필터">` 로 대체.
+- 목록 행의 `<span className={ROLE_BADGE[u.role]}>{ROLE_KO[u.role]}</span>` 를 `<AdminStatusBadge label={ROLE_KO[u.role]} className={ROLE_BADGE[u.role]} />` 로 대체.
+- 상단 제목 영역을 `<AdminListHeader title="회원 관리" description="..." />` 로 대체 (현재 문구 유지).
+
+### Step 5: Feature 1 `users/[id]/page.tsx` 리팩터
+
+- 인라인 `ROLE_BADGE / STATUS_BADGE / ROLE_KO / STATUS_KO` 유지 (상세 페이지에서도 같은 맵 사용). 배지 렌더만 `<AdminStatusBadge label={...} className={...} />` 로 교체.
+- 페이지 상단 타이틀 영역이 있으면 `<AdminListHeader />` 로 교체. (백 버튼/편집 액션이 있으면 `actions` 슬롯에 배치)
+
+### Step 6: Feature 1 `admins/page.tsx` 리팩터 (파일 존재 시)
+
+동일 패턴 적용. 파일이 없으면 스킵.
+
+### Step 7: 타입 체크 + 빌드
 
 Run: `cd frontend && npx tsc --noEmit && npm run build`
 Expected: 타입 에러 0, 빌드 성공.
 
-- [ ] **Step 6: Feature 1 수동 페이지 확인**
+### Step 8: Feature 1 수동 시각 회귀 확인
 
-dev 서버 실행 후 `/admin/users` 목록·상세 진입해서 시각적 회귀 없는지 스폿 체크 (탭·페이지네이션·검색·배지 렌더).
+dev 서버 실행 후 `/admin/users` 목록·상세, `/admin/admins` 진입. 다음 요소가 리팩터 전후 동일해야 함:
+- 탭 스트립의 색·간격·활성 표시
+- 역할/상태 배지의 색상·라벨
+- 페이지 상단 타이틀 영역
 
-- [ ] **Step 7: Commit**
+시각적 회귀가 발견되면 해당 컴포넌트의 className 을 Feature 1 원본과 일치시킨다.
+
+### Step 9: Commit
 
 ```bash
-git add frontend/components/admin/common frontend/app/\(admin\)/users
-git commit -m "refactor(admin): Feature 1 인라인 공용 컴포넌트 5개를 components/admin/common/ 으로 추출"
+git add frontend/src/components/admin frontend/src/app/admin/users frontend/src/app/admin/admins
+git commit -m "refactor(admin): 공용 AdminListHeader/AdminTabs/AdminStatusBadge 컴포넌트 신규 생성 + Feature 1 적용"
 ```
 
 ---
@@ -576,6 +673,7 @@ package com.devmatch.service;
 
 import com.devmatch.config.TossCancelProperties;
 import com.devmatch.dto.admin.payment.AdminPaymentSummaryResponse;
+import com.devmatch.entity.AdminActionType;
 import com.devmatch.entity.PaymentStatus;
 import com.devmatch.repository.MatchingRepository;
 import com.devmatch.repository.PaymentRepository;
@@ -590,7 +688,11 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -636,7 +738,17 @@ Expected: 컴파일 실패 (`AdminPaymentService` 없음) — 기대되는 FAIL.
 
 - [ ] **Step 3: `AdminPaymentService` 스켈레톤 구현**
 
-`AdminAuditLogService` 는 PR #42 Common 에서 도입됨. 시그니처 가정: `void record(Long adminId, String actionType, String targetType, Long targetId, String metadataJson)` — 실제 시그니처는 구현 시점 확인.
+`AdminAuditLogService` 는 PR #42 Common 에서 도입됨. 실제 시그니처 (main 기준 확인 완료):
+```java
+void record(Long adminId,
+            AdminActionType actionType,    // enum (String 아님)
+            String targetType,
+            Long targetId,
+            String reason,                 // 환불 사유 등 도메인 사유 문자열
+            Map<String, Object> metadata); // 서비스가 JSON 직렬화 담당
+```
+- `actionType` 는 `AdminActionType.PAYMENT_REFUND` enum 값을 사용 (이미 main 에 존재)
+- `metadata` 값 타입은 String/Number/Boolean/Enum.name() 4종만 (스펙 §4.4)
 
 ```java
 package com.devmatch.service;
@@ -977,7 +1089,13 @@ void refund_해피패스_Matching_ACCEPTED_도_CANCELLED_로_전이() {
     assertThat(p.getCancelledAt()).isNotNull();
     assertThat(m.getStatus()).isEqualTo(MatchingStatus.CANCELLED);
     verify(tossPaymentService).cancelPayment(eq("pk_live_abc"), anyString());
-    verify(auditLogService).record(eq(99L), eq("PAYMENT_REFUND"), eq("PAYMENT"), eq(1L), anyString());
+    verify(auditLogService).record(
+            eq(99L),
+            eq(AdminActionType.PAYMENT_REFUND),
+            eq("PAYMENT"),
+            eq(1L),
+            anyString(),              // reason
+            anyMap());                // metadata
 }
 ```
 
@@ -1039,31 +1157,35 @@ public AdminPaymentDetailResponse refundPayment(Long paymentId, Long adminId, St
     }
 
     // 5) 감사 로그
-    String metadata = String.format(
-            "{\"refundAmount\":%d,\"reason\":%s,\"matchingAffected\":%s,\"matchingId\":%s}",
-            payment.getAmount(),
-            jsonQuote(reason),
-            matchingAffected,
-            matchingId == null ? "null" : matchingId
+    Map<String, Object> metadata = new LinkedHashMap<>();
+    metadata.put("refundAmount", payment.getAmount());
+    metadata.put("matchingAffected", matchingAffected);
+    if (matchingId != null) {
+        metadata.put("matchingId", matchingId);
+    }
+    auditLogService.record(
+            adminId,
+            AdminActionType.PAYMENT_REFUND,
+            "PAYMENT",
+            payment.getId(),
+            reason,
+            metadata
     );
-    auditLogService.record(adminId, "PAYMENT_REFUND", "PAYMENT", payment.getId(), metadata);
 
     log.info("[AdminPayment] 환불 완료 — paymentId={}, adminId={}, matchingAffected={}",
             paymentId, adminId, matchingAffected);
 
     return getDetail(paymentId);
 }
-
-private static String jsonQuote(String s) {
-    if (s == null) return "null";
-    return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
-}
 ```
 
 import:
 ```java
+import com.devmatch.entity.AdminActionType;
 import com.devmatch.exception.PaymentFailedException;
 import com.devmatch.exception.PaymentNotFoundException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 ```
 
 - [ ] **Step 4: 해피 패스 테스트 PASS 확인**
@@ -1193,7 +1315,13 @@ void refund_플래그_false_면_토스_호출_skip() {
 
     verifyNoInteractions(tossPaymentService);
     assertThat(p.getStatus()).isEqualTo(PaymentStatus.CANCELLED);
-    verify(auditLogService).record(eq(99L), eq("PAYMENT_REFUND"), eq("PAYMENT"), eq(6L), anyString());
+    verify(auditLogService).record(
+            eq(99L),
+            eq(AdminActionType.PAYMENT_REFUND),
+            eq("PAYMENT"),
+            eq(6L),
+            anyString(),              // reason
+            anyMap());                // metadata
 }
 ```
 
@@ -1498,8 +1626,8 @@ git commit -m "docs(mockups): admin-payments Pencil 렌더 결정 반영"
 
 **Files:**
 - Modify: `frontend/package.json` (새 의존성 추가되는 경우)
-- Create: `frontend/components/ui/popover.tsx`, `frontend/components/ui/calendar.tsx`
-- Create: `frontend/components/admin/common/AdminDateRangePicker.tsx`
+- Create: `frontend/src/components/ui/popover.tsx`, `frontend/src/components/ui/calendar.tsx`
+- Create: `frontend/src/components/admin/AdminDateRangePicker.tsx`
 
 - [ ] **Step 1: shadcn 명령 실행**
 
@@ -1512,7 +1640,7 @@ Expected: `components/ui/popover.tsx`, `components/ui/calendar.tsx` 생성. `pac
 - [ ] **Step 2: `AdminDateRangePicker` 공용 컴포넌트 작성**
 
 ```tsx
-// frontend/components/admin/common/AdminDateRangePicker.tsx
+// frontend/src/components/admin/AdminDateRangePicker.tsx
 "use client";
 
 import * as React from "react";
@@ -1578,7 +1706,7 @@ Expected: 성공.
 - [ ] **Step 4: Commit**
 
 ```bash
-git add frontend/package.json frontend/package-lock.json frontend/components/ui/popover.tsx frontend/components/ui/calendar.tsx frontend/components/admin/common/AdminDateRangePicker.tsx
+git add frontend/package.json frontend/package-lock.json frontend/src/components/ui/popover.tsx frontend/src/components/ui/calendar.tsx frontend/src/components/admin/AdminDateRangePicker.tsx
 git commit -m "chore(frontend): shadcn popover/calendar 설치 + AdminDateRangePicker 공용"
 ```
 
@@ -1587,16 +1715,16 @@ git commit -m "chore(frontend): shadcn popover/calendar 설치 + AdminDateRangeP
 ## Task 14: FE — `/admin/payments` 목록 + 요약 카드 + 필터
 
 **Files:**
-- Create: `frontend/app/(admin)/payments/_types.ts`
-- Create: `frontend/app/(admin)/payments/_api/adminPaymentApi.ts`
-- Create: `frontend/app/(admin)/payments/_components/PaymentSummaryCards.tsx`
-- Create: `frontend/app/(admin)/payments/_components/PaymentListTable.tsx`
-- Create: `frontend/app/(admin)/payments/page.tsx`
+- Create: `frontend/src/app/admin/payments/_types.ts`
+- Create: `frontend/src/app/admin/payments/_api/adminPaymentApi.ts`
+- Create: `frontend/src/app/admin/payments/_components/PaymentSummaryCards.tsx`
+- Create: `frontend/src/app/admin/payments/_components/PaymentListTable.tsx`
+- Create: `frontend/src/app/admin/payments/page.tsx`
 
 - [ ] **Step 1: 타입 정의**
 
 ```ts
-// frontend/app/(admin)/payments/_types.ts
+// frontend/src/app/admin/payments/_types.ts
 export type PaymentStatus = "PENDING" | "CONFIRMED" | "CANCELLED" | "FAILED";
 
 export interface AdminPaymentListItem {
@@ -1648,7 +1776,7 @@ export interface AdminPaymentDetail {
 - [ ] **Step 2: API 클라이언트**
 
 ```ts
-// frontend/app/(admin)/payments/_api/adminPaymentApi.ts
+// frontend/src/app/admin/payments/_api/adminPaymentApi.ts
 import { apiClient } from "@/lib/apiClient"; // 프로젝트의 공용 fetch 래퍼
 import type {
   AdminPaymentListItem,
@@ -1696,7 +1824,7 @@ export const adminPaymentApi = {
 - [ ] **Step 3: 요약 카드 컴포넌트**
 
 ```tsx
-// frontend/app/(admin)/payments/_components/PaymentSummaryCards.tsx
+// frontend/src/app/admin/payments/_components/PaymentSummaryCards.tsx
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -1731,12 +1859,12 @@ function SummaryCard({ title, value }: { title: string; value: string }) {
 - [ ] **Step 4: 목록 테이블 컴포넌트**
 
 ```tsx
-// frontend/app/(admin)/payments/_components/PaymentListTable.tsx
+// frontend/src/app/admin/payments/_components/PaymentListTable.tsx
 "use client";
 
 import Link from "next/link";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { AdminStatusBadge } from "@/components/admin/common/AdminStatusBadge";
+import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import type { AdminPaymentListItem } from "../_types";
 
 function formatKRW(n: number) {
@@ -1792,18 +1920,18 @@ export function PaymentListTable({ rows }: { rows: AdminPaymentListItem[] }) {
 - [ ] **Step 5: 목록 페이지 (URL searchParams 동기화)**
 
 ```tsx
-// frontend/app/(admin)/payments/page.tsx
+// frontend/src/app/admin/payments/page.tsx
 "use client";
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import type { DateRange } from "react-day-picker";
-import { AdminListHeader } from "@/components/admin/common/AdminListHeader";
-import { AdminTabs } from "@/components/admin/common/AdminTabs";
-import { AdminSearchInput } from "@/components/admin/common/AdminSearchInput";
-import { AdminPagination } from "@/components/admin/common/AdminPagination";
-import { AdminDateRangePicker } from "@/components/admin/common/AdminDateRangePicker";
+import { AdminListHeader } from "@/components/admin/AdminListHeader";
+import { AdminTabs } from "@/components/admin/AdminTabs";
+import { DebouncedSearchInput } from "@/components/admin/DebouncedSearchInput";
+import { Pagination } from "@/components/admin/Pagination";
+import { AdminDateRangePicker } from "@/components/admin/AdminDateRangePicker";
 import { PaymentSummaryCards } from "./_components/PaymentSummaryCards";
 import { PaymentListTable } from "./_components/PaymentListTable";
 import { adminPaymentApi } from "./_api/adminPaymentApi";
@@ -1876,7 +2004,7 @@ export default function AdminPaymentsPage() {
               u.set("page", "0");
             })}
           />
-          <AdminSearchInput
+          <DebouncedSearchInput
             value={q}
             placeholder="사용자·주문ID"
             onChange={(next) => updateParams((u) => { if (next) u.set("q", next); else u.delete("q"); u.set("page", "0"); })}
@@ -1886,7 +2014,7 @@ export default function AdminPaymentsPage() {
 
       <PaymentListTable rows={listQ.data?.content ?? []} />
 
-      <AdminPagination
+      <Pagination
         page={listQ.data?.number ?? 0}
         totalPages={listQ.data?.totalPages ?? 0}
         onChange={(nextPage) => updateParams((u) => u.set("page", String(nextPage)))}
@@ -1907,7 +2035,7 @@ Run: `cd frontend && npx tsc --noEmit && npm run build`
 - [ ] **Step 8: Commit**
 
 ```bash
-git add frontend/app/\(admin\)/payments
+git add frontend/src/app/admin/payments
 git commit -m "feat(admin-payment): /admin/payments 목록 + 요약 카드 + 필터"
 ```
 
@@ -1916,14 +2044,14 @@ git commit -m "feat(admin-payment): /admin/payments 목록 + 요약 카드 + 필
 ## Task 15: FE — `/admin/payments/[id]` 상세 + 환불 다이얼로그
 
 **Files:**
-- Create: `frontend/app/(admin)/payments/[id]/page.tsx`
-- Create: `frontend/app/(admin)/payments/_components/PaymentDetailSection.tsx`
-- Create: `frontend/app/(admin)/payments/_components/PaymentRefundDialog.tsx`
+- Create: `frontend/src/app/admin/payments/[id]/page.tsx`
+- Create: `frontend/src/app/admin/payments/_components/PaymentDetailSection.tsx`
+- Create: `frontend/src/app/admin/payments/_components/PaymentRefundDialog.tsx`
 
 - [ ] **Step 1: 상세 섹션 컴포넌트**
 
 ```tsx
-// frontend/app/(admin)/payments/_components/PaymentDetailSection.tsx
+// frontend/src/app/admin/payments/_components/PaymentDetailSection.tsx
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -1999,7 +2127,7 @@ export function PaymentDetailSection({ detail }: { detail: AdminPaymentDetail })
 - [ ] **Step 2: 환불 다이얼로그**
 
 ```tsx
-// frontend/app/(admin)/payments/_components/PaymentRefundDialog.tsx
+// frontend/src/app/admin/payments/_components/PaymentRefundDialog.tsx
 "use client";
 
 import { useState } from "react";
@@ -2113,14 +2241,14 @@ export function PaymentRefundDialog({ open, onOpenChange, detail, onSuccess }: P
 - [ ] **Step 3: 상세 페이지**
 
 ```tsx
-// frontend/app/(admin)/payments/[id]/page.tsx
+// frontend/src/app/admin/payments/[id]/page.tsx
 "use client";
 
 import Link from "next/link";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { AdminStatusBadge } from "@/components/admin/common/AdminStatusBadge";
+import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { PaymentDetailSection } from "../_components/PaymentDetailSection";
 import { PaymentRefundDialog } from "../_components/PaymentRefundDialog";
 import { adminPaymentApi } from "../_api/adminPaymentApi";
@@ -2203,7 +2331,7 @@ cd frontend && npx tsc --noEmit && npm run build
 - [ ] **Step 5: Commit**
 
 ```bash
-git add frontend/app/\(admin\)/payments
+git add frontend/src/app/admin/payments
 git commit -m "feat(admin-payment): /admin/payments/[id] 상세 + 환불 다이얼로그"
 ```
 
@@ -2292,7 +2420,8 @@ git commit -m "docs(smoke): Phase II Feature 2 관리자 결제 관리 스모크
 - `AdminPaymentListItemResponse.of(Payment, String, String)` — Task 5 정의, Task 7 호출 시그니처 일치.
 
 **4. 잔여 의존성 (Feature 1 / Common)**
-- `AdminAuditLogService.record(Long, String, String, Long, String)` 시그니처는 PR #42 가 제공하는 실제 시그니처와 맞춰야 한다. 구현 시점 첫 오류는 여기서 발생 가능 → 구현자는 PR #42 의 Common 스펙을 한 번 확인할 것.
+- `AdminAuditLogService.record(Long, AdminActionType, String, Long, String, Map<String,Object>)` — main 기준 실제 시그니처 확인 완료 (2026-04-23). Task 6-8 에 반영됨.
+- `AdminActionType.PAYMENT_REFUND` 는 Common 이 이미 도입 — enum 추가 작업 불필요.
 - `UserRepository.findFirstByRole(Role)` (Task 10 seed) 가 존재하지 않으면 `userRepository.findAll().stream()...first()` 로 대체.
 
 ---
