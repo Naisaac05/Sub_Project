@@ -142,7 +142,7 @@ public class AdminPaymentService {
 
     @Transactional
     public AdminPaymentDetailResponse refundPayment(Long paymentId, Long adminId, String reason) {
-        var payment = paymentRepository.findById(paymentId)
+        var payment = paymentRepository.findByIdForUpdate(paymentId)
                 .orElseThrow(() -> new PaymentNotFoundException("결제 정보를 찾을 수 없습니다: " + paymentId));
 
         // 1) status 가드 — CONFIRMED 만 환불 가능

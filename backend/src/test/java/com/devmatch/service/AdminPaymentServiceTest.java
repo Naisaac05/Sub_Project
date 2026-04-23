@@ -168,7 +168,8 @@ class AdminPaymentServiceTest {
                 .orderId("ord_1").paymentKey("pk_live_abc").amount(150_000)
                 .status(PaymentStatus.CONFIRMED).build();
         Matching m = Matching.builder().id(50L).status(MatchingStatus.ACCEPTED).build();
-        when(paymentRepository.findById(1L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findById(1L)).thenReturn(Optional.of(p)); // getDetail 응답용
         when(matchingRepository.findById(50L)).thenReturn(Optional.of(m));
         when(userRepository.findById(any())).thenReturn(Optional.empty());
         when(tossPaymentService.cancelPayment(eq("pk_live_abc"), anyString())).thenReturn(true);
@@ -199,7 +200,8 @@ class AdminPaymentServiceTest {
                 .id(2L).userId(10L).applicationId(100L).matchingId(null)
                 .orderId("ord_2").paymentKey("pk_2").amount(990_000)
                 .status(PaymentStatus.CONFIRMED).build();
-        when(paymentRepository.findById(2L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(2L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findById(2L)).thenReturn(Optional.of(p)); // getDetail 응답용
         when(tossPaymentService.cancelPayment(any(), any())).thenReturn(true);
 
         AdminPaymentService svc = new AdminPaymentService(
@@ -219,7 +221,8 @@ class AdminPaymentServiceTest {
                 .orderId("ord_3").paymentKey("pk_3").amount(990_000)
                 .status(PaymentStatus.CONFIRMED).build();
         Matching m = Matching.builder().id(70L).status(MatchingStatus.REJECTED).build();
-        when(paymentRepository.findById(3L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(3L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findById(3L)).thenReturn(Optional.of(p)); // getDetail 응답용
         when(matchingRepository.findById(70L)).thenReturn(Optional.of(m));
         when(tossPaymentService.cancelPayment(any(), any())).thenReturn(true);
 
@@ -235,7 +238,7 @@ class AdminPaymentServiceTest {
     @Test
     void refund_PENDING_결제_환불_시도는_PaymentFailedException() {
         Payment p = Payment.builder().id(4L).status(PaymentStatus.PENDING).build();
-        when(paymentRepository.findById(4L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(4L)).thenReturn(Optional.of(p));
 
         AdminPaymentService svc = new AdminPaymentService(
                 paymentRepository, matchingRepository, userRepository,
@@ -249,7 +252,7 @@ class AdminPaymentServiceTest {
     @Test
     void refund_CANCELLED_재환불_시도는_PaymentFailedException() {
         Payment p = Payment.builder().id(5L).status(PaymentStatus.CANCELLED).build();
-        when(paymentRepository.findById(5L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(5L)).thenReturn(Optional.of(p));
 
         AdminPaymentService svc = new AdminPaymentService(
                 paymentRepository, matchingRepository, userRepository,
@@ -265,7 +268,8 @@ class AdminPaymentServiceTest {
                 .id(6L).userId(10L).matchingId(null)
                 .orderId("ord_6").paymentKey(null).amount(990_000)
                 .status(PaymentStatus.CONFIRMED).build();
-        when(paymentRepository.findById(6L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(6L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findById(6L)).thenReturn(Optional.of(p)); // getDetail 응답용
 
         AdminPaymentService svc = new AdminPaymentService(
                 paymentRepository, matchingRepository, userRepository,
@@ -288,7 +292,7 @@ class AdminPaymentServiceTest {
     void refund_플래그_true_인데_paymentKey_NULL_은_PaymentFailedException() {
         Payment p = Payment.builder()
                 .id(7L).paymentKey(null).status(PaymentStatus.CONFIRMED).build();
-        when(paymentRepository.findById(7L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(7L)).thenReturn(Optional.of(p));
 
         AdminPaymentService svc = new AdminPaymentService(
                 paymentRepository, matchingRepository, userRepository,
@@ -303,7 +307,7 @@ class AdminPaymentServiceTest {
     void refund_토스_호출_실패는_PaymentFailedException_전파() {
         Payment p = Payment.builder()
                 .id(8L).paymentKey("pk_x").status(PaymentStatus.CONFIRMED).build();
-        when(paymentRepository.findById(8L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(8L)).thenReturn(Optional.of(p));
         when(tossPaymentService.cancelPayment(eq("pk_x"), any()))
                 .thenThrow(new PaymentFailedException("토스 4xx"));
 
