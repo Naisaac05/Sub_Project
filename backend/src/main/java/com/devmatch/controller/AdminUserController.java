@@ -72,4 +72,13 @@ public class AdminUserController {
         adminUserService.delete(admin.getUserId(), id, request.getReason());
         return ResponseEntity.ok(ApiResponse.success("회원이 삭제되었습니다", null));
     }
+
+    @Operation(summary = "회원 비밀번호 리셋")
+    @PostMapping("/{id}/reset-password")
+    public ResponseEntity<ApiResponse<com.devmatch.dto.admin.PasswordResetResponse>> resetPassword(
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails admin) {
+        var resp = adminUserService.resetPassword(admin.getUserId(), id);
+        return ResponseEntity.ok(ApiResponse.success("임시 비밀번호가 발급되었습니다", resp));
+    }
 }

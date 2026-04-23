@@ -29,6 +29,8 @@ class AdminUserServiceTest {
     @Mock PostRepository postRepository;
     @Mock MentorProfileRepository mentorProfileRepository;
     @Mock AdminAuditLogService auditLogService;
+    @Mock org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    @Mock com.devmatch.util.PasswordGenerator passwordGenerator;
 
     @InjectMocks AdminUserService service;
 
@@ -139,5 +141,57 @@ class AdminUserServiceTest {
                 org.mockito.ArgumentMatchers.eq(7L),
                 org.mockito.ArgumentMatchers.eq("탈퇴 요청 처리"),
                 org.mockito.ArgumentMatchers.isNull());
+    }
+
+    @Test
+    void resetPassword_정상_평문_응답_및_플래그_설정() {
+        User u = userOf(7L, Role.MENTEE, UserStatus.ACTIVE);
+        when(userRepository.findById(7L)).thenReturn(Optional.of(u));
+        when(passwordGenerator.generate()).thenReturn("Tmp1!XyzAbc2");
+        when(passwordEncoder.encode("Tmp1!XyzAbc2")).thenReturn("encoded-pwd");
+
+        var resp = service.resetPassword(1L, 7L);
+
+        assertThat(resp.getTemporaryPassword()).isEqualTo("Tmp1!XyzAbc2");
+        assertThat(resp.isMustChangePassword()).isTrue();
+        assertThat(u.getPassword()).isEqualTo("encoded-pwd");
+        assertThat(u.getMustChangePassword()).isTrue();
+        org.mockito.Mockito.verify(auditLogService).record(
+                org.mockito.ArgumentMatchers.eq(1L),
+                org.mockito.ArgumentMatchers.eq(com.devmatch.entity.AdminActionType.USER_PASSWORD_RESET),
+                org.mockito.ArgumentMatchers.eq("USER"),
+                org.mockito.ArgumentMatchers.eq(7L),
+                org.mockito.ArgumentMatchers.isNull(),
+                org.mockito.ArgumentMatchers.isNull());
+    }
+
+    @Test
+    void resetPassword_SUPER_ADMIN_대상_차단() {
+        User u = userOf(7L, Role.SUPER_ADMIN, UserStatus.ACTIVE);
+        when(userRepository.findById(7L)).thenReturn(Optional.of(u));
+
+        assertThatThrownBy(() -> service.resetPassword(1L, 7L))
+                .isInstanceOf(com.devmatch.exception.ForbiddenOperationException.class);
+    }
+
+    @Test
+    void resetPassword_DELETED_대상_차단() {
+        User u = userOf(7L, Role.MENTEE, UserStatus.DELETED);
+        when(userRepository.findById(7L)).thenReturn(Optional.of(u));
+
+        assertThatThrownBy(() -> service.resetPassword(1L, 7L))
+                .isInstanceOf(com.devmatch.exception.ForbiddenOperationException.class);
+    }
+
+    @Test
+    void resetPassword_ADMIN_대상은_허용() {
+        User u = userOf(7L, Role.ADMIN, UserStatus.ACTIVE);
+        when(userRepository.findById(7L)).thenReturn(Optional.of(u));
+        when(passwordGenerator.generate()).thenReturn("Tmp2!QwerXyz9");
+        when(passwordEncoder.encode("Tmp2!QwerXyz9")).thenReturn("encoded2");
+
+        var resp = service.resetPassword(1L, 7L);
+
+        assertThat(resp.getTemporaryPassword()).isEqualTo("Tmp2!QwerXyz9");
     }
 }
