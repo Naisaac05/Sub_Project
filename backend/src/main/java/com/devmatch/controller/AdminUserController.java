@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminUserController {
 
     private final AdminUserService adminUserService;
+    private final com.devmatch.service.MentorSwapService mentorSwapService;
 
     @Operation(summary = "회원 목록 (페이징)")
     @GetMapping
@@ -80,5 +81,15 @@ public class AdminUserController {
             @AuthenticationPrincipal CustomUserDetails admin) {
         var resp = adminUserService.resetPassword(admin.getUserId(), id);
         return ResponseEntity.ok(ApiResponse.success("임시 비밀번호가 발급되었습니다", resp));
+    }
+
+    @Operation(summary = "멘티의 멘토 교체")
+    @PostMapping("/{menteeId}/swap-mentor")
+    public ResponseEntity<ApiResponse<Void>> swapMentor(
+            @PathVariable Long menteeId,
+            @Valid @RequestBody com.devmatch.dto.admin.MentorSwapRequest request,
+            @AuthenticationPrincipal CustomUserDetails admin) {
+        mentorSwapService.swap(admin.getUserId(), menteeId, request.getNewMentorId(), request.getReason());
+        return ResponseEntity.ok(ApiResponse.success("멘토가 교체되었습니다", null));
     }
 }

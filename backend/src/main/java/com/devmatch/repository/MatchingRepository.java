@@ -17,4 +17,7 @@ public interface MatchingRepository extends JpaRepository<Matching, Long> {
     boolean existsByMenteeIdAndMentorIdAndStatus(Long menteeId, Long mentorId, MatchingStatus status);
 
     int countByMentorIdAndStatusIn(Long mentorId, List<MatchingStatus> statuses);
+
+    java.util.Optional<com.devmatch.entity.Matching> findFirstByMenteeIdAndStatusInOrderByCreatedAtDesc(
+            Long menteeId, java.util.Collection<com.devmatch.entity.MatchingStatus> statuses);
 }
