@@ -4,6 +4,7 @@ import com.devmatch.config.TossCancelProperties;
 import com.devmatch.dto.admin.payment.*;
 import com.devmatch.entity.Payment;
 import com.devmatch.entity.PaymentStatus;
+import com.devmatch.entity.User;
 import com.devmatch.exception.PaymentNotFoundException;
 import com.devmatch.repository.MatchingRepository;
 import com.devmatch.repository.PaymentRepository;
@@ -12,6 +13,7 @@ import com.devmatch.repository.spec.PaymentSpecifications;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,6 +35,10 @@ public class AdminPaymentService {
     private final TossPaymentService tossPaymentService;
     private final AdminAuditLogService auditLogService;
     private final TossCancelProperties tossCancelProperties;
+
+    // 이름/이메일 검색 시 관리자 목록 필터용 userId 집합 상한.
+    // 과도한 매칭으로 IN(...) 절이 폭주하는 것을 방지한다.
+    private static final int USER_LOOKUP_LIMIT = 1000;
 
     public AdminPaymentSummaryResponse getSummary(LocalDate from, LocalDate to) {
         LocalDateTime[] range = resolveRange(from, to);
@@ -47,27 +54,33 @@ public class AdminPaymentService {
 
     public Page<AdminPaymentListItemResponse> listPayments(AdminPaymentFilter filter, Pageable pageable) {
         LocalDateTime[] range = resolveRange(filter.from(), filter.to());
-        Specification<Payment> spec = PaymentSpecifications.withFilter(
-                filter.status(), filter.q(), range[0], range[1]);
 
-        // 사용자 이름/이메일 검색: q 가 있을 때 userId 집합을 구해 추가 Spec 결합
-        if (filter.q() != null && !filter.q().isBlank()) {
+        String q = (filter.q() != null && !filter.q().isBlank()) ? filter.q().trim() : null;
+
+        // base: status + date-range (orderId 는 아래서 별도 처리)
+        Specification<Payment> spec = PaymentSpecifications.withFilter(
+                filter.status(), null, range[0], range[1]);
+
+        if (q != null) {
+            Specification<Payment> byOrderId = (root, query, cb) ->
+                    cb.like(root.get("orderId"), "%" + q + "%");
+
             var userIds = userRepository.findByNameContainingOrEmailContaining(
-                            filter.q(), filter.q(), Pageable.unpaged())
+                            q, q, PageRequest.of(0, USER_LOOKUP_LIMIT))
                     .map(u -> u.getId()).getContent();
-            if (!userIds.isEmpty()) {
-                Specification<Payment> byUser = (root, query, cb) -> root.get("userId").in(userIds);
-                // orderId LIKE(Spec 내부) OR userId IN 은 or 결합
-                spec = spec.or(byUser);
-            }
+
+            Specification<Payment> textSpec = userIds.isEmpty()
+                    ? byOrderId
+                    : byOrderId.or(PaymentSpecifications.userIdIn(userIds));
+            spec = spec.and(textSpec);
         }
 
         Page<Payment> page = paymentRepository.findAll(spec, pageable);
 
-        // N+1 방지 위해 userId 들을 한 번에 조회
-        var userIds = page.getContent().stream().map(Payment::getUserId).distinct().toList();
-        var userMap = userRepository.findAllById(userIds).stream()
-                .collect(java.util.stream.Collectors.toMap(u -> u.getId(), u -> u));
+        // N+1 방지: userId 일괄 조회
+        var pageUserIds = page.getContent().stream().map(Payment::getUserId).distinct().toList();
+        var userMap = userRepository.findAllById(pageUserIds).stream()
+                .collect(Collectors.toMap(User::getId, u -> u));
 
         return page.map(p -> {
             var u = userMap.get(p.getUserId());
