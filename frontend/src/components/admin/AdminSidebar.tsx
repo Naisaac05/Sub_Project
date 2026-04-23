@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Users } from 'lucide-react';
+import { UserCheck, Users, CreditCard, FileText } from 'lucide-react';
 
 const NAV_ITEMS: Array<{
   href: string;
@@ -13,8 +13,26 @@ const NAV_ITEMS: Array<{
   {
     href: '/admin/mentor',
     label: '멘토 심사',
-    icon: Users,
+    icon: UserCheck,
     match: (p) => p === '/admin/mentor' || p.startsWith('/admin/mentor/'),
+  },
+  {
+    href: '/admin/users',
+    label: '회원 관리',
+    icon: Users,
+    match: (p) => p === '/admin/users' || p.startsWith('/admin/users/'),
+  },
+  {
+    href: '/admin/payments',
+    label: '결제 관리',
+    icon: CreditCard,
+    match: (p) => p === '/admin/payments' || p.startsWith('/admin/payments/'),
+  },
+  {
+    href: '/admin/posts',
+    label: '게시물 관리',
+    icon: FileText,
+    match: (p) => p === '/admin/posts' || p.startsWith('/admin/posts/'),
   },
 ];
 
