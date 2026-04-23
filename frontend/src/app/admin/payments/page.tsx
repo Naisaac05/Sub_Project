@@ -104,7 +104,7 @@ export default function AdminPaymentsPage() {
     <div className="space-y-4">
       <AdminListHeader
         title="결제 관리"
-        description="전체 결제 내역을 조회하고 환불을 처리합니다."
+        description="결제 내역을 조회하고 취소·환불 요청을 처리합니다."
       />
 
       <PaymentSummaryCards summary={summary} />
