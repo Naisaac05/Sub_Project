@@ -23,6 +23,9 @@ public class DataInitializer implements CommandLineRunner {
     private final MentorAvailabilityRepository mentorAvailabilityRepository;
     private final PasswordEncoder passwordEncoder;
     private final MentoringCourseRepository mentoringCourseRepository;
+    private final PaymentRepository paymentRepository;
+    private final ApplicationRepository applicationRepository;
+    private final MatchingRepository matchingRepository;
 
     @Override
     @Transactional
@@ -30,22 +33,21 @@ public class DataInitializer implements CommandLineRunner {
         initMentoringCourses();
         initDefaultAdmin();
 
-        if (testRepository.count() > 0) {
+        if (testRepository.count() == 0) {
+            log.info("===== 테스트 초기 데이터 삽입 시작 =====");
+            initJavaTests();
+            initSpringTests();
+            initReactTests();
+            initPythonTests();
+            initAlgorithmTests();
+            initMentors();
+            log.info("===== 초기 데이터 삽입 완료: 테스트 {}개, 문제 {}개 =====",
+                    testRepository.count(), questionRepository.count());
+        } else {
             log.info("테스트 데이터가 이미 존재합니다. 초기화를 건너뜁니다.");
-            return;
         }
 
-        log.info("===== 테스트 초기 데이터 삽입 시작 =====");
-
-        initJavaTests();
-        initSpringTests();
-        initReactTests();
-        initPythonTests();
-        initAlgorithmTests();
-        initMentors();
-
-        log.info("===== 초기 데이터 삽입 완료: 테스트 {}개, 문제 {}개 =====",
-                testRepository.count(), questionRepository.count());
+        initSamplePayments();
     }
 
     // ──────────────────────────────────────────────
@@ -808,5 +810,97 @@ public class DataInitializer implements CommandLineRunner {
                 .startTime(java.time.LocalTime.of(9, 0))
                 .endTime(java.time.LocalTime.of(18, 0))
                 .build());
+    }
+
+    // ──────────────────────────────────────────────
+    //  관리자 결제 관리 스모크용 seed — 7건
+    //  Mentee + Application 이 없으면 graceful skip.
+    // ──────────────────────────────────────────────
+    private void initSamplePayments() {
+        if (paymentRepository.count() > 0) {
+            log.info("Payment seed skip — 이미 데이터 존재");
+            return;
+        }
+
+        User mentee = userRepository.findByRole(Role.MENTEE).stream().findFirst().orElse(null);
+        if (mentee == null) {
+            log.info("Payment seed skip — MENTEE 가 없음. 먼저 멘티 + 신청서를 생성한 뒤 서버 재기동.");
+            return;
+        }
+
+        List<Application> apps = applicationRepository.findByMenteeIdOrderByCreatedAtDesc(mentee.getId());
+        if (apps.isEmpty()) {
+            log.info("Payment seed skip — Application 이 없음.");
+            return;
+        }
+        Long applicationId = apps.get(0).getId();
+
+        List<Matching> matchings = matchingRepository.findByMenteeIdOrderByCreatedAtDesc(mentee.getId());
+        Long matchingId1 = matchings.size() >= 1 ? matchings.get(0).getId() : null;
+        Long matchingId2 = matchings.size() >= 2 ? matchings.get(1).getId() : null;
+
+        User admin = userRepository.findByRole(Role.SUPER_ADMIN).stream().findFirst().orElse(null);
+        Long adminId = admin != null ? admin.getId() : null;
+
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+
+        // 1) CONFIRMED + matching
+        paymentRepository.save(Payment.builder()
+                .userId(mentee.getId()).applicationId(applicationId).matchingId(matchingId1)
+                .orderId("SEED-ORD-001").paymentKey("FAKE_PK_SEED-ORD-001").amount(990_000)
+                .status(PaymentStatus.CONFIRMED)
+                .courseType("IMMEDIATE").monthsBundled(1).renewalCount(0)
+                .build());
+
+        // 2) CONFIRMED + matching (최근)
+        paymentRepository.save(Payment.builder()
+                .userId(mentee.getId()).applicationId(applicationId).matchingId(matchingId2)
+                .orderId("SEED-ORD-002").paymentKey("FAKE_PK_SEED-ORD-002").amount(1_800_000)
+                .status(PaymentStatus.CONFIRMED)
+                .courseType("EARLY_BIRD").monthsBundled(2).renewalCount(0)
+                .build());
+
+        // 3) CONFIRMED without matching
+        paymentRepository.save(Payment.builder()
+                .userId(mentee.getId()).applicationId(applicationId).matchingId(null)
+                .orderId("SEED-ORD-003").paymentKey("FAKE_PK_SEED-ORD-003").amount(990_000)
+                .status(PaymentStatus.CONFIRMED)
+                .courseType("IMMEDIATE").monthsBundled(1).renewalCount(0)
+                .build());
+
+        // 4) PENDING
+        paymentRepository.save(Payment.builder()
+                .userId(mentee.getId()).applicationId(applicationId).matchingId(null)
+                .orderId("SEED-ORD-004").paymentKey(null).amount(990_000)
+                .status(PaymentStatus.PENDING)
+                .courseType("IMMEDIATE").monthsBundled(1).renewalCount(0)
+                .build());
+
+        // 5) CANCELLED by user
+        paymentRepository.save(Payment.builder()
+                .userId(mentee.getId()).applicationId(applicationId).matchingId(null)
+                .orderId("SEED-ORD-005").paymentKey("FAKE_PK_SEED-ORD-005").amount(990_000)
+                .status(PaymentStatus.CANCELLED).cancelReason("고객 요청 취소")
+                .courseType("IMMEDIATE").monthsBundled(1).renewalCount(0)
+                .build());
+
+        // 6) CANCELLED by admin (환불 처리자 + 처리일시)
+        paymentRepository.save(Payment.builder()
+                .userId(mentee.getId()).applicationId(applicationId).matchingId(null)
+                .orderId("SEED-ORD-006").paymentKey("FAKE_PK_SEED-ORD-006").amount(1_800_000)
+                .status(PaymentStatus.CANCELLED).cancelReason("관리자 환불 — 서비스 오류 보상")
+                .processedByAdminId(adminId).cancelledAt(now.minusDays(3))
+                .courseType("EARLY_BIRD").monthsBundled(2).renewalCount(0)
+                .build());
+
+        // 7) FAILED
+        paymentRepository.save(Payment.builder()
+                .userId(mentee.getId()).applicationId(applicationId).matchingId(null)
+                .orderId("SEED-ORD-007").paymentKey(null).amount(990_000)
+                .status(PaymentStatus.FAILED)
+                .courseType("IMMEDIATE").monthsBundled(1).renewalCount(0)
+                .build());
+
+        log.info("Payment seed 완료 — 7건 생성 (mentee={}, application={})", mentee.getId(), applicationId);
     }
 }
