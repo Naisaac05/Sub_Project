@@ -70,6 +70,12 @@ public class Payment {
     @Column(name = "cancel_reason", length = 500)
     private String cancelReason;
 
+    @Column(name = "processed_by_admin_id")
+    private Long processedByAdminId;
+
+    @Column(name = "cancelled_at")
+    private LocalDateTime cancelledAt;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -88,6 +94,15 @@ public class Payment {
     public void cancel(String cancelReason) {
         this.status = PaymentStatus.CANCELLED;
         this.cancelReason = cancelReason;
+    }
+
+    /**
+     * 관리자 강제 환불 경로에서 호출. 처리자 + 처리일시 기록.
+     * 반드시 {@link #cancel(String)} 이후에 호출되어야 한다 (순서 의존).
+     */
+    public void markProcessedByAdmin(Long adminId, LocalDateTime at) {
+        this.processedByAdminId = adminId;
+        this.cancelledAt = at;
     }
 
     public void fail() {
