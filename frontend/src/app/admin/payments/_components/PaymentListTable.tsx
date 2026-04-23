@@ -3,25 +3,8 @@
 import Link from "next/link";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
-import type { AdminPaymentListItem, PaymentStatus } from "../_types";
-
-function formatKRW(n: number) {
-  return new Intl.NumberFormat("ko-KR", { style: "currency", currency: "KRW" }).format(n);
-}
-
-const STATUS_CLASSNAMES: Record<PaymentStatus, string> = {
-  PENDING: "bg-amber-100 text-amber-800",
-  CONFIRMED: "bg-emerald-100 text-emerald-800",
-  CANCELLED: "bg-red-100 text-red-800",
-  FAILED: "bg-zinc-100 text-zinc-700",
-};
-
-const STATUS_LABELS: Record<PaymentStatus, string> = {
-  PENDING: "대기",
-  CONFIRMED: "확정",
-  CANCELLED: "취소",
-  FAILED: "실패",
-};
+import type { AdminPaymentListItem } from "../_types";
+import { STATUS_CLASSNAMES, STATUS_LABELS, formatKRW } from "./paymentStatus";
 
 export function PaymentListTable({ rows }: { rows: AdminPaymentListItem[] }) {
   if (!rows.length) return <div className="py-12 text-center text-muted-foreground">조건에 맞는 결제가 없습니다</div>;
