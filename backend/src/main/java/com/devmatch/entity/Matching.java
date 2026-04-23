@@ -106,6 +106,15 @@ public class Matching {
     }
 
     /**
+     * 관리자 강제 환불에 의한 매칭 취소. 기존 rejectedReason 컬럼을 재사용해 사유를 남긴다.
+     * LmsAccessService 의 allow-list(TRIAL/ACCEPTED) 덕에 CANCELLED 전이만으로 LMS 접근이 자동 차단된다.
+     */
+    public void cancel(String reason) {
+        this.status = MatchingStatus.CANCELLED;
+        this.rejectedReason = reason;
+    }
+
+    /**
      * 무료 체험 기간인지 확인
      */
     public boolean isInTrialPeriod() {
