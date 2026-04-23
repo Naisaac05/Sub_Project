@@ -41,6 +41,18 @@ public class User {
     @Column(length = 100)
     private String providerId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private UserStatus status = UserStatus.ACTIVE;
+
+    @Column(name = "job_title", length = 100)
+    private String jobTitle;
+
+    @Column(name = "must_change_password", nullable = false)
+    @Builder.Default
+    private Boolean mustChangePassword = false;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -59,5 +71,30 @@ public class User {
 
     public void updateRole(Role role) {
         this.role = role;
+    }
+
+    public void deactivate() {
+        this.status = UserStatus.DEACTIVATED;
+    }
+
+    public void reactivate() {
+        this.status = UserStatus.ACTIVE;
+    }
+
+    public void markDeleted() {
+        this.status = UserStatus.DELETED;
+    }
+
+    public void forcePasswordChange(String encodedPassword) {
+        this.password = encodedPassword;
+        this.mustChangePassword = true;
+    }
+
+    public void clearMustChangePassword() {
+        this.mustChangePassword = false;
+    }
+
+    public void updateJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 }
