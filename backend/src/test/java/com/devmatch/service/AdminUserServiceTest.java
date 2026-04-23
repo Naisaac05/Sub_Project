@@ -28,6 +28,7 @@ class AdminUserServiceTest {
     @Mock PaymentRepository paymentRepository;
     @Mock PostRepository postRepository;
     @Mock MentorProfileRepository mentorProfileRepository;
+    @Mock AdminAuditLogService auditLogService;
 
     @InjectMocks AdminUserService service;
 
@@ -59,5 +60,84 @@ class AdminUserServiceTest {
         when(userRepository.findById(99L)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> service.getDetail(99L))
                 .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void deactivate_정상_케이스_상태_전이_및_감사로그() {
+        User u = userOf(7L, Role.MENTEE, UserStatus.ACTIVE);
+        when(userRepository.findById(7L)).thenReturn(Optional.of(u));
+
+        service.deactivate(1L, 7L, "스팸 행위");
+
+        assertThat(u.getStatus()).isEqualTo(UserStatus.DEACTIVATED);
+        org.mockito.Mockito.verify(auditLogService).record(
+                org.mockito.ArgumentMatchers.eq(1L),
+                org.mockito.ArgumentMatchers.eq(com.devmatch.entity.AdminActionType.USER_DEACTIVATE),
+                org.mockito.ArgumentMatchers.eq("USER"),
+                org.mockito.ArgumentMatchers.eq(7L),
+                org.mockito.ArgumentMatchers.eq("스팸 행위"),
+                org.mockito.ArgumentMatchers.isNull());
+    }
+
+    @Test
+    void deactivate_본인_차단() {
+        User u = userOf(1L, Role.ADMIN, UserStatus.ACTIVE);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(u));
+
+        assertThatThrownBy(() -> service.deactivate(1L, 1L, "test reason"))
+                .isInstanceOf(com.devmatch.exception.ForbiddenOperationException.class);
+        assertThat(u.getStatus()).isEqualTo(UserStatus.ACTIVE);
+    }
+
+    @Test
+    void deactivate_ADMIN_대상_차단() {
+        User u = userOf(7L, Role.ADMIN, UserStatus.ACTIVE);
+        when(userRepository.findById(7L)).thenReturn(Optional.of(u));
+
+        assertThatThrownBy(() -> service.deactivate(1L, 7L, "test reason"))
+                .isInstanceOf(com.devmatch.exception.ForbiddenOperationException.class);
+    }
+
+    @Test
+    void deactivate_DELETED_대상_차단() {
+        User u = userOf(7L, Role.MENTEE, UserStatus.DELETED);
+        when(userRepository.findById(7L)).thenReturn(Optional.of(u));
+
+        assertThatThrownBy(() -> service.deactivate(1L, 7L, "test reason"))
+                .isInstanceOf(com.devmatch.exception.ForbiddenOperationException.class);
+    }
+
+    @Test
+    void reactivate_DEACTIVATED_사용자_ACTIVE_전이_감사로그() {
+        User u = userOf(7L, Role.MENTEE, UserStatus.DEACTIVATED);
+        when(userRepository.findById(7L)).thenReturn(Optional.of(u));
+
+        service.reactivate(1L, 7L);
+
+        assertThat(u.getStatus()).isEqualTo(UserStatus.ACTIVE);
+        org.mockito.Mockito.verify(auditLogService).record(
+                org.mockito.ArgumentMatchers.eq(1L),
+                org.mockito.ArgumentMatchers.eq(com.devmatch.entity.AdminActionType.USER_REACTIVATE),
+                org.mockito.ArgumentMatchers.eq("USER"),
+                org.mockito.ArgumentMatchers.eq(7L),
+                org.mockito.ArgumentMatchers.isNull(),
+                org.mockito.ArgumentMatchers.isNull());
+    }
+
+    @Test
+    void delete_정상_케이스_DELETED_전이_감사로그() {
+        User u = userOf(7L, Role.MENTEE, UserStatus.ACTIVE);
+        when(userRepository.findById(7L)).thenReturn(Optional.of(u));
+
+        service.delete(1L, 7L, "탈퇴 요청 처리");
+
+        assertThat(u.getStatus()).isEqualTo(UserStatus.DELETED);
+        org.mockito.Mockito.verify(auditLogService).record(
+                org.mockito.ArgumentMatchers.eq(1L),
+                org.mockito.ArgumentMatchers.eq(com.devmatch.entity.AdminActionType.USER_DELETE),
+                org.mockito.ArgumentMatchers.eq("USER"),
+                org.mockito.ArgumentMatchers.eq(7L),
+                org.mockito.ArgumentMatchers.eq("탈퇴 요청 처리"),
+                org.mockito.ArgumentMatchers.isNull());
     }
 }

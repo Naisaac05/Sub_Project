@@ -2,18 +2,22 @@ package com.devmatch.controller;
 
 import com.devmatch.dto.admin.AdminUserDetailResponse;
 import com.devmatch.dto.admin.AdminUserListResponse;
+import com.devmatch.dto.admin.UserActionRequest;
 import com.devmatch.dto.common.ApiResponse;
 import com.devmatch.entity.Role;
 import com.devmatch.entity.UserStatus;
+import com.devmatch.security.CustomUserDetails;
 import com.devmatch.service.AdminUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Admin - Users", description = "관리자 회원 관리 API")
@@ -38,5 +42,34 @@ public class AdminUserController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AdminUserDetailResponse>> get(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(adminUserService.getDetail(id)));
+    }
+
+    @Operation(summary = "회원 비활성화")
+    @PostMapping("/{id}/deactivate")
+    public ResponseEntity<ApiResponse<Void>> deactivate(
+            @PathVariable Long id,
+            @Valid @RequestBody UserActionRequest request,
+            @AuthenticationPrincipal CustomUserDetails admin) {
+        adminUserService.deactivate(admin.getUserId(), id, request.getReason());
+        return ResponseEntity.ok(ApiResponse.success("회원이 비활성화되었습니다", null));
+    }
+
+    @Operation(summary = "회원 재활성화")
+    @PostMapping("/{id}/reactivate")
+    public ResponseEntity<ApiResponse<Void>> reactivate(
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails admin) {
+        adminUserService.reactivate(admin.getUserId(), id);
+        return ResponseEntity.ok(ApiResponse.success("회원이 재활성화되었습니다", null));
+    }
+
+    @Operation(summary = "회원 영구 삭제")
+    @PostMapping("/{id}/delete")
+    public ResponseEntity<ApiResponse<Void>> delete(
+            @PathVariable Long id,
+            @Valid @RequestBody UserActionRequest request,
+            @AuthenticationPrincipal CustomUserDetails admin) {
+        adminUserService.delete(admin.getUserId(), id, request.getReason());
+        return ResponseEntity.ok(ApiResponse.success("회원이 삭제되었습니다", null));
     }
 }
