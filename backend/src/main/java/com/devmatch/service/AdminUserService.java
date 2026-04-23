@@ -33,19 +33,11 @@ public class AdminUserService {
     private final com.devmatch.util.PasswordGenerator passwordGenerator;
 
     public Page<AdminUserListResponse> list(Role role, UserStatus status, String q, Pageable pageable) {
-        Page<User> users;
-        if (q != null && !q.isBlank()) {
-            users = userRepository.findByNameContainingOrEmailContaining(q, q, pageable);
-        } else if (role != null && status != null) {
-            users = userRepository.findByRoleAndStatus(role, status, pageable);
-        } else if (role != null) {
-            users = userRepository.findByRole(role, pageable);
-        } else if (status != null) {
-            users = userRepository.findByStatus(status, pageable);
-        } else {
-            users = userRepository.findAll(pageable);
-        }
-        return users.map(AdminUserListResponse::from);
+        // role/status/q 모두 조합 가능 — JPQL 단일 쿼리로 위임 (이전 if-else 사다리는 q 가 있으면
+        // role/status 를 무시하던 버그 — 2026-04-23 코드리뷰 피드백 반영)
+        String normalizedQ = (q == null || q.isBlank()) ? null : q.trim();
+        return userRepository.searchAdminUsers(role, status, normalizedQ, pageable)
+                .map(AdminUserListResponse::from);
     }
 
     public AdminUserDetailResponse getDetail(Long userId) {

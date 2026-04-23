@@ -42,11 +42,13 @@ public class RecommendationService {
     public List<RecommendedMentor> recommendMentors(SurveyResponse survey) {
         log.info("[Recommendation] 멘토 추천 시작 — surveyId: {}", survey.getId());
 
-        // 1. 승인된(APPROVED) 전체 멘토 풀 조회
-        List<MentorProfile> allMentors = mentorProfileRepository.findByStatus(MentorStatus.APPROVED);
+        // 1. 승인된(APPROVED) 전체 멘토 풀 조회 — 사용자 상태 ACTIVE 만 (Phase II Feature 1: 비활성/삭제 회원 제외)
+        List<MentorProfile> allMentors = mentorProfileRepository.findByStatus(MentorStatus.APPROVED).stream()
+                .filter(m -> m.getUser().getStatus() == com.devmatch.entity.UserStatus.ACTIVE)
+                .toList();
 
         if (allMentors.isEmpty()) {
-            log.warn("[Recommendation] 승인된 멘토가 없습니다.");
+            log.warn("[Recommendation] 승인된 ACTIVE 멘토가 없습니다.");
             return List.of();
         }
 
