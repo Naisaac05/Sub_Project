@@ -76,12 +76,12 @@ export function PaymentDetailSection({ detail }: { detail: AdminPaymentDetail })
           </CardHeader>
           <CardContent className="space-y-2">
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <DlRow label="매칭 ID">{detail.matching.id}</DlRow>
+              <DlRow label="매칭 ID">#{detail.matching.id}</DlRow>
               <DlRow label="멘토">{detail.matching.mentorName}</DlRow>
               <DlRow label="매칭 상태">{detail.matching.status}</DlRow>
             </dl>
             <p className="text-xs text-muted-foreground">
-              환불 시 매칭이 함께 취소되며, 멘토에게 알림이 전송됩니다.
+              환불 시 매칭이 함께 취소되며, 멘티의 LMS 접근이 차단됩니다.
             </p>
           </CardContent>
         </Card>
