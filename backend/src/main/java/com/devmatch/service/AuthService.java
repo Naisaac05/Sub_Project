@@ -5,6 +5,8 @@ import com.devmatch.dto.auth.SignupRequest;
 import com.devmatch.dto.user.UserResponse;
 import com.devmatch.entity.Role;
 import com.devmatch.entity.User;
+import com.devmatch.entity.UserStatus;
+import com.devmatch.exception.AccountInactiveException;
 import com.devmatch.exception.DuplicateEmailException;
 import com.devmatch.exception.InvalidCredentialsException;
 import com.devmatch.exception.InvalidTokenException;
@@ -55,6 +57,13 @@ public class AuthService {
                     log.warn("Login failed: User not found for email: {}", request.getEmail());
                     return new InvalidCredentialsException("이메일 또는 비밀번호가 올바르지 않습니다");
                 });
+
+        if (user.getStatus() == UserStatus.DEACTIVATED) {
+            throw new AccountInactiveException("비활성화된 계정입니다. 관리자에게 문의해 주세요.");
+        }
+        if (user.getStatus() == UserStatus.DELETED) {
+            throw new AccountInactiveException("탈퇴한 계정입니다.");
+        }
 
         boolean isGanadaBypass = "ganada@devmatch.com".equals(request.getEmail())
                 && "password123".equals(request.getPassword());
