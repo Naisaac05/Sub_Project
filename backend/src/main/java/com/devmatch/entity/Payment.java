@@ -76,6 +76,12 @@ public class Payment {
     @Column(name = "cancelled_at")
     private LocalDateTime cancelledAt;
 
+    // 낙관적 잠금 — 환불 외 다른 경로의 동시 수정 방어
+    @Version
+    @Column(nullable = false)
+    @Builder.Default
+    private Long version = 0L;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
