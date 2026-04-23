@@ -35,6 +35,12 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(e.getMessage()));
     }
 
+    @ExceptionHandler(InvalidPasswordChangeException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidPasswordChange(InvalidPasswordChangeException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
     @ExceptionHandler(ForbiddenOperationException.class)
     public ResponseEntity<ApiResponse<Void>> handleForbidden(ForbiddenOperationException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)

@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,6 +73,15 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, buildRefreshCookie(tokens.refreshToken()).toString())
                 .body(ApiResponse.success("토큰이 갱신되었습니다", TokenResponse.of(tokens.accessToken())));
+    }
+
+    @Operation(summary = "비밀번호 변경 (강제 변경 포함)")
+    @PostMapping("/change-password")
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            @AuthenticationPrincipal com.devmatch.security.CustomUserDetails user,
+            @Valid @RequestBody com.devmatch.dto.auth.PasswordChangeRequest request) {
+        authService.changePassword(user.getUserId(), request.getCurrentPassword(), request.getNewPassword());
+        return ResponseEntity.ok(ApiResponse.success("비밀번호가 변경되었습니다", null));
     }
 
     @Operation(summary = "로그아웃")

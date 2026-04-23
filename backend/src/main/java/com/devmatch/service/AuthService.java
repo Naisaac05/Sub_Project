@@ -99,4 +99,18 @@ public class AuthService {
     public void logout(String presentedRefreshToken) {
         refreshSessionService.revokeByToken(presentedRefreshToken);
     }
+
+    @Transactional
+    public void changePassword(Long userId, String currentPassword, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new com.devmatch.exception.UserNotFoundException("사용자를 찾을 수 없습니다"));
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new com.devmatch.exception.InvalidPasswordChangeException("현재 비밀번호가 일치하지 않습니다.");
+        }
+        if (currentPassword.equals(newPassword)) {
+            throw new com.devmatch.exception.InvalidPasswordChangeException("새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+        }
+        user.updatePassword(passwordEncoder.encode(newPassword));
+        user.clearMustChangePassword();
+    }
 }
