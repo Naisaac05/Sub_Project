@@ -131,4 +131,29 @@ class AdminPaymentServiceTest {
         assertThatThrownBy(() -> svc.getDetail(999L))
                 .isInstanceOf(PaymentNotFoundException.class);
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void listPayments_q와_status_조합은_status를_우회하지_않는다() {
+        // 이름 매치되는 user 가 있어도 status 필터가 OR 로 튀지 않아야 한다
+        when(userRepository.findByNameContainingOrEmailContaining(
+                eq("alice"), eq("alice"), any(Pageable.class)))
+                .thenReturn(new org.springframework.data.domain.PageImpl<>(
+                        java.util.List.of())); // userIds 빈 집합
+        when(paymentRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(Page.empty());
+
+        AdminPaymentService svc = new AdminPaymentService(
+                paymentRepository, matchingRepository, userRepository,
+                tossPaymentService, auditLogService, props(true));
+
+        svc.listPayments(
+                new AdminPaymentFilter(PaymentStatus.CONFIRMED, "alice", null, null),
+                PageRequest.of(0, 20));
+
+        // 사용자 검색이 호출되었고, paymentRepository.findAll 이 최종 Specification 으로 호출됨
+        verify(userRepository).findByNameContainingOrEmailContaining(
+                eq("alice"), eq("alice"), any(Pageable.class));
+        verify(paymentRepository).findAll(any(Specification.class), any(Pageable.class));
+    }
 }
