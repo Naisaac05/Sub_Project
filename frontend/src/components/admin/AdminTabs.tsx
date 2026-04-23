@@ -29,7 +29,7 @@ export function AdminTabs<V extends string>({
   trailing,
 }: Props<V>) {
   return (
-    <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label={ariaLabel}>
+    <div className="flex flex-wrap items-center gap-2" role="group" aria-label={ariaLabel}>
       {items.map((t) => {
         const isActive = t.value === value;
         let cls: string;
@@ -47,7 +47,7 @@ export function AdminTabs<V extends string>({
               : 'bg-slate-100 text-slate-700 hover:bg-slate-200');
         }
         return (
-          <button key={t.value} role="tab" aria-selected={isActive} onClick={() => onChange(t.value)} className={cls}>
+          <button key={t.value} aria-pressed={isActive} onClick={() => onChange(t.value)} className={cls}>
             {t.label}
           </button>
         );
