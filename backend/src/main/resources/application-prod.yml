@@ -19,3 +19,8 @@ server:
 
 jwt:
   secret: ${JWT_SECRET}
+
+# 관리자 환불 — prod 는 실제 토스 API 호출
+app:
+  payment:
+    toss-cancel-enabled: true
