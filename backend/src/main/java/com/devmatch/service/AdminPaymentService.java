@@ -2,9 +2,12 @@ package com.devmatch.service;
 
 import com.devmatch.config.TossCancelProperties;
 import com.devmatch.dto.admin.payment.*;
+import com.devmatch.entity.AdminActionType;
+import com.devmatch.entity.MatchingStatus;
 import com.devmatch.entity.Payment;
 import com.devmatch.entity.PaymentStatus;
 import com.devmatch.entity.User;
+import com.devmatch.exception.PaymentFailedException;
 import com.devmatch.exception.PaymentNotFoundException;
 import com.devmatch.repository.MatchingRepository;
 import com.devmatch.repository.PaymentRepository;
@@ -21,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -133,6 +138,69 @@ public class AdminPaymentService {
                 payment.getCancelReason(),
                 userSection, appSection, matchingSection, refundSection
         );
+    }
+
+    @Transactional
+    public AdminPaymentDetailResponse refundPayment(Long paymentId, Long adminId, String reason) {
+        var payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new PaymentNotFoundException("결제 정보를 찾을 수 없습니다: " + paymentId));
+
+        // 1) status 가드 — CONFIRMED 만 환불 가능
+        if (payment.getStatus() != PaymentStatus.CONFIRMED) {
+            throw new PaymentFailedException("승인된 결제만 환불할 수 있습니다. 현재 상태: " + payment.getStatus());
+        }
+
+        // 2) 토스 호출 (플래그 on + paymentKey 존재)
+        if (tossCancelProperties.tossCancelEnabled()) {
+            if (payment.getPaymentKey() == null || payment.getPaymentKey().isBlank()) {
+                throw new PaymentFailedException("환불을 위한 결제키가 없습니다 (paymentKey NULL)");
+            }
+            boolean ok = tossPaymentService.cancelPayment(payment.getPaymentKey(), reason);
+            if (!ok) {
+                throw new PaymentFailedException("토스 환불에 실패했습니다");
+            }
+        } else {
+            log.warn("[AdminPayment] toss-cancel-enabled=false — 토스 호출 skip, 내부 상태만 변경 (paymentId={})", paymentId);
+        }
+
+        // 3) Payment 상태 전이
+        payment.cancel(reason);
+        payment.markProcessedByAdmin(adminId, LocalDateTime.now());
+
+        // 4) Matching 소프트 캐스케이드
+        boolean matchingAffected = false;
+        Long matchingId = payment.getMatchingId();
+        if (matchingId != null) {
+            var matching = matchingRepository.findById(matchingId).orElse(null);
+            if (matching != null &&
+                    (matching.getStatus() == MatchingStatus.PENDING ||
+                     matching.getStatus() == MatchingStatus.ACCEPTED ||
+                     matching.getStatus() == MatchingStatus.TRIAL)) {
+                matching.cancel(reason);
+                matchingAffected = true;
+            }
+        }
+
+        // 5) 감사 로그
+        Map<String, Object> metadata = new LinkedHashMap<>();
+        metadata.put("refundAmount", payment.getAmount());
+        metadata.put("matchingAffected", matchingAffected);
+        if (matchingId != null) {
+            metadata.put("matchingId", matchingId);
+        }
+        auditLogService.record(
+                adminId,
+                AdminActionType.PAYMENT_REFUND,
+                "PAYMENT",
+                payment.getId(),
+                reason,
+                metadata
+        );
+
+        log.info("[AdminPayment] 환불 완료 — paymentId={}, adminId={}, matchingAffected={}",
+                paymentId, adminId, matchingAffected);
+
+        return getDetail(paymentId);
     }
 
     static LocalDateTime[] resolveRange(LocalDate from, LocalDate to) {
