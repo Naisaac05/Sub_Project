@@ -768,9 +768,10 @@ public class DataInitializer implements CommandLineRunner {
                 .email(email)
                 .password(passwordEncoder.encode("Admin1234!"))
                 .name("DevMatch Admin")
-                .role(Role.ADMIN)
+                .role(Role.SUPER_ADMIN)
+                .jobTitle("운영팀")
                 .build());
-        log.info("기본 ADMIN 계정 시드 완료: {}", email);
+        log.info("기본 SUPER_ADMIN 계정 시드 완료: {}", email);
     }
 
     private void createMentor(String name, String email, String encodedPassword,

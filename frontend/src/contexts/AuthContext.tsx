@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import type { UserResponse } from '@/lib/types';
 import * as authService from '@/lib/auth';
 import { getMyMentorProfile } from '@/lib/mentor';
@@ -94,6 +95,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return;
     setMentorStatus(await fetchMentorStatus(user.role));
   }, [user]);
+
+  // mustChangePassword=true 사용자는 비밀번호 변경 페이지로 강제 리다이렉트
+  const router = useRouter();
+  const pathname = usePathname();
+  useEffect(() => {
+    if (!user) return;
+    if (!user.mustChangePassword) return;
+    if (pathname === '/account/change-password') return;
+    if (pathname === '/auth/login') return;
+    router.replace('/account/change-password');
+  }, [user, pathname, router]);
 
   return (
     <AuthContext.Provider

@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    long countByAuthor_Id(Long userId);
 }

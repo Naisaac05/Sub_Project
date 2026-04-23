@@ -36,11 +36,17 @@ export interface TokenResponse {
 }
 
 // ─── User DTOs ───
+export type UserRole = 'MENTEE' | 'MENTOR' | 'ADMIN' | 'SUPER_ADMIN';
+export type UserStatus = 'ACTIVE' | 'DEACTIVATED' | 'DELETED';
+
 export interface UserResponse {
   id: number;
   email: string;
   name: string;
-  role: 'MENTEE' | 'MENTOR' | 'ADMIN';
+  role: UserRole;
+  status: UserStatus;
+  jobTitle: string | null;
+  mustChangePassword: boolean;
   createdAt: string;
 }
 
