@@ -21,4 +21,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     // 연장 회차 계산용: 동일 사용자의 확정된 결제 수 조회
     long countByUserIdAndStatus(Long userId, PaymentStatus status);
+
+    long countByUserId(Long userId);
 }

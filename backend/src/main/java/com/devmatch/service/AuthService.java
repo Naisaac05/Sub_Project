@@ -5,6 +5,8 @@ import com.devmatch.dto.auth.SignupRequest;
 import com.devmatch.dto.user.UserResponse;
 import com.devmatch.entity.Role;
 import com.devmatch.entity.User;
+import com.devmatch.entity.UserStatus;
+import com.devmatch.exception.AccountInactiveException;
 import com.devmatch.exception.DuplicateEmailException;
 import com.devmatch.exception.InvalidCredentialsException;
 import com.devmatch.exception.InvalidTokenException;
@@ -56,6 +58,13 @@ public class AuthService {
                     return new InvalidCredentialsException("이메일 또는 비밀번호가 올바르지 않습니다");
                 });
 
+        if (user.getStatus() == UserStatus.DEACTIVATED) {
+            throw new AccountInactiveException("비활성화된 계정입니다. 관리자에게 문의해 주세요.");
+        }
+        if (user.getStatus() == UserStatus.DELETED) {
+            throw new AccountInactiveException("탈퇴한 계정입니다.");
+        }
+
         boolean isGanadaBypass = "ganada@devmatch.com".equals(request.getEmail())
                 && "password123".equals(request.getPassword());
 
@@ -89,5 +98,19 @@ public class AuthService {
 
     public void logout(String presentedRefreshToken) {
         refreshSessionService.revokeByToken(presentedRefreshToken);
+    }
+
+    @Transactional
+    public void changePassword(Long userId, String currentPassword, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new com.devmatch.exception.UserNotFoundException("사용자를 찾을 수 없습니다"));
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new com.devmatch.exception.InvalidPasswordChangeException("현재 비밀번호가 일치하지 않습니다.");
+        }
+        if (currentPassword.equals(newPassword)) {
+            throw new com.devmatch.exception.InvalidPasswordChangeException("새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+        }
+        user.updatePassword(passwordEncoder.encode(newPassword));
+        user.clearMustChangePassword();
     }
 }

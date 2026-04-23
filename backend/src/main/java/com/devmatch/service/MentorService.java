@@ -2,6 +2,7 @@ package com.devmatch.service;
 
 import com.devmatch.dto.mentor.MentorApplyRequest;
 import com.devmatch.dto.mentor.MentorProfileResponse;
+import com.devmatch.entity.AdminActionType;
 import com.devmatch.entity.MentorProfile;
 import com.devmatch.entity.MentorProfileHistory;
 import com.devmatch.entity.MentorStatus;
@@ -35,6 +36,7 @@ public class MentorService {
     private final UserRepository userRepository;
     private final CourseService courseService;
     private final MentorProfileHistoryRepository historyRepository;
+    private final AdminAuditLogService adminAuditLogService;
 
     @Transactional
     public MentorProfileResponse apply(Long userId, MentorApplyRequest request) {
@@ -169,6 +171,14 @@ public class MentorService {
         historyRepository.findTopByUserIdOrderBySubmittedAtDesc(profile.getUser().getId())
                 .ifPresent(history -> history.markApproved(adminUserId));
 
+        adminAuditLogService.record(
+                adminUserId,
+                AdminActionType.MENTOR_APPROVE,
+                "MENTOR_PROFILE",
+                profileId,
+                null,
+                null);
+
         return MentorProfileResponse.from(profile, null);
     }
 
@@ -185,6 +195,14 @@ public class MentorService {
 
         historyRepository.findTopByUserIdOrderBySubmittedAtDesc(profile.getUser().getId())
                 .ifPresent(history -> history.markRejected(adminUserId, reason));
+
+        adminAuditLogService.record(
+                adminUserId,
+                AdminActionType.MENTOR_REJECT,
+                "MENTOR_PROFILE",
+                profileId,
+                reason,
+                null);
 
         return MentorProfileResponse.from(profile, reason);
     }
