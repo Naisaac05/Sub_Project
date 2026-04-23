@@ -102,15 +102,21 @@ public class AdminAuditLog {
 package com.devmatch.entity;
 
 public enum AdminActionType {
-    // Phase II 사용
-    USER_ROLE_CHANGE,
+    // Phase II Common
+    USER_ROLE_CHANGE,    // (Common 에서 선언, Feature 1 에서 미사용)
     PAYMENT_REFUND,
     POST_DELETE,
     COMMENT_DELETE,
-
-    // Phase I 소급 적용 (결정 사항 §3)
     MENTOR_APPROVE,
-    MENTOR_REJECT
+    MENTOR_REJECT,
+
+    // Phase II Feature 1 (회원 관리, 2026-04-23-admin-users-design.md)
+    USER_DEACTIVATE,
+    USER_REACTIVATE,
+    USER_DELETE,
+    USER_PASSWORD_RESET,
+    USER_MENTOR_SWAP,
+    ADMIN_CREATE
 }
 ```
 
