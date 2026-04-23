@@ -29,6 +29,8 @@ public class AdminUserService {
     private final PostRepository postRepository;
     private final MentorProfileRepository mentorProfileRepository;
     private final AdminAuditLogService adminAuditLogService;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    private final com.devmatch.util.PasswordGenerator passwordGenerator;
 
     public Page<AdminUserListResponse> list(Role role, UserStatus status, String q, Pageable pageable) {
         Page<User> users;
@@ -89,6 +91,28 @@ public class AdminUserService {
         target.markDeleted();
         adminAuditLogService.record(adminId, AdminActionType.USER_DELETE,
                 "USER", targetId, reason, null);
+    }
+
+    @Transactional
+    public com.devmatch.dto.admin.PasswordResetResponse resetPassword(Long adminId, Long targetId) {
+        User target = loadTarget(targetId);
+        guardAgainstSuperAdminTarget(target);
+        guardAgainstDeleted(target);
+
+        String temp = passwordGenerator.generate();
+        String encoded = passwordEncoder.encode(temp);
+        target.forcePasswordChange(encoded);
+
+        adminAuditLogService.record(adminId, AdminActionType.USER_PASSWORD_RESET,
+                "USER", targetId, null, null);
+
+        return new com.devmatch.dto.admin.PasswordResetResponse(temp, true);
+    }
+
+    private void guardAgainstSuperAdminTarget(User target) {
+        if (target.getRole() == Role.SUPER_ADMIN) {
+            throw new ForbiddenOperationException("SUPER_ADMIN 의 비밀번호는 이 메뉴에서 리셋할 수 없습니다.");
+        }
     }
 
     private User loadTarget(Long id) {
