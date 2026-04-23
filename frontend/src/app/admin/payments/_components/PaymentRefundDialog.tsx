@@ -120,7 +120,13 @@ export function PaymentRefundDialog({ open, onOpenChange, detail, onSuccess }: P
               <span className={errors.reason ? "text-destructive" : ""}>
                 {errors.reason?.message ?? "\u00A0"}
               </span>
-              <span>
+              <span
+                className={
+                  reason.length > 500 || (reason.length > 0 && reason.length < 10)
+                    ? "text-destructive"
+                    : ""
+                }
+              >
                 {reason.length} / 500 (최소 10)
               </span>
             </div>
@@ -131,7 +137,9 @@ export function PaymentRefundDialog({ open, onOpenChange, detail, onSuccess }: P
             <AlertDescription>
               <ul className="list-disc pl-4 space-y-1">
                 <li>토스페이먼츠에 환불 요청이 전송됩니다 (취소 불가).</li>
-                <li>연결된 매칭이 함께 취소되어 멘티의 LMS 접근이 차단됩니다.</li>
+                {detail.matching && (
+                  <li>연결된 매칭이 함께 취소되어 멘티의 LMS 접근이 차단됩니다.</li>
+                )}
                 <li>본 작업은 감사 로그에 기록됩니다.</li>
               </ul>
             </AlertDescription>
