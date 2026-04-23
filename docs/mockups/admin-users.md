@@ -1,5 +1,13 @@
 # Phase II UI — 관리자 회원 관리 목업 (Markdown 버전)
 
+> ⚠ **본 문서는 pre-brainstorming 초안입니다.** 정식 스펙은 [`docs/superpowers/specs/2026-04-23-admin-users-design.md`](../superpowers/specs/2026-04-23-admin-users-design.md), 구현 플랜은 [`docs/superpowers/plans/2026-04-23-admin-users.md`](../superpowers/plans/2026-04-23-admin-users.md) 참조. 본 초안과 정식 스펙이 다를 경우 정식 스펙 우선.
+
+> **사용자 확인 사항 (2026-04-23 Pencil 목업 리뷰):**
+> - 목록·상세의 역할/상태 배지는 **한글로 표시** — 멘티/멘토/관리자/슈퍼관리자, 활성/비활성/삭제
+> - 모달의 취소 버튼은 **outline 스타일** (회색 배경 + 테두리)
+> - 모달의 주의안내는 **amber alert 박스**에 **문장별 줄바꿈** (한 줄에 한 문장씩)
+
+
 > `admin-mentor.md` 와 동일한 포맷. shadcn/ui 컴포넌트 매핑 포함.
 > 대상: 멘티·멘토 전체 회원 목록 + 역할 변경 + 상세.
 
