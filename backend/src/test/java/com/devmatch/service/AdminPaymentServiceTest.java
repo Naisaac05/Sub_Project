@@ -1,19 +1,29 @@
 package com.devmatch.service;
 
 import com.devmatch.config.TossCancelProperties;
+import com.devmatch.dto.admin.payment.AdminPaymentFilter;
+import com.devmatch.dto.admin.payment.AdminPaymentListItemResponse;
 import com.devmatch.dto.admin.payment.AdminPaymentSummaryResponse;
 import com.devmatch.entity.AdminActionType;
+import com.devmatch.entity.Payment;
 import com.devmatch.entity.PaymentStatus;
+import com.devmatch.exception.PaymentNotFoundException;
 import com.devmatch.repository.MatchingRepository;
 import com.devmatch.repository.PaymentRepository;
 import com.devmatch.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -89,5 +99,36 @@ class AdminPaymentServiceTest {
                 tossPaymentService, auditLogService, props(true));
         assertThatThrownBy(() -> svc.getSummary(LocalDate.of(2026,5,1), LocalDate.of(2026,4,1)))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void listPayments_status_필터_적용() {
+        AdminPaymentService svc = new AdminPaymentService(
+                paymentRepository, matchingRepository, userRepository,
+                tossPaymentService, auditLogService, props(true));
+        when(paymentRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(Page.empty());
+
+        Page<AdminPaymentListItemResponse> page = svc.listPayments(
+                new AdminPaymentFilter(PaymentStatus.CONFIRMED, null, null, null),
+                PageRequest.of(0, 20)
+        );
+
+        assertThat(page.getContent()).isEmpty();
+        ArgumentCaptor<Specification<Payment>> captor = ArgumentCaptor.forClass(Specification.class);
+        verify(paymentRepository).findAll(captor.capture(), any(Pageable.class));
+        assertThat(captor.getValue()).isNotNull();
+    }
+
+    @Test
+    void getDetail_존재하지_않는_id_는_PaymentNotFoundException() {
+        when(paymentRepository.findById(999L)).thenReturn(Optional.empty());
+        AdminPaymentService svc = new AdminPaymentService(
+                paymentRepository, matchingRepository, userRepository,
+                tossPaymentService, auditLogService, props(true));
+
+        assertThatThrownBy(() -> svc.getDetail(999L))
+                .isInstanceOf(PaymentNotFoundException.class);
     }
 }
