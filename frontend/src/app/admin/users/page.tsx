@@ -6,6 +6,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import * as api from '@/lib/admin/users';
 import { Pagination } from '@/components/admin/Pagination';
 import { DebouncedSearchInput } from '@/components/admin/DebouncedSearchInput';
+import { AdminListHeader } from '@/components/admin/AdminListHeader';
+import { AdminTabs } from '@/components/admin/AdminTabs';
+import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge';
 import type { UserRole, UserStatus } from '@/lib/types';
 
 const ROLE_TABS: Array<{ value: UserRole | 'ALL'; label: string }> = [
@@ -93,48 +96,26 @@ export default function AdminUsersPage() {
 
   return (
     <div className="space-y-4">
-      <header>
-        <h1 className="text-2xl font-bold text-slate-900">회원 관리</h1>
-        <p className="text-sm text-slate-600">전체 회원을 조회하고 상태·비밀번호를 관리합니다.</p>
-      </header>
+      <AdminListHeader
+        title="회원 관리"
+        description="전체 회원을 조회하고 상태·비밀번호를 관리합니다."
+      />
 
-      <div className="flex flex-wrap items-center gap-2">
-        {ROLE_TABS.map((t) => (
-          <button
-            key={t.value}
-            onClick={() => {
-              setRole(t.value);
-              setPage(0);
-            }}
-            className={
-              'rounded-md px-3 py-1.5 text-sm transition-colors ' +
-              (role === t.value ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200')
-            }
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
+      <AdminTabs
+        items={ROLE_TABS}
+        value={role}
+        onChange={(next) => { setRole(next); setPage(0); }}
+        ariaLabel="역할 필터"
+        variant="primary"
+      />
 
-      <div className="flex flex-wrap items-center gap-2">
-        {STATUS_TABS.map((t) => (
-          <button
-            key={t.value}
-            onClick={() => {
-              setStatus(t.value);
-              setPage(0);
-            }}
-            className={
-              'rounded-md border px-3 py-1 text-xs transition-colors ' +
-              (status === t.value
-                ? 'border-slate-700 bg-slate-700 text-white'
-                : 'border-slate-300 bg-white text-slate-600 hover:bg-slate-50')
-            }
-          >
-            {t.label}
-          </button>
-        ))}
-        <div className="ml-auto">
+      <AdminTabs
+        items={STATUS_TABS}
+        value={status}
+        onChange={(next) => { setStatus(next); setPage(0); }}
+        ariaLabel="상태 필터"
+        variant="secondary"
+        trailing={
           <DebouncedSearchInput
             value={q}
             onChange={(next) => {
@@ -143,8 +124,8 @@ export default function AdminUsersPage() {
             }}
             placeholder="이름·이메일 검색"
           />
-        </div>
-      </div>
+        }
+      />
 
       {loading && <div className="text-sm text-slate-500 py-6 text-center">불러오는 중…</div>}
       {error && (
@@ -187,14 +168,10 @@ export default function AdminUsersPage() {
                       <td className="px-4 py-3 text-sm">{u.name}</td>
                       <td className="px-4 py-3 text-sm">{u.email}</td>
                       <td className="px-4 py-3">
-                        <span className={'rounded-full px-2 py-0.5 text-xs font-semibold ' + ROLE_BADGE[u.role]}>
-                          {ROLE_KO[u.role]}
-                        </span>
+                        <AdminStatusBadge label={ROLE_KO[u.role]} className={ROLE_BADGE[u.role]} />
                       </td>
                       <td className="px-4 py-3">
-                        <span className={'rounded-full px-2 py-0.5 text-xs font-semibold ' + STATUS_BADGE[u.status]}>
-                          {STATUS_KO[u.status]}
-                        </span>
+                        <AdminStatusBadge label={STATUS_KO[u.status]} className={STATUS_BADGE[u.status]} />
                       </td>
                       <td className="px-4 py-3 text-sm">{u.createdAt.slice(0, 10)}</td>
                       <td className="px-4 py-3 text-right">
