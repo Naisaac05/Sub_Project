@@ -24,7 +24,7 @@ export function AdminListHeader({ title, description, actions, preTitle, subtitl
 
   if (actions) {
     return (
-      <header className="flex items-center justify-between">
+      <header className="flex items-start justify-between">
         {leftBlock}
         <div>{actions}</div>
       </header>
