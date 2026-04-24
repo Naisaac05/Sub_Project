@@ -20,4 +20,10 @@ public interface MatchingRepository extends JpaRepository<Matching, Long> {
 
     java.util.Optional<com.devmatch.entity.Matching> findFirstByMenteeIdAndStatusInOrderByCreatedAtDesc(
             Long menteeId, java.util.Collection<com.devmatch.entity.MatchingStatus> statuses);
+
+    long countByStatus(com.devmatch.entity.MatchingStatus status);
+
+    long countByStatusAndCreatedAtBetween(com.devmatch.entity.MatchingStatus status,
+                                          java.time.LocalDateTime from,
+                                          java.time.LocalDateTime toExclusive);
 }
