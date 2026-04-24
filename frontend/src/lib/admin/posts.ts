@@ -1,5 +1,7 @@
 import apiClient from '../api';
-import type { ApiResponse } from '../types';
+import type { ApiResponse, PageResponse } from '../types';
+
+export type { PageResponse };
 
 export interface AdminPostListItem {
   id: number;
@@ -46,14 +48,6 @@ export interface AdminPostDetail {
   deletedBy: number | null;
   deletedAt: string | null;
   comments: AdminPostCommentItem[];
-}
-
-export interface PageResponse<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  number: number;
-  size: number;
 }
 
 export interface ListAdminPostsParams {
