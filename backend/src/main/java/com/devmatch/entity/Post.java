@@ -1,5 +1,6 @@
 package com.devmatch.entity;
 
+import com.devmatch.exception.AlreadyDeletedException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,7 +10,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "posts")
+@Table(name = "posts", indexes = {
+        @Index(name = "idx_posts_deleted_created", columnList = "deleted, created_at")
+})
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,6 +57,19 @@ public class Post {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean deleted = false;
+
+    @Column(name = "deletion_reason", length = 500)
+    private String deletionReason;
+
+    @Column(name = "deleted_by")
+    private Long deletedBy;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public void update(String title, String content, String category) {
         this.title = title;
         this.content = content;
@@ -78,5 +94,19 @@ public class Post {
 
     public void incrementViewCount() {
         this.viewCount++;
+    }
+
+    public boolean isDeleted() {
+        return Boolean.TRUE.equals(this.deleted);
+    }
+
+    public void softDelete(String reason, Long adminId) {
+        if (isDeleted()) {
+            throw new AlreadyDeletedException("이미 삭제된 게시물입니다");
+        }
+        this.deleted = true;
+        this.deletionReason = reason;
+        this.deletedBy = adminId;
+        this.deletedAt = LocalDateTime.now();
     }
 }

@@ -33,6 +33,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByRoleIn(Collection<Role> roles);
 
+    java.util.List<User> findByNameContainingIgnoreCase(String name);
+
     /**
      * 회원 관리 목록 조회 — role/status/q 모두 조합 가능. null 인 파라미터는 무시.
      * (Phase II Feature 1: q 와 role/status 동시 적용을 위해 추가)

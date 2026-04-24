@@ -52,7 +52,7 @@ public class PostService {
     }
 
     public Page<PostResponse> getPosts(Long userId, Pageable pageable) {
-        return postRepository.findAllByOrderByCreatedAtDesc(pageable)
+        return postRepository.findByDeletedFalseOrderByCreatedAtDesc(pageable)
                 .map(post -> PostResponse.from(
                         post,
                         postLikeRepository.existsByPostIdAndUserId(post.getId(), userId)
@@ -61,8 +61,7 @@ public class PostService {
 
     @Transactional
     public PostResponse getPost(Long userId, Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        Post post = findActivePost(postId);
 
         post.incrementViewCount();
         return PostResponse.from(post, postLikeRepository.existsByPostIdAndUserId(postId, userId));
@@ -70,8 +69,7 @@ public class PostService {
 
     @Transactional
     public PostResponse updatePost(Long userId, Long postId, PostCreateRequest request) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        Post post = findActivePost(postId);
 
         if (!post.getAuthor().getId().equals(userId)) {
             throw new UnauthorizedPostException("본인이 작성한 게시글만 수정할 수 있습니다.");
@@ -83,8 +81,7 @@ public class PostService {
 
     @Transactional
     public void deletePost(Long userId, Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        Post post = findActivePost(postId);
 
         if (!post.getAuthor().getId().equals(userId)) {
             throw new UnauthorizedPostException("본인이 작성한 게시글만 삭제할 수 있습니다.");
@@ -95,8 +92,7 @@ public class PostService {
 
     @Transactional
     public PostResponse toggleLike(Long userId, Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        Post post = findActivePost(postId);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
@@ -119,8 +115,7 @@ public class PostService {
 
     @Transactional
     public CommentResponse createComment(Long userId, Long postId, CommentCreateRequest request) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        Post post = findActivePost(postId);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
@@ -140,7 +135,7 @@ public class PostService {
             throw new PostNotFoundException("게시글을 찾을 수 없습니다.");
         }
 
-        return commentRepository.findByPostIdOrderByCreatedAtAsc(postId).stream()
+        return commentRepository.findByPostIdAndDeletedFalseOrderByCreatedAtAsc(postId).stream()
                 .map(CommentResponse::from)
                 .collect(Collectors.toList());
     }
@@ -154,11 +149,24 @@ public class PostService {
             throw new CommentNotFoundException("해당 게시글의 댓글이 아닙니다.");
         }
 
+        if (comment.isDeleted()) {
+            throw new CommentNotFoundException("댓글을 찾을 수 없습니다.");
+        }
+
         if (!comment.getAuthor().getId().equals(userId)) {
             throw new UnauthorizedPostException("본인이 작성한 댓글만 삭제할 수 있습니다.");
         }
 
         commentRepository.delete(comment);
         comment.getPost().decrementCommentCount();
+    }
+
+    private Post findActivePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        if (post.isDeleted()) {
+            throw new PostNotFoundException("게시글을 찾을 수 없습니다.");
+        }
+        return post;
     }
 }

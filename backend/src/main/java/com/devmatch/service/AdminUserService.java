@@ -44,7 +44,7 @@ public class AdminUserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("회원을 찾을 수 없습니다: " + userId));
         long paymentCount = paymentRepository.countByUserId(userId);
-        long postCount = postRepository.countByAuthor_Id(userId);
+        long postCount = postRepository.countByAuthor_IdAndDeletedFalse(userId);
         Long mentorProfileId = mentorProfileRepository.findByUserId(userId)
                 .map(MentorProfile::getId).orElse(null);
         return AdminUserDetailResponse.from(user, paymentCount, postCount, mentorProfileId);
