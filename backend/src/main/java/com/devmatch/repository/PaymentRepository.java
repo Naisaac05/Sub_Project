@@ -2,8 +2,10 @@ package com.devmatch.repository;
 
 import com.devmatch.entity.Payment;
 import com.devmatch.entity.PaymentStatus;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -23,6 +25,11 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>,
     boolean existsByApplicationId(Long applicationId);
 
     Optional<Payment> findByMatchingId(Long matchingId);
+
+    // ===== 동시성 제어 — 환불 흐름에서 row lock 으로 중복 Toss 호출 차단 =====
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Payment p where p.id = :id")
+    Optional<Payment> findByIdForUpdate(@Param("id") Long id);
 
     // 연장 회차 계산용: 동일 사용자의 확정된 결제 수 조회
     long countByUserIdAndStatus(Long userId, PaymentStatus status);

@@ -20,6 +20,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +36,7 @@ import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -168,7 +170,8 @@ class AdminPaymentServiceTest {
                 .orderId("ord_1").paymentKey("pk_live_abc").amount(150_000)
                 .status(PaymentStatus.CONFIRMED).build();
         Matching m = Matching.builder().id(50L).status(MatchingStatus.ACCEPTED).build();
-        when(paymentRepository.findById(1L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findById(1L)).thenReturn(Optional.of(p)); // getDetail 응답용
         when(matchingRepository.findById(50L)).thenReturn(Optional.of(m));
         when(userRepository.findById(any())).thenReturn(Optional.empty());
         when(tossPaymentService.cancelPayment(eq("pk_live_abc"), anyString())).thenReturn(true);
@@ -199,7 +202,8 @@ class AdminPaymentServiceTest {
                 .id(2L).userId(10L).applicationId(100L).matchingId(null)
                 .orderId("ord_2").paymentKey("pk_2").amount(990_000)
                 .status(PaymentStatus.CONFIRMED).build();
-        when(paymentRepository.findById(2L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(2L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findById(2L)).thenReturn(Optional.of(p)); // getDetail 응답용
         when(tossPaymentService.cancelPayment(any(), any())).thenReturn(true);
 
         AdminPaymentService svc = new AdminPaymentService(
@@ -219,7 +223,8 @@ class AdminPaymentServiceTest {
                 .orderId("ord_3").paymentKey("pk_3").amount(990_000)
                 .status(PaymentStatus.CONFIRMED).build();
         Matching m = Matching.builder().id(70L).status(MatchingStatus.REJECTED).build();
-        when(paymentRepository.findById(3L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(3L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findById(3L)).thenReturn(Optional.of(p)); // getDetail 응답용
         when(matchingRepository.findById(70L)).thenReturn(Optional.of(m));
         when(tossPaymentService.cancelPayment(any(), any())).thenReturn(true);
 
@@ -235,7 +240,7 @@ class AdminPaymentServiceTest {
     @Test
     void refund_PENDING_결제_환불_시도는_PaymentFailedException() {
         Payment p = Payment.builder().id(4L).status(PaymentStatus.PENDING).build();
-        when(paymentRepository.findById(4L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(4L)).thenReturn(Optional.of(p));
 
         AdminPaymentService svc = new AdminPaymentService(
                 paymentRepository, matchingRepository, userRepository,
@@ -249,7 +254,7 @@ class AdminPaymentServiceTest {
     @Test
     void refund_CANCELLED_재환불_시도는_PaymentFailedException() {
         Payment p = Payment.builder().id(5L).status(PaymentStatus.CANCELLED).build();
-        when(paymentRepository.findById(5L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(5L)).thenReturn(Optional.of(p));
 
         AdminPaymentService svc = new AdminPaymentService(
                 paymentRepository, matchingRepository, userRepository,
@@ -265,7 +270,8 @@ class AdminPaymentServiceTest {
                 .id(6L).userId(10L).matchingId(null)
                 .orderId("ord_6").paymentKey(null).amount(990_000)
                 .status(PaymentStatus.CONFIRMED).build();
-        when(paymentRepository.findById(6L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(6L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findById(6L)).thenReturn(Optional.of(p)); // getDetail 응답용
 
         AdminPaymentService svc = new AdminPaymentService(
                 paymentRepository, matchingRepository, userRepository,
@@ -288,7 +294,7 @@ class AdminPaymentServiceTest {
     void refund_플래그_true_인데_paymentKey_NULL_은_PaymentFailedException() {
         Payment p = Payment.builder()
                 .id(7L).paymentKey(null).status(PaymentStatus.CONFIRMED).build();
-        when(paymentRepository.findById(7L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(7L)).thenReturn(Optional.of(p));
 
         AdminPaymentService svc = new AdminPaymentService(
                 paymentRepository, matchingRepository, userRepository,
@@ -303,7 +309,7 @@ class AdminPaymentServiceTest {
     void refund_토스_호출_실패는_PaymentFailedException_전파() {
         Payment p = Payment.builder()
                 .id(8L).paymentKey("pk_x").status(PaymentStatus.CONFIRMED).build();
-        when(paymentRepository.findById(8L)).thenReturn(Optional.of(p));
+        when(paymentRepository.findByIdForUpdate(8L)).thenReturn(Optional.of(p));
         when(tossPaymentService.cancelPayment(eq("pk_x"), any()))
                 .thenThrow(new PaymentFailedException("토스 4xx"));
 
@@ -315,5 +321,73 @@ class AdminPaymentServiceTest {
                 .isInstanceOf(PaymentFailedException.class);
         assertThat(p.getStatus()).isEqualTo(PaymentStatus.CONFIRMED);
         verifyNoInteractions(auditLogService);
+    }
+
+    @Test
+    void refund_동시요청_두번째는_상태가드에서_차단되어_Toss_미호출() {
+        // Admin1 의 트랜잭션이 이미 commit 된 직후 Admin2 가 락을 획득해 재읽기한 상황을 시뮬레이션.
+        // 첫 호출은 CONFIRMED, 두 번째 호출은 CANCELLED 를 반환.
+        Payment first = Payment.builder()
+                .id(100L).userId(10L).applicationId(100L).matchingId(null)
+                .orderId("ord_concurrent").paymentKey("pk_concurrent").amount(150_000)
+                .status(PaymentStatus.CONFIRMED).build();
+        Payment second = Payment.builder()
+                .id(100L).userId(10L).applicationId(100L).matchingId(null)
+                .orderId("ord_concurrent").paymentKey("pk_concurrent").amount(150_000)
+                .status(PaymentStatus.CANCELLED).build();
+
+        when(paymentRepository.findByIdForUpdate(100L))
+                .thenReturn(Optional.of(first))
+                .thenReturn(Optional.of(second));
+        // Admin1 의 환불 후 getDetail 응답용 (Admin2 는 status 가드에서 throw 하므로 도달 안 함)
+        when(paymentRepository.findById(100L)).thenReturn(Optional.of(first));
+        when(tossPaymentService.cancelPayment(eq("pk_concurrent"), anyString())).thenReturn(true);
+
+        AdminPaymentService svc = new AdminPaymentService(
+                paymentRepository, matchingRepository, userRepository,
+                tossPaymentService, auditLogService, props(true));
+
+        // Admin1: 정상 환불
+        svc.refundPayment(100L, 99L, "Admin1 환불 처리");
+        assertThat(first.getStatus()).isEqualTo(PaymentStatus.CANCELLED);
+
+        // Admin2: 락이 풀린 뒤 재읽기 결과가 CANCELLED → status 가드에서 차단
+        assertThatThrownBy(() -> svc.refundPayment(100L, 88L, "Admin2 동시 환불 시도"))
+                .isInstanceOf(PaymentFailedException.class);
+
+        // Toss 환불 API 는 정확히 1회만 호출되어야 한다 (중복 차단의 핵심 검증)
+        verify(tossPaymentService, times(1)).cancelPayment(eq("pk_concurrent"), anyString());
+        // 감사 로그도 1회만 기록
+        verify(auditLogService, times(1)).record(
+                eq(99L),
+                eq(AdminActionType.PAYMENT_REFUND),
+                eq("PAYMENT"),
+                eq(100L),
+                anyString(),
+                anyMap());
+    }
+
+    @Test
+    void refund_낙관적잠금_충돌시_OptimisticLockingFailureException_전파() {
+        // 다른 코드 경로(예: 자동 배치, 결제 confirm 흐름)가 같은 Payment 를 동시 수정한 경우를 시뮬레이션.
+        // findByIdForUpdate 는 정상 반환하지만, 감사 로그 기록 시점에 @Version 충돌이 발생.
+        // 주의: 이 시점엔 이미 Toss 호출이 일어났을 수 있음 — 그래서 1차 방어가 PESSIMISTIC_WRITE 인 이유.
+        Payment p = Payment.builder()
+                .id(200L).userId(10L).applicationId(100L).matchingId(null)
+                .orderId("ord_optlock").paymentKey("pk_optlock").amount(150_000)
+                .status(PaymentStatus.CONFIRMED).build();
+        when(paymentRepository.findByIdForUpdate(200L)).thenReturn(Optional.of(p));
+        when(tossPaymentService.cancelPayment(eq("pk_optlock"), anyString())).thenReturn(true);
+        org.mockito.Mockito.doThrow(new OptimisticLockingFailureException("version mismatch"))
+                .when(auditLogService).record(
+                        eq(99L), eq(AdminActionType.PAYMENT_REFUND),
+                        eq("PAYMENT"), eq(200L), anyString(), anyMap());
+
+        AdminPaymentService svc = new AdminPaymentService(
+                paymentRepository, matchingRepository, userRepository,
+                tossPaymentService, auditLogService, props(true));
+
+        assertThatThrownBy(() -> svc.refundPayment(200L, 99L, "낙관적 잠금 충돌 시나리오"))
+                .isInstanceOf(OptimisticLockingFailureException.class);
     }
 }
