@@ -1,5 +1,6 @@
 package com.devmatch.entity;
 
+import com.devmatch.exception.AlreadyDeletedException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -56,7 +57,7 @@ public class Comment {
 
     public void softDelete(String reason, Long adminId) {
         if (isDeleted()) {
-            throw new IllegalStateException("이미 삭제된 댓글입니다");
+            throw new AlreadyDeletedException("이미 삭제된 댓글입니다");
         }
         this.deleted = true;
         this.deletionReason = reason;

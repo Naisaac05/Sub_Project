@@ -1,5 +1,6 @@
 package com.devmatch.entity;
 
+import com.devmatch.exception.AlreadyDeletedException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,12 +30,12 @@ class PostSoftDeleteTest {
     }
 
     @Test
-    void softDelete_이미_삭제된_게시물_재호출은_IllegalStateException() {
+    void softDelete_이미_삭제된_게시물_재호출은_AlreadyDeletedException() {
         Post post = newPost();
         post.softDelete("사유1사유1사유1사유1", 1L);
 
         assertThatThrownBy(() -> post.softDelete("사유2사유2사유2사유2", 2L))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(AlreadyDeletedException.class)
                 .hasMessageContaining("이미 삭제된 게시물");
     }
 }

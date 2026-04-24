@@ -226,8 +226,8 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(e.getMessage()));
     }
 
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<ApiResponse<Void>> handleIllegalState(IllegalStateException e) {
+    @ExceptionHandler(AlreadyDeletedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAlreadyDeleted(AlreadyDeletedException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.error(e.getMessage()));
     }

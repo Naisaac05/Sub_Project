@@ -84,7 +84,9 @@ public class AdminPostService {
         Map<String, Object> metadata = new HashMap<>();
         metadata.put("title", post.getTitle());
         metadata.put("category", post.getCategory());
-        metadata.put("authorId", post.getAuthor() != null ? post.getAuthor().getId() : null);
+        if (post.getAuthor() != null) {
+            metadata.put("authorId", post.getAuthor().getId());
+        }
         metadata.put("commentCount", post.getCommentCount());
 
         auditLogService.record(adminId, AdminActionType.POST_DELETE,
@@ -112,7 +114,9 @@ public class AdminPostService {
 
         Map<String, Object> metadata = new HashMap<>();
         metadata.put("postId", postId);
-        metadata.put("authorId", comment.getAuthor() != null ? comment.getAuthor().getId() : null);
+        if (comment.getAuthor() != null) {
+            metadata.put("authorId", comment.getAuthor().getId());
+        }
         metadata.put("content", comment.getContent());
 
         auditLogService.record(adminId, AdminActionType.COMMENT_DELETE,

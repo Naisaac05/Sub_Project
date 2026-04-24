@@ -1,5 +1,6 @@
 package com.devmatch.entity;
 
+import com.devmatch.exception.AlreadyDeletedException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,12 +27,12 @@ class CommentSoftDeleteTest {
     }
 
     @Test
-    void softDelete_이미_삭제된_댓글_재호출은_IllegalStateException() {
+    void softDelete_이미_삭제된_댓글_재호출은_AlreadyDeletedException() {
         Comment c = newComment();
         c.softDelete("사유1사유1사유1사유1", 1L);
 
         assertThatThrownBy(() -> c.softDelete("사유2사유2사유2사유2", 2L))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(AlreadyDeletedException.class)
                 .hasMessageContaining("이미 삭제된 댓글");
     }
 }
