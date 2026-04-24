@@ -16,6 +16,7 @@ import com.devmatch.repository.CommentRepository;
 import com.devmatch.repository.PostLikeRepository;
 import com.devmatch.repository.PostRepository;
 import com.devmatch.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,6 +64,9 @@ public class PostService {
     public PostResponse getPost(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        if (post.isDeleted()) {
+            throw new EntityNotFoundException("게시물을 찾을 수 없습니다");
+        }
 
         post.incrementViewCount();
         return PostResponse.from(post, postLikeRepository.existsByPostIdAndUserId(postId, userId));
@@ -72,6 +76,9 @@ public class PostService {
     public PostResponse updatePost(Long userId, Long postId, PostCreateRequest request) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        if (post.isDeleted()) {
+            throw new EntityNotFoundException("게시물을 찾을 수 없습니다");
+        }
 
         if (!post.getAuthor().getId().equals(userId)) {
             throw new UnauthorizedPostException("본인이 작성한 게시글만 수정할 수 있습니다.");
@@ -85,6 +92,9 @@ public class PostService {
     public void deletePost(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        if (post.isDeleted()) {
+            throw new EntityNotFoundException("게시물을 찾을 수 없습니다");
+        }
 
         if (!post.getAuthor().getId().equals(userId)) {
             throw new UnauthorizedPostException("본인이 작성한 게시글만 삭제할 수 있습니다.");
@@ -97,6 +107,9 @@ public class PostService {
     public PostResponse toggleLike(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        if (post.isDeleted()) {
+            throw new EntityNotFoundException("게시물을 찾을 수 없습니다");
+        }
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
@@ -121,6 +134,9 @@ public class PostService {
     public CommentResponse createComment(Long userId, Long postId, CommentCreateRequest request) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("게시글을 찾을 수 없습니다."));
+        if (post.isDeleted()) {
+            throw new EntityNotFoundException("게시물을 찾을 수 없습니다");
+        }
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
@@ -152,6 +168,10 @@ public class PostService {
 
         if (!comment.getPost().getId().equals(postId)) {
             throw new CommentNotFoundException("해당 게시글의 댓글이 아닙니다.");
+        }
+
+        if (comment.isDeleted()) {
+            throw new EntityNotFoundException("댓글을 찾을 수 없습니다");
         }
 
         if (!comment.getAuthor().getId().equals(userId)) {
