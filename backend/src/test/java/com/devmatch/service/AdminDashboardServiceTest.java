@@ -80,6 +80,45 @@ class AdminDashboardServiceTest {
         assertThat(res.kpi().currentMonthRevenue().deltaFromLastMonth()).isEqualTo(150_000L);
     }
 
+    @Test
+    void auditLogFeed_formats_description_for_each_action_type() {
+        var admin = com.devmatch.entity.User.builder()
+                .id(1L).email("a@d").name("관리자A")
+                .role(com.devmatch.entity.Role.ADMIN)
+                .status(UserStatus.ACTIVE).build();
+        var log = com.devmatch.entity.AdminAuditLog.builder()
+                .id(7L).adminId(1L)
+                .actionType(com.devmatch.entity.AdminActionType.PAYMENT_REFUND)
+                .targetType("PAYMENT").targetId(123L).reason("중복")
+                .metadata(null).createdAt(LocalDateTime.of(2026,4,24,9,0)).build();
+        when(auditLogRepository.findTop10ByOrderByCreatedAtDesc()).thenReturn(List.of(log));
+        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(admin));
+
+        var res = service.getAuditLogFeed();
+
+        assertThat(res.items()).hasSize(1);
+        var item = res.items().get(0);
+        assertThat(item.adminName()).isEqualTo("관리자A");
+        assertThat(item.description()).isEqualTo("결제 #123 환불");
+        assertThat(item.targetHref()).isEqualTo("/admin/payments/123");
+    }
+
+    @Test
+    void auditLogFeed_falls_back_when_admin_deleted() {
+        var log = com.devmatch.entity.AdminAuditLog.builder()
+                .id(8L).adminId(999L)
+                .actionType(com.devmatch.entity.AdminActionType.POST_DELETE)
+                .targetType("POST").targetId(45L).createdAt(LocalDateTime.now()).build();
+        when(auditLogRepository.findTop10ByOrderByCreatedAtDesc()).thenReturn(List.of(log));
+        when(userRepository.findById(999L)).thenReturn(java.util.Optional.empty());
+
+        var res = service.getAuditLogFeed();
+
+        assertThat(res.items().get(0).adminName()).isEqualTo("(삭제된 관리자)");
+        assertThat(res.items().get(0).description()).isEqualTo("게시물 #45 삭제");
+        assertThat(res.items().get(0).targetHref()).isEqualTo("/admin/posts/45");
+    }
+
     private void stubZeroBase() {
         when(userRepository.countByStatus(any())).thenReturn(0L);
         when(userRepository.countByStatusAndCreatedAtBetween(any(), any(), any())).thenReturn(0L);

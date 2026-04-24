@@ -128,4 +128,53 @@ public class AdminDashboardService {
         }
         return out;
     }
+
+    public com.devmatch.dto.admin.dashboard.AdminAuditLogFeedResponse getAuditLogFeed() {
+        var logs = auditLogRepository.findTop10ByOrderByCreatedAtDesc();
+        var items = logs.stream().map(log -> {
+            String adminName = userRepository.findById(log.getAdminId())
+                    .map(com.devmatch.entity.User::getName)
+                    .orElse("(삭제된 관리자)");
+            return new com.devmatch.dto.admin.dashboard.AdminAuditLogFeedResponse.Item(
+                    log.getId(),
+                    adminName,
+                    log.getActionType(),
+                    formatDescription(log),
+                    formatTargetHref(log),
+                    log.getCreatedAt()
+            );
+        }).toList();
+        return new com.devmatch.dto.admin.dashboard.AdminAuditLogFeedResponse(items);
+    }
+
+    static String formatDescription(com.devmatch.entity.AdminAuditLog log) {
+        long id = log.getTargetId();
+        return switch (log.getActionType()) {
+            case USER_ROLE_CHANGE    -> "회원 #" + id + " 역할 변경";
+            case USER_DEACTIVATE     -> "회원 #" + id + " 비활성화";
+            case USER_REACTIVATE     -> "회원 #" + id + " 재활성화";
+            case USER_DELETE         -> "회원 #" + id + " 삭제";
+            case USER_PASSWORD_RESET -> "회원 #" + id + " 비밀번호 초기화";
+            case USER_MENTOR_SWAP    -> "회원 #" + id + " 멘토 교체";
+            case ADMIN_CREATE        -> "관리자 계정 #" + id + " 생성";
+            case PAYMENT_REFUND      -> "결제 #" + id + " 환불";
+            case POST_DELETE         -> "게시물 #" + id + " 삭제";
+            case COMMENT_DELETE      -> "댓글 #" + id + " 삭제";
+            case MENTOR_APPROVE      -> "멘토 #" + id + " 승인";
+            case MENTOR_REJECT       -> "멘토 #" + id + " 거절";
+        };
+    }
+
+    static String formatTargetHref(com.devmatch.entity.AdminAuditLog log) {
+        long id = log.getTargetId();
+        return switch (log.getTargetType()) {
+            case "USER"    -> "/admin/users/" + id;
+            case "PAYMENT" -> "/admin/payments/" + id;
+            case "POST"    -> "/admin/posts/" + id;
+            case "COMMENT" -> "/admin/posts";
+            case "MENTOR"  -> "/admin/mentor/" + id;
+            case "ADMIN"   -> "/admin/admins";
+            default        -> "/admin";
+        };
+    }
 }
