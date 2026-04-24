@@ -46,7 +46,7 @@ class AdminUserServiceTest {
         User u = userOf(7L, Role.MENTEE, UserStatus.ACTIVE);
         when(userRepository.findById(7L)).thenReturn(Optional.of(u));
         when(paymentRepository.countByUserId(7L)).thenReturn(3L);
-        when(postRepository.countByAuthor_Id(7L)).thenReturn(12L);
+        when(postRepository.countByAuthor_IdAndDeletedFalse(7L)).thenReturn(12L);
         when(mentorProfileRepository.findByUserId(7L)).thenReturn(Optional.empty());
 
         var detail = service.getDetail(7L);
