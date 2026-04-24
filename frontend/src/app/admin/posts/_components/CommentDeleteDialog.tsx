@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -35,6 +35,13 @@ export function CommentDeleteDialog({ open, onOpenChange, postId, commentId, onS
     defaultValues: { reason: "" },
   });
   const len = watch("reason")?.length ?? 0;
+
+  useEffect(() => {
+    if (!open) {
+      reset({ reason: "" });
+      setSubmitting(false);
+    }
+  }, [open, reset]);
 
   async function onSubmit(v: FormValues) {
     setSubmitting(true);
