@@ -23,11 +23,16 @@ export default function AdminPostDetailPage() {
   const [detail, setDetail] = useState<AdminPostDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryTick, setRetryTick] = useState(0);
   const [postDelOpen, setPostDelOpen] = useState(false);
   const [commentDelTarget, setCommentDelTarget] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+    if (!Number.isFinite(id) || id <= 0) {
+      setError("잘못된 경로입니다");
+      setLoading(false);
+      return;
+    }
     let ignore = false;
     setLoading(true);
     getAdminPost(id)
@@ -40,10 +45,23 @@ export default function AdminPostDetailPage() {
       })
       .finally(() => { if (!ignore) setLoading(false); });
     return () => { ignore = true; };
-  }, [id]);
+  }, [id, retryTick]);
 
   if (loading) return <div className="space-y-4"><Skeleton className="h-8 w-48" /><Skeleton className="h-64 w-full" /></div>;
-  if (error)   return <Alert variant="destructive"><AlertDescription>{error}</AlertDescription></Alert>;
+  if (error) return (
+    <Alert variant="destructive">
+      <AlertDescription className="flex items-center justify-between gap-4">
+        <span>{error}</span>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => { setError(null); setRetryTick((t) => t + 1); }}
+        >
+          재시도
+        </Button>
+      </AlertDescription>
+    </Alert>
+  );
   if (!detail) return null;
 
   const onCommentSoftDeleted = (updated: AdminPostCommentItem) => {
