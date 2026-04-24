@@ -6,6 +6,8 @@ import * as api from '@/lib/admin/users';
 import type { UserResponse, UserRole, UserStatus } from '@/lib/types';
 import { PrimaryButton } from '@/components/admin/Modal';
 import { CreateAdminModal } from './_CreateAdminModal';
+import { AdminListHeader } from '@/components/admin/AdminListHeader';
+import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge';
 
 const ROLE_KO: Record<UserRole, string> = {
   MENTEE: '멘티', MENTOR: '멘토', ADMIN: '관리자', SUPER_ADMIN: '슈퍼관리자',
@@ -62,13 +64,11 @@ export default function AdminsPage() {
 
   return (
     <div className="space-y-4">
-      <header className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">관리자 계정</h1>
-          <p className="text-sm text-slate-600">ADMIN/SUPER_ADMIN 계정을 조회하고 신규 ADMIN 을 생성합니다.</p>
-        </div>
-        <PrimaryButton onClick={() => setShowCreate(true)}>+ 관리자 추가</PrimaryButton>
-      </header>
+      <AdminListHeader
+        title="관리자 계정"
+        description="ADMIN/SUPER_ADMIN 계정을 조회하고 신규 ADMIN 을 생성합니다."
+        actions={<PrimaryButton onClick={() => setShowCreate(true)}>+ 관리자 추가</PrimaryButton>}
+      />
 
       {loading && <div className="text-sm text-slate-500 py-6 text-center">불러오는 중…</div>}
       {err && <div className="rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-700">에러: {err}</div>}
@@ -96,14 +96,10 @@ export default function AdminsPage() {
                   <td className="px-4 py-3 text-sm text-slate-700">{a.email}</td>
                   <td className="px-4 py-3 text-sm text-slate-700">{a.jobTitle ?? '-'}</td>
                   <td className="px-4 py-3">
-                    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${ROLE_BADGE[a.role]}`}>
-                      {ROLE_KO[a.role]}
-                    </span>
+                    <AdminStatusBadge label={ROLE_KO[a.role]} className={ROLE_BADGE[a.role]} />
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${STATUS_BADGE[a.status]}`}>
-                      {STATUS_KO[a.status]}
-                    </span>
+                    <AdminStatusBadge label={STATUS_KO[a.status]} className={STATUS_BADGE[a.status]} />
                   </td>
                   <td className="px-4 py-3 text-sm text-slate-700">{a.createdAt.slice(0, 10)}</td>
                 </tr>
