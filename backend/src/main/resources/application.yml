@@ -49,7 +49,7 @@ jwt:
   access-token-expiration: 3600000 # 1시간 (ms)
   refresh-token-expiration: 604800000 # 7일 (ms)
 
-# ===== Auth Cookie =====
+# ===== Auth Cookie / 관리자 환불 =====
 app:
   auth:
     refresh-cookie:
@@ -58,6 +58,8 @@ app:
       secure: ${REFRESH_COOKIE_SECURE:false} # 운영에서는 true (HTTPS)
       same-site: Strict
     reuse-window-seconds: 300 # 재사용 탐지 윈도우 (5분)
+  payment:
+    toss-cancel-enabled: ${TOSS_CANCEL_ENABLED:false} # 기본 false (local/dev). prod 는 application-prod.yml 에서 true.
 
 # ===== Swagger =====
 springdoc:

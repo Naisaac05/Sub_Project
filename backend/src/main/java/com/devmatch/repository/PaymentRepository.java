@@ -3,11 +3,16 @@ package com.devmatch.repository;
 import com.devmatch.entity.Payment;
 import com.devmatch.entity.PaymentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface PaymentRepository extends JpaRepository<Payment, Long> {
+public interface PaymentRepository extends JpaRepository<Payment, Long>,
+        JpaSpecificationExecutor<Payment> {
 
     List<Payment> findByUserIdOrderByCreatedAtDesc(Long userId);
 
@@ -23,4 +28,24 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     long countByUserIdAndStatus(Long userId, PaymentStatus status);
 
     long countByUserId(Long userId);
+
+    // ===== Phase II 관리자 결제 관리 =====
+
+    @Query("""
+           select coalesce(sum(p.amount), 0) from Payment p
+            where p.status = :status
+              and p.createdAt >= :from and p.createdAt < :toExclusive
+           """)
+    long sumAmountByStatusAndCreatedBetween(@Param("status") PaymentStatus status,
+                                            @Param("from") LocalDateTime from,
+                                            @Param("toExclusive") LocalDateTime toExclusive);
+
+    @Query("""
+           select count(p) from Payment p
+            where p.status = :status
+              and p.createdAt >= :from and p.createdAt < :toExclusive
+           """)
+    long countByStatusAndCreatedBetween(@Param("status") PaymentStatus status,
+                                        @Param("from") LocalDateTime from,
+                                        @Param("toExclusive") LocalDateTime toExclusive);
 }

@@ -9,6 +9,8 @@ import { DeactivateOrDeleteModal } from './_DeactivateOrDeleteModal';
 import { ResetPasswordModal } from './_ResetPasswordModal';
 import { SwapMentorModal } from './_SwapMentorModal';
 import { CancelButton, PrimaryButton } from '@/components/admin/Modal';
+import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge';
+import { AdminListHeader } from '@/components/admin/AdminListHeader';
 
 const ROLE_KO: Record<UserRole, string> = {
   MENTEE: '멘티', MENTOR: '멘토', ADMIN: '관리자', SUPER_ADMIN: '슈퍼관리자',
@@ -73,24 +75,22 @@ export default function AdminUserDetailPage() {
 
   return (
     <div className="space-y-4">
-      <header className="flex items-start justify-between">
-        <div>
+      <AdminListHeader
+        title={user.name}
+        preTitle={
           <button onClick={() => router.back()} className="text-xs text-slate-500 hover:text-slate-900 mb-1">
             ← 목록
           </button>
-          <h1 className="text-2xl font-bold text-slate-900">{user.name}</h1>
+        }
+        subtitle={
           <div className="mt-1 flex items-center gap-2 text-sm text-slate-600">
             <span>{user.email}</span>
             <span className="text-slate-300">·</span>
-            <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${ROLE_BADGE[user.role]}`}>
-              {ROLE_KO[user.role]}
-            </span>
-            <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${STATUS_BADGE[user.status]}`}>
-              {STATUS_KO[user.status]}
-            </span>
+            <AdminStatusBadge label={ROLE_KO[user.role]} className={ROLE_BADGE[user.role]} />
+            <AdminStatusBadge label={STATUS_KO[user.status]} className={STATUS_BADGE[user.status]} />
           </div>
-        </div>
-      </header>
+        }
+      />
 
       <section className="rounded-lg border border-slate-200 bg-white p-4">
         <h2 className="mb-2 font-semibold text-slate-900">기본 정보</h2>
