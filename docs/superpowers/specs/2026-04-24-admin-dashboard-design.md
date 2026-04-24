@@ -122,22 +122,26 @@
 
 ```
 월 N 순매출
-  = sum(payments.amount where status='PAID' and approved_at in 월 N)
-  - sum(payments.refund_amount where cancelled_at in 월 N)
+  = sum(payments.amount where status='CONFIRMED' and created_at in 월 N)
+  - sum(payments.amount where status='CANCELLED' and cancelled_at in 월 N)
 ```
 
 → 원결제 달이 아니라 **환불 달에 차감**. 월별 캐시 플로우 관점.
+
+> **엔티티 전제**:
+> - `PaymentStatus` enum 값: `PENDING` / **`CONFIRMED`** / `CANCELLED` / `FAILED` (스펙 초안의 `PAID` 는 오기, 실제는 `CONFIRMED`).
+> - Payment 엔티티에 별도 `approved_at`/`refund_amount` 컬럼은 **없음**. 결제 승인 시점은 `created_at` (toss 플로우상 row 생성 직후 확정), 환불 금액은 전액 환불이 전제이므로 `payments.amount` 자체를 환불금액으로 합산.
 
 **MTD vs Rolling — 각 지표의 시간 범위:**
 
 | 지표 | 시간 범위 | 기준 컬럼 |
 |------|----------|----------|
 | `totalActiveUsers` | 현재 시점 (누적) | `users.status = ACTIVE` |
-| `currentMonthRevenue` | **MTD** (이번달 1일 00:00 ~ 지금, Asia/Seoul) | `payments.approved_at`, `cancelled_at` |
+| `currentMonthRevenue` | **MTD** (이번달 1일 00:00 ~ 지금, Asia/Seoul) | `payments.created_at` (CONFIRMED), `cancelled_at` (CANCELLED) |
 | `totalAcceptedMatchings` | 누적 + MTD 신규 | `matchings.created_at / status` |
 | `approvedMentors` | 누적 + 전체 PENDING | `mentor_profiles.status` |
 | `signupTrend` | **Rolling 30일** | `users.created_at` |
-| `revenueTrend` | **Rolling 12개월** | `payments.approved_at / cancelled_at` |
+| `revenueTrend` | **Rolling 12개월** | `payments.created_at` (CONFIRMED) / `cancelled_at` (CANCELLED) |
 
 ### 3.4 Repository 쿼리 (신규 메서드)
 
@@ -152,14 +156,14 @@ List<SignupDailyRow> countDailySignupsSince(@Param("from") LocalDateTime from);
 
 // PaymentRepository
 @Query("select coalesce(sum(p.amount), 0) from Payment p " +
-       "where p.status = com.devmatch.entity.PaymentStatus.PAID " +
-       "and p.approvedAt between :f and :t")
-long sumPaidAmountBetween(@Param("f") LocalDateTime f, @Param("t") LocalDateTime t);
+       "where p.status = com.devmatch.entity.PaymentStatus.CONFIRMED " +
+       "and p.createdAt between :f and :t")
+long sumConfirmedAmountBetween(@Param("f") LocalDateTime f, @Param("t") LocalDateTime t);
 
-@Query("select coalesce(sum(p.refundAmount), 0) from Payment p " +
+@Query("select coalesce(sum(p.amount), 0) from Payment p " +
        "where p.status = com.devmatch.entity.PaymentStatus.CANCELLED " +
        "and p.cancelledAt between :f and :t")
-long sumRefundAmountCancelledBetween(@Param("f") LocalDateTime f, @Param("t") LocalDateTime t);
+long sumCancelledAmountBetween(@Param("f") LocalDateTime f, @Param("t") LocalDateTime t);
 
 // 월별 순매출: approved_at 기준 grossRevenue + cancelled_at 기준 refundAmount 를
 // 12개월 row 로 조합하여 반환. 구현 시 2개의 쿼리를 month 키로 머지.
@@ -187,13 +191,19 @@ List<AdminAuditLog> findTop10ByOrderByCreatedAtDesc();
 ```java
 // AdminDashboardService.formatDescription(AdminAuditLog log)
 String desc = switch (log.getActionType()) {
-  case CHANGE_USER_ROLE -> "회원 #%d 역할 변경".formatted(log.getTargetId());
-  case SUSPEND_USER     -> "회원 #%d 정지".formatted(log.getTargetId());
-  case REFUND_PAYMENT   -> "결제 #%d 환불".formatted(log.getTargetId());
-  case DELETE_POST      -> "게시물 #%d 삭제".formatted(log.getTargetId());
-  case DELETE_COMMENT   -> "댓글 #%d 삭제".formatted(log.getTargetId());
-  // 새 enum 값 추가 시 여기도 업데이트 (AdminActionType.java 에 TODO 주석)
-  default               -> "%s 실행".formatted(log.getActionType().name());
+  case USER_ROLE_CHANGE    -> "회원 #%d 역할 변경".formatted(log.getTargetId());
+  case USER_DEACTIVATE     -> "회원 #%d 비활성화".formatted(log.getTargetId());
+  case USER_REACTIVATE     -> "회원 #%d 재활성화".formatted(log.getTargetId());
+  case USER_DELETE         -> "회원 #%d 삭제".formatted(log.getTargetId());
+  case USER_PASSWORD_RESET -> "회원 #%d 비밀번호 초기화".formatted(log.getTargetId());
+  case USER_MENTOR_SWAP    -> "회원 #%d 멘토 교체".formatted(log.getTargetId());
+  case ADMIN_CREATE        -> "관리자 계정 #%d 생성".formatted(log.getTargetId());
+  case PAYMENT_REFUND      -> "결제 #%d 환불".formatted(log.getTargetId());
+  case POST_DELETE         -> "게시물 #%d 삭제".formatted(log.getTargetId());
+  case COMMENT_DELETE      -> "댓글 #%d 삭제".formatted(log.getTargetId());
+  case MENTOR_APPROVE      -> "멘토 #%d 승인".formatted(log.getTargetId());
+  case MENTOR_REJECT       -> "멘토 #%d 거절".formatted(log.getTargetId());
+  // 새 enum 값 추가 시 여기도 업데이트 (AdminActionType.java 에 주석 추가됨)
 };
 
 String href = switch (log.getTargetType()) {
@@ -201,11 +211,13 @@ String href = switch (log.getTargetType()) {
   case "PAYMENT" -> "/admin/payments/" + log.getTargetId();
   case "POST"    -> "/admin/posts/" + log.getTargetId();
   case "COMMENT" -> "/admin/posts";  // 댓글은 게시물 리스트로
+  case "MENTOR"  -> "/admin/mentor/" + log.getTargetId();
+  case "ADMIN"   -> "/admin/admins";
   default        -> "/admin";
 };
 ```
 
-> `AdminActionType.java` 파일에 `// 주의: AdminDashboardService.formatDescription 도 업데이트` 주석을 추가하여 새 액션 추가 시 놓치지 않도록.
+> `AdminActionType.java` 파일에 이미 "새 값 추가 시 스펙 문서 업데이트" 주석이 있음 — 이 플랜 구현 시 "AdminDashboardService.formatDescription 도 업데이트" 문구 추가.
 
 ### 3.6 권한
 
@@ -355,7 +367,7 @@ useEffect(() => {
 | audit_log target 이 삭제된 리소스 | `targetHref` 그대로 링크 유지 (목적지가 404 떠도 기록은 유지) |
 | 지난달 0 → % 분모 0 | `deltaPercent = null` → UI "—" |
 | 타임존 | `Asia/Seoul`. "이번달" 경계는 `LocalDate.now(ZoneId.of("Asia/Seoul"))` |
-| `approved_at` NULL 인 PAID | Plan 단계에서 Payment 엔티티 검토 후 확정. Fallback 은 `created_at`, 없으면 무시. |
+| ~~`approved_at` NULL 인 PAID~~ | (해결됨) `approved_at` 컬럼 자체가 없음. CONFIRMED 집계 기준은 `created_at` 으로 확정. |
 
 ### 5.3 에러 핸들링
 
