@@ -86,38 +86,48 @@ export default function AdminPaymentDetailPage({ params }: { params: { id: strin
 
       {detail && !loading && (
         <>
-          <div className="space-y-1">
-            <div className="flex items-center gap-3">
-              <h1 className="font-mono text-2xl font-semibold">{detail.orderId}</h1>
-              <AdminStatusBadge
-                label={STATUS_LABELS[detail.status]}
-                className={STATUS_CLASSNAMES[detail.status]}
-              />
+          <div className="flex items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-3">
+                <h1 className="font-mono text-2xl font-semibold">{detail.orderId}</h1>
+                <AdminStatusBadge
+                  label={STATUS_LABELS[detail.status]}
+                  className={STATUS_CLASSNAMES[detail.status]}
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                결제일 {new Date(detail.createdAt).toLocaleString("ko-KR")} ·{" "}
+                금액 {formatKRW(detail.amount)}
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              결제일 {new Date(detail.createdAt).toLocaleString("ko-KR")} ·{" "}
-              금액 {formatKRW(detail.amount)}
-            </p>
+
+            {detail.status === "CANCELLED" && (
+              <div className="flex items-center gap-2 rounded-lg border-2 border-red-300 bg-red-50 px-4 py-3 text-red-700 shadow-sm">
+                <span className="text-xl" aria-hidden>🔒</span>
+                <span className="text-base font-bold">재환불 불가</span>
+              </div>
+            )}
+            {detail.status === "PENDING" && (
+              <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700">
+                결제 대기 상태입니다
+              </div>
+            )}
+            {detail.status === "FAILED" && (
+              <div className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700">
+                결제 실패 — 액션 불가
+              </div>
+            )}
           </div>
 
           <PaymentDetailSection detail={detail} />
 
-          <div className="sticky bottom-0 bg-background border-t pt-4 flex justify-end">
-            {detail.status === "CONFIRMED" && (
+          {detail.status === "CONFIRMED" && (
+            <div className="sticky bottom-0 bg-background border-t pt-4 flex justify-end">
               <Button variant="destructive" onClick={() => setRefundOpen(true)}>
                 환불 처리
               </Button>
-            )}
-            {detail.status === "PENDING" && (
-              <p className="text-sm text-muted-foreground">결제 대기 상태입니다</p>
-            )}
-            {detail.status === "FAILED" && (
-              <p className="text-sm text-muted-foreground">결제 실패 — 액션 불가</p>
-            )}
-            {detail.status === "CANCELLED" && (
-              <p className="text-sm text-muted-foreground">🔒 재환불 불가</p>
-            )}
-          </div>
+            </div>
+          )}
 
           <PaymentRefundDialog
             open={refundOpen}
