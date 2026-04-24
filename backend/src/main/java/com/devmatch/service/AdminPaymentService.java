@@ -140,6 +140,22 @@ public class AdminPaymentService {
         );
     }
 
+    /**
+     * 관리자에 의한 결제 환불.
+     *
+     * <p><b>원자성 트레이드오프 (운영 주의):</b> 외부 PG(Toss) 호출은 트랜잭션 외부 부수효과이므로
+     * 본 메서드는 <i>Toss 환불을 먼저 호출한 뒤</i> 내부 DB 상태를 전이시킨다.
+     * Toss 호출 성공 이후 단계({@code payment.cancel}, {@code markProcessedByAdmin},
+     * {@code matching.cancel}, {@code auditLogService.record})에서 예외가 발생하면
+     * {@code @Transactional} 롤백으로 DB 는 원복되지만 <b>Toss 환불은 이미 집행된 상태</b>로 남아
+     * Toss ↔ DB 간 조용한 desync(고아 환불) 가 생긴다.
+     *
+     * <p>이 상황은 {@code log.error} 로 남긴 {@code paymentId}, {@code paymentKey},
+     * {@code adminId} 를 근거로 <b>수동 복구</b>(내부 상태를 CANCELLED 로 맞추거나 Toss 쪽 reverse)
+     * 가 필요하다.
+     *
+     * <p>TODO(Phase III): 정기 reconciliation 잡으로 Toss ↔ DB 불일치(고아 환불 등) 를 자동 탐지/보정.
+     */
     @Transactional
     public AdminPaymentDetailResponse refundPayment(Long paymentId, Long adminId, String reason) {
         var payment = paymentRepository.findByIdForUpdate(paymentId)
@@ -163,42 +179,50 @@ public class AdminPaymentService {
             log.warn("[AdminPayment] toss-cancel-enabled=false — 토스 호출 skip, 내부 상태만 변경 (paymentId={})", paymentId);
         }
 
-        // 3) Payment 상태 전이
-        payment.cancel(reason);
-        payment.markProcessedByAdmin(adminId, LocalDateTime.now());
+        // Toss 호출 이후 단계 — 여기서 예외가 나면 트랜잭션은 롤백되지만 Toss 는 이미 취소됨.
+        // log.error 로 추적 정보를 남겨 운영자가 수동 복구할 수 있게 한다. (자세한 내용은 Javadoc 참조)
+        try {
+            // 3) Payment 상태 전이
+            payment.cancel(reason);
+            payment.markProcessedByAdmin(adminId, LocalDateTime.now());
 
-        // 4) Matching 소프트 캐스케이드
-        boolean matchingAffected = false;
-        Long matchingId = payment.getMatchingId();
-        if (matchingId != null) {
-            var matching = matchingRepository.findById(matchingId).orElse(null);
-            if (matching != null &&
-                    (matching.getStatus() == MatchingStatus.PENDING ||
-                     matching.getStatus() == MatchingStatus.ACCEPTED ||
-                     matching.getStatus() == MatchingStatus.TRIAL)) {
-                matching.cancel(reason);
-                matchingAffected = true;
+            // 4) Matching 소프트 캐스케이드
+            boolean matchingAffected = false;
+            Long matchingId = payment.getMatchingId();
+            if (matchingId != null) {
+                var matching = matchingRepository.findById(matchingId).orElse(null);
+                if (matching != null &&
+                        (matching.getStatus() == MatchingStatus.PENDING ||
+                         matching.getStatus() == MatchingStatus.ACCEPTED ||
+                         matching.getStatus() == MatchingStatus.TRIAL)) {
+                    matching.cancel(reason);
+                    matchingAffected = true;
+                }
             }
-        }
 
-        // 5) 감사 로그
-        Map<String, Object> metadata = new LinkedHashMap<>();
-        metadata.put("refundAmount", payment.getAmount());
-        metadata.put("matchingAffected", matchingAffected);
-        if (matchingId != null) {
-            metadata.put("matchingId", matchingId);
-        }
-        auditLogService.record(
-                adminId,
-                AdminActionType.PAYMENT_REFUND,
-                "PAYMENT",
-                payment.getId(),
-                reason,
-                metadata
-        );
+            // 5) 감사 로그
+            Map<String, Object> metadata = new LinkedHashMap<>();
+            metadata.put("refundAmount", payment.getAmount());
+            metadata.put("matchingAffected", matchingAffected);
+            if (matchingId != null) {
+                metadata.put("matchingId", matchingId);
+            }
+            auditLogService.record(
+                    adminId,
+                    AdminActionType.PAYMENT_REFUND,
+                    "PAYMENT",
+                    payment.getId(),
+                    reason,
+                    metadata
+            );
 
-        log.info("[AdminPayment] 환불 완료 — paymentId={}, adminId={}, matchingAffected={}",
-                paymentId, adminId, matchingAffected);
+            log.info("[AdminPayment] 환불 완료 — paymentId={}, adminId={}, matchingAffected={}",
+                    paymentId, adminId, matchingAffected);
+        } catch (RuntimeException ex) {
+            log.error("[AdminPayment] 토스 환불 성공 후 DB 작업 실패 - 수동 복구 필요. paymentId={}, paymentKey={}, adminId={}",
+                    paymentId, payment.getPaymentKey(), adminId, ex);
+            throw ex;
+        }
 
         return getDetail(paymentId);
     }
