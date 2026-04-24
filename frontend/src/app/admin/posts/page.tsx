@@ -70,6 +70,7 @@ export default function AdminPostsPage() {
   }, []);
 
   useEffect(() => {
+    let ignore = false;
     setLoading(true);
     setError(null);
     listAdminPosts({
@@ -80,13 +81,15 @@ export default function AdminPostsPage() {
       to: toStr || undefined,
       includeDeleted,
     })
-      .then(setData)
+      .then((d) => { if (!ignore) setData(d); })
       .catch((e: unknown) => {
+        if (ignore) return;
         const msg = (e as { response?: { data?: { message?: string } } })
           ?.response?.data?.message ?? "목록을 불러오지 못했습니다";
         setError(msg);
       })
-      .finally(() => setLoading(false));
+      .finally(() => { if (!ignore) setLoading(false); });
+    return () => { ignore = true; };
   }, [page, category, q, fromStr, toStr, includeDeleted]);
 
   return (
