@@ -52,7 +52,7 @@ public class PostService {
     }
 
     public Page<PostResponse> getPosts(Long userId, Pageable pageable) {
-        return postRepository.findAllByOrderByCreatedAtDesc(pageable)
+        return postRepository.findByDeletedFalseOrderByCreatedAtDesc(pageable)
                 .map(post -> PostResponse.from(
                         post,
                         postLikeRepository.existsByPostIdAndUserId(post.getId(), userId)
@@ -140,7 +140,7 @@ public class PostService {
             throw new PostNotFoundException("게시글을 찾을 수 없습니다.");
         }
 
-        return commentRepository.findByPostIdOrderByCreatedAtAsc(postId).stream()
+        return commentRepository.findByPostIdAndDeletedFalseOrderByCreatedAtAsc(postId).stream()
                 .map(CommentResponse::from)
                 .collect(Collectors.toList());
     }
