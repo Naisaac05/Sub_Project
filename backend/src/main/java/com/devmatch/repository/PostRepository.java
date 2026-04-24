@@ -13,4 +13,9 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
 
     // 특정 유저가 작성한 비삭제 게시물 수 (사용자 프로필 카운트)
     long countByAuthor_IdAndDeletedFalse(Long userId);
+
+    @org.springframework.data.jpa.repository.Query(
+        "SELECT DISTINCT p.category FROM Post p WHERE p.deleted = false ORDER BY p.category"
+    )
+    java.util.List<String> findDistinctCategories();
 }
