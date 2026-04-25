@@ -4,42 +4,36 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { confirmApplicationPayment } from '@/lib/application';
 
 function SuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const applicationId = searchParams.get('applicationId');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (applicationId) {
-      fetch(`http://localhost:8080/api/applications/${applicationId}/confirm-payment`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Payment confirmation failed');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log('Payment confirmed and mentor assigned:', data);
-          setLoading(false);
-          setTimeout(() => {
-            router.push('/mypage');
-          }, 2000);
-        })
-        .catch((error) => {
-          console.error(error);
-          setLoading(false);
-        });
-    } else {
+    if (!applicationId) {
       router.push('/');
+      return;
     }
+
+    const confirmPayment = async () => {
+      try {
+        await confirmApplicationPayment(Number(applicationId));
+        setLoading(false);
+        setTimeout(() => {
+          router.push('/mypage');
+        }, 2000);
+      } catch (err) {
+        console.error(err);
+        setError('Payment was completed, but automatic matching failed. Please refresh this page or contact an admin.');
+        setLoading(false);
+      }
+    };
+
+    void confirmPayment();
   }, [applicationId, router]);
 
   return (
@@ -47,17 +41,25 @@ function SuccessContent() {
       {loading ? (
         <>
           <div className="mx-auto mb-6 h-16 w-16 animate-spin rounded-full border-4 border-blue-100 border-t-blue-500" />
-          <h2 className="mb-2 text-2xl font-bold text-gray-900">결제 확인 중...</h2>
-          <p className="text-gray-500">결제 정보를 확인하고 멘토를 배정하고 있습니다.</p>
+          <h2 className="mb-2 text-2xl font-bold text-gray-900">Confirming payment...</h2>
+          <p className="text-gray-500">We are confirming your payment and creating your mentor matching.</p>
+        </>
+      ) : error ? (
+        <>
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-3xl font-bold text-red-500">
+            !
+          </div>
+          <h2 className="mb-2 text-2xl font-bold text-gray-900">Matching failed</h2>
+          <p className="mb-6 text-gray-500">{error}</p>
         </>
       ) : (
         <>
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl text-green-500">
-            ✓
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl font-bold text-green-500">
+            OK
           </div>
-          <h2 className="mb-2 text-2xl font-bold text-gray-900">신청 완료!</h2>
-          <p className="mb-6 text-gray-500">성공적으로 접수되었습니다. 멘토님의 승인을 기다려주세요.</p>
-          <p className="text-sm text-gray-400">잠시 후 마이페이지로 이동합니다...</p>
+          <h2 className="mb-2 text-2xl font-bold text-gray-900">Matching complete</h2>
+          <p className="mb-6 text-gray-500">Your application has been received and a mentor has been matched automatically.</p>
+          <p className="text-sm text-gray-400">Moving to My Page...</p>
         </>
       )}
     </div>

@@ -5,6 +5,7 @@ import type {
   MatchingRequest,
   MatchingResponse,
   MatchingAcceptRequest,
+  ApplicationResponse,
 } from './types';
 
 /** 테스트 결과 기반 멘토 추천 */
@@ -36,5 +37,11 @@ export async function getMyMatchingsAsMentee(): Promise<ApiResponse<MatchingResp
 /** 멘토 입장 매칭 요청 목록 */
 export async function getMyMatchingsAsMentor(): Promise<ApiResponse<MatchingResponse[]>> {
   const res = await apiClient.get<ApiResponse<MatchingResponse[]>>('/matching/mentor');
+  return res.data;
+}
+
+/** 매칭에 연결된 멘티 신청서 상세 조회 */
+export async function getMatchingApplication(matchingId: number): Promise<ApiResponse<ApplicationResponse>> {
+  const res = await apiClient.get<ApiResponse<ApplicationResponse>>(`/matching/${matchingId}/application`);
   return res.data;
 }

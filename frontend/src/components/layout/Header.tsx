@@ -12,9 +12,7 @@ const navItems = [
     href: '/mentors',
     hasMegamenu: true
   },
-  { label: '실력 테스트', href: '/tests' },
-  { label: '수강 신청', href: '/apply' },
-  { label: 'LMS', href: '/lms/dashboard' },
+  { label: '실력 테스트', href: '/tests' },  { label: 'LMS', href: '/lms/dashboard' },
   { label: '커뮤니티', href: '/community' },
   { label: 'FAQ', href: '/faq' },
 ];
