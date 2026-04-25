@@ -33,6 +33,7 @@ class MentorChangeRequestTest {
         r.reject(99L, "객관적 사유가 부족합니다");
         assertThat(r.getStatus()).isEqualTo(MentorChangeRequestStatus.REJECTED);
         assertThat(r.getRejectReason()).isEqualTo("객관적 사유가 부족합니다");
+        assertThat(r.getDecidedByAdminId()).isEqualTo(99L);
         assertThat(r.getRespondedAt()).isNotNull();
     }
 
