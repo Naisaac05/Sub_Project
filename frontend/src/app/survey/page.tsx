@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { confirmApplicationPayment } from '@/lib/application';
 import {
   ArrowRight,
   ArrowLeft,
@@ -250,10 +251,7 @@ function SurveyContent() {
   const applicationId = searchParams.get('applicationId');
   useEffect(() => {
     if (applicationId) {
-      fetch(`http://localhost:8080/api/applications/${applicationId}/confirm-payment`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      }).catch(console.error);
+      confirmApplicationPayment(Number(applicationId)).catch(console.error);
     }
   }, [applicationId]);
   const [step, setStep] = useState(1);
