@@ -1193,14 +1193,15 @@ export interface AuditLogResponse {
 }
 
 // ─── API ───
+// 주의: apiClient baseURL 이 '/api' 이므로 호출부는 '/admin/...' 으로 시작 (`/api` 중복 금지)
 
 export async function fetchDashboard(): Promise<DashboardResponse> {
-  const res = await apiClient.get<ApiResponse<DashboardResponse>>('/api/admin/dashboard');
+  const res = await apiClient.get<ApiResponse<DashboardResponse>>('/admin/dashboard');
   return res.data.data;
 }
 
 export async function fetchAuditLog(): Promise<AuditLogResponse> {
-  const res = await apiClient.get<ApiResponse<AuditLogResponse>>('/api/admin/dashboard/audit-log');
+  const res = await apiClient.get<ApiResponse<AuditLogResponse>>('/admin/dashboard/audit-log');
   return res.data.data;
 }
 ```

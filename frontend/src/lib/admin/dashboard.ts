@@ -72,11 +72,11 @@ export interface AuditLogResponse {
 // ─── API ───
 
 export async function fetchDashboard(): Promise<DashboardResponse> {
-  const res = await apiClient.get<ApiResponse<DashboardResponse>>('/api/admin/dashboard');
+  const res = await apiClient.get<ApiResponse<DashboardResponse>>('/admin/dashboard');
   return res.data.data;
 }
 
 export async function fetchAuditLog(): Promise<AuditLogResponse> {
-  const res = await apiClient.get<ApiResponse<AuditLogResponse>>('/api/admin/dashboard/audit-log');
+  const res = await apiClient.get<ApiResponse<AuditLogResponse>>('/admin/dashboard/audit-log');
   return res.data.data;
 }
