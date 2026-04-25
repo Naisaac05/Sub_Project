@@ -58,3 +58,4 @@
 - [2026-04-21 Pencil MCP — 새 I() 삽입 프레임의 자식이 부모 composite 뷰에서 렌더 안 됨](2026-04-21-pencil-mcp-new-inserts-render-blank.md)
 - [2026-04-24 Admin 게시물 상세 페이지 — 비정수 경로 진입 시 스켈레톤 무한 렌더](2026-04-24-admin-post-detail-nan-id-infinite-skeleton.md)
 - [2026-04-25 Admin 대시보드 — apiClient baseURL 과 중복돼 `/api/api/admin/dashboard` 호출 (500)](2026-04-25-admin-dashboard-double-api-prefix.md)
+- [2026-04-25 Admin 레이아웃 가드가 SUPER_ADMIN 을 거부 — 403 차단](2026-04-25-admin-layout-rejects-super-admin.md)
