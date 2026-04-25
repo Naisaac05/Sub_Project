@@ -3,8 +3,9 @@ package com.devmatch.entity;
 /**
  * 관리자 행위 유형. AdminAuditLog.actionType 에서 사용한다.
  *
- * 새 값 추가 시 반드시 스펙 문서
- * (docs/superpowers/specs/2026-04-22-admin-console-common-design.md) 업데이트.
+ * 새 값 추가 시 반드시 다음을 함께 업데이트:
+ * - 스펙 문서 (docs/superpowers/specs/2026-04-22-admin-console-common-design.md)
+ * - AdminDashboardService.formatDescription (피드 description 포맷)
  */
 public enum AdminActionType {
     // Phase II Common
