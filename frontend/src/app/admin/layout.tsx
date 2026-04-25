@@ -43,7 +43,7 @@ export default function AdminLayout({
   }
 
   // 로그인했지만 관리자가 아님 → 403
-  if (user?.role !== 'ADMIN') {
+  if (user?.role !== 'ADMIN' && user?.role !== 'SUPER_ADMIN') {
     return (
       <div className="min-h-screen bg-slate-50">
         <NotAuthorized />
