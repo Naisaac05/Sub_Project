@@ -48,4 +48,24 @@ public interface UserRepository extends JpaRepository<User, Long> {
                                 @Param("status") UserStatus status,
                                 @Param("q") String q,
                                 Pageable pageable);
+
+    long countByStatus(UserStatus status);
+
+    long countByStatusAndCreatedAtBetween(UserStatus status,
+                                          java.time.LocalDateTime from,
+                                          java.time.LocalDateTime toExclusive);
+
+    /**
+     * 최근 N일 일별 신규 가입 집계.
+     * DATE(created_at) → count 형태의 native-style 쿼리.
+     * H2·MySQL 모두에서 동작하도록 function('date', ...) JPQL 사용.
+     */
+    @Query("""
+           SELECT FUNCTION('DATE', u.createdAt) AS d, COUNT(u) AS c
+             FROM User u
+            WHERE u.createdAt >= :from
+            GROUP BY FUNCTION('DATE', u.createdAt)
+            ORDER BY FUNCTION('DATE', u.createdAt) ASC
+           """)
+    List<Object[]> findDailySignupsSince(@Param("from") java.time.LocalDateTime from);
 }

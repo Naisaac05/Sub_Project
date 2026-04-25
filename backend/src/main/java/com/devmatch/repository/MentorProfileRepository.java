@@ -54,4 +54,5 @@ public interface MentorProfileRepository extends JpaRepository<MentorProfile, Lo
             @Param("keyword") String keyword,
             Pageable pageable);
 
+    long countByStatus(MentorStatus status);
 }

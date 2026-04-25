@@ -248,9 +248,9 @@ export default function Header() {
                           </Link>
                         </>
                       )}
-                      {user.role === 'ADMIN' && (
+                      {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
                         <Link
-                          href="/admin/mentor"
+                          href="/admin/dashboard"
                           onClick={() => setDropdownOpen(false)}
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
                                    hover:text-white hover:bg-white/5 transition-colors"
@@ -385,9 +385,9 @@ export default function Header() {
                       </Link>
                     </>
                   )}
-                  {user.role === 'ADMIN' && (
+                  {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
                     <Link
-                      href="/admin/mentor"
+                      href="/admin/dashboard"
                       onClick={() => setMobileOpen(false)}
                       className="px-4 py-3 text-gray-300 hover:text-white text-center rounded-lg
                                hover:bg-white/5 transition-colors"
