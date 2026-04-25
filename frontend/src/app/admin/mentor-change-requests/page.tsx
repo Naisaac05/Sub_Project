@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AdminListHeader } from '@/components/admin/AdminListHeader';
 import { Pagination } from '@/components/admin/Pagination';
@@ -26,6 +26,7 @@ const STATUS_BADGE: Record<MentorChangeRequestStatus, string> = {
 };
 
 export default function AdminMentorChangeRequestsPage() {
+  const router = useRouter();
   const [tab, setTab] = useState<MentorChangeRequestStatus | 'ALL'>('PENDING');
   const [page, setPage] = useState(0);
   const [items, setItems] = useState<AdminMentorChangeListItem[]>([]);
@@ -118,17 +119,16 @@ export default function AdminMentorChangeRequestsPage() {
             {!loading &&
               !error &&
               items.map((it) => (
-                <tr key={it.id} className="hover:bg-slate-50">
+                <tr
+                  key={it.id}
+                  className="cursor-pointer hover:bg-slate-50"
+                  onClick={() => router.push(`/admin/mentor-change-requests/${it.id}`)}
+                >
                   <td className="px-4 py-3 text-slate-600">
                     {new Date(it.createdAt).toLocaleString('ko-KR')}
                   </td>
                   <td className="px-4 py-3">
-                    <Link
-                      href={`/admin/mentor-change-requests/${it.id}`}
-                      className="font-medium text-slate-900 hover:underline"
-                    >
-                      {it.menteeName}
-                    </Link>
+                    <div className="font-medium text-slate-900">{it.menteeName}</div>
                     <div className="text-xs text-slate-500">{it.menteeEmail}</div>
                   </td>
                   <td className="px-4 py-3 text-slate-700">{it.currentMentorName}</td>
