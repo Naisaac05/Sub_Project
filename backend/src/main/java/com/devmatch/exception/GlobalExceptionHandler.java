@@ -241,6 +241,26 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(message));
     }
 
+    @ExceptionHandler(NoActiveMatchingException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNoActiveMatching(NoActiveMatchingException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(DuplicatePendingMentorChangeRequestException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDuplicatePendingMentorChangeRequest(
+            DuplicatePendingMentorChangeRequestException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(MentorChangeRequestNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMentorChangeRequestNotFound(
+            MentorChangeRequestNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneral(Exception e) {
         log.error("Unhandled exception", e);
