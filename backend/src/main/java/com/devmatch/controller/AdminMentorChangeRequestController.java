@@ -40,15 +40,16 @@ public class AdminMentorChangeRequestController {
         return ResponseEntity.ok(ApiResponse.success(service.get(id)));
     }
 
-    @Operation(summary = "후보 멘토 조회 (현재 카테고리, 현재 멘토 제외)")
+    @Operation(summary = "후보 멘토 조회 (현재 멘토 제외, sameCategoryOnly=true 면 같은 카테고리만)")
     @GetMapping("/{id}/candidate-mentors")
     public ResponseEntity<ApiResponse<Page<CandidateMentorResponse>>> candidates(
             @PathVariable Long id,
             @RequestParam(required = false, defaultValue = "") String keyword,
+            @RequestParam(required = false, defaultValue = "true") boolean sameCategoryOnly,
             Pageable pageable
     ) {
         return ResponseEntity.ok(ApiResponse.success(
-                service.listCandidateMentors(id, keyword, pageable)));
+                service.listCandidateMentors(id, keyword, sameCategoryOnly, pageable)));
     }
 
     @Operation(summary = "승인 (멘토 교체 실행)")

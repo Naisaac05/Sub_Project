@@ -21,6 +21,7 @@ export default function AdminMentorChangeRequestDetailPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [keyword, setKeyword] = useState('');
+  const [sameCategoryOnly, setSameCategoryOnly] = useState(true);
   const [candidates, setCandidates] = useState<CandidateMentor[]>([]);
   const [candidatePage, setCandidatePage] = useState(0);
   const [candidateTotalPages, setCandidateTotalPages] = useState(0);
@@ -48,7 +49,7 @@ export default function AdminMentorChangeRequestDetailPage() {
   useEffect(() => {
     if (!detail || detail.status !== 'PENDING') return;
     let cancelled = false;
-    listCandidateMentors(id, keyword, candidatePage, 10)
+    listCandidateMentors(id, keyword, candidatePage, 10, sameCategoryOnly)
       .then((res) => {
         if (cancelled) return;
         setCandidates(res.content);
@@ -62,7 +63,7 @@ export default function AdminMentorChangeRequestDetailPage() {
     return () => {
       cancelled = true;
     };
-  }, [id, detail, keyword, candidatePage]);
+  }, [id, detail, keyword, candidatePage, sameCategoryOnly]);
 
   if (loading) return <div className="text-slate-500">불러오는 중…</div>;
   if (error) return <div className="text-rose-600">{error}</div>;
@@ -143,10 +144,24 @@ export default function AdminMentorChangeRequestDetailPage() {
               placeholder="멘토 이름 검색"
               className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
             />
+            <label className="flex items-center gap-2 text-xs text-slate-600">
+              <input
+                type="checkbox"
+                checked={sameCategoryOnly}
+                onChange={(e) => {
+                  setSameCategoryOnly(e.target.checked);
+                  setCandidatePage(0);
+                  setSelectedMentorId(null);
+                }}
+              />
+              같은 분야 멘토만 보기 (해제 시 전체 멘토)
+            </label>
             <div className="max-h-72 overflow-y-auto rounded-md border border-slate-200">
               {candidates.length === 0 ? (
                 <p className="p-4 text-center text-sm text-slate-400">
-                  후보 멘토가 없습니다
+                  {sameCategoryOnly
+                    ? '같은 분야 후보 멘토가 없습니다 (위 체크 해제 시 전체 멘토 보기)'
+                    : '후보 멘토가 없습니다'}
                 </p>
               ) : (
                 <table className="w-full text-sm">

@@ -45,14 +45,20 @@ public class AdminMentorChangeRequestService {
 
     @Transactional(readOnly = true)
     public Page<CandidateMentorResponse> listCandidateMentors(
-            Long requestId, String keyword, Pageable pageable) {
+            Long requestId, String keyword, boolean sameCategoryOnly, Pageable pageable) {
         MentorChangeRequest r = findRequiring(requestId);
-        Matching m = matchingRepository.findById(r.getCurrentMatchingId())
-                .orElseThrow(() -> new IllegalStateException(
-                        "매칭이 존재하지 않습니다: " + r.getCurrentMatchingId()));
         String kw = (keyword == null) ? "" : keyword.trim();
-        Page<MentorProfile> profiles = mentorProfileRepository.findApprovedByCategoryAndKeyword(
-                m.getCategory(), r.getCurrentMentorId(), kw, pageable);
+        Page<MentorProfile> profiles;
+        if (sameCategoryOnly) {
+            Matching m = matchingRepository.findById(r.getCurrentMatchingId())
+                    .orElseThrow(() -> new IllegalStateException(
+                            "매칭이 존재하지 않습니다: " + r.getCurrentMatchingId()));
+            profiles = mentorProfileRepository.findApprovedByCategoryAndKeyword(
+                    m.getCategory(), r.getCurrentMentorId(), kw, pageable);
+        } else {
+            profiles = mentorProfileRepository.findApprovedExcludingUser(
+                    r.getCurrentMentorId(), kw, pageable);
+        }
         return profiles.map(p -> {
             int active = matchingRepository.countByMentorIdAndStatusIn(
                     p.getUser().getId(),

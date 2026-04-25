@@ -78,10 +78,11 @@ export async function listCandidateMentors(
   keyword: string,
   page: number,
   size = 10,
+  sameCategoryOnly = true,
 ): Promise<PageResponse<CandidateMentor>> {
   const res = await apiClient.get<ApiResponse<PageResponse<CandidateMentor>>>(
     `/admin/mentor-change-requests/${id}/candidate-mentors`,
-    { params: { keyword, page, size } },
+    { params: { keyword, page, size, sameCategoryOnly } },
   );
   return res.data.data!;
 }
