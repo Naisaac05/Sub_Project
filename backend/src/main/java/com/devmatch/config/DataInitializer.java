@@ -41,12 +41,15 @@ public class DataInitializer implements CommandLineRunner {
             initReactTests();
             initPythonTests();
             initAlgorithmTests();
-            initMentors();
             log.info("===== 초기 데이터 삽입 완료: 테스트 {}개, 문제 {}개 =====",
                     testRepository.count(), questionRepository.count());
         } else {
             log.info("테스트 데이터가 이미 존재합니다. 초기화를 건너뜁니다.");
         }
+
+        // 멘토 시드는 매 startup 마다 실행 — createMentor 가 idempotent 하며
+        // 기존 멘토에 누락된 코스 링크/가용성을 백필한다.
+        initMentors();
 
         initSamplePayments();
         initDefaultFaqs();
@@ -836,7 +839,39 @@ public class DataInitializer implements CommandLineRunner {
 
     private void createMentor(String name, String email, String encodedPassword,
                               List<String> courseKeys, int careerYears, String company, String bio) {
-        if (userRepository.existsByEmail(email)) {
+        java.util.List<MentoringCourse> foundCourses =
+                mentoringCourseRepository.findAllByCourseKeyInAndActiveTrue(courseKeys);
+
+        var existingUser = userRepository.findByEmail(email);
+        if (existingUser.isPresent()) {
+            // 이미 존재하는 멘토 — 누락된 코스 링크/가용성만 보정 (기존 데이터 유지)
+            User user = existingUser.get();
+            mentorProfileRepository.findByUserId(user.getId()).ifPresent(profile -> {
+                java.util.Set<Long> existingCourseIds = profile.getCourses().stream()
+                        .map(MentoringCourse::getId)
+                        .collect(java.util.stream.Collectors.toSet());
+                boolean added = false;
+                for (MentoringCourse c : foundCourses) {
+                    if (!existingCourseIds.contains(c.getId())) {
+                        profile.getCourses().add(c);
+                        added = true;
+                    }
+                }
+                if (added) {
+                    mentorProfileRepository.save(profile);
+                    log.info("멘토 [{}] 누락된 코스 링크 보정", name);
+                }
+            });
+            if (mentorAvailabilityRepository.findByMentorId(user.getId()).isEmpty()) {
+                mentorAvailabilityRepository.save(MentorAvailability.builder()
+                        .mentorId(user.getId())
+                        .isWaiting(true)
+                        .isActive(true)
+                        .dayOfWeek("MONDAY")
+                        .startTime(java.time.LocalTime.of(9, 0))
+                        .endTime(java.time.LocalTime.of(18, 0))
+                        .build());
+            }
             return;
         }
 
@@ -846,9 +881,6 @@ public class DataInitializer implements CommandLineRunner {
                 .name(name)
                 .role(Role.MENTOR)
                 .build());
-
-        java.util.List<MentoringCourse> foundCourses =
-                mentoringCourseRepository.findAllByCourseKeyInAndActiveTrue(courseKeys);
 
         mentorProfileRepository.save(MentorProfile.builder()
                 .user(user)
