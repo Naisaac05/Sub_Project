@@ -57,11 +57,16 @@ public class AdminMentorChangeRequestService {
             int active = matchingRepository.countByMentorIdAndStatusIn(
                     p.getUser().getId(),
                     List.of(MatchingStatus.ACCEPTED, MatchingStatus.TRIAL));
+            List<String> courseTitles = p.getCourses().stream()
+                    .map(com.devmatch.entity.MentoringCourse::getTitle)
+                    .sorted()
+                    .toList();
             return new CandidateMentorResponse(
                     p.getUser().getId(),
                     p.getUser().getName(),
                     p.getUser().getEmail(),
-                    active);
+                    active,
+                    courseTitles);
         });
     }
 

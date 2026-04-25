@@ -46,6 +46,7 @@ export interface CandidateMentor {
   name: string;
   email: string | null;
   activeMenteeCount: number;
+  courseTitles: string[];
 }
 
 export interface ListAdminMentorChangeParams {
