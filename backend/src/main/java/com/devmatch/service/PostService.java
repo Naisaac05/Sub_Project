@@ -2,6 +2,7 @@ package com.devmatch.service;
 
 import com.devmatch.dto.community.CommentCreateRequest;
 import com.devmatch.dto.community.CommentResponse;
+import com.devmatch.dto.community.ImageUploadResponse;
 import com.devmatch.dto.community.PostCreateRequest;
 import com.devmatch.dto.community.PostResponse;
 import com.devmatch.entity.Comment;
@@ -16,14 +17,22 @@ import com.devmatch.repository.CommentRepository;
 import com.devmatch.repository.PostLikeRepository;
 import com.devmatch.repository.PostRepository;
 import com.devmatch.repository.UserRepository;
+import com.devmatch.util.CommunityCategoryNormalizer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +45,9 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final UserRepository userRepository;
 
+    @Value("${file.upload-dir:uploads}")
+    private String uploadDir;
+
     @Transactional
     public PostResponse createPost(Long userId, PostCreateRequest request) {
         User user = userRepository.findById(userId)
@@ -43,9 +55,10 @@ public class PostService {
 
         Post post = Post.builder()
                 .author(user)
-                .category(request.getCategory())
+                .category(CommunityCategoryNormalizer.normalize(request.getCategory()))
                 .title(request.getTitle())
                 .content(request.getContent())
+                .imageUrl(request.getImageUrl())
                 .build();
 
         return PostResponse.from(postRepository.save(post), false);
@@ -75,7 +88,12 @@ public class PostService {
             throw new UnauthorizedPostException("본인이 작성한 게시글만 수정할 수 있습니다.");
         }
 
-        post.update(request.getTitle(), request.getContent(), request.getCategory());
+        post.update(
+                request.getTitle(),
+                request.getContent(),
+                CommunityCategoryNormalizer.normalize(request.getCategory()),
+                request.getImageUrl()
+        );
         return PostResponse.from(post, postLikeRepository.existsByPostIdAndUserId(postId, userId));
     }
 
@@ -87,7 +105,34 @@ public class PostService {
             throw new UnauthorizedPostException("본인이 작성한 게시글만 삭제할 수 있습니다.");
         }
 
+        commentRepository.deleteByPostId(postId);
+        postLikeRepository.deleteByPostId(postId);
         postRepository.delete(post);
+    }
+
+    @Transactional
+    public ImageUploadResponse uploadImage(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("업로드할 이미지 파일을 선택해주세요.");
+        }
+
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("이미지 파일만 업로드할 수 있습니다.");
+        }
+
+        String originalFilename = file.getOriginalFilename();
+        String storedName = UUID.randomUUID() + extractExtension(originalFilename);
+        Path uploadPath = Paths.get(uploadDir, "community");
+
+        try {
+            Files.createDirectories(uploadPath);
+            Files.copy(file.getInputStream(), uploadPath.resolve(storedName));
+        } catch (IOException e) {
+            throw new RuntimeException("커뮤니티 이미지 업로드에 실패했습니다.");
+        }
+
+        return new ImageUploadResponse("/uploads/community/" + storedName);
     }
 
     @Transactional
@@ -159,6 +204,19 @@ public class PostService {
 
         commentRepository.delete(comment);
         comment.getPost().decrementCommentCount();
+    }
+
+    private String extractExtension(String originalFilename) {
+        if (originalFilename == null || originalFilename.isBlank()) {
+            return ".png";
+        }
+
+        int extensionStart = originalFilename.lastIndexOf('.');
+        if (extensionStart < 0) {
+            return ".png";
+        }
+
+        return originalFilename.substring(extensionStart);
     }
 
     private Post findActivePost(Long postId) {
