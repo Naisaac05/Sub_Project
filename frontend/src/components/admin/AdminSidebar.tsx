@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, UserCheck, Users, CreditCard, FileText, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, UserCheck, Users, CreditCard, FileText, HelpCircle, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const NAV_ITEMS: Array<{
@@ -41,6 +41,12 @@ const NAV_ITEMS: Array<{
     label: '게시물 관리',
     icon: FileText,
     match: (p) => p === '/admin/posts' || p.startsWith('/admin/posts/'),
+  },
+  {
+    href: '/admin/faqs',
+    label: 'FAQ 관리',
+    icon: HelpCircle,
+    match: (p) => p === '/admin/faqs' || p.startsWith('/admin/faqs/'),
   },
   {
     href: '/admin/admins',
