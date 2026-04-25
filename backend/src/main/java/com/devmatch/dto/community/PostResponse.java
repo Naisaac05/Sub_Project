@@ -1,6 +1,7 @@
 package com.devmatch.dto.community;
 
 import com.devmatch.entity.Post;
+import com.devmatch.util.CommunityCategoryNormalizer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class PostResponse {
     private String category;
     private String title;
     private String content;
+    private String imageUrl;
     private Integer viewCount;
     private Integer likeCount;
     private Integer commentCount;
@@ -27,9 +29,10 @@ public class PostResponse {
                 post.getId(),
                 post.getAuthor().getId(),
                 post.getAuthor().getName(),
-                post.getCategory(),
+                CommunityCategoryNormalizer.normalize(post.getCategory()),
                 post.getTitle(),
                 post.getContent(),
+                post.getImageUrl(),
                 post.getViewCount(),
                 post.getLikeCount(),
                 post.getCommentCount(),

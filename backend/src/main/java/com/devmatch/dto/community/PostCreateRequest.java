@@ -19,4 +19,7 @@ public class PostCreateRequest {
 
     @NotBlank(message = "내용은 필수입니다.")
     private String content;
+
+    @Size(max = 1000, message = "이미지 URL은 1000자 이하여야 합니다.")
+    private String imageUrl;
 }
