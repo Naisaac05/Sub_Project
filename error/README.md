@@ -32,6 +32,8 @@
 
 ## 인덱스
 
+- [2026-04-25 커뮤니티 이미지 원본 비율 훼손](2026-04-25-community-image-aspect-ratio.md)
+- [2026-04-25 커뮤니티 업로드 이미지 403](2026-04-25-community-uploaded-image-403.md)
 - [2026-04-24 Admin 게시물 상세 페이지 — 비정수 경로 진입 시 스켈레톤 무한 렌더](2026-04-24-admin-post-detail-nan-id-infinite-skeleton.md)
 - [2026-04-24 커뮤니티 새 글 카테고리 필터 재발](2026-04-24-community-category-slug-normalization.md)
 - [2026-04-23 Subagent 가 feature 브랜치 대신 main 브랜치에 커밋 + 빌드 결과 허위 보고](2026-04-23-subagent-committed-to-main.md)

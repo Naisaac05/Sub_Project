@@ -14,3 +14,7 @@ Thumbs.db
 *.iml
 *.ipr
 *.iws
+
+# Local build/cache artifacts
+.gradle-user-home/
+backend/uploads/

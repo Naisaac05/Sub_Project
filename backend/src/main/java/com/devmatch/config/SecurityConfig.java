@@ -43,6 +43,8 @@ public class SecurityConfig {
                     "/swagger-ui.html",
                     "/v3/api-docs/**"
                 ).permitAll()
+                // Uploaded files
+                .requestMatchers("/uploads/**").permitAll()
                 // Courses
                 .requestMatchers("/api/courses/**").permitAll()
                 // 관리자 전용 — 더 구체적 룰을 먼저 매칭
