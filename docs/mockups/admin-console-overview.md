@@ -13,7 +13,7 @@
 | II | 결제 관리 | [admin-payments.md](./admin-payments.md) | 목업 작성 (2026-04-22) |
 | II | 게시물 관리 | [admin-posts.md](./admin-posts.md) | 목업 작성 (2026-04-22) |
 | III | 대시보드 / 통계 | [admin-dashboard.md](./admin-dashboard.md) | 2026-04-24 구현 완료 |
-| III (예정) | FAQ 관리 | — | ROADMAP `CRUD /api/admin/faqs` |
+| III | FAQ 관리 | — | 2026-04-25 구현 완료 |
 
 ---
 
@@ -28,9 +28,7 @@
 │ 👥 회원 관리 │                                         │
 │ 💳 결제 관리 │                                         │
 │ 📝 게시물    │                                         │
-│              │                                         │
-│ — (Phase III) │                                        │
-│ ❓ FAQ        │                                         │
+│ ❓ FAQ 관리  │                                         │
 └──────────────┴─────────────────────────────────────────┘
 ```
 

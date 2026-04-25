@@ -67,6 +67,7 @@
 - [2026-04-24 Admin 게시물 상세 페이지 — 비정수 경로 진입 시 스켈레톤 무한 렌더](2026-04-24-admin-post-detail-nan-id-infinite-skeleton.md)
 - [2026-04-25 Admin 대시보드 — apiClient baseURL 과 중복돼 `/api/api/admin/dashboard` 호출 (500)](2026-04-25-admin-dashboard-double-api-prefix.md)
 - [2026-04-25 Admin 레이아웃 가드가 SUPER_ADMIN 을 거부 — 403 차단](2026-04-25-admin-layout-rejects-super-admin.md)
+- [2026-04-25 `/faq` 공개 페이지 카테고리 순서가 어드민·의도와 다른 알파벳 순](2026-04-25-faq-public-page-category-order-mismatch.md)
 - [2026-04-12 마이페이지 멘토 매칭 목록 누락](2026-04-12-mypage-mentor-matchings-missing.md)
 - [2026-04-12 멘토 시드 비밀번호 불일치](2026-04-12-mentor-seed-password-mismatch.md)
 - [2026-04-12 FullCalendar 이벤트 클릭 시 dateClick 미발생](2026-04-12-fullcalendar-event-click-no-dateclick.md)
