@@ -12,4 +12,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // 관리자측 — 삭제된 댓글 포함
     List<Comment> findByPostIdOrderByCreatedAtAsc(Long postId);
+
+    void deleteByPostId(Long postId);
 }
