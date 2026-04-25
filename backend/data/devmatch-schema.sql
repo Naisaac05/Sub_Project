@@ -494,6 +494,31 @@ CREATE TABLE `session_change_requests` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `mentor_change_requests`
+--
+
+DROP TABLE IF EXISTS `mentor_change_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mentor_change_requests` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `mentee_id` bigint NOT NULL,
+  `current_matching_id` bigint NOT NULL,
+  `current_mentor_id` bigint NOT NULL,
+  `reason` varchar(500) NOT NULL,
+  `status` enum('PENDING','APPROVED','REJECTED','CANCELLED') NOT NULL,
+  `decided_by_admin_id` bigint DEFAULT NULL,
+  `new_mentor_id` bigint DEFAULT NULL,
+  `reject_reason` varchar(500) DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `responded_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_mentor_change_status_created` (`status`,`created_at`),
+  KEY `idx_mentor_change_mentee_status` (`mentee_id`,`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `survey_responses`
 --
 
