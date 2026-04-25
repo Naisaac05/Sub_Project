@@ -155,6 +155,12 @@ public class Application {
         this.autoMatched = true;
     }
 
+    public void completeAutoMatch(User mentor) {
+        this.assignedMentor = mentor;
+        this.status = ApplicationStatus.ACCEPTED;
+        this.autoMatched = true;
+    }
+
     public void assignMentor(User mentor) {
         this.assignedMentor = mentor;
         this.status = ApplicationStatus.PENDING_MENTOR_APPROVAL;

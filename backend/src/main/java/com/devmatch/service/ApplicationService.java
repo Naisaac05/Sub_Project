@@ -5,6 +5,7 @@ import com.devmatch.dto.application.ApplicationResponse;
 import com.devmatch.entity.*;
 import com.devmatch.repository.ApplicationRepository;
 import com.devmatch.repository.MatchingRepository;
+import com.devmatch.repository.MentorProfileRepository;
 import com.devmatch.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +24,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
     private final MatchingRepository matchingRepository;
+    private final MentorProfileRepository mentorProfileRepository;
 
     @Transactional
     public ApplicationResponse submitApplication(ApplicationRequest request) {
@@ -65,17 +65,18 @@ public class ApplicationService {
         return convertToResponse(application);
     }
 
-    public void assignNextAvailableMentor(Application application) {
+    public void createAutoMatching(Application application) {
         if (application.getStatus() == ApplicationStatus.MATCHING_FAILED ||
             application.getStatus() == ApplicationStatus.ACCEPTED) {
             return;
         }
 
-        Set<Long> rejectedMentorIds = application.getRejectedMentors();
-
-        List<User> eligibleMentors = userRepository.findByRole(Role.MENTOR).stream()
-                .filter(u -> !rejectedMentorIds.contains(u.getId()))
-                .collect(Collectors.toList());
+        List<User> eligibleMentors = mentorProfileRepository.findByStatus(MentorStatus.APPROVED).stream()
+                .filter(profile -> profile.getCourses() != null
+                        && profile.getCourses().stream()
+                                .anyMatch(course -> course.getCourseKey().equals(application.getCategory())))
+                .map(MentorProfile::getUser)
+                .toList();
 
         if (eligibleMentors.isEmpty()) {
             application.markMatchingFailed();
@@ -89,7 +90,15 @@ public class ApplicationService {
                 .orElse(null);
 
         if (nextMentor != null) {
-            application.assignMentor(nextMentor);
+            Matching matching = Matching.builder()
+                    .mentee(application.getMentee())
+                    .mentor(nextMentor)
+                    .category(application.getCategory())
+                    .applicationId(application.getId())
+                    .status(MatchingStatus.ACCEPTED)
+                    .build();
+            matchingRepository.save(matching);
+            application.completeAutoMatch(nextMentor);
         } else {
             application.markMatchingFailed();
         }
@@ -100,53 +109,16 @@ public class ApplicationService {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new com.devmatch.exception.UserNotFoundException("Application not found with ID: " + applicationId));
 
-        application.markPaid();
-        assignNextAvailableMentor(application);
+        if (application.getStatus() == ApplicationStatus.ACCEPTED ||
+            application.getStatus() == ApplicationStatus.MATCHING_FAILED) {
+            return application;
+        }
+
+        if (application.getStatus() != ApplicationStatus.PAYMENT_COMPLETED) {
+            application.markPaid();
+        }
+        createAutoMatching(application);
         return application;
-    }
-
-    @Transactional
-    public ApplicationResponse approveApplication(Long applicationId, Long mentorId) {
-        Application application = applicationRepository.findById(applicationId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid application ID"));
-
-        if (application.getAssignedMentor() == null || !application.getAssignedMentor().getId().equals(mentorId)) {
-            throw new IllegalStateException("해당 신청서는 현재 멘토가 승인할 수 없는 상태입니다.");
-        }
-
-        Matching matching = Matching.builder()
-                .mentee(application.getMentee())
-                .mentor(application.getAssignedMentor())
-                .category(application.getCategory())
-                .applicationId(application.getId())
-                .status(MatchingStatus.ACCEPTED)
-                .build();
-        matchingRepository.save(matching);
-
-        application.acceptAutoMatch();
-        return convertToResponse(application);
-    }
-
-    @Transactional
-    public ApplicationResponse rejectApplication(Long applicationId, Long mentorId) {
-        Application application = applicationRepository.findById(applicationId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid application ID"));
-
-        if (application.getAssignedMentor() == null || !application.getAssignedMentor().getId().equals(mentorId)) {
-            throw new IllegalStateException("해당 신청서는 현재 멘토가 거절할 수 없는 상태입니다.");
-        }
-
-        application.rejectByCurrentMentor();
-        assignNextAvailableMentor(application);
-        return convertToResponse(application);
-    }
-
-    public List<ApplicationResponse> getMyAssignments(Long mentorId) {
-        List<Application> assignments = applicationRepository.findByAssignedMentorIdAndStatusOrderByCreatedAtAsc(
-                mentorId, ApplicationStatus.PENDING_MENTOR_APPROVAL);
-        return assignments.stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
     }
 
     public ApplicationResponse convertToResponse(Application application) {
