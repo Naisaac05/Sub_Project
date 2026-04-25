@@ -37,6 +37,9 @@ public class Post {
     @Column(nullable = false, length = 50)
     private String category;
 
+    @Column(length = 1000)
+    private String imageUrl;
+
     @Column(nullable = false)
     @Builder.Default
     private Integer likeCount = 0;
@@ -70,10 +73,11 @@ public class Post {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public void update(String title, String content, String category) {
+    public void update(String title, String content, String category, String imageUrl) {
         this.title = title;
         this.content = content;
         this.category = category;
+        this.imageUrl = imageUrl;
     }
 
     public void incrementLikeCount() {
