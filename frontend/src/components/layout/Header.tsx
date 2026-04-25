@@ -234,12 +234,19 @@ export default function Header() {
                             {LABELS.assignments}
                           </DropdownLink>
                         </>
-                      ) : null}
-                      {user.role === 'ADMIN' ? (
-                        <DropdownLink href="/admin/mentor" icon={<ShieldCheck size={16} />} onClick={() => setDropdownOpen(false)}>
-                          {LABELS.adminConsole}
-                        </DropdownLink>
-                      ) : null}
+                      )}
+                      {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
+                        <Link
+                          href="/admin/dashboard"
+                          onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
+                                   hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                          <ShieldCheck size={16} />
+                          관리자 콘솔
+                        </Link>
+                      )}
+
                       <button
                         onClick={handleLogout}
                         className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-400 transition-colors hover:bg-white/5 hover:text-red-400"
@@ -320,10 +327,17 @@ export default function Header() {
                       <MobileLink href="/mentor/status" onClick={() => setMobileOpen(false)}>{LABELS.mentorStatus}</MobileLink>
                       <MobileLink href="/lms/assignments" onClick={() => setMobileOpen(false)}>{LABELS.assignments}</MobileLink>
                     </>
-                  ) : null}
-                  {user.role === 'ADMIN' ? (
-                    <MobileLink href="/admin/mentor" onClick={() => setMobileOpen(false)}>{LABELS.adminConsole}</MobileLink>
-                  ) : null}
+                  )}
+                  {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
+                    <Link
+                      href="/admin/dashboard"
+                      onClick={() => setMobileOpen(false)}
+                      className="px-4 py-3 text-gray-300 hover:text-white text-center rounded-lg
+                               hover:bg-white/5 transition-colors"
+                    >
+                      관리자 콘솔
+                    </Link>
+                  )}
                   <button
                     onClick={handleLogout}
                     className="rounded-lg px-4 py-3 text-center text-red-400 transition-colors hover:bg-white/5 hover:text-red-300"

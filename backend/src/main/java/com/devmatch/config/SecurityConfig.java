@@ -45,7 +45,10 @@ public class SecurityConfig {
                 ).permitAll()
                 // Courses
                 .requestMatchers("/api/courses/**").permitAll()
+                // FAQ 공개 조회 (GET 만)
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/faqs", "/api/faqs/**").permitAll()
                 // 관리자 전용 — 더 구체적 룰을 먼저 매칭
+                .requestMatchers("/api/admin/dashboard/audit-log").hasRole("SUPER_ADMIN")
                 .requestMatchers("/api/admin/admins/**").hasRole("SUPER_ADMIN")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // 나머지 API는 인증 필요

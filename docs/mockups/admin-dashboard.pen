@@ -1,0 +1,1077 @@
+{
+  "version": "2.11",
+  "children": [
+    {
+      "type": "frame",
+      "id": "bi8Au",
+      "x": 0,
+      "y": 0,
+      "name": "Dashboard",
+      "clip": true,
+      "width": 1280,
+      "height": 1680,
+      "fill": "#F8FAFC",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 32,
+      "children": [
+        {
+          "type": "frame",
+          "id": "jUKMZ",
+          "name": "Header",
+          "width": "fill_container",
+          "fill": "#00000000",
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "OR00U",
+              "name": "title",
+              "fill": "#0F172A",
+              "content": "대시보드",
+              "fontFamily": "Inter",
+              "fontSize": 28,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "UMk64",
+              "name": "sub",
+              "fill": "#64748B",
+              "content": "관리자 콘솔 홈 · 2026년 4월 25일 기준",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "YVBPo",
+          "name": "KPI Row",
+          "width": "fill_container",
+          "fill": "#00000000",
+          "gap": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "nCGXU",
+              "name": "KPI Active Users",
+              "width": "fill_container",
+              "height": 128,
+              "fill": "#FFFFFF",
+              "cornerRadius": 8,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#E2E8F0"
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "uSwe8",
+                  "name": "k1l",
+                  "fill": "#64748B",
+                  "content": "활성 회원",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "gxXBV",
+                  "name": "k1v",
+                  "fill": "#0F172A",
+                  "content": "1,248",
+                  "fontFamily": "Inter",
+                  "fontSize": 28,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "hleHf",
+                  "name": "k1d",
+                  "fill": "#059669",
+                  "content": "지난달 대비 ▲ 8.2%",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "k0sBS",
+              "name": "KPI Revenue",
+              "width": "fill_container",
+              "height": 128,
+              "fill": "#FFFFFF",
+              "cornerRadius": 8,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#E2E8F0"
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "gxx71",
+                  "name": "k2l",
+                  "fill": "#64748B",
+                  "content": "이번달 순매출",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "ZmCwh",
+                  "name": "k2v",
+                  "fill": "#0F172A",
+                  "content": "₩4,820,000",
+                  "fontFamily": "Inter",
+                  "fontSize": 28,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "PSOuH",
+                  "name": "k2d",
+                  "fill": "#059669",
+                  "content": "지난달 대비 ▲ 12.5%",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "5PSVA",
+              "name": "KPI Matching",
+              "width": "fill_container",
+              "height": 128,
+              "fill": "#FFFFFF",
+              "cornerRadius": 8,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#E2E8F0"
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "NCa9e",
+                  "name": "k3l",
+                  "fill": "#64748B",
+                  "content": "누적 매칭",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "aohkh",
+                  "name": "k3v",
+                  "fill": "#0F172A",
+                  "content": "3,912",
+                  "fontFamily": "Inter",
+                  "fontSize": 28,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "mFP6G",
+                  "name": "k3d",
+                  "fill": "#64748B",
+                  "content": "이번달 +128",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "0sqbf",
+              "name": "KPI Mentors",
+              "width": "fill_container",
+              "height": 128,
+              "fill": "#FFFFFF",
+              "cornerRadius": 8,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#E2E8F0"
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "h63X9",
+                  "name": "k4l",
+                  "fill": "#64748B",
+                  "content": "승인 멘토",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "7HoWA",
+                  "name": "k4v",
+                  "fill": "#0F172A",
+                  "content": "87",
+                  "fontFamily": "Inter",
+                  "fontSize": 28,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "JXUvJ",
+                  "name": "k4d",
+                  "fill": "#D97706",
+                  "content": "대기 3명",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "reQ7T",
+          "name": "Chart Row",
+          "width": "fill_container",
+          "fill": "#00000000",
+          "gap": 16,
+          "children": [
+            {
+              "type": "frame",
+              "id": "VXfh7",
+              "name": "Signup Trend Chart",
+              "width": "fill_container",
+              "height": 300,
+              "fill": "#FFFFFF",
+              "cornerRadius": 8,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#E2E8F0"
+              },
+              "layout": "vertical",
+              "gap": 12,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "YqXaw",
+                  "name": "c1t",
+                  "fill": "#0F172A",
+                  "content": "일별 신규 가입 (최근 30일)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "7Y5yj",
+                  "name": "Signup Bars",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "#00000000",
+                  "gap": 2,
+                  "alignItems": "end",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "y4208",
+                      "name": "b1",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 40
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "P2nWW",
+                      "name": "b2",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 80
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "sxIcI",
+                      "name": "b3",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 50
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "27rRz",
+                      "name": "b4",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 120
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "tMwHD",
+                      "name": "b5",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 90
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "vyB4e",
+                      "name": "b6",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 140
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "H89bk",
+                      "name": "b7",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 70
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "azJDh",
+                      "name": "b8",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 110
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "ewp7q",
+                      "name": "b9",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 100
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "mjUkG",
+                      "name": "b10",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 160
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "Sevyq",
+                      "name": "b11",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 130
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "vyFHB",
+                      "name": "b12",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 90
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "XAfXk",
+                      "name": "b13",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 180
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "w4lbd",
+                      "name": "b14",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 140
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        2,
+                        2,
+                        0,
+                        0
+                      ],
+                      "id": "AfiwN",
+                      "name": "b15",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 60
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "gLJpL",
+                  "name": "c1note",
+                  "fill": "#94A3B8",
+                  "content": "03-27 ─── 04-25  (Recharts LineChart 로 구현)",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "crFQl",
+              "name": "Revenue Trend Chart",
+              "width": "fill_container",
+              "height": 300,
+              "fill": "#FFFFFF",
+              "cornerRadius": 8,
+              "stroke": {
+                "thickness": 1,
+                "fill": "#E2E8F0"
+              },
+              "layout": "vertical",
+              "gap": 12,
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rpVwt",
+                  "name": "c2t",
+                  "fill": "#0F172A",
+                  "content": "월별 순매출 (최근 12개월)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "FCZ0u",
+                  "name": "Revenue Bars",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "#00000000",
+                  "gap": 8,
+                  "alignItems": "end",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "auAwK",
+                      "name": "r1",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 60
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "HRFl8",
+                      "name": "r2",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 80
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "jShtz",
+                      "name": "r3",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 70
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "WgGbD",
+                      "name": "r4",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 100
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "9BqI4",
+                      "name": "r5",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 110
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "jR1yI",
+                      "name": "r6",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 90
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "8oPQc",
+                      "name": "r7",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 130
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "IGJti",
+                      "name": "r8",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 120
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "1Xs7I",
+                      "name": "r9",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 150
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "ORIQF",
+                      "name": "r10",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 140
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "3x6uN",
+                      "name": "r11",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 170
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": [
+                        4,
+                        4,
+                        0,
+                        0
+                      ],
+                      "id": "anL2k",
+                      "name": "r12",
+                      "fill": "#F97316",
+                      "width": "fill_container",
+                      "height": 190
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "9v0G0",
+                  "name": "c2note",
+                  "fill": "#94A3B8",
+                  "content": "25-05 ─── 26-04  (Recharts BarChart, net = gross − refund)",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "uNrkJ",
+          "name": "Action Queue",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#E2E8F0"
+          },
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "FwbKT",
+              "name": "qHeader",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "stroke": {
+                "thickness": {
+                  "bottom": 1
+                },
+                "fill": "#E2E8F0"
+              },
+              "layout": "vertical",
+              "padding": [
+                12,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "2JNsE",
+                  "name": "qHeaderText",
+                  "fill": "#0F172A",
+                  "content": "처리 큐",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "xv1Ia",
+              "name": "Queue Item 1",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "stroke": {
+                "thickness": {
+                  "bottom": 1
+                },
+                "fill": "#E2E8F0"
+              },
+              "padding": [
+                16,
+                20
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "cNt2c",
+                  "name": "qi1l",
+                  "fill": "#374151",
+                  "content": "🧑  승인 대기 멘토",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "N0vij",
+                  "name": "qi1r",
+                  "fill": "#D97706",
+                  "content": "3명  ›",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mGZl2",
+              "name": "Queue Item 2",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "padding": [
+                16,
+                20
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "u5iav",
+                  "name": "qi2l",
+                  "fill": "#374151",
+                  "content": "💳  실패 결제",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "yMN2K",
+                  "name": "qi2r",
+                  "fill": "#D97706",
+                  "content": "1건  ›",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "GX17F",
+          "name": "Recent Audit Log (SUPER_ADMIN)",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#E2E8F0"
+          },
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "4KgUY",
+              "name": "aHeader",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "stroke": {
+                "thickness": {
+                  "bottom": 1
+                },
+                "fill": "#E2E8F0"
+              },
+              "layout": "vertical",
+              "gap": 4,
+              "padding": [
+                12,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "jjPeu",
+                  "name": "aHt",
+                  "fill": "#0F172A",
+                  "content": "최근 관리자 활동",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "Zl4Jd",
+                  "name": "aHs",
+                  "fill": "#94A3B8",
+                  "content": "최대 10건 · SUPER_ADMIN 만 조회",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "qSM4j",
+              "name": "aItem1",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "stroke": {
+                "thickness": {
+                  "bottom": 1
+                },
+                "fill": "#E2E8F0"
+              },
+              "padding": [
+                12,
+                20
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "pWqfx",
+                  "name": "ai1l",
+                  "fill": "#374151",
+                  "content": "관리자A: 결제 #1287 환불",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "L32Hp",
+                  "name": "ai1r",
+                  "fill": "#94A3B8",
+                  "content": "15분 전",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AvLbX",
+              "name": "aItem2",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "stroke": {
+                "thickness": {
+                  "bottom": 1
+                },
+                "fill": "#E2E8F0"
+              },
+              "padding": [
+                12,
+                20
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "u0vJh",
+                  "name": "ai2l",
+                  "fill": "#374151",
+                  "content": "관리자B: 멘토 #204 승인",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "AlMnu",
+                  "name": "ai2r",
+                  "fill": "#94A3B8",
+                  "content": "42분 전",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lQeRP",
+              "name": "aItem3",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "stroke": {
+                "thickness": {
+                  "bottom": 1
+                },
+                "fill": "#E2E8F0"
+              },
+              "padding": [
+                12,
+                20
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "cQgjp",
+                  "name": "ai3l",
+                  "fill": "#374151",
+                  "content": "관리자A: 게시물 #981 삭제",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "PAj02",
+                  "name": "ai3r",
+                  "fill": "#94A3B8",
+                  "content": "2시간 전",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "S4XmM",
+              "name": "aItem4",
+              "width": "fill_container",
+              "fill": "#00000000",
+              "padding": [
+                12,
+                20
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lAoEU",
+                  "name": "ai4l",
+                  "fill": "#374151",
+                  "content": "관리자C: 회원 #3012 비밀번호 초기화",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "ZNB84",
+                  "name": "ai4r",
+                  "fill": "#94A3B8",
+                  "content": "5시간 전",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
