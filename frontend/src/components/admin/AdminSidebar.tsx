@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserCheck, Users, CreditCard, FileText, ShieldCheck } from 'lucide-react';
+import { UserCheck, Users, CreditCard, FileText, ShieldCheck, Repeat } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const NAV_ITEMS: Array<{
@@ -23,6 +23,14 @@ const NAV_ITEMS: Array<{
     label: '회원 관리',
     icon: Users,
     match: (p) => p === '/admin/users' || p.startsWith('/admin/users/'),
+  },
+  {
+    href: '/admin/mentor-change-requests',
+    label: '멘토 교체 신청',
+    icon: Repeat,
+    match: (p) =>
+      p === '/admin/mentor-change-requests' ||
+      p.startsWith('/admin/mentor-change-requests/'),
   },
   {
     href: '/admin/payments',
