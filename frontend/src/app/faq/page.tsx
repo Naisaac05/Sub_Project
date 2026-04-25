@@ -29,7 +29,14 @@ export default function FaqPage() {
 
   const filtered = useMemo(() => {
     if (!faqs) return [];
-    return selected === 'ALL' ? faqs : faqs.filter((f) => f.category === selected);
+    const list = selected === 'ALL' ? faqs : faqs.filter((f) => f.category === selected);
+    // 백엔드는 category 알파벳 순으로 정렬해 응답하지만, 우리는 CATEGORY_ORDER 의 의도된 순서를 강제한다.
+    return [...list].sort((a, b) => {
+      const ai = CATEGORY_ORDER.indexOf(a.category);
+      const bi = CATEGORY_ORDER.indexOf(b.category);
+      if (ai !== bi) return ai - bi;
+      return a.orderIndex - b.orderIndex;
+    });
   }, [faqs, selected]);
 
   return (
