@@ -556,9 +556,9 @@ export default function CommunityPage() {
                             </h3>
 
                             {post.imageUrl ? (
-                              <div className="mt-4 overflow-hidden rounded-3xl border border-white/10 bg-slate-950/60">
+                              <div className="mt-4 overflow-hidden rounded-3xl border border-white/10 bg-slate-950/80">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={post.imageUrl} alt={post.title} className="h-52 w-full object-cover" />
+                                <img src={post.imageUrl} alt={post.title} className="h-52 w-full object-contain" />
                               </div>
                             ) : null}
 
@@ -758,9 +758,9 @@ export default function CommunityPage() {
                 </button>
 
                 {editor.imageUrl ? (
-                  <div className="mt-4 overflow-hidden rounded-[28px] border border-white/10 bg-slate-950/60">
+                  <div className="mt-4 overflow-hidden rounded-[28px] border border-white/10 bg-slate-950/80">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={editor.imageUrl} alt="미리보기" className="h-64 w-full object-cover" />
+                    <img src={editor.imageUrl} alt="미리보기" className="h-64 w-full object-contain" />
                   </div>
                 ) : null}
               </div>
@@ -812,9 +812,9 @@ export default function CommunityPage() {
               ) : (
                 <>
                   {selectedPost.imageUrl ? (
-                    <div className="mb-5 overflow-hidden rounded-[28px] border border-white/10 bg-slate-950/60">
+                    <div className="mb-5 overflow-hidden rounded-[28px] border border-white/10 bg-slate-950/80">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={selectedPost.imageUrl} alt={selectedPost.title} className="h-80 w-full object-cover" />
+                      <img src={selectedPost.imageUrl} alt={selectedPost.title} className="h-80 w-full object-contain" />
                     </div>
                   ) : null}
 
