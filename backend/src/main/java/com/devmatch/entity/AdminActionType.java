@@ -21,5 +21,9 @@ public enum AdminActionType {
     USER_DELETE,
     USER_PASSWORD_RESET,
     USER_MENTOR_SWAP,
-    ADMIN_CREATE
+    ADMIN_CREATE,
+
+    // Phase II Feature 5 (멘토 교체 신청)
+    MENTOR_CHANGE_APPROVE,
+    MENTOR_CHANGE_REJECT
 }
