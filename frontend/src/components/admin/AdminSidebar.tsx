@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserCheck, Users, CreditCard, FileText, ShieldCheck, Repeat } from 'lucide-react';
+import { LayoutDashboard, UserCheck, Users, CreditCard, FileText, HelpCircle, ShieldCheck, Repeat } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const NAV_ITEMS: Array<{
@@ -12,6 +12,12 @@ const NAV_ITEMS: Array<{
   match: (pathname: string) => boolean;
   requireSuperAdmin?: boolean;
 }> = [
+  {
+    href: '/admin/dashboard',
+    label: '대시보드',
+    icon: LayoutDashboard,
+    match: (p) => p === '/admin/dashboard' || p.startsWith('/admin/dashboard/'),
+  },
   {
     href: '/admin/mentor',
     label: '멘토 심사',
@@ -43,6 +49,12 @@ const NAV_ITEMS: Array<{
     label: '게시물 관리',
     icon: FileText,
     match: (p) => p === '/admin/posts' || p.startsWith('/admin/posts/'),
+  },
+  {
+    href: '/admin/faqs',
+    label: 'FAQ 관리',
+    icon: HelpCircle,
+    match: (p) => p === '/admin/faqs' || p.startsWith('/admin/faqs/'),
   },
   {
     href: '/admin/admins',

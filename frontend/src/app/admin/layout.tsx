@@ -13,8 +13,8 @@ import NotAuthorized from '@/components/admin/NotAuthorized';
  * 접근 제어:
  *  - isLoading: 스피너 (초기 auth 복원 중)
  *  - 비로그인: /auth/login 으로 리다이렉트 (redirect 쿼리 동봉)
- *  - 로그인했지만 ADMIN 아님: 403 렌더 (리다이렉트 X)
- *  - ADMIN: Header + Sidebar + children
+ *  - 로그인했지만 ADMIN/SUPER_ADMIN 아님: 403 렌더 (리다이렉트 X)
+ *  - ADMIN 또는 SUPER_ADMIN: Header + Sidebar + children
  */
 export default function AdminLayout({
   children,

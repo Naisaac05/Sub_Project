@@ -55,4 +55,15 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>,
     long countByStatusAndCreatedBetween(@Param("status") PaymentStatus status,
                                         @Param("from") LocalDateTime from,
                                         @Param("toExclusive") LocalDateTime toExclusive);
+
+    @Query("""
+           select coalesce(sum(p.amount), 0) from Payment p
+            where p.status = :status
+              and p.cancelledAt >= :from and p.cancelledAt < :toExclusive
+           """)
+    long sumAmountByStatusAndCancelledBetween(@Param("status") PaymentStatus status,
+                                              @Param("from") LocalDateTime from,
+                                              @Param("toExclusive") LocalDateTime toExclusive);
+
+    long countByStatus(PaymentStatus status);
 }
