@@ -54,18 +54,4 @@ public interface MentorProfileRepository extends JpaRepository<MentorProfile, Lo
             @Param("keyword") String keyword,
             Pageable pageable);
 
-    /**
-     * 카테고리 무관하게 APPROVED 멘토 전체에서 검색 (현재 멘토 제외).
-     * 관리자가 "전체 멘토 보기" 옵션을 켰을 때 사용.
-     */
-    @Query("""
-        SELECT mp FROM MentorProfile mp
-        WHERE mp.status = com.devmatch.entity.MentorStatus.APPROVED
-          AND mp.user.id <> :excludeUserId
-          AND (:keyword = '' OR LOWER(mp.user.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
-        """)
-    Page<MentorProfile> findApprovedExcludingUser(
-            @Param("excludeUserId") Long excludeUserId,
-            @Param("keyword") String keyword,
-            Pageable pageable);
 }

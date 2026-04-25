@@ -129,23 +129,10 @@ class AdminMentorChangeRequestServiceTest {
                 eq("Java BE"), eq(20L), eq(""), any()))
                 .thenReturn(org.springframework.data.domain.Page.empty());
 
-        service.listCandidateMentors(100L, "", true, org.springframework.data.domain.PageRequest.of(0, 10));
+        service.listCandidateMentors(100L, "", org.springframework.data.domain.PageRequest.of(0, 10));
 
         verify(mentorProfileRepository).findApprovedByCategoryAndKeyword(
                 eq("Java BE"), eq(20L), eq(""), any());
-    }
-
-    @Test
-    void listCandidateMentors_sameCategoryOnly_false_시_카테고리_무시() {
-        MentorChangeRequest r = pending(100L, 7L, 20L);
-        when(requestRepository.findById(100L)).thenReturn(Optional.of(r));
-        when(mentorProfileRepository.findApprovedExcludingUser(eq(20L), eq(""), any()))
-                .thenReturn(org.springframework.data.domain.Page.empty());
-
-        service.listCandidateMentors(100L, "", false, org.springframework.data.domain.PageRequest.of(0, 10));
-
-        verify(mentorProfileRepository).findApprovedExcludingUser(eq(20L), eq(""), any());
-        verifyNoInteractions(matchingRepository);
     }
 
     private com.devmatch.entity.User userOf(Long id) {
