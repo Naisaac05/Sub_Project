@@ -194,6 +194,7 @@ export interface MatchingResponse {
   menteeName: string;
   mentorId: number;
   mentorName: string;
+  applicationId: number | null;
   category: string;
   message: string;
   status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELLED' | 'TRIAL';
@@ -205,4 +206,35 @@ export interface MatchingResponse {
 export interface MatchingAcceptRequest {
   accepted: boolean;
   rejectedReason?: string;
+}
+
+export interface ApplicationResponse {
+  id: number;
+  menteeId: number;
+  currentLevel: string;
+  targetTechStack: string;
+  careerGoal: string;
+  category: string;
+  courseType: string;
+  desiredMonths: number;
+  languages: string[];
+  platforms: string[];
+  isCsMajor: boolean;
+  learningPaths: string[];
+  careerYears: string;
+  githubUrl: string;
+  projectCount: string;
+  projectDescription: string;
+  weekdayStudyHours: string;
+  weekendStudyHours: string;
+  goal: string;
+  personality: string;
+  selfIntroduction: string;
+  referralSources: string[];
+  referralCode: string;
+  termsAgreed: boolean;
+  status: string;
+  autoMatched: boolean;
+  submittedAt: string;
+  assignedMentorId: number | null;
 }

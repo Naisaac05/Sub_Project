@@ -7,8 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Check, Send, Sparkles } from 'lucide-react';
 import { submitApplication } from '@/lib/application';
-import { fetchCourseSummaries } from '@/lib/courses';
-import type { CourseSummary } from '@/lib/types';
+import { fetchMentorCount } from '@/lib/courses';
 import { useAuth } from '@/contexts/AuthContext';
 
 const LANGUAGES = ['Java', 'JavaScript', 'Python', 'TypeScript', 'C++', 'Go', 'Rust', 'Swift', 'Kotlin', '기타'];
@@ -16,15 +15,37 @@ const PLATFORMS = ['없음', '웹', '안드로이드', 'iOS', '데이터', 'AI',
 const LEARNING_PATHS = ['대학교', '부트캠프', '국비학원', '온라인 강의', '외부활동', '독학', '배우지 않음'];
 const REFERRAL_SOURCES = ['SNS 광고', 'Github', '검색', '지인추천', '블로그', '커뮤니티', '기타'];
 
+const WEEKDAY_DAYS = ['\uC6D4', '\uD654', '\uC218', '\uBAA9', '\uAE08'];
+const WEEKEND_DAYS = ['\uD1A0', '\uC77C'];
+const TIME_BLOCKS = Array.from({ length: 24 }, (_, hour) => {
+  const start = `${String(hour).padStart(2, '0')}:00`;
+  const end = `${String((hour + 1) % 24).padStart(2, '0')}:00`;
+  return `${start}-${end}`;
+});
+const SCHEDULE_LABELS = {
+  dayPlaceholder: '\uC694\uC77C \uC120\uD0DD',
+  timePlaceholder: '\uC2DC\uAC04 \uC120\uD0DD',
+  add: '\uCD94\uAC00',
+  selectedTime: '\uC120\uD0DD\uD55C \uC2DC\uAC04',
+  emptyTime: '\uC544\uC9C1 \uC120\uD0DD\uD55C \uC2DC\uAC04\uC774 \uC5C6\uC2B5\uB2C8\uB2E4.',
+  removeTitle: '\uD074\uB9AD\uD558\uBA74 \uC0AD\uC81C\uB429\uB2C8\uB2E4',
+  daySuffix: '\uC694\uC77C',
+};
+const COURSE_ENTRY_LABELS = {
+  selectedCourse: '\uC120\uD0DD\uD55C \uBA58\uD1A0\uB9C1 \uCF54\uC2A4',
+  startFromCourse: '\uBA58\uD1A0\uB9C1 \uCF54\uC2A4 \uD654\uBA74\uC5D0\uC11C \uC218\uAC15\uC2E0\uCCAD\uC744 \uB20C\uB7EC \uC2E0\uCCAD\uC11C\uB97C \uC2DC\uC791\uD574 \uC8FC\uC138\uC694.',
+  noMentor: '\uD604\uC7AC \uC774 \uCF54\uC2A4\uC5D0\uB294 \uC2B9\uC778\uB41C \uBA58\uD1A0\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4. \uB2E4\uB978 \uCF54\uC2A4\uB97C \uC120\uD0DD\uD558\uAC70\uB098 \uBA58\uD1A0 \uC2B9\uC778 \uD6C4 \uB2E4\uC2DC \uC2E0\uCCAD\uD574 \uC8FC\uC138\uC694.',
+};
+
 export default function ApplyPage() {
   const router = useRouter();
   const { user, isLoggedIn, isLoading } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [courseOptions, setCourseOptions] = useState<CourseSummary[]>([]);
-
-  useEffect(() => {
-    fetchCourseSummaries().then(setCourseOptions).catch(() => setCourseOptions([]));
-  }, []);
+  const [mentorCount, setMentorCount] = useState<number | null>(null);
+  const [checkingMentor, setCheckingMentor] = useState(false);
+  const [weekdayScheduleDraft, setWeekdayScheduleDraft] = useState({ day: '', time: '' });
+  const [weekendScheduleDraft, setWeekendScheduleDraft] = useState({ day: '', time: '' });
+  const applyRedirect = () => encodeURIComponent(`/apply${window.location.search}`);
 
   const [form, setForm] = useState({
     menteeId: 0,
@@ -53,10 +74,30 @@ export default function ApplyPage() {
     termsAgreed: false,
   });
 
+  // 코스 선택 시 멘토 유무 확인
+  useEffect(() => {
+    const course = new URLSearchParams(window.location.search).get('course');
+    if (course) {
+      setForm((prev) => ({ ...prev, category: course }));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!form.category) {
+      setMentorCount(null);
+      return;
+    }
+    setCheckingMentor(true);
+    fetchMentorCount(form.category)
+      .then(setMentorCount)
+      .catch(() => setMentorCount(null))
+      .finally(() => setCheckingMentor(false));
+  }, [form.category]);
+
   useEffect(() => {
     if (!isLoading && !isLoggedIn) {
       alert('로그인이 필요한 페이지입니다.');
-      router.push('/auth/login?redirect=/apply');
+      router.push(`/auth/login?redirect=${applyRedirect()}`);
     }
   }, [isLoading, isLoggedIn, router]);
 
@@ -86,10 +127,12 @@ export default function ApplyPage() {
     form.referralSources.length > 0 &&
     form.termsAgreed;
 
+  const hasNoAvailableMentor = () => form.category !== '' && !checkingMentor && mentorCount === 0;
+
   const handleSubmit = async () => {
     if (!isLoggedIn || !user) {
       alert('로그인이 필요합니다.');
-      router.push('/auth/login?redirect=/apply');
+      router.push(`/auth/login?redirect=${applyRedirect()}`);
       return;
     }
 
@@ -100,6 +143,11 @@ export default function ApplyPage() {
 
     if (!isFormValid()) {
       alert('필수 항목을 모두 입력해주세요.');
+      return;
+    }
+
+    if (hasNoAvailableMentor()) {
+      alert(COURSE_ENTRY_LABELS.noMentor);
       return;
     }
 
@@ -188,6 +236,99 @@ export default function ApplyPage() {
     </div>
   );
 
+  const ScheduleSelect = ({
+    days,
+    field,
+    draft,
+    setDraft,
+  }: {
+    days: string[];
+    field: 'weekdayStudyHours' | 'weekendStudyHours';
+    draft: { day: string; time: string };
+    setDraft: (draft: { day: string; time: string }) => void;
+  }) => {
+    const selectedSlots = (form[field] || '')
+      .split(', ')
+      .map((value) => value.trim())
+      .filter(Boolean);
+
+    const addSlot = () => {
+      if (!draft.day || !draft.time) return;
+
+      const slot = `${draft.day} ${draft.time}`;
+      if (selectedSlots.includes(slot)) return;
+
+      setForm((prev) => ({
+        ...prev,
+        [field]: [...selectedSlots, slot].join(', '),
+      }));
+      setDraft({ day: '', time: '' });
+    };
+
+    const removeSlot = (slot: string) => {
+      setForm((prev) => ({
+        ...prev,
+        [field]: selectedSlots.filter((item) => item !== slot).join(', '),
+      }));
+    };
+
+    return (
+      <div className="space-y-4 rounded-2xl border border-gray-100 bg-white p-4">
+        <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+          <select
+            value={draft.day}
+            onChange={(event) => setDraft({ ...draft, day: event.target.value })}
+            className="w-full rounded-xl border-2 border-gray-100 bg-white p-3 text-sm text-gray-700 transition-colors focus:border-blue-500 focus:ring-0"
+          >
+            <option value="">{SCHEDULE_LABELS.dayPlaceholder}</option>
+            {days.map((day) => (
+              <option key={day} value={day}>{day}{SCHEDULE_LABELS.daySuffix}</option>
+            ))}
+          </select>
+          <select
+            value={draft.time}
+            onChange={(event) => setDraft({ ...draft, time: event.target.value })}
+            className="w-full rounded-xl border-2 border-gray-100 bg-white p-3 text-sm text-gray-700 transition-colors focus:border-blue-500 focus:ring-0"
+          >
+            <option value="">{SCHEDULE_LABELS.timePlaceholder}</option>
+            {TIME_BLOCKS.map((time) => (
+              <option key={time} value={time}>{time}</option>
+            ))}
+          </select>
+          <button
+            type="button"
+            onClick={addSlot}
+            disabled={!draft.day || !draft.time}
+            className="rounded-xl bg-gray-900 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
+          >
+            {SCHEDULE_LABELS.add}
+          </button>
+        </div>
+
+        <div className="rounded-xl bg-gray-50 px-4 py-3">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-gray-400">{SCHEDULE_LABELS.selectedTime}</p>
+          {selectedSlots.length === 0 ? (
+            <p className="text-sm text-gray-500">{SCHEDULE_LABELS.emptyTime}</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {selectedSlots.map((slot) => (
+                <button
+                  key={slot}
+                  type="button"
+                  onClick={() => removeSlot(slot)}
+                  className="rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700 transition-colors hover:border-red-100 hover:bg-red-50 hover:text-red-600"
+                  title={SCHEDULE_LABELS.removeTitle}
+                >
+                  {slot} x
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   if (isLoading || !user) {
     return (
       <>
@@ -241,24 +382,16 @@ export default function ApplyPage() {
           </div>
 
           <div className="space-y-8 rounded-3xl border border-gray-100 bg-white p-8 shadow-sm sm:p-10">
-            <section className="mb-12">
-              <SectionTitle>멘토링 코스 선택</SectionTitle>
-              <div className="space-y-8">
-                <div>
-                  <QuestionLabel>관심 있는 멘토링 코스를 선택해주세요.</QuestionLabel>
-                  <select
-                    className="w-full p-4 rounded-xl border-2 border-gray-100 focus:border-blue-500 focus:ring-0 transition-colors bg-white text-gray-900"
-                    value={form.category}
-                    onChange={e => setForm({ ...form, category: e.target.value })}
-                  >
-                    <option value="">카테고리 선택…</option>
-                    {courseOptions.map(c => (
-                      <option key={c.courseKey} value={c.courseKey}>{c.title}</option>
-                    ))}
-                  </select>
-                </div>
+            {form.category ? (
+              <div className="rounded-2xl border border-blue-100 bg-blue-50 px-5 py-4">
+                <p className="text-xs font-bold uppercase tracking-wide text-blue-500">{COURSE_ENTRY_LABELS.selectedCourse}</p>
+                <p className="mt-1 text-sm font-semibold text-blue-900">{form.category}</p>
               </div>
-            </section>
+            ) : (
+              <div className="rounded-2xl border border-amber-100 bg-amber-50 px-5 py-4">
+                <p className="text-sm font-semibold text-amber-800">{COURSE_ENTRY_LABELS.startFromCourse}</p>
+              </div>
+            )}
 
             <section className="mb-12">
               <SectionTitle>개발 배경</SectionTitle>
@@ -359,33 +492,21 @@ export default function ApplyPage() {
                   />
                 </div>
                 <div>
-                  <QuestionLabel>관심 분야 카테고리를 적어주세요.</QuestionLabel>
-                  <input
-                    type="text"
-                    value={form.category}
-                    onChange={(event) => setForm((prev) => ({ ...prev, category: event.target.value }))}
-                    placeholder="예: backend, frontend"
-                    className="w-full rounded-xl border-2 border-gray-100 p-4 transition-colors focus:border-blue-500 focus:ring-0"
-                  />
-                </div>
-                <div>
                   <QuestionLabel>평일 멘토링이 가능한 시간을 적어주세요.</QuestionLabel>
-                  <input
-                    type="text"
-                    value={form.weekdayStudyHours}
-                    onChange={(event) => setForm((prev) => ({ ...prev, weekdayStudyHours: event.target.value }))}
-                    placeholder="예: 월/수/금 20:00~22:00"
-                    className="w-full rounded-xl border-2 border-gray-100 p-4 transition-colors focus:border-blue-500 focus:ring-0"
+                  <ScheduleSelect
+                    days={WEEKDAY_DAYS}
+                    field="weekdayStudyHours"
+                    draft={weekdayScheduleDraft}
+                    setDraft={setWeekdayScheduleDraft}
                   />
                 </div>
                 <div>
                   <QuestionLabel>주말 멘토링이 가능한 시간을 적어주세요.</QuestionLabel>
-                  <input
-                    type="text"
-                    value={form.weekendStudyHours}
-                    onChange={(event) => setForm((prev) => ({ ...prev, weekendStudyHours: event.target.value }))}
-                    placeholder="예: 토요일 14:00~17:00"
-                    className="w-full rounded-xl border-2 border-gray-100 p-4 transition-colors focus:border-blue-500 focus:ring-0"
+                  <ScheduleSelect
+                    days={WEEKEND_DAYS}
+                    field="weekendStudyHours"
+                    draft={weekendScheduleDraft}
+                    setDraft={setWeekendScheduleDraft}
                   />
                 </div>
                 <div>
@@ -463,9 +584,11 @@ export default function ApplyPage() {
               <button
                 type="button"
                 onClick={handleSubmit}
-                disabled={!isFormValid() || isSubmitting}
+                disabled={!isFormValid() || isSubmitting || hasNoAvailableMentor()}
                 className={`flex w-full items-center justify-center gap-2 rounded-2xl py-5 text-lg font-bold transition-all duration-300 ${
-                  isFormValid() && !isSubmitting ? 'bg-gray-900 text-white shadow-xl hover:bg-gray-800' : 'cursor-not-allowed bg-gray-100 text-gray-400'
+                  isFormValid() && !isSubmitting && !hasNoAvailableMentor()
+                    ? 'bg-gray-900 text-white shadow-xl hover:bg-gray-800'
+                    : 'cursor-not-allowed bg-gray-100 text-gray-400'
                 }`}
               >
                 {isSubmitting ? '제출 중...' : '신청서 저장하기'}

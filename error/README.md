@@ -32,6 +32,15 @@
 
 ## 인덱스
 
+- [2026-04-25 Course-driven application entry showed unavailable courses](2026-04-25-course-driven-application-entry.md)
+- [2026-04-25 mentor_profile_courses 조인 테이블 데이터 누락으로 매칭 실패](2026-04-25-mentor-course-mapping-missing.md)
+- [2026-04-25 Course-specific auto matching did not filter mentor courses](2026-04-25-course-specific-auto-matching.md)
+- [2026-04-25 Mentor could not review matched mentee application and unavailable courses were still submittable](2026-04-25-mentor-application-detail-and-course-availability.md)
+- [2026-04-25 Apply page course availability guide was shown in English and time entry was too free-form](2026-04-25-apply-course-guide-english-and-time-select.md)
+- [2026-04-25 Payment success page did not confirm application matching](2026-04-25-payment-success-token-confirm-matching.md)
+- [2026-04-25 Matching application detail text rendered as mojibake](2026-04-25-matching-application-mojibake-text.md)
+- [2026-04-25 멘토 매칭 내역에서 멘티 신청서를 확인할 수 없던 문제](2026-04-25-mentor-matching-application-detail.md)
+- [2026-04-25 멘티 신청서 자동 매칭 흐름에 멘토 승인/거절 API가 남아 있던 문제](2026-04-25-application-auto-matching-mentor-reject.md)
 - [2026-04-25 AdminAuditLog.target_type 컬럼 길이 부족 — MENTOR_CHANGE_REQUEST 삽입 시 500](2026-04-25-admin-audit-log-target-type-too-short.md)
 - [2026-04-24 Admin 게시물 상세 페이지 — 비정수 경로 진입 시 스켈레톤 무한 렌더](2026-04-24-admin-post-detail-nan-id-infinite-skeleton.md)
 - [2026-04-24 커뮤니티 새 글 카테고리 필터 재발](2026-04-24-community-category-slug-normalization.md)

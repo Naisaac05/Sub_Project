@@ -224,7 +224,7 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
 
                 <div className="mt-8 flex flex-wrap gap-4">
                   <button
-                    onClick={() => router.push('/apply')}
+                    onClick={() => router.push(`/apply?course=${course.slug}`)}
                     className="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-500"
                   >
                     신청하기 <ArrowRight size={16} />
@@ -433,7 +433,7 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                 </div>
 
                 <button
-                  onClick={() => router.push('/apply')}
+                  onClick={() => router.push(`/apply?course=${course.slug}`)}
                   className="mt-8 inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-5 py-4 text-sm font-bold text-white transition-colors hover:bg-blue-500"
                 >
                   이 플랜으로 신청하기
