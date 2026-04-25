@@ -69,6 +69,9 @@ public class AdminMentorChangeRequestService {
     public AdminMentorChangeDetailResponse approve(
             Long adminId, Long requestId, AdminMentorChangeApproveRequest req) {
         MentorChangeRequest r = findRequiring(requestId);
+        // 엔티티 approve() 도 PENDING 검증을 하지만, 그건 swap() 이후에 실행된다.
+        // 여기서 사전에 막지 않으면 non-PENDING 신청에 대해 swap 부작용이 일어나고
+        // 이후 IllegalStateException 으로 트랜잭션이 롤백되더라도 외부 행위 흔적이 남을 수 있다.
         if (r.getStatus() != MentorChangeRequestStatus.PENDING) {
             throw new IllegalStateException(
                     "PENDING 상태에서만 처리할 수 있습니다 (현재: " + r.getStatus() + ")");
@@ -86,6 +89,10 @@ public class AdminMentorChangeRequestService {
     public AdminMentorChangeDetailResponse reject(
             Long adminId, Long requestId, AdminMentorChangeRejectRequest req) {
         MentorChangeRequest r = findRequiring(requestId);
+        if (r.getStatus() != MentorChangeRequestStatus.PENDING) {
+            throw new IllegalStateException(
+                    "PENDING 상태에서만 처리할 수 있습니다 (현재: " + r.getStatus() + ")");
+        }
         String menteeReason = r.getReason();
         r.reject(adminId, req.rejectReason());
         auditLogService.record(adminId, AdminActionType.MENTOR_CHANGE_REJECT,

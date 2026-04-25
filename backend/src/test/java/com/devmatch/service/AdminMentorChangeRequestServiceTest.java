@@ -98,4 +98,50 @@ class AdminMentorChangeRequestServiceTest {
                 eq("MENTOR_CHANGE_REQUEST"), eq(100L), eq("객관적 사유 부족"),
                 eq(Map.of("menteeReason", "스타일 안 맞음")));
     }
+
+    @Test
+    void reject_PENDING_아니면_예외() {
+        MentorChangeRequest r = pending(100L, 7L, 20L);
+        r.cancel();
+        when(requestRepository.findById(100L)).thenReturn(Optional.of(r));
+
+        assertThatThrownBy(() -> service.reject(99L, 100L,
+                new com.devmatch.dto.admin.menteechange.AdminMentorChangeRejectRequest("사유")))
+                .isInstanceOf(IllegalStateException.class);
+        verifyNoInteractions(auditLogService);
+    }
+
+    @Test
+    void listCandidateMentors_현재멘토_쿼리_excludeUserId_로_전달() {
+        MentorChangeRequest r = pending(100L, 7L, 20L);
+        when(requestRepository.findById(100L)).thenReturn(Optional.of(r));
+
+        com.devmatch.entity.User mentee = userOf(7L);
+        com.devmatch.entity.User mentor = userOf(20L);
+        com.devmatch.entity.Matching matching = com.devmatch.entity.Matching.builder()
+                .mentee(mentee).mentor(mentor)
+                .category("Java BE")
+                .status(com.devmatch.entity.MatchingStatus.ACCEPTED)
+                .build();
+        ReflectionTestUtils.setField(matching, "id", 10L);
+        when(matchingRepository.findById(10L)).thenReturn(Optional.of(matching));
+        when(mentorProfileRepository.findApprovedByCategoryAndKeyword(
+                eq("Java BE"), eq(20L), eq(""), any()))
+                .thenReturn(org.springframework.data.domain.Page.empty());
+
+        service.listCandidateMentors(100L, "", org.springframework.data.domain.PageRequest.of(0, 10));
+
+        verify(mentorProfileRepository).findApprovedByCategoryAndKeyword(
+                eq("Java BE"), eq(20L), eq(""), any());
+    }
+
+    private com.devmatch.entity.User userOf(Long id) {
+        com.devmatch.entity.User u = com.devmatch.entity.User.builder()
+                .email("u").name("u").password("p")
+                .role(com.devmatch.entity.Role.MENTEE)
+                .status(com.devmatch.entity.UserStatus.ACTIVE)
+                .build();
+        ReflectionTestUtils.setField(u, "id", id);
+        return u;
+    }
 }
