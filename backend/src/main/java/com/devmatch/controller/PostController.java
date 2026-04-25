@@ -3,6 +3,7 @@ package com.devmatch.controller;
 import com.devmatch.dto.common.ApiResponse;
 import com.devmatch.dto.community.CommentCreateRequest;
 import com.devmatch.dto.community.CommentResponse;
+import com.devmatch.dto.community.ImageUploadResponse;
 import com.devmatch.dto.community.PostCreateRequest;
 import com.devmatch.dto.community.PostResponse;
 import com.devmatch.security.CustomUserDetails;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,8 +32,6 @@ public class PostController {
 
     private final PostService postService;
 
-    // ===== 게시글 =====
-
     @Operation(summary = "게시글 작성", description = "커뮤니티에 게시글을 작성합니다")
     @PostMapping
     public ResponseEntity<ApiResponse<PostResponse>> createPost(
@@ -41,6 +41,16 @@ public class PostController {
         PostResponse response = postService.createPost(userDetails.getUserId(), request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("게시글이 작성되었습니다", response));
+    }
+
+    @Operation(summary = "커뮤니티 이미지 업로드", description = "게시글에 사용할 이미지를 업로드합니다")
+    @PostMapping("/images")
+    public ResponseEntity<ApiResponse<ImageUploadResponse>> uploadPostImage(
+            @RequestParam("file") MultipartFile file) {
+
+        ImageUploadResponse response = postService.uploadImage(file);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success("이미지가 업로드되었습니다", response));
     }
 
     @Operation(summary = "게시글 목록 조회", description = "게시글 목록을 페이지네이션으로 조회합니다")
@@ -84,8 +94,6 @@ public class PostController {
         return ResponseEntity.ok(ApiResponse.success("게시글이 삭제되었습니다", null));
     }
 
-    // ===== 좋아요 =====
-
     @Operation(summary = "좋아요 토글", description = "게시글에 좋아요를 누르거나 취소합니다")
     @PostMapping("/{postId}/like")
     public ResponseEntity<ApiResponse<PostResponse>> toggleLike(
@@ -96,8 +104,6 @@ public class PostController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    // ===== 댓글 =====
-
     @Operation(summary = "댓글 작성", description = "게시글에 댓글을 작성합니다")
     @PostMapping("/{postId}/comments")
     public ResponseEntity<ApiResponse<CommentResponse>> createComment(
@@ -105,19 +111,15 @@ public class PostController {
             @PathVariable Long postId,
             @Valid @RequestBody CommentCreateRequest request) {
 
-        CommentResponse response = postService.createComment(
-                userDetails.getUserId(), postId, request);
+        CommentResponse response = postService.createComment(userDetails.getUserId(), postId, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("댓글이 작성되었습니다", response));
     }
 
     @Operation(summary = "댓글 목록 조회", description = "게시글의 댓글 목록을 조회합니다")
     @GetMapping("/{postId}/comments")
-    public ResponseEntity<ApiResponse<List<CommentResponse>>> getComments(
-            @PathVariable Long postId) {
-
-        List<CommentResponse> responses = postService.getComments(postId);
-        return ResponseEntity.ok(ApiResponse.success(responses));
+    public ResponseEntity<ApiResponse<List<CommentResponse>>> getComments(@PathVariable Long postId) {
+        return ResponseEntity.ok(ApiResponse.success(postService.getComments(postId)));
     }
 
     @Operation(summary = "댓글 삭제", description = "본인의 댓글을 삭제합니다")

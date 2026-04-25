@@ -18,6 +18,7 @@ export interface CommunityPost {
   category: CommunityCategory;
   title: string;
   content: string;
+  imageUrl?: string | null;
   viewCount: number;
   likeCount: number;
   commentCount: number;
@@ -41,33 +42,91 @@ type PageResponse<T> = {
   number: number;
 };
 
+const COMMUNITY_CATEGORY_CODES: Record<CommunityCategory, string> = {
+  [COMMUNITY_CATEGORIES[0]]: 'question',
+  [COMMUNITY_CATEGORIES[1]]: 'study',
+  [COMMUNITY_CATEGORIES[2]]: 'review',
+  [COMMUNITY_CATEGORIES[3]]: 'career',
+  [COMMUNITY_CATEGORIES[4]]: 'free',
+};
+
+const COMMUNITY_CATEGORY_BY_CODE = Object.fromEntries(
+  Object.entries(COMMUNITY_CATEGORY_CODES).map(([category, code]) => [code, category as CommunityCategory])
+) as Record<string, CommunityCategory>;
+
+type CommunityPostPayload = {
+  category: CommunityCategory;
+  title: string;
+  content: string;
+  imageUrl?: string;
+};
+
+export function normalizeCommunityCategory(category: string | null | undefined): CommunityCategory {
+  if (!category) {
+    return COMMUNITY_CATEGORIES[4];
+  }
+
+  const trimmed = category.trim();
+  if ((COMMUNITY_CATEGORIES as readonly string[]).includes(trimmed)) {
+    return trimmed as CommunityCategory;
+  }
+
+  return COMMUNITY_CATEGORY_BY_CODE[trimmed.toLowerCase()] ?? COMMUNITY_CATEGORIES[4];
+}
+
+function serializeCommunityPostPayload(data: CommunityPostPayload) {
+  return {
+    ...data,
+    category: COMMUNITY_CATEGORY_CODES[normalizeCommunityCategory(data.category)],
+  };
+}
+
+function mapCommunityPost(post: CommunityPost): CommunityPost {
+  return {
+    ...post,
+    category: normalizeCommunityCategory(post.category),
+  };
+}
+
+function mapCommunityPostPage(page: PageResponse<CommunityPost>): PageResponse<CommunityPost> {
+  return {
+    ...page,
+    content: page.content.map(mapCommunityPost),
+  };
+}
+
 export async function getCommunityPosts() {
   const response = await apiClient.get<ApiResponse<PageResponse<CommunityPost>>>('/posts', {
     params: { size: 100 },
   });
-  return response.data;
+  return {
+    ...response.data,
+    data: mapCommunityPostPage(response.data.data),
+  };
 }
 
 export async function getCommunityPost(postId: number) {
   const response = await apiClient.get<ApiResponse<CommunityPost>>(`/posts/${postId}`);
-  return response.data;
+  return {
+    ...response.data,
+    data: mapCommunityPost(response.data.data),
+  };
 }
 
-export async function createCommunityPost(data: {
-  category: CommunityCategory;
-  title: string;
-  content: string;
-}) {
-  const response = await apiClient.post<ApiResponse<CommunityPost>>('/posts', data);
-  return response.data;
+export async function createCommunityPost(data: CommunityPostPayload) {
+  const response = await apiClient.post<ApiResponse<CommunityPost>>('/posts', serializeCommunityPostPayload(data));
+  return {
+    ...response.data,
+    data: mapCommunityPost(response.data.data),
+  };
 }
 
-export async function updateCommunityPost(
-  postId: number,
-  data: { category: CommunityCategory; title: string; content: string }
-) {
-  const response = await apiClient.put<ApiResponse<CommunityPost>>(`/posts/${postId}`, data);
-  return response.data;
+export async function updateCommunityPost(postId: number, data: CommunityPostPayload) {
+  const response = await apiClient.put<ApiResponse<CommunityPost>>(`/posts/${postId}`, serializeCommunityPostPayload(data));
+  return {
+    ...response.data,
+    data: mapCommunityPost(response.data.data),
+  };
 }
 
 export async function deleteCommunityPost(postId: number) {
@@ -75,9 +134,22 @@ export async function deleteCommunityPost(postId: number) {
   return response.data;
 }
 
+export async function uploadCommunityImage(file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await apiClient.post<ApiResponse<{ imageUrl: string }>>('/posts/images', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return response.data;
+}
+
 export async function toggleCommunityLike(postId: number) {
   const response = await apiClient.post<ApiResponse<CommunityPost>>(`/posts/${postId}/like`);
-  return response.data;
+  return {
+    ...response.data,
+    data: mapCommunityPost(response.data.data),
+  };
 }
 
 export async function getCommunityComments(postId: number) {
