@@ -40,12 +40,15 @@ public class DataInitializer implements CommandLineRunner {
             initReactTests();
             initPythonTests();
             initAlgorithmTests();
-            initMentors();
             log.info("===== 초기 데이터 삽입 완료: 테스트 {}개, 문제 {}개 =====",
                     testRepository.count(), questionRepository.count());
         } else {
             log.info("테스트 데이터가 이미 존재합니다. 초기화를 건너뜁니다.");
         }
+
+        // 멘토 시드는 매 startup 마다 실행 — createMentor 가 idempotent 하며
+        // 기존 멘토에 누락된 코스 링크/가용성을 백필한다.
+        initMentors();
 
         initSamplePayments();
     }
