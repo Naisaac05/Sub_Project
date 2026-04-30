@@ -53,6 +53,19 @@ type ReviewFormState = {
   content: string;
 };
 
+const REVIEW_LABELS = {
+  title: '\uC218\uAC15\uC0DD \uD6C4\uAE30',
+  description:
+    '\uC2E4\uC81C \uC218\uAC15\uC0DD\uC774 \uC791\uC131\uD55C \uD6C4\uAE30\uB9CC \uB178\uCD9C\uB429\uB2C8\uB2E4.',
+  checking: '\uC218\uAC15 \uC774\uB825\uC744 \uD655\uC778\uD558\uB294 \uC911\uC785\uB2C8\uB2E4.',
+  noPermission:
+    '\uC218\uAC15 \uC774\uB825\uC774 \uC788\uB294 \uBA58\uD2F0\uB9CC \uD6C4\uAE30\uB97C \uC791\uC131\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4. \uC774 \uACFC\uC815\uC5D0 \uB9E4\uCE6D\uB418\uC5C8\uAC70\uB098 \uC218\uAC15\uC744 \uC644\uB8CC\uD55C \uB4A4 \uB2E4\uC2DC \uB0A8\uACA8\uC8FC\uC138\uC694.',
+  noPermissionTitle:
+    '\uC218\uAC15\uC0DD \uD6C4\uAE30\uB294 \uC2E4\uC81C \uC218\uAC15\uC0DD\uB9CC \uC791\uC131\uD560 \uC218 \uC788\uC5B4\uC694.',
+  writeAllowed:
+    '\uC774 \uACFC\uC815\uC758 \uC2E4\uC81C \uC218\uAC15 \uC774\uB825\uC774 \uD655\uC778\uB418\uC5B4 \uD6C4\uAE30\uB97C \uC791\uC131\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.',
+};
+
 const FALLBACK_COURSE: CourseCatalogItem = {
   slug: 'fallback',
   title: '멘토링 코스',
@@ -154,7 +167,7 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
 
   const handleCreateReview = () => {
     if (!user || !canWriteReview) {
-      setReviewMessage('후기는 실제 수강 중이거나 수강 이력이 있는 멘티만 작성할 수 있습니다.');
+      setReviewMessage(REVIEW_LABELS.noPermission);
       return;
     }
 
@@ -284,17 +297,17 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
           <div className="mx-auto max-w-6xl px-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="text-3xl font-bold text-white">수강생 후기</h2>
+                <h2 className="text-3xl font-bold text-white">{REVIEW_LABELS.title}</h2>
                 <p className="mt-3 break-keep text-sm leading-7 text-gray-400">
-                  실제로 작성된 후기만 노출합니다. 아직 등록된 후기가 없으면 빈 상태로 안내합니다.
+                  {REVIEW_LABELS.description}
                 </p>
               </div>
               <div className="rounded-2xl bg-white/5 px-4 py-3 text-sm text-gray-300">
                 {reviewLoading
-                  ? '수강 이력을 확인하는 중입니다.'
+                  ? REVIEW_LABELS.checking
                   : canWriteReview
-                    ? '이 과정의 실제 수강 이력이 확인되어 후기를 작성할 수 있습니다.'
-                    : '후기는 실제 수강 중이거나 수강 이력이 있는 멘티만 작성할 수 있습니다.'}
+                    ? REVIEW_LABELS.writeAllowed
+                    : REVIEW_LABELS.noPermission}
               </div>
             </div>
 
@@ -345,6 +358,14 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                     이미 이 과정에 후기를 남겼습니다. 새로 등록하면 기존 후기가 최신 내용으로 교체됩니다.
                   </div>
                 )}
+
+                {!reviewLoading && !canWriteReview && (
+                  <div className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4">
+                    <p className="break-keep text-sm font-semibold text-amber-200">{REVIEW_LABELS.noPermissionTitle}</p>
+                    <p className="mt-2 break-keep text-sm leading-6 text-amber-100/80">{REVIEW_LABELS.noPermission}</p>
+                  </div>
+                )}
+
 
                 <div className="mt-6">
                   <label className="mb-3 block text-sm font-semibold text-gray-200">별점</label>
