@@ -17,11 +17,15 @@ public class AiReviewProviderSelector {
 
         return switch (properties.provider()) {
             case OPENAI -> hasOpenAiKey() ? AiReviewProviderType.OPENAI : AiReviewProviderType.RULE_BASED;
+            case PYTHON -> hasPythonAiConfig() ? AiReviewProviderType.PYTHON : AiReviewProviderType.RULE_BASED;
             case OLLAMA -> hasOllamaConfig() ? AiReviewProviderType.OLLAMA : AiReviewProviderType.RULE_BASED;
             case RULE_BASED -> AiReviewProviderType.RULE_BASED;
             case AUTO -> {
                 if (hasOpenAiKey()) {
                     yield AiReviewProviderType.OPENAI;
+                }
+                if (hasPythonAiConfig()) {
+                    yield AiReviewProviderType.PYTHON;
                 }
                 yield hasOllamaConfig() ? AiReviewProviderType.OLLAMA : AiReviewProviderType.RULE_BASED;
             }
@@ -33,6 +37,15 @@ public class AiReviewProviderSelector {
         return apiKey != null
                 && !apiKey.isBlank()
                 && !apiKey.equals("your-openai-api-key");
+    }
+
+    public boolean hasPythonAiConfig() {
+        return properties.python() != null
+                && properties.python().enabled()
+                && properties.python().baseUrl() != null
+                && !properties.python().baseUrl().isBlank()
+                && properties.python().model() != null
+                && !properties.python().model().isBlank();
     }
 
     public boolean hasOllamaConfig() {
