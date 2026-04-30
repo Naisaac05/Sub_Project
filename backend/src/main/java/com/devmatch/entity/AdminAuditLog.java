@@ -30,7 +30,7 @@ public class AdminAuditLog {
     @Column(name = "action_type", nullable = false, length = 30)
     private AdminActionType actionType;
 
-    @Column(name = "target_type", nullable = false, length = 20)
+    @Column(name = "target_type", nullable = false, length = 30)
     private String targetType;
 
     @Column(name = "target_id", nullable = false)

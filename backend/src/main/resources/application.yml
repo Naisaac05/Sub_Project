@@ -61,6 +61,27 @@ app:
   payment:
     toss-cancel-enabled: ${TOSS_CANCEL_ENABLED:false} # 기본 false (local/dev). prod 는 application-prod.yml 에서 true.
 
+  ai-review:
+    enabled: ${AI_REVIEW_ENABLED:true}
+    provider: ${AI_REVIEW_PROVIDER:AUTO}
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      model: ${OPENAI_MODEL:gpt-4.1-mini}
+      base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1/responses}
+      temperature: ${OPENAI_TEMPERATURE:0.2}
+    ollama:
+      enabled: ${OLLAMA_ENABLED:true}
+      model: ${OLLAMA_MODEL:qwen2.5:1.5b}
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      temperature: ${OLLAMA_TEMPERATURE:0.2}
+      max-tokens: ${OLLAMA_MAX_TOKENS:200}
+    rule-based:
+      enabled: ${AI_REVIEW_RULE_BASED_ENABLED:true}
+    limits:
+      max-questions-per-wrong-answer: ${AI_REVIEW_MAX_QUESTIONS_PER_WRONG_ANSWER:3}
+      max-questions-per-session: ${AI_REVIEW_MAX_QUESTIONS_PER_SESSION:10}
+      max-user-answer-length: ${AI_REVIEW_MAX_USER_ANSWER_LENGTH:700}
+
 # ===== Swagger =====
 springdoc:
   default-consumes-media-type: application/json

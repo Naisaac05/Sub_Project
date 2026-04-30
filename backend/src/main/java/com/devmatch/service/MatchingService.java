@@ -1,5 +1,6 @@
 package com.devmatch.service;
 
+import com.devmatch.dto.application.ApplicationResponse;
 import com.devmatch.dto.matching.*;
 import com.devmatch.entity.*;
 import com.devmatch.exception.*;
@@ -21,6 +22,8 @@ public class MatchingService {
     private final MentorProfileRepository mentorProfileRepository;
     private final UserRepository userRepository;
     private final TestResultRepository testResultRepository;
+    private final ApplicationRepository applicationRepository;
+    private final ApplicationService applicationService;
 
     public List<MentorRecommendResponse> recommendMentors(Long userId, String category) {
         // APPROVED 멘토 중 해당 분야 전문가 필터링
@@ -120,6 +123,26 @@ public class MatchingService {
                 .stream()
                 .map(MatchingResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    public ApplicationResponse getApplicationForMatching(Long userId, Long matchingId) {
+        Matching matching = matchingRepository.findById(matchingId)
+                .orElseThrow(() -> new MatchingNotFoundException("Matching not found with ID: " + matchingId));
+
+        boolean isParticipant = matching.getMentor().getId().equals(userId)
+                || matching.getMentee().getId().equals(userId);
+        if (!isParticipant) {
+            throw new UnauthorizedMatchingException("You can only view applications for your own matching.");
+        }
+
+        if (matching.getApplicationId() == null) {
+            throw new MatchingNotFoundException("This matching has no linked application.");
+        }
+
+        Application application = applicationRepository.findById(matching.getApplicationId())
+                .orElseThrow(() -> new MatchingNotFoundException("Linked application not found with ID: " + matching.getApplicationId()));
+
+        return applicationService.convertToResponse(application);
     }
 
     /**

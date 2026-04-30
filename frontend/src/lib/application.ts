@@ -31,3 +31,8 @@ export async function submitApplication(data: ApplicationRequest): Promise<ApiRe
   const res = await apiClient.post<ApiResponse<any>>('/applications/submit', data);
   return res.data;
 }
+
+export async function confirmApplicationPayment(applicationId: number): Promise<ApiResponse<any>> {
+  const res = await apiClient.post<ApiResponse<any>>(`/applications/${applicationId}/confirm-payment`);
+  return res.data;
+}

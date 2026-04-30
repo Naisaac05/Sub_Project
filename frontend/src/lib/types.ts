@@ -170,6 +170,44 @@ export interface TestResultResponse {
   submittedAt: string;
 }
 
+export interface WrongQuestionResponse {
+  questionId: number;
+  content: string;
+  correctAnswer: string;
+  selectedAnswer: string;
+  area: string;
+}
+
+export interface AiReviewMessageResponse {
+  id: number;
+  questionId: number | null;
+  role: 'USER' | 'AI';
+  mode: 'CHECK_QUESTION' | 'CHECK_ANSWER' | 'FREE_QUESTION' | 'FREE_ANSWER' | 'EXPLANATION' | 'NEXT_QUESTION' | 'SYSTEM_SUMMARY' | null;
+  content: string;
+  evaluation: 'UNDERSTOOD' | 'PARTIAL' | 'NEEDS_REVIEW' | null;
+  createdAt: string;
+}
+
+export interface AiReviewSessionResponse {
+  sessionId: number;
+  testResultId: number;
+  courseKey: string;
+  status: 'IN_PROGRESS' | 'COMPLETED';
+  summary: string | null;
+  weaknessTags: string | null;
+  wrongQuestions: WrongQuestionResponse[];
+  messages: AiReviewMessageResponse[];
+}
+
+export interface AiReviewSubmitResponse {
+  evaluation: 'UNDERSTOOD' | 'PARTIAL' | 'NEEDS_REVIEW' | 'COMPLETED' | 'FREE_QUESTION' | 'NEXT_QUESTION';
+  feedback: string;
+  nextQuestion: string | null;
+  completed: boolean;
+  summary: string | null;
+  messages: AiReviewMessageResponse[];
+}
+
 // ─── Matching DTOs ───
 export interface MentorRecommendResponse {
   mentorId: number;
@@ -194,6 +232,7 @@ export interface MatchingResponse {
   menteeName: string;
   mentorId: number;
   mentorName: string;
+  applicationId: number | null;
   category: string;
   message: string;
   status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELLED' | 'TRIAL';
@@ -205,4 +244,35 @@ export interface MatchingResponse {
 export interface MatchingAcceptRequest {
   accepted: boolean;
   rejectedReason?: string;
+}
+
+export interface ApplicationResponse {
+  id: number;
+  menteeId: number;
+  currentLevel: string;
+  targetTechStack: string;
+  careerGoal: string;
+  category: string;
+  courseType: string;
+  desiredMonths: number;
+  languages: string[];
+  platforms: string[];
+  isCsMajor: boolean;
+  learningPaths: string[];
+  careerYears: string;
+  githubUrl: string;
+  projectCount: string;
+  projectDescription: string;
+  weekdayStudyHours: string;
+  weekendStudyHours: string;
+  goal: string;
+  personality: string;
+  selfIntroduction: string;
+  referralSources: string[];
+  referralCode: string;
+  termsAgreed: boolean;
+  status: string;
+  autoMatched: boolean;
+  submittedAt: string;
+  assignedMentorId: number | null;
 }

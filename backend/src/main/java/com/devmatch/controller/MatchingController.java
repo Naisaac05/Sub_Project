@@ -1,6 +1,7 @@
 package com.devmatch.controller;
 
 import com.devmatch.dto.common.ApiResponse;
+import com.devmatch.dto.application.ApplicationResponse;
 import com.devmatch.dto.matching.MatchingAcceptRequest;
 import com.devmatch.dto.matching.MatchingRequest;
 import com.devmatch.dto.matching.MatchingResponse;
@@ -73,6 +74,16 @@ public class MatchingController {
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         List<MatchingResponse> response =
                 matchingService.getMyMatchingsAsMentor(userDetails.getUserId());
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @Operation(summary = "매칭된 신청서 상세 조회", description = "멘토/멘티가 본인 매칭에 연결된 신청서를 확인합니다.")
+    @GetMapping("/{id}/application")
+    public ResponseEntity<ApiResponse<ApplicationResponse>> getApplicationForMatching(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long id) {
+        ApplicationResponse response =
+                matchingService.getApplicationForMatching(userDetails.getUserId(), id);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

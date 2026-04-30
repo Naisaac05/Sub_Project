@@ -15,6 +15,7 @@ public class MatchingResponse {
     private String menteeName;
     private Long mentorId;
     private String mentorName;
+    private Long applicationId;
     private String category;
     private String message;
     private String status;
@@ -34,6 +35,7 @@ public class MatchingResponse {
                 matching.getMentee().getName(),
                 matching.getMentor().getId(),
                 matching.getMentor().getName(),
+                matching.getApplicationId(),
                 matching.getCategory(),
                 matching.getMessage(),
                 matching.getStatus().name(),
