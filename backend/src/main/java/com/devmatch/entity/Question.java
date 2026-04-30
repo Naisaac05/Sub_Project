@@ -44,4 +44,13 @@ public class Question {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    public void updateQuestion(String content, List<String> options, Integer correctAnswer,
+                               Integer score, Integer orderIndex) {
+        this.content = content;
+        this.options = options;
+        this.correctAnswer = correctAnswer;
+        this.score = score;
+        this.orderIndex = orderIndex;
+    }
 }

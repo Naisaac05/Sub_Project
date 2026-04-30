@@ -11,6 +11,25 @@ import { getMyResults } from '@/lib/test';
 import { getMyMatchingsAsMentee, getMyMatchingsAsMentor } from '@/lib/matching';
 import type { TestResultResponse, MatchingResponse } from '@/lib/types';
 
+function getDiagnosticStatus(score: number) {
+  if (score >= 80) {
+    return {
+      label: '\uD0C4\uD0C4\uD55C \uC0C1\uD0DC',
+      className: 'text-emerald-400 bg-emerald-500/10',
+    };
+  }
+  if (score >= 60) {
+    return {
+      label: '\uAE30\uBCF8\uAE30',
+      className: 'text-blue-400 bg-blue-500/10',
+    };
+  }
+  return {
+    label: '\uBCF5\uC2B5 \uD544\uC694',
+    className: 'text-amber-400 bg-amber-500/10',
+  };
+}
+
 export default function MyPage() {
   const router = useRouter();
   const { user, isLoggedIn, isLoading, refreshUser } = useAuth();
@@ -380,14 +399,8 @@ export default function MyPage() {
                         <span className="text-white text-sm font-semibold">
                           {result.totalScore}<span className="text-gray-500 font-normal">/100</span>
                         </span>
-                        <span
-                          className={`px-2.5 py-0.5 rounded-md text-xs font-medium ${
-                            result.passed
-                              ? 'text-green-400 bg-green-500/10'
-                              : 'text-red-400 bg-red-500/10'
-                          }`}
-                        >
-                          {result.passed ? '합격' : '불합격'}
+                        <span className={`px-2.5 py-0.5 rounded-md text-xs font-medium ${getDiagnosticStatus(result.totalScore).className}`}>
+                          {getDiagnosticStatus(result.totalScore).label}
                         </span>
                       </div>
                     </div>

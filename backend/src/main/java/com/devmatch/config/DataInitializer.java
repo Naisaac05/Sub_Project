@@ -41,12 +41,15 @@ public class DataInitializer implements CommandLineRunner {
             initReactTests();
             initPythonTests();
             initAlgorithmTests();
-            initMentors();
             log.info("===== 초기 데이터 삽입 완료: 테스트 {}개, 문제 {}개 =====",
                     testRepository.count(), questionRepository.count());
         } else {
             log.info("테스트 데이터가 이미 존재합니다. 초기화를 건너뜁니다.");
         }
+
+        // 멘토 시드는 매 startup 마다 실행 — createMentor 가 idempotent 하며
+        // 기존 멘토에 누락된 코스 링크/가용성을 백필한다.
+        initMentors();
 
         initSamplePayments();
         initDefaultFaqs();
@@ -611,25 +614,53 @@ public class DataInitializer implements CommandLineRunner {
     // ──────────────────────────────────────────────
 
     private void initMentors() {
-        if (mentorProfileRepository.count() > 0) {
-            log.info("멘토 데이터가 이미 존재합니다. 멘토 초기화를 건너뜁니다.");
-            return;
-        }
-
         String encoded = passwordEncoder.encode("mentor1234!");
 
-        createMentor("김자바", "java.mentor@devmatch.com", encoded,
-                List.of("java-backend", "firststep"), 8, "네이버", "Java/Spring 전문 멘토입니다. 대규모 서비스 설계 경험이 풍부합니다.");
-        createMentor("이스프링", "spring.mentor@devmatch.com", encoded,
-                List.of("java-backend", "devops"), 5, "카카오", "Spring 기반 MSA 설계와 DevOps 파이프라인 구축 경험이 있습니다.");
-        createMentor("박리액트", "react.mentor@devmatch.com", encoded,
-                List.of("frontend", "node-backend"), 6, "라인", "React와 Node.js 풀스택 개발 멘토입니다.");
-        createMentor("최파이썬", "python.mentor@devmatch.com", encoded,
-                List.of("python-backend"), 7, "쿠팡", "Python 백엔드와 알고리즘 전문 멘토입니다.");
-        createMentor("정풀스택", "fullstack.mentor@devmatch.com", encoded,
-                List.of("java-backend", "frontend", "kafka"), 10, "토스", "10년차 풀스택 개발자입니다. 서비스 전체 아키텍처 설계를 도와드립니다.");
+        record MentorSeed(String name, String email, java.util.List<String> courseKeys,
+                          int careerYears, String company, String bio) {}
 
-        log.info("멘토 초기 데이터 {}명 삽입 완료", mentorProfileRepository.count());
+        java.util.List<MentorSeed> mentorSeeds = java.util.List.of(
+            new MentorSeed("김자바", "java.mentor@devmatch.com",
+                List.of("java-backend", "firststep"), 8, "네이버",
+                "Java/Spring 전문 멘토입니다. 대규모 서비스 설계 경험이 풍부합니다."),
+            new MentorSeed("이스프링", "spring.mentor@devmatch.com",
+                List.of("java-backend", "devops"), 5, "카카오",
+                "Spring 기반 MSA 설계와 DevOps 파이프라인 구축 경험이 있습니다."),
+            new MentorSeed("박리액트", "react.mentor@devmatch.com",
+                List.of("frontend", "node-backend"), 6, "라인",
+                "React와 Node.js 풀스택 개발 멘토입니다."),
+            new MentorSeed("최파이썬", "python.mentor@devmatch.com",
+                List.of("python-backend"), 7, "쿠팡",
+                "Python 백엔드와 알고리즘 전문 멘토입니다."),
+            new MentorSeed("정풀스택", "fullstack.mentor@devmatch.com",
+                List.of("java-backend", "frontend", "kafka"), 10, "토스",
+                "10년차 풀스택 개발자입니다. 서비스 전체 아키텍처 설계를 도와드립니다.")
+        );
+
+        for (MentorSeed seed : mentorSeeds) {
+            if (!userRepository.existsByEmail(seed.email())) {
+                // 신규 멘토 생성
+                createMentor(seed.name(), seed.email(), encoded,
+                        seed.courseKeys(), seed.careerYears(), seed.company(), seed.bio());
+            } else {
+                // 기존 멘토의 코스 매핑이 비어있으면 복구
+                userRepository.findByEmail(seed.email()).ifPresent(user -> {
+                    mentorProfileRepository.findByUser(user).ifPresent(profile -> {
+                        if (profile.getCourses() == null || profile.getCourses().isEmpty()) {
+                            java.util.List<MentoringCourse> foundCourses =
+                                    mentoringCourseRepository.findAllByCourseKeyInAndActiveTrue(seed.courseKeys());
+                            if (!foundCourses.isEmpty()) {
+                                profile.getCourses().addAll(foundCourses);
+                                mentorProfileRepository.save(profile);
+                                log.info("멘토 {} 의 코스 매핑을 복구했습니다: {}", seed.name(), seed.courseKeys());
+                            }
+                        }
+                    });
+                });
+            }
+        }
+
+        log.info("멘토 초기화/복구 완료 (프로필 {}개)", mentorProfileRepository.count());
     }
 
     // ──────────────────────────────────────────────
@@ -836,7 +867,39 @@ public class DataInitializer implements CommandLineRunner {
 
     private void createMentor(String name, String email, String encodedPassword,
                               List<String> courseKeys, int careerYears, String company, String bio) {
-        if (userRepository.existsByEmail(email)) {
+        java.util.List<MentoringCourse> foundCourses =
+                mentoringCourseRepository.findAllByCourseKeyInAndActiveTrue(courseKeys);
+
+        var existingUser = userRepository.findByEmail(email);
+        if (existingUser.isPresent()) {
+            // 이미 존재하는 멘토 — 누락된 코스 링크/가용성만 보정 (기존 데이터 유지)
+            User user = existingUser.get();
+            mentorProfileRepository.findByUserId(user.getId()).ifPresent(profile -> {
+                java.util.Set<Long> existingCourseIds = profile.getCourses().stream()
+                        .map(MentoringCourse::getId)
+                        .collect(java.util.stream.Collectors.toSet());
+                boolean added = false;
+                for (MentoringCourse c : foundCourses) {
+                    if (!existingCourseIds.contains(c.getId())) {
+                        profile.getCourses().add(c);
+                        added = true;
+                    }
+                }
+                if (added) {
+                    mentorProfileRepository.save(profile);
+                    log.info("멘토 [{}] 누락된 코스 링크 보정", name);
+                }
+            });
+            if (mentorAvailabilityRepository.findByMentorId(user.getId()).isEmpty()) {
+                mentorAvailabilityRepository.save(MentorAvailability.builder()
+                        .mentorId(user.getId())
+                        .isWaiting(true)
+                        .isActive(true)
+                        .dayOfWeek("MONDAY")
+                        .startTime(java.time.LocalTime.of(9, 0))
+                        .endTime(java.time.LocalTime.of(18, 0))
+                        .build());
+            }
             return;
         }
 
@@ -846,9 +909,6 @@ public class DataInitializer implements CommandLineRunner {
                 .name(name)
                 .role(Role.MENTOR)
                 .build());
-
-        java.util.List<MentoringCourse> foundCourses =
-                mentoringCourseRepository.findAllByCourseKeyInAndActiveTrue(courseKeys);
 
         mentorProfileRepository.save(MentorProfile.builder()
                 .user(user)

@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -8,10 +11,13 @@ import {
   Database,
   Layers,
   Layout,
+  Loader2,
   Server,
   Smartphone,
 } from 'lucide-react';
-import { getOpenCourses, getUpcomingCourses, type CourseCatalogItem } from '@/lib/course-catalog';
+import { fetchAvailableCourseSummaries, fetchCourseSummaries } from '@/lib/courses';
+import { COURSE_CATALOG, getCourseBySlug, type CourseCatalogItem } from '@/lib/course-catalog';
+import type { CourseSummary } from '@/lib/types';
 
 const iconMap = {
   server: Server,
@@ -22,6 +28,25 @@ const iconMap = {
   brain: Brain,
   layers: Layers,
 };
+
+function fallbackCourse(course: CourseSummary): CourseCatalogItem {
+  return {
+    slug: course.courseKey,
+    title: course.title,
+    shortTitle: course.title,
+    categoryLabel: 'Mentoring',
+    iconKey: 'layout',
+    summary: '승인된 멘토가 배정 가능한 멘토링 코스입니다.',
+    headline: course.title,
+    description: '멘토링 신청서를 작성하면 이 코스의 승인 멘토와 자동 매칭됩니다.',
+    level: 'All levels',
+    durationLabel: '4개월',
+    matchKeywords: [course.courseKey],
+    outcomes: ['코스 담당 멘토 자동 매칭', '멘티 신청서 기반 멘토링 진행'],
+    sections: [],
+    availability: 'open',
+  };
+}
 
 function CourseCard({ course }: { course: CourseCatalogItem }) {
   const Icon = iconMap[course.iconKey];
@@ -35,8 +60,8 @@ function CourseCard({ course }: { course: CourseCatalogItem }) {
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400">
           <Icon size={22} />
         </div>
-        <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-semibold text-gray-400">
-          {course.categoryLabel}
+        <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+          신청 가능
         </span>
       </div>
       <h2 className="break-keep text-2xl font-bold text-white">{course.title}</h2>
@@ -52,15 +77,53 @@ function CourseCard({ course }: { course: CourseCatalogItem }) {
         ))}
       </div>
       <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-400">
-        자세히 보기 <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+        코스 자세히 보기 <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
       </div>
     </Link>
   );
 }
 
+async function withTimeout<T>(promise: Promise<T>, timeoutMs = 5000): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  const timeout = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error('Course request timed out')), timeoutMs);
+  });
+
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timeoutId));
+}
+
 export default function MentorsPage() {
-  const openCourses = getOpenCourses();
-  const upcomingCourses = getUpcomingCourses();
+  const [availableSummaries, setAvailableSummaries] = useState<CourseSummary[]>([]);
+  const [allSummaries, setAllSummaries] = useState<CourseSummary[]>([]);
+  const [availableLoading, setAvailableLoading] = useState(true);
+
+  useEffect(() => {
+    withTimeout(fetchAvailableCourseSummaries())
+      .then(setAvailableSummaries)
+      .catch(() => setAvailableSummaries([]))
+      .finally(() => setAvailableLoading(false));
+
+    withTimeout(fetchCourseSummaries())
+      .then(setAllSummaries)
+      .catch(() => setAllSummaries([]));
+  }, []);
+
+  const availableCourses = useMemo(
+    () => availableSummaries.map((course) => getCourseBySlug(course.courseKey) ?? fallbackCourse(course)),
+    [availableSummaries],
+  );
+  const upcomingCourses = useMemo(() => {
+    const availableKeys = new Set(availableSummaries.map((course) => course.courseKey));
+    const allKeys = new Set(allSummaries.map((course) => course.courseKey));
+    const inactiveOrUnavailableCourses = allSummaries
+      .filter((course) => !availableKeys.has(course.courseKey))
+      .map((course) => getCourseBySlug(course.courseKey) ?? fallbackCourse(course));
+    const staticOnlyCourses = COURSE_CATALOG.filter(
+      (course) => !availableKeys.has(course.slug) && !allKeys.has(course.slug),
+    );
+
+    return [...inactiveOrUnavailableCourses, ...staticOnlyCourses];
+  }, [allSummaries, availableSummaries]);
 
   return (
     <>
@@ -72,13 +135,10 @@ export default function MentorsPage() {
               Mentoring Courses
             </span>
             <h1 className="mt-6 max-w-3xl break-keep text-4xl font-extrabold tracking-tight sm:text-5xl">
-              분야별 멘토링 코스를 한 곳에서 보고
-              <br />
-              지금 열려 있는 과정부터 바로 시작할 수 있습니다.
+              멘토가 배정 가능한 코스만 신청할 수 있습니다
             </h1>
             <p className="mt-6 max-w-2xl break-keep text-lg leading-8 text-gray-400">
-              백엔드, 프론트엔드, 모바일까지 실제 포트폴리오와 코드 리뷰 중심으로 설계한 코스를 모았습니다.
-              아직 준비 중인 과정은 오픈 예정 상태로 따로 안내합니다.
+              승인된 멘토가 담당 중인 코스만 신청 가능한 과정에 표시됩니다. 코스를 선택한 뒤 수강신청을 누르면 신청서에 해당 코스가 자동으로 설정됩니다.
             </p>
           </div>
         </section>
@@ -86,19 +146,30 @@ export default function MentorsPage() {
         <section className="mx-auto max-w-7xl px-6 py-16">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-white">지금 신청 가능한 과정</h2>
-            <p className="mt-2 text-sm text-gray-400">현재 바로 상세 정보를 확인하고 신청할 수 있는 코스입니다.</p>
+            <p className="mt-2 text-sm text-gray-400">실제 승인 멘토가 연결된 코스만 표시됩니다.</p>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {openCourses.map((course) => (
-              <CourseCard key={course.slug} course={course} />
-            ))}
-          </div>
+
+          {availableLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 size={32} className="animate-spin text-blue-400" />
+            </div>
+          ) : availableCourses.length === 0 ? (
+            <div className="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-8 text-gray-300">
+              현재 신청 가능한 코스가 없습니다. 승인된 멘토가 코스에 연결되면 이곳에 표시됩니다.
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {availableCourses.map((course) => (
+                <CourseCard key={course.slug} course={course} />
+              ))}
+            </div>
+          )}
         </section>
 
         <section className="mx-auto max-w-7xl px-6 pb-20">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-white">오픈 예정 과정</h2>
-            <p className="mt-2 text-sm text-gray-400">세부 커리큘럼과 멘토 구성을 마무리하는 중인 과정입니다.</p>
+            <h2 className="text-3xl font-bold text-white">준비 중인 과정</h2>
+            <p className="mt-2 text-sm text-gray-400">멘토 배정 준비가 완료되면 신청 가능한 과정으로 이동합니다.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {upcomingCourses.map((course) => (

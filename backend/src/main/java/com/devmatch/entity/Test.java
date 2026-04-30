@@ -54,4 +54,15 @@ public class Test {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    public void updateDiagnostic(String title, String description, Difficulty difficulty,
+                                 Integer timeLimit, Integer passingScore, Integer questionCount) {
+        this.title = title;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.timeLimit = timeLimit;
+        this.passingScore = passingScore;
+        this.questionCount = questionCount;
+        this.isActive = true;
+    }
 }

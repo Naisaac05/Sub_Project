@@ -162,6 +162,8 @@ public class AdminDashboardService {
             case COMMENT_DELETE      -> "댓글 #" + id + " 삭제";
             case MENTOR_APPROVE      -> "멘토 #" + id + " 승인";
             case MENTOR_REJECT       -> "멘토 #" + id + " 거절";
+            case MENTOR_CHANGE_APPROVE -> "Mentor change request #" + id + " approved";
+            case MENTOR_CHANGE_REJECT  -> "Mentor change request #" + id + " rejected";
         };
     }
 
