@@ -32,6 +32,12 @@
 
 ## 인덱스
 
+- [2026-04-30 AI review Ollama submit timed out before saved response was returned](2026-04-30-ai-review-ollama-submit-timeout.md)
+- [2026-04-29 Diagnostic test result showed pass/fail wording](2026-04-29-diagnostic-test-result-showed-pass-fail.md)
+- [2026-04-26 Course skill tests stayed in preparing state](2026-04-26-course-skill-tests-stuck-preparing.md)
+- [2026-04-26 Test page labels rendered as mojibake](2026-04-26-test-page-mojibake-labels.md)
+- [2026-04-26 Header conditional render blocked course navigation](2026-04-26-header-conditional-render-blocked-course-navigation.md)
+- [2026-04-25 Admin dashboard audit action switch missed mentor change actions](2026-04-25-admin-dashboard-action-switch-missing.md)
 - [2026-04-25 Course-driven application entry showed unavailable courses](2026-04-25-course-driven-application-entry.md)
 - [2026-04-25 mentor_profile_courses 조인 테이블 데이터 누락으로 매칭 실패](2026-04-25-mentor-course-mapping-missing.md)
 - [2026-04-25 Course-specific auto matching did not filter mentor courses](2026-04-25-course-specific-auto-matching.md)

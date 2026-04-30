@@ -93,7 +93,11 @@ export default function Header() {
 
   const userInitial = user?.name ? user.name[0].toUpperCase() : '?';
   const roleLabel =
-    user?.role === 'MENTOR' ? LABELS.mentor : user?.role === 'ADMIN' ? LABELS.admin : LABELS.mentee;
+    user?.role === 'MENTOR'
+      ? LABELS.mentor
+      : user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'
+        ? LABELS.admin
+        : LABELS.mentee;
 
   return (
     <header className="fixed left-0 right-0 top-0 z-50 transition-all duration-300">
@@ -234,18 +238,12 @@ export default function Header() {
                             {LABELS.assignments}
                           </DropdownLink>
                         </>
-                      )}
-                      {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
-                        <Link
-                          href="/admin/dashboard"
-                          onClick={() => setDropdownOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-400
-                                   hover:text-white hover:bg-white/5 transition-colors"
-                        >
-                          <ShieldCheck size={16} />
-                          관리자 콘솔
-                        </Link>
-                      )}
+                      ) : null}
+                      {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
+                        <DropdownLink href="/admin/mentor" icon={<ShieldCheck size={16} />} onClick={() => setDropdownOpen(false)}>
+                          {LABELS.adminConsole}
+                        </DropdownLink>
+                      ) : null}
 
                       <button
                         onClick={handleLogout}
@@ -327,17 +325,10 @@ export default function Header() {
                       <MobileLink href="/mentor/status" onClick={() => setMobileOpen(false)}>{LABELS.mentorStatus}</MobileLink>
                       <MobileLink href="/lms/assignments" onClick={() => setMobileOpen(false)}>{LABELS.assignments}</MobileLink>
                     </>
-                  )}
-                  {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
-                    <Link
-                      href="/admin/dashboard"
-                      onClick={() => setMobileOpen(false)}
-                      className="px-4 py-3 text-gray-300 hover:text-white text-center rounded-lg
-                               hover:bg-white/5 transition-colors"
-                    >
-                      관리자 콘솔
-                    </Link>
-                  )}
+                  ) : null}
+                  {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
+                    <MobileLink href="/admin/mentor" onClick={() => setMobileOpen(false)}>{LABELS.adminConsole}</MobileLink>
+                  ) : null}
                   <button
                     onClick={handleLogout}
                     className="rounded-lg px-4 py-3 text-center text-red-400 transition-colors hover:bg-white/5 hover:text-red-300"
