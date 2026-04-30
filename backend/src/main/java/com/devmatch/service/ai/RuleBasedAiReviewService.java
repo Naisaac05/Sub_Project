@@ -26,6 +26,7 @@ public class RuleBasedAiReviewService {
     private final AiReviewSessionRepository sessionRepository;
     private final AiReviewMessageRepository messageRepository;
     private final AiReviewProviderSelector providerSelector;
+    private final PythonAiReviewClient pythonAiReviewClient;
     private final OllamaAiReviewClient ollamaAiReviewClient;
 
     @Transactional
@@ -76,7 +77,7 @@ public class RuleBasedAiReviewService {
                     null,
                     true,
                     session.getSummary(),
-                    messages(session)
+                    List.of()
             );
         }
 
@@ -88,15 +89,18 @@ public class RuleBasedAiReviewService {
                 .orElseThrow(() -> new TestNotFoundException("진행 중인 복습 질문이 없습니다."));
         Question currentQuestion = lastAiMessage.getQuestion();
         List<TestAnswer> wrongAnswers = wrongAnswers(session.getTestResult().getId());
+        Long messageCursor = messageRepository.findTopBySessionIdOrderByIdDesc(sessionId)
+                .map(AiReviewMessage::getId)
+                .orElse(0L);
 
         if (mode == AiReviewMessageMode.NEXT_QUESTION) {
-            return moveToNextQuestion(session, wrongAnswers, currentQuestion);
+            return moveToNextQuestion(session, wrongAnswers, currentQuestion, messageCursor);
         }
         if (normalizedAnswer.isBlank()) {
             throw new TestNotFoundException("답변이나 질문을 입력해주세요.");
         }
         if (mode == AiReviewMessageMode.FREE_QUESTION) {
-            return answerFreeQuestion(session, wrongAnswers, currentQuestion, normalizedAnswer);
+            return answerFreeQuestion(session, wrongAnswers, currentQuestion, normalizedAnswer, messageCursor);
         }
 
         AiReviewEvaluation evaluation = evaluateAnswer(currentQuestion, normalizedAnswer);
@@ -127,7 +131,7 @@ public class RuleBasedAiReviewService {
             Optional<TestAnswer> nextWrongAnswer = nextWrongAnswer(wrongAnswers, currentQuestion);
             if (nextWrongAnswer.isPresent()) {
                 Question question = nextWrongAnswer.get().getQuestion();
-                nextQuestion = ollamaAiReviewClient.generateFirstQuestion(
+                nextQuestion = generateFirstQuestion(
                         question,
                         optionAt(question, question.getCorrectAnswer()),
                         optionAt(question, nextWrongAnswer.get().getSelectedAnswer())
@@ -143,7 +147,7 @@ public class RuleBasedAiReviewService {
             String selectedAnswer = currentWrongAnswer
                     .map(testAnswer -> optionAt(currentQuestion, testAnswer.getSelectedAnswer()))
                     .orElse("");
-            nextQuestion = ollamaAiReviewClient.generateFollowUp(
+            nextQuestion = generateFollowUp(
                     currentQuestion,
                     optionAt(currentQuestion, currentQuestion.getCorrectAnswer()),
                     selectedAnswer,
@@ -161,7 +165,7 @@ public class RuleBasedAiReviewService {
                 nextQuestion,
                 completed,
                 session.getSummary(),
-                messages(session)
+                messagesAfter(session, messageCursor)
         );
     }
 
@@ -169,7 +173,8 @@ public class RuleBasedAiReviewService {
             AiReviewSession session,
             List<TestAnswer> wrongAnswers,
             Question currentQuestion,
-            String questionText
+            String questionText,
+            Long messageCursor
     ) {
         messageRepository.save(AiReviewMessage.builder()
                 .session(session)
@@ -183,7 +188,7 @@ public class RuleBasedAiReviewService {
         String selectedAnswer = currentWrongAnswer
                 .map(testAnswer -> optionAt(currentQuestion, testAnswer.getSelectedAnswer()))
                 .orElse("");
-        String answer = ollamaAiReviewClient.answerFreeQuestion(
+        String answer = answerFreeQuestion(
                 currentQuestion,
                 optionAt(currentQuestion, currentQuestion.getCorrectAnswer()),
                 selectedAnswer,
@@ -198,20 +203,21 @@ public class RuleBasedAiReviewService {
                 null,
                 false,
                 session.getSummary(),
-                messages(session)
+                messagesAfter(session, messageCursor)
         );
     }
 
     private AiReviewSubmitResponse moveToNextQuestion(
             AiReviewSession session,
             List<TestAnswer> wrongAnswers,
-            Question currentQuestion
+            Question currentQuestion,
+            Long messageCursor
     ) {
         Optional<TestAnswer> nextWrongAnswer = nextWrongAnswer(wrongAnswers, currentQuestion);
         if (nextWrongAnswer.isPresent()) {
             TestAnswer nextAnswer = nextWrongAnswer.get();
             Question question = nextAnswer.getQuestion();
-            String nextQuestion = ollamaAiReviewClient.generateFirstQuestion(
+            String nextQuestion = generateFirstQuestion(
                     question,
                     optionAt(question, question.getCorrectAnswer()),
                     optionAt(question, nextAnswer.getSelectedAnswer())
@@ -224,7 +230,7 @@ public class RuleBasedAiReviewService {
                     nextQuestion,
                     false,
                     session.getSummary(),
-                    messages(session)
+                    messagesAfter(session, messageCursor)
             );
         }
 
@@ -237,7 +243,7 @@ public class RuleBasedAiReviewService {
                 null,
                 true,
                 session.getSummary(),
-                messages(session)
+                messagesAfter(session, messageCursor)
         );
     }
 
@@ -245,7 +251,7 @@ public class RuleBasedAiReviewService {
         if (!wrongAnswers.isEmpty()) {
             TestAnswer firstAnswer = wrongAnswers.get(0);
             Question firstQuestion = firstAnswer.getQuestion();
-            String question = ollamaAiReviewClient.generateFirstQuestion(
+            String question = generateFirstQuestion(
                     firstQuestion,
                     optionAt(firstQuestion, firstQuestion.getCorrectAnswer()),
                     optionAt(firstQuestion, firstAnswer.getSelectedAnswer())
@@ -277,6 +283,61 @@ public class RuleBasedAiReviewService {
 
     private String withFeedback(String feedback, String nextQuestion) {
         return feedback + "\n\n" + nextQuestion;
+    }
+
+    private Optional<String> generateFirstQuestion(Question question, String correctAnswer, String selectedAnswer) {
+        Optional<String> pythonAnswer = pythonAiReviewClient.generateFirstQuestion(question, correctAnswer, selectedAnswer);
+        if (pythonAnswer.isPresent()) {
+            return pythonAnswer;
+        }
+        return ollamaAiReviewClient.generateFirstQuestion(question, correctAnswer, selectedAnswer);
+    }
+
+    private Optional<String> generateFollowUp(
+            Question question,
+            String correctAnswer,
+            String selectedAnswer,
+            String userAnswer,
+            AiReviewEvaluation evaluation,
+            int nextStep
+    ) {
+        Optional<String> pythonAnswer = pythonAiReviewClient.generateFollowUp(
+                question,
+                correctAnswer,
+                selectedAnswer,
+                userAnswer,
+                evaluation,
+                nextStep
+        );
+        if (pythonAnswer.isPresent()) {
+            return pythonAnswer;
+        }
+        return ollamaAiReviewClient.generateFollowUp(
+                question,
+                correctAnswer,
+                selectedAnswer,
+                userAnswer,
+                evaluation,
+                nextStep
+        );
+    }
+
+    private Optional<String> answerFreeQuestion(
+            Question question,
+            String correctAnswer,
+            String selectedAnswer,
+            String userQuestion
+    ) {
+        Optional<String> pythonAnswer = pythonAiReviewClient.answerFreeQuestion(
+                question,
+                correctAnswer,
+                selectedAnswer,
+                userQuestion
+        );
+        if (pythonAnswer.isPresent()) {
+            return pythonAnswer;
+        }
+        return ollamaAiReviewClient.answerFreeQuestion(question, correctAnswer, selectedAnswer, userQuestion);
     }
 
     private AiReviewMessageMode parseMode(String modeValue) {
@@ -426,6 +487,13 @@ public class RuleBasedAiReviewService {
 
     private List<AiReviewMessageResponse> messages(AiReviewSession session) {
         return messageRepository.findBySessionIdOrderByCreatedAtAsc(session.getId()).stream()
+                .map(AiReviewMessageResponse::from)
+                .toList();
+    }
+
+    private List<AiReviewMessageResponse> messagesAfter(AiReviewSession session, Long messageCursor) {
+        long cursor = messageCursor == null ? 0L : messageCursor;
+        return messageRepository.findBySessionIdAndIdGreaterThanOrderByCreatedAtAsc(session.getId(), cursor).stream()
                 .map(AiReviewMessageResponse::from)
                 .toList();
     }
