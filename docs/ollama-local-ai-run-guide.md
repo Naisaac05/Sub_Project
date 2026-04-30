@@ -113,17 +113,36 @@ ollama serve
 http://localhost:11434
 ```
 
-## 9. 백엔드에서 Ollama 모드 켜기
+## 9. Python AI 서버 실행
+
+이제 Java 백엔드가 Ollama를 직접 호출하지 않고, `ai/` 폴더의 Python 서버를 통해 호출합니다.
+
+```powershell
+cd C:\Users\User\Desktop\Sub_Project\ai
+
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+
+uvicorn app.main:app --host 127.0.0.1 --port 8001 --reload
+```
+
+정상 확인:
+
+```text
+http://localhost:8001/health
+```
+
+## 10. 백엔드에서 Python AI 모드 켜기
 
 백엔드 실행 터미널에서 환경변수를 설정합니다.
 
 ```powershell
 cd C:\Users\User\Desktop\Sub_Project\backend
 
-$env:AI_REVIEW_PROVIDER="OLLAMA"
-$env:OLLAMA_ENABLED="true"
-$env:OLLAMA_MODEL="qwen2.5:1.5b"
-$env:OLLAMA_BASE_URL="http://localhost:11434"
+$env:AI_REVIEW_PROVIDER="PYTHON"
+$env:PYTHON_AI_ENABLED="true"
+$env:PYTHON_AI_BASE_URL="http://localhost:8001"
 ```
 
 그다음 백엔드를 실행합니다.
@@ -132,7 +151,7 @@ $env:OLLAMA_BASE_URL="http://localhost:11434"
 .\gradlew.bat bootRun
 ```
 
-## 10. CMD에서 실행할 때
+## 11. CMD에서 실행할 때
 
 CMD에서는 PowerShell의 `$env:` 문법을 사용할 수 없습니다.
 
@@ -141,15 +160,14 @@ CMD를 쓰는 경우:
 ```cmd
 cd C:\Users\User\Desktop\Sub_Project\backend
 
-set AI_REVIEW_PROVIDER=OLLAMA
-set OLLAMA_ENABLED=true
-set OLLAMA_MODEL=qwen2.5:1.5b
-set OLLAMA_BASE_URL=http://localhost:11434
+set AI_REVIEW_PROVIDER=PYTHON
+set PYTHON_AI_ENABLED=true
+set PYTHON_AI_BASE_URL=http://localhost:8001
 
 gradlew.bat bootRun
 ```
 
-## 11. 프론트에서 확인
+## 12. 프론트에서 확인
 
 1. 프론트와 백엔드를 실행합니다.
 2. 로그인합니다.
@@ -165,19 +183,21 @@ gradlew.bat bootRun
 
 Ollama가 정상 연결되어 있으면 자유 질문에 대해 더 자연스러운 답변이 나옵니다.
 
-## 12. 동작 방식
+## 13. 동작 방식
 
 현재 DevMatch 스마트 복습은 아래 순서로 동작합니다.
 
 ```text
-AI_REVIEW_PROVIDER=OLLAMA
+AI_REVIEW_PROVIDER=PYTHON
+-> Spring Boot backend
+-> Python FastAPI AI server
 -> Ollama qwen2.5:1.5b 호출
 -> 실패하면 규칙 기반 답변으로 fallback
 ```
 
 즉 Ollama가 꺼져 있어도 앱은 터지지 않고 기존 규칙 기반 복습으로 동작합니다.
 
-## 13. 자주 나는 문제
+## 14. 자주 나는 문제
 
 ### ollama 명령어를 못 찾음
 
@@ -217,19 +237,22 @@ ollama --version
 ollama run qwen2.5:1.5b
 ```
 
+Python AI 서버가 켜져 있는지도 확인합니다.
+
+```text
+http://localhost:8001/health
+```
+
 백엔드 실행 터미널에 환경변수가 들어갔는지도 확인합니다.
 
 ```powershell
 echo $env:AI_REVIEW_PROVIDER
-echo $env:OLLAMA_MODEL
-echo $env:OLLAMA_BASE_URL
+echo $env:PYTHON_AI_BASE_URL
 ```
 
 정상값:
 
 ```text
-OLLAMA
-qwen2.5:1.5b
-http://localhost:11434
+PYTHON
+http://localhost:8001
 ```
-
