@@ -103,11 +103,20 @@ export default function AiReviewPage() {
     try {
       const res = await submitAiReviewAnswer(session.sessionId, answer.trim(), mode);
       if (res.success) {
-        setSession({
-          ...session,
-          status: res.data.completed ? 'COMPLETED' : session.status,
-          summary: res.data.summary ?? session.summary,
-          messages: res.data.messages,
+        setSession((current) => {
+          if (!current) {
+            return current;
+          }
+
+          const existingMessageIds = new Set(current.messages.map((message) => message.id));
+          const newMessages = res.data.messages.filter((message) => !existingMessageIds.has(message.id));
+
+          return {
+            ...current,
+            status: res.data.completed ? 'COMPLETED' : current.status,
+            summary: res.data.summary ?? current.summary,
+            messages: [...current.messages, ...newMessages],
+          };
         });
         setAnswer('');
       } else {
