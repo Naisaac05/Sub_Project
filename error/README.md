@@ -32,6 +32,7 @@
 
 ## 인덱스
 
+- [2026-04-30 AI review submit full message payload](2026-04-30-ai-review-submit-full-message-payload.md)
 - [2026-04-30 AI review Ollama submit timed out before saved response was returned](2026-04-30-ai-review-ollama-submit-timeout.md)
 - [2026-04-29 Diagnostic test result showed pass/fail wording](2026-04-29-diagnostic-test-result-showed-pass-fail.md)
 - [2026-04-26 Course skill tests stayed in preparing state](2026-04-26-course-skill-tests-stuck-preparing.md)
