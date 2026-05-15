@@ -7,5 +7,7 @@ public enum AiReviewMessageMode {
     FREE_ANSWER,
     EXPLANATION,
     NEXT_QUESTION,
-    SYSTEM_SUMMARY
+    SYSTEM_SUMMARY,
+    QUESTION_SUMMARY,
+    REVIEW_REPORT
 }
