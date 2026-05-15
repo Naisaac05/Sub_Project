@@ -2,6 +2,7 @@ package com.devmatch.service.ai;
 
 import com.devmatch.dto.aireview.*;
 import com.devmatch.entity.*;
+import com.devmatch.exception.InvalidSessionStateException;
 import com.devmatch.exception.TestNotFoundException;
 import com.devmatch.exception.UserNotFoundException;
 import com.devmatch.repository.*;
@@ -19,13 +20,18 @@ public class RuleBasedAiReviewService {
 
     private static final int MAX_QUESTIONS_PER_WRONG_ANSWER = 3;
     private static final int MAX_AI_MESSAGE_LENGTH = 1800;
+    private static final List<AiReviewMessageMode> AI_RESPONSE_LIMIT_MODES = List.of(
+            AiReviewMessageMode.CHECK_QUESTION,
+            AiReviewMessageMode.EXPLANATION,
+            AiReviewMessageMode.NEXT_QUESTION,
+            AiReviewMessageMode.FREE_ANSWER
+    );
 
     private final UserRepository userRepository;
     private final TestResultRepository testResultRepository;
     private final TestAnswerRepository testAnswerRepository;
     private final AiReviewSessionRepository sessionRepository;
     private final AiReviewMessageRepository messageRepository;
-    private final AiReviewProviderSelector providerSelector;
     private final PythonAiReviewClient pythonAiReviewClient;
     private final OllamaAiReviewClient ollamaAiReviewClient;
 
@@ -68,7 +74,79 @@ public class RuleBasedAiReviewService {
     }
 
     @Transactional
-    public AiReviewSubmitResponse submitAnswer(Long userId, Long sessionId, String answer, String modeValue) {
+    public AiReviewSummaryResponse summarizeQuestion(Long userId, Long sessionId, Long questionId) {
+        AiReviewSession session = findOwnedSession(userId, sessionId);
+        List<TestAnswer> wrongAnswers = wrongAnswers(session.getTestResult().getId());
+        TestAnswer wrongAnswer = wrongAnswers.stream()
+                .filter(answer -> Objects.equals(answer.getQuestion().getId(), questionId))
+                .findFirst()
+                .orElseThrow(() -> new TestNotFoundException("요약할 틀린 문제를 찾을 수 없습니다."));
+        List<AiReviewMessage> messages = messageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId).stream()
+                .filter(message -> message.getQuestion() != null)
+                .filter(message -> Objects.equals(message.getQuestion().getId(), questionId))
+                .toList();
+        Long messageCursor = messageRepository.findTopBySessionIdOrderByIdDesc(sessionId)
+                .map(AiReviewMessage::getId)
+                .orElse(0L);
+
+        Optional<AiReviewMessage> reusableSummary = reusableSummary(messages, AiReviewMessageMode.QUESTION_SUMMARY);
+        if (reusableSummary.isPresent()) {
+            return new AiReviewSummaryResponse(
+                    questionId,
+                    reusableSummary.get().getContent(),
+                    false,
+                    List.of(AiReviewMessageResponse.from(reusableSummary.get()))
+            );
+        }
+
+        String summary = buildQuestionStudySummary(wrongAnswer, messages);
+        saveAiMessage(session, wrongAnswer.getQuestion(), AiReviewMessageMode.QUESTION_SUMMARY, summary);
+        return new AiReviewSummaryResponse(
+                questionId,
+                summary,
+                false,
+                messagesAfter(session, messageCursor)
+        );
+    }
+
+    @Transactional
+    public AiReviewSummaryResponse summarizeReview(Long userId, Long sessionId) {
+        AiReviewSession session = findOwnedSession(userId, sessionId);
+        List<TestAnswer> wrongAnswers = wrongAnswers(session.getTestResult().getId());
+        List<AiReviewMessage> messages = messageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId);
+        Long messageCursor = messageRepository.findTopBySessionIdOrderByIdDesc(sessionId)
+                .map(AiReviewMessage::getId)
+                .orElse(0L);
+
+        Optional<AiReviewMessage> reusableReport = reusableSummary(messages, AiReviewMessageMode.REVIEW_REPORT);
+        if (reusableReport.isPresent()) {
+            return new AiReviewSummaryResponse(
+                    null,
+                    reusableReport.get().getContent(),
+                    true,
+                    List.of(AiReviewMessageResponse.from(reusableReport.get()))
+            );
+        }
+
+        String summary = buildOverallStudyReport(session, wrongAnswers, messages);
+        AiReviewMessage report = messageRepository.save(AiReviewMessage.builder()
+                .session(session)
+                .question(null)
+                .role(AiReviewMessageRole.AI)
+                .mode(AiReviewMessageMode.REVIEW_REPORT)
+                .content(limitAiMessage(summary))
+                .build());
+
+        return new AiReviewSummaryResponse(
+                null,
+                report.getContent(),
+                true,
+                messagesAfter(session, messageCursor)
+        );
+    }
+
+    @Transactional
+    public AiReviewSubmitResponse submitAnswer(Long userId, Long sessionId, String answer, String modeValue, Long questionId) {
         AiReviewSession session = findOwnedSession(userId, sessionId);
         if (session.getStatus() == AiReviewStatus.COMPLETED) {
             return new AiReviewSubmitResponse(
@@ -84,11 +162,10 @@ public class RuleBasedAiReviewService {
         AiReviewMessageMode mode = parseMode(modeValue);
         String normalizedAnswer = answer == null ? "" : answer.trim();
 
-        AiReviewMessage lastAiMessage = messageRepository
-                .findTopBySessionIdAndRoleOrderByCreatedAtDesc(sessionId, AiReviewMessageRole.AI)
+        AiReviewMessage lastAiMessage = latestQuestionMessage(sessionId)
                 .orElseThrow(() -> new TestNotFoundException("진행 중인 복습 질문이 없습니다."));
-        Question currentQuestion = lastAiMessage.getQuestion();
         List<TestAnswer> wrongAnswers = wrongAnswers(session.getTestResult().getId());
+        Question currentQuestion = resolveCurrentQuestion(wrongAnswers, lastAiMessage, questionId, mode);
         Long messageCursor = messageRepository.findTopBySessionIdOrderByIdDesc(sessionId)
                 .map(AiReviewMessage::getId)
                 .orElse(0L);
@@ -103,6 +180,8 @@ public class RuleBasedAiReviewService {
             return answerFreeQuestion(session, wrongAnswers, currentQuestion, normalizedAnswer, messageCursor);
         }
 
+        ensureInitialQuestionMessage(session, currentQuestion);
+
         AiReviewEvaluation evaluation = evaluateAnswer(currentQuestion, normalizedAnswer);
         messageRepository.save(AiReviewMessage.builder()
                 .session(session)
@@ -113,16 +192,7 @@ public class RuleBasedAiReviewService {
                 .evaluation(evaluation)
                 .build());
 
-        long aiQuestionCount = messageRepository.countBySessionIdAndQuestionIdAndRoleAndModeIn(
-                sessionId,
-                currentQuestion.getId(),
-                AiReviewMessageRole.AI,
-                List.of(
-                        AiReviewMessageMode.CHECK_QUESTION,
-                        AiReviewMessageMode.EXPLANATION,
-                        AiReviewMessageMode.NEXT_QUESTION
-                )
-        );
+        long aiQuestionCount = countAiResponses(sessionId, currentQuestion.getId());
 
         String feedback = feedback(evaluation);
         String nextQuestion = null;
@@ -176,6 +246,11 @@ public class RuleBasedAiReviewService {
             String questionText,
             Long messageCursor
     ) {
+        long freeQuestionCount = countFreeQuestions(session.getId(), currentQuestion.getId());
+        if (freeQuestionCount >= MAX_QUESTIONS_PER_WRONG_ANSWER) {
+            throw new InvalidSessionStateException("이 문제는 AI 질문/답변을 3개까지 사용할 수 있습니다. 다음 문제로 넘어가세요.");
+        }
+
         messageRepository.save(AiReviewMessage.builder()
                 .session(session)
                 .question(currentQuestion)
@@ -260,10 +335,6 @@ public class RuleBasedAiReviewService {
         }
     }
 
-    private void saveAiQuestion(AiReviewSession session, Question question, String content) {
-        saveAiMessage(session, question, AiReviewMessageMode.CHECK_QUESTION, content);
-    }
-
     private void saveAiMessage(AiReviewSession session, Question question, AiReviewMessageMode mode, String content) {
         messageRepository.save(AiReviewMessage.builder()
                 .session(session)
@@ -286,11 +357,7 @@ public class RuleBasedAiReviewService {
     }
 
     private Optional<String> generateFirstQuestion(Question question, String correctAnswer, String selectedAnswer) {
-        Optional<String> pythonAnswer = pythonAiReviewClient.generateFirstQuestion(question, correctAnswer, selectedAnswer);
-        if (pythonAnswer.isPresent()) {
-            return pythonAnswer;
-        }
-        return ollamaAiReviewClient.generateFirstQuestion(question, correctAnswer, selectedAnswer);
+        return Optional.of(buildQuestion(question, 1));
     }
 
     private Optional<String> generateFollowUp(
@@ -354,16 +421,16 @@ public class RuleBasedAiReviewService {
     private String buildQuestion(Question question, int step) {
         String correct = optionAt(question, question.getCorrectAnswer());
         return switch (step) {
-            case 1 -> "이 문제에서 어떤 이유로 그 답을 골랐나요? 본인이 이해한 흐름을 짧게 설명해보세요.";
-            case 2 -> "정답은 `" + correct + "`입니다. 이 선택지가 맞는 핵심 이유를 한 문장으로 설명해볼까요?";
-            default -> "실무에서 비슷한 상황을 만난다면 어떤 기준으로 판단하면 좋을까요?";
+            case 1 -> "이 문제의 핵심 개념이 무엇인지 먼저 짚어볼게요. 내 선택지를 고른 이유와 정답이 되는 조건을 한 문장으로 설명해볼까요?";
+            case 2 -> "정답은 `" + correct + "`입니다. 내 선택지가 왜 정답이 아닌지 핵심 차이를 한 문장으로 다시 정리해볼까요?";
+            default -> "비슷한 문제를 다시 만나면 어떤 기준으로 판단하면 좋을까요? 판단 기준을 짧게 적어보세요.";
         };
     }
 
     private String buildFreeQuestionFallback(Question question) {
         String correct = optionAt(question, question.getCorrectAnswer());
-        return "좋은 질문이에요. 이 문제에서 핵심은 정답 `" + correct + "`이 왜 맞는지와 내 선택지가 어떤 개념과 헷갈렸는지를 구분하는 거예요.\n\n"
-                + "지금은 로컬 AI 응답을 사용할 수 없어 자세한 자유 답변은 제한되지만, 정답 문장을 기준으로 개념 차이를 먼저 정리해보면 좋아요.";
+        return "좋은 질문이에요. 지금은 로컬 AI 응답이 느리거나 실패해서 자세한 답변 대신 핵심 기준만 먼저 정리할게요.\n\n"
+                + "이 문제에서는 정답 `" + correct + "`이 왜 맞는지와 내 선택지가 어떤 개념을 놓쳤는지를 구분해보면 좋습니다.";
     }
 
     private AiReviewEvaluation evaluateAnswer(Question question, String answer) {
@@ -425,6 +492,239 @@ public class RuleBasedAiReviewService {
         return wrongAnswers.stream()
                 .filter(answer -> Objects.equals(answer.getQuestion().getId(), currentQuestion.getId()))
                 .findFirst();
+    }
+
+    private Question resolveCurrentQuestion(
+            List<TestAnswer> wrongAnswers,
+            AiReviewMessage lastAiMessage,
+            Long questionId,
+            AiReviewMessageMode mode
+    ) {
+        if (questionId != null && mode != AiReviewMessageMode.NEXT_QUESTION) {
+            return wrongAnswers.stream()
+                    .map(TestAnswer::getQuestion)
+                    .filter(question -> Objects.equals(question.getId(), questionId))
+                    .findFirst()
+                    .orElseThrow(() -> new TestNotFoundException("선택한 복습 문제를 찾을 수 없습니다."));
+        }
+        return lastAiMessage.getQuestion();
+    }
+
+    private Optional<AiReviewMessage> latestQuestionMessage(Long sessionId) {
+        List<AiReviewMessage> messages = messageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId);
+        ListIterator<AiReviewMessage> iterator = messages.listIterator(messages.size());
+        while (iterator.hasPrevious()) {
+            AiReviewMessage message = iterator.previous();
+            if (message.getRole() != AiReviewMessageRole.AI || message.getQuestion() == null) {
+                continue;
+            }
+            if (message.getMode() == AiReviewMessageMode.QUESTION_SUMMARY
+                    || message.getMode() == AiReviewMessageMode.REVIEW_REPORT) {
+                continue;
+            }
+            return Optional.of(message);
+        }
+        return Optional.empty();
+    }
+
+    private void ensureInitialQuestionMessage(AiReviewSession session, Question question) {
+        long questionCount = messageRepository.countBySessionIdAndQuestionIdAndRoleAndModeIn(
+                session.getId(),
+                question.getId(),
+                AiReviewMessageRole.AI,
+                List.of(AiReviewMessageMode.CHECK_QUESTION, AiReviewMessageMode.NEXT_QUESTION)
+        );
+        if (questionCount == 0) {
+            saveAiMessage(session, question, AiReviewMessageMode.CHECK_QUESTION, buildQuestion(question, 1));
+        }
+    }
+
+    private long countAiResponses(Long sessionId, Long questionId) {
+        return messageRepository.countBySessionIdAndQuestionIdAndRoleAndModeIn(
+                sessionId,
+                questionId,
+                AiReviewMessageRole.AI,
+                AI_RESPONSE_LIMIT_MODES
+        );
+    }
+
+    private long countFreeQuestions(Long sessionId, Long questionId) {
+        return messageRepository.countBySessionIdAndQuestionIdAndRoleAndModeIn(
+                sessionId,
+                questionId,
+                AiReviewMessageRole.USER,
+                List.of(AiReviewMessageMode.FREE_QUESTION)
+        );
+    }
+
+    private Optional<AiReviewMessage> reusableSummary(List<AiReviewMessage> messages, AiReviewMessageMode summaryMode) {
+        Optional<AiReviewMessage> latestSummary = messages.stream()
+                .filter(message -> message.getMode() == summaryMode)
+                .reduce((first, second) -> second);
+        if (latestSummary.isEmpty()) {
+            return Optional.empty();
+        }
+        long latestStudyMessageId = messages.stream()
+                .filter(message -> message.getMode() != AiReviewMessageMode.QUESTION_SUMMARY)
+                .filter(message -> message.getMode() != AiReviewMessageMode.REVIEW_REPORT)
+                .mapToLong(AiReviewMessage::getId)
+                .max()
+                .orElse(0L);
+        return latestSummary.get().getId() >= latestStudyMessageId ? latestSummary : Optional.empty();
+    }
+
+    private String buildQuestionStudySummary(TestAnswer wrongAnswer, List<AiReviewMessage> messages) {
+        Question question = wrongAnswer.getQuestion();
+        List<AiReviewMessage> userMessages = messages.stream()
+                .filter(message -> message.getRole() == AiReviewMessageRole.USER)
+                .toList();
+        List<AiReviewMessage> aiMessages = messages.stream()
+                .filter(message -> message.getRole() == AiReviewMessageRole.AI)
+                .filter(message -> message.getMode() != AiReviewMessageMode.QUESTION_SUMMARY)
+                .filter(message -> message.getMode() != AiReviewMessageMode.REVIEW_REPORT)
+                .toList();
+        String latestEvaluation = userMessages.stream()
+                .map(AiReviewMessage::getEvaluation)
+                .filter(Objects::nonNull)
+                .reduce((first, second) -> second)
+                .map(this::evaluationStudyLabel)
+                .orElse("아직 평가 전");
+        String lastUserAnswer = userMessages.stream()
+                .reduce((first, second) -> second)
+                .map(AiReviewMessage::getContent)
+                .map(this::shorten)
+                .orElse("아직 직접 답변이 없습니다.");
+        String keyAiQuestion = aiMessages.stream()
+                .findFirst()
+                .map(AiReviewMessage::getContent)
+                .map(this::shorten)
+                .orElse("AI 꼬리질문이 아직 없습니다.");
+        long freeQuestionCount = userMessages.stream()
+                .filter(message -> message.getMode() == AiReviewMessageMode.FREE_QUESTION)
+                .count();
+
+        return """
+                문제별 복습 요약
+
+                1. 원래 문제
+                %s
+
+                2. 오답 흐름
+                - 내 선택: %s
+                - 정답: %s
+                - 현재 이해도: %s
+
+                3. 핵심 꼬리질문
+                %s
+
+                4. 내가 마지막으로 설명한 내용
+                %s
+
+                5. 다시 풀 때 체크할 포인트
+                - 보기의 표현을 외우기보다 정답이 되는 조건을 먼저 말해보기
+                - 내 선택이 왜 틀렸는지 한 문장으로 반박해보기
+                - 비슷한 문제가 나오면 키워드보다 동작 원리와 예외 상황을 같이 확인하기
+
+                6. 추가 질문 기록
+                자유 질문 %d개
+                """.formatted(
+                question.getContent(),
+                optionAt(question, wrongAnswer.getSelectedAnswer()),
+                optionAt(question, question.getCorrectAnswer()),
+                latestEvaluation,
+                keyAiQuestion,
+                lastUserAnswer,
+                freeQuestionCount
+        );
+    }
+
+    private String buildOverallStudyReport(
+            AiReviewSession session,
+            List<TestAnswer> wrongAnswers,
+            List<AiReviewMessage> messages
+    ) {
+        Map<Long, List<AiReviewMessage>> messagesByQuestion = messages.stream()
+                .filter(message -> message.getQuestion() != null)
+                .collect(Collectors.groupingBy(
+                        message -> message.getQuestion().getId(),
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
+        String weakAreas = weaknessTags(wrongAnswers);
+        long understood = messages.stream()
+                .filter(message -> message.getEvaluation() == AiReviewEvaluation.UNDERSTOOD)
+                .count();
+        long needsReview = messages.stream()
+                .filter(message -> message.getEvaluation() == AiReviewEvaluation.NEEDS_REVIEW)
+                .count();
+        long freeQuestions = messages.stream()
+                .filter(message -> message.getMode() == AiReviewMessageMode.FREE_QUESTION)
+                .count();
+
+        String questionLines = wrongAnswers.stream()
+                .map(answer -> {
+                    List<AiReviewMessage> questionMessages = messagesByQuestion.getOrDefault(
+                            answer.getQuestion().getId(),
+                            List.of()
+                    );
+                    String evaluation = questionMessages.stream()
+                            .map(AiReviewMessage::getEvaluation)
+                            .filter(Objects::nonNull)
+                            .reduce((first, second) -> second)
+                            .map(this::evaluationStudyLabel)
+                            .orElse("점검 전");
+                    return "- " + inferArea(answer.getQuestion()) + ": "
+                            + shorten(answer.getQuestion().getContent())
+                            + " / " + evaluation;
+                })
+                .collect(Collectors.joining("\n"));
+
+        return """
+                전체 복습 리포트
+
+                1. 오늘의 오답 범위
+                - 틀린 문제: %d개
+                - 주요 약점: %s
+                - 이해 완료 답변: %d개
+                - 추가 복습 필요 답변: %d개
+                - 자유 질문: %d개
+
+                2. 문제별 상태
+                %s
+
+                3. 공통 약점
+                - 정답 키워드를 알고 있어도 왜 그 보기가 정답인지 설명하는 힘을 더 키워야 합니다.
+                - 틀린 선택지를 반박하는 연습이 필요합니다.
+                - 문제를 다시 풀 때는 개념 정의, 적용 조건, 예외 상황 순서로 점검하면 좋습니다.
+
+                4. 다음 복습 순서
+                - 먼저 '추가 복습 필요'가 남은 문제를 다시 클릭해서 질문하기
+                - 각 문제 요약을 읽고 30초 안에 정답 이유를 말해보기
+                - 마지막에 같은 유형 문제를 한 번 더 풀어보기
+                """.formatted(
+                wrongAnswers.size(),
+                weakAreas.isBlank() ? session.getCourseKey() : weakAreas,
+                understood,
+                needsReview,
+                freeQuestions,
+                questionLines.isBlank() ? "- 아직 정리할 대화가 없습니다." : questionLines
+        );
+    }
+
+    private String evaluationStudyLabel(AiReviewEvaluation evaluation) {
+        return switch (evaluation) {
+            case UNDERSTOOD -> "이해 완료";
+            case PARTIAL -> "부분 이해";
+            case NEEDS_REVIEW -> "추가 복습 필요";
+        };
+    }
+
+    private String shorten(String value) {
+        if (value == null || value.isBlank()) {
+            return "";
+        }
+        String compact = value.replaceAll("\\s+", " ").trim();
+        return compact.length() <= 140 ? compact : compact.substring(0, 140) + "...";
     }
 
     private String buildSummary(AiReviewSession session, List<TestAnswer> wrongAnswers) {

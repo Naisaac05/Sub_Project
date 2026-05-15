@@ -154,7 +154,7 @@ public class AdminPaymentService {
      * {@code adminId} 를 근거로 <b>수동 복구</b>(내부 상태를 CANCELLED 로 맞추거나 Toss 쪽 reverse)
      * 가 필요하다.
      *
-     * <p>TODO(Phase III): 정기 reconciliation 잡으로 Toss ↔ DB 불일치(고아 환불 등) 를 자동 탐지/보정.
+     * <p>Phase III note: 정기 reconciliation 잡으로 Toss ↔ DB 불일치(고아 환불 등) 를 자동 탐지/보정.
      */
     @Transactional
     public AdminPaymentDetailResponse refundPayment(Long paymentId, Long adminId, String reason) {

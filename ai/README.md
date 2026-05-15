@@ -2,20 +2,20 @@
 
 DevMatch 스마트 복습용 Python AI 서버입니다.
 
-Java Spring Boot 백엔드는 이 서버로 요청을 보내고, Python 서버는 로컬 Ollama `qwen2.5:1.5b` 모델을 호출합니다.
+Java Spring Boot 백엔드는 이 서버로 요청을 보내고, Python 서버는 로컬 Ollama `qwen3:4b-q4_K_M` 모델을 호출합니다.
 
 ## 실행 순서
 
 ### 1. Ollama 모델 준비
 
 ```powershell
-ollama pull qwen2.5:1.5b
+ollama pull qwen3:4b-q4_K_M
 ```
 
 Ollama가 켜져 있는지 확인합니다.
 
 ```powershell
-ollama run qwen2.5:1.5b
+ollama run qwen3:4b-q4_K_M
 ```
 
 ### 2. Python 가상환경 생성
@@ -74,7 +74,7 @@ gradlew.bat bootRun
 frontend
   -> backend Spring Boot
     -> ai Python FastAPI
-      -> Ollama qwen2.5:1.5b
+      -> Ollama qwen3:4b-q4_K_M
 ```
 
 Ollama 또는 Python AI 서버가 실패하면 백엔드는 기존 규칙 기반 복습으로 fallback합니다.

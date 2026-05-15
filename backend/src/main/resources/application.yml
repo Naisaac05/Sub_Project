@@ -72,15 +72,21 @@ app:
     python:
       enabled: ${PYTHON_AI_ENABLED:true}
       base-url: ${PYTHON_AI_BASE_URL:http://localhost:8001}
-      model: ${PYTHON_AI_MODEL:qwen2.5:1.5b}
+      model: ${PYTHON_AI_MODEL:qwen3:4b-q4_K_M}
       temperature: ${PYTHON_AI_TEMPERATURE:0.2}
-      max-tokens: ${PYTHON_AI_MAX_TOKENS:1000}
+      max-tokens: ${PYTHON_AI_MAX_TOKENS:220}
+      num-ctx: ${PYTHON_AI_NUM_CTX:512}
+      num-thread: ${PYTHON_AI_NUM_THREAD:4}
+      read-timeout-seconds: ${PYTHON_AI_READ_TIMEOUT_SECONDS:150}
     ollama:
       enabled: ${OLLAMA_ENABLED:true}
-      model: ${OLLAMA_MODEL:qwen2.5:1.5b}
+      model: ${OLLAMA_MODEL:qwen3:4b-q4_K_M}
       base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
       temperature: ${OLLAMA_TEMPERATURE:0.2}
-      max-tokens: ${OLLAMA_MAX_TOKENS:1000}
+      max-tokens: ${OLLAMA_MAX_TOKENS:220}
+      num-ctx: ${OLLAMA_NUM_CTX:512}
+      num-thread: ${OLLAMA_NUM_THREAD:4}
+      read-timeout-seconds: ${OLLAMA_READ_TIMEOUT_SECONDS:150}
     rule-based:
       enabled: ${AI_REVIEW_RULE_BASED_ENABLED:true}
     limits:

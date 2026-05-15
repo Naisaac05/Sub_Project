@@ -4,16 +4,23 @@ import com.devmatch.config.AiReviewProperties;
 import com.devmatch.entity.AiReviewEvaluation;
 import com.devmatch.entity.Question;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class PythonAiReviewClient {
+
+    private static final Logger log = LoggerFactory.getLogger(PythonAiReviewClient.class);
+    private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(2);
 
     private final AiReviewProperties properties;
     private final AiReviewProviderSelector providerSelector;
@@ -33,7 +40,9 @@ public class PythonAiReviewClient {
                 1,
                 properties.python().model(),
                 properties.python().temperature(),
-                properties.python().maxTokens()
+                properties.python().maxTokens(),
+                properties.python().numCtx(),
+                properties.python().numThread()
         ));
     }
 
@@ -59,7 +68,9 @@ public class PythonAiReviewClient {
                 nextStep,
                 properties.python().model(),
                 properties.python().temperature(),
-                properties.python().maxTokens()
+                properties.python().maxTokens(),
+                properties.python().numCtx(),
+                properties.python().numThread()
         ));
     }
 
@@ -83,13 +94,15 @@ public class PythonAiReviewClient {
                 1,
                 properties.python().model(),
                 properties.python().temperature(),
-                properties.python().maxTokens()
+                properties.python().maxTokens(),
+                properties.python().numCtx(),
+                properties.python().numThread()
         ));
     }
 
     private Optional<String> request(String uri, PythonAiRequest request) {
         try {
-            PythonAiResponse response = RestClient.create(properties.python().baseUrl())
+            PythonAiResponse response = aiClient(properties.python().baseUrl())
                     .post()
                     .uri(uri)
                     .body(request)
@@ -97,12 +110,30 @@ public class PythonAiReviewClient {
                     .body(PythonAiResponse.class);
 
             if (response == null || response.answer() == null || response.answer().isBlank()) {
+                log.warn("Python AI returned an empty response. uri={}, baseUrl={}", uri, properties.python().baseUrl());
                 return Optional.empty();
             }
             return Optional.of(response.answer().trim());
         } catch (RestClientException ex) {
+            log.warn(
+                    "Python AI request failed. uri={}, baseUrl={}, model={}, message={}",
+                    uri,
+                    properties.python().baseUrl(),
+                    request.model(),
+                    ex.getMessage()
+            );
             return Optional.empty();
         }
+    }
+
+    private RestClient aiClient(String baseUrl) {
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(CONNECT_TIMEOUT);
+        requestFactory.setReadTimeout(Duration.ofSeconds(properties.python().readTimeoutSeconds()));
+        return RestClient.builder()
+                .baseUrl(baseUrl)
+                .requestFactory(requestFactory)
+                .build();
     }
 
     private record PythonAiRequest(
@@ -115,7 +146,9 @@ public class PythonAiReviewClient {
             int step,
             String model,
             double temperature,
-            int max_tokens
+            int max_tokens,
+            int num_ctx,
+            int num_thread
     ) {
     }
 
