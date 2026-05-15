@@ -2,13 +2,16 @@ import axios from 'axios';
 import { getAccessToken, setAccessToken, clearAccessToken } from './token';
 import type { ApiResponse, TokenResponse } from './types';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
+const normalizedApiBaseUrl = API_BASE_URL.replace(/\/$/, '');
+
 /**
  * DevMatch API 클라이언트
  * Spring Boot 백엔드와 /api 프리픽스로 통신하며, refresh token은 HttpOnly 쿠키로
  * 서버가 관리합니다 (클라이언트는 access token만 직접 들고 있음).
  */
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   timeout: 10000,
   withCredentials: true,
   headers: {
@@ -76,7 +79,7 @@ apiClient.interceptors.response.use(
 
     try {
       const res = await axios.post<ApiResponse<TokenResponse>>(
-        '/api/auth/refresh',
+        `${normalizedApiBaseUrl}/auth/refresh`,
         null,
         { withCredentials: true }
       );

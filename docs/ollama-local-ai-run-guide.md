@@ -1,6 +1,6 @@
 # Ollama Local AI Run Guide
 
-DevMatch 스마트 복습에서 `qwen2.5:1.5b` 로컬 AI를 사용하는 방법입니다.
+DevMatch 스마트 복습에서 `qwen3:4b-q4_K_M` 로컬 AI를 사용하는 방법입니다.
 
 ## 1. Ollama 설치
 
@@ -68,13 +68,13 @@ ollama --version
 Ollama 명령어가 인식되면 모델을 다운로드합니다.
 
 ```powershell
-ollama pull qwen2.5:1.5b
+ollama pull qwen3:4b-q4_K_M
 ```
 
 만약 `ollama` 명령어가 아직 안 잡히면 직접 경로로 실행합니다.
 
 ```powershell
-& "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe" pull qwen2.5:1.5b
+& "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe" pull qwen3:4b-q4_K_M
 ```
 
 ## 7. 모델 실행 테스트
@@ -82,7 +82,7 @@ ollama pull qwen2.5:1.5b
 모델이 정상 동작하는지 확인합니다.
 
 ```powershell
-ollama run qwen2.5:1.5b
+ollama run qwen3:4b-q4_K_M
 ```
 
 프롬프트가 뜨면 테스트로 입력합니다.
@@ -191,7 +191,7 @@ Ollama가 정상 연결되어 있으면 자유 질문에 대해 더 자연스러
 AI_REVIEW_PROVIDER=PYTHON
 -> Spring Boot backend
 -> Python FastAPI AI server
--> Ollama qwen2.5:1.5b 호출
+-> Ollama qwen3:4b-q4_K_M 호출
 -> 실패하면 규칙 기반 답변으로 fallback
 ```
 
@@ -225,7 +225,7 @@ ollama --version
 모델을 다시 받습니다.
 
 ```powershell
-ollama pull qwen2.5:1.5b
+ollama pull qwen3:4b-q4_K_M
 ```
 
 ### AI 답변이 안 나오고 규칙 기반처럼 보임
@@ -234,7 +234,7 @@ ollama pull qwen2.5:1.5b
 
 ```powershell
 ollama --version
-ollama run qwen2.5:1.5b
+ollama run qwen3:4b-q4_K_M
 ```
 
 Python AI 서버가 켜져 있는지도 확인합니다.
