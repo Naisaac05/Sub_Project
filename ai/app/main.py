@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from typing import Any
 
-from app.schemas import AiGenerateRequest, AiGenerateResponse
+from fastapi import Body, FastAPI
+
+from app.schemas import AiGenerateResponse, normalize_ai_request
 from app.service import generate_review_answer
 
 app = FastAPI(title="DevMatch AI Service")
@@ -12,16 +14,16 @@ def health() -> dict[str, str]:
 
 
 @app.post("/api/review/first-question", response_model=AiGenerateResponse)
-def first_question(request: AiGenerateRequest) -> AiGenerateResponse:
-    return generate_review_answer("first-question", request)
+def first_question(payload: Any = Body(default_factory=dict)) -> AiGenerateResponse:
+    return generate_review_answer("first-question", normalize_ai_request(payload))
 
 
 @app.post("/api/review/follow-up", response_model=AiGenerateResponse)
-def follow_up(request: AiGenerateRequest) -> AiGenerateResponse:
-    return generate_review_answer("follow-up", request)
+def follow_up(payload: Any = Body(default_factory=dict)) -> AiGenerateResponse:
+    return generate_review_answer("follow-up", normalize_ai_request(payload))
 
 
 @app.post("/api/review/free-question", response_model=AiGenerateResponse)
-def free_question(request: AiGenerateRequest) -> AiGenerateResponse:
-    return generate_review_answer("free-question", request)
+def free_question(payload: Any = Body(default_factory=dict)) -> AiGenerateResponse:
+    return generate_review_answer("free-question", normalize_ai_request(payload))
 

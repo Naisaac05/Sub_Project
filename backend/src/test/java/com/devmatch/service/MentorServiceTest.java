@@ -1,7 +1,6 @@
 package com.devmatch.service;
 
 import com.devmatch.dto.mentor.MentorApplyRequest;
-import com.devmatch.dto.mentor.MentorProfileResponse;
 import com.devmatch.entity.*;
 import com.devmatch.exception.AlreadyAppliedException;
 import com.devmatch.repository.*;

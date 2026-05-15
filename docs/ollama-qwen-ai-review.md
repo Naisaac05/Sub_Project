@@ -7,7 +7,7 @@ The smart review flow can now use a local Ollama model before falling back to th
 Default model:
 
 ```text
-qwen2.5:1.5b
+qwen3:4b-q4_K_M
 ```
 
 This keeps the project usable without paid API keys. If Ollama is not running, DevMatch continues with the existing rule-based review.
@@ -17,7 +17,7 @@ This keeps the project usable without paid API keys. If Ollama is not running, D
 Install Ollama, then pull the model:
 
 ```powershell
-ollama pull qwen2.5:1.5b
+ollama pull qwen3:4b-q4_K_M
 ```
 
 Keep Ollama running:
@@ -29,7 +29,7 @@ ollama serve
 In another terminal, you can test the model:
 
 ```powershell
-ollama run qwen2.5:1.5b
+ollama run qwen3:4b-q4_K_M
 ```
 
 ## Backend Environment
@@ -39,7 +39,7 @@ For local development, use Ollama explicitly:
 ```powershell
 $env:AI_REVIEW_PROVIDER="OLLAMA"
 $env:OLLAMA_ENABLED="true"
-$env:OLLAMA_MODEL="qwen2.5:1.5b"
+$env:OLLAMA_MODEL="qwen3:4b-q4_K_M"
 $env:OLLAMA_BASE_URL="http://localhost:11434"
 ```
 
