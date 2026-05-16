@@ -21,13 +21,13 @@ public class AiReviewProviderSelector {
             case OLLAMA -> hasOllamaConfig() ? AiReviewProviderType.OLLAMA : AiReviewProviderType.RULE_BASED;
             case RULE_BASED -> AiReviewProviderType.RULE_BASED;
             case AUTO -> {
-                if (hasOpenAiKey()) {
-                    yield AiReviewProviderType.OPENAI;
+                if (hasOllamaConfig()) {
+                    yield AiReviewProviderType.OLLAMA;
                 }
                 if (hasPythonAiConfig()) {
                     yield AiReviewProviderType.PYTHON;
                 }
-                yield hasOllamaConfig() ? AiReviewProviderType.OLLAMA : AiReviewProviderType.RULE_BASED;
+                yield hasOpenAiKey() ? AiReviewProviderType.OPENAI : AiReviewProviderType.RULE_BASED;
             }
         };
     }

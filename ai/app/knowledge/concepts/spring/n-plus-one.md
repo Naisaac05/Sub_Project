@@ -1,0 +1,28 @@
+---
+id: spring-n-plus-one
+category: spring-jpa
+difficulty: intermediate
+version: java17-springboot3
+last_updated: 2026-05-16
+---
+
+# N+1 문제
+
+## 핵심 설명
+N+1 문제는 목록 조회 1번 이후 각 엔티티의 연관 데이터를 지연 로딩으로 접근할 때 추가 쿼리가 반복해서 발생하는 성능 문제다.
+
+## 대표 해결
+- fetch join으로 필요한 연관 엔티티를 함께 조회한다.
+- EntityGraph로 조회 시점의 연관 로딩 범위를 명시한다.
+- batch size로 반복 조회 비용을 줄인다.
+
+## 흔한 오해
+- 단순히 트랜잭션 문제라고 설명하는 것은 부정확하다.
+- 네트워크 지연 문제라고만 설명하는 것은 부정확하다.
+
+## 평가 키워드
+- 지연 로딩
+- 연관 엔티티
+- 추가 쿼리
+- 반복 쿼리
+
