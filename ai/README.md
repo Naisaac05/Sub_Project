@@ -27,11 +27,30 @@ python -m venv .venv
 .\.venv\Scripts\activate
 ```
 
+Anaconda를 쓰고 있고 RAG 선택 의존성까지 설치할 계획이면 Python 3.11 환경을 권장합니다. Python 3.13에서는 `chromadb` 하위 의존성인 `chroma-hnswlib`가 C++ 빌드를 요구할 수 있습니다.
+
+```powershell
+conda create -n devmatch-ai python=3.11 -y
+conda activate devmatch-ai
+cd C:\Users\User\Desktop\Sub_Project\ai
+python -m pip install --upgrade pip
+```
+
+FastAPI 서버만 실행할 때는 기존 `(base)` 환경을 써도 됩니다.
+
 ### 3. 패키지 설치
 
 ```powershell
 pip install -r requirements.txt
 ```
+
+`requirements.txt`는 FastAPI 서버 실행에 필요한 최소 의존성만 설치합니다. Chroma/LangChain 기반 RAG 의존성은 선택 설치입니다.
+
+```powershell
+pip install -r requirements-rag.txt
+```
+
+Windows에서 `requirements-rag.txt` 설치 중 `Microsoft Visual C++ 14.0 or greater is required` 오류가 나면 Microsoft C++ Build Tools를 설치하거나 Python 3.11/3.12 환경에서 다시 시도합니다. 현재 Phase 1 fallback retriever는 `requirements-rag.txt` 없이도 동작합니다.
 
 ### 4. AI 서버 실행
 

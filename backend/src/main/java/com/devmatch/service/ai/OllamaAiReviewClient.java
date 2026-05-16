@@ -12,7 +12,10 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -21,9 +24,19 @@ public class OllamaAiReviewClient {
 
     private static final Logger log = LoggerFactory.getLogger(OllamaAiReviewClient.class);
     private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(2);
+    private static final int MAX_CACHE_ENTRIES = 128;
+    private static final int MAX_PROMPT_FIELD_LENGTH = 260;
 
     private final AiReviewProperties properties;
     private final AiReviewProviderSelector providerSelector;
+    private final Map<String, String> responseCache = Collections.synchronizedMap(
+            new LinkedHashMap<>(MAX_CACHE_ENTRIES, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<String, String> eldest) {
+                    return size() > MAX_CACHE_ENTRIES;
+                }
+            }
+    );
 
     public Optional<String> generateFirstQuestion(Question question, String correctAnswer, String selectedAnswer) {
         if (!canUseOllama()) {
@@ -31,26 +44,14 @@ public class OllamaAiReviewClient {
         }
 
         String prompt = """
-                You are a Korean programming mentor.
-                Ask one short follow-up question for a learner who got a diagnostic test question wrong.
-                Rules:
-                - Korean only.
-                - 2 sentences maximum.
-                - Do not write reasoning steps or <think> tags.
-                - Do not reveal the full answer yet.
-                - Ask why they chose their answer and what concept they used.
-                - Ask exactly one question.
-                - Stop after the question.
+                Korean mentor. Use the facts as truth.
+                Output: 1 short question, max 2 sentences. No markdown. No <think>.
 
-                [Question]
+                Facts:
                 %s
 
-                [Selected Answer]
-                %s
-
-                [Correct Answer]
-                %s
-                """.formatted(question.getContent(), selectedAnswer, correctAnswer);
+                Ask why the learner chose the selected answer and what concept they used.
+                """.formatted(grounding(question, correctAnswer, selectedAnswer, "", null));
 
         return generate(prompt);
     }
@@ -68,48 +69,15 @@ public class OllamaAiReviewClient {
         }
 
         String prompt = """
-                You are a Korean programming mentor helping with a diagnostic test review.
-                Give feedback on the learner's answer and ask exactly one next follow-up question.
-                Rules:
-                - Korean only.
-                - 3 sentences maximum.
-                - Do not write reasoning steps or <think> tags.
-                - Be specific to the learner answer.
-                - If the learner says they do not know, briefly explain the missing concept first.
-                - Do not be too verbose.
-                - Do not use markdown tables.
-                - Ask exactly one next question.
-                - Stop after the next question.
+                Korean mentor. Use the facts as truth.
+                Output: feedback + exactly 1 next question, max 3 short sentences. No markdown. No <think>.
 
-                [Question]
+                Facts:
                 %s
+                Step: %d
 
-                [Options]
-                %s
-
-                [Selected Answer]
-                %s
-
-                [Correct Answer]
-                %s
-
-                [Learner Answer]
-                %s
-
-                [Rule Evaluation]
-                %s
-
-                [Follow-up Step]
-                %d
-                """.formatted(
-                question.getContent(),
-                formatOptions(question.getOptions()),
-                selectedAnswer,
-                correctAnswer,
-                userAnswer,
-                evaluation.name(),
-                nextStep
-        );
+                If the learner is unsure, explain the missing concept briefly first.
+                """.formatted(grounding(question, correctAnswer, selectedAnswer, userAnswer, evaluation), nextStep);
 
         return generate(prompt);
     }
@@ -125,30 +93,14 @@ public class OllamaAiReviewClient {
         }
 
         String prompt = """
-                You are a Korean programming mentor.
-                Answer the learner's free question using the diagnostic test context.
-                Rules:
-                - Korean only.
-                - 3 sentences maximum.
-                - Do not write reasoning steps or <think> tags.
-                - Explain with a small concrete example if helpful.
-                - If the question is unrelated, gently connect it back to the concept.
-                - Do not grade the learner.
-                - Do not ask more than one follow-up question.
-                - Stop after the answer.
+                Korean mentor. Use the facts as truth.
+                Output: answer the learner's question, max 3 short sentences. No markdown. No <think>.
 
-                [Original Question]
+                Facts:
                 %s
 
-                [Selected Answer]
-                %s
-
-                [Correct Answer]
-                %s
-
-                [Learner Free Question]
-                %s
-                """.formatted(question.getContent(), selectedAnswer, correctAnswer, userQuestion);
+                Give a tiny concrete example only if it helps.
+                """.formatted(grounding(question, correctAnswer, selectedAnswer, userQuestion, null));
 
         return generate(prompt);
     }
@@ -160,6 +112,13 @@ public class OllamaAiReviewClient {
 
     private Optional<String> generate(String prompt) {
         AiReviewProperties.Ollama ollama = properties.ollama();
+        String cacheKey = cacheKey(ollama.model(), prompt);
+        String cached = responseCache.get(cacheKey);
+        if (cached != null) {
+            log.debug("Ollama cache hit. model={}", ollama.model());
+            return Optional.of(cached);
+        }
+
         try {
             OllamaGenerateResponse response = aiClient(ollama.baseUrl())
                     .post()
@@ -191,6 +150,7 @@ public class OllamaAiReviewClient {
                 log.warn("Ollama response did not contain Korean text. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
                 return Optional.empty();
             }
+            responseCache.put(cacheKey, answer);
             return Optional.of(answer);
         } catch (RestClientException ex) {
             log.warn(
@@ -206,11 +166,50 @@ public class OllamaAiReviewClient {
     private RestClient aiClient(String baseUrl) {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(CONNECT_TIMEOUT);
-        requestFactory.setReadTimeout(Duration.ofSeconds(properties.ollama().readTimeoutSeconds()));
+        requestFactory.setReadTimeout(readTimeout(properties.ollama().readTimeoutSeconds()));
         return RestClient.builder()
                 .baseUrl(baseUrl)
                 .requestFactory(requestFactory)
                 .build();
+    }
+
+    private Duration readTimeout(int seconds) {
+        return seconds <= 0 ? Duration.ZERO : Duration.ofSeconds(seconds);
+    }
+
+    private String grounding(
+            Question question,
+            String correctAnswer,
+            String selectedAnswer,
+            String learnerText,
+            AiReviewEvaluation evaluation
+    ) {
+        StringBuilder builder = new StringBuilder()
+                .append("Question: ").append(shorten(question.getContent())).append('\n')
+                .append("Selected: ").append(shorten(selectedAnswer)).append('\n')
+                .append("Correct: ").append(shorten(correctAnswer)).append('\n')
+                .append("Backend evidence: correct answer is authoritative; compare selected vs correct.");
+        if (evaluation != null) {
+            builder.append('\n').append("Rule evaluation: ").append(evaluation.name());
+        }
+        if (learnerText != null && !learnerText.isBlank()) {
+            builder.append('\n').append("Learner: ").append(shorten(learnerText));
+        }
+        return builder.toString();
+    }
+
+    private String cacheKey(String model, String prompt) {
+        return model + "\n" + prompt;
+    }
+
+    private String shorten(String value) {
+        if (value == null) {
+            return "";
+        }
+        String compact = value.replaceAll("\\s+", " ").trim();
+        return compact.length() <= MAX_PROMPT_FIELD_LENGTH
+                ? compact
+                : compact.substring(0, MAX_PROMPT_FIELD_LENGTH) + "...";
     }
 
     private String compactAnswer(String answer) {
@@ -272,17 +271,6 @@ public class OllamaAiReviewClient {
             }
         }
         return false;
-    }
-
-    private String formatOptions(List<String> options) {
-        if (options == null || options.isEmpty()) {
-            return "";
-        }
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < options.size(); i++) {
-            builder.append(i + 1).append(". ").append(options.get(i)).append('\n');
-        }
-        return builder.toString();
     }
 
     private record OllamaGenerateRequest(
