@@ -9,9 +9,9 @@ class AiGenerateRequest(BaseModel):
     user_answer: str = ""
     evaluation: str = ""
     step: int = 1
-    model: str = "qwen3:4b-q4_K_M"
+    model: str = "qwen3:1.7b"
     temperature: float = 0.2
-    max_tokens: int = 220
+    max_tokens: int = 120
     num_ctx: int = 512
     num_thread: int = 4
 
@@ -31,7 +31,7 @@ class AiGenerateRequest(BaseModel):
     @classmethod
     def none_to_default_model(cls, value: object) -> str:
         model = "" if value is None else str(value).strip()
-        return model or "qwen3:4b-q4_K_M"
+        return model or "qwen3:1.7b"
 
     @field_validator("options", mode="before")
     @classmethod
@@ -62,9 +62,9 @@ class AiGenerateRequest(BaseModel):
     @classmethod
     def none_to_default_max_tokens(cls, value: object) -> int:
         try:
-            return 220 if value in (None, "") else int(value)
+            return 120 if value in (None, "") else int(value)
         except (TypeError, ValueError):
-            return 220
+            return 120
 
     @field_validator("num_ctx", mode="before")
     @classmethod
@@ -86,6 +86,13 @@ class AiGenerateRequest(BaseModel):
 class AiGenerateResponse(BaseModel):
     answer: str
     provider: str = "python-ollama"
+    confidence_score: float | None = None
+    model_used: str | None = None
+    fallback_used: bool | None = None
+    retrieved_concept_ids: list[str] = Field(default_factory=list)
+    candidate_id: str | None = None
+    prompt_version: str | None = None
+    latency_ms: int | None = None
 
 
 def normalize_ai_request(payload: object) -> AiGenerateRequest:

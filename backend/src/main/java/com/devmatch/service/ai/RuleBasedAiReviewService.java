@@ -7,6 +7,8 @@ import com.devmatch.exception.TestNotFoundException;
 import com.devmatch.exception.UserNotFoundException;
 import com.devmatch.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class RuleBasedAiReviewService {
 
+    private static final Logger log = LoggerFactory.getLogger(RuleBasedAiReviewService.class);
     private static final int MAX_QUESTIONS_PER_WRONG_ANSWER = 3;
     private static final int MAX_AI_MESSAGE_LENGTH = 1800;
     private static final List<AiReviewMessageMode> AI_RESPONSE_LIMIT_MODES = List.of(
@@ -188,7 +191,7 @@ public class RuleBasedAiReviewService {
                 .question(currentQuestion)
                 .role(AiReviewMessageRole.USER)
                 .mode(AiReviewMessageMode.CHECK_ANSWER)
-                .content(normalizedAnswer)
+                .content(limitAiMessage(normalizedAnswer))
                 .evaluation(evaluation)
                 .build());
 
@@ -256,7 +259,7 @@ public class RuleBasedAiReviewService {
                 .question(currentQuestion)
                 .role(AiReviewMessageRole.USER)
                 .mode(AiReviewMessageMode.FREE_QUESTION)
-                .content(questionText)
+                .content(limitAiMessage(questionText))
                 .build());
 
         Optional<TestAnswer> currentWrongAnswer = findWrongAnswer(wrongAnswers, currentQuestion);
@@ -368,25 +371,30 @@ public class RuleBasedAiReviewService {
             AiReviewEvaluation evaluation,
             int nextStep
     ) {
-        Optional<String> pythonAnswer = pythonAiReviewClient.generateFollowUp(
-                question,
-                correctAnswer,
-                selectedAnswer,
-                userAnswer,
-                evaluation,
-                nextStep
-        );
-        if (pythonAnswer.isPresent()) {
-            return pythonAnswer;
+        try {
+            Optional<String> pythonAnswer = pythonAiReviewClient.generateFollowUp(
+                    question,
+                    correctAnswer,
+                    selectedAnswer,
+                    userAnswer,
+                    evaluation,
+                    nextStep
+            );
+            if (pythonAnswer.isPresent()) {
+                return pythonAnswer;
+            }
+            return ollamaAiReviewClient.generateFollowUp(
+                    question,
+                    correctAnswer,
+                    selectedAnswer,
+                    userAnswer,
+                    evaluation,
+                    nextStep
+            );
+        } catch (RuntimeException ex) {
+            log.warn("AI follow-up generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
+            return Optional.empty();
         }
-        return ollamaAiReviewClient.generateFollowUp(
-                question,
-                correctAnswer,
-                selectedAnswer,
-                userAnswer,
-                evaluation,
-                nextStep
-        );
     }
 
     private Optional<String> answerFreeQuestion(
@@ -395,16 +403,21 @@ public class RuleBasedAiReviewService {
             String selectedAnswer,
             String userQuestion
     ) {
-        Optional<String> pythonAnswer = pythonAiReviewClient.answerFreeQuestion(
-                question,
-                correctAnswer,
-                selectedAnswer,
-                userQuestion
-        );
-        if (pythonAnswer.isPresent()) {
-            return pythonAnswer;
+        try {
+            Optional<String> pythonAnswer = pythonAiReviewClient.answerFreeQuestion(
+                    question,
+                    correctAnswer,
+                    selectedAnswer,
+                    userQuestion
+            );
+            if (pythonAnswer.isPresent()) {
+                return pythonAnswer;
+            }
+            return ollamaAiReviewClient.answerFreeQuestion(question, correctAnswer, selectedAnswer, userQuestion);
+        } catch (RuntimeException ex) {
+            log.warn("AI free-question generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
+            return Optional.empty();
         }
-        return ollamaAiReviewClient.answerFreeQuestion(question, correctAnswer, selectedAnswer, userQuestion);
     }
 
     private AiReviewMessageMode parseMode(String modeValue) {
@@ -578,11 +591,6 @@ public class RuleBasedAiReviewService {
         List<AiReviewMessage> userMessages = messages.stream()
                 .filter(message -> message.getRole() == AiReviewMessageRole.USER)
                 .toList();
-        List<AiReviewMessage> aiMessages = messages.stream()
-                .filter(message -> message.getRole() == AiReviewMessageRole.AI)
-                .filter(message -> message.getMode() != AiReviewMessageMode.QUESTION_SUMMARY)
-                .filter(message -> message.getMode() != AiReviewMessageMode.REVIEW_REPORT)
-                .toList();
         String latestEvaluation = userMessages.stream()
                 .map(AiReviewMessage::getEvaluation)
                 .filter(Objects::nonNull)
@@ -594,48 +602,138 @@ public class RuleBasedAiReviewService {
                 .map(AiReviewMessage::getContent)
                 .map(this::shorten)
                 .orElse("아직 직접 답변이 없습니다.");
-        String keyAiQuestion = aiMessages.stream()
-                .findFirst()
-                .map(AiReviewMessage::getContent)
-                .map(this::shorten)
-                .orElse("AI 꼬리질문이 아직 없습니다.");
         long freeQuestionCount = userMessages.stream()
                 .filter(message -> message.getMode() == AiReviewMessageMode.FREE_QUESTION)
                 .count();
+        String selectedAnswer = optionAt(question, wrongAnswer.getSelectedAnswer());
+        String correctAnswer = optionAt(question, question.getCorrectAnswer());
 
         return """
-                문제별 복습 요약
-
-                1. 원래 문제
                 %s
 
-                2. 오답 흐름
-                - 내 선택: %s
-                - 정답: %s
-                - 현재 이해도: %s
-
-                3. 핵심 꼬리질문
+                문제 핵심
                 %s
 
-                4. 내가 마지막으로 설명한 내용
+                내가 틀린 이유
                 %s
 
-                5. 다시 풀 때 체크할 포인트
-                - 보기의 표현을 외우기보다 정답이 되는 조건을 먼저 말해보기
-                - 내 선택이 왜 틀렸는지 한 문장으로 반박해보기
-                - 비슷한 문제가 나오면 키워드보다 동작 원리와 예외 상황을 같이 확인하기
+                정답 기준
+                %s
 
-                6. 추가 질문 기록
+                구조 연결
+                %s
+
+                헷갈린 포인트
+                %s
+
+                왜 이 보기가 함정인지
+                %s
+
+                실무 연결
+                %s
+
+                현재 이해도
+                %s
+
+                내가 마지막으로 설명한 내용
+                %s
+
+                복습 방식
+                문제를 다시 읽기보다 정답 조건 먼저 말하기:
+                "%s"
+
+                추가 질문 기록
                 자유 질문 %d개
                 """.formatted(
-                question.getContent(),
-                optionAt(question, wrongAnswer.getSelectedAnswer()),
-                optionAt(question, question.getCorrectAnswer()),
+                conceptNoteTitle(question),
+                conceptCore(question),
+                wrongReason(question, selectedAnswer),
+                answerCriterion(question, correctAnswer),
+                structureConnection(question),
+                confusingPoint(question, selectedAnswer),
+                trapReason(question, selectedAnswer),
+                practicalConnection(question),
                 latestEvaluation,
-                keyAiQuestion,
                 lastUserAnswer,
+                recallCondition(question),
                 freeQuestionCount
         );
+    }
+
+    private String conceptNoteTitle(Question question) {
+        if (isTransactionalQuestion(question)) {
+            return "@Transactional 위치";
+        }
+        return inferArea(question) + " 개념 충돌 기록";
+    }
+
+    private String conceptCore(Question question) {
+        if (isTransactionalQuestion(question)) {
+            return "트랜잭션 경계를 어느 계층에서 관리하는가?";
+        }
+        return shorten(question.getContent());
+    }
+
+    private String wrongReason(Question question, String selectedAnswer) {
+        if (isTransactionalQuestion(question)) {
+            return "DB 접근과 트랜잭션 책임을 혼동해서 " + selectedAnswer + "를 선택함.";
+        }
+        return "문제의 키워드와 정답 책임을 혼동해서 " + selectedAnswer + "를 선택함.";
+    }
+
+    private String answerCriterion(Question question, String correctAnswer) {
+        if (isTransactionalQuestion(question)) {
+            return "트랜잭션은 비즈니스 로직 단위로 관리해야 하므로 " + correctAnswer + " 계층에 적용한다.";
+        }
+        return "정답은 키워드가 아니라 책임과 동작 조건으로 판단한다. 이 문제의 정답 기준은 " + correctAnswer + "이다.";
+    }
+
+    private String structureConnection(Question question) {
+        if (isTransactionalQuestion(question)) {
+            return """
+                    Controller -> 요청 처리
+                    Service -> 비즈니스 로직, 트랜잭션
+                    Repository -> DB 접근
+                    """.strip();
+        }
+        return "문제의 개념을 역할, 책임, 실행 흐름 순서로 다시 연결한다.";
+    }
+
+    private String confusingPoint(Question question, String selectedAnswer) {
+        if (isTransactionalQuestion(question)) {
+            return selectedAnswer + "도 DB를 다루지만 트랜잭션의 책임 계층은 아님.";
+        }
+        return selectedAnswer + "가 그럴듯해 보이는 이유와 실제 정답 조건을 분리해서 본다.";
+    }
+
+    private String trapReason(Question question, String selectedAnswer) {
+        if (isTransactionalQuestion(question)) {
+            return """
+                    - "DB" 키워드 때문에 Repository로 유도
+                    - "interface 선언부" 같은 표현으로 세부 구현처럼 보이게 함
+                    - DB 접근 계층과 업무 트랜잭션 계층을 같은 책임처럼 착각하게 함
+                    """.strip();
+        }
+        return "- 보기의 키워드가 정답처럼 보이게 유도\n- 세부 구현 표현으로 핵심 책임 판단을 흐리게 함";
+    }
+
+    private String practicalConnection(Question question) {
+        if (isTransactionalQuestion(question)) {
+            return "회원가입 시 회원 저장 + 포인트 저장을 하나의 트랜잭션으로 묶기 위해 Service에 적용한다.";
+        }
+        return "실무에서는 이 개념이 어떤 책임을 어느 계층에 둘지 결정할 때 다시 등장한다.";
+    }
+
+    private String recallCondition(Question question) {
+        if (isTransactionalQuestion(question)) {
+            return "트랜잭션은 업무 단위니까 Service";
+        }
+        return "정답 조건을 먼저 말하고 보기를 확인한다";
+    }
+
+    private boolean isTransactionalQuestion(Question question) {
+        String text = normalize(question.getContent() + " " + String.join(" ", question.getOptions()));
+        return text.contains("@transactional") || text.contains("transactional") || text.contains("트랜잭션");
     }
 
     private String buildOverallStudyReport(

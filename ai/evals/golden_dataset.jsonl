@@ -1,0 +1,4 @@
+{"id":"spring-n-plus-one-001","question":"N+1 문제가 왜 생겨?","expected_concepts":["spring-n-plus-one"],"required_keywords":["지연 로딩","추가 쿼리"],"forbidden_claims":["트랜잭션 문제","네트워크 문제"]}
+{"id":"spring-fetch-join-001","question":"fetch join은 언제 써?","expected_concepts":["spring-fetch-join"],"required_keywords":["연관 엔티티","JPQL"],"forbidden_claims":["항상 사용"]}
+{"id":"java-equals-001","question":"문자열 비교에서 equals를 쓰는 이유가 뭐야?","expected_concepts":["java-equals"],"required_keywords":["논리적 동등성","참조 비교"],"forbidden_claims":["==로 내용 비교"]}
+

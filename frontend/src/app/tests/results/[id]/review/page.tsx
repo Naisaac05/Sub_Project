@@ -7,6 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/contexts/AuthContext';
 import {
+  getAiReviewSession,
   startAiReview,
   submitAiReviewAnswer,
   summarizeAiReviewQuestion,
@@ -48,9 +49,12 @@ const LABELS = {
   studySummary: '\uACF5\uBD80\uC6A9 \uC694\uC57D',
   reportReady: '\uC694\uC57D\uC774 \uC900\uBE44\uB410\uC2B5\uB2C8\uB2E4.',
   questionLimitReached: '\uC774 \uBB38\uC81C\uC758 \uC790\uC720 \uC9C8\uBB38 3\uAC1C\uB97C \uBAA8\uB450 \uC0AC\uC6A9\uD588\uC2B5\uB2C8\uB2E4. \uB2E4\uC74C \uBB38\uC81C\uB85C \uB118\uC5B4\uAC00\uC138\uC694.',
+  slowAiNotice: '\uB85C\uCEEC AI \uC751\uB2F5\uC774 \uC870\uAE08 \uB2A6\uC5B4\uC9C0\uACE0 \uC788\uC5B4\uC694. \uB2F5\uBCC0\uC774 \uC800\uC7A5\uB418\uBA74 \uB300\uD654\uC5D0 \uC790\uB3D9\uC73C\uB85C \uBC18\uC601\uD569\uB2C8\uB2E4.',
+  slowAiRecovered: '\uB2A6\uAC8C \uB3C4\uCC29\uD55C AI \uB2F5\uBCC0\uC744 \uBD88\uB7EC\uC654\uC2B5\uB2C8\uB2E4.',
 };
 
 const MAX_AI_QUESTIONS_PER_WRONG_ANSWER = 3;
+const SLOW_AI_NOTICE_DELAY_MS = 10000;
 const STUDY_QUESTION_MODES = ['CHECK_QUESTION', 'EXPLANATION', 'NEXT_QUESTION', 'FREE_ANSWER'];
 
 function resolveAiReviewError(error: unknown) {
@@ -72,6 +76,14 @@ function resolveAiReviewError(error: unknown) {
       : '\uBC31\uC5D4\uB4DC\uAC00 \uBCF5\uC2B5 \uB2F5\uBCC0\uC744 \uCC98\uB9AC\uD558\uB294 \uC911 \uC624\uB958\uAC00 \uB0AC\uC2B5\uB2C8\uB2E4. \uBC31\uC5D4\uB4DC \uD130\uBBF8\uB110\uC758 \uC2A4\uD0DD \uD2B8\uB808\uC774\uC2A4\uB97C \uD655\uC778\uD574\uC8FC\uC138\uC694.';
   }
   return serverMessage || '\uB2F5\uBCC0\uC744 \uC81C\uCD9C\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.';
+}
+
+function isAiReviewTimeout(error: unknown) {
+  return (error as { code?: string })?.code === 'ECONNABORTED';
+}
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function learningStepLabel(mode: string | null | undefined, completed: boolean) {
@@ -154,6 +166,7 @@ export default function AiReviewPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(null);
   const [messageDurations, setMessageDurations] = useState<Record<number, number>>({});
   const [questionSummaries, setQuestionSummaries] = useState<Record<number, string>>({});
@@ -174,6 +187,7 @@ export default function AiReviewPage() {
     const start = async () => {
       setLoading(true);
       setError(null);
+      setNotice(null);
       try {
         const res = await startAiReview(testResultId);
         if (res.success) {
@@ -281,6 +295,33 @@ export default function AiReviewPage() {
     (remainingQuestionCount / MAX_AI_QUESTIONS_PER_WRONG_ANSWER) * 100
   );
 
+  const refreshSessionAfterSlowAi = async (previousMessageCount: number) => {
+    const currentSessionId = session?.sessionId;
+    if (!currentSessionId) {
+      return false;
+    }
+
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      if (attempt > 0) {
+        await wait(2000);
+      }
+
+      const res = await getAiReviewSession(currentSessionId);
+      if (!res.success || !res.data) {
+        continue;
+      }
+
+      setSession(res.data);
+      if (res.data.messages.length > previousMessageCount) {
+        setNotice(LABELS.slowAiRecovered);
+        return true;
+      }
+    }
+
+    setNotice(LABELS.slowAiNotice);
+    return false;
+  };
+
   const handleSubmit = async (mode: 'CHECK_ANSWER' | 'FREE_QUESTION' | 'NEXT_QUESTION') => {
     if (!session || submitting || session.status === 'COMPLETED') {
       return;
@@ -295,7 +336,12 @@ export default function AiReviewPage() {
 
     setSubmitting(true);
     setError(null);
+    setNotice(null);
     const startedAt = performance.now();
+    const previousMessageCount = session.messages.length;
+    const slowNoticeTimer = window.setTimeout(() => {
+      setNotice(LABELS.slowAiNotice);
+    }, SLOW_AI_NOTICE_DELAY_MS);
     try {
       const res = await submitAiReviewAnswer(
         session.sessionId,
@@ -333,12 +379,26 @@ export default function AiReviewPage() {
           });
         }
         setAnswer('');
+        setNotice(null);
       } else {
         setError(res.message || '\uB2F5\uBCC0\uC744 \uC81C\uCD9C\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
       }
     } catch (err) {
+      if (isAiReviewTimeout(err)) {
+        try {
+          const recovered = await refreshSessionAfterSlowAi(previousMessageCount);
+          if (recovered) {
+            setAnswer('');
+          }
+          return;
+        } catch {
+          setNotice(LABELS.slowAiNotice);
+          return;
+        }
+      }
       setError(resolveAiReviewError(err));
     } finally {
+      window.clearTimeout(slowNoticeTimer);
       setSubmitting(false);
     }
   };
@@ -365,6 +425,7 @@ export default function AiReviewPage() {
 
     setSummaryLoading('question');
     setError(null);
+    setNotice(null);
     try {
       const res = await summarizeAiReviewQuestion(session.sessionId, displayedQuestion.questionId);
       if (res.success) {
@@ -377,6 +438,10 @@ export default function AiReviewPage() {
         setError(res.message || '\uBB38\uC81C \uC694\uC57D\uC744 \uB9CC\uB4E4\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
       }
     } catch (err) {
+      if (isAiReviewTimeout(err)) {
+        setNotice(LABELS.slowAiNotice);
+        return;
+      }
       setError(resolveAiReviewError(err));
     } finally {
       setSummaryLoading(null);
@@ -390,6 +455,7 @@ export default function AiReviewPage() {
 
     setSummaryLoading('overall');
     setError(null);
+    setNotice(null);
     try {
       const res = await summarizeAiReviewSession(session.sessionId);
       if (res.success) {
@@ -399,6 +465,10 @@ export default function AiReviewPage() {
         setError(res.message || '\uC804\uCCB4 \uBCF5\uC2B5 \uB9AC\uD3EC\uD2B8\uB97C \uB9CC\uB4E4\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
       }
     } catch (err) {
+      if (isAiReviewTimeout(err)) {
+        setNotice(LABELS.slowAiNotice);
+        return;
+      }
       setError(resolveAiReviewError(err));
     } finally {
       setSummaryLoading(null);
@@ -441,6 +511,13 @@ export default function AiReviewPage() {
             <div className="col-span-full flex items-center justify-center gap-3 rounded-2xl border border-red-100 bg-white p-8 text-center font-semibold text-red-500">
               <AlertCircle size={20} />
               <span>{error}</span>
+            </div>
+          ) : null}
+
+          {!loading && !error && notice ? (
+            <div className="col-span-full flex items-center justify-center gap-3 rounded-2xl border border-amber-100 bg-amber-50 p-4 text-center text-sm font-semibold text-amber-700">
+              <Clock3 size={18} />
+              <span>{notice}</span>
             </div>
           ) : null}
 
