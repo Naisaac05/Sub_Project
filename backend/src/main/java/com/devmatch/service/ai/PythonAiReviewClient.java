@@ -129,11 +129,15 @@ public class PythonAiReviewClient {
     private RestClient aiClient(String baseUrl) {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(CONNECT_TIMEOUT);
-        requestFactory.setReadTimeout(Duration.ofSeconds(properties.python().readTimeoutSeconds()));
+        requestFactory.setReadTimeout(readTimeout(properties.python().readTimeoutSeconds()));
         return RestClient.builder()
                 .baseUrl(baseUrl)
                 .requestFactory(requestFactory)
                 .build();
+    }
+
+    private Duration readTimeout(int seconds) {
+        return seconds <= 0 ? Duration.ZERO : Duration.ofSeconds(seconds);
     }
 
     private record PythonAiRequest(

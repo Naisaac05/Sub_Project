@@ -14,16 +14,16 @@ public record AiReviewProperties(
 ) {
     public AiReviewProperties {
         if (provider == null) {
-            provider = Provider.AUTO;
+            provider = Provider.OLLAMA;
         }
         if (openai == null) {
             openai = new OpenAi("", "gpt-4.1-mini", "https://api.openai.com/v1/responses", 0.2);
         }
         if (python == null) {
-            python = new PythonAi(true, "http://localhost:8001", "qwen3:4b-q4_K_M", 0.2, 220, 512, 4, 150);
+            python = new PythonAi(false, "http://localhost:8001", "qwen3:4b-q4_K_M", 0.2, 80, 256, 4, 0);
         }
         if (ollama == null) {
-            ollama = new Ollama(true, "qwen3:4b-q4_K_M", "http://localhost:11434", 0.2, 220, 512, 4, 150);
+            ollama = new Ollama(true, "qwen3:4b-q4_K_M", "http://localhost:11434", 0.2, 80, 256, 4, 0);
         }
         if (ruleBased == null) {
             ruleBased = new RuleBased(true);
