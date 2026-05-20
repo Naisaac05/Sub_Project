@@ -39,6 +39,29 @@ public class AiReviewMessage {
     @Column(nullable = false, length = 2000)
     private String content;
 
+    @Column(length = 80)
+    private String aiRoute;
+
+    @Column(length = 500)
+    private String aiResolvedQuery;
+
+    @Column(length = 40)
+    private String aiCorrectionType;
+
+    @Column(length = 120)
+    private String aiMatchedConceptId;
+
+    @Column(length = 40)
+    private String aiAnswerStyle;
+
+    @Column(length = 500)
+    private String aiQualityFlags;
+
+    @Column(length = 80)
+    private String aiCandidateId;
+
+    private Integer aiLatencyMs;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private AiReviewEvaluation evaluation;

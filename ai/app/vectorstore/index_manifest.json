@@ -1,0 +1,41 @@
+{
+  "entries": {
+    "auto-review-recyclerview": {
+      "concept_id": "auto-review-recyclerview",
+      "content_hash": "32c7bea09fa7f9382c423fd03afb95aed036845569bf1c6bc8015fa3743b14ba",
+      "metadata_hash": "b7a0b6f8635d6e53a21cd560d9bdb5478d9d5da2a5ca33e58b432a0e380a3aca",
+      "path": "app/knowledge/concepts/generated/auto-review-recyclerview.md"
+    },
+    "frontend-aria-label": {
+      "concept_id": "frontend-aria-label",
+      "content_hash": "6a5341657c516f21f06374c47666871bdcdaf99c14b23bd938fae53a9d7e2903",
+      "metadata_hash": "29966746117140dc36d238927bca45caf22803fdc06225cea2131801902f80af",
+      "path": "app/knowledge/concepts/generated/frontend-aria-label.md"
+    },
+    "java-backend-controlleradvice": {
+      "concept_id": "java-backend-controlleradvice",
+      "content_hash": "d1b2e5072f5b665e65f38e578b82f751ff1cabc16455fbf09a683f01280fad32",
+      "metadata_hash": "e748c43caf7345dc541e576b00d8c275bd038d1b54d66d6addab4f90cb54090c",
+      "path": "app/knowledge/concepts/generated/java-backend-controlleradvice.md"
+    },
+    "java-equals": {
+      "concept_id": "java-equals",
+      "content_hash": "a52dfb02a15772c6d5cff2437669dfe34f8b87b7beedd49f0ce5304bbc3c0577",
+      "metadata_hash": "96093b0f04cfe0eccc67746d6e0aa17d2ff342e71422438544b36486f219d1b2",
+      "path": "app/knowledge/concepts/java/equals.md"
+    },
+    "spring-fetch-join": {
+      "concept_id": "spring-fetch-join",
+      "content_hash": "1916e0e6e8d859ced2ef88076f03d9740bbe1097a221fd8a55b7b55d54614317",
+      "metadata_hash": "a1b69c86f170020d102772a8221ebdc0dd871ffdf26c23f6794e90580d94530d",
+      "path": "app/knowledge/concepts/spring/fetch-join.md"
+    },
+    "spring-n-plus-one": {
+      "concept_id": "spring-n-plus-one",
+      "content_hash": "8b254cc4b5bdb5000f033ed4e8c142e80ad74990a6e701f7544a2e72e899d518",
+      "metadata_hash": "ec791bd93e33bc465cddbf6f46d6cdb9b4511cd555b29a5e5f870de852fc5d6f",
+      "path": "app/knowledge/concepts/spring/n-plus-one.md"
+    }
+  },
+  "version": 1
+}

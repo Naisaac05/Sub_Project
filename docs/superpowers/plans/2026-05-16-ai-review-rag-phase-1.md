@@ -8,6 +8,8 @@
 
 **Tech Stack:** FastAPI, Pydantic, Python standard library `unittest`, Markdown files, optional LangChain/Chroma/sentence-transformers/flashrank/kiwipiepy dependencies.
 
+**Execution Order:** Run this plan before `docs/superpowers/plans/2026-05-16-ai-review-lightweight-phase-47.md`. Do not execute both plans concurrently because both modify `ai/app/service.py`.
+
 ---
 
 ## File Structure

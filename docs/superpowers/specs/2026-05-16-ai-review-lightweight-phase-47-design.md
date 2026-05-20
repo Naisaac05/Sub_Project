@@ -4,6 +4,19 @@
 
 Implement a laptop-friendly version of Phase 4 through 4.7: a LangGraph-compatible workflow shape, lightweight validation, confidence scoring, fallback routing, and a small keyword evaluator without requiring GPU-heavy RAG dependencies.
 
+## Execution Order
+
+This phase must run after `2026-05-16-ai-review-rag-phase-1-design.md`.
+
+Fixed order:
+
+```text
+Phase 1: rag-phase-1
+→ Phase 4.7: lightweight-phase-47
+```
+
+Do not execute both phases concurrently. Both phases modify `ai/app/service.py`, so this phase assumes Phase 1 has already established the modular AI service foundation.
+
 ## Constraints
 
 - Target machine has 16GB RAM, no discrete GPU, and limited free memory during normal development.
