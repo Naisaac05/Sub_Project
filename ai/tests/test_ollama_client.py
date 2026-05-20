@@ -25,7 +25,9 @@ class OllamaClientTest(unittest.TestCase):
         self.assertEqual(OLLAMA_WARMUP_MODEL, "qwen3:1.7b")
 
     def test_keep_alive_policy_keeps_small_resident_and_fallback_bounded(self):
-        self.assertEqual(keep_alive_for_model("qwen3:1.7b"), "-1")
+        # Ollama requires keep_alive as int seconds or a duration string with a unit.
+        # "-1" (int) means "stay resident forever"; sending the bare string "-1" returns HTTP 400.
+        self.assertEqual(keep_alive_for_model("qwen3:1.7b"), -1)
         self.assertEqual(keep_alive_for_model("qwen3:4b-q4_K_M"), "30m")
 
     def test_generation_concurrency_defaults_to_one(self):
