@@ -32,6 +32,9 @@
 
 ## 인덱스
 
+- [2026-05-20 AI server keep_alive invalid duration → all generate calls fall back to template](2026-05-20-ai-server-keep-alive-invalid-duration.md)
+- [2026-05-20 AI review specific question answered with definition template](2026-05-20-ai-review-specific-question-definition-template.md)
+- [2026-05-20 AI review workflow context gate weak overlap](2026-05-20-ai-review-workflow-context-gate-weak-overlap.md)
 - [2026-05-20 AI review auto candidate answer draft missing](2026-05-20-ai-review-auto-candidate-answer-draft-missing.md)
 - [2026-05-20 AI review unapproved free-question template fallback](2026-05-20-ai-review-unapproved-free-question-template-fallback.md)
 - [2026-05-20 AI review admin candidate review CORS and import filter](2026-05-20-ai-review-admin-candidate-review-cors-and-import-filter.md)

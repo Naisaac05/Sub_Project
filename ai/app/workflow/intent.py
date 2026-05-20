@@ -33,6 +33,9 @@ ORIGINAL_PROBLEM_MARKERS = (
 
 PRACTICAL_MARKERS = ("실무", "현업", "서비스", "운영", "대용량", "어떻게처리")
 DEFINITION_MARKERS = ("뭐", "무엇", "의미", "개념", "뭔데", "설명")
+# 목적격 의문사("무엇을"/"뭘")는 정의가 아니라 특정 내용·행위를 묻는다.
+# 정의 템플릿으로 답하면 비응답이 되므로 별도 intent로 분류해 fast-path를 건너뛴다.
+SPECIFIC_GUIDANCE_MARKERS = ("무엇을", "무엇과", "무엇이랑", "무엇부터", "뭘")
 
 
 def classify_free_question(text: str) -> FreeQuestionIntent:
@@ -50,6 +53,9 @@ def classify_free_question(text: str) -> FreeQuestionIntent:
 
     if any(marker in normalized for marker in PRACTICAL_MARKERS):
         return FreeQuestionIntent("practical_application", "latest_question_only", topic)
+
+    if _is_specific_guidance_question(normalized):
+        return FreeQuestionIntent("specific_guidance", "latest_question_only", topic)
 
     if any(marker in normalized for marker in DEFINITION_MARKERS):
         return FreeQuestionIntent("concept_definition", "latest_question_only", topic)
@@ -90,6 +96,12 @@ def _has_technical_signal(text: str) -> bool:
     if re.search(r"[A-Za-z][A-Za-z0-9+#.-]{1,}", text):
         return True
     return bool(re.search(r"[가-힣]{4,}", text))
+
+
+def _is_specific_guidance_question(normalized: str) -> bool:
+    if "의미" in normalized or "개념" in normalized:
+        return False
+    return any(marker in normalized for marker in SPECIFIC_GUIDANCE_MARKERS)
 
 
 def _is_comparison_question(text: str, normalized: str) -> bool:

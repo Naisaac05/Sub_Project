@@ -15,7 +15,10 @@ from app.workflow.state import ReviewWorkflowState, ValidationResult
 
 
 Generator = Callable[..., str]
-MIN_WORKFLOW_CONTEXT_SCORE = 2.0
+# 강신호(제목/키워드/concept_id) 토큰이 하나라도 맞으면 score_card 점수는 최소 5.0이다
+# (강매칭 +4 보너스 + 겹침 ≥1). 그 미만은 강신호 없는 본문 우연 겹침이라 엉뚱한 카드를
+# 근거로 주입할 위험이 있어 워크플로 컨텍스트에서 제외한다.
+MIN_WORKFLOW_CONTEXT_SCORE = 5.0
 
 FORBIDDEN_CLAIMS = (
     "트랜잭션 문제",
