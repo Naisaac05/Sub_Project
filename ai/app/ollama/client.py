@@ -59,10 +59,12 @@ def call_ollama(model: str, prompt: str, temperature: float, max_tokens: int, nu
     return strip_thinking(answer)
 
 
-def keep_alive_for_model(model: str) -> str:
-    if model == FALLBACK_MODEL:
-        return OLLAMA_FALLBACK_KEEP_ALIVE
-    return OLLAMA_SMALL_KEEP_ALIVE
+def keep_alive_for_model(model: str) -> str | int:
+    value = OLLAMA_FALLBACK_KEEP_ALIVE if model == FALLBACK_MODEL else OLLAMA_SMALL_KEEP_ALIVE
+    stripped = value.strip()
+    if stripped.lstrip("-").isdigit():
+        return int(stripped)
+    return value
 
 
 def stop_sequences() -> list[str]:
