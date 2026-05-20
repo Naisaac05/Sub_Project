@@ -1,0 +1,50 @@
+{"id":"spring-n-plus-one-001","question":"N+1 문제는 뭐야?","expected_concepts":["spring-n-plus-one"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"spring-n-plus-one-002","question":"N+1 문제를 설명해줘","expected_concepts":["spring-n-plus-one"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"spring-n-plus-one-003","question":"JPA N+1은 왜 생겨?","expected_concepts":["spring-n-plus-one"],"expected_intent":"related_concept","expected_rag_policy":"latest_question_only"}
+{"id":"spring-n-plus-one-004","question":"N+1 문제랑 지연 로딩 관계가 뭐야?","expected_concepts":["spring-n-plus-one"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"spring-fetch-join-001","question":"fetch join은 뭐야?","expected_concepts":["spring-fetch-join"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"spring-fetch-join-002","question":"fetch join을 언제 써?","expected_concepts":["spring-fetch-join"],"expected_intent":"related_concept","expected_rag_policy":"latest_question_only"}
+{"id":"spring-fetch-join-003","question":"JPQL fetch join 설명","expected_concepts":["spring-fetch-join"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"spring-fetch-join-004","question":"fetch join과 N+1 차이가 뭐야?","expected_concepts":["spring-fetch-join","spring-n-plus-one"],"expected_intent":"comparison","expected_rag_policy":"latest_question_only"}
+{"id":"java-equals-001","question":"equals는 뭐야?","expected_concepts":["java-equals"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"java-equals-002","question":"equals 메서드는 왜 오버라이드해?","expected_concepts":["java-equals"],"expected_intent":"related_concept","expected_rag_policy":"latest_question_only"}
+{"id":"java-equals-003","question":"Java equals와 == 차이가 뭐야?","expected_concepts":["java-equals"],"expected_intent":"comparison","expected_rag_policy":"latest_question_only"}
+{"id":"java-equals-004","question":"equals가 뭔데?","expected_concepts":["java-equals"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"frontend-aria-label-001","question":"aria-label은 뭐야?","expected_concepts":["frontend-aria-label"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"frontend-aria-label-002","question":"aria-label이 뭐야?","expected_concepts":["frontend-aria-label"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"frontend-aria-label-003","question":"aria label은 아이콘 버튼에서 왜 필요해?","expected_concepts":["frontend-aria-label"],"expected_intent":"related_concept","expected_rag_policy":"latest_question_only"}
+{"id":"frontend-aria-label-004","question":"arila-label이 뭐야?","expected_concepts":["frontend-aria-label"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"java-controlleradvice-001","question":"@ControllerAdvice가 뭐야?","expected_concepts":["java-backend-controlleradvice"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"java-controlleradvice-002","question":"ControllerAdvice는 실무에서 어떻게 써?","expected_concepts":["java-backend-controlleradvice"],"expected_intent":"practical_application","expected_rag_policy":"latest_question_only"}
+{"id":"java-controlleradvice-003","question":"ConrollerAdvice는 예외 처리랑 무슨 관계야?","expected_concepts":["java-backend-controlleradvice"],"expected_intent":"related_concept","expected_rag_policy":"latest_question_only"}
+{"id":"free-rest-api-001","question":"REST API가 뭐야?","expected_concepts":[],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only","forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}
+{"id":"free-api-001","question":"API가 뭔데?","expected_concepts":[],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only","forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}
+{"id":"free-json-001","question":"JSON이 뭐야?","expected_concepts":[],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only","forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}
+{"id":"free-optional-001","question":"Optional은 왜 써?","expected_concepts":[],"expected_intent":"related_concept","expected_rag_policy":"latest_question_only","forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}
+{"id":"free-stream-001","question":"Stream map filter 차이가 뭐야?","expected_concepts":[],"expected_intent":"comparison","expected_rag_policy":"latest_question_only","forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}
+{"id":"free-pagination-001","question":"pagination이 뭔지 모르겠음","expected_concepts":[],"expected_intent":"related_concept","expected_rag_policy":"latest_question_only","forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}
+{"id":"free-pagination-002","question":"pagnation이 뭔지 모르겠음","expected_concepts":[],"expected_intent":"related_concept","expected_rag_policy":"latest_question_only","forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}
+{"id":"free-distributed-001","question":"분산환경이 어떤 환경을 의미하는 것인가요?","expected_concepts":[],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only","forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}
+{"id":"free-dto-001","question":"DTO가 뭐야?","expected_concepts":[],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only","forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}
+{"id":"clarification-why-001","question":"왜요?","expected_concepts":[],"expected_intent":"clarification","expected_rag_policy":"original_context_mixed"}
+{"id":"clarification-why-002","question":"왜 그런거야?","expected_concepts":[],"expected_intent":"related_concept","expected_rag_policy":"latest_question_only"}
+{"id":"clarification-this-001","question":"이게 왜 맞아?","expected_concepts":[],"expected_intent":"original_problem_reason","expected_rag_policy":"original_context_mixed"}
+{"id":"practical-application-001","question":"실무에서는 이걸 어떻게 처리해?","expected_concepts":[],"expected_intent":"practical_application","expected_rag_policy":"latest_question_only"}
+{"id":"workflow-api-route-001","question":"API가 뭐야?","expected_concepts":[],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only","expected_route":"static_fast_path","required_keywords":["API"],"expected_quality_flags_absent":["missing_topic"],"forbidden_claims":["N+1"]}
+{"id":"workflow-pagination-route-001","question":"pagination이 뭐야?","expected_concepts":[],"expected_intent":"related_concept","expected_rag_policy":"latest_question_only","expected_route":"static_fast_path","expected_quality_flags_absent":["missing_topic"],"forbidden_claims":["N+1"]}
+{"id":"spring-n-plus-one-005","question":"JPA N+1 problem definition","expected_concepts":["spring-n-plus-one"]}
+{"id":"spring-n-plus-one-006","question":"Why does lazy loading create N+1 queries?","expected_concepts":["spring-n-plus-one"]}
+{"id":"spring-n-plus-one-007","question":"N+1 query issue in Spring data access","expected_concepts":["spring-n-plus-one"]}
+{"id":"spring-fetch-join-005","question":"Fetch Join usage in JPA query optimization","expected_concepts":["spring-fetch-join"]}
+{"id":"spring-fetch-join-006","question":"When should I use fetch join instead of lazy loading?","expected_concepts":["spring-fetch-join"]}
+{"id":"spring-fetch-join-007","question":"JPQL fetch join and association loading","expected_concepts":["spring-fetch-join"]}
+{"id":"java-equals-005","question":"Java equals contract and hashCode relationship","expected_concepts":["java-equals"]}
+{"id":"java-equals-006","question":"Why override equals when comparing Java objects?","expected_concepts":["java-equals"]}
+{"id":"java-equals-007","question":"equals method symmetry transitivity consistency","expected_concepts":["java-equals"]}
+{"id":"frontend-aria-label-005","question":"aria-label usage for icon button accessibility","expected_concepts":["frontend-aria-label"]}
+{"id":"frontend-aria-label-006","question":"screen reader label with aria-label","expected_concepts":["frontend-aria-label"]}
+{"id":"frontend-aria-label-007","question":"accessible name for a button without visible text","expected_concepts":["frontend-aria-label"]}
+{"id":"java-controlleradvice-004","question":"Spring @ControllerAdvice global exception handling","expected_concepts":["java-backend-controlleradvice"]}
+{"id":"java-controlleradvice-005","question":"How does ControllerAdvice handle REST API errors?","expected_concepts":["java-backend-controlleradvice"]}
+{"id":"java-controlleradvice-006","question":"ControllerAdvice and ExceptionHandler response body","expected_concepts":["java-backend-controlleradvice"]}
+{"id":"free-cache-001","question":"What is a cache miss?","expected_concepts":[],"forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}

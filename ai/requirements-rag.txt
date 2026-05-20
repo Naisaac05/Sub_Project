@@ -1,0 +1,12 @@
+# Optional RAG/LangGraph dependencies for later phases.
+#
+# Windows note:
+# chromadb depends on chroma-hnswlib, which may require Microsoft C++ Build Tools
+# when a compatible prebuilt wheel is unavailable for the active Python version.
+langchain==0.3.25
+langchain-community==0.3.24
+langgraph==0.4.5
+chromadb==0.5.23
+sentence-transformers==3.3.1
+flashrank==0.2.10
+kiwipiepy==0.20.4

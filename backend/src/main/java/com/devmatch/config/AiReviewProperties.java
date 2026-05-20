@@ -10,26 +10,30 @@ public record AiReviewProperties(
         PythonAi python,
         Ollama ollama,
         RuleBased ruleBased,
-        Limits limits
+        Limits limits,
+        Evaluation evaluation
 ) {
     public AiReviewProperties {
         if (provider == null) {
-            provider = Provider.AUTO;
+            provider = Provider.PYTHON;
         }
         if (openai == null) {
             openai = new OpenAi("", "gpt-4.1-mini", "https://api.openai.com/v1/responses", 0.2);
         }
         if (python == null) {
-            python = new PythonAi(true, "http://localhost:8001", "qwen2.5:1.5b", 0.2, 200);
+            python = new PythonAi(true, "http://localhost:8001", "qwen3:1.7b", 0.2, 256, 1024, 4, 45, "");
         }
         if (ollama == null) {
-            ollama = new Ollama(true, "qwen2.5:1.5b", "http://localhost:11434", 0.2, 200);
+            ollama = new Ollama(true, "qwen3:4b-q4_K_M", "http://localhost:11434", 0.2, 256, 1024, 4, 45, 1);
         }
         if (ruleBased == null) {
             ruleBased = new RuleBased(true);
         }
         if (limits == null) {
             limits = new Limits(3, 10, 700);
+        }
+        if (evaluation == null) {
+            evaluation = new Evaluation(false);
         }
     }
 
@@ -54,7 +58,11 @@ public record AiReviewProperties(
             String baseUrl,
             String model,
             double temperature,
-            int maxTokens
+            int maxTokens,
+            int numCtx,
+            int numThread,
+            int readTimeoutSeconds,
+            String serviceToken
     ) {
     }
 
@@ -63,7 +71,11 @@ public record AiReviewProperties(
             String model,
             String baseUrl,
             double temperature,
-            int maxTokens
+            int maxTokens,
+            int numCtx,
+            int numThread,
+            int readTimeoutSeconds,
+            int maxConcurrentGenerations
     ) {
     }
 
@@ -76,6 +88,11 @@ public record AiReviewProperties(
             int maxQuestionsPerWrongAnswer,
             int maxQuestionsPerSession,
             int maxUserAnswerLength
+    ) {
+    }
+
+    public record Evaluation(
+            boolean semanticEnabled
     ) {
     }
 }

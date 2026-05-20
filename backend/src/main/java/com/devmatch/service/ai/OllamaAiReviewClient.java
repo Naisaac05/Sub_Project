@@ -4,43 +4,58 @@ import com.devmatch.config.AiReviewProperties;
 import com.devmatch.entity.AiReviewEvaluation;
 import com.devmatch.entity.Question;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
+import java.time.Duration;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Semaphore;
 
 @Component
 @RequiredArgsConstructor
 public class OllamaAiReviewClient {
 
+    private static final Logger log = LoggerFactory.getLogger(OllamaAiReviewClient.class);
+    private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(2);
+    private static final int MAX_CACHE_ENTRIES = 128;
+    private static final int MAX_PROMPT_FIELD_LENGTH = 260;
+
     private final AiReviewProperties properties;
     private final AiReviewProviderSelector providerSelector;
+    private final AiReviewMetricSink metricSink;
+    private volatile Semaphore generationSemaphore = new Semaphore(1, true);
+    private volatile int semaphorePermits = 1;
+    private final Map<String, String> responseCache = Collections.synchronizedMap(
+            new LinkedHashMap<>(MAX_CACHE_ENTRIES, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<String, String> eldest) {
+                    return size() > MAX_CACHE_ENTRIES;
+                }
+            }
+    );
 
     public Optional<String> generateFirstQuestion(Question question, String correctAnswer, String selectedAnswer) {
-        if (providerSelector.selectProvider() != AiReviewProviderType.OLLAMA) {
+        if (!canUseOllama()) {
             return Optional.empty();
         }
 
         String prompt = """
-                You are a Korean programming mentor.
-                Ask one short follow-up question for a learner who got a diagnostic test question wrong.
-                Rules:
-                - Korean only.
-                - 2 sentences maximum.
-                - Do not reveal the full answer yet.
-                - Ask why they chose their answer and what concept they used.
+                Korean mentor. Use the facts as truth.
+                Output: 1 short question, max 2 sentences. No markdown. No <think>.
 
-                [Question]
+                Facts:
                 %s
 
-                [Selected Answer]
-                %s
-
-                [Correct Answer]
-                %s
-                """.formatted(question.getContent(), selectedAnswer, correctAnswer);
+                Ask why the learner chose the selected answer and what concept they used.
+                """.formatted(grounding(question, correctAnswer, selectedAnswer, "", null));
 
         return generate(prompt);
     }
@@ -53,50 +68,20 @@ public class OllamaAiReviewClient {
             AiReviewEvaluation evaluation,
             int nextStep
     ) {
-        if (providerSelector.selectProvider() != AiReviewProviderType.OLLAMA) {
+        if (!canUseOllama()) {
             return Optional.empty();
         }
 
         String prompt = """
-                You are a Korean programming mentor helping with a diagnostic test review.
-                Give feedback on the learner's answer and ask exactly one next follow-up question.
-                Rules:
-                - Korean only.
-                - 4 sentences maximum.
-                - Be specific to the learner answer.
-                - If the learner says they do not know, briefly explain the missing concept first.
-                - Do not be too verbose.
-                - Do not use markdown tables.
+                Korean mentor. Use the facts as truth.
+                Output: feedback + exactly 1 next question, max 3 short sentences. No markdown. No <think>.
 
-                [Question]
+                Facts:
                 %s
+                Step: %d
 
-                [Options]
-                %s
-
-                [Selected Answer]
-                %s
-
-                [Correct Answer]
-                %s
-
-                [Learner Answer]
-                %s
-
-                [Rule Evaluation]
-                %s
-
-                [Follow-up Step]
-                %d
-                """.formatted(
-                question.getContent(),
-                formatOptions(question.getOptions()),
-                selectedAnswer,
-                correctAnswer,
-                userAnswer,
-                evaluation.name(),
-                nextStep
-        );
+                If the learner is unsure, explain the missing concept briefly first.
+                """.formatted(grounding(question, correctAnswer, selectedAnswer, userAnswer, evaluation), nextStep);
 
         return generate(prompt);
     }
@@ -107,82 +92,241 @@ public class OllamaAiReviewClient {
             String selectedAnswer,
             String userQuestion
     ) {
-        if (providerSelector.selectProvider() != AiReviewProviderType.OLLAMA) {
+        if (!canUseOllama()) {
             return Optional.empty();
         }
 
         String prompt = """
-                You are a Korean programming mentor.
-                Answer the learner's free question using the diagnostic test context.
-                Rules:
-                - Korean only.
-                - 5 sentences maximum.
-                - Explain with a small concrete example if helpful.
-                - If the question is unrelated, gently connect it back to the concept.
-                - Do not grade the learner.
+                Korean mentor. Use the facts as truth.
+                Output: answer the learner's question, max 3 short sentences. No markdown. No <think>.
 
-                [Original Question]
+                Facts:
                 %s
 
-                [Selected Answer]
-                %s
-
-                [Correct Answer]
-                %s
-
-                [Learner Free Question]
-                %s
-                """.formatted(question.getContent(), selectedAnswer, correctAnswer, userQuestion);
+                Give a tiny concrete example only if it helps.
+                """.formatted(grounding(question, correctAnswer, selectedAnswer, userQuestion, null));
 
         return generate(prompt);
     }
 
+    private boolean canUseOllama() {
+        return providerSelector.hasOllamaConfig()
+                && (providerSelector.selectProvider() == AiReviewProviderType.OLLAMA
+                || providerSelector.canUseOllamaFallback());
+    }
+
     private Optional<String> generate(String prompt) {
         AiReviewProperties.Ollama ollama = properties.ollama();
+        String cacheKey = cacheKey(ollama.model(), prompt);
+        String cached = responseCache.get(cacheKey);
+        if (cached != null) {
+            log.debug("Ollama cache hit. model={}", ollama.model());
+            metricSink.ollamaGeneration(ollama.model(), true, true);
+            return Optional.of(cached);
+        }
+
+        Semaphore semaphore = currentGenerationSemaphore();
+        boolean acquired = false;
         try {
-            OllamaGenerateResponse response = RestClient.create(ollama.baseUrl())
+            semaphore.acquire();
+            acquired = true;
+            OllamaGenerateResponse response = aiClient(ollama.baseUrl())
                     .post()
                     .uri("/api/generate")
                     .body(new OllamaGenerateRequest(
                             ollama.model(),
                             prompt,
                             false,
-                            new OllamaOptions(ollama.temperature(), ollama.maxTokens())
+                            false,
+                            new OllamaOptions(
+                                    ollama.temperature(),
+                                    Math.min(ollama.maxTokens(), 1000),
+                                    ollama.numCtx(),
+                                    ollama.numThread(),
+                                    1.25,
+                                    128,
+                                    List.of("\n\n\n", "[Question]", "[Original Question]", "[Learner Free Question]")
+                            )
                     ))
                     .retrieve()
                     .body(OllamaGenerateResponse.class);
 
             if (response == null || response.response() == null || response.response().isBlank()) {
+                log.warn("Ollama returned an empty response. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
+                metricSink.ollamaGeneration(ollama.model(), false, false);
                 return Optional.empty();
             }
-            return Optional.of(response.response().trim());
+            String answer = compactAnswer(stripThinking(response.response().trim()));
+            if (!containsKorean(answer)) {
+                log.warn("Ollama response did not contain Korean text. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
+                metricSink.ollamaGeneration(ollama.model(), false, false);
+                return Optional.empty();
+            }
+            responseCache.put(cacheKey, answer);
+            metricSink.ollamaGeneration(ollama.model(), false, true);
+            return Optional.of(answer);
         } catch (RestClientException ex) {
+            log.warn(
+                    "Ollama request failed. baseUrl={}, model={}, message={}",
+                    ollama.baseUrl(),
+                    ollama.model(),
+                    ex.getMessage()
+            );
+            metricSink.ollamaGeneration(ollama.model(), false, false);
             return Optional.empty();
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            log.warn("Ollama request interrupted. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
+            metricSink.ollamaGeneration(ollama.model(), false, false);
+            return Optional.empty();
+        } finally {
+            if (acquired) {
+                semaphore.release();
+            }
         }
     }
 
-    private String formatOptions(List<String> options) {
-        if (options == null || options.isEmpty()) {
-            return "";
+    private Semaphore currentGenerationSemaphore() {
+        int desiredPermits = Math.max(1, properties.ollama().maxConcurrentGenerations());
+        if (desiredPermits == semaphorePermits) {
+            return generationSemaphore;
         }
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < options.size(); i++) {
-            builder.append(i + 1).append(". ").append(options.get(i)).append('\n');
+        synchronized (this) {
+            if (desiredPermits != semaphorePermits) {
+                generationSemaphore = new Semaphore(desiredPermits, true);
+                semaphorePermits = desiredPermits;
+            }
+            return generationSemaphore;
+        }
+    }
+
+    private RestClient aiClient(String baseUrl) {
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(CONNECT_TIMEOUT);
+        requestFactory.setReadTimeout(readTimeout(properties.ollama().readTimeoutSeconds()));
+        return RestClient.builder()
+                .baseUrl(baseUrl)
+                .requestFactory(requestFactory)
+                .build();
+    }
+
+    private Duration readTimeout(int seconds) {
+        return seconds <= 0 ? Duration.ZERO : Duration.ofSeconds(seconds);
+    }
+
+    private String grounding(
+            Question question,
+            String correctAnswer,
+            String selectedAnswer,
+            String learnerText,
+            AiReviewEvaluation evaluation
+    ) {
+        StringBuilder builder = new StringBuilder()
+                .append("Question: ").append(shorten(question.getContent())).append('\n')
+                .append("Selected: ").append(shorten(selectedAnswer)).append('\n')
+                .append("Correct: ").append(shorten(correctAnswer)).append('\n')
+                .append("Backend evidence: correct answer is authoritative; compare selected vs correct.");
+        if (evaluation != null) {
+            builder.append('\n').append("Rule evaluation: ").append(evaluation.name());
+        }
+        if (learnerText != null && !learnerText.isBlank()) {
+            builder.append('\n').append("Learner: ").append(shorten(learnerText));
         }
         return builder.toString();
+    }
+
+    private String cacheKey(String model, String prompt) {
+        return model + "\n" + prompt;
+    }
+
+    private String shorten(String value) {
+        if (value == null) {
+            return "";
+        }
+        String compact = value.replaceAll("\\s+", " ").trim();
+        return compact.length() <= MAX_PROMPT_FIELD_LENGTH
+                ? compact
+                : compact.substring(0, MAX_PROMPT_FIELD_LENGTH) + "...";
+    }
+
+    private String compactAnswer(String answer) {
+        if (answer.isBlank()) {
+            return answer;
+        }
+        String[] paragraphs = answer.split("\\R\\s*\\R");
+        StringBuilder builder = new StringBuilder();
+        for (String paragraph : paragraphs) {
+            String normalized = paragraph.trim();
+            if (normalized.isBlank()) {
+                continue;
+            }
+            if (builder.indexOf(normalized) >= 0) {
+                continue;
+            }
+            if (!builder.isEmpty()) {
+                builder.append("\n\n");
+            }
+            builder.append(normalized);
+        }
+        return limitSentences(builder.toString(), 3);
+    }
+
+    private String limitSentences(String text, int sentenceLimit) {
+        int sentenceCount = 0;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            builder.append(ch);
+            if (ch == '.' || ch == '!' || ch == '?' || ch == '\n') {
+                sentenceCount++;
+                if (sentenceCount >= sentenceLimit) {
+                    break;
+                }
+            }
+        }
+        return builder.toString().trim();
+    }
+
+    private String stripThinking(String answer) {
+        String cleaned = answer;
+        while (cleaned.contains("<think>") && cleaned.contains("</think>")) {
+            int start = cleaned.indexOf("<think>");
+            int end = cleaned.indexOf("</think>", start);
+            if (end < 0) {
+                break;
+            }
+            cleaned = cleaned.substring(0, start) + cleaned.substring(end + "</think>".length());
+        }
+        return cleaned.trim();
+    }
+
+    private boolean containsKorean(String text) {
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            if (ch >= '\uAC00' && ch <= '\uD7A3') {
+                return true;
+            }
+        }
+        return false;
     }
 
     private record OllamaGenerateRequest(
             String model,
             String prompt,
             boolean stream,
+            boolean think,
             OllamaOptions options
     ) {
     }
 
     private record OllamaOptions(
             double temperature,
-            int num_predict
+            int num_predict,
+            int num_ctx,
+            int num_thread,
+            double repeat_penalty,
+            int repeat_last_n,
+            List<String> stop
     ) {
     }
 

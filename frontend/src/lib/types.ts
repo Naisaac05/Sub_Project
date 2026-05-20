@@ -182,10 +182,18 @@ export interface AiReviewMessageResponse {
   id: number;
   questionId: number | null;
   role: 'USER' | 'AI';
-  mode: 'CHECK_QUESTION' | 'CHECK_ANSWER' | 'FREE_QUESTION' | 'FREE_ANSWER' | 'EXPLANATION' | 'NEXT_QUESTION' | 'SYSTEM_SUMMARY' | null;
+  mode: 'CHECK_QUESTION' | 'CHECK_ANSWER' | 'FREE_QUESTION' | 'FREE_ANSWER' | 'EXPLANATION' | 'NEXT_QUESTION' | 'SYSTEM_SUMMARY' | 'QUESTION_SUMMARY' | 'REVIEW_REPORT' | null;
   content: string;
   evaluation: 'UNDERSTOOD' | 'PARTIAL' | 'NEEDS_REVIEW' | null;
   createdAt: string;
+  aiRoute?: string | null;
+  aiResolvedQuery?: string | null;
+  aiCorrectionType?: string | null;
+  aiMatchedConceptId?: string | null;
+  aiAnswerStyle?: string | null;
+  aiQualityFlags?: string[];
+  aiCandidateId?: string | null;
+  aiLatencyMs?: number | null;
 }
 
 export interface AiReviewSessionResponse {
@@ -205,6 +213,13 @@ export interface AiReviewSubmitResponse {
   nextQuestion: string | null;
   completed: boolean;
   summary: string | null;
+  messages: AiReviewMessageResponse[];
+}
+
+export interface AiReviewSummaryResponse {
+  questionId: number | null;
+  summary: string;
+  overall: boolean;
   messages: AiReviewMessageResponse[];
 }
 

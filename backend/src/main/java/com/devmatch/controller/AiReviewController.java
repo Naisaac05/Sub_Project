@@ -1,6 +1,7 @@
 package com.devmatch.controller;
 
 import com.devmatch.dto.aireview.AiReviewSessionResponse;
+import com.devmatch.dto.aireview.AiReviewSummaryResponse;
 import com.devmatch.dto.aireview.AiReviewSubmitRequest;
 import com.devmatch.dto.aireview.AiReviewSubmitResponse;
 import com.devmatch.dto.common.ApiResponse;
@@ -47,8 +48,32 @@ public class AiReviewController {
                 userDetails.getUserId(),
                 sessionId,
                 request.getAnswer(),
-                request.getMode()
+                request.getMode(),
+                request.getQuestionId()
         );
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @PostMapping("/sessions/{sessionId}/questions/{questionId}/summary")
+    public ResponseEntity<ApiResponse<AiReviewSummaryResponse>> summarizeQuestion(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long sessionId,
+            @PathVariable Long questionId
+    ) {
+        AiReviewSummaryResponse response = aiReviewService.summarizeQuestion(
+                userDetails.getUserId(),
+                sessionId,
+                questionId
+        );
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @PostMapping("/sessions/{sessionId}/summary")
+    public ResponseEntity<ApiResponse<AiReviewSummaryResponse>> summarizeReview(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long sessionId
+    ) {
+        AiReviewSummaryResponse response = aiReviewService.summarizeReview(userDetails.getUserId(), sessionId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
