@@ -1,6 +1,7 @@
 package com.devmatch.service.ai;
 
 import com.devmatch.dto.aireview.*;
+import com.devmatch.config.AiReviewProperties;
 import com.devmatch.entity.*;
 import com.devmatch.exception.InvalidSessionStateException;
 import com.devmatch.exception.TestNotFoundException;
@@ -37,6 +38,8 @@ public class RuleBasedAiReviewService {
     private final AiReviewMessageRepository messageRepository;
     private final PythonAiReviewClient pythonAiReviewClient;
     private final OllamaAiReviewClient ollamaAiReviewClient;
+    private final AiReviewProperties aiReviewProperties;
+    private final SemanticAnswerEvaluator semanticAnswerEvaluator;
 
     @Transactional
     public AiReviewSessionResponse startReview(Long userId, Long testResultId) {
@@ -266,18 +269,18 @@ public class RuleBasedAiReviewService {
         String selectedAnswer = currentWrongAnswer
                 .map(testAnswer -> optionAt(currentQuestion, testAnswer.getSelectedAnswer()))
                 .orElse("");
-        String answer = answerFreeQuestion(
+        AiGeneratedAnswer generatedAnswer = generateFreeQuestionAnswer(
                 currentQuestion,
                 optionAt(currentQuestion, currentQuestion.getCorrectAnswer()),
                 selectedAnswer,
                 questionText
-        ).orElse(buildFreeQuestionFallback(currentQuestion));
+        ).orElseGet(() -> AiGeneratedAnswer.plain(buildFreeQuestionFallback(currentQuestion, questionText)));
 
-        saveAiMessage(session, currentQuestion, AiReviewMessageMode.FREE_ANSWER, answer);
+        saveAiMessage(session, currentQuestion, AiReviewMessageMode.FREE_ANSWER, generatedAnswer);
 
         return new AiReviewSubmitResponse(
                 "FREE_QUESTION",
-                answer,
+                generatedAnswer.answer(),
                 null,
                 false,
                 session.getSummary(),
@@ -348,6 +351,24 @@ public class RuleBasedAiReviewService {
                 .build());
     }
 
+    private void saveAiMessage(AiReviewSession session, Question question, AiReviewMessageMode mode, AiGeneratedAnswer answer) {
+        messageRepository.save(AiReviewMessage.builder()
+                .session(session)
+                .question(question)
+                .role(AiReviewMessageRole.AI)
+                .mode(mode)
+                .content(limitAiMessage(answer.answer()))
+                .aiRoute(answer.route())
+                .aiResolvedQuery(answer.resolvedQuery())
+                .aiCorrectionType(answer.correctionType())
+                .aiMatchedConceptId(answer.matchedConceptId())
+                .aiAnswerStyle(answer.answerStyle())
+                .aiQualityFlags(answer.qualityFlags() == null ? "" : String.join(",", answer.qualityFlags()))
+                .aiCandidateId(answer.candidateId())
+                .aiLatencyMs(answer.latencyMs())
+                .build());
+    }
+
     private String limitAiMessage(String content) {
         if (content == null || content.length() <= MAX_AI_MESSAGE_LENGTH) {
             return content;
@@ -360,7 +381,20 @@ public class RuleBasedAiReviewService {
     }
 
     private Optional<String> generateFirstQuestion(Question question, String correctAnswer, String selectedAnswer) {
-        return Optional.of(buildQuestion(question, 1));
+        try {
+            Optional<String> pythonAnswer = pythonAiReviewClient.generateFirstQuestion(
+                    question,
+                    correctAnswer,
+                    selectedAnswer
+            ).map(AiGeneratedAnswer::answer);
+            if (pythonAnswer.isPresent()) {
+                return pythonAnswer;
+            }
+            return ollamaAiReviewClient.generateFirstQuestion(question, correctAnswer, selectedAnswer);
+        } catch (RuntimeException ex) {
+            log.warn("AI first question generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
+            return Optional.empty();
+        }
     }
 
     private Optional<String> generateFollowUp(
@@ -379,7 +413,7 @@ public class RuleBasedAiReviewService {
                     userAnswer,
                     evaluation,
                     nextStep
-            );
+            ).map(AiGeneratedAnswer::answer);
             if (pythonAnswer.isPresent()) {
                 return pythonAnswer;
             }
@@ -397,14 +431,14 @@ public class RuleBasedAiReviewService {
         }
     }
 
-    private Optional<String> answerFreeQuestion(
+    private Optional<AiGeneratedAnswer> generateFreeQuestionAnswer(
             Question question,
             String correctAnswer,
             String selectedAnswer,
             String userQuestion
     ) {
         try {
-            Optional<String> pythonAnswer = pythonAiReviewClient.answerFreeQuestion(
+            Optional<AiGeneratedAnswer> pythonAnswer = pythonAiReviewClient.answerFreeQuestion(
                     question,
                     correctAnswer,
                     selectedAnswer,
@@ -413,7 +447,8 @@ public class RuleBasedAiReviewService {
             if (pythonAnswer.isPresent()) {
                 return pythonAnswer;
             }
-            return ollamaAiReviewClient.answerFreeQuestion(question, correctAnswer, selectedAnswer, userQuestion);
+            return ollamaAiReviewClient.answerFreeQuestion(question, correctAnswer, selectedAnswer, userQuestion)
+                    .map(AiGeneratedAnswer::plain);
         } catch (RuntimeException ex) {
             log.warn("AI free-question generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
             return Optional.empty();
@@ -440,13 +475,60 @@ public class RuleBasedAiReviewService {
         };
     }
 
-    private String buildFreeQuestionFallback(Question question) {
+    private String buildFreeQuestionFallback(Question question, String userQuestion) {
+        Optional<String> topicFallback = topicSpecificFallback(question, userQuestion);
+        if (topicFallback.isPresent()) {
+            return topicFallback.get();
+        }
         String correct = optionAt(question, question.getCorrectAnswer());
         return "좋은 질문이에요. 지금은 로컬 AI 응답이 느리거나 실패해서 자세한 답변 대신 핵심 기준만 먼저 정리할게요.\n\n"
                 + "이 문제에서는 정답 `" + correct + "`이 왜 맞는지와 내 선택지가 어떤 개념을 놓쳤는지를 구분해보면 좋습니다.";
     }
 
+    private Optional<String> topicSpecificFallback(Question question, String userQuestion) {
+        String topicText = String.join(" ",
+                userQuestion == null ? "" : userQuestion,
+                question == null ? "" : question.getContent(),
+                question == null || question.getOptions() == null ? "" : String.join(" ", question.getOptions())
+        );
+        String normalized = normalize(topicText);
+        String compact = normalized.replace(" ", "");
+        if (isLayerQuestion(normalized)) {
+            return Optional.of("계층은 보통 `Controller -> Service -> Repository -> Entity`로 나눠서 봅니다. "
+                    + "Controller는 HTTP 요청과 응답을 받고, Service는 비즈니스 규칙과 transaction boundary를 잡고, Repository는 DB 접근을 맡고, Entity는 DB에 저장되는 도메인 상태를 표현합니다. "
+                    + "그래서 여러 DB 작업을 하나의 업무 흐름으로 묶어야 하면 Repository 하나가 아니라 Service 계층에서 transaction을 관리하는 것이 정답이 됩니다.");
+        }
+        if (compact.contains("gittag") || (normalized.contains("git") && normalized.contains("tag"))) {
+            return Optional.of("Git tag는 특정 commit에 붙이는 고정 이름표입니다. 보통 `v1.0.0`처럼 release version을 표시할 때 사용합니다. branch는 계속 움직일 수 있지만 tag는 한 commit을 가리키므로 배포 버전 추적, rollback 기준, 릴리스 노트 연결에 유용합니다.");
+        }
+        if (normalized.contains("idempotent") || normalized.contains("idempotency")) {
+            return Optional.of("Idempotent 설계는 같은 요청이나 메시지가 여러 번 들어와도 최종 결과가 한 번 처리한 것과 같게 유지하는 방식입니다. 네트워크 재시도, 중복 클릭, 메시지 재전달 상황에서 데이터가 두 번 생성되거나 금액이 두 번 차감되는 문제를 막기 위해 idempotency key, unique constraint, 처리 이력 테이블을 사용합니다.");
+        }
+        if (normalized.contains("network") || normalized.contains("네트워크")
+                || (normalized.contains("자동") && normalized.contains("연결"))
+                || compact.contains("autoconnect")) {
+            return Optional.of("network 다이어그램에서 auto layout이나 auto connect 기능은 도구에 따라 가능합니다. 다만 도구가 의미를 완전히 추론해 없는 관계를 자동 생성한다기보다, 사용자가 node와 edge 데이터를 주면 layout 엔진이 보기 좋게 배치하고 연결선을 정리하는 방식입니다. Mermaid, Graphviz, Cytoscape 같은 도구가 이런 자동 배치를 도와줍니다.");
+        }
+        return Optional.empty();
+    }
+
+    private boolean isLayerQuestion(String normalized) {
+        return normalized.contains("계층")
+                || normalized.contains("layer")
+                || normalized.contains("controller")
+                || normalized.contains("service")
+                || normalized.contains("repository")
+                || normalized.contains("entity");
+    }
+
     private AiReviewEvaluation evaluateAnswer(Question question, String answer) {
+        if (isSemanticEvaluationEnabled() && semanticAnswerEvaluator != null) {
+            Optional<AiReviewEvaluation> semanticEvaluation = semanticAnswerEvaluator.evaluate(question, answer);
+            if (semanticEvaluation.isPresent()) {
+                return semanticEvaluation.get();
+            }
+        }
+
         String normalized = normalize(answer);
         if (normalized.length() < 8) {
             return AiReviewEvaluation.NEEDS_REVIEW;
@@ -464,6 +546,12 @@ public class RuleBasedAiReviewService {
             return AiReviewEvaluation.PARTIAL;
         }
         return AiReviewEvaluation.NEEDS_REVIEW;
+    }
+
+    private boolean isSemanticEvaluationEnabled() {
+        return aiReviewProperties != null
+                && aiReviewProperties.evaluation() != null
+                && aiReviewProperties.evaluation().semanticEnabled();
     }
 
     private Set<String> keywords(Question question) {
@@ -608,56 +696,22 @@ public class RuleBasedAiReviewService {
         String selectedAnswer = optionAt(question, wrongAnswer.getSelectedAnswer());
         String correctAnswer = optionAt(question, question.getCorrectAnswer());
 
-        return """
-                %s
-
-                문제 핵심
-                %s
-
-                내가 틀린 이유
-                %s
-
-                정답 기준
-                %s
-
-                구조 연결
-                %s
-
-                헷갈린 포인트
-                %s
-
-                왜 이 보기가 함정인지
-                %s
-
-                실무 연결
-                %s
-
-                현재 이해도
-                %s
-
-                내가 마지막으로 설명한 내용
-                %s
-
-                복습 방식
-                문제를 다시 읽기보다 정답 조건 먼저 말하기:
-                "%s"
-
-                추가 질문 기록
-                자유 질문 %d개
-                """.formatted(
+        return new StudySummary(
                 conceptNoteTitle(question),
                 conceptCore(question),
-                wrongReason(question, selectedAnswer),
                 answerCriterion(question, correctAnswer),
                 structureConnection(question),
+                selectedAnswer,
                 confusingPoint(question, selectedAnswer),
                 trapReason(question, selectedAnswer),
                 practicalConnection(question),
+                counterExample(question, correctAnswer),
+                wrongReason(question, selectedAnswer),
+                recallCondition(question),
                 latestEvaluation,
                 lastUserAnswer,
-                recallCondition(question),
                 freeQuestionCount
-        );
+        ).toMarkdown();
     }
 
     private String conceptNoteTitle(Question question) {
@@ -731,6 +785,99 @@ public class RuleBasedAiReviewService {
         return "정답 조건을 먼저 말하고 보기를 확인한다";
     }
 
+    private String counterExample(Question question, String correctAnswer) {
+        if (isTransactionalQuestion(question)) {
+            return "Repository에서 직접 @Transactional을 붙이면 단건 DB 연산만 감싸고, 여러 작업을 하나의 업무 단위로 묶지 못합니다.";
+        }
+        return "정답이 " + correctAnswer + "인 이유를 반대로 물어보면: 이 조건이 없으면 어떤 문제가 생길까?";
+    }
+
+    private record StudySummary(
+            String title,
+            String coreConcept,
+            String criterion,
+            String structureConnection,
+            String selectedAnswer,
+            String confusingPoint,
+            String trapReason,
+            String practicalConnection,
+            String counterExample,
+            String wrongCause,
+            String oneLiner,
+            String currentEvaluation,
+            String lastExplanation,
+            long freeQuestionCount
+    ) {
+        private String toMarkdown() {
+            return """
+                    # %s
+
+                    ## 핵심 개념
+                    - **문제의 중심:** %s
+                    - **구조 연결:** %s
+
+                    ## 판단 기준
+                    - **정답 조건**: %s
+                    - **판단 순서:** 문제의 키워드보다 “어느 책임을 어느 계층이 가져야 하는가”를 먼저 본다.
+
+                    ## 오답 함정
+                    - **내가 고른 보기:** %s
+                    - **헷갈린 지점:** %s
+                    - **함정 이유:** %s
+
+                    ## 실무 연결
+                    - %s
+
+                    ## 반례 / 예외
+                    - %s
+
+                    ## 내 오답 원인
+                    - **현재 이해 상태:** %s
+                    - **마지막 내 답변:** %s
+                    - **추가 질문 횟수:** %d회
+                    - **원인:** %s
+
+                    ## 한 줄 압축
+                    - **%s**
+                    """.formatted(
+                    title,
+                    coreConcept,
+                    structureConnection,
+                    criterion,
+                    selectedAnswer,
+                    confusingPoint,
+                    trapReason,
+                    practicalConnection,
+                    counterExample,
+                    currentEvaluation,
+                    lastExplanation,
+                    freeQuestionCount,
+                    wrongCause,
+                    oneLiner
+            );
+        }
+    }
+
+    private boolean hasKeywordTrap(String normalizedText) {
+        return normalizedText.contains("환경변수") || normalizedText.contains("백엔드")
+                || normalizedText.contains("api") || normalizedText.contains("키워드");
+    }
+
+    private boolean hasLayerConfusion(String normalizedText) {
+        return normalizedText.contains("service") || normalizedText.contains("repository")
+                || normalizedText.contains("controller") || normalizedText.contains("계층");
+    }
+
+    private boolean hasConditionJudgment(String normalizedText) {
+        return normalizedText.contains("조건") || normalizedText.contains("경우")
+                || normalizedText.contains("적절") || normalizedText.contains("적합");
+    }
+
+    private boolean hasExceptionCase(String normalizedText) {
+        return normalizedText.contains("예외") || normalizedText.contains("반례")
+                || normalizedText.contains("exception") || normalizedText.contains("error");
+    }
+
     private boolean isTransactionalQuestion(Question question) {
         String text = normalize(question.getContent() + " " + String.join(" ", question.getOptions()));
         return text.contains("@transactional") || text.contains("transactional") || text.contains("트랜잭션");
@@ -759,10 +906,11 @@ public class RuleBasedAiReviewService {
                 .filter(message -> message.getMode() == AiReviewMessageMode.FREE_QUESTION)
                 .count();
 
-        String questionLines = wrongAnswers.stream()
+        List<QuestionReview> reviews = wrongAnswers.stream()
                 .map(answer -> {
+                    Question question = answer.getQuestion();
                     List<AiReviewMessage> questionMessages = messagesByQuestion.getOrDefault(
-                            answer.getQuestion().getId(),
+                            question.getId(),
                             List.of()
                     );
                     String evaluation = questionMessages.stream()
@@ -770,43 +918,200 @@ public class RuleBasedAiReviewService {
                             .filter(Objects::nonNull)
                             .reduce((first, second) -> second)
                             .map(this::evaluationStudyLabel)
-                            .orElse("점검 전");
-                    return "- " + inferArea(answer.getQuestion()) + ": "
-                            + shorten(answer.getQuestion().getContent())
-                            + " / " + evaluation;
+                            .orElse("아직 복습 전");
+                    return new QuestionReview(
+                            inferArea(question),
+                            shorten(question.getContent()),
+                            safeOptionAt(question, answer.getSelectedAnswer()),
+                            safeOptionAt(question, question.getCorrectAnswer()),
+                            evaluation,
+                            classifyWeaknesses(answer, questionMessages)
+                    );
                 })
-                .collect(Collectors.joining("\n"));
+                .toList();
 
-        return """
-                전체 복습 리포트
-
-                1. 오늘의 오답 범위
-                - 틀린 문제: %d개
-                - 주요 약점: %s
-                - 이해 완료 답변: %d개
-                - 추가 복습 필요 답변: %d개
-                - 자유 질문: %d개
-
-                2. 문제별 상태
-                %s
-
-                3. 공통 약점
-                - 정답 키워드를 알고 있어도 왜 그 보기가 정답인지 설명하는 힘을 더 키워야 합니다.
-                - 틀린 선택지를 반박하는 연습이 필요합니다.
-                - 문제를 다시 풀 때는 개념 정의, 적용 조건, 예외 상황 순서로 점검하면 좋습니다.
-
-                4. 다음 복습 순서
-                - 먼저 '추가 복습 필요'가 남은 문제를 다시 클릭해서 질문하기
-                - 각 문제 요약을 읽고 30초 안에 정답 이유를 말해보기
-                - 마지막에 같은 유형 문제를 한 번 더 풀어보기
-                """.formatted(
+        return new OverallStudyReport(
                 wrongAnswers.size(),
-                weakAreas.isBlank() ? session.getCourseKey() : weakAreas,
+                weakAreas.isBlank() ? safeText(session.getCourseKey(), "미분류") : weakAreas,
                 understood,
                 needsReview,
                 freeQuestions,
-                questionLines.isBlank() ? "- 아직 정리할 대화가 없습니다." : questionLines
-        );
+                reviews,
+                topWeaknesses(reviews)
+        ).toMarkdown();
+    }
+
+    private List<String> classifyWeaknesses(TestAnswer answer, List<AiReviewMessage> messages) {
+        Question question = answer.getQuestion();
+        String selected = safeOptionAt(question, answer.getSelectedAnswer());
+        String correct = safeOptionAt(question, question.getCorrectAnswer());
+        String text = normalize(String.join(" ",
+                question.getContent(),
+                String.join(" ", question.getOptions() == null ? List.of() : question.getOptions()),
+                selected,
+                correct,
+                messages.stream().map(AiReviewMessage::getContent).filter(Objects::nonNull).collect(Collectors.joining(" "))
+        ));
+        LinkedHashSet<String> weaknesses = new LinkedHashSet<>();
+        if (text.contains("api") || text.contains("dto") || text.contains("entity")
+                || text.contains("비슷") || text.contains("키워드")) {
+            weaknesses.add("키워드 유사성 함정");
+        }
+        if (text.contains("service") || text.contains("repository") || text.contains("controller")
+                || text.contains("entity") || text.contains("transactional") || text.contains("계층")
+                || text.contains("책임")) {
+            weaknesses.add("책임/계층 분리 부족");
+        }
+        if (text.contains("조건") || text.contains("기준") || text.contains("언제")
+                || text.contains("어느") || text.contains("정답")) {
+            weaknesses.add("조건 기반 판단 부족");
+        }
+        if (text.contains("예외") || text.contains("반례") || text.contains("exception")
+                || text.contains("error")) {
+            weaknesses.add("예외/반례 이해 부족");
+        }
+        if (weaknesses.isEmpty()) {
+            weaknesses.add("조건 기반 판단 부족");
+        }
+        if (weaknesses.size() == 1) {
+            weaknesses.add("키워드 유사성 함정");
+        }
+        return weaknesses.stream().limit(3).toList();
+    }
+
+    private List<WeaknessCount> topWeaknesses(List<QuestionReview> reviews) {
+        Map<String, Long> counts = reviews.stream()
+                .flatMap(review -> review.weaknesses().stream())
+                .collect(Collectors.groupingBy(
+                        weakness -> weakness,
+                        LinkedHashMap::new,
+                        Collectors.counting()
+                ));
+        for (String weakness : List.of("키워드 유사성 함정", "책임/계층 분리 부족", "조건 기반 판단 부족", "예외/반례 이해 부족")) {
+            counts.putIfAbsent(weakness, 0L);
+        }
+        return counts.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(3)
+                .map(entry -> new WeaknessCount(entry.getKey(), entry.getValue()))
+                .toList();
+    }
+
+    private String safeOptionAt(Question question, Integer index) {
+        try {
+            return safeText(optionAt(question, index), "선택지 정보 없음");
+        } catch (RuntimeException ex) {
+            return "선택지 정보 없음";
+        }
+    }
+
+    private String safeText(String value, String fallback) {
+        return value == null || value.isBlank() ? fallback : value.trim();
+    }
+
+    private record QuestionReview(
+            String area,
+            String question,
+            String selectedAnswer,
+            String correctAnswer,
+            String evaluation,
+            List<String> weaknesses
+    ) {
+        private String priorityLine(int index) {
+            return "- **%d순위** `%s` %s\n  - 선택: %s\n  - 정답: %s\n  - 상태: %s\n  - 약점: %s".formatted(
+                    index,
+                    area,
+                    question,
+                    selectedAnswer,
+                    correctAnswer,
+                    evaluation,
+                    String.join(", ", weaknesses)
+            );
+        }
+    }
+
+    private record WeaknessCount(String name, long count) {
+        private String toMarkdown(int index) {
+            String evidence = count > 0 ? count + "개 문제에서 감지" : "직접 감지는 약하지만 기본 점검 필요";
+            return "%d. **%s** - %s".formatted(index, name, evidence);
+        }
+    }
+
+    private record OverallStudyReport(
+            int wrongAnswerCount,
+            String weakAreas,
+            long understood,
+            long needsReview,
+            long freeQuestions,
+            List<QuestionReview> reviews,
+            List<WeaknessCount> topWeaknesses
+    ) {
+        private String toMarkdown() {
+            String scope = reviews.isEmpty()
+                    ? "- 오늘 기록된 오답 문제가 없습니다."
+                    : reviews.stream()
+                    .map(review -> "- `%s` %s".formatted(review.area(), review.question()))
+                    .collect(Collectors.joining("\n"));
+            String top = topWeaknesses.isEmpty()
+                    ? "1. **조건 기반 판단 부족** - 복습 데이터가 부족해 기본 점검 항목으로 표시"
+                    : java.util.stream.IntStream.range(0, topWeaknesses.size())
+                    .mapToObj(index -> topWeaknesses.get(index).toMarkdown(index + 1))
+                    .collect(Collectors.joining("\n"));
+            String repeated = reviews.isEmpty()
+                    ? "- 아직 반복 패턴을 판단할 데이터가 부족합니다."
+                    : reviews.stream()
+                    .flatMap(review -> review.weaknesses().stream())
+                    .distinct()
+                    .map(weakness -> "- **%s:** 문제 문장 키워드만 보지 말고 정답이 되는 조건을 먼저 말해본다.".formatted(weakness))
+                    .collect(Collectors.joining("\n"));
+            String priorities = reviews.isEmpty()
+                    ? "- 우선 복습할 문제가 없습니다."
+                    : java.util.stream.IntStream.range(0, Math.min(3, reviews.size()))
+                    .mapToObj(index -> reviews.get(index).priorityLine(index + 1))
+                    .collect(Collectors.joining("\n"));
+
+            return """
+                    # 전체 복습 리포트
+
+                    ## 오늘의 오답 범위
+                    - **오답 수:** %d개
+                    - **주요 영역:** %s
+                    - **이해 완료 답변:** %d개
+                    - **추가 복습 필요 답변:** %d개
+                    - **자유 질문:** %d개
+
+                    %s
+
+                    ## 핵심 약점 TOP 3
+                    %s
+
+                    ## 반복 오답 패턴
+                    %s
+
+                    ## 우선 복습할 문제
+                    %s
+
+                    ## 다음 복습 전략
+                    - 먼저 각 문제의 **정답 조건**을 한 문장으로 말한 뒤 선택지를 다시 본다.
+                    - `키워드 유사성 함정`은 보기의 단어가 익숙한지보다 역할과 책임이 맞는지로 판별한다.
+                    - `책임/계층 분리 부족`은 Controller, Service, Repository, Entity의 책임을 표로 다시 나눠본다.
+                    - `조건 기반 판단 부족`은 “항상 맞는가, 특정 조건에서만 맞는가”를 체크한다.
+                    - `예외/반례 이해 부족`은 정답이 아닌 상황을 하나씩 만들어 본다.
+
+                    ## 오늘의 한 줄 피드백
+                    - **오늘의 핵심은 정답 보기 암기가 아니라, 정답이 되는 조건과 반례를 먼저 말하는 연습입니다.**
+                    """.formatted(
+                    wrongAnswerCount,
+                    weakAreas,
+                    understood,
+                    needsReview,
+                    freeQuestions,
+                    scope,
+                    top,
+                    repeated,
+                    priorities
+            );
+        }
     }
 
     private String evaluationStudyLabel(AiReviewEvaluation evaluation) {

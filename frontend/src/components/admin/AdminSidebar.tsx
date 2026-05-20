@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, UserCheck, Users, CreditCard, FileText, HelpCircle, ShieldCheck, Repeat } from 'lucide-react';
+import { Bot, LayoutDashboard, UserCheck, Users, CreditCard, FileText, HelpCircle, ShieldCheck, Repeat } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const NAV_ITEMS: Array<{
@@ -55,6 +55,12 @@ const NAV_ITEMS: Array<{
     label: 'FAQ 관리',
     icon: HelpCircle,
     match: (p) => p === '/admin/faqs' || p.startsWith('/admin/faqs/'),
+  },
+  {
+    href: '/admin/ai-review-candidates',
+    label: 'AI 지식 후보',
+    icon: Bot,
+    match: (p) => p === '/admin/ai-review-candidates' || p.startsWith('/admin/ai-review-candidates/'),
   },
   {
     href: '/admin/admins',

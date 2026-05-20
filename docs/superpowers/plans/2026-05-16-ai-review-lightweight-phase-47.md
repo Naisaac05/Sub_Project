@@ -8,6 +8,8 @@
 
 **Tech Stack:** Python standard library, Pydantic, FastAPI runtime, existing Markdown concept cards, unittest.
 
+**Execution Order:** Run only after `docs/superpowers/plans/2026-05-16-ai-review-rag-phase-1.md` is complete. Do not execute concurrently with Phase 1 because both plans modify `ai/app/service.py`.
+
 ---
 
 ## File Structure

@@ -1,10 +1,27 @@
+import json
+import os
+from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 
 from app.schemas import AiGenerateRequest
+from app.scoring import ConfidenceResult
+from app.workflow.answer_cache import clear_answer_cache
+from app.workflow.graph import (
+    WORKFLOW_NODE_NAMES,
+    candidate_save_node,
+    dead_end_state_node,
+    error_state_node,
+)
 from app.workflow.runner import run_review_workflow
+from app.workflow.state import ReviewWorkflowState
 
 
 class WorkflowRunnerTest(unittest.TestCase):
+    def setUp(self):
+        clear_answer_cache()
+
     def test_successful_generation_returns_metadata(self):
         response = run_review_workflow(
             mode="free-question",
@@ -45,6 +62,563 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertTrue(response.fallback_used)
         self.assertEqual(response.model_used, "template")
         self.assertIn("기준", response.answer)
+
+
+    def test_free_question_answer_is_not_replaced_by_unrelated_context_fallback(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question=(
+                    "JPA 엔티티는 데이터베이스 테이블과 매핑되는 Java 클래스입니다. "
+                    "API 응답으로 그대로 반환하면 데이터베이스 구조와 관련된 문제들이 발생할 수 있습니다. "
+                    "이 경우 불필요한 필드 노출 문제가 생길 수 있습니다."
+                ),
+                correct_answer="DTO",
+                selected_answer="엔티티",
+                user_answer="API가 뭔데?",
+            ),
+            generator=lambda **kwargs: (
+                "API는 클라이언트와 서버가 정해진 방식으로 데이터를 주고받기 위한 약속입니다. "
+                "예를 들어 화면이 사용자 정보를 요청하면 서버는 API를 통해 JSON 같은 형태로 응답합니다. "
+                "이 문항에서는 엔티티를 API 응답으로 바로 내보내면 내부 DB 구조까지 노출될 수 있어서 DTO를 사용합니다."
+            ),
+        )
+
+        self.assertFalse(response.fallback_used)
+        self.assertIn("API", response.answer)
+
+    def test_free_question_retrieval_uses_learner_question_before_original_question(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="N+1 문제에서 지연 로딩 때문에 추가 쿼리가 생기는 이유는 무엇인가요?",
+                correct_answer="fetch join",
+                selected_answer="지연 로딩",
+                user_answer="API가 뭔데?",
+            ),
+            generator=lambda **kwargs: "API는 클라이언트와 서버가 데이터를 주고받기 위한 약속입니다.",
+        )
+
+        self.assertEqual(response.retrieved_concept_ids, [])
+
+    def test_free_question_with_korean_technical_term_does_not_retrieve_original_context(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question=(
+                    "N+1 \ubb38\uc81c\ub294 JPA\ub098 Hibernate\uc5d0\uc11c "
+                    "\uc790\uc8fc \ubc1c\uc0dd\ud558\uba70 \uc9c0\uc5f0 \ub85c\ub529\uacfc \uad00\ub828\uc774 \uc788\uc2b5\ub2c8\ub2e4."
+                ),
+                correct_answer="fetch join",
+                selected_answer="\uc9c0\uc5f0 \ub85c\ub529",
+                user_answer="\ubd84\uc0b0\ud658\uacbd\uc774 \uc5b4\ub5a4 \ud658\uacbd\uc744 \uc758\ubbf8\ud558\ub294 \uac83\uc778\uac00\uc694?",
+            ),
+            generator=lambda **kwargs: (
+                "\ubd84\uc0b0\ud658\uacbd\uc740 \ud558\ub098\uc758 \uc11c\ubc84\uac00 \uc544\ub2c8\ub77c "
+                "\uc5ec\ub7ec \uc11c\ubc84\ub098 \uc2dc\uc2a4\ud15c\uc774 \ub124\ud2b8\uc6cc\ud06c\ub85c \uc5f0\uacb0\ub418\uc5b4 "
+                "\ud568\uaed8 \uc791\uc5c5\ud558\ub294 \ud658\uacbd\uc785\ub2c8\ub2e4."
+            ),
+        )
+
+        self.assertEqual(response.retrieved_concept_ids, [])
+        self.assertIn("\ubd84\uc0b0\ud658\uacbd", response.answer)
+
+    def test_free_question_rejects_stale_original_context_answer(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question=(
+                    "N+1 \ubb38\uc81c\ub294 JPA\ub098 Hibernate\uc5d0\uc11c "
+                    "\uc790\uc8fc \ubc1c\uc0dd\ud558\uba70 \uc9c0\uc5f0 \ub85c\ub529\uacfc \uad00\ub828\uc774 \uc788\uc2b5\ub2c8\ub2e4."
+                ),
+                correct_answer="fetch join",
+                selected_answer="\uc9c0\uc5f0 \ub85c\ub529",
+                user_answer="\uc11c\ud0b7\ube0c\ub808\uc774\ucee4\uac00 \uc5b4\ub5a4 \uc758\ubbf8\uc778\uac00\uc694?",
+            ),
+            generator=lambda **kwargs: (
+                "\uc9c0\uc5f0 \ub85c\ub529\uc740 \uc5f0\uad00 \uc5d4\ud2f0\ud2f0\ub97c "
+                "\ud544\uc694\ud560 \ub54c \ubd88\ub7ec\uc624\ub294 \ubc29\uc2dd\uc774\uace0 N+1 \ubb38\uc81c\uc640 \uad00\ub828\uc774 \uc788\uc2b5\ub2c8\ub2e4."
+            ),
+        )
+
+        self.assertTrue(response.fallback_used)
+        self.assertIn("\uc11c\ud0b7\ube0c\ub808\uc774\ucee4", response.answer)
+        self.assertNotIn("\uc9c0\uc5f0 \ub85c\ub529", response.answer)
+
+    def test_vague_clarification_filters_low_score_unrelated_context(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question=(
+                    "N+1 \ubb38\uc81c\ub294 JPA\ub098 Hibernate\uc5d0\uc11c "
+                    "\uc790\uc8fc \ubc1c\uc0dd\ud558\uba70 \uc9c0\uc5f0 \ub85c\ub529\uacfc \uad00\ub828\uc774 \uc788\uc2b5\ub2c8\ub2e4."
+                ),
+                correct_answer="fetch join",
+                selected_answer="\uc9c0\uc5f0 \ub85c\ub529",
+                user_answer="\uc65c\uc694?",
+            ),
+            generator=lambda **kwargs: "\uc9c0\uc5f0 \ub85c\ub529\uc774 \uc5f0\uad00 \ub370\uc774\ud130\ub97c \ub098\uc911\uc5d0 \ubd88\ub7ec\uc640 N+1\uc774 \uc0dd\uae41\ub2c8\ub2e4.",
+        )
+
+        self.assertIn("spring-n-plus-one", response.retrieved_concept_ids)
+
+    def test_stategraph_contract_exposes_named_nodes(self):
+        self.assertIn("retrieve_context", WORKFLOW_NODE_NAMES)
+        self.assertIn("candidate_save", WORKFLOW_NODE_NAMES)
+        self.assertIn("error_state", WORKFLOW_NODE_NAMES)
+        self.assertIn("dead_end_state", WORKFLOW_NODE_NAMES)
+
+    def test_candidate_save_node_sets_candidate_id(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "auto_candidates.jsonl"
+            previous = os.environ.get("AI_REVIEW_AUTO_CANDIDATES_PATH")
+            os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = str(path)
+            try:
+                state = ReviewWorkflowState(
+                    mode="free-question",
+                    request=AiGenerateRequest(user_answer="\uc11c\ud0b7\ube0c\ub808\uc774\ucee4\uac00 \ubb50\uc57c?"),
+                    answer="서킷브레이커는 장애가 난 외부 호출을 잠시 차단해 장애 전파를 줄이는 패턴입니다.",
+                    route="generation",
+                    fallback_used=False,
+                    confidence=ConfidenceResult(
+                        score=0.5,
+                        band="low",
+                        should_fallback=True,
+                        should_save_candidate=True,
+                    ),
+                )
+
+                result = candidate_save_node(state)
+            finally:
+                if previous is None:
+                    os.environ.pop("AI_REVIEW_AUTO_CANDIDATES_PATH", None)
+                else:
+                    os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = previous
+
+            self.assertIsNotNone(result.candidate_id)
+            self.assertTrue(path.exists())
+            self.assertIn(result.candidate_id or "", path.read_text(encoding="utf-8"))
+            rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+            self.assertEqual(rows[0]["definition_draft"], state.answer)
+
+    def test_common_mobile_terms_use_static_answer_to_avoid_slow_llm(self):
+        cases = [
+            ("RecyclerView가 뭔가요?", "RecyclerView"),
+            ("Android가 뭔가요?", "Android"),
+            ("Flutter 앱이 뭔가요?", "Flutter"),
+            ("DAO가 뭔가요?", "DAO"),
+        ]
+
+        def failing_generator(**kwargs):
+            raise AssertionError("known mobile/backend terms should not wait for Ollama generation")
+
+        for user_answer, expected_term in cases:
+            with self.subTest(user_answer=user_answer):
+                response = run_review_workflow(
+                    mode="free-question",
+                    request=AiGenerateRequest(user_answer=user_answer),
+                    generator=failing_generator,
+                )
+
+                self.assertFalse(response.fallback_used)
+                self.assertEqual(response.model_used, "lightweight-template")
+                self.assertEqual(response.route, "static_fast_path")
+                self.assertIn(expected_term, response.answer)
+
+    def test_candidate_save_node_uses_default_queue_when_env_is_missing(self):
+        previous = os.environ.pop("AI_REVIEW_AUTO_CANDIDATES_PATH", None)
+        state = ReviewWorkflowState(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="\uc11c\ud0b7\ube0c\ub808\uc774\ucee4\uac00 \ubb50\uc57c?"),
+            route="generation",
+            fallback_used=False,
+            confidence=ConfidenceResult(
+                score=0.5,
+                band="low",
+                should_fallback=True,
+                should_save_candidate=True,
+            ),
+        )
+
+        try:
+            with patch("app.workflow.graph.append_auto_candidate", return_value=True) as append:
+                result = candidate_save_node(state)
+        finally:
+            if previous is not None:
+                os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = previous
+
+        self.assertIsNotNone(result.candidate_id)
+        append.assert_called_once()
+        queue_path = append.call_args.args[0]
+        self.assertEqual(queue_path.name, "auto_candidates.jsonl")
+        self.assertIn("knowledge", queue_path.parts)
+        self.assertIn("candidates", queue_path.parts)
+
+    def test_dead_end_and_error_state_nodes_mark_graph_status(self):
+        state = ReviewWorkflowState(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="\uc11c\ud0b7\ube0c\ub808\uc774\ucee4\uac00 \ubb50\uc57c?"),
+        )
+
+        dead_end = dead_end_state_node(state)
+        self.assertEqual(dead_end.graph_status, "dead_end")
+        self.assertEqual(dead_end.route, "dead_end_state")
+        self.assertTrue(dead_end.fallback_used)
+        self.assertTrue(dead_end.answer)
+
+        error_state = error_state_node(
+            ReviewWorkflowState(mode="free-question", request=AiGenerateRequest())
+        )
+        self.assertEqual(error_state.graph_status, "error")
+        self.assertEqual(error_state.route, "error_state")
+
+    def test_known_standalone_concept_question_skips_generator(self):
+        def failing_generator(**kwargs):
+            raise AssertionError("generator should not be called for lightweight known answers")
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="N+1 \ubb38\uc81c\ub294 JPA\ub098 Hibernate\uc5d0\uc11c \uc790\uc8fc \ubc1c\uc0dd\ud569\ub2c8\ub2e4.",
+                correct_answer="fetch join",
+                selected_answer="\uc9c0\uc5f0 \ub85c\ub529",
+                user_answer="API\uac00 \ubb54\ub370?",
+            ),
+            generator=failing_generator,
+        )
+
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.model_used, "lightweight-template")
+        self.assertIn("API", response.answer)
+        self.assertNotIn("N+1", response.answer)
+        self.assertEqual(response.route, "static_fast_path")
+
+    def test_common_programming_concepts_skip_generator(self):
+        cases = [
+            ("\ub9ac\uc2a4\ud2b8 \ucef4\ud504\ub9ac\ud5e8\uc158\uc774 \ubb54\uc9c0 \ubaa8\ub974\uaca0\uc74c", "\ub9ac\uc2a4\ud2b8"),
+            ("REST API\uac00 \ubb50\uc57c?", "REST"),
+            ("JSON\uc774 \ubb50\uc57c?", "JSON"),
+            ("Optional\uc740 \uc65c \uc368?", "Optional"),
+            ("Stream map filter \ucc28\uc774\uac00 \ubb50\uc57c?", "Stream"),
+            ("ORM\uc774 \ubb54\ub370?", "ORM"),
+            ("JPA \uc5d4\ud2f0\ud2f0\uac00 \ubb50\uc57c?", "\uc5d4\ud2f0\ud2f0"),
+            ("\ud504\ub77c\ubbf8\uc2a4\uac00 \ubb54\uc9c0 \ubaa8\ub974\uaca0\uc5b4", "Promise"),
+            ("async await\uc774 \ubb50\uc57c?", "async"),
+        ]
+
+        def failing_generator(**kwargs):
+            raise AssertionError("generator should not be called for common concept fast path")
+
+        for question, expected_keyword in cases:
+            with self.subTest(question=question):
+                response = run_review_workflow(
+                    mode="free-question",
+                    request=AiGenerateRequest(
+                        question="N+1 \ubb38\uc81c\ub294 JPA\uc5d0\uc11c \uc790\uc8fc \ub098\uc635\ub2c8\ub2e4.",
+                        correct_answer="fetch join",
+                        selected_answer="\uc9c0\uc5f0 \ub85c\ub529",
+                        user_answer=question,
+                    ),
+                    generator=failing_generator,
+                )
+
+                self.assertFalse(response.fallback_used)
+                self.assertEqual(response.model_used, "lightweight-template")
+                self.assertIn(expected_keyword, response.answer)
+                self.assertEqual(response.retrieved_concept_ids, [])
+
+    def test_typo_alias_question_uses_lightweight_fast_path(self):
+        def failing_generator(**kwargs):
+            raise AssertionError("generator should not be called for corrected aria-label fast path")
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="접근성 측면에서 아이콘 버튼에 필요한 처리는 무엇인가요?",
+                correct_answer="aria-label 또는 스크린리더가 읽을 수 있는 이름 제공",
+                selected_answer="아이콘을 더 작게 만들기",
+                user_answer="arila-label이 뭐야?",
+            ),
+            generator=failing_generator,
+        )
+
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.model_used, "lightweight-template")
+        self.assertIn("aria-label", response.answer)
+        self.assertIn("스크린리더", response.answer)
+
+    def test_typo_alias_question_uses_generated_card_fast_path(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="Spring 전역 예외 처리 문제",
+                correct_answer="@ControllerAdvice",
+                selected_answer="@Controller",
+                user_answer="ConrollerAdvice는 실무에서 어떻게 쓰여?",
+            ),
+            generator=lambda **kwargs: "@ControllerAdvice는 여러 컨트롤러의 예외 응답을 한곳에서 일관되게 처리할 때 사용합니다.",
+        )
+
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.model_used, "lightweight-template")
+        self.assertIn("@ControllerAdvice", response.answer)
+        self.assertEqual(response.retrieved_concept_ids, [])
+
+    def test_generated_concept_card_question_uses_lightweight_fast_path(self):
+        def failing_generator(**kwargs):
+            raise AssertionError("generator should not be called for generated concept card fast path")
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="Spring 전역 예외 처리 문제",
+                correct_answer="@ControllerAdvice",
+                selected_answer="@Controller",
+                user_answer="ConrollerAdvice는 실무에서 어떻게 쓰여?",
+            ),
+            generator=failing_generator,
+        )
+
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.model_used, "lightweight-template")
+        self.assertIn("@ControllerAdvice", response.answer)
+        self.assertIn("Spring MVC", response.answer)
+        self.assertIn("예외", response.answer)
+        self.assertEqual(response.retrieved_concept_ids, [])
+        self.assertEqual(response.route, "generated_card_fast_path")
+        self.assertEqual(response.correction_type, "typo")
+        self.assertEqual(response.matched_concept_id, "java-backend-controlleradvice")
+        self.assertIn("@ControllerAdvice", response.resolved_query)
+
+    def test_generated_answer_returns_rag_generation_route(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="Java equals와 == 비교 문제입니다.",
+                correct_answer="equals 재정의",
+                selected_answer="== 비교",
+                user_answer="equals를 짧게 설명해줘",
+            ),
+            generator=lambda **kwargs: "equals는 객체의 논리적 동등성을 비교하는 메서드입니다.",
+        )
+
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.route, "rag_generation")
+        self.assertIsNotNone(response.resolved_query)
+
+    def test_practical_question_returns_practical_answer_style(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="aria-label은 실무에서 어떻게 써?"),
+            generator=lambda **kwargs: "generator should not be used",
+        )
+
+        self.assertEqual(response.model_used, "lightweight-template")
+        self.assertEqual(response.answer_style, "practical")
+        self.assertEqual(response.quality_flags, [])
+        self.assertIn("aria-label", response.answer)
+
+    def test_low_quality_generated_answer_reports_missing_topic_flag(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="서킷브레이커가 어떤 의미인가요?"),
+            generator=lambda **kwargs: "이 개념은 중요합니다.",
+        )
+
+        self.assertTrue(response.fallback_used)
+        self.assertIn("missing_topic", response.quality_flags)
+        self.assertEqual(response.answer_style, "definition")
+
+    def test_unapproved_free_question_keeps_llm_answer_and_saves_candidate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "auto_candidates.jsonl"
+            previous = os.environ.get("AI_REVIEW_AUTO_CANDIDATES_PATH")
+            os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = str(path)
+            try:
+                response = run_review_workflow(
+                    mode="free-question",
+                    request=AiGenerateRequest(
+                        question="\ub85c\uceec \uc800\uc7a5\uc18c\uc640 \uc11c\ubc84 \ub3d9\uae30\ud654 \uc815\ucc45\uc740?",
+                        correct_answer="\ub85c\uceec \uc800\uc7a5\uc18c\uc640 \uc11c\ubc84 \ub3d9\uae30\ud654 \uc815\ucc45",
+                        user_answer="Flutter \uc571\uc774 \ubb54\uac00\uc694?",
+                    ),
+                    generator=lambda **kwargs: (
+                        "Flutter \uc571\uc740 Flutter \ud504\ub808\uc784\uc6cc\ud06c\ub85c \ub9cc\ub4e0 \uc571\uc785\ub2c8\ub2e4. "
+                        "\ud558\ub098\uc758 Dart \ucf54\ub4dc\ub85c Android\uc640 iOS \ud654\uba74\uc744 \uad6c\uc131\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4."
+                    ),
+                )
+            finally:
+                if previous is None:
+                    os.environ.pop("AI_REVIEW_AUTO_CANDIDATES_PATH", None)
+                else:
+                    os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = previous
+
+            self.assertFalse(response.fallback_used)
+            self.assertIn(response.route, {"generation", "static_fast_path"})
+            self.assertIn("Flutter \uc571", response.answer)
+            self.assertNotIn("\uc2b9\uc778\ub41c \uc9c0\uc2dd \uce74\ub4dc", response.answer)
+            self.assertIsNotNone(response.candidate_id)
+            self.assertTrue(path.exists())
+            self.assertIn(response.candidate_id or "", path.read_text(encoding="utf-8"))
+
+    def test_unapproved_free_question_retries_llm_fallback_model_before_template(self):
+        calls: list[str] = []
+
+        def fallback_model_generator(**kwargs):
+            calls.append(kwargs["model"])
+            if len(calls) == 1:
+                raise RuntimeError("primary model unavailable")
+            return (
+                "WebSocket \ud578\ub4dc\uc170\uc774\ud06c\ub294 HTTP \uc5f0\uacb0\uc744 WebSocket \uc5f0\uacb0\ub85c "
+                "\uc804\ud658\ud558\uae30 \uc704\ud574 \ud074\ub77c\uc774\uc5b8\ud2b8\uc640 \uc11c\ubc84\uac00 \ucc98\uc74c\uc5d0 \uc8fc\uace0\ubc1b\ub294 \uc57d\uc18d\uc785\ub2c8\ub2e4."
+            )
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="\ub85c\uceec \uc800\uc7a5\uc18c\uc640 \uc11c\ubc84 \ub3d9\uae30\ud654 \uc815\ucc45\uc740?",
+                correct_answer="\ub85c\uceec \uc800\uc7a5\uc18c\uc640 \uc11c\ubc84 \ub3d9\uae30\ud654 \uc815\ucc45",
+                user_answer="WebSocket \ud578\ub4dc\uc170\uc774\ud06c\uac00 \ubb54\uac00\uc694?",
+                model="qwen3:1.7b",
+            ),
+            generator=fallback_model_generator,
+        )
+
+        self.assertEqual(calls, ["qwen3:1.7b", "qwen3:4b-q4_K_M"])
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.route, "generation")
+        self.assertEqual(response.model_used, "qwen3:4b-q4_K_M")
+        self.assertIn("WebSocket", response.answer)
+        self.assertNotIn("\uc2b9\uc778\ub41c \uc9c0\uc2dd \uce74\ub4dc", response.answer)
+
+    def test_topic_specific_fallbacks_explain_common_short_questions(self):
+        cases = [
+            ("Git tag는 뭔데?", ["Git tag", "commit", "version"]),
+            ("idempotent 설계가 뭔데?", ["Idempotent", "same result", "retry"]),
+            ("그럼 네트워크를 자동으로 연결 시켜주는 것은 없나요?", ["network", "auto", "layout"]),
+        ]
+
+        for user_answer, expected_terms in cases:
+            with self.subTest(user_answer=user_answer):
+                response = run_review_workflow(
+                    mode="free-question",
+                    request=AiGenerateRequest(user_answer=user_answer),
+                    generator=lambda **kwargs: "unrelated answer",
+                )
+
+                self.assertTrue(response.fallback_used)
+                for expected_term in expected_terms:
+                    self.assertIn(expected_term, response.answer)
+                self.assertNotIn("정의, 쓰이는 상황", response.answer)
+
+    def test_common_backend_terms_use_static_answer_instead_of_vague_fallback(self):
+        cases = [
+            ("@Transactional이 뭐야?", ["@Transactional", "transaction", "rollback", "Service"]),
+            ("계층은 어떻게 있나요?", ["Controller", "Service", "Repository", "Entity"]),
+        ]
+
+        for user_answer, expected_terms in cases:
+            with self.subTest(user_answer=user_answer):
+                response = run_review_workflow(
+                    mode="free-question",
+                    request=AiGenerateRequest(user_answer=user_answer),
+                    generator=lambda **kwargs: "unrelated answer",
+                )
+
+                self.assertFalse(response.fallback_used)
+                self.assertIn(response.route, {"static_fast_path", "generated_card_fast_path"})
+                for expected_term in expected_terms:
+                    self.assertIn(expected_term, response.answer)
+                self.assertNotIn("질문으로 이해했어요", response.answer)
+
+    def test_common_course_terms_use_static_answer_instead_of_contextual_gap_fallback(self):
+        cases = [
+            ("N+1이 뭐야?", ["N+1", "추가 쿼리", "fetch join"]),
+            ("fetch join이 뭐야?", ["fetch join", "연관 엔티티", "N+1"]),
+            ("환경변수는 뭐야?", ["환경변수", "비밀번호", "API 키"]),
+            ("캐시는 뭐야?", ["캐시", "재사용", "속도"]),
+        ]
+
+        for user_answer, expected_terms in cases:
+            with self.subTest(user_answer=user_answer):
+                response = run_review_workflow(
+                    mode="free-question",
+                    request=AiGenerateRequest(user_answer=user_answer),
+                    generator=lambda **kwargs: "unrelated answer",
+                )
+
+                self.assertFalse(response.fallback_used)
+                self.assertEqual(response.route, "static_fast_path")
+                for expected_term in expected_terms:
+                    self.assertIn(expected_term, response.answer)
+                self.assertNotIn("지식 카드가 아직 부족", response.answer)
+
+    def test_http_status_code_questions_answer_the_asked_code_first(self):
+        cases = [
+            (
+                "204 No Content는 어떤 상태 코드인가요?",
+                ["204 No Content", "성공", "응답 본문", "삭제"],
+            ),
+            (
+                "201 Created는 무슨 뜻이야?",
+                ["201 Created", "생성", "Location", "POST"],
+            ),
+        ]
+
+        for user_answer, expected_terms in cases:
+            with self.subTest(user_answer=user_answer):
+                response = run_review_workflow(
+                    mode="free-question",
+                    request=AiGenerateRequest(
+                        question="REST API에서 리소스를 새로 생성했을 때 일반적으로 가장 적절한 HTTP 상태 코드는 무엇인가요?",
+                        correct_answer="201 Created",
+                        selected_answer="204 No Content",
+                        user_answer=user_answer,
+                    ),
+                    generator=lambda **kwargs: "201 Created가 왜 맞는지와 204 No Content가 어떤 개념을 놓쳤는지를 먼저 나눠보면 좋아요.",
+                )
+
+                self.assertFalse(response.fallback_used)
+                self.assertEqual(response.route, "static_fast_path")
+                for expected_term in expected_terms:
+                    self.assertIn(expected_term, response.answer)
+                self.assertNotIn("어떤 개념을 놓쳤는지", response.answer)
+
+    def test_free_question_token_budget_is_laptop_friendly(self):
+        from app.workflow.nodes import max_tokens_for_mode
+
+        self.assertLessEqual(max_tokens_for_mode("free-question", 120), 70)
+
+    def test_repeated_generated_answer_uses_cache(self):
+        calls = {"count": 0}
+
+        def counting_generator(**kwargs):
+            calls["count"] += 1
+            return "\ubc18\ubcf5 \uc9c8\ubb38\uc5d0 \ub300\ud55c \ud55c\uad6d\uc5b4 \uc124\uba85\uc785\ub2c8\ub2e4."
+
+        request = AiGenerateRequest(user_answer="\uc774 \uac1c\ub150\uc744 \uc9e7\uac8c \uc124\uba85\ud574\uc918")
+
+        first = run_review_workflow("free-question", request, generator=counting_generator)
+        second = run_review_workflow("free-question", request, generator=counting_generator)
+
+        self.assertEqual(calls["count"], 1)
+        self.assertEqual(first.answer, second.answer)
+
+    def test_workflow_response_includes_structured_observability_event(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="API가 뭐야?"),
+            generator=lambda **kwargs: "generator should not be called",
+        )
+
+        self.assertEqual(len(response.observability_events), 1)
+        event = response.observability_events[0]
+        self.assertEqual(event["event"], "ai_review.workflow_completed")
+        self.assertEqual(event["route"], response.route)
+        self.assertEqual(event["model_used"], response.model_used)
+        self.assertEqual(event["fallback_used"], response.fallback_used)
+        self.assertEqual(event["candidate_id"], response.candidate_id)
+        self.assertIn("latency_ms", event)
 
 
 if __name__ == "__main__":

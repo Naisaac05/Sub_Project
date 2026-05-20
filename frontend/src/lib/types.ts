@@ -186,6 +186,14 @@ export interface AiReviewMessageResponse {
   content: string;
   evaluation: 'UNDERSTOOD' | 'PARTIAL' | 'NEEDS_REVIEW' | null;
   createdAt: string;
+  aiRoute?: string | null;
+  aiResolvedQuery?: string | null;
+  aiCorrectionType?: string | null;
+  aiMatchedConceptId?: string | null;
+  aiAnswerStyle?: string | null;
+  aiQualityFlags?: string[];
+  aiCandidateId?: string | null;
+  aiLatencyMs?: number | null;
 }
 
 export interface AiReviewSessionResponse {
