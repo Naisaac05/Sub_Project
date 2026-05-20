@@ -21,13 +21,13 @@ public class AiReviewProviderSelector {
             case OLLAMA -> hasOllamaConfig() ? AiReviewProviderType.OLLAMA : AiReviewProviderType.RULE_BASED;
             case RULE_BASED -> AiReviewProviderType.RULE_BASED;
             case AUTO -> {
-                if (hasOpenAiKey()) {
-                    yield AiReviewProviderType.OPENAI;
-                }
                 if (hasPythonAiConfig()) {
                     yield AiReviewProviderType.PYTHON;
                 }
-                yield hasOllamaConfig() ? AiReviewProviderType.OLLAMA : AiReviewProviderType.RULE_BASED;
+                if (hasOllamaConfig()) {
+                    yield AiReviewProviderType.OLLAMA;
+                }
+                yield hasOpenAiKey() ? AiReviewProviderType.OPENAI : AiReviewProviderType.RULE_BASED;
             }
         };
     }
@@ -55,5 +55,11 @@ public class AiReviewProviderSelector {
                 && !properties.ollama().model().isBlank()
                 && properties.ollama().baseUrl() != null
                 && !properties.ollama().baseUrl().isBlank();
+    }
+
+    public boolean canUseOllamaFallback() {
+        return hasOllamaConfig()
+                && properties.provider() != AiReviewProperties.Provider.RULE_BASED
+                && properties.provider() != AiReviewProperties.Provider.OPENAI;
     }
 }
