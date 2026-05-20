@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Semaphore;
 
 @Component
 @RequiredArgsConstructor
@@ -29,6 +30,9 @@ public class OllamaAiReviewClient {
 
     private final AiReviewProperties properties;
     private final AiReviewProviderSelector providerSelector;
+    private final AiReviewMetricSink metricSink;
+    private volatile Semaphore generationSemaphore = new Semaphore(1, true);
+    private volatile int semaphorePermits = 1;
     private final Map<String, String> responseCache = Collections.synchronizedMap(
             new LinkedHashMap<>(MAX_CACHE_ENTRIES, 0.75f, true) {
                 @Override
@@ -107,7 +111,8 @@ public class OllamaAiReviewClient {
 
     private boolean canUseOllama() {
         return providerSelector.hasOllamaConfig()
-                && providerSelector.selectProvider() == AiReviewProviderType.OLLAMA;
+                && (providerSelector.selectProvider() == AiReviewProviderType.OLLAMA
+                || providerSelector.canUseOllamaFallback());
     }
 
     private Optional<String> generate(String prompt) {
@@ -116,10 +121,15 @@ public class OllamaAiReviewClient {
         String cached = responseCache.get(cacheKey);
         if (cached != null) {
             log.debug("Ollama cache hit. model={}", ollama.model());
+            metricSink.ollamaGeneration(ollama.model(), true, true);
             return Optional.of(cached);
         }
 
+        Semaphore semaphore = currentGenerationSemaphore();
+        boolean acquired = false;
         try {
+            semaphore.acquire();
+            acquired = true;
             OllamaGenerateResponse response = aiClient(ollama.baseUrl())
                     .post()
                     .uri("/api/generate")
@@ -143,14 +153,17 @@ public class OllamaAiReviewClient {
 
             if (response == null || response.response() == null || response.response().isBlank()) {
                 log.warn("Ollama returned an empty response. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
+                metricSink.ollamaGeneration(ollama.model(), false, false);
                 return Optional.empty();
             }
             String answer = compactAnswer(stripThinking(response.response().trim()));
             if (!containsKorean(answer)) {
                 log.warn("Ollama response did not contain Korean text. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
+                metricSink.ollamaGeneration(ollama.model(), false, false);
                 return Optional.empty();
             }
             responseCache.put(cacheKey, answer);
+            metricSink.ollamaGeneration(ollama.model(), false, true);
             return Optional.of(answer);
         } catch (RestClientException ex) {
             log.warn(
@@ -159,7 +172,31 @@ public class OllamaAiReviewClient {
                     ollama.model(),
                     ex.getMessage()
             );
+            metricSink.ollamaGeneration(ollama.model(), false, false);
             return Optional.empty();
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            log.warn("Ollama request interrupted. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
+            metricSink.ollamaGeneration(ollama.model(), false, false);
+            return Optional.empty();
+        } finally {
+            if (acquired) {
+                semaphore.release();
+            }
+        }
+    }
+
+    private Semaphore currentGenerationSemaphore() {
+        int desiredPermits = Math.max(1, properties.ollama().maxConcurrentGenerations());
+        if (desiredPermits == semaphorePermits) {
+            return generationSemaphore;
+        }
+        synchronized (this) {
+            if (desiredPermits != semaphorePermits) {
+                generationSemaphore = new Semaphore(desiredPermits, true);
+                semaphorePermits = desiredPermits;
+            }
+            return generationSemaphore;
         }
     }
 

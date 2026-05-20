@@ -1,15 +1,7 @@
 import re
 
 from app.schemas import AiGenerateRequest
-
-
-PII_PATTERNS = {
-    "phone_kr": re.compile(r"\b01[016789][-\s]?\d{3,4}[-\s]?\d{4}\b"),
-    "ssn_kr": re.compile(r"\b\d{6}[-\s]?\d{7}\b"),
-    "email": re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"),
-    "card": re.compile(r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b"),
-    "ipv4": re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b"),
-}
+from app.guardrails import mask_pii
 
 
 def strip_thinking(answer: str) -> str:
@@ -66,12 +58,6 @@ def korean_ratio(text: str) -> float:
         return 0.0
     korean = [char for char in letters if "\uac00" <= char <= "\ud7a3"]
     return len(korean) / len(letters)
-
-
-def mask_pii(text: str) -> str:
-    for name, pattern in PII_PATTERNS.items():
-        text = pattern.sub(f"[REDACTED_{name.upper()}]", text)
-    return text
 
 
 def korean_fallback(mode: str, request: AiGenerateRequest) -> str:

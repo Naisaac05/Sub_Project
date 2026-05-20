@@ -2,3 +2,5 @@
 
 AI answers are saved here only as review candidates. Do not promote generated answers into the RAG knowledge base without human approval.
 
+Human review workflow: `docs/ai-review-candidate-approval-guide.md`
+

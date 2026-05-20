@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
@@ -14,7 +14,9 @@ import {
   summarizeAiReviewSession,
 } from '@/lib/ai-review';
 import type { AiReviewSessionResponse } from '@/lib/types';
-import { AlertCircle, ArrowLeft, Bot, CheckCircle, Clock3, FileText, Lightbulb, Loader2, Send, Target, User } from 'lucide-react';
+import { AlertCircle, ArrowLeft, Bot, CheckCircle, Clock3, FileText, Lightbulb, Loader2, Send, Target, User, Zap, X } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const LABELS = {
   title: '\uC2A4\uB9C8\uD2B8 \uAC1C\uB150 \uBCF5\uC2B5',
@@ -155,7 +157,23 @@ function inferResponseSeconds(
   return secondsBetween(previousUserMessage?.createdAt, message.createdAt);
 }
 
+function aiMetadataBadges(message: AiReviewSessionResponse['messages'][number]) {
+  if (message.role !== 'AI') {
+    return [];
+  }
+  return [
+    message.aiRoute ? `route:${message.aiRoute}` : null,
+    message.aiAnswerStyle ? `style:${message.aiAnswerStyle}` : null,
+    message.aiCorrectionType && message.aiCorrectionType !== 'none' ? `fix:${message.aiCorrectionType}` : null,
+    message.aiMatchedConceptId ? `concept:${message.aiMatchedConceptId}` : null,
+    message.aiCandidateId ? `candidate:${message.aiCandidateId}` : null,
+    typeof message.aiLatencyMs === 'number' ? `${message.aiLatencyMs}ms` : null,
+    ...(message.aiQualityFlags ?? []).map((flag) => `quality:${flag}`),
+  ].filter((item): item is string => Boolean(item));
+}
+
 export default function AiReviewPage() {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const params = useParams();
   const router = useRouter();
   const { isLoggedIn, isLoading: authLoading } = useAuth();
@@ -170,8 +188,14 @@ export default function AiReviewPage() {
   const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(null);
   const [messageDurations, setMessageDurations] = useState<Record<number, number>>({});
   const [questionSummaries, setQuestionSummaries] = useState<Record<number, string>>({});
+  const [closedQuestionSummaryIds, setClosedQuestionSummaryIds] = useState<Set<number>>(new Set());
   const [overallStudyReport, setOverallStudyReport] = useState<string | null>(null);
+  const [closedOverallReport, setClosedOverallReport] = useState(false);
   const [summaryLoading, setSummaryLoading] = useState<'question' | 'overall' | null>(null);
+  const [optimisticUserMessage, setOptimisticUserMessage] = useState<string | null>(null);
+
+  // Auto-scrolling is intentionally disabled per user request.
+  // The user prefers the chat window to remain fixed when a new question or answer arrives.
 
   useEffect(() => {
     if (!authLoading && !isLoggedIn) {
@@ -243,17 +267,17 @@ export default function AiReviewPage() {
     let nextOverallReport: string | null = null;
 
     for (const message of session?.messages ?? []) {
-      if (message.mode === 'QUESTION_SUMMARY' && message.questionId) {
+      if (message.mode === 'QUESTION_SUMMARY' && message.questionId && !closedQuestionSummaryIds.has(message.questionId)) {
         nextQuestionSummaries[message.questionId] = message.content;
       }
-      if (message.mode === 'REVIEW_REPORT') {
+      if (message.mode === 'REVIEW_REPORT' && !closedOverallReport) {
         nextOverallReport = message.content;
       }
     }
 
     setQuestionSummaries(nextQuestionSummaries);
     setOverallStudyReport(nextOverallReport);
-  }, [session?.messages]);
+  }, [session?.messages, closedQuestionSummaryIds, closedOverallReport]);
 
   const displayedQuestion = useMemo(
     () =>
@@ -322,11 +346,13 @@ export default function AiReviewPage() {
     return false;
   };
 
-  const handleSubmit = async (mode: 'CHECK_ANSWER' | 'FREE_QUESTION' | 'NEXT_QUESTION') => {
+  const handleSubmit = async (mode: 'CHECK_ANSWER' | 'FREE_QUESTION' | 'NEXT_QUESTION', overrideAnswer?: string) => {
+    const currentAnswer = (overrideAnswer !== undefined ? overrideAnswer : answer).trim();
+
     if (!session || submitting || session.status === 'COMPLETED') {
       return;
     }
-    if (mode !== 'NEXT_QUESTION' && !answer.trim()) {
+    if (mode !== 'NEXT_QUESTION' && !currentAnswer) {
       return;
     }
     if (mode === 'FREE_QUESTION' && !canAskMoreOnDisplayedQuestion) {
@@ -334,6 +360,8 @@ export default function AiReviewPage() {
       return;
     }
 
+    setAnswer('');
+    setOptimisticUserMessage(currentAnswer);
     setSubmitting(true);
     setError(null);
     setNotice(null);
@@ -345,7 +373,7 @@ export default function AiReviewPage() {
     try {
       const res = await submitAiReviewAnswer(
         session.sessionId,
-        answer.trim(),
+        currentAnswer,
         mode,
         mode === 'NEXT_QUESTION' ? activeWrongQuestion?.questionId : displayedQuestion?.questionId
       );
@@ -389,16 +417,21 @@ export default function AiReviewPage() {
           const recovered = await refreshSessionAfterSlowAi(previousMessageCount);
           if (recovered) {
             setAnswer('');
+          } else {
+            setAnswer(currentAnswer); // 복구 실패 시 입력값 복원
           }
           return;
         } catch {
           setNotice(LABELS.slowAiNotice);
+          setAnswer(currentAnswer); // 에러 시 입력값 복원
           return;
         }
       }
       setError(resolveAiReviewError(err));
+      setAnswer(currentAnswer); // 일반 에러 시 입력값 복원
     } finally {
       window.clearTimeout(slowNoticeTimer);
+      setOptimisticUserMessage(null);
       setSubmitting(false);
     }
   };
@@ -422,6 +455,12 @@ export default function AiReviewPage() {
     if (!session || !displayedQuestion || summaryLoading) {
       return;
     }
+
+    setClosedQuestionSummaryIds((prev) => {
+      const next = new Set(prev);
+      next.delete(displayedQuestion.questionId);
+      return next;
+    });
 
     setSummaryLoading('question');
     setError(null);
@@ -452,6 +491,8 @@ export default function AiReviewPage() {
     if (!session || summaryLoading) {
       return;
     }
+
+    setClosedOverallReport(false);
 
     setSummaryLoading('overall');
     setError(null);
@@ -600,16 +641,14 @@ export default function AiReviewPage() {
                       {LABELS.progress}
                     </div>
                     <div className="flex items-end justify-between gap-3">
-                      <p className="text-2xl font-extrabold text-gray-950">{remainingQuestionCount}개</p>
-                      <p className="text-xs font-semibold text-emerald-800">
-                        사용 {Math.min(usedQuestionCount, MAX_AI_QUESTIONS_PER_WRONG_ANSWER)}/{MAX_AI_QUESTIONS_PER_WRONG_ANSWER}
+                      <p className="text-2xl font-extrabold text-gray-950 flex items-center gap-1">
+                        {Array.from({length: remainingQuestionCount}).map((_, i) => (
+                          <Zap key={i} size={20} className="fill-amber-400 text-amber-500" />
+                        ))}
                       </p>
-                    </div>
-                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-white">
-                      <div
-                        className="h-full rounded-full bg-emerald-500"
-                        style={{ width: `${remainingQuestionPercent}%` }}
-                      />
+                      <p className="text-xs font-semibold text-emerald-800">
+                        질문 기회 {remainingQuestionCount}번 남았어요!
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -662,25 +701,47 @@ export default function AiReviewPage() {
 
                 {displayedQuestion && questionSummaries[displayedQuestion.questionId] ? (
                   <div className="mb-5 rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-                    <div className="mb-2 flex items-center gap-2 text-sm font-extrabold text-emerald-800">
-                      <FileText size={16} />
-                      {LABELS.studySummary}
+                    <div className="mb-2 flex items-center justify-between gap-2 text-sm font-extrabold text-emerald-800">
+                      <div className="flex items-center gap-2">
+                        <FileText size={16} />
+                        {LABELS.studySummary}
+                      </div>
+                      <button 
+                        onClick={() => {
+                          setClosedQuestionSummaryIds((prev) => new Set(prev).add(displayedQuestion.questionId));
+                        }}
+                        className="rounded hover:bg-emerald-200/50 p-1 transition-colors"
+                      >
+                        <X size={16} />
+                      </button>
                     </div>
-                    <p className="whitespace-pre-line break-keep text-sm leading-6 text-emerald-950">
-                      {questionSummaries[displayedQuestion.questionId]}
-                    </p>
+                    <div className="prose prose-sm prose-emerald max-w-none text-emerald-950">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {questionSummaries[displayedQuestion.questionId]}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 ) : null}
 
                 {overallStudyReport ? (
                   <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
-                    <div className="mb-2 flex items-center gap-2 text-sm font-extrabold text-slate-900">
-                      <Target size={16} />
-                      {LABELS.summarizeAll}
+                    <div className="mb-2 flex items-center justify-between gap-2 text-sm font-extrabold text-slate-900">
+                      <div className="flex items-center gap-2">
+                        <Target size={16} />
+                        {LABELS.summarizeAll}
+                      </div>
+                      <button 
+                        onClick={() => setClosedOverallReport(true)}
+                        className="rounded hover:bg-slate-200/50 p-1 transition-colors"
+                      >
+                        <X size={16} />
+                      </button>
                     </div>
-                    <p className="whitespace-pre-line break-keep text-sm leading-6 text-slate-700">
-                      {overallStudyReport}
-                    </p>
+                    <div className="prose prose-sm prose-slate max-w-none text-slate-700">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {overallStudyReport}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 ) : null}
 
@@ -698,13 +759,30 @@ export default function AiReviewPage() {
                     </div>
                   ) : null}
                   {!initialQuestionPrompt && activeMessages.length === 0 ? (
-                    <div className="rounded-xl border border-dashed border-gray-200 p-6 text-center text-sm font-semibold text-gray-400">
-                      {LABELS.noMessages}
+                    <div className="flex flex-col items-center gap-4 py-8">
+                      <div className="text-sm font-semibold text-gray-400">
+                        AI에게 먼저 질문해보세요!
+                      </div>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        <button
+                          onClick={() => handleSubmit('FREE_QUESTION', '이 문제가 왜 틀렸는지 설명해줘')}
+                          className="rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-100 transition-colors"
+                        >
+                          이 문제가 왜 틀렸는지 설명해줘
+                        </button>
+                        <button
+                          onClick={() => handleSubmit('FREE_QUESTION', '정답의 핵심 개념만 짧게 요약해줘')}
+                          className="rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-100 transition-colors"
+                        >
+                          핵심 개념만 짧게 요약해줘
+                        </button>
+                      </div>
                     </div>
                   ) : null}
                   {activeMessages.map((message) => {
                     const isAi = message.role === 'AI';
                     const duration = inferResponseSeconds(message, rawActiveMessages, messageDurations);
+                    const metadataBadges = aiMetadataBadges(message);
                     return (
                       <div
                         key={message.id}
@@ -719,7 +797,7 @@ export default function AiReviewPage() {
                           {isAi && duration ? (
                             <div className="mb-1 flex items-center gap-1 text-xs font-semibold text-gray-400">
                               <Clock3 size={12} />
-                              {duration.toFixed(1)}\uCD08 \uB3D9\uC548 {LABELS.thinking}
+                              {duration.toFixed(1)}초 동안 {LABELS.thinking}
                             </div>
                           ) : null}
                           <div
@@ -729,7 +807,15 @@ export default function AiReviewPage() {
                                 : 'bg-blue-600 text-white'
                             }`}
                           >
-                            <p className="whitespace-pre-line break-keep">{message.content}</p>
+                            {isAi ? (
+                              <div className="prose prose-sm max-w-none prose-p:my-1 prose-pre:my-2 prose-pre:p-2 prose-pre:bg-gray-800 prose-pre:text-gray-100 prose-code:text-blue-600 prose-code:before:content-none prose-code:after:content-none">
+                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                  {message.content}
+                                </ReactMarkdown>
+                              </div>
+                            ) : (
+                              <p className="whitespace-pre-line break-keep">{message.content}</p>
+                            )}
                           </div>
                         </div>
                         {!isAi ? (
@@ -740,6 +826,33 @@ export default function AiReviewPage() {
                       </div>
                     );
                   })}
+                  {submitting && optimisticUserMessage && (
+                    <div className="flex gap-3 justify-end">
+                      <div className="max-w-[82%] text-right">
+                        <div className="rounded-2xl bg-blue-600 px-4 py-3 text-sm leading-6 text-white inline-block text-left">
+                          <p className="whitespace-pre-line break-keep">{optimisticUserMessage}</p>
+                        </div>
+                      </div>
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-900 text-white">
+                        <User size={18} />
+                      </div>
+                    </div>
+                  )}
+                  {submitting && (
+                    <div className="flex gap-3 justify-start">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                        <Bot size={18} />
+                      </div>
+                      <div className="max-w-[82%]">
+                        <div className="rounded-2xl bg-gray-100 px-4 py-4 flex gap-1 items-center h-[44px]">
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '-0.3s' }}></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '-0.15s' }}></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div ref={messagesEndRef} />
                 </div>
 
                 {session.status === 'COMPLETED' ? (
@@ -762,6 +875,14 @@ export default function AiReviewPage() {
                     <textarea
                       value={answer}
                       onChange={(event) => setAnswer(event.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          if (answer.trim() && !submitting) {
+                            handleSubmit('FREE_QUESTION');
+                          }
+                        }
+                      }}
                       maxLength={700}
                       rows={3}
                       className="min-h-[88px] w-full resize-none rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-blue-400"
@@ -795,7 +916,7 @@ export default function AiReviewPage() {
                     <p className="break-keep text-xs leading-5 text-gray-500">
                       {LABELS.answerGuide}
                       {!canAskMoreOnDisplayedQuestion ? ` ${LABELS.questionLimitReached}` : ''}
-                      {!isViewingCurrentQuestion ? ` ${LABELS.nextQuestion}\uB294 ${LABELS.currentQuestion}\uC5D0\uC11C\uB9CC \uC0AC\uC6A9\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.` : ''}
+                      {!isViewingCurrentQuestion ? ` ${LABELS.nextQuestion}는 ${LABELS.currentQuestion}에서만 사용할 수 있습니다.` : ''}
                     </p>
                   </div>
                 )}

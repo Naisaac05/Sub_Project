@@ -4,6 +4,19 @@
 
 Implement the first foundation slice of the final AI Review Local RAG + LangGraph architecture: Python AI server modularization, file-based knowledge structure, concept card linting, and a dependency-tolerant RAG retrieval skeleton.
 
+## Execution Order
+
+This phase must run before `2026-05-16-ai-review-lightweight-phase-47-design.md`.
+
+Fixed order:
+
+```text
+Phase 1: rag-phase-1
+→ Phase 4.7: lightweight-phase-47
+```
+
+Do not execute both phases concurrently. Both phases modify `ai/app/service.py`, so parallel execution can overwrite or invalidate the service orchestration changes.
+
 ## Scope
 
 This phase covers implementation steps 1 through 3.5 from the final architecture document:
