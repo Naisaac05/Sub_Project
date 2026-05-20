@@ -187,7 +187,6 @@ public class LoggingAiReviewKnowledgeReindexer implements AiReviewKnowledgeReind
         command.add(chromaCollection);
         command.add("--embedding-model");
         command.add(chromaEmbeddingModel);
-        command.add("--fail-on-chroma-skip");
 
         chromaReindexCommandRunner.run(command, chromaReindexWorkingDirectory);
     }

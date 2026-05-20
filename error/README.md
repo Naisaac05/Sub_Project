@@ -32,6 +32,8 @@
 
 ## 인덱스
 
+- [2026-05-20 승인한 지식 카드가 실행 중인 AI 서비스에 반영 안 됨 (lru_cache 로 카드 목록 고정)](2026-05-20-ai-approved-card-not-applied-lru-cache.md)
+- [2026-05-20 AI review candidate approval fails on chroma reindex skip (optional chromadb missing)](2026-05-20-ai-review-approval-fails-on-chroma-skip.md)
 - [2026-05-20 AI server keep_alive invalid duration → all generate calls fall back to template](2026-05-20-ai-server-keep-alive-invalid-duration.md)
 - [2026-05-20 AI review specific question answered with definition template](2026-05-20-ai-review-specific-question-definition-template.md)
 - [2026-05-20 AI review workflow context gate weak overlap](2026-05-20-ai-review-workflow-context-gate-weak-overlap.md)
