@@ -144,8 +144,7 @@ class LoggingAiReviewKnowledgeReindexerTest {
                 "--collection",
                 "devmatch_concepts",
                 "--embedding-model",
-                "BAAI/bge-m3",
-                "--fail-on-chroma-skip"
+                "BAAI/bge-m3"
         );
     }
 

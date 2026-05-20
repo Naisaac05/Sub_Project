@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from functools import lru_cache
 
 from app.rag.documents import load_concept_cards
 from app.workflow.intent import FreeQuestionIntent, normalize_question
@@ -271,6 +270,5 @@ def _concept_card_answer_for(concept_id: str | None) -> str | None:
     return card.sections.get("핵심 설명") or None
 
 
-@lru_cache(maxsize=1)
 def _concept_cards_by_id():
     return {card.concept_id: card for card in load_concept_cards()}
