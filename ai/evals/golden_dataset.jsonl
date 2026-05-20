@@ -48,3 +48,22 @@
 {"id":"java-controlleradvice-005","question":"How does ControllerAdvice handle REST API errors?","expected_concepts":["java-backend-controlleradvice"]}
 {"id":"java-controlleradvice-006","question":"ControllerAdvice and ExceptionHandler response body","expected_concepts":["java-backend-controlleradvice"]}
 {"id":"free-cache-001","question":"What is a cache miss?","expected_concepts":[],"forbidden_concepts":["spring-n-plus-one","spring-fetch-join","java-equals"]}
+{"id":"gate-ood-001","question":"DI(의존성 주입)가 뭐야?","expected_concepts":[],"expected_context_concepts":[]}
+{"id":"gate-ood-002","question":"REST API와 GraphQL 차이","expected_concepts":[],"expected_context_concepts":[]}
+{"id":"gate-ood-003","question":"JWT 인증 흐름 설명해줘","expected_concepts":[],"expected_context_concepts":[]}
+{"id":"gate-ood-004","question":"git rebase와 merge 차이","expected_concepts":[],"expected_context_concepts":[]}
+{"id":"gate-ood-005","question":"트랜잭션 격리 수준이 뭐야?","expected_concepts":[],"expected_context_concepts":[]}
+{"id":"gate-ood-006","question":"useEffect 의존성 배열이 뭐야?","expected_concepts":[],"expected_context_concepts":[]}
+{"id":"gate-ood-007","question":"DB 인덱스는 왜 빠른가?","expected_concepts":[],"expected_context_concepts":[]}
+{"id":"gate-ood-008","question":"스프링 빈 스코프 종류","expected_concepts":[],"expected_context_concepts":[]}
+{"id":"gate-indomain-001","question":"N+1 문제 뭐야?","expected_context_concepts":["spring-fetch-join","spring-n-plus-one"]}
+{"id":"gate-indomain-002","question":"equals와 hashCode 관계","expected_context_concepts":["java-equals"]}
+{"id":"gate-indomain-003","question":"aria-label 왜 써?","expected_context_concepts":["frontend-aria-label"]}
+{"id":"answer-equals-001","question":"equals를 재정의하면 무엇을 함께 재정의해야 해?","required_keywords":["hashCode"]}
+{"id":"answer-nplus1-001","question":"N+1 문제가 뭐야?","required_keywords":["N+1"]}
+{"id":"answer-arialabel-001","question":"aria-label은 언제 써?","required_keywords":["aria-label"]}
+{"id":"answer-controlleradvice-001","question":"@ControllerAdvice는 무슨 역할이야?","required_keywords":["ControllerAdvice"]}
+{"id":"answer-fetchjoin-001","question":"N+1을 fetch join으로 어떻게 해결해?","required_keywords":["fetch join"]}
+{"id":"answer-nplus1-002","question":"N+1을 줄이려면 무엇을 적용해야 해?","required_keywords":["fetch join"]}
+{"id":"answer-fetchjoin-002","question":"컬렉션 fetch join을 쓸 때 무엇을 조심해야 해?","required_keywords":["페이징"]}
+{"id":"answer-controlleradvice-002","question":"전역 예외 처리를 하려면 무엇을 써야 해?","required_keywords":["ControllerAdvice"]}

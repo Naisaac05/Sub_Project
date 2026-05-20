@@ -13,6 +13,8 @@ from app.rag.retriever import retrieve_context
 from app.schemas import AiGenerateRequest
 from app.workflow.runner import run_review_workflow
 from app.workflow.intent import classify_free_question
+from app.workflow.nodes import retrieve_context_node
+from app.workflow.state import ReviewWorkflowState
 
 
 DATASET_PATH = ROOT / "evals" / "golden_dataset.jsonl"
@@ -73,6 +75,8 @@ def evaluate_dataset(
     candidate_capture_hits = 0
     observability_event_rows = 0
     observability_event_hits = 0
+    context_rows = 0
+    context_hits = 0
     workflow_rows = 0
     for row in rows:
         expected = set(str(item) for item in row.get("expected_concepts", []))
@@ -103,6 +107,22 @@ def evaluate_dataset(
             stale_context_rows += 1
             if not (forbidden & retrieved_ids):
                 stale_context_absent += 1
+
+        expected_context = row.get("expected_context_concepts")
+        if expected_context is not None:
+            context_rows += 1
+            gated_state = retrieve_context_node(
+                ReviewWorkflowState(
+                    mode="free-question",
+                    request=AiGenerateRequest(
+                        question=str(row.get("question", "")),
+                        user_answer=str(row.get("question", "")),
+                    ),
+                )
+            )
+            gated_ids = {context.concept_id for context in gated_state.contexts}
+            if gated_ids == {str(item) for item in expected_context}:
+                context_hits += 1
 
         workflow_response = _workflow_response_for(row, workflow_runner)
         if workflow_response is not None:
@@ -181,6 +201,8 @@ def evaluate_dataset(
         "observability_event_rate": round(observability_event_hits / observability_event_rows, 4)
         if observability_event_rows
         else 1.0,
+        "workflow_context_accuracy": round(context_hits / context_rows, 4) if context_rows else 1.0,
+        "context_rows": context_rows,
         "workflow_rows": workflow_rows,
     }
 
@@ -205,6 +227,22 @@ def _workflow_response_for(row: dict[str, object], workflow_runner: Any):
     return run_review_workflow("free-question", request, generator=deterministic_generator)
 
 
+def _real_workflow_runner(row: dict[str, object]):
+    from app.ollama.client import call_ollama
+
+    question = str(row.get("question", ""))
+    fields = dict(
+        question=question,
+        user_answer=question,
+        correct_answer=str(row.get("correct_answer", "")),
+        selected_answer=str(row.get("selected_answer", "")),
+    )
+    if row.get("model"):
+        fields["model"] = str(row["model"])
+    request = AiGenerateRequest(**fields)
+    return run_review_workflow("free-question", request, generator=call_ollama)
+
+
 def _needs_workflow(row: dict[str, object]) -> bool:
     return any(
         row.get(key)
@@ -221,9 +259,17 @@ def _needs_workflow(row: dict[str, object]) -> bool:
 
 
 def main() -> int:
-    report = evaluate_dataset(load_dataset())
+    real = "--real" in sys.argv
+    runner = _real_workflow_runner if real else None
+    report = evaluate_dataset(load_dataset(), workflow_runner=runner)
+    report["generation_mode"] = "ollama" if real else "deterministic"
     print(json.dumps(report, ensure_ascii=False, indent=2))
-    return 0 if report["retrieval_hit_rate"] >= 0.6 and report["rag_policy_accuracy"] >= 0.8 else 1
+    passed = (
+        report["retrieval_hit_rate"] >= 0.6
+        and report["rag_policy_accuracy"] >= 0.8
+        and report["workflow_context_accuracy"] >= 1.0
+    )
+    return 0 if passed else 1
 
 
 if __name__ == "__main__":
