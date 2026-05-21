@@ -128,9 +128,7 @@ def candidate_save_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
 
     candidate = build_auto_candidate(
         source_question=state.request.user_answer,
-        resolved_query=(
-            state.resolved_query.resolved_query if state.resolved_query else state.request.user_answer
-        ),
+        resolved_query=_candidate_resolved_query(state),
         route=state.route,
         confidence_score=state.confidence.score if state.confidence else None,
         needs_review_reason=reason,
@@ -139,6 +137,15 @@ def candidate_save_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
     if append_auto_candidate(queue, candidate):
         state.candidate_id = str(candidate["candidate_id"])
     return state
+
+
+def _candidate_resolved_query(state: ReviewWorkflowState) -> str:
+    intent_topic = state.free_question_intent.topic if state.free_question_intent else ""
+    if intent_topic:
+        return intent_topic
+    if state.resolved_query:
+        return state.resolved_query.resolved_query
+    return state.request.user_answer
 
 
 def error_state_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
