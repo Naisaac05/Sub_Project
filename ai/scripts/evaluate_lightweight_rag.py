@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import sys
+import tempfile
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -224,7 +226,16 @@ def _workflow_response_for(row: dict[str, object], workflow_runner: Any):
     def deterministic_generator(**kwargs):
         return str(row.get("reference_answer") or f"{question}에 대한 설명입니다.")
 
-    return run_review_workflow("free-question", request, generator=deterministic_generator)
+    previous = os.environ.get("AI_REVIEW_AUTO_CANDIDATES_PATH")
+    with tempfile.TemporaryDirectory() as tmp:
+        os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = str(Path(tmp) / "auto_candidates.jsonl")
+        try:
+            return run_review_workflow("free-question", request, generator=deterministic_generator)
+        finally:
+            if previous is None:
+                os.environ.pop("AI_REVIEW_AUTO_CANDIDATES_PATH", None)
+            else:
+                os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = previous
 
 
 def _real_workflow_runner(row: dict[str, object]):

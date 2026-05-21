@@ -1,10 +1,12 @@
 from dataclasses import dataclass
+import re
 
 from app.rag.documents import load_concept_cards
 from app.workflow.intent import FreeQuestionIntent, normalize_question
 
 
 LIGHTWEIGHT_MODEL_NAME = "lightweight-template"
+FAST_PATH_CONFIDENCE_THRESHOLD = 0.95
 
 
 @dataclass(frozen=True)
@@ -242,10 +244,14 @@ def resolve_lightweight_answer(
     if intent.intent not in {"concept_definition", "comparison", "related_concept", "practical_application"}:
         return None
 
-    haystack = normalize_question(" ".join((question, intent.topic)))
-    for key, aliases in _ALIASES.items():
-        if any(normalize_question(alias) in haystack for alias in aliases):
-            return LightweightAnswer(_ANSWERS[key], "static_fast_path", _style_for_intent(intent))
+    match_text = " ".join((question, intent.topic))
+    static_match = _static_answer_match_for(match_text)
+    if (
+        static_match
+        and _has_high_confidence_static_match(static_match, intent)
+    ):
+        static_answer_key, _ = static_match
+        return LightweightAnswer(_ANSWERS[static_answer_key], "static_fast_path", _style_for_intent(intent))
     concept_answer = _concept_card_answer_for(matched_concept_id)
     if concept_answer:
         return LightweightAnswer(concept_answer, "generated_card_fast_path", _style_for_intent(intent))
@@ -272,3 +278,52 @@ def _concept_card_answer_for(concept_id: str | None) -> str | None:
 
 def _concept_cards_by_id():
     return {card.concept_id: card for card in load_concept_cards()}
+
+
+def _static_answer_match_for(text: str) -> tuple[str, str] | None:
+    normalized_haystack = normalize_question(text)
+    for key, aliases in _ALIASES.items():
+        for alias in aliases:
+            normalized_alias = normalize_question(alias)
+            if not normalized_alias:
+                continue
+            if _is_alnum_alias(normalized_alias):
+                if _contains_alnum_alias(text, alias):
+                    return key, alias
+                continue
+            if normalized_alias in normalized_haystack:
+                return key, alias
+    return None
+
+
+def _is_alnum_alias(normalized_alias: str) -> bool:
+    return re.fullmatch(r"[a-z0-9]+", normalized_alias) is not None
+
+
+def _contains_alnum_alias(text: str, alias: str) -> bool:
+    parts = re.findall(r"[A-Za-z0-9]+", alias)
+    if not parts:
+        return False
+    separator = r"[^A-Za-z0-9]+"
+    pattern = r"(?<![A-Za-z0-9])" + separator.join(re.escape(part) for part in parts) + r"(?![A-Za-z0-9])"
+    return re.search(pattern, text, re.IGNORECASE) is not None
+
+
+def _has_high_confidence_static_match(match: tuple[str, str], intent: FreeQuestionIntent) -> bool:
+    if getattr(intent, "confidence", 0.7) >= FAST_PATH_CONFIDENCE_THRESHOLD:
+        return True
+    _, alias = match
+    return _is_specific_static_alias(alias)
+
+
+def _is_specific_static_alias(alias: str) -> bool:
+    normalized_alias = normalize_question(alias)
+    if not normalized_alias:
+        return False
+    if re.fullmatch(r"[a-z]+", normalized_alias):
+        return False
+    if re.search(r"[\uac00-\ud7a3]{2,}", normalized_alias):
+        return True
+    if re.search(r"\d|[@+#/-]", normalized_alias):
+        return True
+    return False

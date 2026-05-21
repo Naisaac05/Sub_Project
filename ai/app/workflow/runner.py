@@ -1,7 +1,7 @@
 import time
 from app.ollama.client import call_ollama
 from app.schemas import AiGenerateRequest, AiGenerateResponse
-from app.workflow.answer_cache import cache_key_for, put_cached_answer
+from app.workflow.answer_cache import cache_key_for, put_cached_answer, run_single_flight, get_cached_answer
 from app.workflow.graph import LANGGRAPH_AVAILABLE, candidate_save_node, run_state_graph
 from app.workflow.nodes import (
     Generator,
@@ -11,22 +11,21 @@ from app.workflow.nodes import (
     retrieve_context_node,
     rule_evaluate_node,
     validate_answer_node,
+    _context_text,
+    _learner_query_for_state,
+    _matched_concept_id_for_lightweight,
+    _answer_style_for_state,
+    _should_retry_fallback_model,
+    max_tokens_for_mode,
 )
 from app.workflow.state import ReviewWorkflowState
+from app.workflow.lightweight_answers import LIGHTWEIGHT_MODEL_NAME, resolve_lightweight_answer
+from app.prompts import build_prompt, prompt_version_for_mode
+from app.validation.text import compact_answer, korean_fallback
+from app.ollama.client import FALLBACK_MODEL
 
 
-def run_review_workflow(
-    mode: str,
-    request: AiGenerateRequest,
-    generator: Generator = call_ollama,
-) -> AiGenerateResponse:
-    started = time.perf_counter()
-    if LANGGRAPH_AVAILABLE:
-        state = run_state_graph(mode=mode, request=request, generator=generator)
-    else:
-        state = _run_sequential_workflow(mode=mode, request=request, generator=generator)
-
-    latency_ms = int((time.perf_counter() - started) * 1000)
+def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> AiGenerateResponse:
     response = AiGenerateResponse(
         answer=state.answer,
         model_used=state.model_used,
@@ -45,6 +44,167 @@ def run_review_workflow(
     )
     response.observability_events = [_workflow_completed_event(response)]
     return response
+
+
+def run_review_workflow(
+    mode: str,
+    request: AiGenerateRequest,
+    generator: Generator = call_ollama,
+) -> AiGenerateResponse:
+    started = time.perf_counter()
+    cache_key = cache_key_for(mode, request)
+
+    def run_workflow() -> ReviewWorkflowState:
+        if LANGGRAPH_AVAILABLE:
+            return run_state_graph(mode=mode, request=request, generator=generator)
+        return _run_sequential_workflow(mode=mode, request=request, generator=generator)
+
+    state = run_single_flight(cache_key, run_workflow)
+    latency_ms = int((time.perf_counter() - started) * 1000)
+    return _build_response_from_state(state, latency_ms)
+
+
+async def run_review_workflow_stream(
+    mode: str,
+    request: AiGenerateRequest,
+    generator=None,
+):
+    state = ReviewWorkflowState(mode=mode, request=request)
+    state = retrieve_context_node(state)
+    state = rule_evaluate_node(state)
+
+    # 1. Fast Path (Lightweight Answer) Check
+    learner_query = _learner_query_for_state(state)
+    lightweight_answer = resolve_lightweight_answer(
+        learner_query,
+        state.free_question_intent,
+        matched_concept_id=_matched_concept_id_for_lightweight(state),
+    )
+    if state.mode == "free-question" and lightweight_answer:
+        state.answer = lightweight_answer.answer
+        state.prompt_version = prompt_version_for_mode(state.mode)
+        state.model_used = LIGHTWEIGHT_MODEL_NAME
+        state.fallback_used = False
+        state.route = lightweight_answer.route
+        state.answer_style = lightweight_answer.style
+        if lightweight_answer.route == "static_fast_path":
+            state.contexts = []
+
+        yield {"type": "start"}
+        yield {"type": "chunk", "chunk": state.answer}
+
+        state = validate_answer_node(state)
+        state = confidence_gate_node(state)
+        state = fallback_answer_node(state)
+        state = candidate_save_node(state)
+
+        response = _build_response_from_state(state, 0)
+        yield {"type": "done", "response": response}
+        return
+
+    # 2. Cache Check
+    cache_key = cache_key_for(state.mode, state.request)
+    cached_answer = get_cached_answer(cache_key)
+    if cached_answer:
+        state.answer = cached_answer
+        state.prompt_version = prompt_version_for_mode(state.mode)
+        state.model_used = f"{state.request.model}:cache"
+        state.fallback_used = False
+        state.route = "cache"
+
+        yield {"type": "start"}
+        yield {"type": "chunk", "chunk": state.answer}
+
+        state = validate_answer_node(state)
+        state = confidence_gate_node(state)
+        state = fallback_answer_node(state)
+        state = candidate_save_node(state)
+
+        response = _build_response_from_state(state, 0)
+        yield {"type": "done", "response": response}
+        return
+
+    # 3. Stream Token Generation
+    prompt = build_prompt(state.mode, state.request, context=_context_text(state))
+    state.prompt_version = prompt_version_for_mode(state.mode)
+
+    yield {"type": "start"}
+
+    started = time.perf_counter()
+    chunks = []
+
+    if generator is None:
+        from app.ollama.client import call_ollama_stream_async
+        stream_gen = call_ollama_stream_async
+    else:
+        stream_gen = generator
+
+    try:
+        async for chunk in stream_gen(
+            model=state.request.model,
+            prompt=prompt,
+            temperature=state.request.temperature,
+            max_tokens=max_tokens_for_mode(state.mode, state.request.max_tokens),
+            num_ctx=state.request.num_ctx,
+            num_thread=state.request.num_thread,
+        ):
+            chunks.append(chunk)
+            yield {"type": "chunk", "chunk": chunk}
+
+        state.answer = "".join(chunks)
+        state.answer = compact_answer(state.answer, state.mode)
+        state.model_used = state.request.model
+        state.route = "rag_generation" if state.contexts else "generation"
+        state.answer_style = _answer_style_for_state(state)
+    except Exception as exc:
+        if _should_retry_fallback_model(state):
+            try:
+                chunks = []
+                async for chunk in stream_gen(
+                    model=FALLBACK_MODEL,
+                    prompt=prompt,
+                    temperature=state.request.temperature,
+                    max_tokens=max_tokens_for_mode(state.mode, state.request.max_tokens),
+                    num_ctx=state.request.num_ctx,
+                    num_thread=state.request.num_thread,
+                ):
+                    chunks.append(chunk)
+                    yield {"type": "chunk", "chunk": chunk}
+
+                state.answer = "".join(chunks)
+                state.answer = compact_answer(state.answer, state.mode)
+                state.model_used = FALLBACK_MODEL
+                state.route = "rag_generation" if state.contexts else "generation"
+                state.answer_style = _answer_style_for_state(state)
+                state.error = None
+            except Exception as fallback_exc:
+                state.error = f"{exc}; fallback model failed: {fallback_exc}"
+                state.answer = korean_fallback(state.mode, state.request)
+                state.model_used = "template"
+                state.fallback_used = True
+                state.route = "fallback_template"
+                state.answer_style = _answer_style_for_state(state)
+                yield {"type": "chunk", "chunk": state.answer}
+        else:
+            state.error = str(exc)
+            state.answer = korean_fallback(state.mode, state.request)
+            state.model_used = "template"
+            state.fallback_used = True
+            state.route = "fallback_template"
+            state.answer_style = _answer_style_for_state(state)
+            yield {"type": "chunk", "chunk": state.answer}
+
+    state = validate_answer_node(state)
+    state = confidence_gate_node(state)
+    state = fallback_answer_node(state)
+    if not state.fallback_used and state.model_used not in {"template", "lightweight-template"}:
+        put_cached_answer(cache_key_for(state.mode, state.request), state.answer)
+    state = candidate_save_node(state)
+
+    latency_ms = int((time.perf_counter() - started) * 1000)
+    response = _build_response_from_state(state, latency_ms)
+    yield {"type": "done", "response": response}
+
 
 
 def _run_sequential_workflow(
