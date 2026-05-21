@@ -482,45 +482,35 @@ Streaming 중 disconnect 또는 error 발생 시 생성 내용을 잃지 않기 
 
 ## 저장 전략
 
-AI message를 먼저:
+현재 구현 완료된 persistence 범위와 향후 고도화 예정 범위를 명확히 분리하여 운영한다.
 
-```text
-STREAMING
-```
+### 1. 현재 구현 완료 범위 (State-Transition Persistence)
+* **COMPLETED 저장**: 스트림이 정상적으로 끝까지 수신된 경우 최종 완료 텍스트를 `STATUS:COMPLETED`로 저장한다.
+* **DISCONNECTED 저장**: 클라이언트 disconnect/timeout/send IOException 발생 시 누적된 partial text를 `STATUS:DISCONNECTED`로 저장한다. (단, accumulated text가 비어있으면 저장하지 않고 로그만 남김)
+* **PARTIAL_FAILED 저장**: Python stream error 이벤트 또는 WebClient upstream error 발생 시 누적된 partial text를 `STATUS:PARTIAL_FAILED`로 저장한다.
 
-상태로 생성.
-
-이후:
-
-* 매 5초마다
-  또는
-* 200자 이상 누적 시
-
-AiReviewMessage를 STREAMING 상태로 UPSERT한다.
+### 2. 향후 고도화 예정 범위 (Future Enhancement)
+* **주기적 STREAMING UPSERT**: 스트리밍 진행 중(예: 매 5초마다 또는 200자마다) 중간 텍스트를 `STREAMING` 상태로 DB에 지속적으로 UPSERT하는 전략은 현재 미구현 상태이다. 이는 향후 durability 및 replay 기능 강화를 위한 future enhancement로 남겨둔다.
 
 ## 목적
 
-* disconnect 시 partial text 유실 방지
-* 장시간 generation durability 확보
-* observability 및 replay 지원
+* disconnect 및 partial failure 시 partial text 유실 방지 및 이력 관리
+* 불필요한 DB 트랜잭션 및 쓰기 부하를 방지하기 위해 lifecycle 전이 시점에만 persistence 처리
 
 ## 최종 상태
 
 ### COMPLETED
 
-정상 종료.
-
-### CANCELLED
-
-사용자 명시 취소.
+정상 종료 시 저장되는 최종 상태.
 
 ### DISCONNECTED
 
-브라우저/network disconnect.
+네트워크 단절 또는 브라우저 timeout, 사용자 중간 이탈(disconnect) 시의 상태. 누적 텍스트가 존재할 때만 저장된다.
 
-### FAILED
+### PARTIAL_FAILED
 
-streaming failure.
+중간 에러(Python API 에러, WebClient 에러 등) 발생 시의 상태. 누적 텍스트가 존재할 때만 저장된다.
+
 
 ---
 
@@ -666,55 +656,49 @@ CANCELLED
 
 ## 매우 중요
 
-Streaming은 실패 가능성이 높은 기능이다.
-
-따라서 fallback 전략이 반드시 필요.
+Streaming은 네트워크 및 Upstream API의 상태에 따라 실패 가능성이 높은 기능이다. 
+따라서 사용자의 UX 보호와 시스템 데이터 일관성 유지를 위한 명확한 Fallback 분리 정책을 적용한다.
 
 ---
 
-## 10.1 Streaming 시작 전 실패
+## 10.1 Streaming 시작 전 실패 (첫 Chunk 수신 전)
 
 예:
-
-* SSE 연결 실패
-* proxy failure
-* auth error
+* SSE 연결 자체의 실패
+* WebClient 초기 커넥션 에러 / Gateway Timeout
+* 인증 에러 (Auth Error)
 
 대응:
-
-```text
-자동 non-streaming API retry
-```
+* **자동 Non-streaming Fallback**: 첫 chunk를 수신하기 전(`hasReceivedChunk === false`)에 실패가 감지되면, 클라이언트 측에서 자동으로 기존 non-streaming API(기존 `submitAnswer` 서비스 경로)로 retry 요청을 보내어 응답 생성을 시도한다.
 
 ---
 
-## 10.2 Streaming 중 실패
+## 10.2 Streaming 시작 후 실패 (첫 Chunk 수신 후)
 
-정책:
+예:
+* 스트림 수신 도중 연결 유실 (Disconnect)
+* 스트림 도중 upstream error 이벤트 수신 또는 WebClient downstream read timeout/error 발생
 
-* partial chunk 유지
-* fallback message 출력
-* non-streaming completion 호출
-
-예시:
-
-```text
-응답 연결이 끊겨 기본 응답으로 마무리합니다.
-```
+대응:
+* **자동 재제출 금지**: 이미 화면에 첫 chunk 이상이 렌더링된 상태(`hasReceivedChunk === true`)에서는 **절대로 자동으로 non-streaming API를 재호출하지 않는다.** 중복 질문 제출 및 DB 저장 데이터 정합성 훼손을 방지하기 위함이다.
+* **Partial/Error UI 처리**: 이미 누적된 텍스트는 화면에 그대로 유지(partial chunk 보존)하고, UI 하단에 에러 알림 및 `ERROR` 혹은 `PARTIAL_FAILED` lifecycle 상태 피드백을 제공하여 사용자가 인지하고 수동 대응할 수 있도록 처리한다.
 
 ---
 
 ## 10.3 Metrics 기록
 
-반드시 metric 남김:
-
+반드시 metric 남김 (설계 단계):
 ```text
-fallback_after_stream_start
+fallback_before_stream_start (시작 전 fallback 횟수)
+fallback_after_stream_start_blocked (시작 후 fallback 차단 및 에러 UI 노출 횟수)
 ```
 
 ---
 
 # 11. Observability & Monitoring
+
+> [!NOTE]
+> **Observability 상태 명시**: 본 섹션의 Metrics 스키마 및 Observability 구조는 최종 설계 및 검증이 완료된 상태이나, 실제 Prometheus/Grafana 환경에 대한 Metric Instrumentation Rollout은 다음 후속 구현 단계(Future Implementation Phase)에서 진행된다.
 
 ## 목표
 
@@ -932,7 +916,7 @@ k6
 
 ---
 
-# 15. Streaming Trade-offs & 운영 위험 요소
+# 15. Streaming Trade-offs
 
 ## Streaming 도입의 단점
 
@@ -965,7 +949,7 @@ Streaming은 UX 개선 효과가 크지만 운영 복잡도 또한 크게 증가
 
 ### Ollama Keep-Alive 영향
 
-Streaming generation은 keep_alive 시간 동안 모델 메모리 점유를 더 오래 유지할 수 있다.
+Streaming generation is keep_alive 시간 동안 모델 메모리 점유를 더 오래 유지할 수 있다.
 
 특히:
 
@@ -1007,7 +991,7 @@ Streaming은:
 
 # 16. 운영 위험 요소
 
-## 15.1 Ollama Cold Start
+## 16.1 Ollama Cold Start
 
 모델 unload 후 첫 요청 latency 급증 가능.
 
@@ -1018,7 +1002,7 @@ Streaming은:
 
 ---
 
-## 15.2 Queue Starvation
+## 16.2 Queue Starvation
 
 Streaming generation이 오래 지속되면 queue 증가 가능.
 
@@ -1030,7 +1014,7 @@ Streaming generation이 오래 지속되면 queue 증가 가능.
 
 ---
 
-## 15.3 Excessive Render
+## 16.3 Excessive Render
 
 Frontend excessive state update 위험.
 
@@ -1041,7 +1025,7 @@ Frontend excessive state update 위험.
 
 ---
 
-# 16. 최종 구현 순서
+# 17. 최종 구현 순서
 
 ## Phase 1
 
@@ -1075,7 +1059,7 @@ Frontend excessive state update 위험.
 
 ---
 
-# 17. Rollback & Emergency Procedure
+# 18. Rollback & Emergency Procedure
 
 ## Emergency Rollback
 
@@ -1100,7 +1084,7 @@ app.ai-review.streaming-enabled=false
 
 ---
 
-# 18. 최종 결론
+# 19. 최종 결론
 
 본 설계는 단순 SSE streaming 구현이 아니라:
 
@@ -1130,3 +1114,20 @@ Streaming은 단순 UX 기능이 아니라,
 * observability
 
 없이는 운영 안정성을 보장할 수 없다.
+
+---
+
+# 20. Appendix: 실제 구현 완료 범위
+
+현재 1차 스트리밍 기능 고도화 작업이 안전하게 완료되었으며, 프론트엔드 및 백엔드 전반의 빌드 및 통합 검증이 완료된 실제 구현 범위는 다음과 같다.
+
+* **Python async streaming generator**: FastAPI 상에서 async generator와 `StreamingResponse`를 적용하여 chunk 단위의 스트림을 Non-blocking으로 생성 및 송신한다.
+* **structured SSE event types**: SSE 이벤트 전송 규격을 `start`, `chunk`, `done`, `error`로 구조화하여 클라이언트와의 API 통신 명세를 통일했다.
+* **Spring WebClient reactive proxy**: RestClient 대신 non-blocking Reactive WebClient를 사용하여 Python upstream stream을 프록시하고 동시성 및 backpressure를 효율적으로 관리한다.
+* **SseEmitter cleanup/disconnect propagation**: SseEmitter의 Timeout, Error, Completion(IOException 포함) 발생 시 Reactive subscription을 명시적으로 `dispose()` 하여 리소스 누수를 방지하고 Python/Ollama upstream으로 취소를 즉각 전파한다.
+* **STATUS:COMPLETED / DISCONNECTED / PARTIAL_FAILED persistence**: 스트림 수명 주기 완료 및 비정상 단절 상태에 따라 데이터베이스에 `COMPLETED`, `DISCONNECTED`, `PARTIAL_FAILED` 상태와 누적 partial text를 영속화하여 데이터 신뢰성을 보장한다. (주기적 스트리밍 저장은 future enhancement로 배제)
+* **React buffered SSE parser**: 프론트엔드 상에서 TCP chunk 분할 수신 시 JSON parsing 오류를 방지하기 위해 버퍼 누적식 SSE 파서를 도입하였으며, CRLF(\r\n) 개행 포맷을 표준화(`\n`)하여 파싱 안정성을 더했다.
+* **AbortController cancellation**: React 컴포넌트 마운트 해제, 신규 제출 또는 사용자의 명시적 취소 발생 시 `AbortController` 및 reader cancel을 호출해 리소스를 즉시 반환한다.
+* **lifecycle state machine**: `IDLE`, `LOADING`, `STREAMING`, `SUCCESS`, `ERROR`, `FALLBACK`, `CANCELLED` 등 명시적인 스트리밍 수명 주기 상태 머신을 React state로 정의해 중복 요청 방지 및 일관된 UI 피드백을 실현했다.
+* **streaming fallback separation policy**: 첫 chunk 수신 전 실패 시에만 기존 non-streaming API로 자동 fallback을 시도하고, chunk 수신 후 실패 시에는 자동 fallback을 차단하여 DB 데이터 중복을 원천 차단하고 Partial/Error UI 처리를 보장한다.
+* **frontend/backend build verification completed**: Backend gradle test(전체 성공) 및 Frontend production build(`npm run build` static page optimization 완료)를 통한 전체 빌드 안정성 검증을 마쳤다.

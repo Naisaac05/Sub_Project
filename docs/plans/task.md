@@ -9,4 +9,4 @@
 | └ Task 2: PythonAiReviewClient 확장 | completed | PythonAiReviewClient에 streamReview(Flux<String> 반환) 구현 및 client test |
 | └ Task 3: AiReviewStreamingService 구현 | completed | 세분화된 트랜잭션 DB 적재 및 SseEmitter 라이프사이클/상태 관리와 parser 구현 |
 | └ Task 4: Controller 엔드포인트 연동 | completed | POST /sessions/{sessionId}/messages/stream 연동 및 최종 빌드/통합 테스트 |
-| Step 4: React streaming consumer + fallback 구현 | not_started | 프론트엔드 ReadableStream SSE 버퍼 파서 및 폴백 메커니즘 연동 |
+| Step 4: React streaming consumer + fallback 구현 | completed | 프론트엔드 ReadableStream SSE 버퍼 파서 및 폴백 메커니즘 연동 |
