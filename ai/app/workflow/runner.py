@@ -1,7 +1,7 @@
 import time
 from app.ollama.client import call_ollama
 from app.schemas import AiGenerateRequest, AiGenerateResponse
-from app.workflow.answer_cache import cache_key_for, put_cached_answer
+from app.workflow.answer_cache import cache_key_for, put_cached_answer, run_single_flight
 from app.workflow.graph import LANGGRAPH_AVAILABLE, candidate_save_node, run_state_graph
 from app.workflow.nodes import (
     Generator,
@@ -21,10 +21,14 @@ def run_review_workflow(
     generator: Generator = call_ollama,
 ) -> AiGenerateResponse:
     started = time.perf_counter()
-    if LANGGRAPH_AVAILABLE:
-        state = run_state_graph(mode=mode, request=request, generator=generator)
-    else:
-        state = _run_sequential_workflow(mode=mode, request=request, generator=generator)
+    cache_key = cache_key_for(mode, request)
+
+    def run_workflow() -> ReviewWorkflowState:
+        if LANGGRAPH_AVAILABLE:
+            return run_state_graph(mode=mode, request=request, generator=generator)
+        return _run_sequential_workflow(mode=mode, request=request, generator=generator)
+
+    state = run_single_flight(cache_key, run_workflow)
 
     latency_ms = int((time.perf_counter() - started) * 1000)
     response = AiGenerateResponse(

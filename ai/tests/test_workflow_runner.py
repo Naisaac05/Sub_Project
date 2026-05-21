@@ -2,7 +2,10 @@ import json
 import os
 from pathlib import Path
 import tempfile
+import threading
+import time
 import unittest
+from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import patch
 
 from app.schemas import AiGenerateRequest
@@ -20,6 +23,18 @@ from app.workflow.state import ReviewWorkflowState
 
 class WorkflowRunnerTest(unittest.TestCase):
     def setUp(self):
+        self._auto_candidate_tmp = tempfile.TemporaryDirectory()
+        self.auto_candidate_path = Path(self._auto_candidate_tmp.name) / "auto_candidates.jsonl"
+        self._previous_auto_candidate_path = os.environ.get("AI_REVIEW_AUTO_CANDIDATES_PATH")
+        os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = str(self.auto_candidate_path)
+        clear_answer_cache()
+
+    def tearDown(self):
+        if self._previous_auto_candidate_path is None:
+            os.environ.pop("AI_REVIEW_AUTO_CANDIDATES_PATH", None)
+        else:
+            os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = self._previous_auto_candidate_path
+        self._auto_candidate_tmp.cleanup()
         clear_answer_cache()
 
     def test_successful_generation_returns_metadata(self):
@@ -293,6 +308,73 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertNotIn("N+1", response.answer)
         self.assertEqual(response.route, "static_fast_path")
 
+    def test_generic_ai_question_does_not_use_static_fast_path(self):
+        calls = {"count": 0}
+
+        def generator(**kwargs):
+            calls["count"] += 1
+            return "AI는 사람이 만든 데이터를 바탕으로 추론하거나 답을 만드는 기술입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="AI가 뭐야?"),
+            generator=generator,
+        )
+
+        self.assertEqual(calls["count"], 1)
+        self.assertNotEqual(response.route, "static_fast_path")
+        self.assertIn("AI", response.answer)
+
+    def test_latin_alias_does_not_match_inside_unrelated_word(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "auto_candidates.jsonl"
+            previous = os.environ.get("AI_REVIEW_AUTO_CANDIDATES_PATH")
+            os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = str(path)
+            calls = {"count": 0}
+
+            def generator(**kwargs):
+                calls["count"] += 1
+                return "forest는 REST API가 아니라 나무가 많은 숲을 뜻하는 일반 단어입니다."
+
+            try:
+                response = run_review_workflow(
+                    mode="free-question",
+                    request=AiGenerateRequest(user_answer="What is forest?"),
+                    generator=generator,
+                )
+            finally:
+                if previous is None:
+                    os.environ.pop("AI_REVIEW_AUTO_CANDIDATES_PATH", None)
+                else:
+                    os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = previous
+
+            self.assertEqual(calls["count"], 1)
+            self.assertNotEqual(response.route, "static_fast_path")
+            self.assertIn("forest", response.answer)
+
+    def test_specific_ai_prompt_question_can_use_generation_with_clean_topic(self):
+        calls = {"count": 0}
+
+        def generator(**kwargs):
+            calls["count"] += 1
+            return "AI 프롬프트는 AI에게 원하는 답을 얻기 위해 입력하는 지시문입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="혹시 AI 프롬프트가 뭐야?"),
+            generator=generator,
+        )
+
+        self.assertEqual(calls["count"], 1)
+        self.assertNotEqual(response.route, "static_fast_path")
+        self.assertIn("AI 프롬프트", response.answer)
+
+        rows = [
+            json.loads(line)
+            for line in self.auto_candidate_path.read_text(encoding="utf-8").splitlines()
+        ]
+        self.assertEqual(rows[0]["term"], "AI \ud504\ub86c\ud504\ud2b8")
+
     def test_common_programming_concepts_skip_generator(self):
         cases = [
             ("\ub9ac\uc2a4\ud2b8 \ucef4\ud504\ub9ac\ud5e8\uc158\uc774 \ubb54\uc9c0 \ubaa8\ub974\uaca0\uc74c", "\ub9ac\uc2a4\ud2b8"),
@@ -362,7 +444,7 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertFalse(response.fallback_used)
         self.assertEqual(response.model_used, "lightweight-template")
         self.assertIn("@ControllerAdvice", response.answer)
-        self.assertEqual(response.retrieved_concept_ids, [])
+        self.assertIn("java-backend-controlleradvice", response.retrieved_concept_ids)
 
     def test_generated_concept_card_question_uses_lightweight_fast_path(self):
         def failing_generator(**kwargs):
@@ -384,8 +466,8 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertIn("@ControllerAdvice", response.answer)
         self.assertIn("Spring MVC", response.answer)
         self.assertIn("예외", response.answer)
-        self.assertEqual(response.retrieved_concept_ids, [])
         self.assertEqual(response.route, "generated_card_fast_path")
+        self.assertIn("java-backend-controlleradvice", response.retrieved_concept_ids)
         self.assertEqual(response.correction_type, "typo")
         self.assertEqual(response.matched_concept_id, "java-backend-controlleradvice")
         self.assertIn("@ControllerAdvice", response.resolved_query)
@@ -603,6 +685,35 @@ class WorkflowRunnerTest(unittest.TestCase):
 
         self.assertEqual(calls["count"], 1)
         self.assertEqual(first.answer, second.answer)
+
+    def test_concurrent_identical_generated_answer_uses_single_flight(self):
+        calls = {"count": 0}
+        calls_lock = threading.Lock()
+        start = threading.Event()
+
+        def generator(**kwargs):
+            with calls_lock:
+                calls["count"] += 1
+            time.sleep(0.1)
+            return "AI는 사람이 만든 데이터를 바탕으로 추론하거나 답을 만드는 기술이며, single-flight로 같은 질문 생성을 공유합니다."
+
+        request = AiGenerateRequest(user_answer="AI가 뭐야?")
+
+        def call_workflow():
+            start.wait(timeout=1)
+            return run_review_workflow(
+                mode="free-question",
+                request=request,
+                generator=generator,
+            )
+
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            futures = [executor.submit(call_workflow) for _ in range(2)]
+            start.set()
+            responses = [future.result(timeout=5) for future in futures]
+
+        self.assertEqual(calls["count"], 1)
+        self.assertEqual([response.answer for response in responses], [responses[0].answer] * 2)
 
     def test_workflow_response_includes_structured_observability_event(self):
         response = run_review_workflow(

@@ -37,6 +37,23 @@ class ObservabilityTest(unittest.TestCase):
         self.assertTrue(event["retrieval_miss"])
         self.assertTrue(event["candidate_captured"])
 
+    def test_emit_observability_events_marks_cache_hit_and_llm_call_avoided(self):
+        logger = CapturingLogger()
+        response = AiGenerateResponse(
+            answer="cached",
+            fallback_used=False,
+            route="cache",
+            model_used="qwen3:1.7b:cache",
+            observability_events=[{"event": "ai_review.workflow_completed"}],
+        )
+
+        emit_observability_events(response, "corr-2", logger=logger)
+
+        event = json.loads(logger.messages[0])
+        self.assertTrue(event["cache_hit"])
+        self.assertTrue(event["llm_call_avoided"])
+        self.assertEqual(event["model_used"], "qwen3:1.7b:cache")
+
 
 if __name__ == "__main__":
     unittest.main()
