@@ -106,6 +106,10 @@ public class PythonAiReviewClient {
 
     private Optional<AiGeneratedAnswer> request(String uri, PythonAiRequest request) {
         String correlationId = "ai-review-" + UUID.randomUUID();
+        return AiRetrySupport.executeWithRetry(() -> requestOnce(uri, request, correlationId));
+    }
+
+    private Optional<AiGeneratedAnswer> requestOnce(String uri, PythonAiRequest request, String correlationId) {
         try {
             PythonAiResponse response = aiClient(properties.python().baseUrl())
                     .post()
@@ -135,6 +139,9 @@ public class PythonAiReviewClient {
                     request.model(),
                     ex.getMessage()
             );
+            if (AiRetrySupport.isRetryable(ex)) {
+                throw ex;
+            }
             return Optional.empty();
         }
     }
@@ -142,15 +149,11 @@ public class PythonAiReviewClient {
     private RestClient aiClient(String baseUrl) {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(CONNECT_TIMEOUT);
-        requestFactory.setReadTimeout(readTimeout(properties.python().readTimeoutSeconds()));
+        requestFactory.setReadTimeout(AiRetrySupport.boundedReadTimeout(properties.python().readTimeoutSeconds()));
         return RestClient.builder()
                 .baseUrl(baseUrl)
                 .requestFactory(requestFactory)
                 .build();
-    }
-
-    private Duration readTimeout(int seconds) {
-        return seconds <= 0 ? Duration.ZERO : Duration.ofSeconds(seconds);
     }
 
     private void logObservabilityEvents(String correlationId, PythonAiResponse response) {

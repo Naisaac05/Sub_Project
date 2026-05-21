@@ -6,7 +6,7 @@ import type {
   ApiResponse,
 } from './types';
 
-const AI_REVIEW_TIMEOUT_MS = 180000;
+const AI_REVIEW_TIMEOUT_MS = 45000;
 
 export async function startAiReview(testResultId: number): Promise<ApiResponse<AiReviewSessionResponse>> {
   const res = await apiClient.post<ApiResponse<AiReviewSessionResponse>>(

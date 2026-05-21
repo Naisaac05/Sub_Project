@@ -53,11 +53,32 @@ const LABELS = {
   questionLimitReached: '\uC774 \uBB38\uC81C\uC758 \uC790\uC720 \uC9C8\uBB38 3\uAC1C\uB97C \uBAA8\uB450 \uC0AC\uC6A9\uD588\uC2B5\uB2C8\uB2E4. \uB2E4\uC74C \uBB38\uC81C\uB85C \uB118\uC5B4\uAC00\uC138\uC694.',
   slowAiNotice: '\uB85C\uCEEC AI \uC751\uB2F5\uC774 \uC870\uAE08 \uB2A6\uC5B4\uC9C0\uACE0 \uC788\uC5B4\uC694. \uB2F5\uBCC0\uC774 \uC800\uC7A5\uB418\uBA74 \uB300\uD654\uC5D0 \uC790\uB3D9\uC73C\uB85C \uBC18\uC601\uD569\uB2C8\uB2E4.',
   slowAiRecovered: '\uB2A6\uAC8C \uB3C4\uCC29\uD55C AI \uB2F5\uBCC0\uC744 \uBD88\uB7EC\uC654\uC2B5\uB2C8\uB2E4.',
+  aiStateLoading: 'AI\uAC00 \uB2F5\uBCC0\uC744 \uC0DD\uC131\uD558\uB294 \uC911\uC785\uB2C8\uB2E4...',
+  aiStateRetrying: '\uC751\uB2F5\uC774 \uC9C0\uC5F0\uB418\uC5B4 \uB300\uCCB4 \uB2F5\uBCC0\uC744 \uC900\uBE44\uD558\uACE0 \uC788\uC2B5\uB2C8\uB2E4.',
+  aiStateTimeout: 'AI \uC751\uB2F5\uC774 \uC2DC\uAC04\uC744 \uCD08\uACFC\uD574 \uC800\uC7A5\uB41C \uB2F5\uBCC0\uC744 \uD655\uC778\uD558\uACE0 \uC788\uC2B5\uB2C8\uB2E4.',
+  aiStateFallback: '\uB300\uCCB4 \uB2F5\uBCC0\uC744 \uBCF4\uC5EC\uC904 \uC900\uBE44\uB97C \uD558\uACE0 \uC788\uC2B5\uB2C8\uB2E4.',
 };
 
 const MAX_AI_QUESTIONS_PER_WRONG_ANSWER = 3;
 const SLOW_AI_NOTICE_DELAY_MS = 10000;
 const STUDY_QUESTION_MODES = ['CHECK_QUESTION', 'EXPLANATION', 'NEXT_QUESTION', 'FREE_ANSWER'];
+type AiRequestLifecycleState = 'IDLE' | 'LOADING' | 'STREAMING' | 'SUCCESS' | 'TIMEOUT' | 'RETRYING' | 'FALLBACK' | 'ERROR';
+
+function aiRequestStateLabel(state: AiRequestLifecycleState) {
+  switch (state) {
+    case 'LOADING':
+    case 'STREAMING':
+      return LABELS.aiStateLoading;
+    case 'RETRYING':
+      return LABELS.aiStateRetrying;
+    case 'TIMEOUT':
+      return LABELS.aiStateTimeout;
+    case 'FALLBACK':
+      return LABELS.aiStateFallback;
+    default:
+      return null;
+  }
+}
 
 function resolveAiReviewError(error: unknown) {
   const maybeError = error as {
@@ -193,6 +214,7 @@ export default function AiReviewPage() {
   const [closedOverallReport, setClosedOverallReport] = useState(false);
   const [summaryLoading, setSummaryLoading] = useState<'question' | 'overall' | null>(null);
   const [optimisticUserMessage, setOptimisticUserMessage] = useState<string | null>(null);
+  const [aiRequestState, setAiRequestState] = useState<AiRequestLifecycleState>('IDLE');
 
   // Auto-scrolling is intentionally disabled per user request.
   // The user prefers the chat window to remain fixed when a new question or answer arrives.
@@ -363,11 +385,13 @@ export default function AiReviewPage() {
     setAnswer('');
     setOptimisticUserMessage(currentAnswer);
     setSubmitting(true);
+    setAiRequestState('LOADING');
     setError(null);
     setNotice(null);
     const startedAt = performance.now();
     const previousMessageCount = session.messages.length;
     const slowNoticeTimer = window.setTimeout(() => {
+      setAiRequestState('RETRYING');
       setNotice(LABELS.slowAiNotice);
     }, SLOW_AI_NOTICE_DELAY_MS);
     try {
@@ -408,25 +432,32 @@ export default function AiReviewPage() {
         }
         setAnswer('');
         setNotice(null);
+        setAiRequestState('SUCCESS');
       } else {
+        setAiRequestState('ERROR');
         setError(res.message || '\uB2F5\uBCC0\uC744 \uC81C\uCD9C\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
       }
     } catch (err) {
       if (isAiReviewTimeout(err)) {
+        setAiRequestState('TIMEOUT');
         try {
           const recovered = await refreshSessionAfterSlowAi(previousMessageCount);
           if (recovered) {
             setAnswer('');
+            setAiRequestState('SUCCESS');
           } else {
+            setAiRequestState('FALLBACK');
             setAnswer(currentAnswer); // 복구 실패 시 입력값 복원
           }
           return;
         } catch {
+          setAiRequestState('FALLBACK');
           setNotice(LABELS.slowAiNotice);
           setAnswer(currentAnswer); // 에러 시 입력값 복원
           return;
         }
       }
+      setAiRequestState('ERROR');
       setError(resolveAiReviewError(err));
       setAnswer(currentAnswer); // 일반 에러 시 입력값 복원
     } finally {
@@ -520,6 +551,8 @@ export default function AiReviewPage() {
     return null;
   }
 
+  const aiRequestStateMessage = submitting ? aiRequestStateLabel(aiRequestState) : null;
+
   return (
     <>
       <Header />
@@ -559,6 +592,13 @@ export default function AiReviewPage() {
             <div className="col-span-full flex items-center justify-center gap-3 rounded-2xl border border-amber-100 bg-amber-50 p-4 text-center text-sm font-semibold text-amber-700">
               <Clock3 size={18} />
               <span>{notice}</span>
+            </div>
+          ) : null}
+
+          {!loading && !error && aiRequestStateMessage ? (
+            <div className="col-span-full flex items-center justify-center gap-3 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-center text-sm font-semibold text-blue-700">
+              <Loader2 size={18} className="animate-spin" />
+              <span>{aiRequestStateMessage}</span>
             </div>
           ) : null}
 
