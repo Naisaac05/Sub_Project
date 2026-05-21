@@ -10,6 +10,7 @@ import {
   getAiReviewSession,
   startAiReview,
   submitAiReviewAnswer,
+  submitAiReviewAnswerStream,
   summarizeAiReviewQuestion,
   summarizeAiReviewSession,
 } from '@/lib/ai-review';
@@ -62,17 +63,20 @@ const LABELS = {
 const MAX_AI_QUESTIONS_PER_WRONG_ANSWER = 3;
 const SLOW_AI_NOTICE_DELAY_MS = 10000;
 const STUDY_QUESTION_MODES = ['CHECK_QUESTION', 'EXPLANATION', 'NEXT_QUESTION', 'FREE_ANSWER'];
-type AiRequestLifecycleState = 'IDLE' | 'LOADING' | 'STREAMING' | 'SUCCESS' | 'TIMEOUT' | 'RETRYING' | 'FALLBACK' | 'ERROR';
+type AiRequestLifecycleState =
+  | 'IDLE'
+  | 'LOADING'
+  | 'STREAMING'
+  | 'SUCCESS'
+  | 'ERROR'
+  | 'FALLBACK'
+  | 'CANCELLED';
 
 function aiRequestStateLabel(state: AiRequestLifecycleState) {
   switch (state) {
     case 'LOADING':
     case 'STREAMING':
       return LABELS.aiStateLoading;
-    case 'RETRYING':
-      return LABELS.aiStateRetrying;
-    case 'TIMEOUT':
-      return LABELS.aiStateTimeout;
     case 'FALLBACK':
       return LABELS.aiStateFallback;
     default:
@@ -215,6 +219,35 @@ export default function AiReviewPage() {
   const [summaryLoading, setSummaryLoading] = useState<'question' | 'overall' | null>(null);
   const [optimisticUserMessage, setOptimisticUserMessage] = useState<string | null>(null);
   const [aiRequestState, setAiRequestState] = useState<AiRequestLifecycleState>('IDLE');
+  const [streamingContent, setStreamingContent] = useState<string>('');
+
+  const activeAbortControllerRef = useRef<AbortController | null>(null);
+  const activeReaderRef = useRef<ReadableStreamDefaultReader<Uint8Array> | null>(null);
+  const accumulatedContentRef = useRef<string>('');
+  const batchTimerRef = useRef<number | null>(null);
+
+  const cleanupActiveStream = () => {
+    if (batchTimerRef.current) {
+      window.clearInterval(batchTimerRef.current);
+      batchTimerRef.current = null;
+    }
+    if (activeReaderRef.current) {
+      try {
+        activeReaderRef.current.cancel();
+      } catch (e) {}
+      activeReaderRef.current = null;
+    }
+    if (activeAbortControllerRef.current) {
+      activeAbortControllerRef.current.abort();
+      activeAbortControllerRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      cleanupActiveStream();
+    };
+  }, []);
 
   // Auto-scrolling is intentionally disabled per user request.
   // The user prefers the chat window to remain fixed when a new question or answer arrives.
@@ -382,88 +415,220 @@ export default function AiReviewPage() {
       return;
     }
 
+    cleanupActiveStream();
+
+    const controller = new AbortController();
+    activeAbortControllerRef.current = controller;
+
     setAnswer('');
     setOptimisticUserMessage(currentAnswer);
     setSubmitting(true);
     setAiRequestState('LOADING');
     setError(null);
     setNotice(null);
+    setStreamingContent('');
+    accumulatedContentRef.current = '';
+
+    let hasReceivedChunk = false;
     const startedAt = performance.now();
-    const previousMessageCount = session.messages.length;
+
     const slowNoticeTimer = window.setTimeout(() => {
-      setAiRequestState('RETRYING');
       setNotice(LABELS.slowAiNotice);
     }, SLOW_AI_NOTICE_DELAY_MS);
+
     try {
-      const res = await submitAiReviewAnswer(
+      const res = await submitAiReviewAnswerStream(
         session.sessionId,
         currentAnswer,
         mode,
-        mode === 'NEXT_QUESTION' ? activeWrongQuestion?.questionId : displayedQuestion?.questionId
+        mode === 'NEXT_QUESTION' ? activeWrongQuestion?.questionId : displayedQuestion?.questionId,
+        controller.signal
       );
-      if (res.success) {
-        const elapsedSeconds = Math.max(0.1, (performance.now() - startedAt) / 1000);
-        setSession((current) => {
-          if (!current) {
-            return current;
-          }
 
-          const existingMessageIds = new Set(current.messages.map((message) => message.id));
-          const newMessages = res.data.messages.filter((message) => !existingMessageIds.has(message.id));
+      const contentType = res.headers.get('content-type') || '';
+      if (res.ok && contentType.includes('text/event-stream') && res.body) {
+        setAiRequestState('STREAMING');
+        const reader = res.body.getReader();
+        activeReaderRef.current = reader;
 
-          return {
-            ...current,
-            status: res.data.completed ? 'COMPLETED' : current.status,
-            summary: res.data.summary ?? current.summary,
-            messages: [...current.messages, ...newMessages],
-          };
-        });
-        const newAiMessageIds = res.data.messages
-          .filter((message) => message.role === 'AI')
-          .map((message) => message.id);
-        if (newAiMessageIds.length > 0) {
-          setMessageDurations((current) => {
-            const next = { ...current };
-            for (const messageId of newAiMessageIds) {
-              next[messageId] = elapsedSeconds;
-            }
-            return next;
-          });
-        }
-        setAnswer('');
-        setNotice(null);
-        setAiRequestState('SUCCESS');
-      } else {
-        setAiRequestState('ERROR');
-        setError(res.message || '\uB2F5\uBCC0\uC744 \uC81C\uCD9C\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
-      }
-    } catch (err) {
-      if (isAiReviewTimeout(err)) {
-        setAiRequestState('TIMEOUT');
+        // 100ms 배치 업데이트 최적화로 UI 버벅임 최소화
+        batchTimerRef.current = window.setInterval(() => {
+          setStreamingContent(accumulatedContentRef.current);
+        }, 100);
+
+        const decoder = new TextDecoder();
+        let buffer = '';
+
         try {
-          const recovered = await refreshSessionAfterSlowAi(previousMessageCount);
-          if (recovered) {
-            setAnswer('');
-            setAiRequestState('SUCCESS');
-          } else {
-            setAiRequestState('FALLBACK');
-            setAnswer(currentAnswer); // 복구 실패 시 입력값 복원
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            
+            // UTF-8 멀티바이트 split 안정성을 위해 CRLF -> LF 정규화 후 \n\n split 진행
+            const normalized = buffer.replace(/\r\n/g, '\n');
+            const parts = normalized.split('\n\n');
+            buffer = parts.pop() || '';
+
+            for (const part of parts) {
+              const lines = part.split('\n');
+              for (const line of lines) {
+                if (line.startsWith('data:')) {
+                  const dataStr = line.substring(5).trim();
+                  if (dataStr) {
+                    const event = JSON.parse(dataStr);
+
+                    if (event.type === 'chunk') {
+                      hasReceivedChunk = true;
+                      accumulatedContentRef.current += event.chunk || '';
+                    } else if (event.type === 'done') {
+                      cleanupActiveStream();
+                      setStreamingContent('');
+
+                      if (event.response && event.response.messages) {
+                        const officialResponse = event.response as any;
+                        setSession((current) => {
+                          if (!current) return current;
+                          const existingMessageIds = new Set(current.messages.map((m) => m.id));
+                          const newMessages = (officialResponse.messages as any[]).filter((m: any) => !existingMessageIds.has(m.id));
+                          return {
+                            ...current,
+                            status: officialResponse.completed ? 'COMPLETED' : current.status,
+                            summary: officialResponse.summary ?? current.summary,
+                            messages: [...current.messages, ...newMessages],
+                          };
+                        });
+                      } else {
+                        // 세션 데이터 유실 방지를 위한 Dynamic Reload Fallback
+                        const reloadRes = await getAiReviewSession(session.sessionId);
+                        if (reloadRes.success && reloadRes.data) {
+                          setSession(reloadRes.data);
+                        }
+                      }
+
+                      setAiRequestState('SUCCESS');
+                      setSubmitting(false);
+                      window.clearTimeout(slowNoticeTimer);
+                      return;
+                    } else if (event.type === 'error') {
+                      cleanupActiveStream();
+                      setStreamingContent('');
+                      const streamErrorMsg = event.error || '답변 생성 에러가 수신되었습니다.';
+                      
+                      if (!hasReceivedChunk) {
+                        throw new Error(streamErrorMsg);
+                      } else {
+                        setAiRequestState('ERROR');
+                        setError(`답변 생성 중 오류가 발생했습니다: ${streamErrorMsg}`);
+                        setSubmitting(false);
+                        window.clearTimeout(slowNoticeTimer);
+                        return;
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
-          return;
-        } catch {
-          setAiRequestState('FALLBACK');
-          setNotice(LABELS.slowAiNotice);
-          setAnswer(currentAnswer); // 에러 시 입력값 복원
-          return;
+
+          cleanupActiveStream();
+          setStreamingContent('');
+          if (!hasReceivedChunk) {
+            throw new Error('스트림이 완료 이벤트 없이 종료되었습니다.');
+          } else {
+            setAiRequestState('ERROR');
+            setError('답변 스트리밍 중 비정상적으로 중단되었습니다.');
+            setSubmitting(false);
+            window.clearTimeout(slowNoticeTimer);
+            return;
+          }
+        } catch (streamReadErr: any) {
+          cleanupActiveStream();
+          setStreamingContent('');
+          if (streamReadErr.name === 'AbortError') {
+            setAiRequestState('CANCELLED');
+            setSubmitting(false);
+            window.clearTimeout(slowNoticeTimer);
+            return;
+          }
+          if (!hasReceivedChunk) {
+            throw streamReadErr;
+          } else {
+            setAiRequestState('ERROR');
+            setError(`스트리밍 통신 오류가 발생했습니다: ${streamReadErr.message || streamReadErr}`);
+            setSubmitting(false);
+            window.clearTimeout(slowNoticeTimer);
+            return;
+          }
         }
+      } else {
+        throw new Error('스트리밍 응답이 올바르지 않습니다.');
       }
-      setAiRequestState('ERROR');
-      setError(resolveAiReviewError(err));
-      setAnswer(currentAnswer); // 일반 에러 시 입력값 복원
-    } finally {
+    } catch (err: any) {
       window.clearTimeout(slowNoticeTimer);
-      setOptimisticUserMessage(null);
-      setSubmitting(false);
+      cleanupActiveStream();
+      setStreamingContent('');
+
+      if (err.name === 'AbortError') {
+        setAiRequestState('CANCELLED');
+        setSubmitting(false);
+        return;
+      }
+
+      // 이미 글자가 렌더링된 이후면 중복 차단을 위해 자동 복구 제출 금지
+      if (hasReceivedChunk) {
+        setAiRequestState('ERROR');
+        setError(`스트리밍 통신 중 오류가 발생하여 중단되었습니다: ${err.message || err}`);
+        setSubmitting(false);
+        return;
+      }
+
+      // 첫 청크 수집 전이면 동기식 API로 즉시 자동 Fallback
+      setAiRequestState('FALLBACK');
+      try {
+        const syncRes = await submitAiReviewAnswer(
+          session.sessionId,
+          currentAnswer,
+          mode,
+          mode === 'NEXT_QUESTION' ? activeWrongQuestion?.questionId : displayedQuestion?.questionId
+        );
+        if (syncRes.success) {
+          const elapsedSeconds = Math.max(0.1, (performance.now() - startedAt) / 1000);
+          setSession((current) => {
+            if (!current) return current;
+            const existingMessageIds = new Set(current.messages.map((m) => m.id));
+            const newMessages = syncRes.data.messages.filter((m) => !existingMessageIds.has(m.id));
+            return {
+              ...current,
+              status: syncRes.data.completed ? 'COMPLETED' : current.status,
+              summary: syncRes.data.summary ?? current.summary,
+              messages: [...current.messages, ...newMessages],
+            };
+          });
+          const newAiMessageIds = syncRes.data.messages.filter((m) => m.role === 'AI').map((m) => m.id);
+          if (newAiMessageIds.length > 0) {
+            setMessageDurations((current) => {
+              const next = { ...current };
+              for (const mId of newAiMessageIds) {
+                next[mId] = elapsedSeconds;
+              }
+              return next;
+            });
+          }
+          setAiRequestState('SUCCESS');
+        } else {
+          setAiRequestState('ERROR');
+          setError(syncRes.message || '답변 동기 복구 전송에 실패했습니다.');
+        }
+      } catch (syncErr: any) {
+        setAiRequestState('ERROR');
+        setError(resolveAiReviewError(syncErr));
+        setAnswer(currentAnswer);
+      } finally {
+        setOptimisticUserMessage(null);
+        setSubmitting(false);
+      }
     }
   };
 
@@ -596,9 +761,26 @@ export default function AiReviewPage() {
           ) : null}
 
           {!loading && !error && aiRequestStateMessage ? (
-            <div className="col-span-full flex items-center justify-center gap-3 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-center text-sm font-semibold text-blue-700">
-              <Loader2 size={18} className="animate-spin" />
-              <span>{aiRequestStateMessage}</span>
+            <div className="col-span-full flex items-center justify-between gap-3 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm font-semibold text-blue-700">
+              <div className="flex items-center gap-3">
+                <Loader2 size={18} className="animate-spin" />
+                <span>{aiRequestStateMessage}</span>
+              </div>
+              {(aiRequestState === 'LOADING' || aiRequestState === 'STREAMING') && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    cleanupActiveStream();
+                    setAiRequestState('CANCELLED');
+                    setSubmitting(false);
+                    setError('답변 생성이 사용자에 의해 중단되었습니다.');
+                  }}
+                  className="inline-flex items-center gap-1 rounded-lg border border-blue-200 bg-white px-3 py-1.5 text-xs font-bold text-blue-700 transition-colors hover:bg-blue-100"
+                >
+                  <X size={12} />
+                  <span>중단하기</span>
+                </button>
+              )}
             </div>
           ) : null}
 
@@ -878,7 +1060,23 @@ export default function AiReviewPage() {
                       </div>
                     </div>
                   )}
-                  {submitting && (
+                  {streamingContent && (
+                    <div className="flex gap-3 justify-start">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                        <Bot size={18} />
+                      </div>
+                      <div className="max-w-[82%]">
+                        <div className="rounded-2xl px-4 py-3 text-sm leading-6 bg-gray-100 text-gray-800">
+                          <div className="prose prose-sm max-w-none prose-p:my-1 prose-pre:my-2 prose-pre:p-2 prose-pre:bg-gray-800 prose-pre:text-gray-100 prose-code:text-blue-600 prose-code:before:content-none prose-code:after:content-none">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {streamingContent}
+                            </ReactMarkdown>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {submitting && !streamingContent && (
                     <div className="flex gap-3 justify-start">
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
                         <Bot size={18} />
