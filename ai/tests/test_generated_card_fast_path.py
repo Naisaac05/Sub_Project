@@ -9,6 +9,7 @@ from app.workflow.intent import FreeQuestionIntent
 from app.schemas import AiGenerateRequest
 from app.workflow.nodes import generate_answer_node
 from app.workflow.lightweight_answers import resolve_lightweight_answer
+from app.workflow.runner import run_review_workflow
 from app.workflow.state import ReviewWorkflowState
 
 
@@ -52,6 +53,22 @@ Circuit breaker approved by admin.
         self.assertIsNotNone(answer)
         self.assertEqual(answer.answer, "Circuit breaker approved by admin.")
         self.assertEqual(answer.route, "generated_card_fast_path")
+
+    def test_low_confidence_static_alias_with_unbacked_concept_id_returns_none(self):
+        intent = FreeQuestionIntent(
+            "concept_definition",
+            "latest_question_only",
+            "API",
+            confidence=0.7,
+        )
+
+        answer = resolve_lightweight_answer(
+            "API가 뭐야?",
+            intent,
+            matched_concept_id="missing-generated-card",
+        )
+
+        self.assertIsNone(answer)
 
     def test_generation_node_uses_retrieved_generated_card_without_calling_generator(self):
         with TemporaryDirectory() as tmp:
@@ -110,6 +127,33 @@ Circuit breaker approved by admin.
         self.assertEqual(result.answer, "Circuit breaker approved by admin.")
         self.assertEqual(result.model_used, "lightweight-template")
         self.assertEqual(result.route, "generated_card_fast_path")
+
+    def test_response_metadata_keeps_retrieved_generated_card_id(self):
+        retrieved = RetrievedContext(
+            concept_id="auto-review-circuit-breaker",
+            title="circuit breaker",
+            content="circuit breaker approved card.",
+            score=5.0,
+            metadata={"version": "admin-approved-candidate"},
+        )
+
+        with (
+            patch("app.workflow.nodes.retrieve_context", return_value=[retrieved]),
+            patch(
+                "app.workflow.lightweight_answers._concept_card_answer_for",
+                return_value="circuit breaker\ub294 \uc7a5\uc560 \uc804\ud30c\ub97c \uc904\uc774\ub294 \ud328\ud134\uc785\ub2c8\ub2e4.",
+            ),
+        ):
+            response = run_review_workflow(
+                "free-question",
+                AiGenerateRequest(user_answer="What is circuit breaker?"),
+                generator=lambda **kwargs: (_ for _ in ()).throw(
+                    AssertionError("generator should not be called")
+                ),
+            )
+
+        self.assertEqual(response.route, "generated_card_fast_path")
+        self.assertIn("auto-review-circuit-breaker", response.retrieved_concept_ids)
 
 
 if __name__ == "__main__":

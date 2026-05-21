@@ -32,6 +32,13 @@ def emit_observability_events(
         enriched["candidate_captured"] = bool(response.candidate_id)
         enriched["candidate_id"] = response.candidate_id
         enriched["route"] = response.route
+        enriched["model_used"] = response.model_used
+        enriched["cache_hit"] = response.route == "cache"
+        enriched["llm_call_avoided"] = response.route in {
+            "cache",
+            "static_fast_path",
+            "generated_card_fast_path",
+        }
         enriched_events.append(enriched)
         sink.info(json.dumps(enriched, ensure_ascii=False, sort_keys=True))
     response.observability_events = enriched_events

@@ -32,6 +32,9 @@
 
 ## 인덱스
 
+- [2026-05-21 AI workflow tests polluted auto-candidate queue and saved discourse marker as term](2026-05-21-ai-workflow-test-candidate-pollution-topic.md)
+- [2026-05-21 AI fast path alias boundary and generated-card provenance](2026-05-21-ai-fast-path-alias-boundary-provenance.md)
+- [2026-05-21 AI intent clarification and English topic routing](2026-05-21-ai-intent-clarification-english-topic.md)
 - [2026-05-20 승인한 지식 카드가 실행 중인 AI 서비스에 반영 안 됨 (lru_cache 로 카드 목록 고정)](2026-05-20-ai-approved-card-not-applied-lru-cache.md)
 - [2026-05-20 AI review candidate approval fails on chroma reindex skip (optional chromadb missing)](2026-05-20-ai-review-approval-fails-on-chroma-skip.md)
 - [2026-05-20 AI server keep_alive invalid duration → all generate calls fall back to template](2026-05-20-ai-server-keep-alive-invalid-duration.md)

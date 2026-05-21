@@ -63,7 +63,8 @@ def generate_answer_node(
         state.fallback_used = False
         state.route = lightweight_answer.route
         state.answer_style = lightweight_answer.style
-        state.contexts = []
+        if lightweight_answer.route == "static_fast_path":
+            state.contexts = []
         return state
 
     cache_key = cache_key_for(state.mode, state.request)
@@ -382,13 +383,13 @@ def _learner_query_for_state(state: ReviewWorkflowState) -> str:
 def _matched_concept_id_for_lightweight(state: ReviewWorkflowState) -> str | None:
     if state.resolved_query and state.resolved_query.matched_concept_id:
         return state.resolved_query.matched_concept_id
-    if (
-        state.mode == "free-question"
-        and state.free_question_intent
-        and state.free_question_intent.rag_policy == "latest_question_only"
-        and state.contexts
-    ):
-        return state.contexts[0].concept_id
+    for context in state.contexts:
+        if (
+            context.concept_id
+            and context.score >= MIN_WORKFLOW_CONTEXT_SCORE
+            and context.metadata.get("version") in {"admin-approved-candidate", "course-candidate"}
+        ):
+            return context.concept_id
     return None
 
 

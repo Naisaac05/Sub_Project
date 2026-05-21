@@ -1,7 +1,8 @@
 from typing import Any
 
-from fastapi import Body, FastAPI, Request, Response
+from fastapi import Body, FastAPI, HTTPException, Request, Response
 
+from app.congestion import AiRequestBusyError, ai_request_admission
 from app.observability import CORRELATION_ID_HEADER, correlation_id_from, emit_observability_events
 from app.schemas import AiGenerateResponse, normalize_ai_request
 from app.security import verify_service_token
@@ -51,7 +52,15 @@ def free_question(
 def _generate(mode: str, payload: Any, request: Request, response: Response) -> AiGenerateResponse:
     verify_service_token(request)
     correlation_id = correlation_id_from(request.headers.get(CORRELATION_ID_HEADER))
-    result = generate_review_answer(mode, normalize_ai_request(payload))
+    try:
+        with ai_request_admission():
+            result = generate_review_answer(mode, normalize_ai_request(payload))
+    except AiRequestBusyError as exc:
+        raise HTTPException(
+            status_code=exc.status_code,
+            detail=exc.detail,
+            headers={"Retry-After": str(exc.retry_after_seconds)},
+        ) from exc
     emit_observability_events(result, correlation_id)
     response.headers[CORRELATION_ID_HEADER] = correlation_id
     return result
