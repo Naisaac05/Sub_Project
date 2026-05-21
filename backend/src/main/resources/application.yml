@@ -79,7 +79,7 @@ app:
       max-tokens: ${PYTHON_AI_MAX_TOKENS:256}
       num-ctx: ${PYTHON_AI_NUM_CTX:1024}
       num-thread: ${PYTHON_AI_NUM_THREAD:4}
-      read-timeout-seconds: ${PYTHON_AI_READ_TIMEOUT_SECONDS:45}
+      read-timeout-seconds: ${PYTHON_AI_READ_TIMEOUT_SECONDS:30}
       service-token: ${AI_REVIEW_SERVICE_TOKEN:}
     ollama:
       enabled: ${OLLAMA_ENABLED:true}
@@ -89,7 +89,7 @@ app:
       max-tokens: ${OLLAMA_MAX_TOKENS:256}
       num-ctx: ${OLLAMA_NUM_CTX:1024}
       num-thread: ${OLLAMA_NUM_THREAD:4}
-      read-timeout-seconds: ${OLLAMA_READ_TIMEOUT_SECONDS:45}
+      read-timeout-seconds: ${OLLAMA_READ_TIMEOUT_SECONDS:30}
       max-concurrent-generations: ${OLLAMA_MAX_CONCURRENT_GENERATIONS:1}
     evaluation:
       semantic-enabled: ${AI_REVIEW_SEMANTIC_EVALUATION_ENABLED:false}
