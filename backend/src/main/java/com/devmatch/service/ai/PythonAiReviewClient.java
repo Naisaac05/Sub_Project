@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +31,15 @@ public class PythonAiReviewClient {
     private final AiReviewProperties properties;
     private final AiReviewProviderSelector providerSelector;
     private final AiReviewMetricSink metricSink;
+    private WebClient webClient;
+
+    @PostConstruct
+    public void initWebClient() {
+        this.webClient = WebClient.builder()
+                .baseUrl(properties.python().baseUrl())
+                .defaultHeader("Content-Type", "application/json")
+                .build();
+    }
 
     public Optional<AiGeneratedAnswer> generateFirstQuestion(Question question, String correctAnswer, String selectedAnswer) {
         if (providerSelector.selectProvider() != AiReviewProviderType.PYTHON) {
@@ -102,6 +114,42 @@ public class PythonAiReviewClient {
                 properties.python().numCtx(),
                 properties.python().numThread()
         ));
+    }
+
+    public Flux<String> streamReview(String uri, String correlationId, PythonAiRequest request) {
+        if (providerSelector.selectProvider() != AiReviewProviderType.PYTHON) {
+            return Flux.error(new IllegalStateException("Python AI provider is not enabled"));
+        }
+
+        PythonAiRequest streamRequest = new PythonAiRequest(
+                request.question(),
+                request.options(),
+                request.correct_answer(),
+                request.selected_answer(),
+                request.user_answer(),
+                request.evaluation(),
+                request.step(),
+                request.model(),
+                request.temperature(),
+                request.max_tokens(),
+                request.num_ctx(),
+                request.num_thread(),
+                true
+        );
+
+        return webClient.post()
+                .uri(uri)
+                .header(CORRELATION_ID_HEADER, correlationId)
+                .header("Accept", "text/event-stream")
+                .headers(headers -> {
+                    if (properties.python().serviceToken() != null && !properties.python().serviceToken().isBlank()) {
+                        headers.set("X-AI-Service-Token", properties.python().serviceToken());
+                    }
+                })
+                .bodyValue(streamRequest)
+                .retrieve()
+                .bodyToFlux(String.class)
+                .onBackpressureBuffer(50);
     }
 
     private Optional<AiGeneratedAnswer> request(String uri, PythonAiRequest request) {
@@ -199,7 +247,7 @@ public class PythonAiReviewClient {
         }
     }
 
-    private record PythonAiRequest(
+    public record PythonAiRequest(
             String question,
             List<String> options,
             String correct_answer,
@@ -211,8 +259,25 @@ public class PythonAiReviewClient {
             double temperature,
             int max_tokens,
             int num_ctx,
-            int num_thread
+            int num_thread,
+            Boolean stream
     ) {
+        public PythonAiRequest(
+                String question,
+                List<String> options,
+                String correct_answer,
+                String selected_answer,
+                String user_answer,
+                String evaluation,
+                int step,
+                String model,
+                double temperature,
+                int max_tokens,
+                int num_ctx,
+                int num_thread
+        ) {
+            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step, model, temperature, max_tokens, num_ctx, num_thread, false);
+        }
     }
 
     private record PythonAiResponse(

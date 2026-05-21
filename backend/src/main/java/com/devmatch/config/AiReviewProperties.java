@@ -11,7 +11,9 @@ public record AiReviewProperties(
         Ollama ollama,
         RuleBased ruleBased,
         Limits limits,
-        Evaluation evaluation
+        Evaluation evaluation,
+        boolean streamingEnabled,
+        int streamTimeoutSeconds
 ) {
     public AiReviewProperties {
         if (provider == null) {
@@ -34,6 +36,9 @@ public record AiReviewProperties(
         }
         if (evaluation == null) {
             evaluation = new Evaluation(false);
+        }
+        if (streamTimeoutSeconds == 0) {
+            streamTimeoutSeconds = 45;
         }
     }
 

@@ -66,6 +66,8 @@ app:
     provider: ${AI_REVIEW_PROVIDER:PYTHON}
     candidates-path: ${AI_REVIEW_CANDIDATES_PATH:../ai/app/knowledge/candidates/course_concepts.jsonl}
     auto-candidates-path: ${AI_REVIEW_AUTO_CANDIDATES_PATH:../ai/app/knowledge/candidates/auto_candidates.jsonl}
+    streaming-enabled: ${AI_REVIEW_STREAMING_ENABLED:false}
+    stream-timeout-seconds: ${AI_REVIEW_STREAM_TIMEOUT_SECONDS:45}
     openai:
       api-key: ${OPENAI_API_KEY:}
       model: ${OPENAI_MODEL:gpt-4.1-mini}
