@@ -160,6 +160,11 @@ def _extract_term(text: str) -> str:
     technical = re.findall(r"[@A-Za-z][@A-Za-z0-9+#_.-]*|[가-힣]{2,}", stripped)
     if not technical:
         return stripped[:30]
+    particle_trimmed = re.sub(r"(이|가|은|는|을|를)$", "", stripped)
+    if " " in particle_trimmed and len(particle_trimmed) <= 40:
+        tokens = particle_trimmed.split()
+        if tokens and all(token in technical for token in tokens):
+            return particle_trimmed
     first = technical[0]
     return re.sub(r"(이|가|은|는|을|를)$", "", first) or first
 
