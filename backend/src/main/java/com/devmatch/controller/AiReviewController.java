@@ -7,8 +7,11 @@ import com.devmatch.dto.aireview.AiReviewSubmitResponse;
 import com.devmatch.dto.common.ApiResponse;
 import com.devmatch.security.CustomUserDetails;
 import com.devmatch.service.ai.RuleBasedAiReviewService;
+import com.devmatch.service.ai.AiReviewStreamingService;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class AiReviewController {
 
     private final RuleBasedAiReviewService aiReviewService;
+    private final AiReviewStreamingService aiReviewStreamingService;
 
     @PostMapping("/test-results/{testResultId}/start")
     public ResponseEntity<ApiResponse<AiReviewSessionResponse>> startReview(
@@ -52,6 +56,21 @@ public class AiReviewController {
                 request.getQuestionId()
         );
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @PostMapping(value = "/sessions/{sessionId}/messages/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamAnswer(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long sessionId,
+            @Valid @RequestBody AiReviewSubmitRequest request
+    ) {
+        return aiReviewStreamingService.streamAnswer(
+                userDetails.getUserId(),
+                sessionId,
+                request.getAnswer(),
+                request.getMode(),
+                request.getQuestionId()
+        );
     }
 
     @PostMapping("/sessions/{sessionId}/questions/{questionId}/summary")
