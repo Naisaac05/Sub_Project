@@ -32,6 +32,7 @@
 
 ## 인덱스
 
+- [2026-05-21 AI free-question answers truncated by low token budget](2026-05-21-ai-free-question-token-budget-truncation.md)
 - [2026-05-21 AI RecyclerView generated card failed knowledge lint schema](2026-05-21-ai-recyclerview-card-lint-schema.md)
 - [2026-05-21 AI workflow tests polluted auto-candidate queue and saved discourse marker as term](2026-05-21-ai-workflow-test-candidate-pollution-topic.md)
 - [2026-05-21 AI fast path alias boundary and generated-card provenance](2026-05-21-ai-fast-path-alias-boundary-provenance.md)

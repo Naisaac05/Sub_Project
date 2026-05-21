@@ -666,10 +666,11 @@ class WorkflowRunnerTest(unittest.TestCase):
                     self.assertIn(expected_term, response.answer)
                 self.assertNotIn("어떤 개념을 놓쳤는지", response.answer)
 
-    def test_free_question_token_budget_is_laptop_friendly(self):
+    def test_free_question_token_budget_allows_complete_short_definition(self):
         from app.workflow.nodes import max_tokens_for_mode
 
-        self.assertLessEqual(max_tokens_for_mode("free-question", 120), 70)
+        self.assertGreaterEqual(max_tokens_for_mode("free-question", 256), 120)
+        self.assertLessEqual(max_tokens_for_mode("free-question", 256), 140)
 
     def test_repeated_generated_answer_uses_cache(self):
         calls = {"count": 0}
