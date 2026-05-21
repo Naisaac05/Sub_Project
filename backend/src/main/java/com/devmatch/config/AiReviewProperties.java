@@ -11,7 +11,9 @@ public record AiReviewProperties(
         Ollama ollama,
         RuleBased ruleBased,
         Limits limits,
-        Evaluation evaluation
+        Evaluation evaluation,
+        boolean streamingEnabled,
+        int streamTimeoutSeconds
 ) {
     public AiReviewProperties {
         if (provider == null) {
@@ -21,10 +23,10 @@ public record AiReviewProperties(
             openai = new OpenAi("", "gpt-4.1-mini", "https://api.openai.com/v1/responses", 0.2);
         }
         if (python == null) {
-            python = new PythonAi(true, "http://localhost:8001", "qwen3:1.7b", 0.2, 256, 1024, 4, 45, "");
+            python = new PythonAi(true, "http://localhost:8001", "qwen3:1.7b", 0.2, 256, 1024, 4, 30, "");
         }
         if (ollama == null) {
-            ollama = new Ollama(true, "qwen3:4b-q4_K_M", "http://localhost:11434", 0.2, 256, 1024, 4, 45, 1);
+            ollama = new Ollama(true, "qwen3:4b-q4_K_M", "http://localhost:11434", 0.2, 256, 1024, 4, 30, 1);
         }
         if (ruleBased == null) {
             ruleBased = new RuleBased(true);
@@ -34,6 +36,9 @@ public record AiReviewProperties(
         }
         if (evaluation == null) {
             evaluation = new Evaluation(false);
+        }
+        if (streamTimeoutSeconds == 0) {
+            streamTimeoutSeconds = 45;
         }
     }
 

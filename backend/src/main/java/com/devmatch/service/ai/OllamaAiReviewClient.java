@@ -130,41 +130,9 @@ public class OllamaAiReviewClient {
         try {
             semaphore.acquire();
             acquired = true;
-            OllamaGenerateResponse response = aiClient(ollama.baseUrl())
-                    .post()
-                    .uri("/api/generate")
-                    .body(new OllamaGenerateRequest(
-                            ollama.model(),
-                            prompt,
-                            false,
-                            false,
-                            new OllamaOptions(
-                                    ollama.temperature(),
-                                    Math.min(ollama.maxTokens(), 1000),
-                                    ollama.numCtx(),
-                                    ollama.numThread(),
-                                    1.25,
-                                    128,
-                                    List.of("\n\n\n", "[Question]", "[Original Question]", "[Learner Free Question]")
-                            )
-                    ))
-                    .retrieve()
-                    .body(OllamaGenerateResponse.class);
-
-            if (response == null || response.response() == null || response.response().isBlank()) {
-                log.warn("Ollama returned an empty response. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
-                metricSink.ollamaGeneration(ollama.model(), false, false);
-                return Optional.empty();
-            }
-            String answer = compactAnswer(stripThinking(response.response().trim()));
-            if (!containsKorean(answer)) {
-                log.warn("Ollama response did not contain Korean text. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
-                metricSink.ollamaGeneration(ollama.model(), false, false);
-                return Optional.empty();
-            }
-            responseCache.put(cacheKey, answer);
-            metricSink.ollamaGeneration(ollama.model(), false, true);
-            return Optional.of(answer);
+            Optional<String> generated = AiRetrySupport.executeWithRetry(() -> generateOnce(prompt, ollama));
+            generated.ifPresent(answer -> responseCache.put(cacheKey, answer));
+            return generated;
         } catch (RestClientException ex) {
             log.warn(
                     "Ollama request failed. baseUrl={}, model={}, message={}",
@@ -186,6 +154,43 @@ public class OllamaAiReviewClient {
         }
     }
 
+    private Optional<String> generateOnce(String prompt, AiReviewProperties.Ollama ollama) {
+        OllamaGenerateResponse response = aiClient(ollama.baseUrl())
+                .post()
+                .uri("/api/generate")
+                .body(new OllamaGenerateRequest(
+                        ollama.model(),
+                        prompt,
+                        false,
+                        false,
+                        new OllamaOptions(
+                                ollama.temperature(),
+                                Math.min(ollama.maxTokens(), 1000),
+                                ollama.numCtx(),
+                                ollama.numThread(),
+                                1.25,
+                                128,
+                                List.of("\n\n\n", "[Question]", "[Original Question]", "[Learner Free Question]")
+                        )
+                ))
+                .retrieve()
+                .body(OllamaGenerateResponse.class);
+
+        if (response == null || response.response() == null || response.response().isBlank()) {
+            log.warn("Ollama returned an empty response. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
+            metricSink.ollamaGeneration(ollama.model(), false, false);
+            return Optional.empty();
+        }
+        String answer = compactAnswer(stripThinking(response.response().trim()));
+        if (!containsKorean(answer)) {
+            log.warn("Ollama response did not contain Korean text. baseUrl={}, model={}", ollama.baseUrl(), ollama.model());
+            metricSink.ollamaGeneration(ollama.model(), false, false);
+            return Optional.empty();
+        }
+        metricSink.ollamaGeneration(ollama.model(), false, true);
+        return Optional.of(answer);
+    }
+
     private Semaphore currentGenerationSemaphore() {
         int desiredPermits = Math.max(1, properties.ollama().maxConcurrentGenerations());
         if (desiredPermits == semaphorePermits) {
@@ -203,15 +208,11 @@ public class OllamaAiReviewClient {
     private RestClient aiClient(String baseUrl) {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(CONNECT_TIMEOUT);
-        requestFactory.setReadTimeout(readTimeout(properties.ollama().readTimeoutSeconds()));
+        requestFactory.setReadTimeout(AiRetrySupport.boundedReadTimeout(properties.ollama().readTimeoutSeconds()));
         return RestClient.builder()
                 .baseUrl(baseUrl)
                 .requestFactory(requestFactory)
                 .build();
-    }
-
-    private Duration readTimeout(int seconds) {
-        return seconds <= 0 ? Duration.ZERO : Duration.ofSeconds(seconds);
     }
 
     private String grounding(

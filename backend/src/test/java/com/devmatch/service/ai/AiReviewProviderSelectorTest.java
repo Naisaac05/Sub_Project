@@ -17,7 +17,9 @@ class AiReviewProviderSelectorTest {
                 null,
                 null,
                 null,
-                null
+                null,
+                false,
+                45
         );
 
         AiReviewProviderSelector selector = new AiReviewProviderSelector(properties);

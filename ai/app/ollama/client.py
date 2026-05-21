@@ -3,6 +3,8 @@ import os
 import threading
 import urllib.error
 import urllib.request
+import asyncio
+import httpx
 
 from app.validation.text import strip_thinking
 
@@ -105,4 +107,60 @@ def _warm_up_ollama() -> None:
             response.read()
     except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
         pass
+
+
+async def call_ollama_stream_async(
+    model: str,
+    prompt: str,
+    temperature: float,
+    max_tokens: int,
+    num_ctx: int,
+    num_thread: int,
+):
+    body = {
+        "model": model,
+        "prompt": prompt,
+        "stream": True,
+        "think": False,
+        "keep_alive": keep_alive_for_model(model),
+        "options": {
+            "temperature": temperature,
+            "num_predict": max_tokens,
+            "num_ctx": num_ctx,
+            "num_thread": num_thread,
+            "repeat_penalty": 1.25,
+            "repeat_last_n": 128,
+            "stop": stop_sequences(),
+        },
+    }
+
+    loop = asyncio.get_running_loop()
+    await loop.run_in_executor(None, _GENERATION_SEMAPHORE.acquire)
+
+    try:
+        timeout = None if OLLAMA_REQUEST_TIMEOUT_SECONDS <= 0 else OLLAMA_REQUEST_TIMEOUT_SECONDS
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            async with client.stream(
+                "POST",
+                f"{OLLAMA_BASE_URL}/api/generate",
+                json=body,
+                headers={"Content-Type": "application/json"},
+            ) as response:
+                if response.status_code != 200:
+                    raise RuntimeError(f"Ollama returned status code {response.status_code}")
+
+                async for line in response.aiter_lines():
+                    if not line:
+                        continue
+                    payload = json.loads(line)
+                    chunk = payload.get("response", "")
+                    if chunk:
+                        yield chunk
+                    if payload.get("done", False):
+                        break
+    except Exception as exc:
+        raise RuntimeError("Ollama streaming request failed") from exc
+    finally:
+        _GENERATION_SEMAPHORE.release()
+
 

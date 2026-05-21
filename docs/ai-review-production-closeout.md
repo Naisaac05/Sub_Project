@@ -57,7 +57,10 @@ Fields to index:
 
 - `correlation_id`
 - `route`
+- `model_used`
 - `fallback_used`
+- `cache_hit`
+- `llm_call_avoided`
 - `retrieval_miss`
 - `candidate_captured`
 - `candidate_id`
@@ -70,6 +73,17 @@ Spring logs to collect:
 Initial dashboard counters:
 
 - fallback count by route
+- cache hit rate
+- LLM call avoided rate
 - retrieval miss count
 - captured candidate count
 - pending candidate backlog
+- admission in-flight / available slots
+
+## Next Spikes
+
+See [AI Review Streaming, Evaluation, and Summary Spikes](superpowers/specs/2026-05-21-ai-review-streaming-evaluation-summary-spikes.md).
+
+- Add a separate streaming endpoint before replacing the current synchronous review endpoints.
+- Keep rule-based evaluation and Spring Markdown summary builders as fallbacks while testing semantic/LLM evaluation and Python summary generation.
+- Measure first-token latency, fallback rate, and golden dataset regression before enabling these paths by default.
