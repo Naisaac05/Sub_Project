@@ -32,6 +32,7 @@
 
 ## 인덱스
 
+- [2026-05-21 AiReviewStreamingServiceTest NullPointerException 및 UnnecessaryStubbingException 발생](2026-05-21-ai-review-streaming-service-test-failures.md)
 - [2026-05-21 AI review read timeout retry stall](2026-05-21-ai-review-read-timeout-retry-stall.md)
 - [2026-05-21 AI free-question answers truncated by low token budget](2026-05-21-ai-free-question-token-budget-truncation.md)
 - [2026-05-21 AI RecyclerView generated card failed knowledge lint schema](2026-05-21-ai-recyclerview-card-lint-schema.md)
