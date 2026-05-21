@@ -63,9 +63,28 @@ class AiRetrySupportTest {
     @Test
     void classifiesRetryableAndNonRetryableExceptions() {
         assertThat(AiRetrySupport.isRetryable(new ResourceAccessException("timeout"))).isTrue();
+        assertThat(AiRetrySupport.isRetryable(new ResourceAccessException("Read timed out"))).isFalse();
         assertThat(AiRetrySupport.isRetryable(new HttpServerErrorException(HttpStatus.BAD_GATEWAY))).isTrue();
         assertThat(AiRetrySupport.isRetryable(new HttpClientErrorException(HttpStatus.TOO_MANY_REQUESTS))).isTrue();
         assertThat(AiRetrySupport.isRetryable(new HttpClientErrorException(HttpStatus.UNAUTHORIZED))).isFalse();
         assertThat(AiRetrySupport.isRetryable(new RestClientException("unknown"))).isTrue();
+    }
+
+    @Test
+    void readTimeoutFallsBackWithoutRetryingTheSameSlowGeneration() {
+        AtomicInteger attempts = new AtomicInteger();
+
+        Optional<String> result = AiRetrySupport.executeWithRetry(
+                () -> {
+                    attempts.incrementAndGet();
+                    throw new ResourceAccessException("I/O error on POST request: Read timed out");
+                },
+                ignored -> {
+                },
+                ignored -> 0L
+        );
+
+        assertThat(result).isEmpty();
+        assertThat(attempts).hasValue(1);
     }
 }

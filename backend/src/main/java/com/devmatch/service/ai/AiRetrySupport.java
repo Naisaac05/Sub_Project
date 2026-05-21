@@ -1,6 +1,7 @@
 package com.devmatch.service.ai;
 
 import org.springframework.http.HttpStatusCode;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 
@@ -52,11 +53,22 @@ final class AiRetrySupport {
     }
 
     static boolean isRetryable(RestClientException ex) {
+        if (isReadTimeout(ex)) {
+            return false;
+        }
         if (ex instanceof RestClientResponseException responseException) {
             HttpStatusCode status = responseException.getStatusCode();
             return status.value() == 429 || status.is5xxServerError();
         }
         return true;
+    }
+
+    private static boolean isReadTimeout(RestClientException ex) {
+        if (!(ex instanceof ResourceAccessException)) {
+            return false;
+        }
+        String message = ex.getMessage();
+        return message != null && message.toLowerCase().contains("read timed out");
     }
 
     private static long fullJitterDelayMillis(int attempt) {
