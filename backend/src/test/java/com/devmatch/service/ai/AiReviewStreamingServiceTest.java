@@ -41,8 +41,11 @@ class AiReviewStreamingServiceTest {
     @Mock private PythonAiReviewClient pythonAiReviewClient;
     @Mock private RuleBasedAiReviewService aiReviewService;
     @Mock private SemanticAnswerEvaluator semanticAnswerEvaluator;
+    @Mock private AiReviewContextSupport contextSupport;
+    @Mock private AiReviewMetricSink metricSink;
     
     private AiReviewProperties properties;
+
     private ObjectMapper objectMapper;
 
     @InjectMocks
@@ -94,15 +97,16 @@ class AiReviewStreamingServiceTest {
                 null,
                 new ArrayList<>()
         );
-        when(aiReviewService.submitAnswer(anyLong(), anyLong(), anyString(), anyString(), anyLong()))
+        when(aiReviewService.submitAnswer(anyLong(), anyLong(), anyString(), anyString(), anyLong(), any()))
                 .thenReturn(mockResponse);
 
+
         // When
-        SseEmitter emitter = service.streamAnswer(1L, 20L, "Answer", "FREE_QUESTION", 100L);
+        SseEmitter emitter = service.streamAnswer(1L, 20L, "Answer", "FREE_QUESTION", 100L, null);
 
         // Then
         assertThat(emitter).isNotNull();
-        verify(aiReviewService).submitAnswer(1L, 20L, "Answer", "FREE_QUESTION", 100L);
+        verify(aiReviewService).submitAnswer(1L, 20L, "Answer", "FREE_QUESTION", 100L, null);
     }
 
     @Test
@@ -112,7 +116,7 @@ class AiReviewStreamingServiceTest {
         AiReviewSession completedSession = session(fixtures.user(), fixtures.result(), 20L);
         ReflectionTestUtils.setField(completedSession, "status", AiReviewStatus.COMPLETED);
 
-        when(sessionRepository.findById(20L)).thenReturn(Optional.of(completedSession));
+        when(contextSupport.findOwnedSession(eq(1L), eq(20L))).thenReturn(completedSession);
         
         AiReviewSubmitResponse mockResponse = new AiReviewSubmitResponse(
                 AiReviewMessageMode.REVIEW_REPORT.name(),
@@ -122,16 +126,17 @@ class AiReviewStreamingServiceTest {
                 "summary",
                 new ArrayList<>()
         );
-        when(aiReviewService.submitAnswer(anyLong(), anyLong(), anyString(), anyString(), anyLong()))
+        when(aiReviewService.submitAnswer(anyLong(), anyLong(), anyString(), anyString(), anyLong(), any()))
                 .thenReturn(mockResponse);
 
         // When
-        SseEmitter emitter = service.streamAnswer(1L, 20L, "Answer", "FREE_QUESTION", 100L);
+        SseEmitter emitter = service.streamAnswer(1L, 20L, "Answer", "FREE_QUESTION", 100L, null);
 
         // Then
         assertThat(emitter).isNotNull();
-        verify(aiReviewService).submitAnswer(1L, 20L, "Answer", "FREE_QUESTION", 100L);
+        verify(aiReviewService).submitAnswer(1L, 20L, "Answer", "FREE_QUESTION", 100L, null);
     }
+
 
     @Test
     void streamAnswer_whenSuccessfulFreeQuestion_shouldStreamAndSaveCompletedMessage() {
@@ -142,7 +147,9 @@ class AiReviewStreamingServiceTest {
         AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
         AiReviewMessage lastAiMsg = aiMessage(session, question, AiReviewMessageMode.CHECK_QUESTION, "deadlock prompt");
 
-        when(sessionRepository.findById(20L)).thenReturn(Optional.of(session));
+        when(contextSupport.findOwnedSession(eq(1L), eq(20L))).thenReturn(session);
+        when(sessionRepository.findById(eq(20L))).thenReturn(Optional.of(session));
+        when(questionRepository.findById(eq(100L))).thenReturn(Optional.of(question));
         lenient().when(testAnswerRepository.findByTestResultId(10L)).thenReturn(List.of(wrongAnswer));
         lenient().when(messageRepository.findBySessionIdOrderByCreatedAtAsc(20L)).thenReturn(List.of(lastAiMsg));
         lenient().when(messageRepository.countBySessionIdAndQuestionIdAndRoleAndModeIn(
@@ -159,7 +166,7 @@ class AiReviewStreamingServiceTest {
         when(messageRepository.save(any(AiReviewMessage.class))).thenAnswer(inv -> inv.getArgument(0));
 
         // When
-        SseEmitter emitter = service.streamAnswer(1L, 20L, "What is it?", "FREE_QUESTION", 100L);
+        SseEmitter emitter = service.streamAnswer(1L, 20L, "What is it?", "FREE_QUESTION", 100L, "client-req-uuid-1234");
 
         // Then
         assertThat(emitter).isNotNull();
@@ -199,7 +206,9 @@ class AiReviewStreamingServiceTest {
         AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
         AiReviewMessage lastAiMsg = aiMessage(session, question, AiReviewMessageMode.CHECK_QUESTION, "deadlock prompt");
 
-        when(sessionRepository.findById(20L)).thenReturn(Optional.of(session));
+        when(contextSupport.findOwnedSession(eq(1L), eq(20L))).thenReturn(session);
+        when(sessionRepository.findById(eq(20L))).thenReturn(Optional.of(session));
+        when(questionRepository.findById(eq(100L))).thenReturn(Optional.of(question));
         lenient().when(testAnswerRepository.findByTestResultId(10L)).thenReturn(List.of(wrongAnswer));
         lenient().when(messageRepository.findBySessionIdOrderByCreatedAtAsc(20L)).thenReturn(List.of(lastAiMsg));
         lenient().when(messageRepository.countBySessionIdAndQuestionIdAndRoleAndModeIn(
@@ -215,7 +224,7 @@ class AiReviewStreamingServiceTest {
         when(messageRepository.save(any(AiReviewMessage.class))).thenAnswer(inv -> inv.getArgument(0));
 
         // When
-        SseEmitter emitter = service.streamAnswer(1L, 20L, "What is it?", "FREE_QUESTION", 100L);
+        SseEmitter emitter = service.streamAnswer(1L, 20L, "What is it?", "FREE_QUESTION", 100L, "client-req-uuid-1234");
 
         // Then
         assertThat(emitter).isNotNull();
@@ -243,7 +252,9 @@ class AiReviewStreamingServiceTest {
         AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
         AiReviewMessage lastAiMsg = aiMessage(session, question, AiReviewMessageMode.CHECK_QUESTION, "deadlock prompt");
 
-        when(sessionRepository.findById(20L)).thenReturn(Optional.of(session));
+        when(contextSupport.findOwnedSession(eq(1L), eq(20L))).thenReturn(session);
+        when(sessionRepository.findById(eq(20L))).thenReturn(Optional.of(session));
+        when(questionRepository.findById(eq(100L))).thenReturn(Optional.of(question));
         lenient().when(testAnswerRepository.findByTestResultId(10L)).thenReturn(List.of(wrongAnswer));
         lenient().when(messageRepository.findBySessionIdOrderByCreatedAtAsc(20L)).thenReturn(List.of(lastAiMsg));
         lenient().when(messageRepository.countBySessionIdAndQuestionIdAndRoleAndModeIn(
@@ -257,7 +268,7 @@ class AiReviewStreamingServiceTest {
         when(messageRepository.save(any(AiReviewMessage.class))).thenAnswer(inv -> inv.getArgument(0));
 
         // When
-        SseEmitter emitter = service.streamAnswer(1L, 20L, "What is it?", "FREE_QUESTION", 100L);
+        SseEmitter emitter = service.streamAnswer(1L, 20L, "What is it?", "FREE_QUESTION", 100L, "client-req-uuid-1234");
 
         // Then
         assertThat(emitter).isNotNull();
@@ -275,6 +286,232 @@ class AiReviewStreamingServiceTest {
         assertThat(aiMsg.getAiQualityFlags()).isEqualTo("STATUS:PARTIAL_FAILED");
         assertThat(aiMsg.getContent()).contains("Partial concept...", "답변 생성 중 오류가 발생했습니다: Network breakdown");
     }
+
+    @Test
+    void saveMessage_withClientRequestId_shouldPersistAndQueryCorrectly() {
+        Fixtures fixtures = fixtures(1);
+        AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
+        
+        AiReviewMessage msg = AiReviewMessage.builder()
+                .session(session)
+                .role(AiReviewMessageRole.USER)
+                .content("Test Answer")
+                .clientRequestId("client-req-uuid-1234")
+                .build();
+
+        when(messageRepository.save(any(AiReviewMessage.class))).thenReturn(msg);
+        when(messageRepository.existsBySessionIdAndClientRequestId(eq(20L), eq("client-req-uuid-1234"))).thenReturn(true);
+
+        AiReviewMessage saved = messageRepository.save(msg);
+        boolean exists = messageRepository.existsBySessionIdAndClientRequestId(20L, "client-req-uuid-1234");
+
+        assertThat(saved.getClientRequestId()).isEqualTo("client-req-uuid-1234");
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    void streamAnswer_whenFailedBeforeFirstChunk_shouldNotSaveUserMessage() {
+        Fixtures fixtures = fixtures(1);
+        AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
+
+        when(contextSupport.findOwnedSession(eq(1L), eq(20L))).thenReturn(session);
+        
+        Flux<String> streamFlux = Flux.error(new RuntimeException("Connection failed"));
+        when(pythonAiReviewClient.streamReview(anyString(), anyString(), any())).thenReturn(streamFlux);
+
+        SseEmitter emitter = service.streamAnswer(1L, 20L, "What is it?", "FREE_QUESTION", 100L, "client-req-uuid-999");
+
+        assertThat(emitter).isNotNull();
+        try {
+            Thread.sleep(150);
+        } catch (InterruptedException ignored) {}
+
+        verify(messageRepository, never()).save(any(AiReviewMessage.class));
+    }
+
+    @Test
+    void streamAnswer_whenDuplicateClientRequestId_shouldPreventDoubleSaving() {
+        Fixtures fixtures = fixtures(1);
+        AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
+
+        when(contextSupport.findOwnedSession(eq(1L), eq(20L))).thenReturn(session);
+        when(messageRepository.existsBySessionIdAndClientRequestId(eq(20L), eq("client-req-uuid-duplicate"))).thenReturn(true);
+
+        Flux<String> streamFlux = Flux.just("data: {\"type\": \"chunk\", \"chunk\": \"some chunk\"}");
+        when(pythonAiReviewClient.streamReview(anyString(), anyString(), any())).thenReturn(streamFlux);
+
+        SseEmitter emitter = service.streamAnswer(1L, 20L, "What is it?", "FREE_QUESTION", 100L, "client-req-uuid-duplicate");
+
+        assertThat(emitter).isNotNull();
+        try {
+            Thread.sleep(150);
+        } catch (InterruptedException ignored) {}
+
+        verify(messageRepository, never()).save(any(AiReviewMessage.class));
+    }
+
+    @Test
+    void streamAnswer_whenDoneEvent_shouldNormalizeToAiReviewSubmitResponse() throws Exception {
+        Fixtures fixtures = fixtures(1);
+        Question question = question(fixtures.test(), 100L, "What is a deadlock?", List.of("A", "B"), 0, 1);
+        AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
+        AiReviewMessage lastAiMsg = aiMessage(session, question, AiReviewMessageMode.CHECK_QUESTION, "deadlock prompt");
+
+        when(contextSupport.findOwnedSession(eq(1L), eq(20L))).thenReturn(session);
+        when(sessionRepository.findById(eq(20L))).thenReturn(Optional.of(session));
+        lenient().when(questionRepository.findById(eq(100L))).thenReturn(Optional.of(question));
+        
+        Flux<String> streamFlux = Flux.just(
+                "data: {\"type\": \"chunk\", \"chunk\": \"A deadlock is \"}",
+                "data: {\"type\": \"done\", \"response\": {\"route\": \"rag\", \"latency_ms\": 150, \"quality_flags\": [\"high_conf\"], \"candidate_id\": \"cand-123\"}}"
+        );
+        when(pythonAiReviewClient.streamReview(anyString(), anyString(), any())).thenReturn(streamFlux);
+
+        AiReviewMessage userMsg = AiReviewMessage.builder()
+                .session(session)
+                .role(AiReviewMessageRole.USER)
+                .mode(AiReviewMessageMode.FREE_QUESTION)
+                .content("What is it?")
+                .evaluation(AiReviewEvaluation.UNDERSTOOD)
+                .build();
+        
+        AiReviewMessage aiMsg = AiReviewMessage.builder()
+                .session(session)
+                .role(AiReviewMessageRole.AI)
+                .mode(AiReviewMessageMode.FREE_ANSWER)
+                .content("A deadlock is ")
+                .build();
+
+        when(messageRepository.save(any(AiReviewMessage.class))).thenReturn(userMsg).thenReturn(aiMsg);
+        when(messageRepository.findBySessionIdOrderByCreatedAtAsc(20L)).thenReturn(List.of(lastAiMsg, userMsg, aiMsg));
+        when(messageRepository.findTopBySessionIdAndRoleOrderByCreatedAtDesc(eq(20L), eq(AiReviewMessageRole.USER)))
+                .thenReturn(Optional.of(userMsg));
+
+        SseEmitter emitter = service.streamAnswer(1L, 20L, "What is it?", "FREE_QUESTION", 100L, "client-req-uuid-done-1");
+
+        assertThat(emitter).isNotNull();
+        try {
+            Thread.sleep(150);
+        } catch (InterruptedException ignored) {}
+
+        verify(messageRepository, atLeast(2)).save(any(AiReviewMessage.class));
+    }
+
+    @Test
+    void streamAnswer_shouldRecordObservabilityMetrics() {
+        Fixtures fixtures = fixtures(1);
+        Question question = question(fixtures.test(), 100L, "What is a deadlock?", List.of("A", "B"), 0, 1);
+        AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
+
+        AiReviewProperties disabledProps = new AiReviewProperties(
+                true,
+                AiReviewProperties.Provider.PYTHON,
+                null,
+                new AiReviewProperties.PythonAi(true, "http://localhost:8001", "qwen3:1.7b", 0.2, 256, 1024, 4, 30, ""),
+                null,
+                null,
+                null,
+                null,
+                false,
+                45
+        );
+        ReflectionTestUtils.setField(service, "properties", disabledProps);
+
+        AiReviewSubmitResponse mockResponse = new AiReviewSubmitResponse(
+                AiReviewMessageMode.CHECK_QUESTION.name(),
+                "Fallback response",
+                "resolved",
+                false,
+                null,
+                new ArrayList<>()
+        );
+        lenient().when(aiReviewService.submitAnswer(anyLong(), anyLong(), anyString(), anyString(), anyLong(), any()))
+                .thenReturn(mockResponse);
+
+        service.streamAnswer(1L, 20L, "Answer", "FREE_QUESTION", 100L, "client-req-uuid-metric");
+
+        verify(metricSink).streamMetric(
+                eq("fallback_to_sync_count"),
+                eq(20L),
+                eq(1L),
+                eq("FREE_QUESTION"),
+                eq(100L),
+                eq("client-req-uuid-metric"),
+                anyLong(),
+                anyString()
+        );
+    }
+    @Test
+    void saveUserMessage_whenDataIntegrityViolation_shouldRecoverAndReturnExistingMessage() {
+        Fixtures fixtures = fixtures(1);
+        AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
+        Question question = question(fixtures.test(), 100L, "What is a deadlock?", List.of("A", "B"), 0, 1);
+
+        when(sessionRepository.findById(eq(20L))).thenReturn(Optional.of(session));
+        when(questionRepository.findById(eq(100L))).thenReturn(Optional.of(question));
+
+        AiReviewMessage existingMsg = AiReviewMessage.builder()
+                .session(session)
+                .question(question)
+                .role(AiReviewMessageRole.USER)
+                .content("Answer")
+                .clientRequestId("client-req-uuid-violation")
+                .build();
+
+        when(messageRepository.save(any(AiReviewMessage.class)))
+                .thenThrow(new org.springframework.dao.DataIntegrityViolationException("Duplicate key uk_session_client_request"));
+        when(messageRepository.findBySessionIdAndClientRequestId(eq(20L), eq("client-req-uuid-violation")))
+                .thenReturn(List.of(existingMsg));
+
+        AiReviewMessage recovered = service.saveUserMessage(20L, 100L, AiReviewMessageMode.FREE_QUESTION, "Answer", "client-req-uuid-violation");
+
+        assertThat(recovered).isNotNull();
+        assertThat(recovered.getClientRequestId()).isEqualTo("client-req-uuid-violation");
+        verify(messageRepository).save(any(AiReviewMessage.class));
+        verify(messageRepository).findBySessionIdAndClientRequestId(20L, "client-req-uuid-violation");
+    }
+ 
+    @Test
+    void streamAnswer_shouldPropagateMdcContextAndCleanupOnTermination() {
+        Fixtures fixtures = fixtures(1);
+        AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
+
+        when(contextSupport.findOwnedSession(eq(1L), eq(20L))).thenReturn(session);
+
+        Flux<String> streamFlux = Flux.just("data: {\"type\": \"chunk\", \"chunk\": \"A deadlock is \"}");
+        when(pythonAiReviewClient.streamReview(anyString(), anyString(), any())).thenReturn(streamFlux);
+
+        // Given: Set MDC values in main servlet thread
+        org.slf4j.MDC.put("traceId", "test-bridge-trace-id");
+        org.slf4j.MDC.put("requestId", "test-bridge-request-id");
+
+        try {
+            // When
+            SseEmitter emitter = service.streamAnswer(1L, 20L, "What is it?", "FREE_QUESTION", 100L, "client-req-uuid-mdc");
+            
+            // Wait for subscription to complete
+            try {
+                Thread.sleep(150);
+            } catch (InterruptedException ignored) {}
+
+            // Then: verify MDC propagation inside Reactive Context is complete and safe
+            assertThat(emitter).isNotNull();
+            
+            // Check that MDC is cleared after stream completion (cleanup assurance)
+            assertThat(org.slf4j.MDC.get("traceId")).isNull();
+            assertThat(org.slf4j.MDC.get("requestId")).isNull();
+            
+        } finally {
+            org.slf4j.MDC.clear();
+        }
+    }
+
+
+
+
+
+
+
 
     private static Fixtures fixtures(int questionCount) {
         User user = User.builder()

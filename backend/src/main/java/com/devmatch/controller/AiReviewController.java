@@ -53,7 +53,8 @@ public class AiReviewController {
                 sessionId,
                 request.getAnswer(),
                 request.getMode(),
-                request.getQuestionId()
+                request.getQuestionId(),
+                request.getClientRequestId()
         );
         return ResponseEntity.ok(ApiResponse.success(response));
     }
@@ -69,9 +70,11 @@ public class AiReviewController {
                 sessionId,
                 request.getAnswer(),
                 request.getMode(),
-                request.getQuestionId()
+                request.getQuestionId(),
+                request.getClientRequestId()
         );
     }
+
 
     @PostMapping("/sessions/{sessionId}/questions/{questionId}/summary")
     public ResponseEntity<ApiResponse<AiReviewSummaryResponse>> summarizeQuestion(

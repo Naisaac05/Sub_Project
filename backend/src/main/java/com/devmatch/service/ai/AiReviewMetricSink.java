@@ -27,4 +27,28 @@ public class AiReviewMetricSink {
     public void ollamaGeneration(String model, boolean cacheHit, boolean success) {
         log.info("metric.ai_review.ollama_generation model={} cacheHit={} success={}", model, cacheHit, success);
     }
+
+    public void streamMetric(
+            String metricName,
+            Long sessionId,
+            Long userId,
+            String mode,
+            Long questionId,
+            String clientRequestId,
+            Long durationMs,
+            String errorMessage
+    ) {
+        log.info(
+                "metric.ai_review.stream_event metricName={} sessionId={} userId={} mode={} questionId={} clientRequestId={} durationMs={} errorMessage={}",
+                metricName,
+                sessionId,
+                userId,
+                mode,
+                questionId,
+                clientRequestId != null ? clientRequestId : "null",
+                durationMs != null ? durationMs : 0L,
+                errorMessage != null ? errorMessage : "none"
+        );
+    }
 }
+

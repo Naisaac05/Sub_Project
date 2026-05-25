@@ -27,4 +27,9 @@ public interface AiReviewMessageRepository extends JpaRepository<AiReviewMessage
             AiReviewMessageRole role,
             Collection<AiReviewMessageMode> modes
     );
+
+    boolean existsBySessionIdAndClientRequestId(Long sessionId, String clientRequestId);
+
+    List<AiReviewMessage> findBySessionIdAndClientRequestId(Long sessionId, String clientRequestId);
 }
+

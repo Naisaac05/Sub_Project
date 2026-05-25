@@ -436,12 +436,15 @@ export default function AiReviewPage() {
       setNotice(LABELS.slowAiNotice);
     }, SLOW_AI_NOTICE_DELAY_MS);
 
+    const clientRequestId = `ai-req-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+
     try {
       const res = await submitAiReviewAnswerStream(
         session.sessionId,
         currentAnswer,
         mode,
         mode === 'NEXT_QUESTION' ? activeWrongQuestion?.questionId : displayedQuestion?.questionId,
+        clientRequestId,
         controller.signal
       );
 
@@ -591,7 +594,8 @@ export default function AiReviewPage() {
           session.sessionId,
           currentAnswer,
           mode,
-          mode === 'NEXT_QUESTION' ? activeWrongQuestion?.questionId : displayedQuestion?.questionId
+          mode === 'NEXT_QUESTION' ? activeWrongQuestion?.questionId : displayedQuestion?.questionId,
+          clientRequestId
         );
         if (syncRes.success) {
           const elapsedSeconds = Math.max(0.1, (performance.now() - startedAt) / 1000);

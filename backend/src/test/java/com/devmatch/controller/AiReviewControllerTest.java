@@ -29,8 +29,10 @@ class AiReviewControllerTest {
     @Autowired
     private MockMvc mvc;
 
+
     @Autowired
     private ObjectMapper objectMapper;
+
 
     @MockitoBean
     private RuleBasedAiReviewService aiReviewService;
@@ -53,8 +55,9 @@ class AiReviewControllerTest {
         SseEmitter mockEmitter = new SseEmitter();
 
         when(aiReviewStreamingService.streamAnswer(
-                eq(1L), eq(20L), eq("My answer"), eq("CHECK_ANSWER"), eq(100L)
+                eq(1L), eq(20L), eq("My answer"), eq("CHECK_ANSWER"), eq(100L), any()
         )).thenReturn(mockEmitter);
+
 
         // When & Then
         mvc.perform(post("/api/ai-review/sessions/20/messages/stream")

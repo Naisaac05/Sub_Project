@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,10 @@ import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +37,12 @@ public class AiReviewStreamingService {
     private final RuleBasedAiReviewService aiReviewService;
     private final AiReviewProperties properties;
     private final ObjectMapper objectMapper;
+    private final AiReviewContextSupport contextSupport;
+    private final AiReviewMetricSink metricSink;
 
     private final AiReviewSessionRepository sessionRepository;
+
+
     private final QuestionRepository questionRepository;
     private final AiReviewMessageRepository messageRepository;
 
@@ -47,9 +54,12 @@ public class AiReviewStreamingService {
         INIT, ACTIVE, COMPLETED, DISCONNECTED, ERROR
     }
 
-    public SseEmitter streamAnswer(Long userId, Long sessionId, String answer, String modeValue, Long questionId) {
+    public SseEmitter streamAnswer(Long userId, Long sessionId, String answer, String modeValue, Long questionId, String clientRequestId) {
+        final long startTime = System.currentTimeMillis();
+
         if (!properties.streamingEnabled()) {
-            return fallbackToSynchronousSubmit(userId, sessionId, answer, modeValue, questionId);
+            metricSink.streamMetric("fallback_to_sync_count", sessionId, userId, modeValue, questionId, clientRequestId, 0L, "streaming_disabled");
+            return fallbackToSynchronousSubmit(userId, sessionId, answer, modeValue, questionId, clientRequestId);
         }
 
         // Parse Mode
@@ -63,11 +73,19 @@ public class AiReviewStreamingService {
         }
         final AiReviewMessageMode finalMode = mode;
 
-        // Session completion check for fallback
-        AiReviewSession sessionObj = sessionRepository.findById(sessionId).orElse(null);
-        if (sessionObj != null && sessionObj.getStatus() == AiReviewStatus.COMPLETED) {
-            return fallbackToSynchronousSubmit(userId, sessionId, answer, modeValue, questionId);
+        // Session completion & ownership check for fallback
+        AiReviewSession sessionObj = null;
+        try {
+            sessionObj = contextSupport.findOwnedSession(userId, sessionId);
+        } catch (Exception e) {
+            metricSink.streamMetric("fallback_to_sync_count", sessionId, userId, modeValue, questionId, clientRequestId, 0L, "session_ownership_failed: " + e.getMessage());
+            return fallbackToSynchronousSubmit(userId, sessionId, answer, modeValue, questionId, clientRequestId);
         }
+        if (sessionObj != null && sessionObj.getStatus() == AiReviewStatus.COMPLETED) {
+            metricSink.streamMetric("fallback_to_sync_count", sessionId, userId, modeValue, questionId, clientRequestId, 0L, "session_already_completed");
+            return fallbackToSynchronousSubmit(userId, sessionId, answer, modeValue, questionId, clientRequestId);
+        }
+
 
         long timeoutMs = properties.streamTimeoutSeconds() * 1000L;
         SseEmitter emitter = new SseEmitter(timeoutMs);
@@ -76,8 +94,8 @@ public class AiReviewStreamingService {
         AtomicReference<Disposable> subscriptionRef = new AtomicReference<>();
         final StringBuilder accumulated = new StringBuilder();
 
-        // Save User Message
-        self.saveUserMessage(sessionId, questionId, finalMode, answer);
+        // USER 메시지는 지연(Lazy) 저장을 위해 여기서 즉시 저장하지 않고 첫 chunk 수신 시 저장함.
+
 
         // SSE lifecycle cleanup hooks
         emitter.onCompletion(() -> {
@@ -85,6 +103,7 @@ public class AiReviewStreamingService {
             if (state.get() != StreamingState.COMPLETED && state.get() != StreamingState.ERROR && state.get() != StreamingState.DISCONNECTED) {
                 if (state.compareAndSet(state.get(), StreamingState.DISCONNECTED)) {
                     cleanup(subscriptionRef, state, StreamingState.DISCONNECTED);
+                    metricSink.streamMetric("stream_disconnected", sessionId, userId, modeValue, questionId, clientRequestId, System.currentTimeMillis() - startTime, "emitter_completion");
                     self.saveDisconnectedAiMessage(sessionId, questionId, finalMode, accumulated.toString());
                 }
             }
@@ -94,6 +113,7 @@ public class AiReviewStreamingService {
             log.warn("SseEmitter timeout reached for session {}", sessionId);
             if (state.compareAndSet(StreamingState.ACTIVE, StreamingState.DISCONNECTED) || state.compareAndSet(StreamingState.INIT, StreamingState.DISCONNECTED)) {
                 cleanup(subscriptionRef, state, StreamingState.DISCONNECTED);
+                metricSink.streamMetric("stream_disconnected", sessionId, userId, modeValue, questionId, clientRequestId, System.currentTimeMillis() - startTime, "emitter_timeout");
                 self.saveDisconnectedAiMessage(sessionId, questionId, finalMode, accumulated.toString());
             }
             emitter.complete();
@@ -103,10 +123,12 @@ public class AiReviewStreamingService {
             log.error("SseEmitter error for session {}", sessionId, ex);
             if (state.compareAndSet(StreamingState.ACTIVE, StreamingState.DISCONNECTED) || state.compareAndSet(StreamingState.INIT, StreamingState.DISCONNECTED)) {
                 cleanup(subscriptionRef, state, StreamingState.DISCONNECTED);
+                metricSink.streamMetric("stream_disconnected", sessionId, userId, modeValue, questionId, clientRequestId, System.currentTimeMillis() - startTime, "emitter_error: " + ex.getMessage());
                 self.saveDisconnectedAiMessage(sessionId, questionId, finalMode, accumulated.toString());
             }
             emitter.completeWithError(ex);
         });
+
 
         // Stub Python request
         PythonAiReviewClient.PythonAiRequest request = new PythonAiReviewClient.PythonAiRequest(
@@ -125,10 +147,18 @@ public class AiReviewStreamingService {
                 true
         );
 
-        String correlationId = "ai-stream-" + java.util.UUID.randomUUID();
+        String traceId = MDC.get("traceId");
+        if (traceId == null || traceId.isBlank()) {
+            traceId = "ai-stream-" + java.util.UUID.randomUUID();
+        }
+        String correlationId = traceId;
         
         state.set(StreamingState.ACTIVE);
-        Flux<String> flux = pythonAiReviewClient.streamReview("/api/review/follow-up", correlationId, request);
+        Flux<String> flux = pythonAiReviewClient.streamReview("/api/review/follow-up", correlationId, request)
+                .transform(MdcReactiveBridge.fluxBridge())
+                .contextWrite(MdcReactiveBridge.captureCurrentMdc());
+
+        java.util.concurrent.atomic.AtomicBoolean userMessageSaved = new java.util.concurrent.atomic.AtomicBoolean(false);
 
         Disposable subscription = flux.subscribe(
                 rawEvent -> {
@@ -145,6 +175,20 @@ public class AiReviewStreamingService {
                     if ("chunk".equals(type)) {
                         String chunk = String.valueOf(event.getOrDefault("chunk", ""));
                         accumulated.append(chunk);
+
+                        // 지연 저장 (Lazy saving USER message on first chunk)
+                        if (userMessageSaved.compareAndSet(false, true)) {
+                            try {
+                                if (clientRequestId == null || !messageRepository.existsBySessionIdAndClientRequestId(sessionId, clientRequestId)) {
+                                    self.saveUserMessage(sessionId, questionId, finalMode, answer, clientRequestId);
+                                } else {
+                                    log.info("USER message saving skipped. Duplicate clientRequestId found: {}", clientRequestId);
+                                }
+                            } catch (Exception e) {
+                                log.error("Failed to save user message lazily on first chunk", e);
+                            }
+                        }
+
                         try {
                             emitter.send(event);
                         } catch (IOException e) {
@@ -166,14 +210,51 @@ public class AiReviewStreamingService {
                             }
 
                             // Save to database inside transaction
+                            AiReviewMessage savedAiMsg = null;
                             try {
-                                self.saveCompletedAiMessage(sessionId, questionId, finalMode, accumulated.toString(), responseMetadata);
+                                savedAiMsg = self.saveCompletedAiMessage(sessionId, questionId, finalMode, accumulated.toString(), responseMetadata);
                             } catch (Exception e) {
                                 log.error("Failed to save completed AI message to database", e);
                             }
 
+                            // 정규화된 DTO 빌드 (Normalizing DTO structure with USER/AI messages)
+                            AiReviewSubmitResponse submitResponse = null;
+                            if (savedAiMsg != null) {
+                                try {
+                                    AiReviewSession session = sessionRepository.findById(sessionId).orElse(null);
+                                    boolean completed = session != null && session.getStatus() == AiReviewStatus.COMPLETED;
+                                    String summary = session != null ? session.getSummary() : "";
+
+                                    List<AiReviewMessage> allMsgs = messageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId);
+                                    List<com.devmatch.dto.aireview.AiReviewMessageResponse> msgResponses = allMsgs.stream()
+                                            .map(com.devmatch.dto.aireview.AiReviewMessageResponse::from)
+                                            .toList();
+
+                                    java.util.Optional<AiReviewMessage> lastUser = messageRepository.findTopBySessionIdAndRoleOrderByCreatedAtDesc(sessionId, AiReviewMessageRole.USER);
+                                    String evalStr = lastUser.map(m -> m.getEvaluation() != null ? m.getEvaluation().name() : "UNDERSTOOD").orElse("UNDERSTOOD");
+
+                                    submitResponse = new AiReviewSubmitResponse(
+                                            evalStr,
+                                            savedAiMsg.getContent(),
+                                            null,
+                                            completed,
+                                            summary,
+                                            msgResponses
+                                    );
+                                } catch (Exception e) {
+                                    log.error("Failed to build normalized AiReviewSubmitResponse in done event", e);
+                                }
+                            }
+
                             try {
-                                emitter.send(event);
+                                if (submitResponse != null) {
+                                    java.util.Map<String, Object> normalizedEvent = new java.util.HashMap<>();
+                                    normalizedEvent.put("type", "done");
+                                    normalizedEvent.put("response", submitResponse);
+                                    emitter.send(normalizedEvent);
+                                } else {
+                                    emitter.send(event);
+                                }
                                 emitter.complete();
                             } catch (IOException e) {
                                 log.warn("Failed to send done event to SseEmitter", e);
@@ -239,11 +320,11 @@ public class AiReviewStreamingService {
         return emitter;
     }
 
-    private SseEmitter fallbackToSynchronousSubmit(Long userId, Long sessionId, String answer, String modeValue, Long questionId) {
+    private SseEmitter fallbackToSynchronousSubmit(Long userId, Long sessionId, String answer, String modeValue, Long questionId, String clientRequestId) {
         long timeoutMs = properties.streamTimeoutSeconds() * 1000L;
         SseEmitter emitter = new SseEmitter(timeoutMs);
         try {
-            AiReviewSubmitResponse response = aiReviewService.submitAnswer(userId, sessionId, answer, modeValue, questionId);
+            AiReviewSubmitResponse response = aiReviewService.submitAnswer(userId, sessionId, answer, modeValue, questionId, clientRequestId);
             emitter.send(Map.of("type", "done", "response", response));
             emitter.complete();
         } catch (Exception e) {
@@ -252,6 +333,7 @@ public class AiReviewStreamingService {
         }
         return emitter;
     }
+
 
     private Map<String, Object> parseEvent(String rawEvent) {
         if (rawEvent == null || rawEvent.isBlank()) {
@@ -430,7 +512,8 @@ public class AiReviewStreamingService {
             Long sessionId,
             Long questionId,
             AiReviewMessageMode mode,
-            String content
+            String content,
+            String clientRequestId
     ) {
         AiReviewSession session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new IllegalArgumentException("AI 복습 세션을 찾을 수 없습니다."));
@@ -447,8 +530,18 @@ public class AiReviewStreamingService {
                 .role(AiReviewMessageRole.USER)
                 .mode(mode)
                 .content(formattedContent)
+                .clientRequestId(clientRequestId)
                 .build();
 
-        return messageRepository.save(msg);
+        try {
+            return messageRepository.save(msg);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            log.warn("DataIntegrityViolationException caught while saving user message. sessionId={}, clientRequestId={}", sessionId, clientRequestId, ex);
+            return messageRepository.findBySessionIdAndClientRequestId(sessionId, clientRequestId).stream()
+                    .filter(m -> m.getRole() == AiReviewMessageRole.USER)
+                    .findFirst()
+                    .orElse(null);
+        }
     }
+
 }
