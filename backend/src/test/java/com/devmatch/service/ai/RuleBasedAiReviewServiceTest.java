@@ -1,6 +1,7 @@
 package com.devmatch.service.ai;
 
 import com.devmatch.dto.aireview.AiReviewSummaryResponse;
+import com.devmatch.dto.aireview.AiReviewSubmitResponse;
 import com.devmatch.config.AiReviewProperties;
 import com.devmatch.entity.AiReviewEvaluation;
 import com.devmatch.entity.AiReviewMessage;
@@ -35,8 +36,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.atLeastOnce;
 
 @ExtendWith(MockitoExtension.class)
 class RuleBasedAiReviewServiceTest {
@@ -51,6 +55,16 @@ class RuleBasedAiReviewServiceTest {
     @Mock private AiReviewProperties aiReviewProperties;
     @Mock private SemanticAnswerEvaluator semanticAnswerEvaluator;
     @InjectMocks private RuleBasedAiReviewService service;
+
+    @org.junit.jupiter.api.BeforeEach
+    void setUp() {
+        AiReviewContextSupport contextSupport = new AiReviewContextSupport(
+                sessionRepository,
+                testAnswerRepository,
+                messageRepository
+        );
+        ReflectionTestUtils.setField(service, "aiReviewContextSupport", contextSupport);
+    }
 
     @Test
     void evaluateAnswer_usesSemanticEvaluatorOnlyWhenFeatureFlagIsEnabled() {
@@ -410,6 +424,57 @@ class RuleBasedAiReviewServiceTest {
         ReflectionTestUtils.setField(session, "id", id);
         return session;
     }
+
+    @Test
+    void submitAnswer_whenDataIntegrityViolation_shouldRecoverAndReturnIdempotencyResponse() {
+        Fixtures fixtures = fixtures(1);
+        Question question = question(fixtures.test(), 100L, "Git tag와 release version의 관계는?", List.of("branch", "tag"), 1, 1);
+        AiReviewSession session = session(fixtures.user(), fixtures.result(), 20L);
+        AiReviewMessage lastAiMsg = aiMessage(session, question, AiReviewMessageMode.CHECK_QUESTION, "Git tag가 무엇인지 설명해보세요.");
+        TestAnswer wrongAnswer = wrongAnswer(fixtures.result(), question, 0);
+
+        AiReviewMessage existingUserMsg = AiReviewMessage.builder()
+                .session(session)
+                .question(question)
+                .role(AiReviewMessageRole.USER)
+                .mode(AiReviewMessageMode.CHECK_ANSWER)
+                .content("Answer")
+                .clientRequestId("client-req-uuid-integrity")
+                .build();
+        
+        AiReviewMessage existingAiMsg = AiReviewMessage.builder()
+                .session(session)
+                .question(question)
+                .role(AiReviewMessageRole.AI)
+                .mode(AiReviewMessageMode.EXPLANATION)
+                .content("Existing AI feedback response")
+                .evaluation(AiReviewEvaluation.UNDERSTOOD)
+                .clientRequestId("client-req-uuid-integrity")
+                .build();
+
+        when(sessionRepository.findById(eq(20L))).thenReturn(Optional.of(session));
+        when(testAnswerRepository.findByTestResultId(10L)).thenReturn(List.of(wrongAnswer));
+        when(messageRepository.findBySessionIdOrderByCreatedAtAsc(20L)).thenReturn(List.of(lastAiMsg));
+        when(messageRepository.findTopBySessionIdOrderByIdDesc(20L)).thenReturn(Optional.empty());
+
+        when(messageRepository.save(any(AiReviewMessage.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        when(messageRepository.save(argThat(msg -> msg != null && msg.getRole() == AiReviewMessageRole.USER)))
+                .thenThrow(new org.springframework.dao.DataIntegrityViolationException("Duplicate key uk_session_client_request"));
+
+        when(messageRepository.findBySessionIdAndClientRequestId(eq(20L), eq("client-req-uuid-integrity")))
+                .thenReturn(List.of(existingUserMsg, existingAiMsg));
+
+        AiReviewSubmitResponse response = service.submitAnswer(1L, 20L, "Answer", "CHECK_ANSWER", 100L, "client-req-uuid-integrity");
+
+        assertThat(response).isNotNull();
+        assertThat(response.getFeedback()).isEqualTo("Existing AI feedback response");
+        assertThat(response.getEvaluation()).isEqualTo("UNDERSTOOD");
+        verify(messageRepository, times(2)).save(any(AiReviewMessage.class));
+        verify(messageRepository, times(1)).findBySessionIdAndClientRequestId(20L, "client-req-uuid-integrity");
+    }
+
 
     private static AiReviewMessage aiMessage(
             AiReviewSession session,

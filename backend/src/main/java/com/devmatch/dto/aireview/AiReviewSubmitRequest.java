@@ -14,4 +14,7 @@ public class AiReviewSubmitRequest {
     private String mode;
 
     private Long questionId;
+
+    private String clientRequestId;
 }
+

@@ -40,6 +40,8 @@ public class RuleBasedAiReviewService {
     private final OllamaAiReviewClient ollamaAiReviewClient;
     private final AiReviewProperties aiReviewProperties;
     private final SemanticAnswerEvaluator semanticAnswerEvaluator;
+    private final AiReviewContextSupport aiReviewContextSupport;
+
 
     @Transactional
     public AiReviewSessionResponse startReview(Long userId, Long testResultId) {
@@ -153,6 +155,11 @@ public class RuleBasedAiReviewService {
 
     @Transactional
     public AiReviewSubmitResponse submitAnswer(Long userId, Long sessionId, String answer, String modeValue, Long questionId) {
+        return submitAnswer(userId, sessionId, answer, modeValue, questionId, null);
+    }
+
+    @Transactional
+    public AiReviewSubmitResponse submitAnswer(Long userId, Long sessionId, String answer, String modeValue, Long questionId, String clientRequestId) {
         AiReviewSession session = findOwnedSession(userId, sessionId);
         if (session.getStatus() == AiReviewStatus.COMPLETED) {
             return new AiReviewSubmitResponse(
@@ -164,6 +171,12 @@ public class RuleBasedAiReviewService {
                     List.of()
             );
         }
+
+        if (clientRequestId != null && messageRepository.existsBySessionIdAndClientRequestId(sessionId, clientRequestId)) {
+            log.info("Idempotent submitAnswer request hit for session {}, clientRequestId {}", sessionId, clientRequestId);
+            return buildIdempotencyResponse(session, sessionId, clientRequestId);
+        }
+
 
         AiReviewMessageMode mode = parseMode(modeValue);
         String normalizedAnswer = answer == null ? "" : answer.trim();
@@ -183,20 +196,28 @@ public class RuleBasedAiReviewService {
             throw new TestNotFoundException("답변이나 질문을 입력해주세요.");
         }
         if (mode == AiReviewMessageMode.FREE_QUESTION) {
-            return answerFreeQuestion(session, wrongAnswers, currentQuestion, normalizedAnswer, messageCursor);
+            return answerFreeQuestion(session, wrongAnswers, currentQuestion, normalizedAnswer, messageCursor, clientRequestId);
         }
+
 
         ensureInitialQuestionMessage(session, currentQuestion);
 
         AiReviewEvaluation evaluation = evaluateAnswer(currentQuestion, normalizedAnswer);
-        messageRepository.save(AiReviewMessage.builder()
-                .session(session)
-                .question(currentQuestion)
-                .role(AiReviewMessageRole.USER)
-                .mode(AiReviewMessageMode.CHECK_ANSWER)
-                .content(limitAiMessage(normalizedAnswer))
-                .evaluation(evaluation)
-                .build());
+        try {
+            messageRepository.save(AiReviewMessage.builder()
+                    .session(session)
+                    .question(currentQuestion)
+                    .role(AiReviewMessageRole.USER)
+                    .mode(AiReviewMessageMode.CHECK_ANSWER)
+                    .content(limitAiMessage(normalizedAnswer))
+                    .evaluation(evaluation)
+                    .clientRequestId(clientRequestId)
+                    .build());
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            log.warn("Concurrency race condition detected in submitAnswer for session {}, clientRequestId {}. Fallback to idempotent recovery.", sessionId, clientRequestId, ex);
+            return buildIdempotencyResponse(session, sessionId, clientRequestId);
+        }
+
 
         long aiQuestionCount = countAiResponses(sessionId, currentQuestion.getId());
 
@@ -245,25 +266,50 @@ public class RuleBasedAiReviewService {
         );
     }
 
+    private AiReviewSubmitResponse buildIdempotencyResponse(AiReviewSession session, Long sessionId, String clientRequestId) {
+        List<AiReviewMessage> existingMsgs = messageRepository.findBySessionIdAndClientRequestId(sessionId, clientRequestId);
+        Optional<AiReviewMessage> existingAi = existingMsgs.stream()
+                .filter(m -> m.getRole() == AiReviewMessageRole.AI)
+                .findFirst();
+        String feedback = existingAi.map(AiReviewMessage::getContent).orElse("이미 처리된 요청입니다.");
+        boolean completed = session.getStatus() == AiReviewStatus.COMPLETED;
+        return new AiReviewSubmitResponse(
+                existingAi.map(m -> m.getEvaluation() != null ? m.getEvaluation().name() : "UNDERSTOOD").orElse("UNDERSTOOD"),
+                feedback,
+                null,
+                completed,
+                session.getSummary(),
+                messages(session)
+        );
+    }
+
     private AiReviewSubmitResponse answerFreeQuestion(
             AiReviewSession session,
             List<TestAnswer> wrongAnswers,
             Question currentQuestion,
             String questionText,
-            Long messageCursor
+            Long messageCursor,
+            String clientRequestId
     ) {
         long freeQuestionCount = countFreeQuestions(session.getId(), currentQuestion.getId());
         if (freeQuestionCount >= MAX_QUESTIONS_PER_WRONG_ANSWER) {
             throw new InvalidSessionStateException("이 문제는 AI 질문/답변을 3개까지 사용할 수 있습니다. 다음 문제로 넘어가세요.");
         }
 
-        messageRepository.save(AiReviewMessage.builder()
-                .session(session)
-                .question(currentQuestion)
-                .role(AiReviewMessageRole.USER)
-                .mode(AiReviewMessageMode.FREE_QUESTION)
-                .content(limitAiMessage(questionText))
-                .build());
+        try {
+            messageRepository.save(AiReviewMessage.builder()
+                    .session(session)
+                    .question(currentQuestion)
+                    .role(AiReviewMessageRole.USER)
+                    .mode(AiReviewMessageMode.FREE_QUESTION)
+                    .content(limitAiMessage(questionText))
+                    .clientRequestId(clientRequestId)
+                    .build());
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            log.warn("Concurrency race condition detected in answerFreeQuestion for session {}, clientRequestId {}. Fallback to idempotent recovery.", session.getId(), clientRequestId, ex);
+            return buildIdempotencyResponse(session, session.getId(), clientRequestId);
+        }
+
 
         Optional<TestAnswer> currentWrongAnswer = findWrongAnswer(wrongAnswers, currentQuestion);
         String selectedAnswer = currentWrongAnswer
@@ -601,15 +647,9 @@ public class RuleBasedAiReviewService {
             Long questionId,
             AiReviewMessageMode mode
     ) {
-        if (questionId != null && mode != AiReviewMessageMode.NEXT_QUESTION) {
-            return wrongAnswers.stream()
-                    .map(TestAnswer::getQuestion)
-                    .filter(question -> Objects.equals(question.getId(), questionId))
-                    .findFirst()
-                    .orElseThrow(() -> new TestNotFoundException("선택한 복습 문제를 찾을 수 없습니다."));
-        }
-        return lastAiMessage.getQuestion();
+        return aiReviewContextSupport.resolveCurrentQuestion(wrongAnswers, lastAiMessage, questionId, mode);
     }
+
 
     private Optional<AiReviewMessage> latestQuestionMessage(Long sessionId) {
         List<AiReviewMessage> messages = messageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId);
@@ -641,22 +681,13 @@ public class RuleBasedAiReviewService {
     }
 
     private long countAiResponses(Long sessionId, Long questionId) {
-        return messageRepository.countBySessionIdAndQuestionIdAndRoleAndModeIn(
-                sessionId,
-                questionId,
-                AiReviewMessageRole.AI,
-                AI_RESPONSE_LIMIT_MODES
-        );
+        return aiReviewContextSupport.countAiResponses(sessionId, questionId, AI_RESPONSE_LIMIT_MODES);
     }
 
     private long countFreeQuestions(Long sessionId, Long questionId) {
-        return messageRepository.countBySessionIdAndQuestionIdAndRoleAndModeIn(
-                sessionId,
-                questionId,
-                AiReviewMessageRole.USER,
-                List.of(AiReviewMessageMode.FREE_QUESTION)
-        );
+        return aiReviewContextSupport.countFreeQuestions(sessionId, questionId);
     }
+
 
     private Optional<AiReviewMessage> reusableSummary(List<AiReviewMessage> messages, AiReviewMessageMode summaryMode) {
         Optional<AiReviewMessage> latestSummary = messages.stream()
@@ -1155,13 +1186,9 @@ public class RuleBasedAiReviewService {
     }
 
     private AiReviewSession findOwnedSession(Long userId, Long sessionId) {
-        AiReviewSession session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new TestNotFoundException("AI 복습 세션을 찾을 수 없습니다."));
-        if (!Objects.equals(session.getUser().getId(), userId)) {
-            throw new TestNotFoundException("AI 복습 세션을 찾을 수 없습니다.");
-        }
-        return session;
+        return aiReviewContextSupport.findOwnedSession(userId, sessionId);
     }
+
 
     private TestResult findOwnedResult(Long userId, Long testResultId) {
         TestResult result = testResultRepository.findById(testResultId)
@@ -1173,11 +1200,9 @@ public class RuleBasedAiReviewService {
     }
 
     private List<TestAnswer> wrongAnswers(Long testResultId) {
-        return testAnswerRepository.findByTestResultId(testResultId).stream()
-                .filter(answer -> !Boolean.TRUE.equals(answer.getIsCorrect()))
-                .sorted(Comparator.comparing(answer -> answer.getQuestion().getOrderIndex()))
-                .toList();
+        return aiReviewContextSupport.wrongAnswers(testResultId);
     }
+
 
     private AiReviewSessionResponse response(AiReviewSession session) {
         List<TestAnswer> wrongAnswers = wrongAnswers(session.getTestResult().getId());
@@ -1202,11 +1227,9 @@ public class RuleBasedAiReviewService {
     }
 
     private String optionAt(Question question, int index) {
-        if (index < 0 || question.getOptions() == null || index >= question.getOptions().size()) {
-            return "미응답";
-        }
-        return question.getOptions().get(index);
+        return aiReviewContextSupport.optionAt(question, index);
     }
+
 
     private String inferArea(Question question) {
         String text = normalize(question.getContent() + " " + String.join(" ", question.getOptions()));

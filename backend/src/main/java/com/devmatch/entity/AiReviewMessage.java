@@ -8,7 +8,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ai_review_messages")
+@Table(
+    name = "ai_review_messages",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_session_client_request", columnNames = {"session_id", "client_request_id"})
+    }
+)
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -65,6 +70,10 @@ public class AiReviewMessage {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private AiReviewEvaluation evaluation;
+
+    @Column(length = 100)
+    private String clientRequestId;
+
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

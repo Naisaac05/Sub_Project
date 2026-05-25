@@ -30,11 +30,12 @@ export async function submitAiReviewAnswer(
   sessionId: number,
   answer: string,
   mode: 'CHECK_ANSWER' | 'FREE_QUESTION' | 'NEXT_QUESTION' = 'CHECK_ANSWER',
-  questionId?: number | null
+  questionId?: number | null,
+  clientRequestId?: string | null
 ): Promise<ApiResponse<AiReviewSubmitResponse>> {
   const res = await apiClient.post<ApiResponse<AiReviewSubmitResponse>>(
     `/ai-review/sessions/${sessionId}/messages`,
-    { answer, mode, questionId },
+    { answer, mode, questionId, clientRequestId },
     { timeout: AI_REVIEW_TIMEOUT_MS }
   );
   return res.data;
@@ -45,6 +46,7 @@ export async function submitAiReviewAnswerStream(
   answer: string,
   mode: 'CHECK_ANSWER' | 'FREE_QUESTION' | 'NEXT_QUESTION' = 'CHECK_ANSWER',
   questionId?: number | null,
+  clientRequestId?: string | null,
   signal?: AbortSignal
 ): Promise<Response> {
   const token = getAccessToken();
@@ -56,10 +58,11 @@ export async function submitAiReviewAnswerStream(
       'Accept': 'text/event-stream',
       ...(token ? { 'Authorization': `Bearer ${token}` } : {})
     },
-    body: JSON.stringify({ answer, mode, questionId }),
+    body: JSON.stringify({ answer, mode, questionId, clientRequestId }),
     signal
   });
 }
+
 
 export async function summarizeAiReviewQuestion(
   sessionId: number,

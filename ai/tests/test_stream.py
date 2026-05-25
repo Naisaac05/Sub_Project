@@ -10,9 +10,10 @@ from app.main import app
 
 
 class StreamingWorkflowTest(unittest.IsolatedAsyncioTestCase):
-    async def test_successful_streaming_generation(self):
+    @patch("app.workflow.runner.resolve_lightweight_answer", return_value=None)
+    async def test_successful_streaming_generation(self, mock_resolve):
         async def mock_stream_gen(*args, **kwargs):
-            yield "Hello"
+            yield "안녕하세요"
             yield " "
             yield "World"
 
@@ -35,16 +36,17 @@ class StreamingWorkflowTest(unittest.IsolatedAsyncioTestCase):
         
         # Verify chunks are yielded
         chunks = [e["chunk"] for e in events if e["type"] == "chunk"]
-        self.assertEqual("".join(chunks), "Hello World")
+        self.assertEqual("".join(chunks), "안녕하세요 World")
         
         # Verify done event contains AiGenerateResponse
         done_event = events[-1]
         self.assertEqual(done_event["type"], "done")
         response = done_event["response"]
-        self.assertEqual(response.answer, "Hello World")
+        self.assertEqual(response.answer, "안녕하세요 World")
         self.assertFalse(response.fallback_used)
 
-    async def test_streaming_generation_exception_falls_back(self):
+    @patch("app.workflow.runner.resolve_lightweight_answer", return_value=None)
+    async def test_streaming_generation_exception_falls_back(self, mock_resolve):
         async def failing_stream_gen(*args, **kwargs):
             raise RuntimeError("stream failure")
             yield "Never reached"
