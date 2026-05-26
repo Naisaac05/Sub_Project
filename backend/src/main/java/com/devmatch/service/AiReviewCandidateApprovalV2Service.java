@@ -1,6 +1,7 @@
 package com.devmatch.service;
 
 import com.devmatch.dto.aireview.candidate.AiReviewCandidateResponse;
+import com.devmatch.dto.aireview.candidate.AiReviewCandidateCaptureRequest;
 import com.devmatch.dto.aireview.candidate.AiReviewCandidateReviewV2Request;
 import com.devmatch.dto.aireview.candidate.AiReviewCandidateV2Response;
 import com.devmatch.entity.AiReviewCandidate;
@@ -8,6 +9,7 @@ import com.devmatch.entity.AiReviewCandidateAudit;
 import com.devmatch.entity.AiReviewCandidateReviewAction;
 import com.devmatch.entity.AiReviewCandidateSource;
 import com.devmatch.entity.AiReviewCandidateStatus;
+import com.devmatch.entity.AiReviewCandidateWorkflowPhase;
 import com.devmatch.repository.AiReviewCandidateAuditRepository;
 import com.devmatch.repository.AiReviewCandidateRepository;
 import com.devmatch.service.ai.AiReviewMetricSink;
@@ -42,6 +44,44 @@ public class AiReviewCandidateApprovalV2Service {
     }
 
     @Transactional
+    public AiReviewCandidateV2Response captureCandidate(AiReviewCandidateCaptureRequest request) {
+        if (candidateRepository.existsByExternalCandidateId(request.candidateId())) {
+            AiReviewCandidate existing = candidateRepository.findByExternalCandidateId(request.candidateId())
+                    .orElseThrow(() -> new IllegalStateException("Candidate duplicate guard was inconsistent: " + request.candidateId()));
+            if (existing.fillDraftIfBlank(
+                    request.definitionDraft(),
+                    request.route(),
+                    request.confidenceScore(),
+                    request.needsReviewReason()
+            )) {
+                candidateRepository.save(existing);
+                auditCapture(existing, "duplicate_draft_updated");
+            }
+            logCandidateBacklog("capture_duplicate");
+            return toResponse(existing);
+        }
+
+        AiReviewCandidate saved = candidateRepository.save(AiReviewCandidate.builder()
+                .externalCandidateId(blankToNull(request.candidateId()))
+                .term(blankToDefault(request.term(), "unknown"))
+                .category(blankToDefault(request.category(), "auto-review"))
+                .source(AiReviewCandidateSource.AUTO)
+                .status(AiReviewCandidateStatus.PENDING)
+                .workflowPhase(phaseForDraft(request.definitionDraft()))
+                .definition("")
+                .definitionDraft(request.definitionDraft())
+                .sourceQuestion(request.sourceQuestion())
+                .resolvedQuery(request.resolvedQuery())
+                .route(request.route())
+                .confidenceScore(request.confidenceScore())
+                .needsReviewReason(request.needsReviewReason())
+                .build());
+        auditCapture(saved, "captured");
+        logCandidateBacklog("capture");
+        return toResponse(saved);
+    }
+
+    @Transactional
     public AiReviewCandidateV2Response reviewCandidate(Long id, AiReviewCandidateReviewV2Request request) {
         AiReviewCandidate candidate = candidateRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No matching AI review candidate: " + id));
@@ -51,7 +91,9 @@ public class AiReviewCandidateApprovalV2Service {
         LocalDateTime retentionUntil = now.plusDays(retentionDays(request));
         String reviewer = blankToDefault(request.reviewer(), "admin-ui");
 
-        if (request.action() == AiReviewCandidateReviewAction.APPROVE) {
+        if (request.action() == AiReviewCandidateReviewAction.START_REVIEW) {
+            candidate.startReview(reviewer, now, retentionUntil);
+        } else if (request.action() == AiReviewCandidateReviewAction.APPROVE) {
             candidate.approve(requiredDefinition(candidate, request.definition()), reviewer, now, retentionUntil);
         } else if (request.action() == AiReviewCandidateReviewAction.EDIT_AND_APPROVE) {
             candidate.editAndApprove(requiredText(request.reviewerEditedAnswer(), "EDIT_AND_APPROVE requires reviewerEditedAnswer"), reviewer, now, retentionUntil);
@@ -121,6 +163,18 @@ public class AiReviewCandidateApprovalV2Service {
         log.info("ai_review.candidate_backlog operation={} pending={}", operation, pending);
     }
 
+    private void auditCapture(AiReviewCandidate candidate, String reason) {
+        auditRepository.save(AiReviewCandidateAudit.builder()
+                .candidate(candidate)
+                .previousStatus(AiReviewCandidateStatus.PENDING)
+                .nextStatus(AiReviewCandidateStatus.PENDING)
+                .action(AiReviewCandidateReviewAction.CAPTURE)
+                .reviewer("python-runtime")
+                .reviewerEditedAnswer(candidate.getDefinitionDraft())
+                .reason(reason)
+                .build());
+    }
+
     private boolean isDuplicate(AiReviewCandidateResponse row) {
         if (!isBlank(row.candidateId())) {
             return candidateRepository.existsByExternalCandidateId(row.candidateId());
@@ -149,6 +203,7 @@ public class AiReviewCandidateApprovalV2Service {
                 .category(blankToDefault(row.category(), "uncategorized"))
                 .source(sourceFrom(row.source()))
                 .status(row.approved() ? AiReviewCandidateStatus.APPROVED : AiReviewCandidateStatus.PENDING)
+                .workflowPhase(row.approved() ? AiReviewCandidateWorkflowPhase.APPROVED : phaseForDraft(row.definitionDraft()))
                 .definition(row.definition())
                 .definitionDraft(row.definitionDraft())
                 .rejectedReason(row.rejectedReason())
@@ -169,6 +224,7 @@ public class AiReviewCandidateApprovalV2Service {
                 candidate.getCategory(),
                 candidate.getSource(),
                 candidate.getStatus(),
+                workflowPhaseOf(candidate),
                 candidate.getDefinition(),
                 candidate.getDefinitionDraft(),
                 candidate.getReviewerEditedAnswer(),
@@ -191,6 +247,28 @@ public class AiReviewCandidateApprovalV2Service {
         return request.retentionDays() == null || request.retentionDays() <= 0
                 ? DEFAULT_RETENTION_DAYS
                 : request.retentionDays();
+    }
+
+    private static AiReviewCandidateWorkflowPhase phaseForDraft(String definitionDraft) {
+        return definitionDraft == null || definitionDraft.isBlank()
+                ? AiReviewCandidateWorkflowPhase.CAPTURED
+                : AiReviewCandidateWorkflowPhase.DRAFTED;
+    }
+
+    private static AiReviewCandidateWorkflowPhase workflowPhaseOf(AiReviewCandidate candidate) {
+        if (candidate.getWorkflowPhase() != null) {
+            return candidate.getWorkflowPhase();
+        }
+        if (candidate.getStatus() == AiReviewCandidateStatus.APPROVED) {
+            return AiReviewCandidateWorkflowPhase.APPROVED;
+        }
+        if (candidate.getStatus() == AiReviewCandidateStatus.REJECTED) {
+            return AiReviewCandidateWorkflowPhase.REJECTED;
+        }
+        if (candidate.getStatus() == AiReviewCandidateStatus.MERGED) {
+            return AiReviewCandidateWorkflowPhase.MERGED;
+        }
+        return phaseForDraft(candidate.getDefinitionDraft());
     }
 
     private static String requiredDefinition(AiReviewCandidate candidate, String requestedDefinition) {

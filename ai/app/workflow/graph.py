@@ -9,8 +9,10 @@ from app.knowledge.auto_candidates import (
     build_auto_candidate,
     should_capture_auto_candidate,
 )
+from app.knowledge.candidate_sink import candidate_sink_mode, save_auto_candidate
 from app.ollama.client import call_ollama
 from app.workflow.answer_cache import cache_key_for, put_cached_answer
+from app.workflow.degraded import no_candidate_capture_enabled
 from app.workflow.nodes import (
     Generator,
     confidence_gate_node,
@@ -20,6 +22,7 @@ from app.workflow.nodes import (
     rule_evaluate_node,
     validate_answer_node,
 )
+from app.workflow.semantic_gate import semantic_evaluate_node, should_store_answer_cache
 from app.workflow.state import ReviewWorkflowState
 
 try:
@@ -106,13 +109,18 @@ def run_state_graph(
 
 
 def cache_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
-    if not state.fallback_used and state.model_used not in {"template", "lightweight-template"}:
+    state = semantic_evaluate_node(state)
+    if should_store_answer_cache(state):
         put_cached_answer(cache_key_for(state.mode, state.request), state.answer)
     state.graph_status = "completed"
     return state
 
 
 def candidate_save_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
+    if no_candidate_capture_enabled():
+        state.quality_flags.append("candidate_capture_disabled")
+        return state
+
     queue_path = os.environ.get("AI_REVIEW_AUTO_CANDIDATES_PATH")
     queue = Path(queue_path) if queue_path else DEFAULT_AUTO_CANDIDATES_PATH
 
@@ -134,7 +142,16 @@ def candidate_save_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
         needs_review_reason=reason,
         generated_answer=state.answer,
     )
-    if append_auto_candidate(queue, candidate):
+    try:
+        if candidate_sink_mode() == "jsonl":
+            written = append_auto_candidate(queue, candidate)
+        else:
+            written = save_auto_candidate(candidate)
+    except Exception:
+        state.quality_flags.append("candidate_capture_failed")
+        return state
+
+    if written:
         state.candidate_id = str(candidate["candidate_id"])
     return state
 

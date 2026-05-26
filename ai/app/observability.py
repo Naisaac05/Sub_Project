@@ -31,6 +31,9 @@ def emit_observability_events(
         enriched["retrieval_miss"] = not bool(response.retrieved_concept_ids)
         enriched["candidate_captured"] = bool(response.candidate_id)
         enriched["candidate_id"] = response.candidate_id
+        quality_flags = set(response.quality_flags or [])
+        enriched["candidate_capture_disabled"] = "candidate_capture_disabled" in quality_flags
+        enriched["candidate_capture_failed"] = "candidate_capture_failed" in quality_flags
         enriched["route"] = response.route
         enriched["model_used"] = response.model_used
         enriched["cache_hit"] = response.route == "cache"
@@ -38,6 +41,7 @@ def emit_observability_events(
             "cache",
             "static_fast_path",
             "generated_card_fast_path",
+            "lightweight_only_miss",
         }
         enriched_events.append(enriched)
         sink.info(json.dumps(enriched, ensure_ascii=False, sort_keys=True))

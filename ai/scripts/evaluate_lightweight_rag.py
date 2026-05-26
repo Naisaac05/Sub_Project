@@ -13,6 +13,7 @@ if str(ROOT) not in sys.path:
 
 from app.rag.retriever import retrieve_context
 from app.schemas import AiGenerateRequest
+from app.evaluation.semantic import should_cache_answer
 from app.workflow.runner import run_review_workflow
 from app.workflow.intent import classify_free_question
 from app.workflow.nodes import retrieve_context_node
@@ -20,6 +21,7 @@ from app.workflow.state import ReviewWorkflowState
 
 
 DATASET_PATH = ROOT / "evals" / "golden_dataset.jsonl"
+DEFAULT_MIN_DATASET_ROWS = 200
 
 
 def load_dataset(path: Path | None = None) -> list[dict[str, object]]:
@@ -28,6 +30,8 @@ def load_dataset(path: Path | None = None) -> list[dict[str, object]]:
     for line in dataset_path.read_text(encoding="utf-8").splitlines():
         if line.strip():
             rows.append(json.loads(line))
+    if path is None:
+        rows = _expanded_default_dataset(rows, DEFAULT_MIN_DATASET_ROWS)
     return rows
 
 
@@ -51,6 +55,10 @@ def evaluate_dataset(
             "fallback_expectation_accuracy": 0.0,
             "candidate_capture_accuracy": 0.0,
             "observability_event_rate": 0.0,
+            "semantic_grounding_pass_rate": 0.0,
+            "contradiction_absent_rate": 0.0,
+            "hallucination_cache_ban_rate": 0.0,
+            "answer_grounding_rate": 0.0,
             "workflow_rows": 0,
         }
 
@@ -77,6 +85,14 @@ def evaluate_dataset(
     candidate_capture_hits = 0
     observability_event_rows = 0
     observability_event_hits = 0
+    semantic_grounding_rows = 0
+    semantic_grounding_hits = 0
+    contradiction_rows = 0
+    contradiction_hits = 0
+    hallucination_cache_ban_rows = 0
+    hallucination_cache_ban_hits = 0
+    answer_grounding_rows = 0
+    answer_grounding_hits = 0
     context_rows = 0
     context_hits = 0
     workflow_rows = 0
@@ -127,8 +143,30 @@ def evaluate_dataset(
                 context_hits += 1
 
         workflow_response = _workflow_response_for(row, workflow_runner)
+        required_keywords = [str(item) for item in row.get("required_keywords", [])]
+        forbidden_claims = [str(item) for item in row.get("forbidden_claims", [])]
         if workflow_response is not None:
             workflow_rows += 1
+            flags = set(str(item) for item in getattr(workflow_response, "quality_flags", []))
+            answer = str(getattr(workflow_response, "answer", ""))
+            semantic_grounding_rows += 1
+            if "evidence_missing" not in flags:
+                semantic_grounding_hits += 1
+            contradiction_rows += 1
+            if "contradiction_suspected" not in flags:
+                contradiction_hits += 1
+            if "hallucination_suspected" in flags:
+                hallucination_cache_ban_rows += 1
+                if not should_cache_answer(flags):
+                    hallucination_cache_ban_hits += 1
+            answer_grounding_rows += 1
+            if _answer_is_grounded(
+                flags=flags,
+                answer=answer,
+                required_keywords=required_keywords,
+                forbidden_claims=forbidden_claims,
+            ):
+                answer_grounding_hits += 1
 
         expected_route = row.get("expected_route")
         if expected_route:
@@ -136,14 +174,12 @@ def evaluate_dataset(
             if workflow_response is not None and getattr(workflow_response, "route", None) == expected_route:
                 route_hits += 1
 
-        required_keywords = [str(item) for item in row.get("required_keywords", [])]
         if required_keywords:
             keyword_rows += 1
             answer = str(getattr(workflow_response, "answer", "")) if workflow_response is not None else ""
             if all(keyword in answer for keyword in required_keywords):
                 keyword_hits += 1
 
-        forbidden_claims = [str(item) for item in row.get("forbidden_claims", [])]
         if forbidden_claims:
             forbidden_rows += 1
             answer = str(getattr(workflow_response, "answer", "")) if workflow_response is not None else ""
@@ -203,6 +239,18 @@ def evaluate_dataset(
         "observability_event_rate": round(observability_event_hits / observability_event_rows, 4)
         if observability_event_rows
         else 1.0,
+        "semantic_grounding_pass_rate": round(semantic_grounding_hits / semantic_grounding_rows, 4)
+        if semantic_grounding_rows
+        else 1.0,
+        "contradiction_absent_rate": round(contradiction_hits / contradiction_rows, 4)
+        if contradiction_rows
+        else 1.0,
+        "hallucination_cache_ban_rate": round(hallucination_cache_ban_hits / hallucination_cache_ban_rows, 4)
+        if hallucination_cache_ban_rows
+        else 1.0,
+        "answer_grounding_rate": round(answer_grounding_hits / answer_grounding_rows, 4)
+        if answer_grounding_rows
+        else 1.0,
         "workflow_context_accuracy": round(context_hits / context_rows, 4) if context_rows else 1.0,
         "context_rows": context_rows,
         "workflow_rows": workflow_rows,
@@ -252,6 +300,53 @@ def _real_workflow_runner(row: dict[str, object]):
         fields["model"] = str(row["model"])
     request = AiGenerateRequest(**fields)
     return run_review_workflow("free-question", request, generator=call_ollama)
+
+
+def _expanded_default_dataset(rows: list[dict[str, object]], minimum_rows: int) -> list[dict[str, object]]:
+    if len(rows) >= minimum_rows:
+        return rows
+    expanded = [dict(row) for row in rows]
+    seen_ids = {str(row.get("id", "")) for row in expanded}
+    variants = (
+        ("explain", "{question} 핵심만 설명해줘"),
+        ("compare", "{question} 관련 개념과 헷갈리는 지점은?"),
+        ("practice", "{question} 실무에서 언제 조심해야 해?"),
+    )
+    for source in rows:
+        question = str(source.get("question", "")).strip()
+        source_id = str(source.get("id", "")).strip()
+        if not question or not source_id:
+            continue
+        for suffix, template in variants:
+            candidate_id = f"{source_id}-{suffix}"
+            if candidate_id in seen_ids:
+                continue
+            variant = dict(source)
+            variant["id"] = candidate_id
+            variant["question"] = template.format(question=question)
+            variant["generated_variant"] = True
+            expanded.append(variant)
+            seen_ids.add(candidate_id)
+            if len(expanded) >= minimum_rows:
+                return expanded
+    return expanded
+
+
+def _answer_is_grounded(
+    *,
+    flags: set[str],
+    answer: str,
+    required_keywords: list[str],
+    forbidden_claims: list[str],
+) -> bool:
+    risky_flags = {"evidence_missing", "hallucination_suspected", "contradiction_suspected"}
+    if flags & risky_flags:
+        return False
+    if required_keywords and not all(keyword in answer for keyword in required_keywords):
+        return False
+    if forbidden_claims and any(claim in answer for claim in forbidden_claims):
+        return False
+    return True
 
 
 def _needs_workflow(row: dict[str, object]) -> bool:

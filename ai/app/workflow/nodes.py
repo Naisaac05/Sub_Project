@@ -8,6 +8,7 @@ from app.schemas import AiGenerateRequest
 from app.scoring import ConfidenceInputs, ConfidenceResult, calculate_confidence
 from app.validation.text import compact_answer, contains_korean, korean_fallback
 from app.workflow.answer_cache import cache_key_for, get_cached_answer
+from app.workflow.degraded import lightweight_only_enabled, lightweight_only_miss_state
 from app.workflow.intent import FreeQuestionIntent, classify_free_question, normalize_question
 from app.workflow.lightweight_answers import LIGHTWEIGHT_MODEL_NAME, resolve_lightweight_answer
 from app.workflow.query_resolver import resolve_learner_query
@@ -66,6 +67,9 @@ def generate_answer_node(
         if lightweight_answer.route == "static_fast_path":
             state.contexts = []
         return state
+
+    if lightweight_only_enabled():
+        return lightweight_only_miss_state(state.mode, state.request)
 
     cache_key = cache_key_for(state.mode, state.request)
     cached_answer = get_cached_answer(cache_key)

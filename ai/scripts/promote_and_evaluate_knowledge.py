@@ -20,8 +20,11 @@ def run_promotion_workflow(
     lint: Callable[[], list[str]] = lint_cards,
     reindex: Callable[[], dict[str, object]] = reindex_changed_knowledge,
     evaluate: Callable[[], dict[str, float | int]] | None = None,
+    evaluate_before: Callable[[], dict[str, float | int]] | None = None,
 ) -> dict[str, object]:
     evaluator = evaluate or (lambda: evaluate_dataset(load_dataset()))
+    before_evaluator = evaluate_before or evaluator
+    before_evaluation = before_evaluator()
     promotion_report = promote()
     errors = lint()
     if errors:
@@ -29,6 +32,7 @@ def run_promotion_workflow(
             "status": "failed",
             "stage": "lint",
             "errors": errors,
+            "before_evaluation": before_evaluation,
             **_promotion_summary(promotion_report),
         }
 
@@ -38,16 +42,20 @@ def run_promotion_workflow(
             "status": "failed",
             "stage": "reindex",
             "errors": reindex_report.get("errors", []),
+            "before_evaluation": before_evaluation,
             "reindex": reindex_report,
             **_promotion_summary(promotion_report),
         }
 
     evaluation_report = evaluator()
+    evaluation_delta = _evaluation_delta(before_evaluation, evaluation_report)
     if float(evaluation_report.get("retrieval_hit_rate", 0.0)) < 0.6:
         return {
             "status": "failed",
             "stage": "evaluate",
+            "before_evaluation": before_evaluation,
             "evaluation": evaluation_report,
+            "evaluation_delta": evaluation_delta,
             "reindex": reindex_report,
             **_promotion_summary(promotion_report),
         }
@@ -55,7 +63,9 @@ def run_promotion_workflow(
     return {
         "status": "passed",
         "stage": "complete",
+        "before_evaluation": before_evaluation,
         "evaluation": evaluation_report,
+        "evaluation_delta": evaluation_delta,
         "reindex": reindex_report,
         **_promotion_summary(promotion_report),
     }
@@ -67,6 +77,18 @@ def _promotion_summary(report: dict[str, object]) -> dict[str, object]:
         "approved_candidates": report.get("approved_candidates", 0),
         "candidates": report.get("candidates", 0),
     }
+
+
+def _evaluation_delta(
+    before: dict[str, float | int],
+    after: dict[str, float | int],
+) -> dict[str, float]:
+    delta: dict[str, float] = {}
+    for key, after_value in after.items():
+        before_value = before.get(key)
+        if isinstance(before_value, (int, float)) and isinstance(after_value, (int, float)):
+            delta[key] = round(float(after_value) - float(before_value), 4)
+    return delta
 
 
 def main() -> int:

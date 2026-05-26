@@ -32,6 +32,15 @@
 
 ## 인덱스
 
+- [2026-05-27 AI review Micrometer classpath and Java warning cleanup](2026-05-27-ai-review-micrometer-classpath-and-warning-cleanup.md)
+- [2026-05-27 AI Python tests run with wrong runtime](2026-05-27-ai-python-tests-wrong-runtime.md)
+- [2026-05-26 AI candidate capture write failure isolation](2026-05-26-ai-candidate-capture-write-failure-isolation.md)
+- [2026-05-26 AI stream terminal idempotency guard](2026-05-26-ai-stream-terminal-idempotency.md)
+- [2026-05-26 AI stream cancellation and timeout chain hardening](2026-05-26-ai-stream-cancellation-timeout-chain.md)
+- [2026-05-25 Python streaming test environment missing dev dependencies](2026-05-25-python-streaming-test-environment.md)
+- [2026-05-25 PowerShell Set-Content Java encoding corruption](2026-05-25-powershell-set-content-java-encoding-corruption.md)
+- [2026-05-25 AI review streaming duplicate save and done DTO gap](2026-05-25-ai-review-streaming-duplicate-save-done-dto.md)
+- [2026-05-25 AI review streaming context bypass](2026-05-25-ai-review-streaming-context-bypass.md)
 - [2026-05-21 AiReviewStreamingServiceTest NullPointerException 및 UnnecessaryStubbingException 발생](2026-05-21-ai-review-streaming-service-test-failures.md)
 - [2026-05-21 AI review read timeout retry stall](2026-05-21-ai-review-read-timeout-retry-stall.md)
 - [2026-05-21 AI free-question answers truncated by low token budget](2026-05-21-ai-free-question-token-budget-truncation.md)

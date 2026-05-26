@@ -18,6 +18,7 @@ class AiReviewProviderSelectorTest {
                 null,
                 null,
                 null,
+                null,
                 false,
                 45
         );
