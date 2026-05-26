@@ -8,8 +8,10 @@ class LightweightEvaluatorTest(unittest.TestCase):
     def test_loads_bundled_dataset(self):
         rows = load_dataset()
 
-        self.assertGreaterEqual(len(rows), 50)
+        self.assertGreaterEqual(len(rows), 200)
         self.assertIn("question", rows[0])
+        ids = [row["id"] for row in rows]
+        self.assertEqual(len(ids), len(set(ids)))
 
     def test_evaluator_reports_retrieval_metrics(self):
         report = evaluate_dataset(load_dataset())
@@ -25,6 +27,10 @@ class LightweightEvaluatorTest(unittest.TestCase):
         self.assertIn("fallback_expectation_accuracy", report)
         self.assertIn("candidate_capture_accuracy", report)
         self.assertIn("observability_event_rate", report)
+        self.assertIn("semantic_grounding_pass_rate", report)
+        self.assertIn("contradiction_absent_rate", report)
+        self.assertIn("hallucination_cache_ban_rate", report)
+        self.assertIn("answer_grounding_rate", report)
         self.assertGreaterEqual(report["rag_policy_accuracy"], 0.8)
 
     def test_evaluator_uses_workflow_response_for_route_keywords_quality_flags_and_ops_signals(self):
@@ -66,7 +72,7 @@ class LightweightEvaluatorTest(unittest.TestCase):
             return SimpleNamespace(
                 route="rag_generation",
                 answer="forbidden answer",
-                quality_flags=["missing_topic"],
+                quality_flags=["missing_topic", "evidence_missing", "hallucination_suspected"],
                 fallback_used=True,
                 candidate_id="",
                 observability_events=[],
@@ -82,6 +88,10 @@ class LightweightEvaluatorTest(unittest.TestCase):
         self.assertEqual(report["fallback_expectation_accuracy"], 0.5)
         self.assertEqual(report["candidate_capture_accuracy"], 0.5)
         self.assertEqual(report["observability_event_rate"], 0.5)
+        self.assertEqual(report["semantic_grounding_pass_rate"], 0.5)
+        self.assertEqual(report["contradiction_absent_rate"], 1.0)
+        self.assertEqual(report["hallucination_cache_ban_rate"], 1.0)
+        self.assertEqual(report["answer_grounding_rate"], 0.5)
 
 
 if __name__ == "__main__":

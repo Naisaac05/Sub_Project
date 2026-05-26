@@ -14,6 +14,12 @@ if str(ROOT) not in sys.path:
 
 from app.rag.documents import CONCEPT_ROOT, load_concept_cards
 from app.rag.documents import ConceptCard
+from app.knowledge.index_manifest import (
+    build_manifest_payload,
+    read_manifest_entries,
+    read_manifest_payload,
+    snapshot_previous_manifest,
+)
 
 
 DEFAULT_MANIFEST = ROOT / "app" / "vectorstore" / "index_manifest.json"
@@ -32,7 +38,8 @@ def reindex_changed_knowledge(
     concept_root: Path = CONCEPT_ROOT,
     manifest_path: Path = DEFAULT_MANIFEST,
 ) -> dict[str, object]:
-    previous = _read_manifest(manifest_path)
+    previous = read_manifest_entries(manifest_path)
+    previous_payload = read_manifest_payload(manifest_path)
     next_entries: dict[str, dict[str, str]] = {}
     changed: list[str] = []
     unchanged: list[str] = []
@@ -55,16 +62,13 @@ def reindex_changed_knowledge(
 
     try:
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
+        previous_version = snapshot_previous_manifest(manifest_path)
+        previous_versions = list(previous_payload.get("previous_versions", []))
+        if previous_version is not None:
+            previous_versions.append(previous_version)
+        manifest = build_manifest_payload(next_entries, previous_versions=previous_versions)
         manifest_path.write_text(
-            json.dumps(
-                {
-                    "version": 1,
-                    "entries": next_entries,
-                },
-                ensure_ascii=False,
-                indent=2,
-                sort_keys=True,
-            )
+            json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True)
             + "\n",
             encoding="utf-8",
         )
@@ -79,6 +83,9 @@ def reindex_changed_knowledge(
     return {
         "status": "passed",
         "manifest": str(manifest_path.relative_to(ROOT)),
+        "knowledge_index_version": manifest["knowledge_index_version"],
+        "manifest_hash": manifest["manifest_hash"],
+        "cache_namespace_version": manifest["cache_namespace_version"],
         "changed": changed,
         "unchanged": unchanged,
     }
@@ -205,19 +212,6 @@ def _run_smoke_query(collection, deps: ChromaIndexDependencies, query: str) -> d
         "top_id": ids[0],
         "top_concept_id": metadata.get("concept_id", ids[0]),
     }
-
-
-def _read_manifest(path: Path) -> dict[str, dict[str, str]]:
-    if not path.exists():
-        return {}
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return {}
-    entries = payload.get("entries", {})
-    if not isinstance(entries, dict):
-        return {}
-    return {str(key): value for key, value in entries.items() if isinstance(value, dict)}
 
 
 def _hash(text: str) -> str:

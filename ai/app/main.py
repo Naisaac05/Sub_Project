@@ -7,6 +7,7 @@ import json
 
 from app.congestion import AiRequestBusyError, ai_request_admission
 from app.observability import CORRELATION_ID_HEADER, correlation_id_from, emit_observability_events
+from app.production_config import validate_production_config
 from app.schemas import AiGenerateResponse, normalize_ai_request
 from app.security import verify_service_token
 from app.ollama.client import warm_up_ollama
@@ -19,6 +20,7 @@ app = FastAPI(title="DevMatch AI Service")
 
 @app.on_event("startup")
 def startup() -> None:
+    validate_production_config()
     warm_up_ollama()
 
 

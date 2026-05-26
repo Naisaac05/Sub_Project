@@ -18,13 +18,23 @@ class PromotionWorkflowTest(unittest.TestCase):
             promote=lambda: calls.append("promote") or {"written": ["card.md"]},
             lint=lambda: calls.append("lint") or [],
             reindex=lambda: calls.append("reindex") or {"changed": ["card.md"], "unchanged": []},
-            evaluate=lambda: calls.append("evaluate") or {"retrieval_hit_rate": 1.0},
+            evaluate=lambda: calls.append("evaluate") or {
+                "retrieval_hit_rate": 1.0,
+                "answer_grounding_rate": 1.0,
+            },
+            evaluate_before=lambda: calls.append("evaluate_before") or {
+                "retrieval_hit_rate": 0.8,
+                "answer_grounding_rate": 0.9,
+            },
         )
 
-        self.assertEqual(calls, ["promote", "lint", "reindex", "evaluate"])
+        self.assertEqual(calls, ["evaluate_before", "promote", "lint", "reindex", "evaluate"])
         self.assertEqual(report["status"], "passed")
         self.assertEqual(report["written"], ["card.md"])
         self.assertEqual(report["reindex"]["changed"], ["card.md"])
+        self.assertEqual(report["before_evaluation"]["retrieval_hit_rate"], 0.8)
+        self.assertEqual(report["evaluation_delta"]["retrieval_hit_rate"], 0.2)
+        self.assertEqual(report["evaluation_delta"]["answer_grounding_rate"], 0.1)
 
     def test_stops_when_lint_fails(self):
         report = run_promotion_workflow(

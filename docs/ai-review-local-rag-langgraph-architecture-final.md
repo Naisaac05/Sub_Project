@@ -1,12 +1,14 @@
 # AI Review Local RAG + LangGraph Architecture — 최종본 (구현용)
 
 작성일: 2026-05-16
-상태: 구현 착수 가능 (review 반영 완료)
+상태: 구현 반영 중 (2026-05-22 코드 상태 보정)
 선행 문서:
 - 초안: [ai-review-local-rag-langgraph-architecture.md](ai-review-local-rag-langgraph-architecture.md)
 - 검토 의견: [ai-review-rag-langgraph-architecture-review.md](ai-review-rag-langgraph-architecture-review.md)
 
 이 문서는 위 두 문서를 통합하고 검토 의견의 결함(필수/권장 항목)을 반영한 최종 구현용 사양이다. 구현 순서대로 따라가면 동작하도록 정합성을 맞추는 것이 목표다.
+
+> 2026-05-22 코드 대조 메모: 현재 코드는 Fast-Path, 캐시, Single Flight, 혼잡 제어, fallback chain, 구조화 로그 기반 관측성, feature flag 기반 SSE 스트리밍 경로가 구현되어 있다. 다만 Prometheus/Grafana export와 정식 Circuit Breaker 상태 전이(Open/Half-Open/Closed)는 아직 코드에 없다. 스트리밍 경로도 인프라는 구현되어 있으나 Spring `AiReviewStreamingService`의 Python 요청 컨텍스트가 일부 stub 값에 의존하므로, 기존 non-streaming workflow와 완전히 동일한 의미 컨텍스트를 보장하려면 추가 보강이 필요하다.
 
 ---
 
@@ -71,13 +73,14 @@ Frontend
 → Spring Boot
    - AI 리뷰 세션/메시지 관리
    - FastAPI AI 서버 호출
-   - timeout/retry/circuit breaker
+   - timeout/retry/backoff 기반 graceful fallback
+   - feature flag 기반 SSE 스트리밍 프록시
    - 후보 승인 API
-   - 로그, tracing, metrics 저장
+   - correlation id 전파와 구조화 로그 기반 metric event 출력
 → FastAPI AI Service
    - LangChain RAG 검색
    - LangGraph workflow 실행
-   - Ollama 로컬 모델 호출
+   - Ollama 로컬 모델 호출(non-streaming + streaming)
    - Reranker 인-프로세스 실행
    - 응답 검증, fallback, 후보 생성
 → Local Knowledge Base
@@ -100,6 +103,7 @@ Ollama     = 로컬 생성 모델 (small + fallback)
 Reranker   = FastAPI 인-프로세스 (HuggingFaceCrossEncoder/flashrank)
 Evaluation = 변경 후 품질 회귀 방지
 Human approval = RAG 지식 품질 최종 게이트
+Observability = X-Correlation-ID + observability_events + metric.ai_review.* 구조화 로그
 ```
 
 ### Mermaid workflow (승인 흐름 비동기 표기)
@@ -592,13 +596,14 @@ candidate_id
 
 ```text
 HTTP timeout (20s)
-retry (1회, exponential backoff)
-Resilience4j circuit breaker
+retry (최대 3회, exponential backoff + full jitter)
+retry exhaustion 시 Optional.empty() 반환 후 graceful fallback
 correlation_id 전달
 FastAPI /health
-FastAPI /models
 Ollama warm-up (서버 기동 시 small model 호출 1회)
 ```
+
+현재 코드에는 Resilience4j 기반 Circuit Breaker 상태 전이(Open/Half-Open/Closed)가 없다. 포트폴리오나 면접 설명에서는 "Circuit Breaker"보다 "Retry with Exponential Backoff + Graceful Fallback"으로 표현하는 것이 정확하다.
 
 ### Multi-Process & Concurrency
 
@@ -802,7 +807,9 @@ retrieval miss rate
 Ollama error rate
 ```
 
-### Grafana 패널
+현재 구현은 `AiReviewMetricSink`의 `metric.ai_review.*` 구조화 로그와 Python 응답의 `observability_events`가 중심이다. Micrometer Counter, Prometheus exporter, Grafana dashboard wiring은 아직 코드에 연결되어 있지 않다.
+
+### 향후 Grafana 패널
 
 ```text
 p50/p95 latency by endpoint
@@ -848,7 +855,7 @@ FastAPI 기동 시:
 
 ```text
 Logging: structlog
-Metrics: Prometheus + Grafana
+Metrics: 현재 구조화 로그, 후속 Prometheus + Grafana
 Tracing: Langfuse 또는 LangSmith
 App tracing: OpenTelemetry
 ```

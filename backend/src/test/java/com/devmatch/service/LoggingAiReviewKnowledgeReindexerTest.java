@@ -3,6 +3,8 @@ package com.devmatch.service;
 import com.devmatch.entity.AiReviewCandidate;
 import com.devmatch.entity.AiReviewCandidateSource;
 import com.devmatch.entity.AiReviewCandidateStatus;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -13,11 +15,16 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class LoggingAiReviewKnowledgeReindexerTest {
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final TypeReference<Map<String, Object>> MAP_TYPE = new TypeReference<>() {
+    };
 
     @TempDir
     Path tempDir;
@@ -89,6 +96,40 @@ class LoggingAiReviewKnowledgeReindexerTest {
         assertThat(manifest).contains("\"concept_id\" : \"auto-review-pagination\"");
         assertThat(manifest).contains("\"content_hash\"");
         assertThat(manifest).contains("\"metadata_hash\"");
+    }
+
+    @Test
+    void reindexChanged_writesImmutableManifestFieldsAndSnapshotsPreviousManifest() throws Exception {
+        Path conceptRoot = tempDir.resolve("concepts/generated");
+        Path manifestPath = tempDir.resolve("vectorstore/index_manifest.json");
+        Files.createDirectories(manifestPath.getParent());
+        Files.writeString(manifestPath, """
+                {
+                  "version": 1,
+                  "entries": {
+                    "spring-n-plus-one": {
+                      "concept_id": "spring-n-plus-one",
+                      "path": "app/knowledge/concepts/spring/n-plus-one.md",
+                      "content_hash": "old-content",
+                      "metadata_hash": "old-metadata"
+                    }
+                  }
+                }
+                """);
+        LoggingAiReviewKnowledgeReindexer reindexer =
+                new LoggingAiReviewKnowledgeReindexer(conceptRoot, manifestPath);
+
+        reindexer.reindexChanged(approvedCandidate());
+
+        Map<String, Object> manifest = OBJECT_MAPPER.readValue(manifestPath.toFile(), MAP_TYPE);
+        assertThat(manifest).containsEntry("schema_version", 2);
+        assertThat((String) manifest.get("manifest_hash")).isNotBlank();
+        assertThat((String) manifest.get("knowledge_index_version")).startsWith("ki-");
+        assertThat(manifest.get("cache_namespace_version")).isEqualTo(manifest.get("knowledge_index_version"));
+        assertThat(manifest).containsKey("previous_versions");
+
+        Path snapshotDir = manifestPath.getParent().resolve("manifests");
+        assertThat(snapshotDir).isDirectoryContaining(path -> path.getFileName().toString().endsWith(".json"));
     }
 
     @Test

@@ -8,7 +8,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ai_review_messages")
+@Table(
+        name = "ai_review_messages",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_ai_review_stream_request_terminal", columnNames = "stream_request_id")
+        }
+)
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -59,6 +64,13 @@ public class AiReviewMessage {
 
     @Column(length = 80)
     private String aiCandidateId;
+
+    @Column(name = "stream_request_id", length = 80)
+    private String streamRequestId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "stream_terminal_status", length = 20)
+    private AiReviewStreamTerminalStatus streamTerminalStatus;
 
     private Integer aiLatencyMs;
 

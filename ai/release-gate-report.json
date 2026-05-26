@@ -1,0 +1,174 @@
+{
+  "generated_at": "2026-05-26T16:49:53.961510+00:00",
+  "decision": "GO",
+  "failed_required_checks": 0,
+  "failed_optional_checks": 0,
+  "checks": [
+    {
+      "name": "python_workflow",
+      "description": "Answer cache, workflow, and degraded-mode smoke tests.",
+      "required": true,
+      "kind": "command",
+      "cwd": "C:\\Users\\User\\Desktop\\Sub_Project\\ai",
+      "command": [
+        "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\.venv\\Scripts\\python.exe",
+        "-m",
+        "unittest",
+        "tests.test_answer_cache",
+        "tests.test_workflow_runner",
+        "tests.test_workflow_degraded_modes"
+      ],
+      "return_code": 0,
+      "duration_ms": 2843,
+      "passed": true,
+      "failure_reason": "",
+      "stdout": "",
+      "stderr": "......................................................\n----------------------------------------------------------------------\nRan 54 tests in 1.875s\n\nOK\n",
+      "parsed": null
+    },
+    {
+      "name": "streaming_cancellation",
+      "description": "FastAPI streaming and cancellation smoke tests.",
+      "required": true,
+      "kind": "command",
+      "cwd": "C:\\Users\\User\\Desktop\\Sub_Project\\ai",
+      "command": [
+        "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\.venv\\Scripts\\python.exe",
+        "-m",
+        "unittest",
+        "tests.test_stream",
+        "tests.test_stream_cancellation"
+      ],
+      "return_code": 0,
+      "duration_ms": 1970,
+      "passed": true,
+      "failure_reason": "",
+      "stdout": "",
+      "stderr": "...Executing <Task finished name='Task-22' coro=<StreamingWorkflowTest.test_streaming_generation_exception_falls_back() done, defined at C:\\Users\\User\\Desktop\\Sub_Project\\ai\\tests\\test_stream.py:48> result=None created at C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\asyncio\\runners.py:100> took 0.110 seconds\n..C:\\Users\\User\\Desktop\\Sub_Project\\ai\\.venv\\Lib\\site-packages\\websockets\\legacy\\__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions\n  warnings.warn(  # deprecated in 14.0 - 2024-11-09\nC:\\Users\\User\\Desktop\\Sub_Project\\ai\\.venv\\Lib\\site-packages\\uvicorn\\protocols\\websockets\\websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n  from websockets.server import WebSocketServerProtocol\n.\n----------------------------------------------------------------------\nRan 6 tests in 0.611s\n\nOK\n",
+      "parsed": null
+    },
+    {
+      "name": "gateway_model_pool",
+      "description": "Ollama gateway/model-pool routing and capacity smoke tests.",
+      "required": true,
+      "kind": "command",
+      "cwd": "C:\\Users\\User\\Desktop\\Sub_Project\\ai",
+      "command": [
+        "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\.venv\\Scripts\\python.exe",
+        "-m",
+        "unittest",
+        "tests.test_ollama_gateway",
+        "tests.test_ollama_client"
+      ],
+      "return_code": 0,
+      "duration_ms": 906,
+      "passed": true,
+      "failure_reason": "",
+      "stdout": "",
+      "stderr": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.166s\n\nOK\n",
+      "parsed": null
+    },
+    {
+      "name": "semantic_and_promotion_eval",
+      "description": "Semantic evaluation and promotion workflow smoke tests.",
+      "required": true,
+      "kind": "command",
+      "cwd": "C:\\Users\\User\\Desktop\\Sub_Project\\ai",
+      "command": [
+        "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\.venv\\Scripts\\python.exe",
+        "-m",
+        "unittest",
+        "tests.test_semantic_evaluation",
+        "tests.test_lightweight_evaluator",
+        "tests.test_promotion_workflow"
+      ],
+      "return_code": 0,
+      "duration_ms": 2149,
+      "passed": true,
+      "failure_reason": "",
+      "stdout": "",
+      "stderr": "..........\n----------------------------------------------------------------------\nRan 10 tests in 1.314s\n\nOK\n",
+      "parsed": null
+    },
+    {
+      "name": "rag_evaluator",
+      "description": "Deterministic 200-row RAG evaluator gate.",
+      "required": true,
+      "kind": "rag_eval",
+      "cwd": "C:\\Users\\User\\Desktop\\Sub_Project\\ai",
+      "command": [
+        "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\.venv\\Scripts\\python.exe",
+        "scripts/evaluate_lightweight_rag.py"
+      ],
+      "return_code": 0,
+      "duration_ms": 2475,
+      "passed": true,
+      "failure_reason": "",
+      "stdout": "{\n  \"total\": 200,\n  \"retrieval_hit_rate\": 0.9917,\n  \"expected_concept_recall\": 0.9917,\n  \"intent_accuracy\": 0.625,\n  \"rag_policy_accuracy\": 0.9779,\n  \"stale_context_absent_rate\": 1.0,\n  \"route_accuracy\": 1.0,\n  \"quality_flag_absent_rate\": 1.0,\n  \"answer_contains_required_keywords\": 0.75,\n  \"forbidden_claims_absent\": 1.0,\n  \"fallback_expectation_accuracy\": 1.0,\n  \"candidate_capture_accuracy\": 1.0,\n  \"observability_event_rate\": 1.0,\n  \"semantic_grounding_pass_rate\": 1.0,\n  \"contradiction_absent_rate\": 1.0,\n  \"hallucination_cache_ban_rate\": 1.0,\n  \"answer_grounding_rate\": 0.8125,\n  \"workflow_context_accuracy\": 1.0,\n  \"context_rows\": 11,\n  \"workflow_rows\": 16,\n  \"generation_mode\": \"deterministic\"\n}\n",
+      "stderr": "",
+      "parsed": {
+        "total": 200,
+        "retrieval_hit_rate": 0.9917,
+        "expected_concept_recall": 0.9917,
+        "intent_accuracy": 0.625,
+        "rag_policy_accuracy": 0.9779,
+        "stale_context_absent_rate": 1.0,
+        "route_accuracy": 1.0,
+        "quality_flag_absent_rate": 1.0,
+        "answer_contains_required_keywords": 0.75,
+        "forbidden_claims_absent": 1.0,
+        "fallback_expectation_accuracy": 1.0,
+        "candidate_capture_accuracy": 1.0,
+        "observability_event_rate": 1.0,
+        "semantic_grounding_pass_rate": 1.0,
+        "contradiction_absent_rate": 1.0,
+        "hallucination_cache_ban_rate": 1.0,
+        "answer_grounding_rate": 0.8125,
+        "workflow_context_accuracy": 1.0,
+        "context_rows": 11,
+        "workflow_rows": 16,
+        "generation_mode": "deterministic"
+      }
+    },
+    {
+      "name": "python_production_config",
+      "description": "Python production config validation smoke test.",
+      "required": true,
+      "kind": "command",
+      "cwd": "C:\\Users\\User\\Desktop\\Sub_Project\\ai",
+      "command": [
+        "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\.venv\\Scripts\\python.exe",
+        "-m",
+        "unittest",
+        "tests.test_production_config"
+      ],
+      "return_code": 0,
+      "duration_ms": 315,
+      "passed": true,
+      "failure_reason": "",
+      "stdout": "",
+      "stderr": "....\n----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n",
+      "parsed": null
+    },
+    {
+      "name": "spring_production_config",
+      "description": "Spring production config validation smoke test.",
+      "required": true,
+      "kind": "command",
+      "cwd": "C:\\Users\\User\\Desktop\\Sub_Project\\backend",
+      "command": [
+        "C:\\Users\\User\\Desktop\\Sub_Project\\backend\\gradlew.bat",
+        "test",
+        "--tests",
+        "*AiReviewProductionConfigValidatorTest"
+      ],
+      "return_code": 0,
+      "duration_ms": 7082,
+      "passed": true,
+      "failure_reason": "",
+      "stdout": "> Task :compileJava UP-TO-DATE\n> Task :processResources UP-TO-DATE\n> Task :classes UP-TO-DATE\n> Task :compileTestJava UP-TO-DATE\n> Task :processTestResources NO-SOURCE\n> Task :testClasses UP-TO-DATE\n> Task :test\n\nBUILD SUCCESSFUL in 6s\n4 actionable tasks: 1 executed, 3 up-to-date\n",
+      "stderr": "",
+      "parsed": null
+    }
+  ]
+}

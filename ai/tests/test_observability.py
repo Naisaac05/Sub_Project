@@ -54,6 +54,37 @@ class ObservabilityTest(unittest.TestCase):
         self.assertTrue(event["llm_call_avoided"])
         self.assertEqual(event["model_used"], "qwen3:1.7b:cache")
 
+    def test_emit_observability_events_marks_lightweight_only_miss_as_llm_avoided(self):
+        logger = CapturingLogger()
+        response = AiGenerateResponse(
+            answer="fallback",
+            fallback_used=True,
+            route="lightweight_only_miss",
+            model_used="template",
+            observability_events=[{"event": "ai_review.workflow_completed"}],
+        )
+
+        emit_observability_events(response, "corr-lightweight", logger=logger)
+
+        event = json.loads(logger.messages[0])
+        self.assertTrue(event["llm_call_avoided"])
+
+    def test_emit_observability_events_marks_candidate_capture_kill_switch_and_failure(self):
+        logger = CapturingLogger()
+        response = AiGenerateResponse(
+            answer="ok",
+            fallback_used=False,
+            route="generation",
+            quality_flags=["candidate_capture_disabled", "candidate_capture_failed"],
+            observability_events=[{"event": "ai_review.workflow_completed"}],
+        )
+
+        emit_observability_events(response, "corr-3", logger=logger)
+
+        event = json.loads(logger.messages[0])
+        self.assertTrue(event["candidate_capture_disabled"])
+        self.assertTrue(event["candidate_capture_failed"])
+
 
 if __name__ == "__main__":
     unittest.main()

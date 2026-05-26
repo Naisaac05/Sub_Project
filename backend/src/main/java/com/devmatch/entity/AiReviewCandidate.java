@@ -55,6 +55,10 @@ public class AiReviewCandidate {
     @Column(nullable = false, length = 20)
     private AiReviewCandidateStatus status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "workflow_phase", length = 30)
+    private AiReviewCandidateWorkflowPhase workflowPhase;
+
     @Column(columnDefinition = "TEXT")
     private String definition;
 
@@ -100,6 +104,7 @@ public class AiReviewCandidate {
 
     public void approve(String definition, String reviewer, LocalDateTime reviewedAt, LocalDateTime retentionUntil) {
         this.status = AiReviewCandidateStatus.APPROVED;
+        this.workflowPhase = AiReviewCandidateWorkflowPhase.APPROVED;
         this.definition = definition;
         this.reviewer = reviewer;
         this.reviewedAt = reviewedAt;
@@ -115,6 +120,7 @@ public class AiReviewCandidate {
 
     public void reject(String rejectedReason, String reviewer, LocalDateTime reviewedAt, LocalDateTime retentionUntil) {
         this.status = AiReviewCandidateStatus.REJECTED;
+        this.workflowPhase = AiReviewCandidateWorkflowPhase.REJECTED;
         this.rejectedReason = rejectedReason;
         this.reviewer = reviewer;
         this.reviewedAt = reviewedAt;
@@ -123,6 +129,7 @@ public class AiReviewCandidate {
 
     public void merge(Long mergedIntoId, String reason, String reviewer, LocalDateTime reviewedAt, LocalDateTime retentionUntil) {
         this.status = AiReviewCandidateStatus.MERGED;
+        this.workflowPhase = AiReviewCandidateWorkflowPhase.MERGED;
         this.mergedIntoId = mergedIntoId;
         this.rejectedReason = reason;
         this.reviewer = reviewer;
@@ -135,9 +142,17 @@ public class AiReviewCandidate {
             return false;
         }
         this.definitionDraft = definitionDraft;
+        this.workflowPhase = AiReviewCandidateWorkflowPhase.DRAFTED;
         this.route = route;
         this.confidenceScore = confidenceScore;
         this.needsReviewReason = needsReviewReason;
         return true;
+    }
+
+    public void startReview(String reviewer, LocalDateTime reviewedAt, LocalDateTime retentionUntil) {
+        this.workflowPhase = AiReviewCandidateWorkflowPhase.HUMAN_REVIEW;
+        this.reviewer = reviewer;
+        this.reviewedAt = reviewedAt;
+        this.retentionUntil = retentionUntil;
     }
 }

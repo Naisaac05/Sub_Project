@@ -2,6 +2,7 @@ import time
 from app.ollama.client import call_ollama
 from app.schemas import AiGenerateRequest, AiGenerateResponse
 from app.workflow.answer_cache import cache_key_for, put_cached_answer, run_single_flight, get_cached_answer
+from app.workflow.degraded import degraded_state_for, lightweight_only_enabled, lightweight_only_miss_state
 from app.workflow.graph import LANGGRAPH_AVAILABLE, candidate_save_node, run_state_graph
 from app.workflow.nodes import (
     Generator,
@@ -20,6 +21,7 @@ from app.workflow.nodes import (
 )
 from app.workflow.state import ReviewWorkflowState
 from app.workflow.lightweight_answers import LIGHTWEIGHT_MODEL_NAME, resolve_lightweight_answer
+from app.workflow.semantic_gate import semantic_evaluate_node, should_store_answer_cache
 from app.prompts import build_prompt, prompt_version_for_mode
 from app.validation.text import compact_answer, korean_fallback
 from app.ollama.client import FALLBACK_MODEL
@@ -52,6 +54,11 @@ def run_review_workflow(
     generator: Generator = call_ollama,
 ) -> AiGenerateResponse:
     started = time.perf_counter()
+    degraded_state = degraded_state_for(mode, request)
+    if degraded_state is not None:
+        latency_ms = int((time.perf_counter() - started) * 1000)
+        return _build_response_from_state(degraded_state, latency_ms)
+
     cache_key = cache_key_for(mode, request)
 
     def run_workflow() -> ReviewWorkflowState:
@@ -69,6 +76,14 @@ async def run_review_workflow_stream(
     request: AiGenerateRequest,
     generator=None,
 ):
+    degraded_state = degraded_state_for(mode, request)
+    if degraded_state is not None:
+        yield {"type": "start"}
+        yield {"type": "chunk", "chunk": degraded_state.answer}
+        response = _build_response_from_state(degraded_state, 0)
+        yield {"type": "done", "response": response}
+        return
+
     state = ReviewWorkflowState(mode=mode, request=request)
     state = retrieve_context_node(state)
     state = rule_evaluate_node(state)
@@ -98,6 +113,14 @@ async def run_review_workflow_stream(
         state = fallback_answer_node(state)
         state = candidate_save_node(state)
 
+        response = _build_response_from_state(state, 0)
+        yield {"type": "done", "response": response}
+        return
+
+    if lightweight_only_enabled():
+        state = lightweight_only_miss_state(state.mode, state.request)
+        yield {"type": "start"}
+        yield {"type": "chunk", "chunk": state.answer}
         response = _build_response_from_state(state, 0)
         yield {"type": "done", "response": response}
         return
@@ -197,7 +220,8 @@ async def run_review_workflow_stream(
     state = validate_answer_node(state)
     state = confidence_gate_node(state)
     state = fallback_answer_node(state)
-    if not state.fallback_used and state.model_used not in {"template", "lightweight-template"}:
+    state = semantic_evaluate_node(state)
+    if should_store_answer_cache(state):
         put_cached_answer(cache_key_for(state.mode, state.request), state.answer)
     state = candidate_save_node(state)
 
@@ -217,10 +241,13 @@ def _run_sequential_workflow(
     state = retrieve_context_node(state)
     state = rule_evaluate_node(state)
     state = generate_answer_node(state, generator=generator)
+    if state.route == "lightweight_only_miss":
+        return state
     state = validate_answer_node(state)
     state = confidence_gate_node(state)
     state = fallback_answer_node(state)
-    if not state.fallback_used and state.model_used not in {"template", "lightweight-template"}:
+    state = semantic_evaluate_node(state)
+    if should_store_answer_cache(state):
         put_cached_answer(cache_key_for(mode, request), state.answer)
     state = candidate_save_node(state)
     return state
