@@ -43,6 +43,16 @@ spring:
 server:
   port: 8080
 
+# ===== Observability =====
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 # ===== JWT =====
 jwt:
   secret: ${JWT_SECRET:devmatch_super_secret_jwt_key_that_is_long_enough}
@@ -95,6 +105,8 @@ app:
       max-concurrent-generations: ${OLLAMA_MAX_CONCURRENT_GENERATIONS:1}
     evaluation:
       semantic-enabled: ${AI_REVIEW_SEMANTIC_EVALUATION_ENABLED:false}
+    degraded:
+      streaming-off: ${AI_REVIEW_STREAMING_OFF:false}
     rule-based:
       enabled: ${AI_REVIEW_RULE_BASED_ENABLED:true}
     limits:

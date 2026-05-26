@@ -1,12 +1,14 @@
 package com.devmatch.service;
 
 import com.devmatch.dto.aireview.candidate.AiReviewCandidateResponse;
+import com.devmatch.dto.aireview.candidate.AiReviewCandidateCaptureRequest;
 import com.devmatch.dto.aireview.candidate.AiReviewCandidateReviewV2Request;
 import com.devmatch.entity.AiReviewCandidate;
 import com.devmatch.entity.AiReviewCandidateAudit;
 import com.devmatch.entity.AiReviewCandidateReviewAction;
 import com.devmatch.entity.AiReviewCandidateSource;
 import com.devmatch.entity.AiReviewCandidateStatus;
+import com.devmatch.entity.AiReviewCandidateWorkflowPhase;
 import com.devmatch.repository.AiReviewCandidateAuditRepository;
 import com.devmatch.repository.AiReviewCandidateRepository;
 import com.devmatch.service.ai.AiReviewMetricSink;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -31,6 +34,116 @@ class AiReviewCandidateApprovalV2ServiceTest {
     private final AiReviewKnowledgeReindexer knowledgeReindexer = mock(AiReviewKnowledgeReindexer.class);
     private final AiReviewCandidateApprovalV2Service service =
             new AiReviewCandidateApprovalV2Service(candidateRepository, auditRepository, jsonlService, metricSink, knowledgeReindexer);
+
+    @Test
+    void captureCandidate_savesPendingAutoCandidate() {
+        when(candidateRepository.existsByExternalCandidateId("auto-rest-api")).thenReturn(false);
+        when(candidateRepository.save(any(AiReviewCandidate.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        var response = service.captureCandidate(new AiReviewCandidateCaptureRequest(
+                "auto-rest-api",
+                "REST API",
+                "auto-review",
+                "REST API는 URL과 HTTP 메서드로 자원을 다루는 API 설계 방식입니다.",
+                "REST API가 뭐야?",
+                "REST API",
+                "static_fast_path",
+                0.8,
+                "static_answer_unapproved"
+        ));
+
+        assertThat(response.externalCandidateId()).isEqualTo("auto-rest-api");
+        assertThat(response.term()).isEqualTo("REST API");
+        assertThat(response.source()).isEqualTo(AiReviewCandidateSource.AUTO);
+        assertThat(response.status()).isEqualTo(AiReviewCandidateStatus.PENDING);
+        assertThat(response.workflowPhase()).isEqualTo(AiReviewCandidateWorkflowPhase.DRAFTED);
+        assertThat(response.definitionDraft()).contains("HTTP");
+        verify(auditRepository).save(any(AiReviewCandidateAudit.class));
+        verify(metricSink).candidateBacklog("capture", 0L);
+    }
+
+    @Test
+    void captureCandidate_withoutDraftStartsCapturedPhase() {
+        when(candidateRepository.existsByExternalCandidateId("auto-empty")).thenReturn(false);
+        when(candidateRepository.save(any(AiReviewCandidate.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        var response = service.captureCandidate(new AiReviewCandidateCaptureRequest(
+                "auto-empty",
+                "unknown topic",
+                "auto-review",
+                "",
+                "unknown topic?",
+                "unknown topic",
+                "fallback_template",
+                0.4,
+                "fallback_used"
+        ));
+
+        assertThat(response.status()).isEqualTo(AiReviewCandidateStatus.PENDING);
+        assertThat(response.workflowPhase()).isEqualTo(AiReviewCandidateWorkflowPhase.CAPTURED);
+    }
+
+    @Test
+    void captureCandidate_updatesBlankDraftForDuplicateExternalCandidate() {
+        AiReviewCandidate existing = AiReviewCandidate.builder()
+                .externalCandidateId("auto-rest-api")
+                .term("REST API")
+                .category("auto-review")
+                .source(AiReviewCandidateSource.AUTO)
+                .status(AiReviewCandidateStatus.PENDING)
+                .definition("")
+                .definitionDraft("")
+                .build();
+        when(candidateRepository.existsByExternalCandidateId("auto-rest-api")).thenReturn(true);
+        when(candidateRepository.findByExternalCandidateId("auto-rest-api")).thenReturn(Optional.of(existing));
+
+        var response = service.captureCandidate(new AiReviewCandidateCaptureRequest(
+                "auto-rest-api",
+                "REST API",
+                "auto-review",
+                "REST API draft",
+                "REST API가 뭐야?",
+                "REST API",
+                "generation",
+                0.5,
+                "no_match"
+        ));
+
+        assertThat(response.definitionDraft()).isEqualTo("REST API draft");
+        assertThat(response.workflowPhase()).isEqualTo(AiReviewCandidateWorkflowPhase.DRAFTED);
+        assertThat(existing.getRoute()).isEqualTo("generation");
+        assertThat(existing.getNeedsReviewReason()).isEqualTo("no_match");
+        verify(candidateRepository).save(existing);
+        verify(auditRepository).save(any(AiReviewCandidateAudit.class));
+        verify(candidateRepository, never()).save(argThat(candidate -> candidate != existing));
+    }
+
+    @Test
+    void startReview_movesPendingCandidateToHumanReviewAndRecordsReviewer() {
+        AiReviewCandidate candidate = candidate("auto-human-review", "pagination");
+        when(candidateRepository.findById(4L)).thenReturn(Optional.of(candidate));
+        when(candidateRepository.save(any(AiReviewCandidate.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        var response = service.reviewCandidate(
+                4L,
+                new AiReviewCandidateReviewV2Request(
+                        AiReviewCandidateReviewAction.START_REVIEW,
+                        null,
+                        null,
+                        "Needs evidence check",
+                        null,
+                        "reviewer-1",
+                        7
+                )
+        );
+
+        assertThat(response.status()).isEqualTo(AiReviewCandidateStatus.PENDING);
+        assertThat(response.workflowPhase()).isEqualTo(AiReviewCandidateWorkflowPhase.HUMAN_REVIEW);
+        assertThat(response.reviewer()).isEqualTo("reviewer-1");
+        assertThat(response.reviewedAt()).isNotNull();
+        verify(auditRepository).save(any(AiReviewCandidateAudit.class));
+        verify(knowledgeReindexer, never()).reindexChanged(any(AiReviewCandidate.class));
+    }
 
     @Test
     void editAndApprove_savesReviewerEditedAnswerAndAudit() {
@@ -52,6 +165,7 @@ class AiReviewCandidateApprovalV2ServiceTest {
         );
 
         assertThat(response.status()).isEqualTo(AiReviewCandidateStatus.APPROVED);
+        assertThat(response.workflowPhase()).isEqualTo(AiReviewCandidateWorkflowPhase.APPROVED);
         assertThat(response.definition()).isEqualTo("Pagination approved by reviewer.");
         assertThat(response.reviewerEditedAnswer()).isEqualTo("Pagination approved by reviewer.");
         assertThat(response.retentionUntil()).isNotNull();
@@ -79,6 +193,7 @@ class AiReviewCandidateApprovalV2ServiceTest {
         );
 
         assertThat(response.status()).isEqualTo(AiReviewCandidateStatus.REJECTED);
+        assertThat(response.workflowPhase()).isEqualTo(AiReviewCandidateWorkflowPhase.REJECTED);
         assertThat(response.rejectedReason()).isEqualTo("Too vague");
         assertThat(response.retentionUntil()).isNotNull();
         verify(auditRepository).save(any(AiReviewCandidateAudit.class));
@@ -106,6 +221,7 @@ class AiReviewCandidateApprovalV2ServiceTest {
         );
 
         assertThat(response.status()).isEqualTo(AiReviewCandidateStatus.MERGED);
+        assertThat(response.workflowPhase()).isEqualTo(AiReviewCandidateWorkflowPhase.MERGED);
         assertThat(response.mergedIntoId()).isEqualTo(99L);
         assertThat(response.rejectedReason()).isEqualTo("Duplicate");
         verify(auditRepository).save(any(AiReviewCandidateAudit.class));

@@ -187,7 +187,9 @@ class WorkflowRunnerTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "auto_candidates.jsonl"
             previous = os.environ.get("AI_REVIEW_AUTO_CANDIDATES_PATH")
+            previous_sink = os.environ.get("AI_REVIEW_CANDIDATE_SINK")
             os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = str(path)
+            os.environ["AI_REVIEW_CANDIDATE_SINK"] = "jsonl"
             try:
                 state = ReviewWorkflowState(
                     mode="free-question",
@@ -209,6 +211,10 @@ class WorkflowRunnerTest(unittest.TestCase):
                     os.environ.pop("AI_REVIEW_AUTO_CANDIDATES_PATH", None)
                 else:
                     os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = previous
+                if previous_sink is None:
+                    os.environ.pop("AI_REVIEW_CANDIDATE_SINK", None)
+                else:
+                    os.environ["AI_REVIEW_CANDIDATE_SINK"] = previous_sink
 
             self.assertIsNotNone(result.candidate_id)
             self.assertTrue(path.exists())
@@ -240,8 +246,8 @@ class WorkflowRunnerTest(unittest.TestCase):
                 self.assertEqual(response.route, "static_fast_path")
                 self.assertIn(expected_term, response.answer)
 
-    def test_candidate_save_node_uses_default_queue_when_env_is_missing(self):
-        previous = os.environ.pop("AI_REVIEW_AUTO_CANDIDATES_PATH", None)
+    def test_candidate_save_node_uses_http_sink_by_default(self):
+        previous_sink = os.environ.pop("AI_REVIEW_CANDIDATE_SINK", None)
         state = ReviewWorkflowState(
             mode="free-question",
             request=AiGenerateRequest(user_answer="\uc11c\ud0b7\ube0c\ub808\uc774\ucee4\uac00 \ubb50\uc57c?"),
@@ -256,18 +262,96 @@ class WorkflowRunnerTest(unittest.TestCase):
         )
 
         try:
-            with patch("app.workflow.graph.append_auto_candidate", return_value=True) as append:
+            with patch("app.workflow.graph.save_auto_candidate", create=True, return_value=True) as save, \
+                    patch("app.workflow.graph.append_auto_candidate", return_value=False) as append:
                 result = candidate_save_node(state)
         finally:
-            if previous is not None:
-                os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = previous
+            if previous_sink is not None:
+                os.environ["AI_REVIEW_CANDIDATE_SINK"] = previous_sink
+
+        self.assertIsNotNone(result.candidate_id)
+        save.assert_called_once()
+        append.assert_not_called()
+
+    def test_candidate_save_node_uses_jsonl_only_when_explicitly_configured(self):
+        previous_sink = os.environ.get("AI_REVIEW_CANDIDATE_SINK")
+        os.environ["AI_REVIEW_CANDIDATE_SINK"] = "jsonl"
+        state = ReviewWorkflowState(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="\uc11c\ud0b7\ube0c\ub808\uc774\ucee4\uac00 \ubb50\uc57c?"),
+            route="generation",
+            fallback_used=False,
+            confidence=ConfidenceResult(
+                score=0.5,
+                band="low",
+                should_fallback=True,
+                should_save_candidate=True,
+            ),
+        )
+
+        try:
+            with patch("app.workflow.graph.save_auto_candidate", create=True, return_value=False) as save, \
+                    patch("app.workflow.graph.append_auto_candidate", return_value=True) as append:
+                result = candidate_save_node(state)
+        finally:
+            if previous_sink is None:
+                os.environ.pop("AI_REVIEW_CANDIDATE_SINK", None)
+            else:
+                os.environ["AI_REVIEW_CANDIDATE_SINK"] = previous_sink
 
         self.assertIsNotNone(result.candidate_id)
         append.assert_called_once()
-        queue_path = append.call_args.args[0]
-        self.assertEqual(queue_path.name, "auto_candidates.jsonl")
-        self.assertIn("knowledge", queue_path.parts)
-        self.assertIn("candidates", queue_path.parts)
+        save.assert_not_called()
+
+    def test_candidate_save_node_skips_append_when_no_candidate_capture_is_enabled(self):
+        previous = os.environ.get("AI_REVIEW_NO_CANDIDATE_CAPTURE")
+        os.environ["AI_REVIEW_NO_CANDIDATE_CAPTURE"] = "true"
+        state = ReviewWorkflowState(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="\uc11c\ud0b7\ube0c\ub808\uc774\ucee4\uac00 \ubb50\uc57c?"),
+            route="generation",
+            fallback_used=False,
+            confidence=ConfidenceResult(
+                score=0.5,
+                band="low",
+                should_fallback=True,
+                should_save_candidate=True,
+            ),
+        )
+
+        try:
+            with patch("app.workflow.graph.append_auto_candidate") as append:
+                result = candidate_save_node(state)
+        finally:
+            if previous is None:
+                os.environ.pop("AI_REVIEW_NO_CANDIDATE_CAPTURE", None)
+            else:
+                os.environ["AI_REVIEW_NO_CANDIDATE_CAPTURE"] = previous
+
+        self.assertIsNone(result.candidate_id)
+        self.assertIn("candidate_capture_disabled", result.quality_flags)
+        append.assert_not_called()
+
+    def test_candidate_save_node_isolates_append_failure_from_answer_path(self):
+        state = ReviewWorkflowState(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="\uc11c\ud0b7\ube0c\ub808\uc774\ucee4\uac00 \ubb50\uc57c?"),
+            route="generation",
+            fallback_used=False,
+            confidence=ConfidenceResult(
+                score=0.5,
+                band="low",
+                should_fallback=True,
+                should_save_candidate=True,
+            ),
+        )
+
+        with patch("app.workflow.graph.save_auto_candidate", create=True, side_effect=OSError("sink unavailable")):
+            result = candidate_save_node(state)
+
+        self.assertIs(result, state)
+        self.assertIsNone(result.candidate_id)
+        self.assertIn("candidate_capture_failed", result.quality_flags)
 
     def test_dead_end_and_error_state_nodes_mark_graph_status(self):
         state = ReviewWorkflowState(
@@ -369,10 +453,23 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertNotEqual(response.route, "static_fast_path")
         self.assertIn("AI 프롬프트", response.answer)
 
-        rows = [
-            json.loads(line)
-            for line in self.auto_candidate_path.read_text(encoding="utf-8").splitlines()
-        ]
+        previous_sink = os.environ.get("AI_REVIEW_CANDIDATE_SINK")
+        os.environ["AI_REVIEW_CANDIDATE_SINK"] = "jsonl"
+        try:
+            response = run_review_workflow(
+                mode="free-question",
+                request=AiGenerateRequest(user_answer="혹시 AI 프롬프트가 뭐야?"),
+                generator=generator,
+            )
+            rows = [
+                json.loads(line)
+                for line in self.auto_candidate_path.read_text(encoding="utf-8").splitlines()
+            ]
+        finally:
+            if previous_sink is None:
+                os.environ.pop("AI_REVIEW_CANDIDATE_SINK", None)
+            else:
+                os.environ["AI_REVIEW_CANDIDATE_SINK"] = previous_sink
         self.assertEqual(rows[0]["term"], "AI \ud504\ub86c\ud504\ud2b8")
 
     def test_common_programming_concepts_skip_generator(self):
@@ -515,7 +612,9 @@ class WorkflowRunnerTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "auto_candidates.jsonl"
             previous = os.environ.get("AI_REVIEW_AUTO_CANDIDATES_PATH")
+            previous_sink = os.environ.get("AI_REVIEW_CANDIDATE_SINK")
             os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = str(path)
+            os.environ["AI_REVIEW_CANDIDATE_SINK"] = "jsonl"
             try:
                 response = run_review_workflow(
                     mode="free-question",
@@ -534,6 +633,10 @@ class WorkflowRunnerTest(unittest.TestCase):
                     os.environ.pop("AI_REVIEW_AUTO_CANDIDATES_PATH", None)
                 else:
                     os.environ["AI_REVIEW_AUTO_CANDIDATES_PATH"] = previous
+                if previous_sink is None:
+                    os.environ.pop("AI_REVIEW_CANDIDATE_SINK", None)
+                else:
+                    os.environ["AI_REVIEW_CANDIDATE_SINK"] = previous_sink
 
             self.assertFalse(response.fallback_used)
             self.assertIn(response.route, {"generation", "static_fast_path"})
@@ -686,6 +789,27 @@ class WorkflowRunnerTest(unittest.TestCase):
 
         self.assertEqual(calls["count"], 1)
         self.assertEqual(first.answer, second.answer)
+
+    def test_hallucination_suspected_generated_answer_is_not_cached(self):
+        calls = {"count": 0}
+        answers = [
+            "Spring\uc5d0\uc11c @Transactional\uc740 \ubaa8\ub4e0 DTO \ubcc0\uacbd\uc744 \uc790\ub3d9\uc73c\ub85c DB\uc5d0 \uc800\uc7a5\ud569\ub2c8\ub2e4.",
+            "Spring\uc5d0\uc11c @Transactional\uc740 \ud2b8\ub79c\uc7ad\uc158 \uacbd\uacc4\ub97c \uc9c0\uc815\ud569\ub2c8\ub2e4.",
+        ]
+
+        def generator(**kwargs):
+            index = min(calls["count"], len(answers) - 1)
+            calls["count"] += 1
+            return answers[index]
+
+        request = AiGenerateRequest(user_answer="\uc774 \uac1c\ub150\uc744 \uc9e7\uac8c \uc124\uba85\ud574\uc918")
+
+        first = run_review_workflow("free-question", request, generator=generator)
+        second = run_review_workflow("free-question", request, generator=generator)
+
+        self.assertEqual(calls["count"], 2)
+        self.assertIn("hallucination_suspected", first.quality_flags)
+        self.assertNotEqual(first.answer, second.answer)
 
     def test_concurrent_identical_generated_answer_uses_single_flight(self):
         calls = {"count": 0}

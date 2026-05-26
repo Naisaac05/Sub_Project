@@ -17,6 +17,7 @@ class AiReviewPropertiesTest {
                 null,
                 null,
                 null,
+                null,
                 false,
                 45
         );
@@ -31,6 +32,7 @@ class AiReviewPropertiesTest {
         assertThat(properties.ollama().readTimeoutSeconds()).isEqualTo(30);
         assertThat(properties.ollama().maxConcurrentGenerations()).isEqualTo(1);
         assertThat(properties.evaluation().semanticEnabled()).isFalse();
+        assertThat(properties.degraded().streamingOff()).isFalse();
     }
 
     @Test
@@ -44,11 +46,31 @@ class AiReviewPropertiesTest {
                 null,
                 null,
                 null,
+                null,
                 false,
                 45
         );
 
         assertThat(properties.streamingEnabled()).isFalse();
         assertThat(properties.streamTimeoutSeconds()).isEqualTo(45);
+    }
+
+    @Test
+    void degradedPropertiesHaveDefaults() {
+        AiReviewProperties properties = new AiReviewProperties(
+                true,
+                AiReviewProperties.Provider.PYTHON,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                45
+        );
+
+        assertThat(properties.degraded().streamingOff()).isFalse();
     }
 }

@@ -1,11 +1,15 @@
 package com.devmatch.service.ai;
 
 import com.devmatch.config.AiReviewProperties;
+import com.devmatch.dto.aireview.AiReviewMessageResponse;
 import com.devmatch.dto.aireview.AiReviewSubmitResponse;
 import com.devmatch.entity.*;
+import com.devmatch.exception.InvalidSessionStateException;
+import com.devmatch.exception.TestNotFoundException;
 import com.devmatch.repository.AiReviewSessionRepository;
 import com.devmatch.repository.QuestionRepository;
 import com.devmatch.repository.AiReviewMessageRepository;
+import com.devmatch.repository.TestAnswerRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -20,8 +25,17 @@ import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -36,8 +50,10 @@ public class AiReviewStreamingService {
     private final ObjectMapper objectMapper;
 
     private final AiReviewSessionRepository sessionRepository;
+    private final TestAnswerRepository testAnswerRepository;
     private final QuestionRepository questionRepository;
     private final AiReviewMessageRepository messageRepository;
+    private final AiReviewMetricSink metricSink;
 
     @Autowired
     @Lazy
@@ -48,7 +64,13 @@ public class AiReviewStreamingService {
     }
 
     public SseEmitter streamAnswer(Long userId, Long sessionId, String answer, String modeValue, Long questionId) {
+        String requestedMode = modeValue == null ? AiReviewMessageMode.CHECK_ANSWER.name() : modeValue;
         if (!properties.streamingEnabled()) {
+            metricSink.fallbackToSync("streaming_disabled", sessionId, questionId, requestedMode);
+            return fallbackToSynchronousSubmit(userId, sessionId, answer, modeValue, questionId);
+        }
+        if (properties.degraded().streamingOff()) {
+            metricSink.fallbackToSync("streaming_off", sessionId, questionId, requestedMode);
             return fallbackToSynchronousSubmit(userId, sessionId, answer, modeValue, questionId);
         }
 
@@ -63,21 +85,49 @@ public class AiReviewStreamingService {
         }
         final AiReviewMessageMode finalMode = mode;
 
-        // Session completion check for fallback
-        AiReviewSession sessionObj = sessionRepository.findById(sessionId).orElse(null);
-        if (sessionObj != null && sessionObj.getStatus() == AiReviewStatus.COMPLETED) {
+        if (finalMode != AiReviewMessageMode.FREE_QUESTION) {
+            metricSink.fallbackToSync("mode_not_streamable", sessionId, questionId, finalMode.name());
             return fallbackToSynchronousSubmit(userId, sessionId, answer, modeValue, questionId);
         }
 
+        AiReviewSession sessionObj = findOwnedSession(userId, sessionId);
+        if (sessionObj.getStatus() == AiReviewStatus.COMPLETED) {
+            metricSink.fallbackToSync("session_completed", sessionId, questionId, finalMode.name());
+            return fallbackToSynchronousSubmit(userId, sessionId, answer, modeValue, questionId);
+        }
+
+        String normalizedAnswer = answer == null ? "" : answer.trim();
+        if (normalizedAnswer.isBlank()) {
+            throw new TestNotFoundException("답변이나 질문을 입력해주세요.");
+        }
+
+        List<TestAnswer> wrongAnswers = wrongAnswers(sessionObj.getTestResult().getId());
+        Question currentQuestion = resolveCurrentQuestion(sessionId, wrongAnswers, questionId);
+        long freeQuestionCount = countFreeQuestions(sessionId, currentQuestion.getId());
+        if (freeQuestionCount >= 3) {
+            throw new InvalidSessionStateException("이 문제는 AI 질문/답변을 3개까지 사용할 수 있습니다. 다음 문제로 넘어가세요.");
+        }
+        TestAnswer currentWrongAnswer = wrongAnswers.stream()
+                .filter(testAnswer -> Objects.equals(testAnswer.getQuestion().getId(), currentQuestion.getId()))
+                .findFirst()
+                .orElse(null);
+        String correctAnswer = optionAt(currentQuestion, currentQuestion.getCorrectAnswer());
+        String selectedAnswer = currentWrongAnswer == null
+                ? ""
+                : optionAt(currentQuestion, currentWrongAnswer.getSelectedAnswer());
+
         long timeoutMs = properties.streamTimeoutSeconds() * 1000L;
-        SseEmitter emitter = new SseEmitter(timeoutMs);
+        SseEmitter emitter = createEmitter(timeoutMs);
 
         AtomicReference<StreamingState> state = new AtomicReference<>(StreamingState.INIT);
         AtomicReference<Disposable> subscriptionRef = new AtomicReference<>();
+        AtomicReference<AiReviewMessage> userMessageRef = new AtomicReference<>();
+        AtomicBoolean firstTokenObserved = new AtomicBoolean(false);
+        AtomicLong firstTokenLatencyMs = new AtomicLong(-1L);
+        AtomicInteger chunkCount = new AtomicInteger(0);
         final StringBuilder accumulated = new StringBuilder();
-
-        // Save User Message
-        self.saveUserMessage(sessionId, questionId, finalMode, answer);
+        String correlationId = "ai-stream-" + java.util.UUID.randomUUID();
+        long streamStartedNanos = System.nanoTime();
 
         // SSE lifecycle cleanup hooks
         emitter.onCompletion(() -> {
@@ -85,7 +135,17 @@ public class AiReviewStreamingService {
             if (state.get() != StreamingState.COMPLETED && state.get() != StreamingState.ERROR && state.get() != StreamingState.DISCONNECTED) {
                 if (state.compareAndSet(state.get(), StreamingState.DISCONNECTED)) {
                     cleanup(subscriptionRef, state, StreamingState.DISCONNECTED);
-                    self.saveDisconnectedAiMessage(sessionId, questionId, finalMode, accumulated.toString());
+                    metricSink.streamDisconnected(
+                            correlationId,
+                            sessionId,
+                            currentQuestion.getId(),
+                            finalMode.name(),
+                            "completion_callback",
+                            firstTokenLatencyMs.get(),
+                            elapsedMillis(streamStartedNanos),
+                            accumulated.length()
+                    );
+                    self.saveDisconnectedAiMessage(correlationId, sessionId, currentQuestion.getId(), finalMode, accumulated.toString());
                 }
             }
         });
@@ -94,7 +154,17 @@ public class AiReviewStreamingService {
             log.warn("SseEmitter timeout reached for session {}", sessionId);
             if (state.compareAndSet(StreamingState.ACTIVE, StreamingState.DISCONNECTED) || state.compareAndSet(StreamingState.INIT, StreamingState.DISCONNECTED)) {
                 cleanup(subscriptionRef, state, StreamingState.DISCONNECTED);
-                self.saveDisconnectedAiMessage(sessionId, questionId, finalMode, accumulated.toString());
+                metricSink.streamDisconnected(
+                        correlationId,
+                        sessionId,
+                        currentQuestion.getId(),
+                        finalMode.name(),
+                        "timeout",
+                        firstTokenLatencyMs.get(),
+                        elapsedMillis(streamStartedNanos),
+                        accumulated.length()
+                );
+                self.saveDisconnectedAiMessage(correlationId, sessionId, currentQuestion.getId(), finalMode, accumulated.toString());
             }
             emitter.complete();
         });
@@ -103,18 +173,27 @@ public class AiReviewStreamingService {
             log.error("SseEmitter error for session {}", sessionId, ex);
             if (state.compareAndSet(StreamingState.ACTIVE, StreamingState.DISCONNECTED) || state.compareAndSet(StreamingState.INIT, StreamingState.DISCONNECTED)) {
                 cleanup(subscriptionRef, state, StreamingState.DISCONNECTED);
-                self.saveDisconnectedAiMessage(sessionId, questionId, finalMode, accumulated.toString());
+                metricSink.streamDisconnected(
+                        correlationId,
+                        sessionId,
+                        currentQuestion.getId(),
+                        finalMode.name(),
+                        "emitter_error",
+                        firstTokenLatencyMs.get(),
+                        elapsedMillis(streamStartedNanos),
+                        accumulated.length()
+                );
+                self.saveDisconnectedAiMessage(correlationId, sessionId, currentQuestion.getId(), finalMode, accumulated.toString());
             }
             emitter.completeWithError(ex);
         });
 
-        // Stub Python request
         PythonAiReviewClient.PythonAiRequest request = new PythonAiReviewClient.PythonAiRequest(
-                "stub question",
-                java.util.List.of(),
-                "stub correct",
-                "stub selected",
-                answer,
+                currentQuestion.getContent(),
+                currentQuestion.getOptions() == null ? List.of() : currentQuestion.getOptions(),
+                correctAnswer,
+                selectedAnswer,
+                normalizedAnswer,
                 "",
                 1,
                 properties.python().model(),
@@ -125,10 +204,8 @@ public class AiReviewStreamingService {
                 true
         );
 
-        String correlationId = "ai-stream-" + java.util.UUID.randomUUID();
-        
         state.set(StreamingState.ACTIVE);
-        Flux<String> flux = pythonAiReviewClient.streamReview("/api/review/follow-up", correlationId, request);
+        Flux<String> flux = pythonAiReviewClient.streamReview("/api/review/free-question", correlationId, request);
 
         Disposable subscription = flux.subscribe(
                 rawEvent -> {
@@ -143,6 +220,19 @@ public class AiReviewStreamingService {
 
                     String type = String.valueOf(event.get("type"));
                     if ("chunk".equals(type)) {
+                        if (firstTokenObserved.compareAndSet(false, true)) {
+                            long latencyMs = elapsedMillis(streamStartedNanos);
+                            firstTokenLatencyMs.set(latencyMs);
+                            metricSink.streamFirstToken(
+                                    correlationId,
+                                    sessionId,
+                                    currentQuestion.getId(),
+                                    finalMode.name(),
+                                    latencyMs
+                            );
+                        }
+                        chunkCount.incrementAndGet();
+                        ensureUserMessageSaved(userMessageRef, sessionId, currentQuestion.getId(), finalMode, normalizedAnswer);
                         String chunk = String.valueOf(event.getOrDefault("chunk", ""));
                         accumulated.append(chunk);
                         try {
@@ -151,7 +241,17 @@ public class AiReviewStreamingService {
                             log.error("Failed to send chunk to SseEmitter, initiating cleanup", e);
                             if (state.compareAndSet(StreamingState.ACTIVE, StreamingState.DISCONNECTED)) {
                                 cleanup(subscriptionRef, state, StreamingState.DISCONNECTED);
-                                self.saveDisconnectedAiMessage(sessionId, questionId, finalMode, accumulated.toString());
+                                metricSink.streamDisconnected(
+                                        correlationId,
+                                        sessionId,
+                                        currentQuestion.getId(),
+                                        finalMode.name(),
+                                        "send_chunk_failed",
+                                        firstTokenLatencyMs.get(),
+                                        elapsedMillis(streamStartedNanos),
+                                        accumulated.length()
+                                );
+                                self.saveDisconnectedAiMessage(correlationId, sessionId, currentQuestion.getId(), finalMode, accumulated.toString());
                                 emitter.completeWithError(e);
                             }
                         }
@@ -159,21 +259,33 @@ public class AiReviewStreamingService {
                         if (state.compareAndSet(StreamingState.ACTIVE, StreamingState.COMPLETED)) {
                             cleanup(subscriptionRef, state, StreamingState.COMPLETED);
 
-                            Map<String, Object> responseMetadata = null;
-                            Object responseObj = event.get("response");
-                            if (responseObj instanceof Map) {
-                                responseMetadata = (Map<String, Object>) responseObj;
-                            }
+                            Map<String, Object> responseMetadata = responseMetadataFrom(event.get("response"));
 
                             // Save to database inside transaction
+                            AiReviewMessage userMessage = null;
+                            AiReviewMessage aiMessage = null;
                             try {
-                                self.saveCompletedAiMessage(sessionId, questionId, finalMode, accumulated.toString(), responseMetadata);
+                                userMessage = ensureUserMessageSaved(userMessageRef, sessionId, currentQuestion.getId(), finalMode, normalizedAnswer);
+                                aiMessage = self.saveCompletedAiMessage(correlationId, sessionId, currentQuestion.getId(), finalMode, accumulated.toString(), responseMetadata);
                             } catch (Exception e) {
                                 log.error("Failed to save completed AI message to database", e);
                             }
 
                             try {
-                                emitter.send(event);
+                                emitter.send(Map.of(
+                                        "type", "done",
+                                        "response", buildSubmitResponse(sessionObj, userMessage, aiMessage)
+                                ));
+                                metricSink.streamCompleted(
+                                        correlationId,
+                                        sessionId,
+                                        currentQuestion.getId(),
+                                        finalMode.name(),
+                                        firstTokenLatencyMs.get(),
+                                        elapsedMillis(streamStartedNanos),
+                                        chunkCount.get(),
+                                        accumulated.length()
+                                );
                                 emitter.complete();
                             } catch (IOException e) {
                                 log.warn("Failed to send done event to SseEmitter", e);
@@ -184,8 +296,18 @@ public class AiReviewStreamingService {
                             cleanup(subscriptionRef, state, StreamingState.ERROR);
                             
                             String errorMsg = String.valueOf(event.getOrDefault("error", "Unknown stream error"));
+                            metricSink.streamPartialFailed(
+                                    correlationId,
+                                    sessionId,
+                                    currentQuestion.getId(),
+                                    finalMode.name(),
+                                    errorMsg,
+                                    elapsedMillis(streamStartedNanos),
+                                    chunkCount.get(),
+                                    accumulated.length()
+                            );
                             try {
-                                self.savePartialFailedAiMessage(sessionId, questionId, finalMode, accumulated.toString(), errorMsg);
+                                self.savePartialFailedAiMessage(correlationId, sessionId, currentQuestion.getId(), finalMode, accumulated.toString(), errorMsg);
                             } catch (Exception e) {
                                 log.error("Failed to save partial failed AI message to database", e);
                             }
@@ -205,9 +327,19 @@ public class AiReviewStreamingService {
                     log.error("Error in stream for session {}", sessionId, error);
                     if (state.compareAndSet(StreamingState.ACTIVE, StreamingState.ERROR)) {
                         cleanup(subscriptionRef, state, StreamingState.ERROR);
+                        metricSink.streamPartialFailed(
+                                correlationId,
+                                sessionId,
+                                currentQuestion.getId(),
+                                finalMode.name(),
+                                error.getMessage(),
+                                elapsedMillis(streamStartedNanos),
+                                chunkCount.get(),
+                                accumulated.length()
+                        );
                         
                         try {
-                            self.savePartialFailedAiMessage(sessionId, questionId, finalMode, accumulated.toString(), error.getMessage());
+                            self.savePartialFailedAiMessage(correlationId, sessionId, currentQuestion.getId(), finalMode, accumulated.toString(), error.getMessage());
                         } catch (Exception e) {
                             log.error("Failed to save partial failed AI message to database", e);
                         }
@@ -224,8 +356,51 @@ public class AiReviewStreamingService {
                     log.info("Stream finished for session {}", sessionId);
                     if (state.compareAndSet(StreamingState.ACTIVE, StreamingState.COMPLETED)) {
                         cleanup(subscriptionRef, state, StreamingState.COMPLETED);
+
+                        if (accumulated.isEmpty()) {
+                            try {
+                                emitter.send(Map.of("type", "error", "error", "Stream completed before response was generated"));
+                                metricSink.streamPartialFailed(
+                                        correlationId,
+                                        sessionId,
+                                        currentQuestion.getId(),
+                                        finalMode.name(),
+                                        "empty_completion",
+                                        elapsedMillis(streamStartedNanos),
+                                        chunkCount.get(),
+                                        accumulated.length()
+                                );
+                                emitter.complete();
+                            } catch (IOException e) {
+                                log.warn("Failed to send empty-completion error event", e);
+                            }
+                            return;
+                        }
+
+                        AiReviewMessage userMessage = null;
+                        AiReviewMessage aiMessage = null;
                         try {
-                            emitter.send(Map.of("type", "done"));
+                            userMessage = ensureUserMessageSaved(userMessageRef, sessionId, currentQuestion.getId(), finalMode, normalizedAnswer);
+                            aiMessage = self.saveCompletedAiMessage(correlationId, sessionId, currentQuestion.getId(), finalMode, accumulated.toString(), null);
+                        } catch (Exception e) {
+                            log.error("Failed to save implicitly completed AI stream to database", e);
+                        }
+
+                        try {
+                            emitter.send(Map.of(
+                                    "type", "done",
+                                    "response", buildSubmitResponse(sessionObj, userMessage, aiMessage)
+                            ));
+                            metricSink.streamCompleted(
+                                    correlationId,
+                                    sessionId,
+                                    currentQuestion.getId(),
+                                    finalMode.name(),
+                                    firstTokenLatencyMs.get(),
+                                    elapsedMillis(streamStartedNanos),
+                                    chunkCount.get(),
+                                    accumulated.length()
+                            );
                             emitter.complete();
                         } catch (IOException e) {
                             log.warn("Failed to send done event on completion", e);
@@ -241,7 +416,7 @@ public class AiReviewStreamingService {
 
     private SseEmitter fallbackToSynchronousSubmit(Long userId, Long sessionId, String answer, String modeValue, Long questionId) {
         long timeoutMs = properties.streamTimeoutSeconds() * 1000L;
-        SseEmitter emitter = new SseEmitter(timeoutMs);
+        SseEmitter emitter = createEmitter(timeoutMs);
         try {
             AiReviewSubmitResponse response = aiReviewService.submitAnswer(userId, sessionId, answer, modeValue, questionId);
             emitter.send(Map.of("type", "done", "response", response));
@@ -251,6 +426,103 @@ public class AiReviewStreamingService {
             emitter.completeWithError(e);
         }
         return emitter;
+    }
+
+    private long elapsedMillis(long startedNanos) {
+        return Math.max(0L, TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startedNanos));
+    }
+
+    private Map<String, Object> responseMetadataFrom(Object responseObj) {
+        if (!(responseObj instanceof Map<?, ?> rawMetadata)) {
+            return null;
+        }
+        Map<String, Object> responseMetadata = new LinkedHashMap<>();
+        rawMetadata.forEach((key, value) -> responseMetadata.put(String.valueOf(key), value));
+        return responseMetadata;
+    }
+
+    protected SseEmitter createEmitter(long timeoutMs) {
+        return new SseEmitter(timeoutMs);
+    }
+
+    private AiReviewSession findOwnedSession(Long userId, Long sessionId) {
+        return AiReviewContextSupport.requireOwnedSession(sessionRepository.findById(sessionId), userId);
+    }
+
+    private List<TestAnswer> wrongAnswers(Long testResultId) {
+        return AiReviewContextSupport.wrongAnswers(testAnswerRepository.findByTestResultId(testResultId));
+    }
+
+    private Question resolveCurrentQuestion(Long sessionId, List<TestAnswer> wrongAnswers, Long questionId) {
+        if (questionId != null) {
+            return AiReviewContextSupport.questionById(wrongAnswers, questionId);
+        }
+
+        return latestQuestionMessage(sessionId)
+                .map(AiReviewMessage::getQuestion)
+                .orElseThrow(() -> new TestNotFoundException("진행 중인 복습 질문이 없습니다."));
+    }
+
+    private Optional<AiReviewMessage> latestQuestionMessage(Long sessionId) {
+        return AiReviewContextSupport.latestQuestionMessage(
+                messageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId)
+        );
+    }
+
+    private long countFreeQuestions(Long sessionId, Long questionId) {
+        return messageRepository.countBySessionIdAndQuestionIdAndRoleAndModeIn(
+                sessionId,
+                questionId,
+                AiReviewMessageRole.USER,
+                List.of(AiReviewMessageMode.FREE_QUESTION)
+        );
+    }
+
+    private String optionAt(Question question, int index) {
+        return AiReviewContextSupport.optionAt(question, index);
+    }
+
+    private AiReviewMessage ensureUserMessageSaved(
+            AtomicReference<AiReviewMessage> userMessageRef,
+            Long sessionId,
+            Long questionId,
+            AiReviewMessageMode mode,
+            String content
+    ) {
+        AiReviewMessage existing = userMessageRef.get();
+        if (existing != null) {
+            return existing;
+        }
+
+        AiReviewMessage saved = self.saveUserMessage(sessionId, questionId, mode, content);
+        if (userMessageRef.compareAndSet(null, saved)) {
+            return saved;
+        }
+        return userMessageRef.get();
+    }
+
+    private AiReviewSubmitResponse buildSubmitResponse(
+            AiReviewSession session,
+            AiReviewMessage userMessage,
+            AiReviewMessage aiMessage
+    ) {
+        List<AiReviewMessageResponse> messages = new ArrayList<>();
+        if (userMessage != null) {
+            messages.add(AiReviewMessageResponse.from(userMessage));
+        }
+        if (aiMessage != null) {
+            messages.add(AiReviewMessageResponse.from(aiMessage));
+        }
+
+        String feedback = aiMessage == null ? "" : aiMessage.getContent();
+        return new AiReviewSubmitResponse(
+                AiReviewMessageMode.FREE_QUESTION.name(),
+                feedback,
+                null,
+                session.getStatus() == AiReviewStatus.COMPLETED,
+                session.getSummary(),
+                messages
+        );
     }
 
     private Map<String, Object> parseEvent(String rawEvent) {
@@ -283,12 +555,18 @@ public class AiReviewStreamingService {
 
     @Transactional
     public AiReviewMessage saveCompletedAiMessage(
+            String streamRequestId,
             Long sessionId,
             Long questionId,
             AiReviewMessageMode mode,
             String accumulatedContent,
             Map<String, Object> responseMetadata
     ) {
+        Optional<AiReviewMessage> existingTerminal = existingTerminalMessage(streamRequestId);
+        if (existingTerminal.isPresent()) {
+            return existingTerminal.get();
+        }
+
         AiReviewSession session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new IllegalArgumentException("AI 복습 세션을 찾을 수 없습니다."));
         Question question = questionId != null ? questionRepository.findById(questionId).orElse(null) : null;
@@ -351,13 +629,16 @@ public class AiReviewStreamingService {
                 .aiCandidateId(candidateId)
                 .aiLatencyMs(latencyMs)
                 .aiQualityFlags(qualityFlags)
+                .streamRequestId(streamRequestId)
+                .streamTerminalStatus(AiReviewStreamTerminalStatus.COMPLETED)
                 .build();
 
-        return messageRepository.save(msg);
+        return saveTerminalMessage(msg, streamRequestId);
     }
 
     @Transactional
     public AiReviewMessage saveDisconnectedAiMessage(
+            String streamRequestId,
             Long sessionId,
             Long questionId,
             AiReviewMessageMode mode,
@@ -366,6 +647,10 @@ public class AiReviewStreamingService {
         if (accumulatedContent == null || accumulatedContent.isBlank()) {
             log.info("Accumulated content is empty. Skipping DB save for disconnected stream on session {}", sessionId);
             return null;
+        }
+        Optional<AiReviewMessage> existingTerminal = existingTerminalMessage(streamRequestId);
+        if (existingTerminal.isPresent()) {
+            return existingTerminal.get();
         }
 
         AiReviewSession session = sessionRepository.findById(sessionId)
@@ -385,13 +670,16 @@ public class AiReviewStreamingService {
                 .content(formattedContent)
                 .aiRoute("streaming_disconnected")
                 .aiQualityFlags("STATUS:DISCONNECTED")
+                .streamRequestId(streamRequestId)
+                .streamTerminalStatus(AiReviewStreamTerminalStatus.DISCONNECTED)
                 .build();
 
-        return messageRepository.save(msg);
+        return saveTerminalMessage(msg, streamRequestId);
     }
 
     @Transactional
     public AiReviewMessage savePartialFailedAiMessage(
+            String streamRequestId,
             Long sessionId,
             Long questionId,
             AiReviewMessageMode mode,
@@ -401,6 +689,10 @@ public class AiReviewStreamingService {
         if (accumulatedContent == null || accumulatedContent.isBlank()) {
             log.info("Accumulated content is empty. Skipping DB save for partial failed stream on session {}", sessionId);
             return null;
+        }
+        Optional<AiReviewMessage> existingTerminal = existingTerminalMessage(streamRequestId);
+        if (existingTerminal.isPresent()) {
+            return existingTerminal.get();
         }
 
         AiReviewSession session = sessionRepository.findById(sessionId)
@@ -420,9 +712,26 @@ public class AiReviewStreamingService {
                 .content(formattedContent)
                 .aiRoute("streaming_error")
                 .aiQualityFlags("STATUS:PARTIAL_FAILED")
+                .streamRequestId(streamRequestId)
+                .streamTerminalStatus(AiReviewStreamTerminalStatus.ERROR)
                 .build();
 
-        return messageRepository.save(msg);
+        return saveTerminalMessage(msg, streamRequestId);
+    }
+
+    private Optional<AiReviewMessage> existingTerminalMessage(String streamRequestId) {
+        if (streamRequestId == null || streamRequestId.isBlank()) {
+            return Optional.empty();
+        }
+        return messageRepository.findByStreamRequestId(streamRequestId);
+    }
+
+    private AiReviewMessage saveTerminalMessage(AiReviewMessage message, String streamRequestId) {
+        try {
+            return messageRepository.save(message);
+        } catch (DataIntegrityViolationException e) {
+            return existingTerminalMessage(streamRequestId).orElseThrow(() -> e);
+        }
     }
 
     @Transactional

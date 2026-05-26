@@ -4,6 +4,7 @@ import com.devmatch.entity.AiReviewCandidate;
 import com.devmatch.entity.AiReviewCandidateStatus;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -246,9 +248,9 @@ public class LoggingAiReviewKnowledgeReindexer implements AiReviewKnowledgeReind
 
     private void updateManifest(Path cardPath, String conceptId) throws IOException {
         LinkedHashMap<String, Object> manifest = readManifest();
+        Map<String, String> previousVersion = snapshotPreviousManifest(manifest);
         @SuppressWarnings("unchecked")
         Map<String, Object> entries = (Map<String, Object>) manifest.computeIfAbsent("entries", ignored -> new LinkedHashMap<>());
-        manifest.put("version", 1);
         String content = Files.readString(cardPath, StandardCharsets.UTF_8);
         entries.put(conceptId, Map.of(
                 "concept_id", conceptId,
@@ -256,9 +258,60 @@ public class LoggingAiReviewKnowledgeReindexer implements AiReviewKnowledgeReind
                 "content_hash", sha256(content),
                 "metadata_hash", sha256(conceptId)
         ));
+        String manifestHash = sha256(canonicalJson(entries));
+        String knowledgeIndexVersion = "ki-" + manifestHash.substring(0, 12);
+        List<Object> previousVersions = previousVersionsOf(manifest);
+        if (previousVersion != null) {
+            previousVersions.add(previousVersion);
+        }
 
+        manifest.remove("version");
+        manifest.put("schema_version", 2);
+        manifest.put("knowledge_index_version", knowledgeIndexVersion);
+        manifest.put("manifest_hash", manifestHash);
+        manifest.put("cache_namespace_version", knowledgeIndexVersion);
+        manifest.put("created_at", Instant.now().toString());
+        manifest.put("previous_versions", previousVersions);
+        manifest.put("entries", entries);
         Files.createDirectories(manifestPath.getParent());
         objectMapper.writerWithDefaultPrettyPrinter().writeValue(manifestPath.toFile(), manifest);
+    }
+
+    private Map<String, String> snapshotPreviousManifest(LinkedHashMap<String, Object> manifest) throws IOException {
+        if (!Files.exists(manifestPath) || !Files.isRegularFile(manifestPath)) {
+            return null;
+        }
+        @SuppressWarnings("unchecked")
+        Map<String, Object> entries = (Map<String, Object>) manifest.getOrDefault("entries", Map.of());
+        String previousHash = String.valueOf(
+                manifest.getOrDefault("manifest_hash", sha256(canonicalJson(entries)))
+        );
+        String previousVersion = String.valueOf(
+                manifest.getOrDefault("knowledge_index_version", "ki-" + previousHash.substring(0, 12))
+        );
+        Path snapshotDir = manifestPath.getParent().resolve("manifests");
+        Path snapshotPath = snapshotDir.resolve(previousVersion + ".json");
+        Files.createDirectories(snapshotDir);
+        Files.copy(manifestPath, snapshotPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        return Map.of(
+                "knowledge_index_version", previousVersion,
+                "manifest_hash", previousHash,
+                "path", snapshotPath.toString().replace('\\', '/')
+        );
+    }
+
+    private static List<Object> previousVersionsOf(Map<String, Object> manifest) {
+        Object value = manifest.get("previous_versions");
+        if (!(value instanceof List<?> existing)) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(existing);
+    }
+
+    private String canonicalJson(Object value) throws IOException {
+        return objectMapper.copy()
+                .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+                .writeValueAsString(value);
     }
 
     private LinkedHashMap<String, Object> readManifest() {

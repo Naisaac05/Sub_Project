@@ -12,13 +12,13 @@ from app.main import app
 class StreamingWorkflowTest(unittest.IsolatedAsyncioTestCase):
     async def test_successful_streaming_generation(self):
         async def mock_stream_gen(*args, **kwargs):
-            yield "Hello"
-            yield " "
-            yield "World"
+            yield "동시성 제어는 "
+            yield "여러 작업이 동시에 실행될 때 "
+            yield "공유 자원 접근을 안전하게 조율하는 방식입니다."
 
         request = AiGenerateRequest(
             question="테스트 질문",
-            user_answer="테스트 답변",
+            user_answer="동시성 제어 설명해줘",
         )
 
         events = []
@@ -35,13 +35,14 @@ class StreamingWorkflowTest(unittest.IsolatedAsyncioTestCase):
         
         # Verify chunks are yielded
         chunks = [e["chunk"] for e in events if e["type"] == "chunk"]
-        self.assertEqual("".join(chunks), "Hello World")
+        expected_answer = "동시성 제어는 여러 작업이 동시에 실행될 때 공유 자원 접근을 안전하게 조율하는 방식입니다."
+        self.assertEqual("".join(chunks), expected_answer)
         
         # Verify done event contains AiGenerateResponse
         done_event = events[-1]
         self.assertEqual(done_event["type"], "done")
         response = done_event["response"]
-        self.assertEqual(response.answer, "Hello World")
+        self.assertEqual(response.answer, expected_answer)
         self.assertFalse(response.fallback_used)
 
     async def test_streaming_generation_exception_falls_back(self):
