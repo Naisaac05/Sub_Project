@@ -602,30 +602,15 @@ public class RuleBasedAiReviewService {
             AiReviewMessageMode mode
     ) {
         if (questionId != null && mode != AiReviewMessageMode.NEXT_QUESTION) {
-            return wrongAnswers.stream()
-                    .map(TestAnswer::getQuestion)
-                    .filter(question -> Objects.equals(question.getId(), questionId))
-                    .findFirst()
-                    .orElseThrow(() -> new TestNotFoundException("선택한 복습 문제를 찾을 수 없습니다."));
+            return AiReviewContextSupport.questionById(wrongAnswers, questionId);
         }
         return lastAiMessage.getQuestion();
     }
 
     private Optional<AiReviewMessage> latestQuestionMessage(Long sessionId) {
-        List<AiReviewMessage> messages = messageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId);
-        ListIterator<AiReviewMessage> iterator = messages.listIterator(messages.size());
-        while (iterator.hasPrevious()) {
-            AiReviewMessage message = iterator.previous();
-            if (message.getRole() != AiReviewMessageRole.AI || message.getQuestion() == null) {
-                continue;
-            }
-            if (message.getMode() == AiReviewMessageMode.QUESTION_SUMMARY
-                    || message.getMode() == AiReviewMessageMode.REVIEW_REPORT) {
-                continue;
-            }
-            return Optional.of(message);
-        }
-        return Optional.empty();
+        return AiReviewContextSupport.latestQuestionMessage(
+                messageRepository.findBySessionIdOrderByCreatedAtAsc(sessionId)
+        );
     }
 
     private void ensureInitialQuestionMessage(AiReviewSession session, Question question) {
@@ -856,26 +841,6 @@ public class RuleBasedAiReviewService {
                     oneLiner
             );
         }
-    }
-
-    private boolean hasKeywordTrap(String normalizedText) {
-        return normalizedText.contains("환경변수") || normalizedText.contains("백엔드")
-                || normalizedText.contains("api") || normalizedText.contains("키워드");
-    }
-
-    private boolean hasLayerConfusion(String normalizedText) {
-        return normalizedText.contains("service") || normalizedText.contains("repository")
-                || normalizedText.contains("controller") || normalizedText.contains("계층");
-    }
-
-    private boolean hasConditionJudgment(String normalizedText) {
-        return normalizedText.contains("조건") || normalizedText.contains("경우")
-                || normalizedText.contains("적절") || normalizedText.contains("적합");
-    }
-
-    private boolean hasExceptionCase(String normalizedText) {
-        return normalizedText.contains("예외") || normalizedText.contains("반례")
-                || normalizedText.contains("exception") || normalizedText.contains("error");
     }
 
     private boolean isTransactionalQuestion(Question question) {
@@ -1155,12 +1120,7 @@ public class RuleBasedAiReviewService {
     }
 
     private AiReviewSession findOwnedSession(Long userId, Long sessionId) {
-        AiReviewSession session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new TestNotFoundException("AI 복습 세션을 찾을 수 없습니다."));
-        if (!Objects.equals(session.getUser().getId(), userId)) {
-            throw new TestNotFoundException("AI 복습 세션을 찾을 수 없습니다.");
-        }
-        return session;
+        return AiReviewContextSupport.requireOwnedSession(sessionRepository.findById(sessionId), userId);
     }
 
     private TestResult findOwnedResult(Long userId, Long testResultId) {
@@ -1173,10 +1133,7 @@ public class RuleBasedAiReviewService {
     }
 
     private List<TestAnswer> wrongAnswers(Long testResultId) {
-        return testAnswerRepository.findByTestResultId(testResultId).stream()
-                .filter(answer -> !Boolean.TRUE.equals(answer.getIsCorrect()))
-                .sorted(Comparator.comparing(answer -> answer.getQuestion().getOrderIndex()))
-                .toList();
+        return AiReviewContextSupport.wrongAnswers(testAnswerRepository.findByTestResultId(testResultId));
     }
 
     private AiReviewSessionResponse response(AiReviewSession session) {
@@ -1202,10 +1159,7 @@ public class RuleBasedAiReviewService {
     }
 
     private String optionAt(Question question, int index) {
-        if (index < 0 || question.getOptions() == null || index >= question.getOptions().size()) {
-            return "미응답";
-        }
-        return question.getOptions().get(index);
+        return AiReviewContextSupport.optionAt(question, index);
     }
 
     private String inferArea(Question question) {

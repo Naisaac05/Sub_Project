@@ -12,8 +12,11 @@ public record AiReviewProperties(
         RuleBased ruleBased,
         Limits limits,
         Evaluation evaluation,
+        Degraded degraded,
         boolean streamingEnabled,
-        int streamTimeoutSeconds
+        int streamTimeoutSeconds,
+        String candidatesPath,
+        String autoCandidatesPath
 ) {
     public AiReviewProperties {
         if (provider == null) {
@@ -37,9 +40,48 @@ public record AiReviewProperties(
         if (evaluation == null) {
             evaluation = new Evaluation(false);
         }
+        if (degraded == null) {
+            degraded = new Degraded(false);
+        }
         if (streamTimeoutSeconds == 0) {
             streamTimeoutSeconds = 45;
         }
+        if (candidatesPath == null) {
+            candidatesPath = "";
+        }
+        if (autoCandidatesPath == null) {
+            autoCandidatesPath = "";
+        }
+    }
+
+    public AiReviewProperties(
+            boolean enabled,
+            Provider provider,
+            OpenAi openai,
+            PythonAi python,
+            Ollama ollama,
+            RuleBased ruleBased,
+            Limits limits,
+            Evaluation evaluation,
+            Degraded degraded,
+            boolean streamingEnabled,
+            int streamTimeoutSeconds
+    ) {
+        this(
+                enabled,
+                provider,
+                openai,
+                python,
+                ollama,
+                ruleBased,
+                limits,
+                evaluation,
+                degraded,
+                streamingEnabled,
+                streamTimeoutSeconds,
+                "",
+                ""
+        );
     }
 
     public enum Provider {
@@ -98,6 +140,11 @@ public record AiReviewProperties(
 
     public record Evaluation(
             boolean semanticEnabled
+    ) {
+    }
+
+    public record Degraded(
+            boolean streamingOff
     ) {
     }
 }

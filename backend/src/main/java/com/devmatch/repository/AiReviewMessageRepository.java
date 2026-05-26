@@ -19,6 +19,8 @@ public interface AiReviewMessageRepository extends JpaRepository<AiReviewMessage
 
     Optional<AiReviewMessage> findTopBySessionIdAndRoleOrderByCreatedAtDesc(Long sessionId, AiReviewMessageRole role);
 
+    Optional<AiReviewMessage> findByStreamRequestId(String streamRequestId);
+
     long countBySessionIdAndQuestionIdAndRole(Long sessionId, Long questionId, AiReviewMessageRole role);
 
     long countBySessionIdAndQuestionIdAndRoleAndModeIn(

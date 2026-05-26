@@ -6,8 +6,10 @@ from pathlib import Path
 import threading
 from typing import Any, TypeVar
 
+from app.knowledge.index_manifest import active_cache_namespace_version
 from app.schemas import AiGenerateRequest
 from app.workflow.intent import normalize_question
+from app.workflow import redis_answer_cache
 
 
 MAX_CACHE_ITEMS = 128
@@ -22,6 +24,7 @@ T = TypeVar("T")
 
 def cache_key_for(mode: str, request: AiGenerateRequest) -> str:
     parts = (
+        active_cache_namespace_version(),
         mode,
         request.model,
         request.question,
@@ -37,10 +40,16 @@ def get_cached_answer(key: str) -> str | None:
     with _CACHE_LOCK:
         _ensure_persistent_cache_loaded()
         answer = _CACHE.get(key)
-        if answer is None:
+        if answer is not None:
+            _CACHE.move_to_end(key)
+            return answer
+        redis_answer = redis_answer_cache.get_answer(key)
+        if redis_answer is None:
             return None
+        _CACHE[key] = redis_answer
         _CACHE.move_to_end(key)
-        return answer
+        _trim_cache()
+        return redis_answer
 
 
 def put_cached_answer(key: str, answer: str) -> None:
@@ -51,6 +60,7 @@ def put_cached_answer(key: str, answer: str) -> None:
         _CACHE.move_to_end(key)
         _trim_cache()
         _append_persistent_cache_entry(key, answer)
+        redis_answer_cache.put_answer(key, answer)
 
 
 def clear_answer_cache() -> None:
@@ -58,6 +68,10 @@ def clear_answer_cache() -> None:
     with _CACHE_LOCK:
         _CACHE.clear()
         _PERSISTENT_CACHE_LOADED = False
+
+
+def set_redis_answer_cache_client_for_tests(client) -> None:
+    redis_answer_cache.set_client_for_tests(client)
 
 
 def run_single_flight(key: str, producer: Callable[[], T]) -> T:
@@ -76,7 +90,7 @@ def run_single_flight(key: str, producer: Callable[[], T]) -> T:
         return entry["result"]
 
     try:
-        result = producer()
+        result = _run_distributed_single_flight(key, producer)
         entry["result"] = result
         return result
     except Exception as exc:
@@ -86,6 +100,21 @@ def run_single_flight(key: str, producer: Callable[[], T]) -> T:
         with _IN_FLIGHT_LOCK:
             _IN_FLIGHT.pop(key, None)
             entry["event"].set()
+
+
+def _run_distributed_single_flight(key: str, producer: Callable[[], T]) -> T:
+    if not redis_answer_cache.distributed_single_flight_enabled():
+        return producer()
+
+    owner = redis_answer_cache.acquire_single_flight_lock(key)
+    if owner is None:
+        redis_answer_cache.wait_for_distributed_answer(key)
+        return producer()
+
+    try:
+        return producer()
+    finally:
+        redis_answer_cache.release_single_flight_lock(key, owner)
 
 
 def _configured_cache_path() -> Path | None:
