@@ -220,6 +220,28 @@ def generate_answer_node(
                 state.route = "fallback_template"
                 state.answer_style = _answer_style_for_state(state)
 
+    if state.mode == "free-question" and state.answer:
+        from app.workflow.grounding import validate_grounding, GroundingResult
+        is_skipped = (
+            state.route in {"static_fast_path", "generated_card_fast_path", "cache"}
+            or not state.contexts
+        )
+        if is_skipped:
+            state.grounding_result = GroundingResult(
+                grounding_score=1.0,
+                evidence_coverage=1.0,
+                unsupported_claims=[],
+                grounded=True,
+                reason="Skipped grounding: fast-path, cache, or empty contexts",
+            )
+        else:
+            state.grounding_result = validate_grounding(
+                request=state.request,
+                answer=state.answer,
+                contexts=state.contexts,
+                generator=generator,
+            )
+
     return state
 
 

@@ -156,6 +156,30 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
                 "final_quality_status": final_status,
                 "reason": judge_res.reason,
             })
+
+        # Grounding metrics event
+        g_res = state.grounding_result
+        if g_res is not None:
+            events.append({
+                "event": "ai_review.grounding_evaluated",
+                "grounding_score": g_res.grounding_score,
+                "retrieval_coverage_score": g_res.evidence_coverage,
+                "unsupported_claim_detected": len(g_res.unsupported_claims) > 0,
+                "low_grounding_answer": g_res.grounding_score < 0.7,
+                "unsupported_claims": g_res.unsupported_claims,
+                "grounded": g_res.grounded,
+                "reason": g_res.reason,
+                
+                # Tags
+                "route": route,
+                "intent": intent,
+                "sub_intent": sub_intent,
+                "rag_policy": rag_policy,
+                "model": model,
+                "fallback_used": fallback_used,
+                "retry_used": retry_used,
+                "hallucination_risk": judge_res.hallucination_risk if judge_res else "low",
+            })
         
     response.observability_events = events
     return response
