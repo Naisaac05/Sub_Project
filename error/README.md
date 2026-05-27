@@ -32,6 +32,11 @@
 
 ## 인덱스
 
+- [2026-05-27 AI follow-up fell back to template after RAG timeout](2026-05-27-ai-follow-up-rag-timeout-template.md)
+- [2026-05-27 AI JSON free question used static fast path instead of model generation](2026-05-27-ai-json-question-static-fast-path.md)
+- [2026-05-27 Backend bootRun failed because stale 8080 process was still running](2026-05-27-backend-bootrun-stale-8080-process.md)
+- [2026-05-27 AI free question fell back after model generation](2026-05-27-ai-free-question-non-korean-fallback.md)
+- [2026-05-27 AiReviewProperties constructor binding bootRun failure](2026-05-27-ai-review-properties-constructor-binding.md)
 - [2026-05-27 AI review Micrometer classpath and Java warning cleanup](2026-05-27-ai-review-micrometer-classpath-and-warning-cleanup.md)
 - [2026-05-27 AI Python tests run with wrong runtime](2026-05-27-ai-python-tests-wrong-runtime.md)
 - [2026-05-26 AI candidate capture write failure isolation](2026-05-26-ai-candidate-capture-write-failure-isolation.md)

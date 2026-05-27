@@ -1,10 +1,16 @@
 package com.devmatch.config;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AiReviewPropertiesTest {
+
+    private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+            .withUserConfiguration(PropertiesScanConfig.class);
 
     @Test
     void defaultsUseSmallPythonModelAnd4bOllamaFallback() {
@@ -72,5 +78,31 @@ class AiReviewPropertiesTest {
         );
 
         assertThat(properties.degraded().streamingOff()).isFalse();
+    }
+
+    @Test
+    void bindsFromConfigurationPropertiesScanWhenMultipleConstructorsExist() {
+        contextRunner
+                .withPropertyValues(
+                        "app.ai-review.enabled=true",
+                        "app.ai-review.provider=PYTHON",
+                        "app.ai-review.python.model=qwen3:1.7b",
+                        "app.ai-review.streaming-enabled=true",
+                        "app.ai-review.stream-timeout-seconds=60"
+                )
+                .run(context -> {
+                    assertThat(context).hasNotFailed();
+                    AiReviewProperties properties = context.getBean(AiReviewProperties.class);
+                    assertThat(properties.enabled()).isTrue();
+                    assertThat(properties.provider()).isEqualTo(AiReviewProperties.Provider.PYTHON);
+                    assertThat(properties.python().model()).isEqualTo("qwen3:1.7b");
+                    assertThat(properties.streamingEnabled()).isTrue();
+                    assertThat(properties.streamTimeoutSeconds()).isEqualTo(60);
+                });
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    @ConfigurationPropertiesScan(basePackageClasses = AiReviewProperties.class)
+    static class PropertiesScanConfig {
     }
 }
