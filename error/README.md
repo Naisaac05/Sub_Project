@@ -38,6 +38,7 @@
 - [2026-05-27 Backend bootRun failed because stale 8080 process was still running](2026-05-27-backend-bootrun-stale-8080-process.md)
 - [2026-05-27 AI free question fell back after model generation](2026-05-27-ai-free-question-non-korean-fallback.md)
 - [2026-05-27 AiReviewProperties constructor binding bootRun failure](2026-05-27-ai-review-properties-constructor-binding.md)
+- [2026-05-27 프롬프트 v1/v2 비교 실험 스크립트 — keep_alive 문자열 `"-1"` 재발로 Ollama 400](2026-05-27-experiment-compare-script-keep-alive-regression.md)
 - [2026-05-27 AI review Micrometer classpath and Java warning cleanup](2026-05-27-ai-review-micrometer-classpath-and-warning-cleanup.md)
 - [2026-05-27 AI Python tests run with wrong runtime](2026-05-27-ai-python-tests-wrong-runtime.md)
 - [2026-05-26 AI candidate capture write failure isolation](2026-05-26-ai-candidate-capture-write-failure-isolation.md)
