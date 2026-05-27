@@ -6,6 +6,7 @@ from app.scoring import ConfidenceResult
 from app.workflow.intent import FreeQuestionIntent
 from app.workflow.query_resolver import ResolvedQuery
 from app.workflow.judge import SemanticJudgeResult
+from app.workflow.grounding import GroundingResult
 
 
 @dataclass
@@ -39,4 +40,5 @@ class ReviewWorkflowState:
     graph_status: str = "pending"
     judge_result: SemanticJudgeResult | None = None
     retry_count: int = 0
+    grounding_result: GroundingResult | None = None
 

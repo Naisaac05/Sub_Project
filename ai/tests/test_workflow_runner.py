@@ -1359,6 +1359,105 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertTrue(event["answer_quality_degraded"])
         self.assertFalse(event["answer_quality_passed"])
 
+    def test_grounding_grounded_answer_passes(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            if "precise Grounding Judge" in prompt:
+                return '{"grounding_score": 0.95, "evidence_coverage": 0.9, "unsupported_claims": [], "grounded": true}'
+            return "지연 로딩은 필요한 시점에 데이터를 로딩하는 방식입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.grounding_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertTrue(event["grounded"])
+        self.assertEqual(event["grounding_score"], 0.95)
+        self.assertEqual(event["retrieval_coverage_score"], 0.9)
+        self.assertFalse(event["unsupported_claim_detected"])
+
+    def test_grounding_unsupported_hallucinated_answer_flagged(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            if "precise Grounding Judge" in prompt:
+                return '{"grounding_score": 0.4, "evidence_coverage": 0.8, "unsupported_claims": ["지연 로딩 시 무조건 가비지 컬렉터가 작동하여 데이터가 자동 삭제됩니다."], "grounded": false}'
+            return "지연 로딩 시 무조건 가비지 컬렉터가 작동하여 데이터가 자동 삭제됩니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.grounding_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertFalse(event["grounded"])
+        self.assertEqual(event["grounding_score"], 0.4)
+        self.assertTrue(event["unsupported_claim_detected"])
+        self.assertTrue(event["low_grounding_answer"])
+        self.assertEqual(len(event["unsupported_claims"]), 1)
+        self.assertEqual(event["unsupported_claims"][0], "지연 로딩 시 무조건 가비지 컬렉터가 작동하여 데이터가 자동 삭제됩니다.")
+
+    def test_grounding_partial_grounding_detected(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            if "precise Grounding Judge" in prompt:
+                return '{"grounding_score": 0.85, "evidence_coverage": 0.35, "unsupported_claims": [], "grounded": false}'
+            return "부분 설명 답변"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.grounding_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertFalse(event["grounded"])
+        self.assertEqual(event["retrieval_coverage_score"], 0.35)
+
+    def test_grounding_retrieval_contamination_handled(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            if "precise Grounding Judge" in prompt:
+                return '{"grounding_score": 0.5, "evidence_coverage": 0.7, "unsupported_claims": ["오염된 RecyclerView 뷰홀더 정보 언급"], "grounded": false}'
+            return "오염된 뷰홀더 언급"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.grounding_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertFalse(event["grounded"])
+        self.assertEqual(event["grounding_score"], 0.5)
+        self.assertTrue(event["low_grounding_answer"])
+
 
 if __name__ == "__main__":
     unittest.main()
