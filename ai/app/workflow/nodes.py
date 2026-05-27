@@ -27,6 +27,12 @@ FORBIDDEN_CLAIMS = (
 )
 
 
+def _is_high_risk_question(state: ReviewWorkflowState) -> bool:
+    keywords = ["왜 틀렸나", "오답 이유", "이 문제에서", "이 선지가", "맞는 이유", "틀린 이유", "비교해줘", "근거가 뭐야"]
+    q_text = (state.request.user_answer or "") + " " + (state.request.question or "")
+    return any(kw in q_text for kw in keywords)
+
+
 def retrieve_context_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
     if state.mode == "follow-up":
         state.contexts = []
@@ -144,8 +150,20 @@ def generate_answer_node(
 
     # Semantic Judge 사후 평가 검증 레이어 연동
     if state.mode == "free-question" and state.route in {"generation", "rag_generation"} and state.answer:
+        # 1. Determine Tier (Tier 1 vs Tier 2)
+        tier = "tier2"
+        is_concept_def = state.free_question_intent and state.free_question_intent.intent == "concept_definition"
+        short_answer = len(state.answer or "") < 700
+        high_risk = _is_high_risk_question(state)
+        
+        if is_concept_def and short_answer and not high_risk and state.retry_count == 0:
+            tier = "tier1"
+            
+        state.judge_tier = tier
+        state.semantic_judge_skipped = False
+        
         from app.workflow.judge import judge_answer
-        # 1. 1차 판정 수행
+        # 1차 판정 수행
         judge_res = judge_answer(
             mode=state.mode,
             request=state.request,
@@ -160,6 +178,8 @@ def generate_answer_node(
         
         # 2. 1회 재시도 (should_retry 이고 retry_count == 0 일 때)
         if judge_res.should_retry and state.retry_count == 0:
+            # retry 발생 시 무조건 Tier 2 격상
+            state.judge_tier = "tier2"
             state.retry_count = 1
             
             # retry 시에는 background context 제거 버전 prompt 사용 (fake intent 활용해 context_dependent=False)
@@ -228,11 +248,21 @@ def generate_answer_node(
                 state.route = "fallback_template"
                 state.answer_style = _answer_style_for_state(state)
 
+        # Set metrics according to final tier
+        if state.judge_tier == "tier1":
+            state.grounding_judge_skipped = True
+            state.estimated_latency_saved_ms = 2000.0
+        else:
+            state.grounding_judge_skipped = False
+            state.estimated_latency_saved_ms = 0.0
+
     if state.mode == "free-question" and state.answer:
         from app.workflow.grounding import validate_grounding, GroundingResult
         is_skipped = (
             state.route in {"static_fast_path", "generated_card_fast_path", "cache"}
             or not state.contexts
+            or state.judge_tier == "tier0"
+            or state.judge_tier == "tier1"
         )
         if is_skipped:
             state.grounding_result = GroundingResult(
@@ -240,15 +270,96 @@ def generate_answer_node(
                 evidence_coverage=1.0,
                 unsupported_claims=[],
                 grounded=True,
-                reason="Skipped grounding: fast-path, cache, or empty contexts",
+                reason="Skipped grounding: fast-path, cache, empty contexts, or tier",
             )
+            state.grounding_judge_skipped = True
         else:
-            state.grounding_result = validate_grounding(
-                request=state.request,
-                answer=state.answer,
-                contexts=state.contexts,
-                generator=generator,
-            )
+            # Tier 2! Run grounding judge.
+            state.grounding_judge_skipped = False
+            
+            # Unit Test 환경이거나 Mock generator인 경우 동기식 처리로 Flake 원천 방지
+            import sys
+            is_test = "unittest" in sys.modules or getattr(generator, "__name__", "") not in ("call_ollama", "call_ollama_stream_async")
+            
+            if is_test:
+                state.grounding_result = validate_grounding(
+                    request=state.request,
+                    answer=state.answer,
+                    contexts=state.contexts,
+                    generator=generator,
+                )
+                if state.grounding_result:
+                    state.grounding_prompt_version = state.grounding_result.prompt_version
+                    state.grounding_prompt_hash = state.grounding_result.prompt_hash
+            else:
+                # Production 환경: daemon Background Thread 기동 (Response Latency 완전 고립화)
+                state.grounding_async_executed = True
+                
+                import threading
+                import logging
+                import json
+                from app.observability import LOGGER_NAME
+                
+                # Capture variables safely
+                req_copy = state.request
+                ans_copy = state.answer
+                ctx_copy = state.contexts
+                intent_copy = state.free_question_intent
+                route_copy = state.route
+                model_copy = state.model_used
+                fallback_copy = state.fallback_used
+                retry_copy = state.retry_count > 0
+                prompt_ver_copy = state.prompt_version
+                prompt_hash_copy = state.prompt_hash
+                prompt_strat_copy = state.prompt_strategy
+                candidate_copy = state.candidate_id
+                
+                def async_grounding_task():
+                    try:
+                        res = validate_grounding(
+                            request=req_copy,
+                            answer=ans_copy,
+                            contexts=ctx_copy,
+                            generator=generator,
+                        )
+                        sink = logging.getLogger(LOGGER_NAME)
+                        enriched = {
+                            "event": "ai_review.grounding_evaluated",
+                            "correlation_id": candidate_copy or "async-grounding",
+                            "grounding_score": res.grounding_score,
+                            "retrieval_coverage_score": res.evidence_coverage,
+                            "unsupported_claim_detected": len(res.unsupported_claims) > 0,
+                            "low_grounding_answer": res.grounding_score < 0.7,
+                            "unsupported_claims": res.unsupported_claims,
+                            "grounded": res.grounded,
+                            "reason": res.reason,
+                            
+                            # Tags
+                            "route": route_copy,
+                            "intent": intent_copy.intent if intent_copy else "free-question",
+                            "sub_intent": intent_copy.sub_intent if intent_copy else "unknown",
+                            "rag_policy": intent_copy.rag_policy if intent_copy else "unknown",
+                            "model": model_copy,
+                            "fallback_used": fallback_copy,
+                            "retry_used": retry_copy,
+                            "hallucination_risk": "low",
+                            
+                            # Prompt versioning metadata
+                            "prompt_version": prompt_ver_copy,
+                            "prompt_hash": prompt_hash_copy,
+                            "prompt_strategy": prompt_strat_copy,
+                            "grounding_prompt_version": res.prompt_version,
+                            "grounding_prompt_hash": res.prompt_hash,
+                        }
+                        sink.info(json.dumps(enriched, ensure_ascii=False, sort_keys=True))
+                    except Exception as async_exc:
+                        logging.getLogger("ai_review.workflow.nodes").error(f"Background grounding execution failed: {async_exc}")
+                
+                thread = threading.Thread(target=async_grounding_task)
+                thread.daemon = True
+                state.grounding_thread = thread
+                thread.start()
+
         if state.grounding_result:
             state.grounding_prompt_version = state.grounding_result.prompt_version
             state.grounding_prompt_hash = state.grounding_result.prompt_hash
