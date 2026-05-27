@@ -1041,7 +1041,7 @@ class WorkflowRunnerTest(unittest.TestCase):
             generator=lambda **kwargs: "generator should not be called",
         )
 
-        self.assertEqual(len(response.observability_events), 1)
+        self.assertEqual(len(response.observability_events), 2)
         event = response.observability_events[0]
         self.assertEqual(event["event"], "ai_review.workflow_completed")
         self.assertEqual(event["route"], response.route)
@@ -1049,6 +1049,10 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertEqual(event["fallback_used"], response.fallback_used)
         self.assertEqual(event["candidate_id"], response.candidate_id)
         self.assertIn("latency_ms", event)
+
+        judge_event = response.observability_events[1]
+        self.assertEqual(judge_event["event"], "ai_review.semantic_judge_evaluated")
+        self.assertEqual(judge_event["final_quality_status"], "degraded")
 
     def test_regression_free_question_concept_definition_without_bias(self):
         # 6번 요구사항 회귀 테스트 케이스
@@ -1233,6 +1237,127 @@ class WorkflowRunnerTest(unittest.TestCase):
         # 재시도 제한(최대 1회) 준수 -> 3차 시도 없이 최종 Fallback 연동
         self.assertTrue(response.fallback_used)
         self.assertIn("fallback_template", response.route)
+
+    def test_metric_judge_passed(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            return "지연 로딩은 필요한 시점에 데이터를 로드하는 방식입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertEqual(event["final_quality_status"], "passed")
+        self.assertTrue(event["answer_quality_passed"])
+        self.assertFalse(event["answer_quality_retry_triggered"])
+        self.assertFalse(event["answer_quality_fallback_triggered"])
+        self.assertFalse(event["answer_quality_degraded"])
+        self.assertEqual(event["answer_relevance_score"], 0.95)
+        self.assertEqual(event["answer_context_bias_score"], 0.1)
+        self.assertEqual(event["answer_hallucination_risk"], "low")
+        self.assertEqual(event["intent"], "concept_definition")
+        self.assertEqual(event["sub_intent"], "definition")
+
+    def test_metric_low_relevance_retry(self):
+        calls = []
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                if len(calls) == 1:
+                    return '{"relevance_score": 0.5, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": true, "reason": "1차 낮음"}'
+                return '{"relevance_score": 0.9, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "2차 통과"}'
+            calls.append(prompt)
+            if len(calls) == 1:
+                return "엉뚱한 답변"
+            return "정상 답변 지연 로딩 설명"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertEqual(event["final_quality_status"], "retried")
+        self.assertTrue(event["answer_quality_retry_triggered"])
+        self.assertFalse(event["answer_quality_passed"])
+        self.assertFalse(event["answer_quality_fallback_triggered"])
+
+    def test_metric_high_hallucination_fallback(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.8, "context_bias_score": 0.1, "hallucination_risk": "high", "should_retry": false, "reason": "환각"}'
+            return "환각 답변"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertEqual(event["final_quality_status"], "fallback")
+        self.assertTrue(event["answer_quality_fallback_triggered"])
+        self.assertFalse(event["answer_quality_passed"])
+        self.assertEqual(event["answer_hallucination_risk"], "high")
+
+    def test_metric_context_bias_score_logged(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.9, "context_bias_score": 0.85, "hallucination_risk": "low", "should_retry": true, "reason": "바이어스"}'
+            return "임시 답변"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertEqual(event["answer_context_bias_score"], 0.85)
+        self.assertTrue(event["semantic_context_bias_detected"])
+
+    def test_metric_judge_skipped_degraded(self):
+        # We use a lambda that has no reflection compatibility matching judge key words -> skipped/unavailable -> degraded
+        non_compatible_generator = lambda **kwargs: "지연 로딩은 필요한 시점에 데이터를 로드하는 방식입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=non_compatible_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertEqual(event["final_quality_status"], "degraded")
+        self.assertTrue(event["answer_quality_degraded"])
+        self.assertFalse(event["answer_quality_passed"])
 
 
 if __name__ == "__main__":
