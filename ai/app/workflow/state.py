@@ -49,4 +49,10 @@ class ReviewWorkflowState:
     judge_result: SemanticJudgeResult | None = None
     retry_count: int = 0
     grounding_result: GroundingResult | None = None
+    judge_tier: str = "tier0"  # "tier0" | "tier1" | "tier2"
+    semantic_judge_skipped: bool = True
+    grounding_judge_skipped: bool = True
+    grounding_async_executed: bool = False
+    estimated_latency_saved_ms: float = 4000.0
+    grounding_thread: object = None  # unit test join 용도 스레드 홀더
 

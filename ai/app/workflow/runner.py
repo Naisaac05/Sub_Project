@@ -106,6 +106,13 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
                 "retry_prompt_hash": state.retry_prompt_hash,
                 "semantic_judge_prompt_version": state.semantic_judge_prompt_version,
                 "semantic_judge_prompt_hash": state.semantic_judge_prompt_hash,
+
+                # Adaptive Judge Metrics
+                "judge_tier": state.judge_tier,
+                "semantic_judge_skipped": state.semantic_judge_skipped,
+                "grounding_judge_skipped": state.grounding_judge_skipped,
+                "grounding_async_executed": state.grounding_async_executed,
+                "estimated_latency_saved_ms": state.estimated_latency_saved_ms,
             })
         else:
             # Determine passed status
@@ -173,11 +180,18 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
                 "retry_prompt_hash": state.retry_prompt_hash,
                 "semantic_judge_prompt_version": state.semantic_judge_prompt_version,
                 "semantic_judge_prompt_hash": state.semantic_judge_prompt_hash,
+
+                # Adaptive Judge Metrics
+                "judge_tier": state.judge_tier,
+                "semantic_judge_skipped": state.semantic_judge_skipped,
+                "grounding_judge_skipped": state.grounding_judge_skipped,
+                "grounding_async_executed": state.grounding_async_executed,
+                "estimated_latency_saved_ms": state.estimated_latency_saved_ms,
             })
 
-        # Grounding metrics event
+        # Grounding metrics event (Only if NOT executed asynchronously)
         g_res = state.grounding_result
-        if g_res is not None:
+        if g_res is not None and not state.grounding_async_executed:
             events.append({
                 "event": "ai_review.grounding_evaluated",
                 "grounding_score": g_res.grounding_score,
@@ -438,6 +452,11 @@ def _workflow_completed_event(state: ReviewWorkflowState, response: AiGenerateRe
         "grounding_prompt_version": state.grounding_prompt_version,
         "latency_ms": response.latency_ms,
         "quality_flags": response.quality_flags,
+        "judge_tier": state.judge_tier,
+        "semantic_judge_skipped": state.semantic_judge_skipped,
+        "grounding_judge_skipped": state.grounding_judge_skipped,
+        "grounding_async_executed": state.grounding_async_executed,
+        "estimated_latency_saved_ms": state.estimated_latency_saved_ms,
     }
 
 

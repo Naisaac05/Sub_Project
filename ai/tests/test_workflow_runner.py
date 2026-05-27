@@ -1372,7 +1372,7 @@ class WorkflowRunnerTest(unittest.TestCase):
             mode="free-question",
             request=AiGenerateRequest(
                 question="JPA 문제",
-                user_answer="지연 로딩이 뭐야?",
+                user_answer="지연 로딩이 왜 틀렸나 설명해줘.",
             ),
             generator=mock_generator,
         )
@@ -1397,7 +1397,7 @@ class WorkflowRunnerTest(unittest.TestCase):
             mode="free-question",
             request=AiGenerateRequest(
                 question="JPA 문제",
-                user_answer="지연 로딩이 뭐야?",
+                user_answer="지연 로딩이 왜 틀렸나 설명해줘.",
             ),
             generator=mock_generator,
         )
@@ -1424,7 +1424,7 @@ class WorkflowRunnerTest(unittest.TestCase):
             mode="free-question",
             request=AiGenerateRequest(
                 question="JPA 문제",
-                user_answer="지연 로딩이 뭐야?",
+                user_answer="지연 로딩이 왜 틀렸나 설명해줘.",
             ),
             generator=mock_generator,
         )
@@ -1447,7 +1447,7 @@ class WorkflowRunnerTest(unittest.TestCase):
             mode="free-question",
             request=AiGenerateRequest(
                 question="JPA 문제",
-                user_answer="지연 로딩이 뭐야?",
+                user_answer="지연 로딩이 왜 틀렸나 설명해줘.",
             ),
             generator=mock_generator,
         )
