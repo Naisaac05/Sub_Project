@@ -22,7 +22,7 @@ from app.workflow.nodes import (
 from app.workflow.state import ReviewWorkflowState
 from app.workflow.lightweight_answers import LIGHTWEIGHT_MODEL_NAME, resolve_lightweight_answer
 from app.workflow.semantic_gate import semantic_evaluate_node, should_store_answer_cache
-from app.prompts import build_prompt, prompt_version_for_mode
+from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_for_mode
 from app.validation.text import compact_answer, korean_fallback
 from app.ollama.client import FALLBACK_MODEL
 
@@ -44,7 +44,183 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
         quality_flags=state.quality_flags,
         candidate_id=state.candidate_id,
     )
-    response.observability_events = [_workflow_completed_event(response)]
+    
+    events = [_workflow_completed_event(state, response)]
+    
+    if state.mode == "free-question":
+        judge_res = state.judge_result
+        retry_used = state.retry_count > 0
+        fallback_used = state.fallback_used
+        
+        # Tags extraction
+        route = state.route
+        intent = state.free_question_intent.intent if state.free_question_intent else state.mode
+        sub_intent = state.free_question_intent.sub_intent if state.free_question_intent else "unknown"
+        rag_policy = state.free_question_intent.rag_policy if state.free_question_intent else "unknown"
+        model = state.model_used or state.request.model
+        
+        if judge_res is None:
+            # skipped/unavailable case -> degraded
+            events.append({
+                "event": "ai_review.semantic_judge_evaluated",
+                "semantic_judge_passed": False,
+                "semantic_judge_failed": False,
+                "semantic_judge_retry": False,
+                "semantic_judge_fallback": False,
+                "semantic_context_bias_detected": False,
+                
+                # Quality metric dimensions
+                "answer_relevance_score": 1.0,
+                "answer_context_bias_score": 0.0,
+                "answer_hallucination_risk": "low",
+                "answer_quality_passed": False,
+                "answer_quality_retry_triggered": False,
+                "answer_quality_fallback_triggered": False,
+                "answer_quality_degraded": True,
+                
+                # Metric tags
+                "route": route,
+                "intent": intent,
+                "sub_intent": sub_intent,
+                "rag_policy": rag_policy,
+                "model": model,
+                "fallback_used": fallback_used,
+                "retry_used": retry_used,
+                "hallucination_risk": "low",
+                
+                # Observability event 확장
+                "relevance_score": 1.0,
+                "context_bias_score": 0.0,
+                "hallucination_risk": "low",
+                "should_retry": False,
+                "semantic_retry_used": False,
+                "semantic_fallback_used": fallback_used,
+                "final_quality_status": "degraded",
+                "reason": "Judge unavailable or skipped",
+                
+                # Prompt versioning metadata (bypassed/skipped)
+                "prompt_version": state.prompt_version,
+                "prompt_hash": state.prompt_hash,
+                "prompt_strategy": state.prompt_strategy,
+                "retry_prompt_version": state.retry_prompt_version,
+                "retry_prompt_hash": state.retry_prompt_hash,
+                "semantic_judge_prompt_version": state.semantic_judge_prompt_version,
+                "semantic_judge_prompt_hash": state.semantic_judge_prompt_hash,
+
+                # Adaptive Judge Metrics
+                "judge_tier": state.judge_tier,
+                "semantic_judge_skipped": state.semantic_judge_skipped,
+                "grounding_judge_skipped": state.grounding_judge_skipped,
+                "grounding_async_executed": state.grounding_async_executed,
+                "estimated_latency_saved_ms": state.estimated_latency_saved_ms,
+            })
+        else:
+            # Determine passed status
+            passed = (judge_res.relevance_score >= 0.7 and 
+                      judge_res.context_bias_score <= 0.6 and 
+                      judge_res.hallucination_risk != "high")
+            
+            is_skipped = (
+                judge_res.reason.startswith("Skipped judge") 
+                or "Exception occurred" in judge_res.reason 
+                or "Skipped" in judge_res.reason
+            )
+            
+            if is_skipped:
+                final_status = "degraded"
+            elif fallback_used:
+                final_status = "fallback"
+            elif retry_used:
+                final_status = "retried"
+            else:
+                final_status = "passed"
+                
+            events.append({
+                "event": "ai_review.semantic_judge_evaluated",
+                "semantic_judge_passed": passed and final_status == "passed",
+                "semantic_judge_failed": not passed and final_status != "retried",
+                "semantic_judge_retry": retry_used,
+                "semantic_judge_fallback": fallback_used,
+                "semantic_context_bias_detected": judge_res.context_bias_score > 0.6,
+                
+                # Quality metric dimensions
+                "answer_relevance_score": judge_res.relevance_score,
+                "answer_context_bias_score": judge_res.context_bias_score,
+                "answer_hallucination_risk": judge_res.hallucination_risk,
+                "answer_quality_passed": final_status == "passed",
+                "answer_quality_retry_triggered": retry_used,
+                "answer_quality_fallback_triggered": final_status == "fallback",
+                "answer_quality_degraded": final_status == "degraded",
+                
+                # Metric tags
+                "route": route,
+                "intent": intent,
+                "sub_intent": sub_intent,
+                "rag_policy": rag_policy,
+                "model": model,
+                "fallback_used": fallback_used,
+                "retry_used": retry_used,
+                "hallucination_risk": judge_res.hallucination_risk,
+                
+                # Observability event 확장
+                "relevance_score": judge_res.relevance_score,
+                "context_bias_score": judge_res.context_bias_score,
+                "hallucination_risk": judge_res.hallucination_risk,
+                "should_retry": judge_res.should_retry,
+                "semantic_retry_used": retry_used,
+                "semantic_fallback_used": fallback_used,
+                "final_quality_status": final_status,
+                "reason": judge_res.reason,
+                
+                # Prompt versioning metadata
+                "prompt_version": state.prompt_version,
+                "prompt_hash": state.prompt_hash,
+                "prompt_strategy": state.prompt_strategy,
+                "retry_prompt_version": state.retry_prompt_version,
+                "retry_prompt_hash": state.retry_prompt_hash,
+                "semantic_judge_prompt_version": state.semantic_judge_prompt_version,
+                "semantic_judge_prompt_hash": state.semantic_judge_prompt_hash,
+
+                # Adaptive Judge Metrics
+                "judge_tier": state.judge_tier,
+                "semantic_judge_skipped": state.semantic_judge_skipped,
+                "grounding_judge_skipped": state.grounding_judge_skipped,
+                "grounding_async_executed": state.grounding_async_executed,
+                "estimated_latency_saved_ms": state.estimated_latency_saved_ms,
+            })
+
+        # Grounding metrics event (Only if NOT executed asynchronously)
+        g_res = state.grounding_result
+        if g_res is not None and not state.grounding_async_executed:
+            events.append({
+                "event": "ai_review.grounding_evaluated",
+                "grounding_score": g_res.grounding_score,
+                "retrieval_coverage_score": g_res.evidence_coverage,
+                "unsupported_claim_detected": len(g_res.unsupported_claims) > 0,
+                "low_grounding_answer": g_res.grounding_score < 0.7,
+                "unsupported_claims": g_res.unsupported_claims,
+                "grounded": g_res.grounded,
+                "reason": g_res.reason,
+                
+                # Tags
+                "route": route,
+                "intent": intent,
+                "sub_intent": sub_intent,
+                "rag_policy": rag_policy,
+                "model": model,
+                "fallback_used": fallback_used,
+                "retry_used": retry_used,
+                "hallucination_risk": judge_res.hallucination_risk if judge_res else "low",
+                
+                # Prompt versioning metadata
+                "prompt_version": state.prompt_version,
+                "prompt_hash": state.prompt_hash,
+                "prompt_strategy": state.prompt_strategy,
+                "grounding_prompt_version": state.grounding_prompt_version,
+                "grounding_prompt_hash": state.grounding_prompt_hash,
+            })
+        
+    response.observability_events = events
     return response
 
 
@@ -97,7 +273,8 @@ async def run_review_workflow_stream(
     )
     if state.mode == "free-question" and lightweight_answer:
         state.answer = lightweight_answer.answer
-        state.prompt_version = prompt_version_for_mode(state.mode)
+        state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+        state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
         state.model_used = LIGHTWEIGHT_MODEL_NAME
         state.fallback_used = False
         state.route = lightweight_answer.route
@@ -130,7 +307,8 @@ async def run_review_workflow_stream(
     cached_answer = get_cached_answer(cache_key)
     if cached_answer:
         state.answer = cached_answer
-        state.prompt_version = prompt_version_for_mode(state.mode)
+        state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+        state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
         state.model_used = f"{state.request.model}:cache"
         state.fallback_used = False
         state.route = "cache"
@@ -148,8 +326,11 @@ async def run_review_workflow_stream(
         return
 
     # 3. Stream Token Generation
-    prompt = build_prompt(state.mode, state.request, context=_context_text(state))
-    state.prompt_version = prompt_version_for_mode(state.mode)
+    prompt = build_prompt(state.mode, state.request, context=_context_text(state), intent=state.free_question_intent)
+    state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+    state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
+    from app.prompts.registry import compute_prompt_hash
+    state.prompt_hash = compute_prompt_hash(prompt)
 
     yield {"type": "start"}
 
@@ -253,7 +434,7 @@ def _run_sequential_workflow(
     return state
 
 
-def _workflow_completed_event(response: AiGenerateResponse) -> dict[str, object]:
+def _workflow_completed_event(state: ReviewWorkflowState, response: AiGenerateResponse) -> dict[str, object]:
     return {
         "event": "ai_review.workflow_completed",
         "route": response.route,
@@ -263,8 +444,19 @@ def _workflow_completed_event(response: AiGenerateResponse) -> dict[str, object]
         "retrieved_concept_ids": response.retrieved_concept_ids,
         "candidate_id": response.candidate_id,
         "prompt_version": response.prompt_version,
+        "prompt_hash": state.prompt_hash,
+        "prompt_strategy": state.prompt_strategy,
+        "retry_prompt_version": state.retry_prompt_version,
+        "retry_prompt_hash": state.retry_prompt_hash,
+        "semantic_judge_prompt_version": state.semantic_judge_prompt_version,
+        "grounding_prompt_version": state.grounding_prompt_version,
         "latency_ms": response.latency_ms,
         "quality_flags": response.quality_flags,
+        "judge_tier": state.judge_tier,
+        "semantic_judge_skipped": state.semantic_judge_skipped,
+        "grounding_judge_skipped": state.grounding_judge_skipped,
+        "grounding_async_executed": state.grounding_async_executed,
+        "estimated_latency_saved_ms": state.estimated_latency_saved_ms,
     }
 
 
