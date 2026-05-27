@@ -1,6 +1,7 @@
 package com.devmatch.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.ConstructorBinding;
 
 @ConfigurationProperties(prefix = "app.ai-review")
 public record AiReviewProperties(
@@ -18,6 +19,7 @@ public record AiReviewProperties(
         String candidatesPath,
         String autoCandidatesPath
 ) {
+    @ConstructorBinding
     public AiReviewProperties {
         if (provider == null) {
             provider = Provider.PYTHON;

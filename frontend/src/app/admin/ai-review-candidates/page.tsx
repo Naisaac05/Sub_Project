@@ -257,10 +257,10 @@ export default function AdminAiReviewCandidatesPage() {
 
       <div className="grid gap-6 xl:grid-cols-[minmax(460px,1fr)_minmax(430px,0.9fr)]">
         <section className="overflow-hidden rounded-lg border border-slate-200 bg-white">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm table-fixed">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
               <tr>
-                <th className="px-4 py-3 w-10">
+                <th className="px-4 py-3 w-10" style={{ width: '40px' }}>
                   <input 
                     type="checkbox" 
                     checked={filtered.length > 0 && selectedBulkIds.size === filtered.length}
@@ -268,9 +268,9 @@ export default function AdminAiReviewCandidatesPage() {
                     className="rounded border-slate-300"
                   />
                 </th>
-                <th className="px-4 py-3">키워드</th>
-                <th className="px-4 py-3">출처</th>
-                <th className="px-4 py-3">상태</th>
+                <th className="px-4 py-3" style={{ width: '30%' }}>키워드</th>
+                <th className="px-4 py-3" style={{ width: '80px' }}>출처</th>
+                <th className="px-4 py-3" style={{ width: '80px' }}>상태</th>
                 <th className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     보관 만료일
@@ -318,9 +318,9 @@ export default function AdminAiReviewCandidatesPage() {
                         <div className="font-medium text-slate-900">{candidate.term}</div>
                         <div className="text-xs text-slate-500">{candidate.category}</div>
                       </td>
-                      <td className="px-4 py-3"><SourceBadge value={candidate.source} /></td>
-                      <td className="px-4 py-3"><StatusBadge value={candidate.status} /></td>
-                      <td className="px-4 py-3 text-slate-500">{candidate.retentionUntil || '-'}</td>
+                      <td className="px-4 py-3 whitespace-nowrap"><SourceBadge value={candidate.source} /></td>
+                      <td className="px-4 py-3 whitespace-nowrap"><StatusBadge value={candidate.status} /></td>
+                      <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{candidate.retentionUntil ? candidate.retentionUntil.split('T')[0] : '-'}</td>
                     </tr>
                   );
                 })
@@ -540,7 +540,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 
 function SourceBadge({ value }: { value: string }) {
   const color = value === 'AUTO' ? 'bg-blue-100 text-blue-700' : value === 'COURSE' ? 'bg-slate-100 text-slate-700' : 'bg-purple-100 text-purple-700';
-  return <span className={`rounded px-2 py-1 text-xs font-bold ${color}`}>{value === 'AUTO' ? '자동수집' : value}</span>;
+  return <span className={`rounded px-2 py-1 text-xs font-bold whitespace-nowrap ${color}`}>{value === 'AUTO' ? '자동수집' : value}</span>;
 }
 
 function StatusBadge({ value }: { value: AiReviewCandidateV2Status }) {
@@ -560,5 +560,5 @@ function StatusBadge({ value }: { value: AiReviewCandidateV2Status }) {
         : value === 'MERGED'
           ? 'bg-blue-100 text-blue-700'
           : 'bg-amber-100 text-amber-700';
-  return <span className={`rounded px-2 py-1 text-xs font-bold ${color}`}>{label}</span>;
+  return <span className={`rounded px-2 py-1 text-xs font-bold whitespace-nowrap ${color}`}>{label}</span>;
 }

@@ -28,6 +28,10 @@ FORBIDDEN_CLAIMS = (
 
 
 def retrieve_context_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
+    if state.mode == "follow-up":
+        state.contexts = []
+        return state
+
     learner_query = state.request.user_answer
     if state.mode == "free-question":
         state.resolved_query = resolve_learner_query(state.request.user_answer)
@@ -83,9 +87,10 @@ def generate_answer_node(
 
     prompt = build_prompt(state.mode, state.request, context=_context_text(state))
     state.prompt_version = prompt_version_for_mode(state.mode)
+    generation_model = _generation_model_for_state(state)
     try:
         state.answer = generator(
-            model=state.request.model,
+            model=generation_model,
             prompt=prompt,
             temperature=state.request.temperature,
             max_tokens=max_tokens_for_mode(state.mode, state.request.max_tokens),
@@ -93,9 +98,21 @@ def generate_answer_node(
             num_thread=state.request.num_thread,
         )
         state.answer = compact_answer(state.answer, state.mode)
-        state.model_used = state.request.model
+        state.model_used = generation_model
         state.route = "rag_generation" if state.contexts else "generation"
         state.answer_style = _answer_style_for_state(state)
+        if _should_retry_fallback_model(state) and not contains_korean(state.answer):
+            state.answer = generator(
+                model=FALLBACK_MODEL,
+                prompt=prompt,
+                temperature=state.request.temperature,
+                max_tokens=max_tokens_for_mode(state.mode, state.request.max_tokens),
+                num_ctx=state.request.num_ctx,
+                num_thread=state.request.num_thread,
+            )
+            state.answer = compact_answer(state.answer, state.mode)
+            state.model_used = FALLBACK_MODEL
+            state.error = None
     except Exception as exc:
         if _should_retry_fallback_model(state):
             try:
@@ -159,7 +176,7 @@ def validate_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
 
 def confidence_gate_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
     validation_score = state.validation.score if state.validation else 0.0
-    if state.mode == "free-question" and not state.contexts:
+    if state.mode in {"free-question", "follow-up"} and not state.contexts:
         retrieval_score = 0.5
         rule_match_score = 1.0
     else:
@@ -321,6 +338,9 @@ def _answer_relevance_ok(state: ReviewWorkflowState) -> bool:
     answer = normalize_question(state.answer)
     if topic and topic in answer:
         return True
+    topic_tokens = re.findall(r"[a-z0-9+#.-]+|[가-힣]{2,}", topic)
+    if any(token and token in answer for token in topic_tokens):
+        return True
 
     stale_terms = _stale_original_terms(state.request)
     return not any(term and term in answer for term in stale_terms)
@@ -400,15 +420,26 @@ def _matched_concept_id_for_lightweight(state: ReviewWorkflowState) -> str | Non
 
 
 def _should_retry_fallback_model(state: ReviewWorkflowState) -> bool:
+    if _generation_model_for_state(state) == FALLBACK_MODEL:
+        return False
+    if state.mode == "follow-up":
+        return True
     return (
         state.mode == "free-question"
         and state.free_question_intent is not None
         and state.free_question_intent.rag_policy == "latest_question_only"
-        and state.request.model != FALLBACK_MODEL
     )
 
 
+def _generation_model_for_state(state: ReviewWorkflowState) -> str:
+    if state.mode == "follow-up":
+        return FALLBACK_MODEL
+    return state.request.model
+
+
 def _required_keywords_ok(state: ReviewWorkflowState) -> bool:
+    if state.mode != "free-question":
+        return True
     if not state.contexts:
         return True
 
