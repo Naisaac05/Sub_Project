@@ -47,24 +47,115 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
     
     events = [_workflow_completed_event(response)]
     
-    if state.judge_result:
+    if state.mode == "free-question":
         judge_res = state.judge_result
-        passed = (judge_res.relevance_score >= 0.7 and 
-                  judge_res.context_bias_score <= 0.6 and 
-                  judge_res.hallucination_risk != "high")
-                  
-        events.append({
-            "event": "ai_review.semantic_judge_evaluated",
-            "semantic_judge_passed": passed,
-            "semantic_judge_failed": not passed,
-            "semantic_judge_retry": state.retry_count > 0,
-            "semantic_judge_fallback": state.fallback_used and not passed,
-            "semantic_context_bias_detected": judge_res.context_bias_score > 0.6,
-            "relevance_score": judge_res.relevance_score,
-            "context_bias_score": judge_res.context_bias_score,
-            "hallucination_risk": judge_res.hallucination_risk,
-            "reason": judge_res.reason,
-        })
+        retry_used = state.retry_count > 0
+        fallback_used = state.fallback_used
+        
+        # Tags extraction
+        route = state.route
+        intent = state.free_question_intent.intent if state.free_question_intent else state.mode
+        sub_intent = state.free_question_intent.sub_intent if state.free_question_intent else "unknown"
+        rag_policy = state.free_question_intent.rag_policy if state.free_question_intent else "unknown"
+        model = state.model_used or state.request.model
+        
+        if judge_res is None:
+            # skipped/unavailable case -> degraded
+            events.append({
+                "event": "ai_review.semantic_judge_evaluated",
+                "semantic_judge_passed": False,
+                "semantic_judge_failed": False,
+                "semantic_judge_retry": False,
+                "semantic_judge_fallback": False,
+                "semantic_context_bias_detected": False,
+                
+                # Quality metric dimensions
+                "answer_relevance_score": 1.0,
+                "answer_context_bias_score": 0.0,
+                "answer_hallucination_risk": "low",
+                "answer_quality_passed": False,
+                "answer_quality_retry_triggered": False,
+                "answer_quality_fallback_triggered": False,
+                "answer_quality_degraded": True,
+                
+                # Metric tags
+                "route": route,
+                "intent": intent,
+                "sub_intent": sub_intent,
+                "rag_policy": rag_policy,
+                "model": model,
+                "fallback_used": fallback_used,
+                "retry_used": retry_used,
+                "hallucination_risk": "low",
+                
+                # Observability event 확장
+                "relevance_score": 1.0,
+                "context_bias_score": 0.0,
+                "hallucination_risk": "low",
+                "should_retry": False,
+                "semantic_retry_used": False,
+                "semantic_fallback_used": fallback_used,
+                "final_quality_status": "degraded",
+                "reason": "Judge unavailable or skipped",
+            })
+        else:
+            # Determine passed status
+            passed = (judge_res.relevance_score >= 0.7 and 
+                      judge_res.context_bias_score <= 0.6 and 
+                      judge_res.hallucination_risk != "high")
+            
+            is_skipped = (
+                judge_res.reason.startswith("Skipped judge") 
+                or "Exception occurred" in judge_res.reason 
+                or "Skipped" in judge_res.reason
+            )
+            
+            if is_skipped:
+                final_status = "degraded"
+            elif fallback_used:
+                final_status = "fallback"
+            elif retry_used:
+                final_status = "retried"
+            else:
+                final_status = "passed"
+                
+            events.append({
+                "event": "ai_review.semantic_judge_evaluated",
+                "semantic_judge_passed": passed and final_status == "passed",
+                "semantic_judge_failed": not passed and final_status != "retried",
+                "semantic_judge_retry": retry_used,
+                "semantic_judge_fallback": fallback_used,
+                "semantic_context_bias_detected": judge_res.context_bias_score > 0.6,
+                
+                # Quality metric dimensions
+                "answer_relevance_score": judge_res.relevance_score,
+                "answer_context_bias_score": judge_res.context_bias_score,
+                "answer_hallucination_risk": judge_res.hallucination_risk,
+                "answer_quality_passed": final_status == "passed",
+                "answer_quality_retry_triggered": retry_used,
+                "answer_quality_fallback_triggered": final_status == "fallback",
+                "answer_quality_degraded": final_status == "degraded",
+                
+                # Metric tags
+                "route": route,
+                "intent": intent,
+                "sub_intent": sub_intent,
+                "rag_policy": rag_policy,
+                "model": model,
+                "fallback_used": fallback_used,
+                "retry_used": retry_used,
+                "hallucination_risk": judge_res.hallucination_risk,
+                
+                # Observability event 확장
+                "relevance_score": judge_res.relevance_score,
+                "context_bias_score": judge_res.context_bias_score,
+                "hallucination_risk": judge_res.hallucination_risk,
+                "should_retry": judge_res.should_retry,
+                "semantic_retry_used": retry_used,
+                "semantic_fallback_used": fallback_used,
+                "final_quality_status": final_status,
+                "reason": judge_res.reason,
+            })
         
     response.observability_events = events
     return response
