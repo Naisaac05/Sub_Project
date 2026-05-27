@@ -1050,6 +1050,190 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertEqual(event["candidate_id"], response.candidate_id)
         self.assertIn("latency_ms", event)
 
+    def test_regression_free_question_concept_definition_without_bias(self):
+        # 6번 요구사항 회귀 테스트 케이스
+        # 질문: "지연 로딩, 순환 참조, 불필요한 필드 노출 문제가 각각 어떤 의미인지 알고 싶어요"
+        
+        def mock_llm_generator(**kwargs):
+            return (
+                "지연 로딩은 필요한 시점에 데이터를 가져오는 방식이고, "
+                "순환 참조는 두 엔티티가 서로를 참조하여 무한 루프가 도는 현상이며, "
+                "불필요한 필드 노출은 내부 DB 구조가 API 밖으로 새는 문제입니다. "
+                "Entity를 DTO로 변환하여 반환하면 이 세 가지 문제를 안전하게 피할 수 있습니다."
+            )
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 엔티티 반환 시 생길 수 있는 문제와 해결방안은?",
+                correct_answer="Entity를 DTO로 변환하여 반환한다.",
+                selected_answer="DB 인덱스를 자동 삭제한다.",
+                user_answer="지연 로딩, 순환 참조, 불필요한 필드 노출 문제가 각각 어떤 의미인지 알고 싶어요",
+            ),
+            generator=mock_llm_generator,
+        )
+
+        # A. fallback이 사용되지 않아야 함 (즉, validation 통과)
+        self.assertFalse(response.fallback_used)
+        
+        # B. 기대 결과 포함 여부 검증
+        self.assertIn("지연 로딩", response.answer)
+        self.assertIn("순환 참조", response.answer)
+        self.assertIn("필드 노출", response.answer)
+        self.assertIn("DTO", response.answer)
+        
+        # C. 금지 결과 미포함 검증
+        self.assertNotIn("자동 삭제", response.answer)
+        self.assertNotIn("RecyclerView", response.answer)
+        self.assertNotIn("ViewHolder", response.answer)
+
+    def test_judge_concept_definition_bias_triggers_retry(self):
+        calls = []
+
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            calls.append(prompt)
+            # 1. 판사의 structured JSON 평가 호출 모의
+            if "precise AI Semantic Judge" in prompt:
+                # 1차 생성에 대해 bias 판정
+                if "오답입니다" in prompt:
+                    return '{"relevance_score": 0.9, "context_bias_score": 0.8, "hallucination_risk": "low", "should_retry": true, "reason": "배경문제에 너무 매몰됨"}'
+                # 2차 생성에 대해 패스 판정
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            
+            # 2. 일반 답변 생성 호출 모의
+            if len(calls) == 1:
+                # 1차 답변 (bias 포함)
+                return "DB 인덱스가 자동 삭제되는 오답입니다."
+            # 2차 답변 (정상)
+            return "지연 로딩은 필요한 시점에 연관 데이터를 불러오는 방식입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 관련 문제",
+                correct_answer="DTO 반환",
+                selected_answer="DB 인덱스 자동 삭제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        # 1차 bias 발견 -> 재시도 실행하여 2차 패스 확인
+        self.assertFalse(response.fallback_used)
+        self.assertIn("지연 로딩은", response.answer)
+        # observability_events에 retry 메트릭 포함 확인
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertTrue(event["semantic_judge_retry"])
+
+    def test_judge_follow_up_contamination_triggers_retry(self):
+        calls = []
+
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            calls.append(prompt)
+            if "precise AI Semantic Judge" in prompt:
+                if "ViewHolder" in prompt:
+                    return '{"relevance_score": 0.3, "context_bias_score": 0.0, "hallucination_risk": "low", "should_retry": true, "reason": "엉뚱한 뷰홀더 언급함"}'
+                return '{"relevance_score": 0.9, "context_bias_score": 0.0, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            
+            if len(calls) == 1:
+                return "ViewHolder는 뷰를 재사용하기 위한 도구입니다."
+            return "DTO는 계층 간 데이터 전달용 객체입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 관련 문제",
+                correct_answer="DTO",
+                user_answer="DTO 개념이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        self.assertFalse(response.fallback_used)
+        self.assertIn("DTO는", response.answer)
+
+    def test_judge_hallucinated_answer_triggers_fallback(self):
+        calls = []
+
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            calls.append(prompt)
+            if "precise AI Semantic Judge" in prompt:
+                # 환각 고위험 판결
+                return '{"relevance_score": 0.8, "context_bias_score": 0.0, "hallucination_risk": "high", "should_retry": false, "reason": "환각 심각함"}'
+            return "equals는 가비지 컬렉터의 동작을 수동 제어하는 함수입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="Java equals",
+                correct_answer="equals 재정의",
+                user_answer="equals가 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        # 환각 고위험 발견 -> 재시도 없이 즉시 fallback 작동
+        self.assertTrue(response.fallback_used)
+        self.assertIn("fallback_template", response.route)
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertTrue(event["semantic_judge_fallback"])
+
+    def test_judge_retry_uses_background_removed_prompt(self):
+        prompts_sent = []
+
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.5, "context_bias_score": 0.8, "hallucination_risk": "low", "should_retry": true, "reason": "재시도"}'
+            prompts_sent.append(prompt)
+            return "임시 답변"
+
+        run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="원래 배경 문제 텍스트가 매우 길게 나열됨",
+                correct_answer="DTO",
+                selected_answer="오답",
+                user_answer="이 문제에서 프록시 객체가 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        self.assertEqual(len(prompts_sent), 2)
+        # 1차 프롬프트에는 배경 텍스트가 들어있음
+        self.assertIn("원래 배경 문제", prompts_sent[0])
+        # 2차 프롬프트(재시도)에는 context_dependent=False에 의해 원래 배경 문제가 제거되어 있음!
+        self.assertNotIn("원래 배경 문제", prompts_sent[1])
+
+    def test_judge_retry_limit_respected(self):
+        calls = []
+
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            calls.append(prompt)
+            if "precise AI Semantic Judge" in prompt:
+                # 1차, 2차 판결 모두 relevance 가 낮아 should_retry=True 임에도, retry_count에 의해 fallback되도록 유도
+                return '{"relevance_score": 0.4, "context_bias_score": 0.0, "hallucination_risk": "low", "should_retry": true, "reason": "실패"}'
+            return "동문서답 계속 수행"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="프록시 객체가 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        # 재시도 제한(최대 1회) 준수 -> 3차 시도 없이 최종 Fallback 연동
+        self.assertTrue(response.fallback_used)
+        self.assertIn("fallback_template", response.route)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -241,7 +241,7 @@ def resolve_lightweight_answer(
 ) -> LightweightAnswer | None:
     if not intent or intent.rag_policy != "latest_question_only":
         return None
-    if intent.intent not in {"concept_definition", "comparison", "related_concept", "practical_application"}:
+    if intent.intent != "concept_definition":
         return None
 
     match_text = " ".join((question, intent.topic))
@@ -260,11 +260,7 @@ def resolve_lightweight_answer(
 
 
 def _style_for_intent(intent: FreeQuestionIntent) -> str:
-    return {
-        "comparison": "comparison",
-        "practical_application": "practical",
-        "related_concept": "related",
-    }.get(intent.intent, "definition")
+    return intent.sub_intent if intent.sub_intent in {"comparison", "practical", "related"} else "definition"
 
 
 def _concept_card_answer_for(concept_id: str | None) -> str | None:

@@ -5,6 +5,7 @@ from app.schemas import AiGenerateRequest
 from app.scoring import ConfidenceResult
 from app.workflow.intent import FreeQuestionIntent
 from app.workflow.query_resolver import ResolvedQuery
+from app.workflow.judge import SemanticJudgeResult
 
 
 @dataclass
@@ -36,4 +37,6 @@ class ReviewWorkflowState:
     quality_flags: list[str] = field(default_factory=list)
     candidate_id: str | None = None
     graph_status: str = "pending"
+    judge_result: SemanticJudgeResult | None = None
+    retry_count: int = 0
 
