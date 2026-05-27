@@ -18,6 +18,7 @@ package com.devmatch.controller;
 import com.devmatch.dto.common.ApiResponse;
 import com.devmatch.entity.AiReviewSession;
 import com.devmatch.entity.TestResult;
+import com.devmatch.exception.ForbiddenOperationException;
 import com.devmatch.exception.TestNotFoundException;
 import com.devmatch.repository.AiReviewMessageRepository;
 import com.devmatch.repository.AiReviewSessionRepository;
@@ -26,7 +27,6 @@ import com.devmatch.security.CustomUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,13 +59,13 @@ public class TestResetAiReviewController {
                 .orElseThrow(() -> new TestNotFoundException("진단평가 결과를 찾을 수 없습니다."));
 
         if (!Objects.equals(result.getUser().getId(), userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(ApiResponse.error("본인의 진단평가만 초기화할 수 있습니다."));
+            throw new ForbiddenOperationException("본인의 진단평가만 초기화할 수 있습니다.");
         }
 
         Optional<AiReviewSession> existing =
                 sessionRepository.findTopByUserIdAndTestResultIdOrderByCreatedAtDesc(userId, testResultId);
 
+        // 세션이 없으면 no-op, 200 반환
         existing.ifPresent(session -> {
             messageRepository.deleteBySessionId(session.getId());
             sessionRepository.delete(session);
