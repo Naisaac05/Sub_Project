@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 from app.schemas import AiGenerateRequest
 from app.scoring import ConfidenceResult
+from app.rag.retriever import RetrievedContext
 from app.workflow.answer_cache import clear_answer_cache
 from app.workflow.graph import (
     WORKFLOW_NODE_NAMES,
@@ -17,6 +18,8 @@ from app.workflow.graph import (
     dead_end_state_node,
     error_state_node,
 )
+from app.workflow.nodes import validate_answer_node
+from app.workflow.nodes import retrieve_context_node
 from app.workflow.runner import run_review_workflow
 from app.workflow.state import ReviewWorkflowState
 
@@ -78,6 +81,133 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertEqual(response.model_used, "template")
         self.assertIn("기준", response.answer)
 
+
+    def test_follow_up_accepts_answer_about_selected_and_correct_options(self):
+        response = run_review_workflow(
+            mode="follow-up",
+            request=AiGenerateRequest(
+                question=(
+                    "Spring Security\uc5d0\uc11c \ud604\uc7ac \ub85c\uadf8\uc778 "
+                    "\uc0ac\uc6a9\uc790\ub97c \ucee8\ud2b8\ub864\ub7ec \uba54\uc11c\ub4dc "
+                    "\ud30c\ub77c\ubbf8\ud130\ub85c \uc8fc\uc785\ubc1b\uc744 \ub54c "
+                    "\uc0ac\uc6a9\ud558\ub294 \uac83\uc740?"
+                ),
+                options=["@AuthenticationPrincipal", "@Scheduled"],
+                correct_answer="@AuthenticationPrincipal",
+                selected_answer="@Scheduled",
+                user_answer="@Scheduled\uac00 \ubb54\uc9c0 \ubab0\ub77c\uc11c\uc694",
+                evaluation="NEEDS_REVIEW",
+                step=2,
+            ),
+            generator=lambda **kwargs: (
+                "@Scheduled\ub294 \uc815\ud574\uc9c4 \uc2dc\uac04\uc5d0 \uba54\uc11c\ub4dc\ub97c "
+                "\uc2e4\ud589\ud558\ub294 \uc2a4\ucf00\uc904\ub9c1\uc6a9\uc774\uace0, "
+                "@AuthenticationPrincipal\uc740 \ud604\uc7ac \ub85c\uadf8\uc778 \uc0ac\uc6a9\uc790\ub97c "
+                "\ucee8\ud2b8\ub864\ub7ec \ud30c\ub77c\ubbf8\ud130\ub85c \ubc1b\ub294 "
+                "Spring Security \uc560\ub108\ud14c\uc774\uc158\uc785\ub2c8\ub2e4. "
+                "\uc774 \ubb38\uc81c\uc5d0\uc11c\ub294 \ub85c\uadf8\uc778 \uc0ac\uc6a9\uc790 "
+                "\uc8fc\uc785\uc774 \uae30\uc900\uc774\ubbc0\ub85c \ub458\uc758 \ucc45\uc784\uc744 "
+                "\ud55c \ubb38\uc7a5\uc73c\ub85c \uad6c\ubd84\ud574\ubcfc\uae4c\uc694?"
+            ),
+        )
+
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.route, "generation")
+        self.assertIn("@Scheduled", response.answer)
+        self.assertIn("@AuthenticationPrincipal", response.answer)
+
+    def test_follow_up_validation_does_not_require_unrelated_context_keywords(self):
+        state = ReviewWorkflowState(
+            mode="follow-up",
+            request=AiGenerateRequest(
+                question=(
+                    "Spring Security\uc5d0\uc11c \ud604\uc7ac \ub85c\uadf8\uc778 "
+                    "\uc0ac\uc6a9\uc790\ub97c \ucee8\ud2b8\ub864\ub7ec \uba54\uc11c\ub4dc "
+                    "\ud30c\ub77c\ubbf8\ud130\ub85c \uc8fc\uc785\ubc1b\uc744 \ub54c "
+                    "\uc0ac\uc6a9\ud558\ub294 \uac83\uc740?"
+                ),
+                correct_answer="@AuthenticationPrincipal",
+                selected_answer="@Scheduled",
+                user_answer="@Scheduled\uac00 \ubb54\uc9c0 \ubab0\ub77c\uc11c\uc694",
+            ),
+            contexts=[
+                RetrievedContext(
+                    "unrelated",
+                    "Unrelated",
+                    "## \ud3c9\uac00 \ud0a4\uc6cc\ub4dc\n- RecyclerView\n- ViewHolder",
+                    3.0,
+                    {},
+                )
+            ],
+            answer=(
+                "@Scheduled\ub294 \uc815\ud574\uc9c4 \uc2dc\uac04\uc5d0 \uba54\uc11c\ub4dc\ub97c "
+                "\uc2e4\ud589\ud558\ub294 \uc2a4\ucf00\uc904\ub9c1\uc6a9\uc774\uace0, "
+                "@AuthenticationPrincipal\uc740 \ud604\uc7ac \ub85c\uadf8\uc778 \uc0ac\uc6a9\uc790\ub97c "
+                "\ucee8\ud2b8\ub864\ub7ec \ud30c\ub77c\ubbf8\ud130\ub85c \ubc1b\ub294 "
+                "Spring Security \uc560\ub108\ud14c\uc774\uc158\uc785\ub2c8\ub2e4."
+            ),
+        )
+
+        validated = validate_answer_node(state)
+
+        self.assertNotIn("missing_required_keywords", validated.quality_flags)
+        self.assertTrue(validated.validation.required_keywords_ok)
+
+    def test_follow_up_uses_fallback_model_first(self):
+        calls = []
+
+        def recording_generator(**kwargs):
+            calls.append(kwargs["model"])
+            return (
+                "@Scheduled\ub294 \uc815\ud574\uc9c4 \uc2dc\uac04\uc5d0 \uba54\uc11c\ub4dc\ub97c "
+                "\uc2e4\ud589\ud558\ub294 \uc2a4\ucf00\uc904\ub9c1\uc6a9\uc774\uace0, "
+                "@AuthenticationPrincipal\uc740 \ud604\uc7ac \ub85c\uadf8\uc778 \uc0ac\uc6a9\uc790\ub97c "
+                "\ucee8\ud2b8\ub864\ub7ec \ud30c\ub77c\ubbf8\ud130\ub85c \ubc1b\ub294 "
+                "Spring Security \uc560\ub108\ud14c\uc774\uc158\uc785\ub2c8\ub2e4."
+            )
+
+        response = run_review_workflow(
+            mode="follow-up",
+            request=AiGenerateRequest(
+                question=(
+                    "Spring Security\uc5d0\uc11c \ud604\uc7ac \ub85c\uadf8\uc778 "
+                    "\uc0ac\uc6a9\uc790\ub97c \ucee8\ud2b8\ub864\ub7ec \uba54\uc11c\ub4dc "
+                    "\ud30c\ub77c\ubbf8\ud130\ub85c \uc8fc\uc785\ubc1b\uc744 \ub54c "
+                    "\uc0ac\uc6a9\ud558\ub294 \uac83\uc740?"
+                ),
+                options=["@AuthenticationPrincipal", "@Scheduled"],
+                correct_answer="@AuthenticationPrincipal",
+                selected_answer="@Scheduled",
+                user_answer="@Scheduled\uac00 \ubb54\uc9c0 \ubab0\ub77c\uc11c\uc694",
+                evaluation="NEEDS_REVIEW",
+                step=2,
+            ),
+            generator=recording_generator,
+        )
+
+        self.assertEqual(calls, ["qwen3:4b-q4_K_M"])
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.model_used, "qwen3:4b-q4_K_M")
+
+    def test_follow_up_skips_rag_context_retrieval(self):
+        state = ReviewWorkflowState(
+            mode="follow-up",
+            request=AiGenerateRequest(
+                question=(
+                    "Spring Security\uc5d0\uc11c \ud604\uc7ac \ub85c\uadf8\uc778 "
+                    "\uc0ac\uc6a9\uc790\ub97c \ucee8\ud2b8\ub864\ub7ec \uba54\uc11c\ub4dc "
+                    "\ud30c\ub77c\ubbf8\ud130\ub85c \uc8fc\uc785\ubc1b\uc744 \ub54c "
+                    "\uc0ac\uc6a9\ud558\ub294 \uac83\uc740?"
+                ),
+                correct_answer="@AuthenticationPrincipal",
+                selected_answer="@Scheduled",
+                user_answer="@Scheduled\uac00 \ubb54\uc9c0 \ubab0\ub77c\uc11c\uc694",
+            ),
+        )
+
+        retrieved = retrieve_context_node(state)
+
+        self.assertEqual(retrieved.contexts, [])
 
     def test_free_question_answer_is_not_replaced_by_unrelated_context_fallback(self):
         response = run_review_workflow(
@@ -506,6 +636,32 @@ class WorkflowRunnerTest(unittest.TestCase):
                 self.assertIn(expected_keyword, response.answer)
                 self.assertEqual(response.retrieved_concept_ids, [])
 
+    def test_contextual_json_question_uses_generator_instead_of_static_definition(self):
+        calls = {"count": 0}
+
+        def generator(**kwargs):
+            calls["count"] += 1
+            return (
+                "\uc751\ub2f5 JSON\uc740 \uc11c\ubc84\uac00 \ud074\ub77c\uc774\uc5b8\ud2b8\uc5d0 "
+                "\ubcf4\ub0b4\ub294 JSON \ud615\uc2dd\uc758 \uacb0\uacfc \ub370\uc774\ud130\uc785\ub2c8\ub2e4."
+            )
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="Spring MVC\uc5d0\uc11c JSON \uc751\ub2f5\uc744 \ub9cc\ub4dc\ub294 \ubc29\uc2dd\uc740?",
+                correct_answer="ResponseEntity\ub85c \uac1d\uccb4\ub97c \ubc18\ud658\ud574 JSON\uc73c\ub85c \uc9c1\ub82c\ud654\ud55c\ub2e4",
+                user_answer="\uc751\ub2f5 JSON\uc758 \uc758\ubbf8",
+            ),
+            generator=generator,
+        )
+
+        self.assertEqual(calls["count"], 1)
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.route, "generation")
+        self.assertNotEqual(response.model_used, "lightweight-template")
+        self.assertIn("\uc751\ub2f5 JSON", response.answer)
+
     def test_typo_alias_question_uses_lightweight_fast_path(self):
         def failing_generator(**kwargs):
             raise AssertionError("generator should not be called for corrected aria-label fast path")
@@ -674,6 +830,44 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertEqual(response.route, "generation")
         self.assertEqual(response.model_used, "qwen3:4b-q4_K_M")
         self.assertIn("WebSocket", response.answer)
+        self.assertNotIn("\uc2b9\uc778\ub41c \uc9c0\uc2dd \uce74\ub4dc", response.answer)
+
+    def test_non_korean_free_question_retries_fallback_model_before_template(self):
+        calls: list[str] = []
+
+        def fallback_model_generator(**kwargs):
+            calls.append(kwargs["model"])
+            if len(calls) == 1:
+                return "train validation test are dataset splits for model development."
+            return (
+                "train/validation/test\ub294 \ubaa8\ub378 \uac1c\ubc1c \ub370\uc774\ud130\ub97c "
+                "\uc5ed\ud560\ubcc4\ub85c \ub098\ub204\ub294 \uae30\uc900\uc785\ub2c8\ub2e4. "
+                "train\uc740 \ud559\uc2b5, validation\uc740 \ud29c\ub2dd\uacfc \uac80\uc99d, "
+                "test\ub294 \ucd5c\uc885 \uc77c\ubc18\ud654 \uc131\ub2a5 \ud655\uc778\uc5d0 \uc0ac\uc6a9\ud569\ub2c8\ub2e4."
+            )
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question=(
+                    "AI \ubaa8\ub378 \ud559\uc2b5 \ub370\uc774\ud130\ub97c \ub098\ub20c \ub54c "
+                    "train/validation/test set\uc758 \uc5ed\ud560\uc740?"
+                ),
+                correct_answer=(
+                    "train\uc740 \ud559\uc2b5, validation\uc740 \ud29c\ub2dd\uacfc \uac80\uc99d, "
+                    "test\ub294 \ucd5c\uc885 \uc77c\ubc18\ud654 \uc131\ub2a5 \ud3c9\uac00"
+                ),
+                user_answer="train/validation/test \ub370\uc774\ud130\uac00 \uc5b4\ub5a4 \uc758\ubbf8\uc778\uc9c0 \ubab0\ub77c",
+                model="qwen3:1.7b",
+            ),
+            generator=fallback_model_generator,
+        )
+
+        self.assertEqual(calls, ["qwen3:1.7b", "qwen3:4b-q4_K_M"])
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.route, "generation")
+        self.assertEqual(response.model_used, "qwen3:4b-q4_K_M")
+        self.assertIn("train/validation/test", response.answer)
         self.assertNotIn("\uc2b9\uc778\ub41c \uc9c0\uc2dd \uce74\ub4dc", response.answer)
 
     def test_topic_specific_fallbacks_explain_common_short_questions(self):
