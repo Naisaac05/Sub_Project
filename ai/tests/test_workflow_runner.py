@@ -1458,6 +1458,100 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertEqual(event["grounding_score"], 0.5)
         self.assertTrue(event["low_grounding_answer"])
 
+    def test_dashboard_payload_generation(self):
+        from app.workflow.dashboard import generate_dashboard_payload
+        
+        events = [
+            {
+                "correlation_id": "session-1",
+                "event": "ai_review.semantic_judge_evaluated",
+                "relevance_score": 0.9,
+                "context_bias_score": 0.1,
+                "final_quality_status": "passed",
+                "intent": "concept_definition",
+                "sub_intent": "definition",
+            },
+            {
+                "correlation_id": "session-1",
+                "event": "ai_review.grounding_evaluated",
+                "grounding_score": 0.8,
+                "hallucination_risk": "low",
+            },
+            {
+                "correlation_id": "session-2",
+                "event": "ai_review.semantic_judge_evaluated",
+                "relevance_score": 0.4,
+                "context_bias_score": 0.8,
+                "final_quality_status": "fallback",
+                "intent": "wrong_answer_explanation",
+                "sub_intent": "explanation",
+            },
+            {
+                "correlation_id": "session-2",
+                "event": "ai_review.grounding_evaluated",
+                "grounding_score": 0.3,
+                "hallucination_risk": "high",
+            }
+        ]
+
+        payload = generate_dashboard_payload(events)
+        
+        self.assertEqual(len(payload["answer_relevance_trend"]), 2)
+        self.assertEqual(payload["hallucination_risk_trend"]["high"], 1)
+        self.assertEqual(payload["hallucination_risk_trend"]["low"], 1)
+        self.assertEqual(payload["fallback_rate"], 0.5)
+        self.assertEqual(payload["retry_rate"], 0.0)
+        self.assertEqual(payload["low_grounding_high_hallucination_correlation"], 0.5)
+        self.assertIn("concept_definition/definition", payload["intent_sub_intent_quality"])
+        self.assertEqual(payload["intent_sub_intent_quality"]["concept_definition/definition"]["average_relevance"], 0.9)
+
+    def test_alert_threshold_evaluation(self):
+        from app.workflow.dashboard import evaluate_alerts
+        
+        # Scenario where fallback spike is triggered (e.g. 2 out of 5 fall back = 40% > 15%)
+        events = [
+            {"correlation_id": f"s-{i}", "event": "ai_review.semantic_judge_evaluated", "final_quality_status": "fallback" if i < 2 else "passed"}
+            for i in range(5)
+        ]
+        
+        alerts = evaluate_alerts(events)
+        fallback_alert = next((a for a in alerts if a["alert"] == "fallback_spike"), None)
+        self.assertIsNotNone(fallback_alert)
+        self.assertEqual(fallback_alert["severity"], "critical")
+
+        # Scenario where grounding collapse is triggered (average grounding = 0.5 < 0.75)
+        events_grounding = [
+            {"correlation_id": f"s-{i}", "event": "ai_review.grounding_evaluated", "grounding_score": 0.5}
+            for i in range(5)
+        ]
+        
+        alerts_g = evaluate_alerts(events_grounding)
+        grounding_alert = next((a for a in alerts_g if a["alert"] == "grounding_score_collapse"), None)
+        self.assertIsNotNone(grounding_alert)
+        self.assertEqual(grounding_alert["severity"], "critical")
+
+    def test_missing_metric_safety_handling(self):
+        from app.workflow.dashboard import generate_dashboard_payload, evaluate_alerts
+        
+        # Feeds completely empty/missing metrics events
+        corrupted_events = [
+            {},
+            {"event": "ai_review.semantic_judge_evaluated", "correlation_id": "s-1"},
+            {"event": "ai_review.grounding_evaluated", "correlation_id": "s-2", "grounding_score": None, "relevance_score": "not-a-float"}
+        ]
+        
+        # Must run successfully without exceptions and fall back to safe defaults
+        try:
+            payload = generate_dashboard_payload(corrupted_events)
+            self.assertIsNotNone(payload)
+            self.assertEqual(payload["average_relevance"], 1.0)
+            self.assertEqual(payload["average_bias"], 0.0)
+            
+            alerts = evaluate_alerts(corrupted_events)
+            self.assertEqual(alerts, [])  # Less than 5 valid total events or no alerts fired
+        except Exception as exc:
+            self.fail(f"Quality Dashboard Engine raised exception on missing metric events: {exc}")
+
 
 if __name__ == "__main__":
     unittest.main()
