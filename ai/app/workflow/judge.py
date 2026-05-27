@@ -6,6 +6,7 @@ import inspect
 from app.ollama.client import call_ollama, FALLBACK_MODEL
 from app.schemas import AiGenerateRequest
 from app.workflow.intent import FreeQuestionIntent
+from app.prompts.registry import compute_prompt_hash
 
 logger = logging.getLogger("ai_review.workflow.judge")
 
@@ -17,6 +18,8 @@ class SemanticJudgeResult:
     hallucination_risk: str
     should_retry: bool
     reason: str
+    prompt_version: str | None = None
+    prompt_hash: str | None = None
 
 
 def judge_answer(
@@ -98,6 +101,9 @@ JSON Schema:
 }}
 """.strip()
 
+    prompt_version = "semantic_judge_v1"
+    prompt_hash = compute_prompt_hash(prompt)
+
     model = request.model or FALLBACK_MODEL
     try:
         raw_response = generator(
@@ -138,7 +144,17 @@ JSON Schema:
             hallucination_risk=hallucination_risk,
             should_retry=should_retry,
             reason=reason,
+            prompt_version=prompt_version,
+            prompt_hash=prompt_hash,
         )
     except Exception as exc:
         logger.warning(f"Semantic judge execution failed, fallback to safe result. Error: {exc}")
-        return SemanticJudgeResult(1.0, 0.0, "low", False, f"Exception occurred: {exc}")
+        return SemanticJudgeResult(
+            relevance_score=1.0,
+            context_bias_score=0.0,
+            hallucination_risk="low",
+            should_retry=False,
+            reason=f"Exception occurred: {exc}",
+            prompt_version=prompt_version,
+            prompt_hash=prompt_hash,
+        )

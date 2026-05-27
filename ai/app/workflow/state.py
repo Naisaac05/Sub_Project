@@ -28,6 +28,14 @@ class ReviewWorkflowState:
     model_used: str | None = None
     fallback_used: bool = False
     prompt_version: str | None = None
+    prompt_hash: str | None = None
+    prompt_strategy: str | None = None
+    retry_prompt_version: str | None = None
+    retry_prompt_hash: str | None = None
+    semantic_judge_prompt_version: str | None = None
+    semantic_judge_prompt_hash: str | None = None
+    grounding_prompt_version: str | None = None
+    grounding_prompt_hash: str | None = None
     free_question_intent: FreeQuestionIntent | None = None
     resolved_query: ResolvedQuery | None = None
     validation: ValidationResult | None = None

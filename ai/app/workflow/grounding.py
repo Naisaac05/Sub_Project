@@ -5,6 +5,7 @@ import re
 import inspect
 from app.ollama.client import call_ollama, FALLBACK_MODEL
 from app.schemas import AiGenerateRequest
+from app.prompts.registry import compute_prompt_hash
 
 logger = logging.getLogger("ai_review.workflow.grounding")
 
@@ -16,6 +17,8 @@ class GroundingResult:
     unsupported_claims: list[str]
     grounded: bool
     reason: str
+    prompt_version: str | None = None
+    prompt_hash: str | None = None
 
 
 def validate_grounding(
@@ -94,6 +97,9 @@ JSON Schema:
 }}
 """.strip()
 
+    prompt_version = "grounding_judge_v1"
+    prompt_hash = compute_prompt_hash(prompt)
+
     model = request.model or FALLBACK_MODEL
     try:
         raw_response = generator(
@@ -134,6 +140,8 @@ JSON Schema:
             unsupported_claims=unsupported_claims,
             grounded=grounded,
             reason="Grounding validation completed",
+            prompt_version=prompt_version,
+            prompt_hash=prompt_hash,
         )
     except Exception as exc:
         logger.warning(f"Grounding validation failed (timeout-safe). Fallback to safe result. Error: {exc}")
@@ -143,4 +151,6 @@ JSON Schema:
             unsupported_claims=[],
             grounded=True,
             reason=f"Grounding failed with exception: {exc}",
+            prompt_version=prompt_version,
+            prompt_hash=prompt_hash,
         )

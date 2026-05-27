@@ -1,6 +1,6 @@
 from app.schemas import AiGenerateRequest
 from app.workflow.intent import FreeQuestionIntent
-
+from app.prompts.registry import compute_prompt_hash, lookup_prompt_version, PROMPT_REGISTRY
 
 PROMPT_VERSIONS = {
     "first-question": "first_question_v1",
@@ -9,8 +9,33 @@ PROMPT_VERSIONS = {
 }
 
 
-def prompt_version_for_mode(mode: str) -> str:
-    return PROMPT_VERSIONS.get(mode, "free_question_v1")
+def prompt_version_for_mode(mode: str, intent: FreeQuestionIntent | None = None) -> str:
+    if mode == "first-question":
+        return "first_question_v1"
+    if mode == "follow-up":
+        return "follow_up_v1"
+    if mode == "free-question":
+        if intent:
+            if intent.intent == "concept_definition":
+                return "concept_definition_v1"
+            elif intent.intent == "wrong_answer_explanation":
+                return "wrong_answer_explanation_v1"
+            elif intent.intent == "follow_up":
+                return "follow_up_intent_v1"
+        return "free_question_v1"
+    return "free_question_v1"
+
+
+def prompt_strategy_for_mode(mode: str, intent: FreeQuestionIntent | None = None) -> str:
+    if mode == "first-question":
+        return "first-question"
+    if mode == "follow-up":
+        return "follow-up"
+    if mode == "free-question":
+        if intent:
+            return f"free-question:{intent.intent}:context_dependent={intent.context_dependent}"
+        return "free-question:generic"
+    return f"unknown:{mode}"
 
 
 def build_prompt(
@@ -235,4 +260,3 @@ def format_options(options: list[str]) -> str:
     if not options:
         return ""
     return "\n".join(f"{index + 1}. {option}" for index, option in enumerate(options))
-
