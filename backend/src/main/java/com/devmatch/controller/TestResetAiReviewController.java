@@ -23,7 +23,7 @@ import com.devmatch.repository.AiReviewMessageRepository;
 import com.devmatch.repository.AiReviewSessionRepository;
 import com.devmatch.repository.TestResultRepository;
 import com.devmatch.security.CustomUserDetails;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
