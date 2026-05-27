@@ -44,7 +44,29 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
         quality_flags=state.quality_flags,
         candidate_id=state.candidate_id,
     )
-    response.observability_events = [_workflow_completed_event(response)]
+    
+    events = [_workflow_completed_event(response)]
+    
+    if state.judge_result:
+        judge_res = state.judge_result
+        passed = (judge_res.relevance_score >= 0.7 and 
+                  judge_res.context_bias_score <= 0.6 and 
+                  judge_res.hallucination_risk != "high")
+                  
+        events.append({
+            "event": "ai_review.semantic_judge_evaluated",
+            "semantic_judge_passed": passed,
+            "semantic_judge_failed": not passed,
+            "semantic_judge_retry": state.retry_count > 0,
+            "semantic_judge_fallback": state.fallback_used and not passed,
+            "semantic_context_bias_detected": judge_res.context_bias_score > 0.6,
+            "relevance_score": judge_res.relevance_score,
+            "context_bias_score": judge_res.context_bias_score,
+            "hallucination_risk": judge_res.hallucination_risk,
+            "reason": judge_res.reason,
+        })
+        
+    response.observability_events = events
     return response
 
 

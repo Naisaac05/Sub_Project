@@ -32,6 +32,7 @@
 
 ## 인덱스
 
+- [2026-05-27 AI semantic judge mock contamination and lint failures](2026-05-27-ai-semantic-judge-mock-contamination-and-lint-failures.md)
 - [2026-05-27 AI follow-up fell back to template after RAG timeout](2026-05-27-ai-follow-up-rag-timeout-template.md)
 - [2026-05-27 AI JSON free question used static fast path instead of model generation](2026-05-27-ai-json-question-static-fast-path.md)
 - [2026-05-27 Backend bootRun failed because stale 8080 process was still running](2026-05-27-backend-bootrun-stale-8080-process.md)

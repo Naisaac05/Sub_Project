@@ -85,7 +85,7 @@ def generate_answer_node(
         state.route = "cache"
         return state
 
-    prompt = build_prompt(state.mode, state.request, context=_context_text(state))
+    prompt = build_prompt(state.mode, state.request, context=_context_text(state), intent=state.free_question_intent)
     state.prompt_version = prompt_version_for_mode(state.mode)
     generation_model = _generation_model_for_state(state)
     try:
@@ -139,6 +139,87 @@ def generate_answer_node(
         state.fallback_used = True
         state.route = "fallback_template"
         state.answer_style = _answer_style_for_state(state)
+
+    # Semantic Judge 사후 평가 검증 레이어 연동
+    if state.mode == "free-question" and state.route in {"generation", "rag_generation"} and state.answer:
+        from app.workflow.judge import judge_answer
+        # 1. 1차 판정 수행
+        judge_res = judge_answer(
+            mode=state.mode,
+            request=state.request,
+            answer=state.answer,
+            contexts=state.contexts,
+            intent=state.free_question_intent,
+            generator=generator,
+        )
+        state.judge_result = judge_res
+        
+        # 2. 1회 재시도 (should_retry 이고 retry_count == 0 일 때)
+        if judge_res.should_retry and state.retry_count == 0:
+            state.retry_count = 1
+            
+            # retry 시에는 background context 제거 버전 prompt 사용 (fake intent 활용해 context_dependent=False)
+            if state.free_question_intent:
+                from app.workflow.intent import FreeQuestionIntent
+                fake_intent = FreeQuestionIntent(
+                    intent=state.free_question_intent.intent,
+                    rag_policy=state.free_question_intent.rag_policy,
+                    topic=state.free_question_intent.topic,
+                    confidence=state.free_question_intent.confidence,
+                    context_dependent=False,
+                    sub_intent=state.free_question_intent.sub_intent
+                )
+            else:
+                fake_intent = None
+            
+            retry_prompt = build_prompt(state.mode, state.request, context=_context_text(state), intent=fake_intent)
+            
+            # 2차 생성 시도
+            try:
+                state.answer = generator(
+                    model=generation_model,
+                    prompt=retry_prompt,
+                    temperature=state.request.temperature,
+                    max_tokens=max_tokens_for_mode(state.mode, state.request.max_tokens),
+                    num_ctx=state.request.num_ctx,
+                    num_thread=state.request.num_thread,
+                )
+                state.answer = compact_answer(state.answer, state.mode)
+                
+                # 2차 판정 수행
+                second_judge = judge_answer(
+                    mode=state.mode,
+                    request=state.request,
+                    answer=state.answer,
+                    contexts=state.contexts,
+                    intent=fake_intent or state.free_question_intent,
+                    generator=generator,
+                )
+                state.judge_result = second_judge
+            except Exception as retry_exc:
+                state.error = f"Retry generation failed: {retry_exc}"
+        
+        # 3. 최종 판사 검증 실패 및 Fallback 우회 제어
+        final_judge = state.judge_result
+        if final_judge and (final_judge.relevance_score < 0.7 or final_judge.context_bias_score > 0.6 or final_judge.hallucination_risk == "high"):
+            lightweight_fallback = resolve_lightweight_answer(
+                learner_query,
+                state.free_question_intent,
+                matched_concept_id=_matched_concept_id_for_lightweight(state),
+            )
+            if lightweight_fallback:
+                state.answer = lightweight_fallback.answer
+                state.model_used = LIGHTWEIGHT_MODEL_NAME
+                state.route = lightweight_fallback.route
+                state.answer_style = lightweight_fallback.style
+                state.fallback_used = True
+            else:
+                state.answer = _fallback_for_state(state)
+                state.model_used = "template" if state.model_used is None else state.model_used
+                state.fallback_used = True
+                state.route = "fallback_template"
+                state.answer_style = _answer_style_for_state(state)
+
     return state
 
 
@@ -440,11 +521,54 @@ def _generation_model_for_state(state: ReviewWorkflowState) -> str:
 def _required_keywords_ok(state: ReviewWorkflowState) -> bool:
     if state.mode != "free-question":
         return True
-    if not state.contexts:
+
+    validation_contexts = state.contexts
+
+    # follow_up 인텐트인 경우 검증 기준 개선
+    if state.free_question_intent and state.free_question_intent.intent == "follow_up":
+        # current RAG top card required_keywords 강제 적용 금지
+        # 1. previous/session active concept 우선 사용
+        active_concept_id = _matched_concept_id_for_lightweight(state)
+        active_contexts = []
+        
+        if active_concept_id:
+            from app.rag.documents import load_concept_cards
+            card = next((c for c in load_concept_cards() if c.concept_id == active_concept_id), None)
+            if card:
+                from app.rag.retriever import RetrievedContext
+                content_parts = [f"# {card.title}"]
+                for sec_title, sec_content in card.sections.items():
+                    content_parts.append(f"## {sec_title}\n{sec_content}")
+                card_content = "\n\n".join(content_parts)
+                active_contexts = [RetrievedContext(
+                    concept_id=card.concept_id,
+                    title=card.title,
+                    content=card_content,
+                    score=10.0,
+                    metadata=card.metadata
+                )]
+        
+        # 2. 그것이 없으면 original question 기반 RAG fallback
+        if not active_contexts:
+            fallback_query = state.request.correct_answer or state.request.question
+            if fallback_query:
+                from app.rag.retriever import retrieve_context
+                active_contexts = [
+                    ctx for ctx in retrieve_context(fallback_query, limit=3)
+                    if ctx.score >= MIN_WORKFLOW_CONTEXT_SCORE
+                ]
+                
+        # 3. 그래도 애매하면 required_keywords 완화 (통과)
+        if not active_contexts:
+            return True
+            
+        validation_contexts = active_contexts
+
+    if not validation_contexts:
         return True
 
     keywords = []
-    for context in state.contexts:
+    for context in validation_contexts:
         content = context.content
         if "## 평가 키워드" not in content:
             continue
