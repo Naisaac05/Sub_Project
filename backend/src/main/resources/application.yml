@@ -114,6 +114,11 @@ app:
       max-questions-per-session: ${AI_REVIEW_MAX_QUESTIONS_PER_SESSION:10}
       max-user-answer-length: ${AI_REVIEW_MAX_USER_ANSWER_LENGTH:700}
 
+    # 🧪 테스트 전용: AI 리뷰 세션 초기화 엔드포인트
+    # 운영 환경에서는 절대 true 로 설정하지 말 것. 기본값 false.
+    test-reset:
+      enabled: ${AI_REVIEW_TEST_RESET_ENABLED:false}
+
 # ===== Swagger =====
 springdoc:
   default-consumes-media-type: application/json
