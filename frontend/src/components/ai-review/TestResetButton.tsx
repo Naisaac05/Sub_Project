@@ -19,12 +19,12 @@ interface TestResetButtonProps {
 }
 
 export function TestResetButton({ testResultId }: TestResetButtonProps) {
+  const [resetting, setResetting] = useState(false);
+
   // 환경변수 OFF 시 컴포넌트 자체가 아무것도 렌더하지 않음
   if (process.env.NEXT_PUBLIC_AI_REVIEW_TEST_RESET !== 'true') {
     return null;
   }
-
-  const [resetting, setResetting] = useState(false);
 
   const handleReset = async () => {
     const ok = window.confirm(
