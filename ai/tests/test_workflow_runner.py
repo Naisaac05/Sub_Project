@@ -1041,7 +1041,7 @@ class WorkflowRunnerTest(unittest.TestCase):
             generator=lambda **kwargs: "generator should not be called",
         )
 
-        self.assertEqual(len(response.observability_events), 1)
+        self.assertEqual(len(response.observability_events), 2)
         event = response.observability_events[0]
         self.assertEqual(event["event"], "ai_review.workflow_completed")
         self.assertEqual(event["route"], response.route)
@@ -1049,6 +1049,508 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertEqual(event["fallback_used"], response.fallback_used)
         self.assertEqual(event["candidate_id"], response.candidate_id)
         self.assertIn("latency_ms", event)
+
+        judge_event = response.observability_events[1]
+        self.assertEqual(judge_event["event"], "ai_review.semantic_judge_evaluated")
+        self.assertEqual(judge_event["final_quality_status"], "degraded")
+
+    def test_regression_free_question_concept_definition_without_bias(self):
+        # 6번 요구사항 회귀 테스트 케이스
+        # 질문: "지연 로딩, 순환 참조, 불필요한 필드 노출 문제가 각각 어떤 의미인지 알고 싶어요"
+        
+        def mock_llm_generator(**kwargs):
+            return (
+                "지연 로딩은 필요한 시점에 데이터를 가져오는 방식이고, "
+                "순환 참조는 두 엔티티가 서로를 참조하여 무한 루프가 도는 현상이며, "
+                "불필요한 필드 노출은 내부 DB 구조가 API 밖으로 새는 문제입니다. "
+                "Entity를 DTO로 변환하여 반환하면 이 세 가지 문제를 안전하게 피할 수 있습니다."
+            )
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 엔티티 반환 시 생길 수 있는 문제와 해결방안은?",
+                correct_answer="Entity를 DTO로 변환하여 반환한다.",
+                selected_answer="DB 인덱스를 자동 삭제한다.",
+                user_answer="지연 로딩, 순환 참조, 불필요한 필드 노출 문제가 각각 어떤 의미인지 알고 싶어요",
+            ),
+            generator=mock_llm_generator,
+        )
+
+        # A. fallback이 사용되지 않아야 함 (즉, validation 통과)
+        self.assertFalse(response.fallback_used)
+        
+        # B. 기대 결과 포함 여부 검증
+        self.assertIn("지연 로딩", response.answer)
+        self.assertIn("순환 참조", response.answer)
+        self.assertIn("필드 노출", response.answer)
+        self.assertIn("DTO", response.answer)
+        
+        # C. 금지 결과 미포함 검증
+        self.assertNotIn("자동 삭제", response.answer)
+        self.assertNotIn("RecyclerView", response.answer)
+        self.assertNotIn("ViewHolder", response.answer)
+
+    def test_judge_concept_definition_bias_triggers_retry(self):
+        calls = []
+
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            calls.append(prompt)
+            # 1. 판사의 structured JSON 평가 호출 모의
+            if "precise AI Semantic Judge" in prompt:
+                # 1차 생성에 대해 bias 판정
+                if "오답입니다" in prompt:
+                    return '{"relevance_score": 0.9, "context_bias_score": 0.8, "hallucination_risk": "low", "should_retry": true, "reason": "배경문제에 너무 매몰됨"}'
+                # 2차 생성에 대해 패스 판정
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            
+            # 2. 일반 답변 생성 호출 모의
+            if len(calls) == 1:
+                # 1차 답변 (bias 포함)
+                return "DB 인덱스가 자동 삭제되는 오답입니다."
+            # 2차 답변 (정상)
+            return "지연 로딩은 필요한 시점에 연관 데이터를 불러오는 방식입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 관련 문제",
+                correct_answer="DTO 반환",
+                selected_answer="DB 인덱스 자동 삭제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        # 1차 bias 발견 -> 재시도 실행하여 2차 패스 확인
+        self.assertFalse(response.fallback_used)
+        self.assertIn("지연 로딩은", response.answer)
+        # observability_events에 retry 메트릭 포함 확인
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertTrue(event["semantic_judge_retry"])
+
+    def test_judge_follow_up_contamination_triggers_retry(self):
+        calls = []
+
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            calls.append(prompt)
+            if "precise AI Semantic Judge" in prompt:
+                if "ViewHolder" in prompt:
+                    return '{"relevance_score": 0.3, "context_bias_score": 0.0, "hallucination_risk": "low", "should_retry": true, "reason": "엉뚱한 뷰홀더 언급함"}'
+                return '{"relevance_score": 0.9, "context_bias_score": 0.0, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            
+            if len(calls) == 1:
+                return "ViewHolder는 뷰를 재사용하기 위한 도구입니다."
+            return "DTO는 계층 간 데이터 전달용 객체입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 관련 문제",
+                correct_answer="DTO",
+                user_answer="DTO 개념이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        self.assertFalse(response.fallback_used)
+        self.assertIn("DTO는", response.answer)
+
+    def test_judge_hallucinated_answer_triggers_fallback(self):
+        calls = []
+
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            calls.append(prompt)
+            if "precise AI Semantic Judge" in prompt:
+                # 환각 고위험 판결
+                return '{"relevance_score": 0.8, "context_bias_score": 0.0, "hallucination_risk": "high", "should_retry": false, "reason": "환각 심각함"}'
+            return "equals는 가비지 컬렉터의 동작을 수동 제어하는 함수입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="Java equals",
+                correct_answer="equals 재정의",
+                user_answer="equals가 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        # 환각 고위험 발견 -> 재시도 없이 즉시 fallback 작동
+        self.assertTrue(response.fallback_used)
+        self.assertIn("fallback_template", response.route)
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertTrue(event["semantic_judge_fallback"])
+
+    def test_judge_retry_uses_background_removed_prompt(self):
+        prompts_sent = []
+
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.5, "context_bias_score": 0.8, "hallucination_risk": "low", "should_retry": true, "reason": "재시도"}'
+            prompts_sent.append(prompt)
+            return "임시 답변"
+
+        run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="원래 배경 문제 텍스트가 매우 길게 나열됨",
+                correct_answer="DTO",
+                selected_answer="오답",
+                user_answer="이 문제에서 프록시 객체가 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        self.assertEqual(len(prompts_sent), 2)
+        # 1차 프롬프트에는 배경 텍스트가 들어있음
+        self.assertIn("원래 배경 문제", prompts_sent[0])
+        # 2차 프롬프트(재시도)에는 context_dependent=False에 의해 원래 배경 문제가 제거되어 있음!
+        self.assertNotIn("원래 배경 문제", prompts_sent[1])
+
+    def test_judge_retry_limit_respected(self):
+        calls = []
+
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            calls.append(prompt)
+            if "precise AI Semantic Judge" in prompt:
+                # 1차, 2차 판결 모두 relevance 가 낮아 should_retry=True 임에도, retry_count에 의해 fallback되도록 유도
+                return '{"relevance_score": 0.4, "context_bias_score": 0.0, "hallucination_risk": "low", "should_retry": true, "reason": "실패"}'
+            return "동문서답 계속 수행"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="프록시 객체가 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        # 재시도 제한(최대 1회) 준수 -> 3차 시도 없이 최종 Fallback 연동
+        self.assertTrue(response.fallback_used)
+        self.assertIn("fallback_template", response.route)
+
+    def test_metric_judge_passed(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            return "지연 로딩은 필요한 시점에 데이터를 로드하는 방식입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertEqual(event["final_quality_status"], "passed")
+        self.assertTrue(event["answer_quality_passed"])
+        self.assertFalse(event["answer_quality_retry_triggered"])
+        self.assertFalse(event["answer_quality_fallback_triggered"])
+        self.assertFalse(event["answer_quality_degraded"])
+        self.assertEqual(event["answer_relevance_score"], 0.95)
+        self.assertEqual(event["answer_context_bias_score"], 0.1)
+        self.assertEqual(event["answer_hallucination_risk"], "low")
+        self.assertEqual(event["intent"], "concept_definition")
+        self.assertEqual(event["sub_intent"], "definition")
+
+    def test_metric_low_relevance_retry(self):
+        calls = []
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                if len(calls) == 1:
+                    return '{"relevance_score": 0.5, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": true, "reason": "1차 낮음"}'
+                return '{"relevance_score": 0.9, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "2차 통과"}'
+            calls.append(prompt)
+            if len(calls) == 1:
+                return "엉뚱한 답변"
+            return "정상 답변 지연 로딩 설명"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertEqual(event["final_quality_status"], "retried")
+        self.assertTrue(event["answer_quality_retry_triggered"])
+        self.assertFalse(event["answer_quality_passed"])
+        self.assertFalse(event["answer_quality_fallback_triggered"])
+
+    def test_metric_high_hallucination_fallback(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.8, "context_bias_score": 0.1, "hallucination_risk": "high", "should_retry": false, "reason": "환각"}'
+            return "환각 답변"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertEqual(event["final_quality_status"], "fallback")
+        self.assertTrue(event["answer_quality_fallback_triggered"])
+        self.assertFalse(event["answer_quality_passed"])
+        self.assertEqual(event["answer_hallucination_risk"], "high")
+
+    def test_metric_context_bias_score_logged(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.9, "context_bias_score": 0.85, "hallucination_risk": "low", "should_retry": true, "reason": "바이어스"}'
+            return "임시 답변"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertEqual(event["answer_context_bias_score"], 0.85)
+        self.assertTrue(event["semantic_context_bias_detected"])
+
+    def test_metric_judge_skipped_degraded(self):
+        # We use a lambda that has no reflection compatibility matching judge key words -> skipped/unavailable -> degraded
+        non_compatible_generator = lambda **kwargs: "지연 로딩은 필요한 시점에 데이터를 로드하는 방식입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 뭐야?",
+            ),
+            generator=non_compatible_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.semantic_judge_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertEqual(event["final_quality_status"], "degraded")
+        self.assertTrue(event["answer_quality_degraded"])
+        self.assertFalse(event["answer_quality_passed"])
+
+    def test_grounding_grounded_answer_passes(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            if "precise Grounding Judge" in prompt:
+                return '{"grounding_score": 0.95, "evidence_coverage": 0.9, "unsupported_claims": [], "grounded": true}'
+            return "지연 로딩은 필요한 시점에 데이터를 로딩하는 방식입니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 왜 틀렸나 설명해줘.",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.grounding_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertTrue(event["grounded"])
+        self.assertEqual(event["grounding_score"], 0.95)
+        self.assertEqual(event["retrieval_coverage_score"], 0.9)
+        self.assertFalse(event["unsupported_claim_detected"])
+
+    def test_grounding_unsupported_hallucinated_answer_flagged(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            if "precise Grounding Judge" in prompt:
+                return '{"grounding_score": 0.4, "evidence_coverage": 0.8, "unsupported_claims": ["지연 로딩 시 무조건 가비지 컬렉터가 작동하여 데이터가 자동 삭제됩니다."], "grounded": false}'
+            return "지연 로딩 시 무조건 가비지 컬렉터가 작동하여 데이터가 자동 삭제됩니다."
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 왜 틀렸나 설명해줘.",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.grounding_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertFalse(event["grounded"])
+        self.assertEqual(event["grounding_score"], 0.4)
+        self.assertTrue(event["unsupported_claim_detected"])
+        self.assertTrue(event["low_grounding_answer"])
+        self.assertEqual(len(event["unsupported_claims"]), 1)
+        self.assertEqual(event["unsupported_claims"][0], "지연 로딩 시 무조건 가비지 컬렉터가 작동하여 데이터가 자동 삭제됩니다.")
+
+    def test_grounding_partial_grounding_detected(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            if "precise Grounding Judge" in prompt:
+                return '{"grounding_score": 0.85, "evidence_coverage": 0.35, "unsupported_claims": [], "grounded": false}'
+            return "부분 설명 답변"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 왜 틀렸나 설명해줘.",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.grounding_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertFalse(event["grounded"])
+        self.assertEqual(event["retrieval_coverage_score"], 0.35)
+
+    def test_grounding_retrieval_contamination_handled(self):
+        def mock_generator(**kwargs):
+            prompt = kwargs["prompt"]
+            if "precise AI Semantic Judge" in prompt:
+                return '{"relevance_score": 0.95, "context_bias_score": 0.1, "hallucination_risk": "low", "should_retry": false, "reason": "통과"}'
+            if "precise Grounding Judge" in prompt:
+                return '{"grounding_score": 0.5, "evidence_coverage": 0.7, "unsupported_claims": ["오염된 RecyclerView 뷰홀더 정보 언급"], "grounded": false}'
+            return "오염된 뷰홀더 언급"
+
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(
+                question="JPA 문제",
+                user_answer="지연 로딩이 왜 틀렸나 설명해줘.",
+            ),
+            generator=mock_generator,
+        )
+
+        event = next((ev for ev in response.observability_events if ev.get("event") == "ai_review.grounding_evaluated"), None)
+        self.assertIsNotNone(event)
+        self.assertFalse(event["grounded"])
+        self.assertEqual(event["grounding_score"], 0.5)
+        self.assertTrue(event["low_grounding_answer"])
+
+    def test_dashboard_payload_generation(self):
+        from app.workflow.dashboard import generate_dashboard_payload
+        
+        events = [
+            {
+                "correlation_id": "session-1",
+                "event": "ai_review.semantic_judge_evaluated",
+                "relevance_score": 0.9,
+                "context_bias_score": 0.1,
+                "final_quality_status": "passed",
+                "intent": "concept_definition",
+                "sub_intent": "definition",
+            },
+            {
+                "correlation_id": "session-1",
+                "event": "ai_review.grounding_evaluated",
+                "grounding_score": 0.8,
+                "hallucination_risk": "low",
+            },
+            {
+                "correlation_id": "session-2",
+                "event": "ai_review.semantic_judge_evaluated",
+                "relevance_score": 0.4,
+                "context_bias_score": 0.8,
+                "final_quality_status": "fallback",
+                "intent": "wrong_answer_explanation",
+                "sub_intent": "explanation",
+            },
+            {
+                "correlation_id": "session-2",
+                "event": "ai_review.grounding_evaluated",
+                "grounding_score": 0.3,
+                "hallucination_risk": "high",
+            }
+        ]
+
+        payload = generate_dashboard_payload(events)
+        
+        self.assertEqual(len(payload["answer_relevance_trend"]), 2)
+        self.assertEqual(payload["hallucination_risk_trend"]["high"], 1)
+        self.assertEqual(payload["hallucination_risk_trend"]["low"], 1)
+        self.assertEqual(payload["fallback_rate"], 0.5)
+        self.assertEqual(payload["retry_rate"], 0.0)
+        self.assertEqual(payload["low_grounding_high_hallucination_correlation"], 0.5)
+        self.assertIn("concept_definition/definition", payload["intent_sub_intent_quality"])
+        self.assertEqual(payload["intent_sub_intent_quality"]["concept_definition/definition"]["average_relevance"], 0.9)
+
+    def test_alert_threshold_evaluation(self):
+        from app.workflow.dashboard import evaluate_alerts
+        
+        # Scenario where fallback spike is triggered (e.g. 2 out of 5 fall back = 40% > 15%)
+        events = [
+            {"correlation_id": f"s-{i}", "event": "ai_review.semantic_judge_evaluated", "final_quality_status": "fallback" if i < 2 else "passed"}
+            for i in range(5)
+        ]
+        
+        alerts = evaluate_alerts(events)
+        fallback_alert = next((a for a in alerts if a["alert"] == "fallback_spike"), None)
+        self.assertIsNotNone(fallback_alert)
+        self.assertEqual(fallback_alert["severity"], "critical")
+
+        # Scenario where grounding collapse is triggered (average grounding = 0.5 < 0.75)
+        events_grounding = [
+            {"correlation_id": f"s-{i}", "event": "ai_review.grounding_evaluated", "grounding_score": 0.5}
+            for i in range(5)
+        ]
+        
+        alerts_g = evaluate_alerts(events_grounding)
+        grounding_alert = next((a for a in alerts_g if a["alert"] == "grounding_score_collapse"), None)
+        self.assertIsNotNone(grounding_alert)
+        self.assertEqual(grounding_alert["severity"], "critical")
+
+    def test_missing_metric_safety_handling(self):
+        from app.workflow.dashboard import generate_dashboard_payload, evaluate_alerts
+        
+        # Feeds completely empty/missing metrics events
+        corrupted_events = [
+            {},
+            {"event": "ai_review.semantic_judge_evaluated", "correlation_id": "s-1"},
+            {"event": "ai_review.grounding_evaluated", "correlation_id": "s-2", "grounding_score": None, "relevance_score": "not-a-float"}
+        ]
+        
+        # Must run successfully without exceptions and fall back to safe defaults
+        try:
+            payload = generate_dashboard_payload(corrupted_events)
+            self.assertIsNotNone(payload)
+            self.assertEqual(payload["average_relevance"], 1.0)
+            self.assertEqual(payload["average_bias"], 0.0)
+            
+            alerts = evaluate_alerts(corrupted_events)
+            self.assertEqual(alerts, [])  # Less than 5 valid total events or no alerts fired
+        except Exception as exc:
+            self.fail(f"Quality Dashboard Engine raised exception on missing metric events: {exc}")
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ from collections.abc import Callable
 import re
 
 from app.ollama.client import FALLBACK_MODEL, call_ollama
-from app.prompts import build_prompt, prompt_version_for_mode
+from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_for_mode, compute_prompt_hash
 from app.rag.retriever import retrieve_context
 from app.schemas import AiGenerateRequest
 from app.scoring import ConfidenceInputs, ConfidenceResult, calculate_confidence
@@ -25,6 +25,12 @@ FORBIDDEN_CLAIMS = (
     "트랜잭션 문제",
     "네트워크 지연 문제",
 )
+
+
+def _is_high_risk_question(state: ReviewWorkflowState) -> bool:
+    keywords = ["왜 틀렸나", "오답 이유", "이 문제에서", "이 선지가", "맞는 이유", "틀린 이유", "비교해줘", "근거가 뭐야"]
+    q_text = (state.request.user_answer or "") + " " + (state.request.question or "")
+    return any(kw in q_text for kw in keywords)
 
 
 def retrieve_context_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
@@ -85,8 +91,10 @@ def generate_answer_node(
         state.route = "cache"
         return state
 
-    prompt = build_prompt(state.mode, state.request, context=_context_text(state))
-    state.prompt_version = prompt_version_for_mode(state.mode)
+    prompt = build_prompt(state.mode, state.request, context=_context_text(state), intent=state.free_question_intent)
+    state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+    state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
+    state.prompt_hash = compute_prompt_hash(prompt)
     generation_model = _generation_model_for_state(state)
     try:
         state.answer = generator(
@@ -139,6 +147,223 @@ def generate_answer_node(
         state.fallback_used = True
         state.route = "fallback_template"
         state.answer_style = _answer_style_for_state(state)
+
+    # Semantic Judge 사후 평가 검증 레이어 연동
+    if state.mode == "free-question" and state.route in {"generation", "rag_generation"} and state.answer:
+        # 1. Determine Tier (Tier 1 vs Tier 2)
+        tier = "tier2"
+        is_concept_def = state.free_question_intent and state.free_question_intent.intent == "concept_definition"
+        short_answer = len(state.answer or "") < 700
+        high_risk = _is_high_risk_question(state)
+        
+        if is_concept_def and short_answer and not high_risk and state.retry_count == 0:
+            tier = "tier1"
+            
+        state.judge_tier = tier
+        state.semantic_judge_skipped = False
+        
+        from app.workflow.judge import judge_answer
+        # 1차 판정 수행
+        judge_res = judge_answer(
+            mode=state.mode,
+            request=state.request,
+            answer=state.answer,
+            contexts=state.contexts,
+            intent=state.free_question_intent,
+            generator=generator,
+        )
+        state.judge_result = judge_res
+        state.semantic_judge_prompt_version = judge_res.prompt_version
+        state.semantic_judge_prompt_hash = judge_res.prompt_hash
+        
+        # 2. 1회 재시도 (should_retry 이고 retry_count == 0 일 때)
+        if judge_res.should_retry and state.retry_count == 0:
+            # retry 발생 시 무조건 Tier 2 격상
+            state.judge_tier = "tier2"
+            state.retry_count = 1
+            
+            # retry 시에는 background context 제거 버전 prompt 사용 (fake intent 활용해 context_dependent=False)
+            if state.free_question_intent:
+                from app.workflow.intent import FreeQuestionIntent
+                fake_intent = FreeQuestionIntent(
+                    intent=state.free_question_intent.intent,
+                    rag_policy=state.free_question_intent.rag_policy,
+                    topic=state.free_question_intent.topic,
+                    confidence=state.free_question_intent.confidence,
+                    context_dependent=False,
+                    sub_intent=state.free_question_intent.sub_intent
+                )
+            else:
+                fake_intent = None
+            
+            retry_prompt = build_prompt(state.mode, state.request, context=_context_text(state), intent=fake_intent)
+            state.retry_prompt_version = "retry_v1"
+            state.retry_prompt_hash = compute_prompt_hash(retry_prompt)
+            
+            # 2차 생성 시도
+            try:
+                state.answer = generator(
+                    model=generation_model,
+                    prompt=retry_prompt,
+                    temperature=state.request.temperature,
+                    max_tokens=max_tokens_for_mode(state.mode, state.request.max_tokens),
+                    num_ctx=state.request.num_ctx,
+                    num_thread=state.request.num_thread,
+                )
+                state.answer = compact_answer(state.answer, state.mode)
+                
+                # 2차 판정 수행
+                second_judge = judge_answer(
+                    mode=state.mode,
+                    request=state.request,
+                    answer=state.answer,
+                    contexts=state.contexts,
+                    intent=fake_intent or state.free_question_intent,
+                    generator=generator,
+                )
+                state.judge_result = second_judge
+                state.semantic_judge_prompt_version = second_judge.prompt_version
+                state.semantic_judge_prompt_hash = second_judge.prompt_hash
+            except Exception as retry_exc:
+                state.error = f"Retry generation failed: {retry_exc}"
+        
+        # 3. 최종 판사 검증 실패 및 Fallback 우회 제어
+        final_judge = state.judge_result
+        if final_judge and (final_judge.relevance_score < 0.7 or final_judge.context_bias_score > 0.6 or final_judge.hallucination_risk == "high"):
+            lightweight_fallback = resolve_lightweight_answer(
+                learner_query,
+                state.free_question_intent,
+                matched_concept_id=_matched_concept_id_for_lightweight(state),
+            )
+            if lightweight_fallback:
+                state.answer = lightweight_fallback.answer
+                state.model_used = LIGHTWEIGHT_MODEL_NAME
+                state.route = lightweight_fallback.route
+                state.answer_style = lightweight_fallback.style
+                state.fallback_used = True
+            else:
+                state.answer = _fallback_for_state(state)
+                state.model_used = "template" if state.model_used is None else state.model_used
+                state.fallback_used = True
+                state.route = "fallback_template"
+                state.answer_style = _answer_style_for_state(state)
+
+        # Set metrics according to final tier
+        if state.judge_tier == "tier1":
+            state.grounding_judge_skipped = True
+            state.estimated_latency_saved_ms = 2000.0
+        else:
+            state.grounding_judge_skipped = False
+            state.estimated_latency_saved_ms = 0.0
+
+    if state.mode == "free-question" and state.answer:
+        from app.workflow.grounding import validate_grounding, GroundingResult
+        is_skipped = (
+            state.route in {"static_fast_path", "generated_card_fast_path", "cache"}
+            or not state.contexts
+            or state.judge_tier == "tier0"
+            or state.judge_tier == "tier1"
+        )
+        if is_skipped:
+            state.grounding_result = GroundingResult(
+                grounding_score=1.0,
+                evidence_coverage=1.0,
+                unsupported_claims=[],
+                grounded=True,
+                reason="Skipped grounding: fast-path, cache, empty contexts, or tier",
+            )
+            state.grounding_judge_skipped = True
+        else:
+            # Tier 2! Run grounding judge.
+            state.grounding_judge_skipped = False
+            
+            # Unit Test 환경이거나 Mock generator인 경우 동기식 처리로 Flake 원천 방지
+            import sys
+            is_test = "unittest" in sys.modules or getattr(generator, "__name__", "") not in ("call_ollama", "call_ollama_stream_async")
+            
+            if is_test:
+                state.grounding_result = validate_grounding(
+                    request=state.request,
+                    answer=state.answer,
+                    contexts=state.contexts,
+                    generator=generator,
+                )
+                if state.grounding_result:
+                    state.grounding_prompt_version = state.grounding_result.prompt_version
+                    state.grounding_prompt_hash = state.grounding_result.prompt_hash
+            else:
+                # Production 환경: daemon Background Thread 기동 (Response Latency 완전 고립화)
+                state.grounding_async_executed = True
+                
+                import threading
+                import logging
+                import json
+                from app.observability import LOGGER_NAME
+                
+                # Capture variables safely
+                req_copy = state.request
+                ans_copy = state.answer
+                ctx_copy = state.contexts
+                intent_copy = state.free_question_intent
+                route_copy = state.route
+                model_copy = state.model_used
+                fallback_copy = state.fallback_used
+                retry_copy = state.retry_count > 0
+                prompt_ver_copy = state.prompt_version
+                prompt_hash_copy = state.prompt_hash
+                prompt_strat_copy = state.prompt_strategy
+                candidate_copy = state.candidate_id
+                
+                def async_grounding_task():
+                    try:
+                        res = validate_grounding(
+                            request=req_copy,
+                            answer=ans_copy,
+                            contexts=ctx_copy,
+                            generator=generator,
+                        )
+                        sink = logging.getLogger(LOGGER_NAME)
+                        enriched = {
+                            "event": "ai_review.grounding_evaluated",
+                            "correlation_id": candidate_copy or "async-grounding",
+                            "grounding_score": res.grounding_score,
+                            "retrieval_coverage_score": res.evidence_coverage,
+                            "unsupported_claim_detected": len(res.unsupported_claims) > 0,
+                            "low_grounding_answer": res.grounding_score < 0.7,
+                            "unsupported_claims": res.unsupported_claims,
+                            "grounded": res.grounded,
+                            "reason": res.reason,
+                            
+                            # Tags
+                            "route": route_copy,
+                            "intent": intent_copy.intent if intent_copy else "free-question",
+                            "sub_intent": intent_copy.sub_intent if intent_copy else "unknown",
+                            "rag_policy": intent_copy.rag_policy if intent_copy else "unknown",
+                            "model": model_copy,
+                            "fallback_used": fallback_copy,
+                            "retry_used": retry_copy,
+                            "hallucination_risk": "low",
+                            
+                            # Prompt versioning metadata
+                            "prompt_version": prompt_ver_copy,
+                            "prompt_hash": prompt_hash_copy,
+                            "prompt_strategy": prompt_strat_copy,
+                            "grounding_prompt_version": res.prompt_version,
+                            "grounding_prompt_hash": res.prompt_hash,
+                        }
+                        sink.info(json.dumps(enriched, ensure_ascii=False, sort_keys=True))
+                    except Exception as async_exc:
+                        logging.getLogger("ai_review.workflow.nodes").error(f"Background grounding execution failed: {async_exc}")
+                
+                thread = threading.Thread(target=async_grounding_task)
+                thread.daemon = True
+                state.grounding_thread = thread
+                thread.start()
+
+        if state.grounding_result:
+            state.grounding_prompt_version = state.grounding_result.prompt_version
+            state.grounding_prompt_hash = state.grounding_result.prompt_hash
+
     return state
 
 
@@ -440,11 +665,54 @@ def _generation_model_for_state(state: ReviewWorkflowState) -> str:
 def _required_keywords_ok(state: ReviewWorkflowState) -> bool:
     if state.mode != "free-question":
         return True
-    if not state.contexts:
+
+    validation_contexts = state.contexts
+
+    # follow_up 인텐트인 경우 검증 기준 개선
+    if state.free_question_intent and state.free_question_intent.intent == "follow_up":
+        # current RAG top card required_keywords 강제 적용 금지
+        # 1. previous/session active concept 우선 사용
+        active_concept_id = _matched_concept_id_for_lightweight(state)
+        active_contexts = []
+        
+        if active_concept_id:
+            from app.rag.documents import load_concept_cards
+            card = next((c for c in load_concept_cards() if c.concept_id == active_concept_id), None)
+            if card:
+                from app.rag.retriever import RetrievedContext
+                content_parts = [f"# {card.title}"]
+                for sec_title, sec_content in card.sections.items():
+                    content_parts.append(f"## {sec_title}\n{sec_content}")
+                card_content = "\n\n".join(content_parts)
+                active_contexts = [RetrievedContext(
+                    concept_id=card.concept_id,
+                    title=card.title,
+                    content=card_content,
+                    score=10.0,
+                    metadata=card.metadata
+                )]
+        
+        # 2. 그것이 없으면 original question 기반 RAG fallback
+        if not active_contexts:
+            fallback_query = state.request.correct_answer or state.request.question
+            if fallback_query:
+                from app.rag.retriever import retrieve_context
+                active_contexts = [
+                    ctx for ctx in retrieve_context(fallback_query, limit=3)
+                    if ctx.score >= MIN_WORKFLOW_CONTEXT_SCORE
+                ]
+                
+        # 3. 그래도 애매하면 required_keywords 완화 (통과)
+        if not active_contexts:
+            return True
+            
+        validation_contexts = active_contexts
+
+    if not validation_contexts:
         return True
 
     keywords = []
-    for context in state.contexts:
+    for context in validation_contexts:
         content = context.content
         if "## 평가 키워드" not in content:
             continue

@@ -9,6 +9,7 @@ class FreeQuestionIntent:
     topic: str
     confidence: float = 0.7
     context_dependent: bool = False
+    sub_intent: str = "definition"
 
 
 CONTEXT_DEPENDENT_CLARIFICATIONS = {
@@ -51,32 +52,33 @@ def classify_free_question(text: str) -> FreeQuestionIntent:
     confidence = topic_confidence(topic, canonical_text)
 
     if not normalized or normalized in CONTEXT_DEPENDENT_CLARIFICATIONS:
-        return FreeQuestionIntent("clarification", "original_context_mixed", topic, confidence, False)
+        return FreeQuestionIntent("follow_up", "original_context_mixed", topic, confidence, False, "follow_up")
 
     context_dependent = is_context_dependent_question(text)
 
     if context_dependent:
-        return FreeQuestionIntent("original_problem_reason", "original_context_mixed", topic, confidence, True)
+        return FreeQuestionIntent("wrong_answer_explanation", "original_context_mixed", topic, confidence, True, "explanation")
 
     if any(marker in normalized for marker in ORIGINAL_PROBLEM_MARKERS):
-        return FreeQuestionIntent("original_problem_reason", "original_context_mixed", topic, confidence, context_dependent)
+        return FreeQuestionIntent("wrong_answer_explanation", "original_context_mixed", topic, confidence, context_dependent, "explanation")
 
     if _is_comparison_question(canonical_text, normalized):
-        return FreeQuestionIntent("comparison", "latest_question_only", topic, confidence, context_dependent)
+        return FreeQuestionIntent("concept_definition", "latest_question_only", topic, confidence, context_dependent, "comparison")
 
     if any(marker in normalized for marker in PRACTICAL_MARKERS):
-        return FreeQuestionIntent("practical_application", "latest_question_only", topic, confidence, context_dependent)
+        return FreeQuestionIntent("concept_definition", "latest_question_only", topic, confidence, context_dependent, "practical")
 
     if _is_specific_guidance_question(normalized):
-        return FreeQuestionIntent("specific_guidance", "latest_question_only", topic, confidence, context_dependent)
+        return FreeQuestionIntent("concept_definition", "latest_question_only", topic, confidence, context_dependent, "definition")
 
     if any(marker in normalized for marker in DEFINITION_MARKERS) or _is_english_definition_question(canonical_text):
-        return FreeQuestionIntent("concept_definition", "latest_question_only", topic, confidence, context_dependent)
+        return FreeQuestionIntent("concept_definition", "latest_question_only", topic, confidence, context_dependent, "definition")
 
     if _has_technical_signal(canonical_text) or len(normalized) >= 8:
-        return FreeQuestionIntent("related_concept", "latest_question_only", topic, confidence, context_dependent)
+        return FreeQuestionIntent("concept_definition", "latest_question_only", topic, confidence, context_dependent, "related")
 
-    return FreeQuestionIntent("clarification", "original_context_mixed", topic, confidence, context_dependent)
+    return FreeQuestionIntent("general_question", "original_context_mixed", topic, confidence, context_dependent, "general")
+
 
 
 def canonicalize_question(text: str) -> str:

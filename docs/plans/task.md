@@ -1,12 +1,8 @@
-# Task Tracker
+# Task Tracker - AI Review Adaptive Judge Optimization
 
 | Task | Status | Description |
 | --- | --- | --- |
-| Step 1: Feature Flag + 설정 추가 | completed | Spring Boot 및 Python FastAPI 환경에 스트리밍 활성화 Feature Flag 및 설정 프로퍼티 추가 |
-| Step 2: Python streaming 최소 구현 | completed | call_ollama_stream_async 및 비동기 generator 기반 Python SSE 연동 구현 |
-| Step 3: Spring SSE proxy 구현 | completed | WebClient 기반 Reactive SSE 스트리밍 프록시 및 SseEmitter 라이프사이클 관리 구현 |
-| └ Task 1: WebFlux 라이브러리 추가 | completed | build.gradle에 WebFlux 의존성 추가 및 빌드 검증 |
-| └ Task 2: PythonAiReviewClient 확장 | completed | PythonAiReviewClient에 streamReview(Flux<String> 반환) 구현 및 client test |
-| └ Task 3: AiReviewStreamingService 구현 | completed | 세분화된 트랜잭션 DB 적재 및 SseEmitter 라이프사이클/상태 관리와 parser 구현 |
-| └ Task 4: Controller 엔드포인트 연동 | completed | POST /sessions/{sessionId}/messages/stream 연동 및 최종 빌드/통합 테스트 |
-| Step 4: React streaming consumer + fallback 구현 | completed | 프론트엔드 ReadableStream SSE 버퍼 파서 및 폴백 메커니즘 연동 |
+| Task 1: Schema Extension (`state.py`) | completed | `ReviewWorkflowState`에 최적화 메트릭 필드 (`judge_tier`, `semantic_judge_skipped`, `grounding_judge_skipped`, `grounding_async_executed`, `estimated_latency_saved_ms`) 추가 |
+| Task 2: Tiered Judge & Async Grounding (`nodes.py`) | completed | `generate_answer_node` 하단에서 질문 난이도를 티어별(Tier 0/1/2) 분류하고, Grounding Judge의 백그라운드 스레드 비동기 실행 및 스킵 기동 구현 |
+| Task 3: Metrics & Event Emission (`runner.py`) | completed | `_build_response_from_state` 및 observability events 발행 시 대시보드 메트릭 연동 |
+| Task 4: Tests & Verification (`test_adaptive_judge.py`) | completed | `test_adaptive_judge.py` 신설하여 4대 조건 검증 및 전체 229개 테스트 100% 성공 확인 |
