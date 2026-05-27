@@ -249,6 +249,7 @@ def resolve_lightweight_answer(
     if (
         static_match
         and _has_high_confidence_static_match(static_match, intent)
+        and not _is_contextual_generic_match(match_text, static_match)
     ):
         static_answer_key, _ = static_match
         return LightweightAnswer(_ANSWERS[static_answer_key], "static_fast_path", _style_for_intent(intent))
@@ -327,3 +328,12 @@ def _is_specific_static_alias(alias: str) -> bool:
     if re.search(r"\d|[@+#/-]", normalized_alias):
         return True
     return False
+
+
+def _is_contextual_generic_match(text: str, match: tuple[str, str]) -> bool:
+    key, _ = match
+    if key not in {"json", "api", "dto"}:
+        return False
+    normalized = normalize_question(text)
+    contextual_markers = ("응답", "요청", "반환", "직렬화", "response", "request", "serialize")
+    return any(marker in normalized for marker in contextual_markers)
