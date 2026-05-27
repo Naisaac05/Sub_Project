@@ -22,7 +22,7 @@ from app.workflow.nodes import (
 from app.workflow.state import ReviewWorkflowState
 from app.workflow.lightweight_answers import LIGHTWEIGHT_MODEL_NAME, resolve_lightweight_answer
 from app.workflow.semantic_gate import semantic_evaluate_node, should_store_answer_cache
-from app.prompts import build_prompt, prompt_version_for_mode
+from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_for_mode
 from app.validation.text import compact_answer, korean_fallback
 from app.ollama.client import FALLBACK_MODEL
 
@@ -45,7 +45,7 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
         candidate_id=state.candidate_id,
     )
     
-    events = [_workflow_completed_event(response)]
+    events = [_workflow_completed_event(state, response)]
     
     if state.mode == "free-question":
         judge_res = state.judge_result
@@ -97,6 +97,15 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
                 "semantic_fallback_used": fallback_used,
                 "final_quality_status": "degraded",
                 "reason": "Judge unavailable or skipped",
+                
+                # Prompt versioning metadata (bypassed/skipped)
+                "prompt_version": state.prompt_version,
+                "prompt_hash": state.prompt_hash,
+                "prompt_strategy": state.prompt_strategy,
+                "retry_prompt_version": state.retry_prompt_version,
+                "retry_prompt_hash": state.retry_prompt_hash,
+                "semantic_judge_prompt_version": state.semantic_judge_prompt_version,
+                "semantic_judge_prompt_hash": state.semantic_judge_prompt_hash,
             })
         else:
             # Determine passed status
@@ -155,6 +164,15 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
                 "semantic_fallback_used": fallback_used,
                 "final_quality_status": final_status,
                 "reason": judge_res.reason,
+                
+                # Prompt versioning metadata
+                "prompt_version": state.prompt_version,
+                "prompt_hash": state.prompt_hash,
+                "prompt_strategy": state.prompt_strategy,
+                "retry_prompt_version": state.retry_prompt_version,
+                "retry_prompt_hash": state.retry_prompt_hash,
+                "semantic_judge_prompt_version": state.semantic_judge_prompt_version,
+                "semantic_judge_prompt_hash": state.semantic_judge_prompt_hash,
             })
 
         # Grounding metrics event
@@ -179,6 +197,13 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
                 "fallback_used": fallback_used,
                 "retry_used": retry_used,
                 "hallucination_risk": judge_res.hallucination_risk if judge_res else "low",
+                
+                # Prompt versioning metadata
+                "prompt_version": state.prompt_version,
+                "prompt_hash": state.prompt_hash,
+                "prompt_strategy": state.prompt_strategy,
+                "grounding_prompt_version": state.grounding_prompt_version,
+                "grounding_prompt_hash": state.grounding_prompt_hash,
             })
         
     response.observability_events = events
@@ -234,7 +259,8 @@ async def run_review_workflow_stream(
     )
     if state.mode == "free-question" and lightweight_answer:
         state.answer = lightweight_answer.answer
-        state.prompt_version = prompt_version_for_mode(state.mode)
+        state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+        state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
         state.model_used = LIGHTWEIGHT_MODEL_NAME
         state.fallback_used = False
         state.route = lightweight_answer.route
@@ -267,7 +293,8 @@ async def run_review_workflow_stream(
     cached_answer = get_cached_answer(cache_key)
     if cached_answer:
         state.answer = cached_answer
-        state.prompt_version = prompt_version_for_mode(state.mode)
+        state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+        state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
         state.model_used = f"{state.request.model}:cache"
         state.fallback_used = False
         state.route = "cache"
@@ -285,8 +312,11 @@ async def run_review_workflow_stream(
         return
 
     # 3. Stream Token Generation
-    prompt = build_prompt(state.mode, state.request, context=_context_text(state))
-    state.prompt_version = prompt_version_for_mode(state.mode)
+    prompt = build_prompt(state.mode, state.request, context=_context_text(state), intent=state.free_question_intent)
+    state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+    state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
+    from app.prompts.registry import compute_prompt_hash
+    state.prompt_hash = compute_prompt_hash(prompt)
 
     yield {"type": "start"}
 
@@ -390,7 +420,7 @@ def _run_sequential_workflow(
     return state
 
 
-def _workflow_completed_event(response: AiGenerateResponse) -> dict[str, object]:
+def _workflow_completed_event(state: ReviewWorkflowState, response: AiGenerateResponse) -> dict[str, object]:
     return {
         "event": "ai_review.workflow_completed",
         "route": response.route,
@@ -400,6 +430,12 @@ def _workflow_completed_event(response: AiGenerateResponse) -> dict[str, object]
         "retrieved_concept_ids": response.retrieved_concept_ids,
         "candidate_id": response.candidate_id,
         "prompt_version": response.prompt_version,
+        "prompt_hash": state.prompt_hash,
+        "prompt_strategy": state.prompt_strategy,
+        "retry_prompt_version": state.retry_prompt_version,
+        "retry_prompt_hash": state.retry_prompt_hash,
+        "semantic_judge_prompt_version": state.semantic_judge_prompt_version,
+        "grounding_prompt_version": state.grounding_prompt_version,
         "latency_ms": response.latency_ms,
         "quality_flags": response.quality_flags,
     }

@@ -2,7 +2,7 @@ from collections.abc import Callable
 import re
 
 from app.ollama.client import FALLBACK_MODEL, call_ollama
-from app.prompts import build_prompt, prompt_version_for_mode
+from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_for_mode, compute_prompt_hash
 from app.rag.retriever import retrieve_context
 from app.schemas import AiGenerateRequest
 from app.scoring import ConfidenceInputs, ConfidenceResult, calculate_confidence
@@ -86,7 +86,9 @@ def generate_answer_node(
         return state
 
     prompt = build_prompt(state.mode, state.request, context=_context_text(state), intent=state.free_question_intent)
-    state.prompt_version = prompt_version_for_mode(state.mode)
+    state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+    state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
+    state.prompt_hash = compute_prompt_hash(prompt)
     generation_model = _generation_model_for_state(state)
     try:
         state.answer = generator(
@@ -153,6 +155,8 @@ def generate_answer_node(
             generator=generator,
         )
         state.judge_result = judge_res
+        state.semantic_judge_prompt_version = judge_res.prompt_version
+        state.semantic_judge_prompt_hash = judge_res.prompt_hash
         
         # 2. 1회 재시도 (should_retry 이고 retry_count == 0 일 때)
         if judge_res.should_retry and state.retry_count == 0:
@@ -173,6 +177,8 @@ def generate_answer_node(
                 fake_intent = None
             
             retry_prompt = build_prompt(state.mode, state.request, context=_context_text(state), intent=fake_intent)
+            state.retry_prompt_version = "retry_v1"
+            state.retry_prompt_hash = compute_prompt_hash(retry_prompt)
             
             # 2차 생성 시도
             try:
@@ -196,6 +202,8 @@ def generate_answer_node(
                     generator=generator,
                 )
                 state.judge_result = second_judge
+                state.semantic_judge_prompt_version = second_judge.prompt_version
+                state.semantic_judge_prompt_hash = second_judge.prompt_hash
             except Exception as retry_exc:
                 state.error = f"Retry generation failed: {retry_exc}"
         
@@ -241,6 +249,9 @@ def generate_answer_node(
                 contexts=state.contexts,
                 generator=generator,
             )
+        if state.grounding_result:
+            state.grounding_prompt_version = state.grounding_result.prompt_version
+            state.grounding_prompt_hash = state.grounding_result.prompt_hash
 
     return state
 
