@@ -32,6 +32,7 @@
 
 ## 인덱스
 
+- [2026-05-27 GlobalExceptionHandler가 NoResourceFoundException을 잡아 404 대신 500 반환](2026-05-27-global-exception-handler-404-swallowed-as-500.md)
 - [2026-05-27 AI semantic judge mock contamination and lint failures](2026-05-27-ai-semantic-judge-mock-contamination-and-lint-failures.md)
 - [2026-05-27 AI follow-up fell back to template after RAG timeout](2026-05-27-ai-follow-up-rag-timeout-template.md)
 - [2026-05-27 AI JSON free question used static fast path instead of model generation](2026-05-27-ai-json-question-static-fast-path.md)
