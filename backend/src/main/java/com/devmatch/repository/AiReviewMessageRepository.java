@@ -33,8 +33,8 @@ public interface AiReviewMessageRepository extends JpaRepository<AiReviewMessage
             Collection<AiReviewMessageMode> modes
     );
 
-    // 테스트 세션 초기화에서 사용 — AiReviewSession에 messages 관계가 없어 JPA cascade 미동작
-    @Modifying
+    // 🧪 테스트 전용 세션 초기화에서 사용 — AiReviewSession에 messages 관계가 없어 JPA cascade 미동작
+    @Modifying(clearAutomatically = true)
     @Transactional
     @Query("DELETE FROM AiReviewMessage m WHERE m.session.id = :sessionId")
     long deleteBySessionId(Long sessionId);

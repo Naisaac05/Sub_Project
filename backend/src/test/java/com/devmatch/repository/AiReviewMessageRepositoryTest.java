@@ -1,7 +1,12 @@
 package com.devmatch.repository;
 
 import com.devmatch.config.JpaAuditingConfig;
-import com.devmatch.entity.*;
+import com.devmatch.entity.AiReviewMessage;
+import com.devmatch.entity.AiReviewMessageRole;
+import com.devmatch.entity.AiReviewSession;
+import com.devmatch.entity.Difficulty;
+import com.devmatch.entity.TestResult;
+import com.devmatch.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
