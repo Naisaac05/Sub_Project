@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApplicationRequest {
+    // [보안] 서버에서 무시됨 — 신청자는 JWT 인증 주체에서 결정한다 (사칭 방지). 클라이언트가 보낸 값은 신뢰하지 않음.
     private Long menteeId;
     private String currentLevel;
     private String targetTechStack;

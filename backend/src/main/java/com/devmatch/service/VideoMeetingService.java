@@ -21,7 +21,7 @@ public class VideoMeetingService {
     @Transactional
     public VideoMeetingResponse createOrUpdate(Long userId, VideoMeetingRequest request) {
         MentoringSession session = sessionRepository.findById(request.getSessionId())
-                .orElseThrow(() -> new com.devmatch.exception.ForbiddenOperationException("해당 멘토링 세션을 찾을 수 없습니다."));
+                .orElseThrow(() -> new com.devmatch.exception.SessionNotFoundException("해당 멘토링 세션을 찾을 수 없습니다."));
         assertParticipant(session, userId);
 
         VideoMeeting vm = videoMeetingRepository.findBySessionId(request.getSessionId())
