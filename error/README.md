@@ -32,6 +32,7 @@
 
 ## 인덱스
 
+- [2026-05-29 AI 품질 감사 — golden eval intent-enum 불일치 + 생성 지식카드 검토 누락 (미수정, 큐레이션 필요)](2026-05-29-ai-eval-and-knowledge-card-quality.md)
 - [2026-05-27 AI semantic judge mock contamination and lint failures](2026-05-27-ai-semantic-judge-mock-contamination-and-lint-failures.md)
 - [2026-05-27 AI follow-up fell back to template after RAG timeout](2026-05-27-ai-follow-up-rag-timeout-template.md)
 - [2026-05-27 AI JSON free question used static fast path instead of model generation](2026-05-27-ai-json-question-static-fast-path.md)
