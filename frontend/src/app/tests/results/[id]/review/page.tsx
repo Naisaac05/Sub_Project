@@ -15,6 +15,8 @@ import {
   summarizeAiReviewSession,
 } from '@/lib/ai-review';
 import type { AiReviewSessionResponse } from '@/lib/types';
+// 🧪 테스트 전용 (제거 시 본 import + 아래 렌더 라인 함께 삭제)
+import { TestResetButton } from '@/components/ai-review/TestResetButton';
 import { AlertCircle, ArrowLeft, Bot, CheckCircle, Clock3, FileText, Lightbulb, Loader2, Send, Target, User, Zap, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -731,7 +733,11 @@ export default function AiReviewPage() {
               <ArrowLeft size={16} />
               {LABELS.back}
             </Link>
-            <h1 className="text-3xl font-extrabold text-white sm:text-4xl">{LABELS.title}</h1>
+            <div className="flex items-center gap-4">
+              <h1 className="text-3xl font-extrabold text-white sm:text-4xl">{LABELS.title}</h1>
+              {/* 🧪 테스트 전용 (제거 시 본 라인 + 상단 import 함께 삭제) */}
+              <TestResetButton testResultId={testResultId} />
+            </div>
             <p className="mt-4 max-w-3xl break-keep text-base leading-7 text-gray-300">
               {LABELS.description}
             </p>
