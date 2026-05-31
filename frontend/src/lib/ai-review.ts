@@ -83,3 +83,14 @@ export async function summarizeAiReviewSession(
   );
   return res.data;
 }
+
+// 🧪 테스트 전용: AI 리뷰 세션 초기화 API
+// 제거 시 본 함수 + TestResetButton.tsx + page.tsx의 import/render 함께 삭제
+// 백엔드는 환경변수 OFF 면 404 반환
+export async function resetAiReviewSession(testResultId: number): Promise<void> {
+  await apiClient.post(
+    `/ai-review/test-results/${testResultId}/session/reset`,
+    null,
+    { timeout: AI_REVIEW_TIMEOUT_MS }
+  );
+}
