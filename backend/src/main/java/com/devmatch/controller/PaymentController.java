@@ -1,7 +1,6 @@
 package com.devmatch.controller;
 
 import com.devmatch.dto.common.ApiResponse;
-import com.devmatch.dto.payment.PaymentCancelRequest;
 import com.devmatch.dto.payment.PaymentConfirmRequest;
 import com.devmatch.dto.payment.PaymentCreateRequest;
 import com.devmatch.dto.payment.PaymentResponse;
@@ -47,16 +46,9 @@ public class PaymentController {
         return ResponseEntity.ok(ApiResponse.success("결제가 승인되었습니다", response));
     }
 
-    @Operation(summary = "결제 취소", description = "승인된 결제를 취소합니다. 토스페이먼츠 환불 API와 연동됩니다.")
-    @PostMapping("/{paymentId}/cancel")
-    public ResponseEntity<ApiResponse<PaymentResponse>> cancelPayment(
-            @AuthenticationPrincipal CustomUserDetails user,
-            @PathVariable Long paymentId,
-            @RequestBody PaymentCancelRequest request
-    ) {
-        PaymentResponse response = paymentService.cancelPayment(user.getUserId(), paymentId, request);
-        return ResponseEntity.ok(ApiResponse.success("결제가 취소되었습니다", response));
-    }
+    // [보안] 사용자向 결제 취소(환불) 엔드포인트는 제거되었습니다.
+    // 환불은 어드민 콘솔(AdminPaymentController/AdminPaymentService)에서만 수행되며,
+    // toss-cancel-enabled 플래그 + 행 잠금 + AdminAuditLog 감사 기록을 거칩니다.
 
     @Operation(summary = "내 결제 목록", description = "본인의 결제 내역을 최신순으로 조회합니다.")
     @GetMapping

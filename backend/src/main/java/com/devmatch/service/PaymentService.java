@@ -1,6 +1,5 @@
 package com.devmatch.service;
 
-import com.devmatch.dto.payment.PaymentCancelRequest;
 import com.devmatch.dto.payment.PaymentConfirmRequest;
 import com.devmatch.dto.payment.PaymentCreateRequest;
 import com.devmatch.dto.payment.PaymentResponse;
@@ -148,37 +147,9 @@ public class PaymentService {
         return PaymentResponse.from(payment);
     }
 
-    /**
-     * 결제 취소 (토스페이먼츠 API 호출)
-     */
-    @Transactional
-    public PaymentResponse cancelPayment(Long userId, Long paymentId, PaymentCancelRequest request) {
-        Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new PaymentNotFoundException("결제 정보를 찾을 수 없습니다: " + paymentId));
-
-        if (!payment.getUserId().equals(userId)) {
-            throw new PaymentFailedException("본인의 결제만 취소할 수 있습니다");
-        }
-
-        if (payment.getStatus() != PaymentStatus.CONFIRMED) {
-            throw new PaymentFailedException("승인된 결제만 취소할 수 있습니다. 현재 상태: " + payment.getStatus());
-        }
-
-        String cancelReason = request.getCancelReason() != null
-                ? request.getCancelReason()
-                : "사용자 요청에 의한 취소";
-
-        boolean cancelled = tossPaymentService.cancelPayment(payment.getPaymentKey(), cancelReason);
-
-        if (cancelled) {
-            payment.cancel(cancelReason);
-            log.info("[Payment] 결제 취소 완료 — paymentId: {}, reason: {}", paymentId, cancelReason);
-        } else {
-            throw new PaymentFailedException("토스페이먼츠 결제 취소에 실패했습니다");
-        }
-
-        return PaymentResponse.from(payment);
-    }
+    // [보안] 사용자向 결제 취소(cancelPayment)는 제거되었습니다.
+    // 기존 구현은 toss-cancel-enabled 플래그·관리자 권한·감사로그를 모두 우회하고
+    // 실제 Toss 환불 API 를 직접 호출했습니다. 모든 환불은 AdminPaymentService.refundPayment 로만 수행합니다.
 
     /**
      * 내 결제 목록 조회
