@@ -1,10 +1,12 @@
-# AI 품질 감사 — golden eval intent-enum 불일치 + 생성 지식카드 검토 누락 (미수정, 큐레이션 필요)
+# AI 품질 감사 — golden eval intent-enum 불일치 + 생성 지식카드 검토 누락 (해결 2026-05-29)
 
 - 발생 일시: 2026-05-29
 - 영역: ai (evals / knowledge)
 - 심각도: high
 
-> Dynamic Workflow 감사(패턴 2: eval 공백, 패턴 4: 지식카드)로 발견. 사용자 결정에 따라 **수정은 보류하고 발견만 기록**한다(직접 큐레이션 예정). 분석은 `ai-quality` 브랜치에서 stash 복원한 최신 `ai/*` 기준.
+> Dynamic Workflow 감사(패턴 2: eval 공백, 패턴 4: 지식카드)로 발견. 분석은 `ai-quality` 브랜치에서 stash 복원한 최신 `ai/*` 기준.
+>
+> **해결 (2026-05-29)**: 아래 권장안대로 큐레이션 완료. intent-enum 17행 재정렬 + `expected_sub_intent` 가드 도입, 변형행 라벨 오염 제거, 저품질 카드 4개(aria-label·controlleradvice·textinput·hashcode) 재작성. 검증: `evaluate_lightweight_rag.py` 의 intent_accuracy·sub_intent_accuracy·rag_policy_accuracy·retrieval_hit_rate·workflow_context_accuracy 모두 **1.0**(PASS_GATE), `lint_knowledge_cards.py` 통과.
 
 ## 증상
 
@@ -17,7 +19,7 @@
 2. **커버리지 공백 (게이트 실측으로 확인)**: auto-review 카드 3개(hashcode/recyclerview/textinput) golden 행 0개; PII 마스킹·프롬프트 인젝션 무력화([guardrails.py](../ai/app/guardrails.py)) 검증 행 0개; 한글 음차('해시코드','아리아라벨' 등)·별칭 없는 오타('equls')는 `MIN_WORKFLOW_CONTEXT_SCORE=5.0` 게이트에서 OOD로 이탈; `original_context_mixed`(멀티턴) 단 2행; 비기술 OOD(잡담/금융) 0개.
 3. **생성 카드 품질**: `frontend-aria-label.md`↔`java-backend-controlleradvice.md` 대표해결/흔한오해 단어만 바꾼 **근접 중복**; `auto-review-textinput.md` 핵심설명이 TextInput이 아닌 **상태관리** 설명(자기모순); `auto-review-hashcode.md` 필수 섹션 3개 누락으로 **lint 실패** + equals/hashCode 계약 누락(`java/equals.md`와 충돌); 평가 키워드에 provenance 토큰(`source:...:10`) 누출.
 
-## 해결 방법 (권장안 — 아직 미적용, 직접 큐레이션 대상)
+## 해결 방법 (적용 완료 2026-05-29)
 
 - **intent-enum**: (a) dataset `expected_intent`를 classifier enum으로 재정렬하고 `expected_sub_intent` 필드를 신설해 comparison/practical 등을 별도 검증 (권장, 런타임 무변경), 또는 (b) classifier가 세부 라벨을 emit하도록 확장.
 - **신규 회귀 케이스**: 워크플로가 게이트로 검증한 ~45개를 제안(통과 못 하는 제안은 자동 제거됨). evaluator는 `forbidden_claims` / `required_keywords` / `expected_quality_flags_absent` / `forbidden_context_concepts`를 이미 지원([evaluate_lightweight_rag.py:155-203](../ai/scripts/evaluate_lightweight_rag.py)). 고가치 검증 케이스를 아래에 보존한다.
