@@ -27,9 +27,10 @@ public class ApplicationService {
     private final MentorProfileRepository mentorProfileRepository;
 
     @Transactional
-    public ApplicationResponse submitApplication(ApplicationRequest request) {
-        User mentee = userRepository.findById(request.getMenteeId())
-                .orElseThrow(() -> new com.devmatch.exception.UserNotFoundException("Mentee not found with ID: " + request.getMenteeId()));
+    public ApplicationResponse submitApplication(Long userId, ApplicationRequest request) {
+        // 신청자는 인증 주체(JWT)에서만 결정한다 — 요청 본문의 menteeId 는 신뢰하지 않는다 (사칭 방지).
+        User mentee = userRepository.findById(userId)
+                .orElseThrow(() -> new com.devmatch.exception.UserNotFoundException("Mentee not found with ID: " + userId));
 
         Application application = Application.builder()
                 .mentee(mentee)
@@ -105,9 +106,14 @@ public class ApplicationService {
     }
 
     @Transactional
-    public Application confirmPayment(Long applicationId) {
+    public Application confirmPayment(Long userId, Long applicationId) {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new com.devmatch.exception.UserNotFoundException("Application not found with ID: " + applicationId));
+
+        // 본인 신청서만 결제 확정 가능 (IDOR 방지)
+        if (!application.getMentee().getId().equals(userId)) {
+            throw new com.devmatch.exception.ForbiddenOperationException("본인의 신청서만 결제 확정할 수 있습니다.");
+        }
 
         if (application.getStatus() == ApplicationStatus.ACCEPTED ||
             application.getStatus() == ApplicationStatus.MATCHING_FAILED) {

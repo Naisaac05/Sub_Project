@@ -45,6 +45,8 @@ public class SecurityConfig {
                 ).permitAll()
                 // Courses
                 .requestMatchers("/api/courses/**").permitAll()
+                // 내부 서비스(파이썬 AI 서버) — JWT 대신 X-AI-Service-Token 헤더로 컨트롤러에서 검증
+                .requestMatchers("/api/internal/**").permitAll()
                 // FAQ 공개 조회 (GET 만)
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/faqs", "/api/faqs/**").permitAll()
                 // 관리자 전용 — 더 구체적 룰을 먼저 매칭
