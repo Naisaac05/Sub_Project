@@ -17,6 +17,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshSessionService refreshSessionService;
 
     public UserResponse getMyProfile(Long userId) {
         User user = userRepository.findById(userId)
@@ -34,6 +35,8 @@ public class UserService {
         }
         if (request.getPassword() != null) {
             user.updatePassword(passwordEncoder.encode(request.getPassword()));
+            // 비밀번호 변경 시 기존 refresh 세션 전체 폐기
+            refreshSessionService.revokeAllForUser(userId);
         }
 
         return UserResponse.from(user);
