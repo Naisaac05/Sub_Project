@@ -549,7 +549,7 @@ INSERT INTO `users` (`id`, `created_at`, `email`, `name`, `password`, `provider`
 INSERT INTO `users` (`id`, `created_at`, `email`, `name`, `password`, `provider`, `provider_id`, `role`, `updated_at`) VALUES (7,'2026-04-04 17:06:44.964693','qwer@qwer.com','마바사','$2a$10$tV.uoOoGX6NxnnqbVEy7w.MXj9QyjWqfZC7DBjMT2fBQcUZ2acw.G',NULL,NULL,'MENTEE','2026-04-04 17:06:44.964693');
 INSERT INTO `users` (`id`, `created_at`, `email`, `name`, `password`, `provider`, `provider_id`, `role`, `updated_at`) VALUES (8,'2026-04-10 00:08:03.105621','qwer@naver.com','가나다','$2a$10$R9NPpezSUyDGEfHMWgZyBujBGhZ7Kh4xrD9FdRf9q/logXQlNcCC.',NULL,NULL,'MENTEE','2026-04-10 00:08:03.105621');
 INSERT INTO `users` (`id`, `created_at`, `email`, `name`, `password`, `provider`, `provider_id`, `role`, `updated_at`) VALUES (9,'2026-04-10 10:18:57.829725','newtest002@example.com','tester','$2a$10$rm4xP7wNl6UfEJbRsCN.Guk.uh./jRStsQwU5h8ODD1bGvLfPMGNq',NULL,NULL,'MENTEE','2026-04-10 10:18:57.829725');
-INSERT INTO `users` (`id`, `created_at`, `email`, `name`, `password`, `provider`, `provider_id`, `role`, `updated_at`) VALUES (10,'2026-04-10 10:31:57.890126','ganada@devmatch.com','가나다','$2a$10$/6F.7RIvJ9BX6W3Wins/U.7v0I4KANtYLkkE0gWTcpONA4YfNNH6y',NULL,NULL,'MENTEE','2026-04-10 10:31:57.890126');
+INSERT INTO `users` (`id`, `created_at`, `email`, `name`, `password`, `provider`, `provider_id`, `role`, `updated_at`) VALUES (10,'2026-04-10 10:31:57.890126','ganada@devmatch.com','가나다','$2b$10$fVe0sas6EqYjoyrWzFkmQecVhGRIpbBNseqpKvPiJsbaxuUMgovLC',NULL,NULL,'MENTEE','2026-04-10 10:31:57.890126');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

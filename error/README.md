@@ -32,6 +32,7 @@
 
 ## 인덱스
 
+- [2026-05-29 보안 감사 하드닝 — 인증/IDOR/결제/설정 10건 (로그인 백도어·결제취소 우회 등)](2026-05-29-security-audit-hardening.md)
 - [2026-05-27 AI semantic judge mock contamination and lint failures](2026-05-27-ai-semantic-judge-mock-contamination-and-lint-failures.md)
 - [2026-05-27 AI follow-up fell back to template after RAG timeout](2026-05-27-ai-follow-up-rag-timeout-template.md)
 - [2026-05-27 AI JSON free question used static fast path instead of model generation](2026-05-27-ai-json-question-static-fast-path.md)
