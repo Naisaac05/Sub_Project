@@ -63,3 +63,6 @@
 {"id":"java-hashcode-001","question":"hashCode는 뭐야?","expected_concepts":["java-hashcode"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
 {"id":"java-hashcode-002","question":"hashCode를 왜 재정의해야 해?","expected_concepts":["java-hashcode"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
 {"id":"java-hashcode-003","question":"equals랑 hashCode 차이가 뭐야?","expected_concepts":["java-hashcode"],"expected_intent":"concept_definition","expected_sub_intent":"comparison","expected_rag_policy":"latest_question_only"}
+{"id":"java-arraylist-001","question":"ArrayList는 뭐야?","expected_concepts":["java-arraylist"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"java-arraylist-002","question":"ArrayList는 내부적으로 어떻게 구현돼 있어?","expected_concepts":["java-arraylist"],"expected_intent":"concept_definition","expected_sub_intent":"related","expected_rag_policy":"latest_question_only"}
+{"id":"java-arraylist-003","question":"ArrayList는 크기가 꽉 차면 어떻게 더 받아?","expected_concepts":["java-arraylist"],"expected_intent":"concept_definition","expected_sub_intent":"related","expected_rag_policy":"latest_question_only"}
