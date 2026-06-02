@@ -61,5 +61,5 @@
 {"id":"answer-fetchjoin-002","question":"컬렉션 fetch join을 쓸 때 무엇을 조심해야 해?","required_keywords":["페이징"]}
 {"id":"answer-controlleradvice-002","question":"전역 예외 처리를 하려면 무엇을 써야 해?","required_keywords":["ControllerAdvice"]}
 {"id":"java-hashcode-001","question":"hashCode는 뭐야?","expected_concepts":["java-hashcode"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
-{"id":"java-hashcode-002","question":"hashCode가 뭐하는 메서드야?","expected_concepts":["java-hashcode"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
+{"id":"java-hashcode-002","question":"hashCode를 왜 재정의해야 해?","expected_concepts":["java-hashcode"],"expected_intent":"concept_definition","expected_rag_policy":"latest_question_only"}
 {"id":"java-hashcode-003","question":"equals랑 hashCode 차이가 뭐야?","expected_concepts":["java-hashcode"],"expected_intent":"concept_definition","expected_sub_intent":"comparison","expected_rag_policy":"latest_question_only"}
