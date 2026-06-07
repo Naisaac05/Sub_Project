@@ -1,0 +1,3 @@
+# 의도분류 PoC 의 ml(학습형) 분류기 전용 의존성.
+# embed/llm 분류기는 로컬 Ollama(bge-m3 / qwen2.5 등)만 필요하고 아래는 불필요.
+scikit-learn>=1.4

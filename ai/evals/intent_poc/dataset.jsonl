@@ -1,0 +1,240 @@
+{"id": "ANSWER_REASON-ar-a-00", "seed_id": "ar-a", "question": "이 문제 정답이 왜 3번이야?", "expected_intent": "ANSWER_REASON", "variation_type": "seed", "split": "dev"}
+{"id": "ANSWER_REASON-ar-a-01", "seed_id": "ar-a", "question": "이 무제 정답이 왜 3번이야?", "expected_intent": "ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-a-02", "seed_id": "ar-a", "question": "이 문재 정답이 왜 3번이야?", "expected_intent": "ANSWER_REASON", "variation_type": "typo", "split": "dev"}
+{"id": "ANSWER_REASON-ar-a-03", "seed_id": "ar-a", "question": "이문제 정답이 왜 3번이야?", "expected_intent": "ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-a-04", "seed_id": "ar-a", "question": "혹시 이 문제 정답이 왜 3번이야?", "expected_intent": "ANSWER_REASON", "variation_type": "filler", "split": "dev"}
+{"id": "ANSWER_REASON-ar-a-05", "seed_id": "ar-a", "question": "이거 정답 왜 3번임?", "expected_intent": "ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-a-06", "seed_id": "ar-a", "question": "왜 3번이 답이야?", "expected_intent": "ANSWER_REASON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "ANSWER_REASON-ar-a-07", "seed_id": "ar-a", "question": "3번이 정답인 이유 뭐야", "expected_intent": "ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-b-00", "seed_id": "ar-b", "question": "정답이 B인 이유가 뭐예요?", "expected_intent": "ANSWER_REASON", "variation_type": "seed", "split": "dev"}
+{"id": "ANSWER_REASON-ar-b-01", "seed_id": "ar-b", "question": "저답이 B인 이유가 뭐예요?", "expected_intent": "ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-b-02", "seed_id": "ar-b", "question": "정답이 B인 이유가 뭐얘요?", "expected_intent": "ANSWER_REASON", "variation_type": "typo", "split": "dev"}
+{"id": "ANSWER_REASON-ar-b-03", "seed_id": "ar-b", "question": "정답이B인 이유가 뭐예요?", "expected_intent": "ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-b-04", "seed_id": "ar-b", "question": "혹시 정답이 B인 이유가 뭐예요?", "expected_intent": "ANSWER_REASON", "variation_type": "filler", "split": "dev"}
+{"id": "ANSWER_REASON-ar-b-05", "seed_id": "ar-b", "question": "정답 B인 이유가 뭐임?", "expected_intent": "ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-b-06", "seed_id": "ar-b", "question": "왜 B가 정답이에요?", "expected_intent": "ANSWER_REASON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "ANSWER_REASON-ar-b-07", "seed_id": "ar-b", "question": "B가 답인 까닭이 뭐죠?", "expected_intent": "ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-c-00", "seed_id": "ar-c", "question": "이게 맞는 근거가 뭐지?", "expected_intent": "ANSWER_REASON", "variation_type": "seed", "split": "dev"}
+{"id": "ANSWER_REASON-ar-c-01", "seed_id": "ar-c", "question": "이게 마는 근거가 뭐지?", "expected_intent": "ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-c-02", "seed_id": "ar-c", "question": "이개 맞는 근거가 뭐지?", "expected_intent": "ANSWER_REASON", "variation_type": "typo", "split": "dev"}
+{"id": "ANSWER_REASON-ar-c-03", "seed_id": "ar-c", "question": "이게맞는 근거가 뭐지?", "expected_intent": "ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-c-04", "seed_id": "ar-c", "question": "혹시 이게 맞는 근거가 뭐지?", "expected_intent": "ANSWER_REASON", "variation_type": "filler", "split": "dev"}
+{"id": "ANSWER_REASON-ar-c-05", "seed_id": "ar-c", "question": "이게 왜 맞는 거임?", "expected_intent": "ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "ANSWER_REASON-ar-c-06", "seed_id": "ar-c", "question": "이거 맞는 이유가 뭐야?", "expected_intent": "ANSWER_REASON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "ANSWER_REASON-ar-c-07", "seed_id": "ar-c", "question": "이게 정답인 근거 뭐예요?", "expected_intent": "ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-a-00", "seed_id": "war-a", "question": "내가 고른 2번은 왜 틀렸어?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "seed", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-a-01", "seed_id": "war-a", "question": "내가 고르 2번은 왜 틀렸어?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-a-02", "seed_id": "war-a", "question": "네가 고른 2번은 왜 틀렸어?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "typo", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-a-03", "seed_id": "war-a", "question": "내가고른 2번은 왜 틀렸어?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-a-04", "seed_id": "war-a", "question": "혹시 내가 고른 2번은 왜 틀렸어?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "filler", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-a-05", "seed_id": "war-a", "question": "내가 고른 2번 왜 틀림?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-a-06", "seed_id": "war-a", "question": "2번 고른 게 왜 오답이야?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-a-07", "seed_id": "war-a", "question": "제가 선택한 2번은 왜 틀렸나요?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-b-00", "seed_id": "war-b", "question": "제 답이 오답인 이유가 뭔가요?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "seed", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-b-01", "seed_id": "war-b", "question": "제 다이 오답인 이유가 뭔가요?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-b-02", "seed_id": "war-b", "question": "재 답이 오답인 이유가 뭔가요?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "typo", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-b-03", "seed_id": "war-b", "question": "제답이 오답인 이유가 뭔가요?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-b-04", "seed_id": "war-b", "question": "혹시 제 답이 오답인 이유가 뭔가요?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "filler", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-b-05", "seed_id": "war-b", "question": "제 답 오답인 이유 뭐예요?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-b-06", "seed_id": "war-b", "question": "내 답이 왜 오답임?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-b-07", "seed_id": "war-b", "question": "제가 쓴 답이 틀린 이유가 뭐죠?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-c-00", "seed_id": "war-c", "question": "이거 내가 왜 틀린 거지?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "seed", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-c-01", "seed_id": "war-c", "question": "이거 내가 왜 트린 거지?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-c-02", "seed_id": "war-c", "question": "이거 네가 왜 틀린 거지?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "typo", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-c-03", "seed_id": "war-c", "question": "이거내가 왜 틀린 거지?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "typo", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-c-04", "seed_id": "war-c", "question": "혹시 이거 내가 왜 틀린 거지?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "filler", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-c-05", "seed_id": "war-c", "question": "이거 나 왜 틀림?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "WRONG_ANSWER_REASON-war-c-06", "seed_id": "war-c", "question": "내가 이거 왜 틀렸어?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "WRONG_ANSWER_REASON-war-c-07", "seed_id": "war-c", "question": "이 문제 제가 왜 틀린 거예요?", "expected_intent": "WRONG_ANSWER_REASON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-a-00", "seed_id": "def-a", "question": "트랜잭션이 뭐야?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "seed", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-a-01", "seed_id": "def-a", "question": "트래잭션이 뭐야?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "typo", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-a-02", "seed_id": "def-a", "question": "트렌잭션이 뭐야?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "typo", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-a-03", "seed_id": "def-a", "question": "트랜잭션이뭐야?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "typo", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-a-04", "seed_id": "def-a", "question": "혹시 트랜잭션이 뭐야?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "filler", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-a-05", "seed_id": "def-a", "question": "트랜잭션 뭐임?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-a-06", "seed_id": "def-a", "question": "트랜잭션이 뭔데?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "paraphrase", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-a-07", "seed_id": "def-a", "question": "트랜잭션 뜻이 뭐야?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-b-00", "seed_id": "def-b", "question": "REST API의 정의를 알려줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "seed", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-b-01", "seed_id": "def-b", "question": "REST API의 저의를 알려줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "typo", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-b-02", "seed_id": "def-b", "question": "RESTAPI의 정의를 알려줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "typo", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-b-03", "seed_id": "def-b", "question": "혹시 REST API의 정의를 알려줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "filler", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-b-04", "seed_id": "def-b", "question": "REST API 정의 좀 알려줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "paraphrase", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-b-05", "seed_id": "def-b", "question": "REST API가 뭐예요?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-b-06", "seed_id": "def-b", "question": "REST API 뜻 알려줄래?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "paraphrase", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-b-07", "seed_id": "def-b", "question": "REST API의 개념 설명해줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-c-00", "seed_id": "def-c", "question": "인덱스 개념 좀 잡아줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "seed", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-c-01", "seed_id": "def-c", "question": "이덱스 개념 좀 잡아줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "typo", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-c-02", "seed_id": "def-c", "question": "인댁스 개념 좀 잡아줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "typo", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-c-03", "seed_id": "def-c", "question": "인덱스개념 좀 잡아줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "typo", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-c-04", "seed_id": "def-c", "question": "혹시 인덱스 개념 좀 잡아줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "filler", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-c-05", "seed_id": "def-c", "question": "인덱스 개념 좀 설명해줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "CONCEPT_DEFINITION-def-c-06", "seed_id": "def-c", "question": "인덱스가 뭔지 알려줘", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "paraphrase", "split": "dev"}
+{"id": "CONCEPT_DEFINITION-def-c-07", "seed_id": "def-c", "question": "인덱스 뜻 좀 잡아줄래?", "expected_intent": "CONCEPT_DEFINITION", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "COMPARISON-cmp-a-00", "seed_id": "cmp-a", "question": "세션이랑 JWT 차이가 뭐야?", "expected_intent": "COMPARISON", "variation_type": "seed", "split": "dev"}
+{"id": "COMPARISON-cmp-a-01", "seed_id": "cmp-a", "question": "세셔이랑 JWT 차이가 뭐야?", "expected_intent": "COMPARISON", "variation_type": "typo", "split": "holdout"}
+{"id": "COMPARISON-cmp-a-02", "seed_id": "cmp-a", "question": "새션이랑 JWT 차이가 뭐야?", "expected_intent": "COMPARISON", "variation_type": "typo", "split": "dev"}
+{"id": "COMPARISON-cmp-a-03", "seed_id": "cmp-a", "question": "세션이랑JWT 차이가 뭐야?", "expected_intent": "COMPARISON", "variation_type": "typo", "split": "holdout"}
+{"id": "COMPARISON-cmp-a-04", "seed_id": "cmp-a", "question": "혹시 세션이랑 JWT 차이가 뭐야?", "expected_intent": "COMPARISON", "variation_type": "filler", "split": "dev"}
+{"id": "COMPARISON-cmp-a-05", "seed_id": "cmp-a", "question": "세션이랑 JWT 뭐가 달라?", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "COMPARISON-cmp-a-06", "seed_id": "cmp-a", "question": "세션이랑 JWT 차이 뭐임?", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "COMPARISON-cmp-a-07", "seed_id": "cmp-a", "question": "세션과 JWT의 차이점이 뭔가요?", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "COMPARISON-cmp-b-00", "seed_id": "cmp-b", "question": "Process vs Thread 비교해줘", "expected_intent": "COMPARISON", "variation_type": "seed", "split": "dev"}
+{"id": "COMPARISON-cmp-b-01", "seed_id": "cmp-b", "question": "Process vs Thread 비교헤줘", "expected_intent": "COMPARISON", "variation_type": "typo", "split": "holdout"}
+{"id": "COMPARISON-cmp-b-02", "seed_id": "cmp-b", "question": "Processvs Thread 비교해줘", "expected_intent": "COMPARISON", "variation_type": "typo", "split": "dev"}
+{"id": "COMPARISON-cmp-b-03", "seed_id": "cmp-b", "question": "혹시 Process vs Thread 비교해줘", "expected_intent": "COMPARISON", "variation_type": "filler", "split": "holdout"}
+{"id": "COMPARISON-cmp-b-04", "seed_id": "cmp-b", "question": "프로세스랑 스레드 비교해줘", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "COMPARISON-cmp-b-05", "seed_id": "cmp-b", "question": "Process랑 Thread 차이가 뭐야?", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "COMPARISON-cmp-b-06", "seed_id": "cmp-b", "question": "프로세스 vs 스레드 뭐가 달라요?", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "COMPARISON-cmp-b-07", "seed_id": "cmp-b", "question": "프로세스와 스레드 비교 좀 해줄래?", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "COMPARISON-cmp-c-00", "seed_id": "cmp-c", "question": "List랑 Set 뭐가 달라?", "expected_intent": "COMPARISON", "variation_type": "seed", "split": "dev"}
+{"id": "COMPARISON-cmp-c-01", "seed_id": "cmp-c", "question": "List라 Set 뭐가 달라?", "expected_intent": "COMPARISON", "variation_type": "typo", "split": "holdout"}
+{"id": "COMPARISON-cmp-c-02", "seed_id": "cmp-c", "question": "List랑Set 뭐가 달라?", "expected_intent": "COMPARISON", "variation_type": "typo", "split": "dev"}
+{"id": "COMPARISON-cmp-c-03", "seed_id": "cmp-c", "question": "혹시 List랑 Set 뭐가 달라?", "expected_intent": "COMPARISON", "variation_type": "filler", "split": "holdout"}
+{"id": "COMPARISON-cmp-c-04", "seed_id": "cmp-c", "question": "List랑 Set 차이가 뭐야?", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "COMPARISON-cmp-c-05", "seed_id": "cmp-c", "question": "리스트랑 셋 뭐가 다름?", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "COMPARISON-cmp-c-06", "seed_id": "cmp-c", "question": "List와 Set의 차이점은?", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "dev"}
+{"id": "COMPARISON-cmp-c-07", "seed_id": "cmp-c", "question": "Set이랑 List 비교해줘", "expected_intent": "COMPARISON", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-a-00", "seed_id": "ex-a", "question": "N+1 문제 예시 하나 들어줘", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "seed", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-a-01", "seed_id": "ex-a", "question": "N+1 무제 예시 하나 들어줘", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "typo", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-a-02", "seed_id": "ex-a", "question": "N+1 문재 예시 하나 들어줘", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "typo", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-a-03", "seed_id": "ex-a", "question": "N+1문제 예시 하나 들어줘", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "typo", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-a-04", "seed_id": "ex-a", "question": "혹시 N+1 문제 예시 하나 들어줘", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "filler", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-a-05", "seed_id": "ex-a", "question": "N+1 문제 예시 좀 들어줄래?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-a-06", "seed_id": "ex-a", "question": "N+1 문제 예 하나만", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "paraphrase", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-a-07", "seed_id": "ex-a", "question": "N+1 예시 보여줘", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-b-00", "seed_id": "ex-b", "question": "옵저버 패턴 코드로 보여줄래?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "seed", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-b-01", "seed_id": "ex-b", "question": "오저버 패턴 코드로 보여줄래?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "typo", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-b-02", "seed_id": "ex-b", "question": "옵저버 페턴 코드로 보여줄래?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "typo", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-b-03", "seed_id": "ex-b", "question": "옵저버패턴 코드로 보여줄래?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "typo", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-b-04", "seed_id": "ex-b", "question": "혹시 옵저버 패턴 코드로 보여줄래?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "filler", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-b-05", "seed_id": "ex-b", "question": "옵저버 패턴 코드 예시 보여줘", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-b-06", "seed_id": "ex-b", "question": "옵저버 패턴 코드로 좀 보여줘", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "paraphrase", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-b-07", "seed_id": "ex-b", "question": "옵저버 패턴 예제 코드 있어?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-c-00", "seed_id": "ex-c", "question": "이거 실제 케이스로 설명해줄 수 있어?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "seed", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-c-01", "seed_id": "ex-c", "question": "이거 시제 케이스로 설명해줄 수 있어?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "typo", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-c-02", "seed_id": "ex-c", "question": "이거 실재 케이스로 설명해줄 수 있어?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "typo", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-c-03", "seed_id": "ex-c", "question": "이거실제 케이스로 설명해줄 수 있어?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "typo", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-c-04", "seed_id": "ex-c", "question": "혹시 이거 실제 케이스로 설명해줄 수 있어?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "filler", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-c-05", "seed_id": "ex-c", "question": "이거 실제 예시로 설명해줘", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "EXAMPLE_REQUEST-ex-c-06", "seed_id": "ex-c", "question": "실제 사례 하나 들어서 설명해줄래?", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "paraphrase", "split": "dev"}
+{"id": "EXAMPLE_REQUEST-ex-c-07", "seed_id": "ex-c", "question": "예를 들어서 설명해줘", "expected_intent": "EXAMPLE_REQUEST", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-a-00", "seed_id": "prac-a", "question": "인덱스는 실무에서 언제 써?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "seed", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-a-01", "seed_id": "prac-a", "question": "이덱스는 실무에서 언제 써?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "typo", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-a-02", "seed_id": "prac-a", "question": "인댁스는 실무에서 언제 써?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "typo", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-a-03", "seed_id": "prac-a", "question": "인덱스는실무에서 언제 써?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "typo", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-a-04", "seed_id": "prac-a", "question": "혹시 인덱스는 실무에서 언제 써?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "filler", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-a-05", "seed_id": "prac-a", "question": "인덱스 실무에서 언제 씀?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-a-06", "seed_id": "prac-a", "question": "인덱스 실제로 언제 써요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "paraphrase", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-a-07", "seed_id": "prac-a", "question": "현업에서 인덱스 언제 쓰는 거야?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-b-00", "seed_id": "prac-b", "question": "트랜잭션 격리수준은 현업에서 어떻게 정해요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "seed", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-b-01", "seed_id": "prac-b", "question": "트래잭션 격리수준은 현업에서 어떻게 정해요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "typo", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-b-02", "seed_id": "prac-b", "question": "트렌잭션 격리수준은 현업에서 어떻게 정해요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "typo", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-b-03", "seed_id": "prac-b", "question": "트랜잭션격리수준은 현업에서 어떻게 정해요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "typo", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-b-04", "seed_id": "prac-b", "question": "혹시 트랜잭션 격리수준은 현업에서 어떻게 정해요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "filler", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-b-05", "seed_id": "prac-b", "question": "트랜잭션 격리수준 실무에서 어떻게 정해?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-b-06", "seed_id": "prac-b", "question": "현업에선 격리수준 어떻게 잡아요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "paraphrase", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-b-07", "seed_id": "prac-b", "question": "트랜잭션 격리수준 실제로 어떻게 결정해?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-c-00", "seed_id": "prac-c", "question": "이거 실제로 많이 쓰나요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "seed", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-c-01", "seed_id": "prac-c", "question": "이거 시제로 많이 쓰나요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "typo", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-c-02", "seed_id": "prac-c", "question": "이거 실재로 많이 쓰나요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "typo", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-c-03", "seed_id": "prac-c", "question": "이거실제로 많이 쓰나요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "typo", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-c-04", "seed_id": "prac-c", "question": "혹시 이거 실제로 많이 쓰나요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "filler", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-c-05", "seed_id": "prac-c", "question": "이거 실무에서 많이 써요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "PRACTICAL_USAGE-prac-c-06", "seed_id": "prac-c", "question": "이거 현업에서 자주 쓰나?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "paraphrase", "split": "dev"}
+{"id": "PRACTICAL_USAGE-prac-c-07", "seed_id": "prac-c", "question": "실제로 많이들 쓰는 거예요?", "expected_intent": "PRACTICAL_USAGE", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-a-00", "seed_id": "dbg-a", "question": "이 코드 왜 NullPointerException 나?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "seed", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-a-01", "seed_id": "dbg-a", "question": "이 코드 외 NullPointerException 나?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "typo", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-a-02", "seed_id": "dbg-a", "question": "이코드 왜 NullPointerException 나?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "typo", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-a-03", "seed_id": "dbg-a", "question": "혹시 이 코드 왜 NullPointerException 나?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "filler", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-a-04", "seed_id": "dbg-a", "question": "이 코드 왜 NPE 나?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "paraphrase", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-a-05", "seed_id": "dbg-a", "question": "코드에서 NullPointerException 왜 떠?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-a-06", "seed_id": "dbg-a", "question": "이거 왜 자꾸 NPE 떠요?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "paraphrase", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-a-07", "seed_id": "dbg-a", "question": "왜 NullPointerException 발생해?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-b-00", "seed_id": "dbg-b", "question": "스프링 빈 주입이 안 되는데 왜 그래요?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "seed", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-b-01", "seed_id": "dbg-b", "question": "스프리 빈 주입이 안 되는데 왜 그래요?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "typo", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-b-02", "seed_id": "dbg-b", "question": "스프링 빈 주입이 안 돼는데 왜 그래요?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "typo", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-b-03", "seed_id": "dbg-b", "question": "스프링빈 주입이 안 되는데 왜 그래요?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "typo", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-b-04", "seed_id": "dbg-b", "question": "혹시 스프링 빈 주입이 안 되는데 왜 그래요?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "filler", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-b-05", "seed_id": "dbg-b", "question": "스프링 빈 주입이 안 돼요 왜죠?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-b-06", "seed_id": "dbg-b", "question": "빈 주입이 왜 안 되지?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "paraphrase", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-b-07", "seed_id": "dbg-b", "question": "스프링에서 의존성 주입이 안 되는데 왜?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-c-00", "seed_id": "dbg-c", "question": "이거 왜 자꾸 안 되지?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "seed", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-c-01", "seed_id": "dbg-c", "question": "이거 왜 자꾸 아 되지?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "typo", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-c-02", "seed_id": "dbg-c", "question": "이거 외 자꾸 안 되지?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "typo", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-c-03", "seed_id": "dbg-c", "question": "이거왜 자꾸 안 되지?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "typo", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-c-04", "seed_id": "dbg-c", "question": "혹시 이거 왜 자꾸 안 되지?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "filler", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-c-05", "seed_id": "dbg-c", "question": "이거 왜 안 됨?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "DEBUG_OR_ERROR-dbg-c-06", "seed_id": "dbg-c", "question": "이게 왜 자꾸 안 돼요?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "paraphrase", "split": "dev"}
+{"id": "DEBUG_OR_ERROR-dbg-c-07", "seed_id": "dbg-c", "question": "왜 계속 안 되는 거지?", "expected_intent": "DEBUG_OR_ERROR", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-a-00", "seed_id": "fu-a", "question": "왜요?", "expected_intent": "FOLLOW_UP", "variation_type": "seed", "split": "dev"}
+{"id": "FOLLOW_UP-fu-a-01", "seed_id": "fu-a", "question": "외요?", "expected_intent": "FOLLOW_UP", "variation_type": "typo", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-a-02", "seed_id": "fu-a", "question": "왜요 ?", "expected_intent": "FOLLOW_UP", "variation_type": "typo", "split": "dev"}
+{"id": "FOLLOW_UP-fu-a-03", "seed_id": "fu-a", "question": "혹시 왜요?", "expected_intent": "FOLLOW_UP", "variation_type": "filler", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-a-04", "seed_id": "fu-a", "question": "왜죠?", "expected_intent": "FOLLOW_UP", "variation_type": "paraphrase", "split": "dev"}
+{"id": "FOLLOW_UP-fu-a-05", "seed_id": "fu-a", "question": "왜에요?", "expected_intent": "FOLLOW_UP", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-a-06", "seed_id": "fu-a", "question": "왜 그런 거예요?", "expected_intent": "FOLLOW_UP", "variation_type": "paraphrase", "split": "dev"}
+{"id": "FOLLOW_UP-fu-a-07", "seed_id": "fu-a", "question": "왜 그래요?", "expected_intent": "FOLLOW_UP", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-b-00", "seed_id": "fu-b", "question": "다시 쉽게 설명해줄 수 있어요?", "expected_intent": "FOLLOW_UP", "variation_type": "seed", "split": "dev"}
+{"id": "FOLLOW_UP-fu-b-01", "seed_id": "fu-b", "question": "다시 쉬게 설명해줄 수 있어요?", "expected_intent": "FOLLOW_UP", "variation_type": "typo", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-b-02", "seed_id": "fu-b", "question": "다시 쉽개 설명해줄 수 있어요?", "expected_intent": "FOLLOW_UP", "variation_type": "typo", "split": "dev"}
+{"id": "FOLLOW_UP-fu-b-03", "seed_id": "fu-b", "question": "다시쉽게 설명해줄 수 있어요?", "expected_intent": "FOLLOW_UP", "variation_type": "typo", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-b-04", "seed_id": "fu-b", "question": "혹시 다시 쉽게 설명해줄 수 있어요?", "expected_intent": "FOLLOW_UP", "variation_type": "filler", "split": "dev"}
+{"id": "FOLLOW_UP-fu-b-05", "seed_id": "fu-b", "question": "다시 쉽게 설명해줘", "expected_intent": "FOLLOW_UP", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-b-06", "seed_id": "fu-b", "question": "좀 더 쉽게 말해줄래?", "expected_intent": "FOLLOW_UP", "variation_type": "paraphrase", "split": "dev"}
+{"id": "FOLLOW_UP-fu-b-07", "seed_id": "fu-b", "question": "다시 쉽게 알려주세요", "expected_intent": "FOLLOW_UP", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-c-00", "seed_id": "fu-c", "question": "그게 무슨 말이에요?", "expected_intent": "FOLLOW_UP", "variation_type": "seed", "split": "dev"}
+{"id": "FOLLOW_UP-fu-c-01", "seed_id": "fu-c", "question": "그게 무스 말이에요?", "expected_intent": "FOLLOW_UP", "variation_type": "typo", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-c-02", "seed_id": "fu-c", "question": "그개 무슨 말이에요?", "expected_intent": "FOLLOW_UP", "variation_type": "typo", "split": "dev"}
+{"id": "FOLLOW_UP-fu-c-03", "seed_id": "fu-c", "question": "그게무슨 말이에요?", "expected_intent": "FOLLOW_UP", "variation_type": "typo", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-c-04", "seed_id": "fu-c", "question": "혹시 그게 무슨 말이에요?", "expected_intent": "FOLLOW_UP", "variation_type": "filler", "split": "dev"}
+{"id": "FOLLOW_UP-fu-c-05", "seed_id": "fu-c", "question": "그게 무슨 말이야?", "expected_intent": "FOLLOW_UP", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "FOLLOW_UP-fu-c-06", "seed_id": "fu-c", "question": "방금 그거 무슨 뜻이에요?", "expected_intent": "FOLLOW_UP", "variation_type": "paraphrase", "split": "dev"}
+{"id": "FOLLOW_UP-fu-c-07", "seed_id": "fu-c", "question": "그 말이 무슨 뜻이죠?", "expected_intent": "FOLLOW_UP", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "OFF_TOPIC-off-a-00", "seed_id": "off-a", "question": "점심 뭐 먹지?", "expected_intent": "OFF_TOPIC", "variation_type": "seed", "split": "dev"}
+{"id": "OFF_TOPIC-off-a-01", "seed_id": "off-a", "question": "저심 뭐 먹지?", "expected_intent": "OFF_TOPIC", "variation_type": "typo", "split": "holdout"}
+{"id": "OFF_TOPIC-off-a-02", "seed_id": "off-a", "question": "점심뭐 먹지?", "expected_intent": "OFF_TOPIC", "variation_type": "typo", "split": "dev"}
+{"id": "OFF_TOPIC-off-a-03", "seed_id": "off-a", "question": "혹시 점심 뭐 먹지?", "expected_intent": "OFF_TOPIC", "variation_type": "filler", "split": "holdout"}
+{"id": "OFF_TOPIC-off-a-04", "seed_id": "off-a", "question": "점심 뭐 먹을까?", "expected_intent": "OFF_TOPIC", "variation_type": "paraphrase", "split": "dev"}
+{"id": "OFF_TOPIC-off-a-05", "seed_id": "off-a", "question": "오늘 점심 뭐 먹지ㅋㅋ", "expected_intent": "OFF_TOPIC", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "OFF_TOPIC-off-a-06", "seed_id": "off-a", "question": "밥 뭐 먹지?", "expected_intent": "OFF_TOPIC", "variation_type": "paraphrase", "split": "dev"}
+{"id": "OFF_TOPIC-off-a-07", "seed_id": "off-a", "question": "점심 메뉴 추천 좀", "expected_intent": "OFF_TOPIC", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "OFF_TOPIC-off-b-00", "seed_id": "off-b", "question": "주말에 영화 뭐 볼까?", "expected_intent": "OFF_TOPIC", "variation_type": "seed", "split": "dev"}
+{"id": "OFF_TOPIC-off-b-01", "seed_id": "off-b", "question": "주마에 영화 뭐 볼까?", "expected_intent": "OFF_TOPIC", "variation_type": "typo", "split": "holdout"}
+{"id": "OFF_TOPIC-off-b-02", "seed_id": "off-b", "question": "주말애 영화 뭐 볼까?", "expected_intent": "OFF_TOPIC", "variation_type": "typo", "split": "dev"}
+{"id": "OFF_TOPIC-off-b-03", "seed_id": "off-b", "question": "주말에영화 뭐 볼까?", "expected_intent": "OFF_TOPIC", "variation_type": "typo", "split": "holdout"}
+{"id": "OFF_TOPIC-off-b-04", "seed_id": "off-b", "question": "혹시 주말에 영화 뭐 볼까?", "expected_intent": "OFF_TOPIC", "variation_type": "filler", "split": "dev"}
+{"id": "OFF_TOPIC-off-b-05", "seed_id": "off-b", "question": "주말에 볼 영화 추천해줘", "expected_intent": "OFF_TOPIC", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "OFF_TOPIC-off-b-06", "seed_id": "off-b", "question": "이번 주말에 무슨 영화 보지?", "expected_intent": "OFF_TOPIC", "variation_type": "paraphrase", "split": "dev"}
+{"id": "OFF_TOPIC-off-b-07", "seed_id": "off-b", "question": "영화 뭐 재밌는 거 없어?", "expected_intent": "OFF_TOPIC", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "OFF_TOPIC-off-c-00", "seed_id": "off-c", "question": "개발자 되면 연봉 많이 받아요?", "expected_intent": "OFF_TOPIC", "variation_type": "seed", "split": "dev"}
+{"id": "OFF_TOPIC-off-c-01", "seed_id": "off-c", "question": "개바자 되면 연봉 많이 받아요?", "expected_intent": "OFF_TOPIC", "variation_type": "typo", "split": "holdout"}
+{"id": "OFF_TOPIC-off-c-02", "seed_id": "off-c", "question": "게발자 되면 연봉 많이 받아요?", "expected_intent": "OFF_TOPIC", "variation_type": "typo", "split": "dev"}
+{"id": "OFF_TOPIC-off-c-03", "seed_id": "off-c", "question": "개발자되면 연봉 많이 받아요?", "expected_intent": "OFF_TOPIC", "variation_type": "typo", "split": "holdout"}
+{"id": "OFF_TOPIC-off-c-04", "seed_id": "off-c", "question": "혹시 개발자 되면 연봉 많이 받아요?", "expected_intent": "OFF_TOPIC", "variation_type": "filler", "split": "dev"}
+{"id": "OFF_TOPIC-off-c-05", "seed_id": "off-c", "question": "개발자 연봉 많이 받나요?", "expected_intent": "OFF_TOPIC", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "OFF_TOPIC-off-c-06", "seed_id": "off-c", "question": "개발자 되면 돈 많이 벌어?", "expected_intent": "OFF_TOPIC", "variation_type": "paraphrase", "split": "dev"}
+{"id": "OFF_TOPIC-off-c-07", "seed_id": "off-c", "question": "개발자 월급 어느 정도예요?", "expected_intent": "OFF_TOPIC", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "UNKNOWN-unk-a-00", "seed_id": "unk-a", "question": "ㅁㄴㅇㄹ asdf", "expected_intent": "UNKNOWN", "variation_type": "seed", "split": "dev"}
+{"id": "UNKNOWN-unk-a-01", "seed_id": "unk-a", "question": "ㅁㄴㅇㄹasdf", "expected_intent": "UNKNOWN", "variation_type": "typo", "split": "holdout"}
+{"id": "UNKNOWN-unk-a-02", "seed_id": "unk-a", "question": "혹시 ㅁㄴㅇㄹ asdf", "expected_intent": "UNKNOWN", "variation_type": "filler", "split": "dev"}
+{"id": "UNKNOWN-unk-a-03", "seed_id": "unk-a", "question": "ㅋㅋㅋㅋ", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "UNKNOWN-unk-a-04", "seed_id": "unk-a", "question": "ㅇㅇ", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "dev"}
+{"id": "UNKNOWN-unk-a-05", "seed_id": "unk-a", "question": "asdf asdf", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "UNKNOWN-unk-a-06", "seed_id": "unk-a", "question": "zzzz", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "dev"}
+{"id": "UNKNOWN-unk-a-07", "seed_id": "unk-a", "question": "........", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "UNKNOWN-unk-b-00", "seed_id": "unk-b", "question": "그거 있잖아 그거 좀", "expected_intent": "UNKNOWN", "variation_type": "seed", "split": "dev"}
+{"id": "UNKNOWN-unk-b-01", "seed_id": "unk-b", "question": "그거 이잖아 그거 좀", "expected_intent": "UNKNOWN", "variation_type": "typo", "split": "holdout"}
+{"id": "UNKNOWN-unk-b-02", "seed_id": "unk-b", "question": "그거있잖아 그거 좀", "expected_intent": "UNKNOWN", "variation_type": "typo", "split": "dev"}
+{"id": "UNKNOWN-unk-b-03", "seed_id": "unk-b", "question": "혹시 그거 있잖아 그거 좀", "expected_intent": "UNKNOWN", "variation_type": "filler", "split": "holdout"}
+{"id": "UNKNOWN-unk-b-04", "seed_id": "unk-b", "question": "그거 그거 있잖아", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "dev"}
+{"id": "UNKNOWN-unk-b-05", "seed_id": "unk-b", "question": "그 뭐냐 그거", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "UNKNOWN-unk-b-06", "seed_id": "unk-b", "question": "아 그거 뭐였지", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "dev"}
+{"id": "UNKNOWN-unk-b-07", "seed_id": "unk-b", "question": "그거 좀 해줘", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "UNKNOWN-unk-c-00", "seed_id": "unk-c", "question": "자바 그거 막 그런 거", "expected_intent": "UNKNOWN", "variation_type": "seed", "split": "dev"}
+{"id": "UNKNOWN-unk-c-01", "seed_id": "unk-c", "question": "자바 그거 마 그런 거", "expected_intent": "UNKNOWN", "variation_type": "typo", "split": "holdout"}
+{"id": "UNKNOWN-unk-c-02", "seed_id": "unk-c", "question": "자바그거 막 그런 거", "expected_intent": "UNKNOWN", "variation_type": "typo", "split": "dev"}
+{"id": "UNKNOWN-unk-c-03", "seed_id": "unk-c", "question": "혹시 자바 그거 막 그런 거", "expected_intent": "UNKNOWN", "variation_type": "filler", "split": "holdout"}
+{"id": "UNKNOWN-unk-c-04", "seed_id": "unk-c", "question": "자바 막 그런 거 있잖아", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "dev"}
+{"id": "UNKNOWN-unk-c-05", "seed_id": "unk-c", "question": "그 자바 뭐시기", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "holdout"}
+{"id": "UNKNOWN-unk-c-06", "seed_id": "unk-c", "question": "자바 그거 뭐였더라", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "dev"}
+{"id": "UNKNOWN-unk-c-07", "seed_id": "unk-c", "question": "자바 막 이것저것", "expected_intent": "UNKNOWN", "variation_type": "paraphrase", "split": "holdout"}

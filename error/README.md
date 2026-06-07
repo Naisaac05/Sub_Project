@@ -31,6 +31,7 @@
 ```
 
 ## 인덱스
+- [2026-05-29 AI 품질 감사 — golden eval intent-enum 불일치 + 생성 지식카드 검토 누락 (해결됨)](2026-05-29-ai-eval-and-knowledge-card-quality.md)
 - [2026-05-29 보안 감사 하드닝 — 인증/IDOR/결제/설정 10건 (로그인 백도어·결제취소 우회 등)](2026-05-29-security-audit-hardening.md)
 - [2026-05-27 GlobalExceptionHandler가 NoResourceFoundException을 잡아 404 대신 500 반환](2026-05-27-global-exception-handler-404-swallowed-as-500.md)
 - [2026-05-27 AI semantic judge mock contamination and lint failures](2026-05-27-ai-semantic-judge-mock-contamination-and-lint-failures.md)
