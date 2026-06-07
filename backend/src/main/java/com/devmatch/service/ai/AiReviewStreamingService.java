@@ -515,10 +515,11 @@ public class AiReviewStreamingService {
         }
 
         String feedback = aiMessage == null ? "" : aiMessage.getContent();
+        String nextQuestion = AiReviewFollowUpSupport.extractFollowUp(feedback);
         return new AiReviewSubmitResponse(
                 AiReviewMessageMode.FREE_QUESTION.name(),
                 feedback,
-                null,
+                nextQuestion,
                 session.getStatus() == AiReviewStatus.COMPLETED,
                 session.getSummary(),
                 messages
@@ -603,6 +604,14 @@ public class AiReviewStreamingService {
                 qualityFlags = String.valueOf(flagsObj);
             }
         }
+        String followUpQuestion = AiReviewFollowUpSupport.buildFreeQuestionFollowUp(
+                question,
+                "",
+                answerStyle,
+                resolvedQuery,
+                matchedConceptId
+        );
+        answer = AiReviewFollowUpSupport.appendFollowUp(answer, followUpQuestion);
 
         // Merge STATUS:COMPLETED
         if (qualityFlags == null || qualityFlags.isBlank()) {

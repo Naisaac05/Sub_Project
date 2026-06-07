@@ -45,7 +45,7 @@ class WorkflowDegradedModesTest(unittest.IsolatedAsyncioTestCase):
         response = run_review_workflow("free-question", request, generator=failing_generator)
 
         self.assertFalse(response.fallback_used)
-        self.assertEqual(response.model_used, "qwen3:1.7b:cache")
+        self.assertEqual(response.model_used, "exaone3.5:2.4b:cache")
         self.assertEqual(response.route, "cache")
         self.assertEqual(response.answer, "캐시된 답변입니다.")
 

@@ -28,10 +28,10 @@ class AiReviewPropertiesTest {
                 45
         );
 
-        assertThat(properties.python().model()).isEqualTo("qwen3:1.7b");
+        assertThat(properties.python().model()).isEqualTo("exaone3.5:2.4b");
         assertThat(properties.python().maxTokens()).isEqualTo(256);
         assertThat(properties.python().numCtx()).isEqualTo(1024);
-        assertThat(properties.ollama().model()).isEqualTo("qwen3:4b-q4_K_M");
+        assertThat(properties.ollama().model()).isEqualTo("exaone3.5:2.4b");
         assertThat(properties.ollama().maxTokens()).isEqualTo(256);
         assertThat(properties.ollama().numCtx()).isEqualTo(1024);
         assertThat(properties.python().readTimeoutSeconds()).isEqualTo(30);
@@ -86,7 +86,7 @@ class AiReviewPropertiesTest {
                 .withPropertyValues(
                         "app.ai-review.enabled=true",
                         "app.ai-review.provider=PYTHON",
-                        "app.ai-review.python.model=qwen3:1.7b",
+                        "app.ai-review.python.model=exaone3.5:2.4b",
                         "app.ai-review.streaming-enabled=true",
                         "app.ai-review.stream-timeout-seconds=60"
                 )
@@ -95,7 +95,7 @@ class AiReviewPropertiesTest {
                     AiReviewProperties properties = context.getBean(AiReviewProperties.class);
                     assertThat(properties.enabled()).isTrue();
                     assertThat(properties.provider()).isEqualTo(AiReviewProperties.Provider.PYTHON);
-                    assertThat(properties.python().model()).isEqualTo("qwen3:1.7b");
+                    assertThat(properties.python().model()).isEqualTo("exaone3.5:2.4b");
                     assertThat(properties.streamingEnabled()).isTrue();
                     assertThat(properties.streamTimeoutSeconds()).isEqualTo(60);
                 });

@@ -42,7 +42,7 @@ class StreamBaselineScriptTest(unittest.IsolatedAsyncioTestCase):
                 "type": "done",
                 "response": module.AiGenerateResponse(
                     answer="첫 응답",
-                    model_used="qwen3:1.7b",
+                    model_used="exaone3.5:2.4b",
                     route="generation",
                     fallback_used=False,
                     latency_ms=1234,
@@ -67,7 +67,7 @@ class StreamBaselineScriptTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(sample["stream_duration_ms"], 1250)
         self.assertEqual(sample["chunk_count"], 2)
         self.assertEqual(sample["response_chars"], 4)
-        self.assertEqual(sample["model_used"], "qwen3:1.7b")
+        self.assertEqual(sample["model_used"], "exaone3.5:2.4b")
         self.assertEqual(sample["route"], "generation")
         self.assertFalse(sample["fallback_used"])
 
@@ -81,7 +81,7 @@ class StreamBaselineScriptTest(unittest.IsolatedAsyncioTestCase):
                 "stream_duration_ms": 1000,
                 "chunk_count": 2,
                 "response_chars": 10,
-                "model_used": "qwen3:1.7b",
+                "model_used": "exaone3.5:2.4b",
                 "route": "generation",
                 "fallback_used": False,
                 "quality_flags": [],
@@ -107,7 +107,7 @@ class StreamBaselineScriptTest(unittest.IsolatedAsyncioTestCase):
             environment={
                 "cpu": "Test CPU",
                 "ram": "16 GB",
-                "model": "qwen3:1.7b",
+                "model": "exaone3.5:2.4b",
                 "prompt": "baseline question",
                 "knowledge_version": "manifest-hash",
             },
@@ -144,7 +144,7 @@ class StreamBaselineScriptTest(unittest.IsolatedAsyncioTestCase):
                 {
                     "run": 1,
                     "status": "completed",
-                    "model_used": "qwen3:1.7b",
+                    "model_used": "exaone3.5:2.4b",
                     "route": "fallback_template",
                 }
             ]

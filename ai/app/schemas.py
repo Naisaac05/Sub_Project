@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field, field_validator
 from app.guardrails import sanitize_text
 
 
-DEFAULT_MODEL = "qwen3:1.7b"
+DEFAULT_MODEL = "exaone3.5:2.4b"
 DEFAULT_MAX_TOKENS = 256
 DEFAULT_NUM_CTX = 1024
 
@@ -21,6 +21,7 @@ class AiGenerateRequest(BaseModel):
     max_tokens: int = DEFAULT_MAX_TOKENS
     num_ctx: int = DEFAULT_NUM_CTX
     num_thread: int = 4
+    stream: bool = False
 
     @field_validator(
         "question",

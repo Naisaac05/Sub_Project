@@ -270,7 +270,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--runs", type=int, default=3)
     parser.add_argument("--mode", default="free-question")
     parser.add_argument("--question", default=DEFAULT_PROMPT)
-    parser.add_argument("--model", default=os.getenv("PYTHON_AI_MODEL", "qwen3:1.7b"))
+    parser.add_argument("--model", default=os.getenv("PYTHON_AI_MODEL", "exaone3.5:2.4b"))
     parser.add_argument("--temperature", type=float, default=0.2)
     parser.add_argument("--max-tokens", type=int, default=128)
     parser.add_argument("--num-ctx", type=int, default=1024)
