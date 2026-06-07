@@ -43,7 +43,7 @@ class ObservabilityTest(unittest.TestCase):
             answer="cached",
             fallback_used=False,
             route="cache",
-            model_used="qwen3:1.7b:cache",
+            model_used="exaone3.5:2.4b:cache",
             observability_events=[{"event": "ai_review.workflow_completed"}],
         )
 
@@ -52,7 +52,7 @@ class ObservabilityTest(unittest.TestCase):
         event = json.loads(logger.messages[0])
         self.assertTrue(event["cache_hit"])
         self.assertTrue(event["llm_call_avoided"])
-        self.assertEqual(event["model_used"], "qwen3:1.7b:cache")
+        self.assertEqual(event["model_used"], "exaone3.5:2.4b:cache")
 
     def test_emit_observability_events_marks_lightweight_only_miss_as_llm_avoided(self):
         logger = CapturingLogger()

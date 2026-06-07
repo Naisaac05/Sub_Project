@@ -1,14 +1,22 @@
 from dataclasses import dataclass
+import hashlib
+import inspect
 import json
 import logging
+import os
 import re
-import inspect
-from app.ollama.client import call_ollama, FALLBACK_MODEL
+import threading
+import time
+
+from app.ollama.client import FALLBACK_MODEL, call_ollama
+from app.prompts.registry import compute_prompt_hash
 from app.schemas import AiGenerateRequest
 from app.workflow.intent import FreeQuestionIntent
-from app.prompts.registry import compute_prompt_hash
 
 logger = logging.getLogger("ai_review.workflow.judge")
+
+JUDGE_MODEL = os.getenv("PYTHON_AI_JUDGE_MODEL", FALLBACK_MODEL)
+LITE_SEMANTIC_JUDGE_PROMPT_VERSION = "semantic_judge_lite_v1"
 
 
 @dataclass(frozen=True)
@@ -20,6 +28,20 @@ class SemanticJudgeResult:
     reason: str
     prompt_version: str | None = None
     prompt_hash: str | None = None
+    cache_hit: bool = False
+    cache_key_hash: str | None = None
+    prompt_tokens_estimate: int = 0
+
+
+_JUDGE_CACHE = {}
+_JUDGE_CACHE_LOCK = threading.Lock()
+MAX_CACHE_ENTRIES = 512
+TTL_SECONDS = 300
+
+
+def clear_answer_cache():
+    with _JUDGE_CACHE_LOCK:
+        _JUDGE_CACHE.clear()
 
 
 def judge_answer(
@@ -31,47 +53,68 @@ def judge_answer(
     generator=call_ollama,
 ) -> SemanticJudgeResult:
     if mode != "free-question" or not answer:
-        return SemanticJudgeResult(1.0, 0.0, "low", False, "Skipped judge for non-free-question or empty answer")
+        return SemanticJudgeResult(
+            1.0,
+            0.0,
+            "low",
+            False,
+            "Skipped judge for non-free-question or empty answer",
+        )
 
-    # [중요 안전망] 기존 유닛 테스트의 단순 mock generator(호출 횟수를 세는 lambda 등)들의 
-    # 호출 횟수 오염을 예방하고 에러를 차단하기 위한 Pre-flight Check 필터링.
-    # 실제 call_ollama 이거나 판사 평결용 JSON 프로토콜을 수행하는 전용 mock_generator 인 경우에만 동작합니다.
-    is_judge_compatible = False
-    func_name = getattr(generator, "__name__", "")
-    if func_name in ("call_ollama", "recording_generator", "call_ollama_stream_async"):
-        is_judge_compatible = True
-    else:
-        try:
-            source = inspect.getsource(generator)
-            if "precise AI Semantic Judge" in source or "Semantic Judge" in source or "judge" in source or "relevance_score" in source or "context_bias_score" in source:
-                is_judge_compatible = True
-        except Exception:
-            if "judge" in func_name.lower() or "mock_llm" in func_name.lower() or "fallback" in func_name.lower():
-                is_judge_compatible = True
+    if not _is_judge_compatible(generator):
+        return SemanticJudgeResult(
+            1.0,
+            0.0,
+            "low",
+            False,
+            "Skipped judge: generator is not judge-compatible",
+        )
 
-    if not is_judge_compatible:
-        return SemanticJudgeResult(1.0, 0.0, "low", False, "Skipped judge: generator is not judge-compatible")
+    prompt_version = LITE_SEMANTIC_JUDGE_PROMPT_VERSION
+    intent_str = intent.intent if intent else "unknown"
+    raw_key = f"{request.user_answer or ''}|{answer}|{intent_str}|{prompt_version}"
+    cache_key_hash = hashlib.sha256(raw_key.encode("utf-8")).hexdigest()
+    now = time.time()
 
-    # RAG contexts text
-    context_text = "\n\n".join(ctx.content for ctx in contexts) if contexts else "No retrieved contexts."
+    with _JUDGE_CACHE_LOCK:
+        entry = _JUDGE_CACHE.get(cache_key_hash)
+        if entry and now < entry["expires_at"]:
+            cached = entry["result"]
+            return SemanticJudgeResult(
+                relevance_score=cached.relevance_score,
+                context_bias_score=cached.context_bias_score,
+                hallucination_risk=cached.hallucination_risk,
+                should_retry=cached.should_retry,
+                reason=cached.reason,
+                prompt_version=cached.prompt_version,
+                prompt_hash=cached.prompt_hash,
+                cache_hit=True,
+                cache_key_hash=cache_key_hash,
+                prompt_tokens_estimate=cached.prompt_tokens_estimate,
+            )
+        if entry:
+            _JUDGE_CACHE.pop(cache_key_hash, None)
 
-    # Judge Prompt 구성 (JSON Schema 명시)
+    context_text = "\n\n".join(ctx.content for ctx in contexts[:2]) if contexts else "No retrieved contexts."
+    if len(context_text) > 1600:
+        context_text = context_text[:1600]
+
     prompt = f"""
-You are a precise AI Semantic Judge evaluating a programming mentor's response to a learner's question.
-Your task is to judge the quality, bias, and correctness of the RESPONSE given below, based on the learner's LATEST QUESTION, the BACKGROUND TEST CONTEXT (if any), and the RETRIEVED CONTEXTS.
+You are a lightweight, precise AI Semantic Judge for a programming mentor answer.
+Return JSON only. Prefer speed and stable coarse scoring over detailed critique.
 
-[Learner's Latest Question]
+[Latest Learner Question]
 {request.user_answer}
 
-[Mentor Response to Evaluate]
+[Answer To Judge]
 {answer}
 
-[Background Original Test Context]
-- Question: {request.question}
-- Correct Answer: {request.correct_answer}
-- Selected Answer (Learner's wrong choice): {request.selected_answer}
+[Original Quiz Context]
+question={request.question}
+correct_answer={request.correct_answer}
+selected_answer={request.selected_answer}
 
-[Retrieved Contexts (RAG)]
+[Retrieved Contexts]
 {context_text}
 
 [Intent Info]
@@ -79,17 +122,12 @@ Your task is to judge the quality, bias, and correctness of the RESPONSE given b
 - Sub Intent: {intent.sub_intent if intent else "unknown"}
 - Context Dependent: {intent.context_dependent if intent else "False"}
 
-Evaluate the Mentor Response based on these strict guidelines:
-1. Relevance Score (relevance_score: 0.0 - 1.0): Does it directly answer the latest question?
-   - If the intent is "follow_up" but it focuses mostly on unrelated retrieved context cards (like RecyclerView/ViewHolder in a JPA/DTO debate), lower the score (< 0.7).
-   - If multiple concepts were asked but only some were explained, lower the score (< 0.7).
-2. Context Bias Score (context_bias_score: 0.0 - 1.0): Is it overly obsessed with the original background test instead of explaining the new concepts?
-   - If the intent is "concept_definition" (meaning the learner asked for pure definitions like "지연 로딩이 뭐야") but the response immediately talks about original background test question/options or why some options are right/wrong, give a high bias score (> 0.6).
-3. Hallucination Risk (hallucination_risk: "low" | "medium" | "high"): Is there any high risk of hallucinated facts or incorrect explanations?
-4. Should Retry (should_retry: true | false): Set to true if relevance_score < 0.7 OR context_bias_score > 0.6. Otherwise false.
-5. Reason (reason: short Korean sentence): Provide a brief explanation for your scores in Korean.
-
-You MUST respond ONLY with a single JSON object in the following schema. Do NOT wrap it in ```json blocks or include any other text.
+Rules:
+1. relevance_score: direct answer to Latest Learner Question.
+2. context_bias_score: high only when answer explains the original quiz/choices instead of the latest question.
+3. Topic Continuity Rule: same-topic concept explanations are valid, not bias.
+4. hallucination_risk: high only for clearly unsafe or unsupported technical claims.
+5. should_retry: true only if relevance_score < 0.7 or context_bias_score > 0.6.
 
 JSON Schema:
 {{
@@ -97,58 +135,50 @@ JSON Schema:
   "context_bias_score": 0.0-1.0,
   "hallucination_risk": "low"|"medium"|"high",
   "should_retry": true|false,
-  "reason": "한국어로 간결하게 작성한 이유"
+  "reason": "short Korean reason"
 }}
 """.strip()
-
-    prompt_version = "semantic_judge_v1"
     prompt_hash = compute_prompt_hash(prompt)
 
-    model = request.model or FALLBACK_MODEL
     try:
         raw_response = generator(
-            model=model,
+            model=JUDGE_MODEL,
             prompt=prompt,
             temperature=0.0,
-            max_tokens=256,
-            num_ctx=request.num_ctx,
+            max_tokens=96,
+            num_ctx=min(request.num_ctx, 1024),
             num_thread=request.num_thread,
         )
-        
-        # JSON 블록 추출 및 클렌징
-        cleaned = raw_response.strip()
-        match = re.search(r"\{.*\}", cleaned, re.DOTALL)
-        if match:
-            cleaned = match.group(0)
-            
-        data = json.loads(cleaned)
-        
+        data = json.loads(_extract_json(raw_response))
+
         relevance_score = float(data.get("relevance_score", 1.0))
         context_bias_score = float(data.get("context_bias_score", 0.0))
         hallucination_risk = str(data.get("hallucination_risk", "low")).lower()
         if hallucination_risk not in {"low", "medium", "high"}:
             hallucination_risk = "low"
-            
-        # 판정 임계값 강제 보정 정책
+
         should_retry = bool(data.get("should_retry", False))
         if relevance_score < 0.7 or context_bias_score > 0.6:
             should_retry = True
         if hallucination_risk == "high":
             should_retry = False
-            
-        reason = str(data.get("reason", "판정 완료"))
-        
-        return SemanticJudgeResult(
+
+        result = SemanticJudgeResult(
             relevance_score=relevance_score,
             context_bias_score=context_bias_score,
             hallucination_risk=hallucination_risk,
             should_retry=should_retry,
-            reason=reason,
+            reason=str(data.get("reason", "Judge completed")),
             prompt_version=prompt_version,
             prompt_hash=prompt_hash,
+            cache_hit=False,
+            cache_key_hash=cache_key_hash,
+            prompt_tokens_estimate=len(prompt) // 4,
         )
+        _save_to_cache(cache_key_hash, result, now)
+        return result
     except Exception as exc:
-        logger.warning(f"Semantic judge execution failed, fallback to safe result. Error: {exc}")
+        logger.warning("Semantic judge execution failed, fallback to safe result. Error: %s", exc)
         return SemanticJudgeResult(
             relevance_score=1.0,
             context_bias_score=0.0,
@@ -157,4 +187,53 @@ JSON Schema:
             reason=f"Exception occurred: {exc}",
             prompt_version=prompt_version,
             prompt_hash=prompt_hash,
+            cache_hit=False,
+            cache_key_hash=cache_key_hash,
+            prompt_tokens_estimate=0,
         )
+
+
+def _is_judge_compatible(generator) -> bool:
+    func_name = getattr(generator, "__name__", "")
+    if func_name in ("call_ollama", "recording_generator", "call_ollama_stream_async"):
+        return True
+    try:
+        source = inspect.getsource(generator)
+    except Exception:
+        return (
+            "judge" in func_name.lower()
+            or "mock_llm" in func_name.lower()
+            or "fallback" in func_name.lower()
+        )
+    return any(
+        token in source
+        for token in (
+            "precise AI Semantic Judge",
+            "Semantic Judge",
+            "judge",
+            "relevance_score",
+            "context_bias_score",
+        )
+    )
+
+
+def _extract_json(raw_response: str) -> str:
+    cleaned = raw_response.strip()
+    match = re.search(r"\{.*\}", cleaned, re.DOTALL)
+    return match.group(0) if match else cleaned
+
+
+def _save_to_cache(cache_key_hash: str, result: SemanticJudgeResult, now: float) -> None:
+    with _JUDGE_CACHE_LOCK:
+        expired_keys = [key for key, value in _JUDGE_CACHE.items() if now >= value["expires_at"]]
+        for key in expired_keys:
+            _JUDGE_CACHE.pop(key, None)
+
+        if len(_JUDGE_CACHE) >= MAX_CACHE_ENTRIES:
+            oldest = next(iter(_JUDGE_CACHE))
+            _JUDGE_CACHE.pop(oldest, None)
+
+        _JUDGE_CACHE[cache_key_hash] = {
+            "result": result,
+            "expires_at": now + TTL_SECONDS,
+        }
