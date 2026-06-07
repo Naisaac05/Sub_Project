@@ -13,7 +13,7 @@ from app.security import verify_service_token
 from app.ollama.client import warm_up_ollama
 from app.service import generate_review_answer
 
-STREAMING_ENABLED = os.getenv("PYTHON_AI_STREAMING_ENABLED", "false").lower() == "true"
+STREAMING_ENABLED = os.getenv("PYTHON_AI_STREAMING_ENABLED", "true").lower() == "true"
 
 app = FastAPI(title="DevMatch AI Service")
 
@@ -69,6 +69,7 @@ def _generate(mode: str, payload: Any, request: Request, response: Response) -> 
 
     if is_streaming:
         normalized_request = normalize_ai_request(payload)
+        normalized_request.stream = True
         ctx = ai_request_admission()
         try:
             ctx.__enter__()

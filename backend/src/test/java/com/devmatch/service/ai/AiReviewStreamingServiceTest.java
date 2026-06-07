@@ -291,7 +291,9 @@ class AiReviewStreamingServiceTest {
         // Second message should be Completed AI message
         AiReviewMessage aiMsg = saved.get(1);
         assertThat(aiMsg.getRole()).isEqualTo(AiReviewMessageRole.AI);
-        assertThat(aiMsg.getContent()).isEqualTo("A deadlock is a state where processes wait for resources.");
+        assertThat(aiMsg.getContent())
+                .contains("A deadlock is a state where processes wait for resources.")
+                .contains("### 다음 확인 질문");
         assertThat(aiMsg.getAiRoute()).isEqualTo("rag");
         assertThat(aiMsg.getAiLatencyMs()).isEqualTo(150);
         assertThat(aiMsg.getAiQualityFlags()).contains("STATUS:COMPLETED", "high_conf");
@@ -509,7 +511,11 @@ class AiReviewStreamingServiceTest {
 
         AiReviewSubmitResponse response = (AiReviewSubmitResponse) doneEvent.get("response");
         assertThat(response.getEvaluation()).isEqualTo("FREE_QUESTION");
-        assertThat(response.getFeedback()).isEqualTo("A deadlock is a wait cycle.");
+        assertThat(response.getFeedback())
+                .contains("A deadlock is a wait cycle.")
+                .contains("### 다음 확인 질문");
+        assertThat(response.getNextQuestion()).isNotBlank();
+        assertThat(response.getFeedback()).contains(response.getNextQuestion());
         assertThat(response.getMessages()).hasSize(2);
         assertThat(response.getMessages().get(0).getId()).isEqualTo(501L);
         assertThat(response.getMessages().get(1).getId()).isEqualTo(502L);
@@ -557,7 +563,11 @@ class AiReviewStreamingServiceTest {
         assertThat(doneEvent.get("response")).isInstanceOf(AiReviewSubmitResponse.class);
 
         AiReviewSubmitResponse response = (AiReviewSubmitResponse) doneEvent.get("response");
-        assertThat(response.getFeedback()).isEqualTo("A deadlock is a wait cycle.");
+        assertThat(response.getFeedback())
+                .contains("A deadlock is a wait cycle.")
+                .contains("### 다음 확인 질문");
+        assertThat(response.getNextQuestion()).isNotBlank();
+        assertThat(response.getFeedback()).contains(response.getNextQuestion());
         assertThat(response.getMessages()).hasSize(2);
         assertThat(response.getMessages().get(0).getId()).isEqualTo(601L);
         assertThat(response.getMessages().get(1).getId()).isEqualTo(602L);

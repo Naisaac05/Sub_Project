@@ -185,9 +185,9 @@ class WorkflowRunnerTest(unittest.TestCase):
             generator=recording_generator,
         )
 
-        self.assertEqual(calls, ["qwen3:4b-q4_K_M"])
+        self.assertEqual(calls, ["exaone3.5:2.4b"])
         self.assertFalse(response.fallback_used)
-        self.assertEqual(response.model_used, "qwen3:4b-q4_K_M")
+        self.assertEqual(response.model_used, "exaone3.5:2.4b")
 
     def test_follow_up_skips_rag_context_retrieval(self):
         state = ReviewWorkflowState(
@@ -820,15 +820,15 @@ class WorkflowRunnerTest(unittest.TestCase):
                 question="\ub85c\uceec \uc800\uc7a5\uc18c\uc640 \uc11c\ubc84 \ub3d9\uae30\ud654 \uc815\ucc45\uc740?",
                 correct_answer="\ub85c\uceec \uc800\uc7a5\uc18c\uc640 \uc11c\ubc84 \ub3d9\uae30\ud654 \uc815\ucc45",
                 user_answer="WebSocket \ud578\ub4dc\uc170\uc774\ud06c\uac00 \ubb54\uac00\uc694?",
-                model="qwen3:1.7b",
+                model="legacy-test-model",
             ),
             generator=fallback_model_generator,
         )
 
-        self.assertEqual(calls, ["qwen3:1.7b", "qwen3:4b-q4_K_M"])
+        self.assertEqual(calls, ["legacy-test-model", "exaone3.5:2.4b"])
         self.assertFalse(response.fallback_used)
         self.assertEqual(response.route, "generation")
-        self.assertEqual(response.model_used, "qwen3:4b-q4_K_M")
+        self.assertEqual(response.model_used, "exaone3.5:2.4b")
         self.assertIn("WebSocket", response.answer)
         self.assertNotIn("\uc2b9\uc778\ub41c \uc9c0\uc2dd \uce74\ub4dc", response.answer)
 
@@ -858,15 +858,15 @@ class WorkflowRunnerTest(unittest.TestCase):
                     "test\ub294 \ucd5c\uc885 \uc77c\ubc18\ud654 \uc131\ub2a5 \ud3c9\uac00"
                 ),
                 user_answer="train/validation/test \ub370\uc774\ud130\uac00 \uc5b4\ub5a4 \uc758\ubbf8\uc778\uc9c0 \ubab0\ub77c",
-                model="qwen3:1.7b",
+                model="legacy-test-model",
             ),
             generator=fallback_model_generator,
         )
 
-        self.assertEqual(calls, ["qwen3:1.7b", "qwen3:4b-q4_K_M"])
+        self.assertEqual(calls, ["legacy-test-model", "exaone3.5:2.4b"])
         self.assertFalse(response.fallback_used)
         self.assertEqual(response.route, "generation")
-        self.assertEqual(response.model_used, "qwen3:4b-q4_K_M")
+        self.assertEqual(response.model_used, "exaone3.5:2.4b")
         self.assertIn("train/validation/test", response.answer)
         self.assertNotIn("\uc2b9\uc778\ub41c \uc9c0\uc2dd \uce74\ub4dc", response.answer)
 
@@ -1041,7 +1041,7 @@ class WorkflowRunnerTest(unittest.TestCase):
             generator=lambda **kwargs: "generator should not be called",
         )
 
-        self.assertEqual(len(response.observability_events), 2)
+        self.assertEqual(len(response.observability_events), 3)
         event = response.observability_events[0]
         self.assertEqual(event["event"], "ai_review.workflow_completed")
         self.assertEqual(event["route"], response.route)
@@ -1053,6 +1053,11 @@ class WorkflowRunnerTest(unittest.TestCase):
         judge_event = response.observability_events[1]
         self.assertEqual(judge_event["event"], "ai_review.semantic_judge_evaluated")
         self.assertEqual(judge_event["final_quality_status"], "degraded")
+
+        breakdown_event = response.observability_events[2]
+        self.assertEqual(breakdown_event["event"], "ai_review.latency_breakdown")
+        self.assertEqual(breakdown_event["route"], response.route)
+        self.assertIn("total_latency_ms", breakdown_event)
 
     def test_regression_free_question_concept_definition_without_bias(self):
         # 6번 요구사항 회귀 테스트 케이스

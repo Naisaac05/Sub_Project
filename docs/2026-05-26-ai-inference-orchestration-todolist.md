@@ -141,6 +141,15 @@
   - [x] contradiction check 추가
   - [x] hallucination suspected answer cache 금지
   - 2026-05-27: Added deterministic Python semantic judge with `evidence_missing`, `contradiction_suspected`, and `hallucination_suspected` flags. Suspicious generated answers are blocked from answer cache writes, and the lightweight evaluator now reports semantic grounding, contradiction absence, and hallucination cache-ban rates. Runbook: `docs/2026-05-27-ai-review-semantic-evaluation.md`.
+  - 2026-05-27: Hardened rule-based/lightweight fallback against ambiguous keyword false positives. `network/네트워크` no longer matches network diagram answers by itself, unstable network UX gets a dedicated lightweight answer, and ambiguous keyword guidance is documented in `docs/ambiguous_keywords.md`.
+  - 2026-05-30: Completed rule conflict audit for additional ambiguous terms. `entity`, `cache`, and Java `service` fallback conflicts now have explicit guards and regression tests; audit notes are in `docs/2026-05-30-ai-review-rule-conflict-audit.md`.
+  - 2026-05-30: Split ambiguous keyword families at intent-classifier level with `api_response_format`, `http_status_code`, `react_state`, `loading_state`, `exception_handling`, and `connection_lifecycle` sub-intents. Regression coverage added in `ai/tests/test_intent_routing.py`.
+  - 2026-05-30: Wired selected sub-intents into answer quality. `api_response_format`, `exception_handling`, and `loading_state` now return dedicated lightweight answers before generic static alias matching.
+  - 2026-05-30: Completed remaining sub-intent lightweight answers for `http_status_code`, `react_state`, and `connection_lifecycle`, so all currently split ambiguous sub-intents have direct answer-quality wiring.
+  - 2026-06-01: Adaptive Judge latency hardening applied. Tier 0 and Tier 1 now skip semantic/grounding judges entirely, Tier 2 uses `semantic_judge_lite_v1`, grounding judge is removed from the response path, and judge model selection is isolated via `PYTHON_AI_JUDGE_MODEL` defaulting to the fallback model such as EXAONE 2.4b.
+  - 2026-06-01: Runtime model defaults are now unified on `exaone3.5:2.4b` for primary Python generation, follow-up/fallback generation, direct Ollama fallback, warmup, candidate review drafting, baseline smoke scripts, and Adaptive Judge defaults.
+  - 2026-06-01: EXAONE prompt templates were tightened for short, direct Korean answers. Mojibake prompt rules were removed from concept-definition paths, and first-question/follow-up/free-question prompts now emphasize conclusion-first, maximum three-sentence answers without tables, section labels, or reasoning tags.
+  - 2026-06-01: Follow-up prompt was replaced with a Korean teacher-tone template. It now branches on "모르겠어요" / partial understanding / wrong concept, forbids labels and markdown, limits output to feedback 1 sentence plus one trailing question, and keeps direct-answer leakage out of tail questions.
 
 - [x] Distributed Single-Flight
   - [x] Redis 기반 request-key lock 검토
@@ -171,6 +180,11 @@
   - [x] GO / NO-GO / CONDITIONAL-GO 자동 판정
   - [x] RAG evaluator threshold 검증
   - 2026-05-27: Added `ai/scripts/run_release_gate.py`, which runs the release smoke checks, validates deterministic RAG evaluator thresholds, writes a JSON report, and exits non-zero on `NO-GO`. Dry-run mode is available for command wiring checks.
+
+- [x] AI review next-question UI latency hardening
+  - [x] `NEXT_QUESTION` path no longer waits for Python/Ollama first-question generation
+  - [x] Regression test verifies next-question movement does not call AI generators
+  - 2026-06-01: Fixed slow "next question" clicks in AI review. `NEXT_QUESTION` now saves the deterministic first-question prompt immediately instead of synchronously generating a new model answer, so moving to the next wrong question is decoupled from local model latency.
 
 ---
 
