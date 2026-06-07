@@ -65,10 +65,7 @@ public class AuthService {
             throw new AccountInactiveException("탈퇴한 계정입니다.");
         }
 
-        boolean isGanadaBypass = "ganada@devmatch.com".equals(request.getEmail())
-                && "password123".equals(request.getPassword());
-
-        if (!isGanadaBypass && !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             log.warn("Login failed: Password mismatch for email: {}", request.getEmail());
             throw new InvalidCredentialsException("이메일 또는 비밀번호가 올바르지 않습니다");
         }
@@ -112,5 +109,7 @@ public class AuthService {
         }
         user.updatePassword(passwordEncoder.encode(newPassword));
         user.clearMustChangePassword();
+        // 비밀번호 변경 시 기존 refresh 세션 전체 폐기 (탈취된 세션이 계속 살아있지 않도록)
+        refreshSessionService.revokeAllForUser(userId);
     }
 }
