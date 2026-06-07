@@ -6,29 +6,29 @@ from app.ollama.gateway import ModelPoolGateway, parse_model_pool, parse_model_c
 class OllamaGatewayTest(unittest.TestCase):
     def test_parse_model_pool_maps_models_to_endpoints(self):
         pool = parse_model_pool(
-            "qwen3:1.7b=http://localhost:11434,qwen3:4b-q4_K_M=http://localhost:11435",
+            "exaone3.5:2.4b=http://localhost:11434,exaone3.5:7.8b=http://localhost:11435",
             default_base_url="http://fallback:11434",
         )
 
-        self.assertEqual(pool["qwen3:1.7b"][0].base_url, "http://localhost:11434")
-        self.assertEqual(pool["qwen3:4b-q4_K_M"][0].base_url, "http://localhost:11435")
+        self.assertEqual(pool["exaone3.5:2.4b"][0].base_url, "http://localhost:11434")
+        self.assertEqual(pool["exaone3.5:7.8b"][0].base_url, "http://localhost:11435")
 
     def test_parse_model_pool_falls_back_to_default_model_endpoint(self):
-        pool = parse_model_pool("", default_base_url="http://localhost:11434", default_model="qwen3:1.7b")
+        pool = parse_model_pool("", default_base_url="http://localhost:11434", default_model="exaone3.5:2.4b")
 
-        self.assertEqual(pool["qwen3:1.7b"][0].base_url, "http://localhost:11434")
+        self.assertEqual(pool["exaone3.5:2.4b"][0].base_url, "http://localhost:11434")
 
     def test_gateway_skips_draining_endpoint_when_active_endpoint_exists(self):
         gateway = ModelPoolGateway(
             model_pool=parse_model_pool(
-                "qwen3:1.7b=http://draining:11434,qwen3:1.7b=http://active:11434",
+                "exaone3.5:2.4b=http://draining:11434,exaone3.5:2.4b=http://active:11434",
                 default_base_url="http://fallback:11434",
             ),
-            capacities={"qwen3:1.7b": 1},
+            capacities={"exaone3.5:2.4b": 1},
             draining_endpoints={"http://draining:11434"},
         )
 
-        route = gateway.route_for("qwen3:1.7b")
+        route = gateway.route_for("exaone3.5:2.4b")
 
         self.assertEqual(route.endpoint.base_url, "http://active:11434")
         self.assertFalse(route.all_draining)

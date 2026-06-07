@@ -95,7 +95,7 @@ class TemplateCandidateReviewProvider:
 
 @dataclass(frozen=True)
 class OllamaCandidateReviewProvider:
-    model_name: str = "qwen3:4b-q4_K_M"
+    model_name: str = "exaone3.5:2.4b"
 
     def draft_definition(self, candidate: dict[str, Any]) -> str:
         from app.ollama.client import call_ollama

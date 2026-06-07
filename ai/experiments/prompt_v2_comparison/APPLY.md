@@ -2,9 +2,9 @@
 
 본 가이드는 [REPORT.md](REPORT.md)의 권장사항을 팀원이 직접 적용할 수 있도록 정리한 절차 문서입니다.
 
-- **변경 대상**: AI 복습 follow-up(꼬리질문) 모드의 생성 모델
-- **변경 내용**: `qwen3:4b-q4_K_M` → `exaone3.5:2.4b`
-- **코드 수정**: **없음** (환경변수 1개만 변경)
+- **변경 대상**: AI 복습 전체 생성 모델 + follow-up/fallback + Adaptive Judge 모델
+- **변경 내용**: 기본 런타임 모델을 `exaone3.5:2.4b`로 통일
+- **코드 수정**: 기본값 반영 완료. 환경변수는 명시적으로 덮어쓸 때만 사용
 - **소요 시간**: 약 5~10분 (모델 다운로드 포함)
 - **환원**: 환경변수 되돌리면 즉시 (1분)
 
@@ -14,7 +14,7 @@
 
 [ai/app/ollama/client.py:20](../../app/ollama/client.py#L20):
 ```python
-FALLBACK_MODEL = os.getenv("PYTHON_AI_FALLBACK_MODEL", "qwen3:4b-q4_K_M")
+FALLBACK_MODEL = os.getenv("PYTHON_AI_FALLBACK_MODEL", "exaone3.5:2.4b")
 ```
 
 [ai/app/workflow/nodes.py:434-437](../../app/workflow/nodes.py#L434):
@@ -25,7 +25,7 @@ def _generation_model_for_state(state):
     return state.request.model
 ```
 
-`PYTHON_AI_FALLBACK_MODEL` 환경변수 한 줄로 follow-up 모델이 결정됩니다.
+기본값은 이미 EXAONE 2.4b입니다. 필요하면 `PYTHON_AI_MODEL`, `PYTHON_AI_FALLBACK_MODEL`, `PYTHON_AI_JUDGE_MODEL`로 명시적으로 덮어쓸 수 있습니다.
 
 ---
 
@@ -152,12 +152,16 @@ notepad ai\experiments\prompt_v2_comparison\results\exaone3.5_2.4b__no_rag\compa
 ### 방법 A의 경우 (.env)
 `.env` 파일에서 해당 줄을 **삭제** 또는 다음으로 변경:
 ```
-PYTHON_AI_FALLBACK_MODEL=qwen3:4b-q4_K_M
+PYTHON_AI_MODEL=exaone3.5:2.4b
+PYTHON_AI_FALLBACK_MODEL=exaone3.5:2.4b
+PYTHON_AI_JUDGE_MODEL=exaone3.5:2.4b
 ```
 
 ### 방법 B의 경우 (PowerShell 임시)
 ```powershell
 Remove-Item Env:PYTHON_AI_FALLBACK_MODEL
+Remove-Item Env:PYTHON_AI_MODEL
+Remove-Item Env:PYTHON_AI_JUDGE_MODEL
 ```
 또는 그 PowerShell 창 닫기.
 
@@ -185,23 +189,24 @@ Remove-Item Env:PYTHON_AI_FALLBACK_MODEL
 
 | 환경변수 | 영향 범위 | 기본값 |
 |---|---|---|
-| `PYTHON_AI_MODEL` | first-question, free-question 1차 호출 | `qwen3:1.7b` |
-| `PYTHON_AI_FALLBACK_MODEL` | **follow-up 직접 사용** + 다른 모드의 폴백 | `qwen3:4b-q4_K_M` |
+| `PYTHON_AI_MODEL` | first-question, free-question 1차 호출 | `exaone3.5:2.4b` |
+| `PYTHON_AI_FALLBACK_MODEL` | **follow-up 직접 사용** + 다른 모드의 폴백 | `exaone3.5:2.4b` |
+| `PYTHON_AI_JUDGE_MODEL` | Adaptive Judge | `exaone3.5:2.4b` |
 
-이번 권장은 **`PYTHON_AI_FALLBACK_MODEL` 만** 변경. `PYTHON_AI_MODEL` 은 그대로 둡니다.
+현재 권장은 세 모델 경로를 모두 `exaone3.5:2.4b`로 통일하는 것입니다.
 
 ### Q2. 디스크 용량 부담은?
 - EXAONE 2.4b: 1.6GB 추가
 - 기존 `qwen3:4b-q4_K_M` (2.5GB) 는 **삭제하지 마세요** — 롤백 시 필요
 - 한참 안정화 후 디스크 회수 원하면:
   ```powershell
-  ollama rm qwen3:4b-q4_K_M
+  ollama list
   ```
 
 ### Q3. 다른 모드(first-question, free-question)에 영향?
 - `follow-up` 모드: 100% 영향 (직접 사용)
 - 다른 모드: **폴백 경로 활성화 시에만** 영향 (1차 호출 실패 시)
-- 평시엔 `PYTHON_AI_MODEL` (`qwen3:1.7b`) 그대로 사용
+- 평시엔 `PYTHON_AI_MODEL`도 `exaone3.5:2.4b`를 사용
 
 ### Q4. CPU only 환경에서 EXAONE 7.8b 는 안 되나요?
 - 1~2 tok/s 로 스트리밍 UX 불가 (한 응답 30~60초+)

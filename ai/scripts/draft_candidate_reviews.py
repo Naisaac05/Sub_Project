@@ -26,7 +26,7 @@ def draft_candidate_reviews(
     output_path: Path | None = None,
     limit: int | None = 10,
     provider_name: str = "template",
-    model: str = "qwen3:4b-q4_K_M",
+    model: str = "exaone3.5:2.4b",
 ) -> dict[str, int | str]:
     candidates = load_candidate_jsonl(input_path)
     provider = OllamaCandidateReviewProvider(model_name=model) if provider_name == "ollama" else TemplateCandidateReviewProvider()
@@ -48,7 +48,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=None)
     parser.add_argument("--limit", type=int, default=10)
     parser.add_argument("--provider", choices=["template", "ollama"], default="template")
-    parser.add_argument("--model", default="qwen3:4b-q4_K_M")
+    parser.add_argument("--model", default="exaone3.5:2.4b")
     args = parser.parse_args()
 
     report = draft_candidate_reviews(args.input, args.output, args.limit, args.provider, args.model)

@@ -276,12 +276,17 @@ public class RuleBasedAiReviewService {
                 questionText
         ).orElseGet(() -> AiGeneratedAnswer.plain(buildFreeQuestionFallback(currentQuestion, questionText)));
 
-        saveAiMessage(session, currentQuestion, AiReviewMessageMode.FREE_ANSWER, generatedAnswer);
+        String followUpQuestion = AiReviewFollowUpSupport.buildFreeQuestionFollowUp(currentQuestion, questionText, generatedAnswer);
+        AiGeneratedAnswer answerWithFollowUp = withAnswerContent(
+                generatedAnswer,
+                AiReviewFollowUpSupport.appendFollowUp(generatedAnswer.answer(), followUpQuestion)
+        );
+        saveAiMessage(session, currentQuestion, AiReviewMessageMode.FREE_ANSWER, answerWithFollowUp);
 
         return new AiReviewSubmitResponse(
                 "FREE_QUESTION",
-                generatedAnswer.answer(),
-                null,
+                answerWithFollowUp.answer(),
+                followUpQuestion,
                 false,
                 session.getSummary(),
                 messagesAfter(session, messageCursor)
@@ -298,11 +303,7 @@ public class RuleBasedAiReviewService {
         if (nextWrongAnswer.isPresent()) {
             TestAnswer nextAnswer = nextWrongAnswer.get();
             Question question = nextAnswer.getQuestion();
-            String nextQuestion = generateFirstQuestion(
-                    question,
-                    optionAt(question, question.getCorrectAnswer()),
-                    optionAt(question, nextAnswer.getSelectedAnswer())
-            ).orElse(buildQuestion(question, 1));
+            String nextQuestion = buildQuestion(question, 1);
             saveAiMessage(session, question, AiReviewMessageMode.NEXT_QUESTION, nextQuestion);
 
             return new AiReviewSubmitResponse(
@@ -483,6 +484,21 @@ public class RuleBasedAiReviewService {
         String correct = optionAt(question, question.getCorrectAnswer());
         return "좋은 질문이에요. 지금은 로컬 AI 응답이 느리거나 실패해서 자세한 답변 대신 핵심 기준만 먼저 정리할게요.\n\n"
                 + "이 문제에서는 정답 `" + correct + "`이 왜 맞는지와 내 선택지가 어떤 개념을 놓쳤는지를 구분해보면 좋습니다.";
+    }
+
+    private AiGeneratedAnswer withAnswerContent(AiGeneratedAnswer source, String content) {
+        return new AiGeneratedAnswer(
+                content,
+                source.route(),
+                source.resolvedQuery(),
+                source.correctionType(),
+                source.matchedConceptId(),
+                source.answerStyle(),
+                source.qualityFlags(),
+                source.candidateId(),
+                source.latencyMs(),
+                source.observabilityEvents()
+        );
     }
 
     private Optional<String> topicSpecificFallback(Question question, String userQuestion) {

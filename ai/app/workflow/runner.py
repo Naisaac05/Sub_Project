@@ -28,6 +28,8 @@ from app.ollama.client import FALLBACK_MODEL
 
 
 def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> AiGenerateResponse:
+    t_publish_start = time.perf_counter()
+    state.total_latency_ms = latency_ms
     response = AiGenerateResponse(
         answer=state.answer,
         model_used=state.model_used,
@@ -88,7 +90,7 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
                 "retry_used": retry_used,
                 "hallucination_risk": "low",
                 
-                # Observability event 확장
+                # Extended observability event
                 "relevance_score": 1.0,
                 "context_bias_score": 0.0,
                 "hallucination_risk": "low",
@@ -162,7 +164,7 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
                 "retry_used": retry_used,
                 "hallucination_risk": judge_res.hallucination_risk,
                 
-                # Observability event 확장
+                # Extended observability event
                 "relevance_score": judge_res.relevance_score,
                 "context_bias_score": judge_res.context_bias_score,
                 "hallucination_risk": judge_res.hallucination_risk,
@@ -220,6 +222,37 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
                 "grounding_prompt_hash": state.grounding_prompt_hash,
             })
         
+    state.metrics_publish_ms = int((time.perf_counter() - t_publish_start) * 1000)
+
+    if state.mode == "free-question":
+        events.append({
+            "event": "ai_review.latency_breakdown",
+            "judge_tier": state.judge_tier,
+            "fast_path_hit": response.route in {"static_fast_path", "generated_card_fast_path"},
+            "cache_hit": response.route == "cache",
+            "semantic_judge_executed": not state.semantic_judge_skipped,
+            "grounding_executed": not state.grounding_judge_skipped,
+            "grounding_async_executed": state.grounding_async_executed,
+            "retrieval_ms": state.retrieval_ms,
+            "prompt_build_ms": state.prompt_build_ms,
+            "generation_ms": state.generation_ms,
+            "retry_generation_ms": state.retry_generation_ms,
+            "semantic_judge_ms": state.semantic_judge_ms,
+            "grounding_ms": state.grounding_ms,
+            "metrics_publish_ms": state.metrics_publish_ms,
+            "total_latency_ms": state.total_latency_ms,
+            "route": response.route,
+            "intent": state.free_question_intent.intent if state.free_question_intent else state.mode,
+            "sub_intent": state.free_question_intent.sub_intent if state.free_question_intent else "unknown",
+            "prompt_hash": state.prompt_hash,
+            "semantic_judge_prompt_hash": state.semantic_judge_prompt_hash,
+            "grounding_prompt_hash": state.grounding_prompt_hash,
+            "fallback_reason": state.fallback_reason,
+            "topic_check_passed": state.topic_check_passed,
+            "semantic_judge_cache_hit": state.semantic_judge_cache_hit,
+            "semantic_judge_cache_key_hash": state.semantic_judge_cache_key_hash,
+        })
+
     response.observability_events = events
     return response
 
@@ -271,7 +304,7 @@ async def run_review_workflow_stream(
         state.free_question_intent,
         matched_concept_id=_matched_concept_id_for_lightweight(state),
     )
-    if state.mode == "free-question" and lightweight_answer:
+    if state.mode == "free-question" and lightweight_answer and not state.request.stream:
         state.answer = lightweight_answer.answer
         state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
         state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
@@ -305,7 +338,7 @@ async def run_review_workflow_stream(
     # 2. Cache Check
     cache_key = cache_key_for(state.mode, state.request)
     cached_answer = get_cached_answer(cache_key)
-    if cached_answer:
+    if cached_answer and not state.request.stream:
         state.answer = cached_answer
         state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
         state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
@@ -458,6 +491,3 @@ def _workflow_completed_event(state: ReviewWorkflowState, response: AiGenerateRe
         "grounding_async_executed": state.grounding_async_executed,
         "estimated_latency_saved_ms": state.estimated_latency_saved_ms,
     }
-
-
-

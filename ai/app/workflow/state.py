@@ -55,4 +55,18 @@ class ReviewWorkflowState:
     grounding_async_executed: bool = False
     estimated_latency_saved_ms: float = 4000.0
     grounding_thread: object = None  # unit test join 용도 스레드 홀더
+    retrieval_ms: int = 0
+    prompt_build_ms: int = 0
+    generation_ms: int = 0
+    retry_generation_ms: int = 0
+    semantic_judge_ms: int = 0
+    grounding_ms: int = 0
+    grounding_async_started: bool = False
+    grounding_async_duration_ms: int = 0
+    metrics_publish_ms: int = 0
+    total_latency_ms: int = 0
+    fallback_reason: str | None = None
+    topic_check_passed: bool = False
+    semantic_judge_cache_hit: bool = False
+    semantic_judge_cache_key_hash: str | None = None
 
