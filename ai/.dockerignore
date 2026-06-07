@@ -1,0 +1,12 @@
+# ai/ 컨테이너 빌드 시 dev 전용 자산을 이미지에서 제외한다.
+# (현재 ai 는 docker-compose 에 없지만, 향후 컨테이너화 대비 안전장치)
+# 런타임 앱(app/)은 아래 디렉토리를 import 하지 않으므로 배포에 불필요하다.
+.venv/
+evals/
+tests/
+experiments/
+scripts/
+__pycache__/
+*.pyc
+.pytest_cache/
+release-gate-report.json

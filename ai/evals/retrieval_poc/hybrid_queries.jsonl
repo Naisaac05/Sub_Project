@@ -1,0 +1,40 @@
+{"id":"fetchjoin-T","question":"JPQL fetch join으로 연관 엔티티 즉시 로딩","expected_concepts":["spring-fetch-join"],"query_type":"exact_token"}
+{"id":"fetchjoin-S","question":"쿼리 한 번에 연관된 데이터까지 같이 가져오는 방법","expected_concepts":["spring-fetch-join"],"query_type":"semantic"}
+{"id":"fetchjoin-Y","question":"패치조인 어떻게 쓰나요","expected_concepts":["spring-fetch-join"],"query_type":"typo"}
+{"id":"fetchjoin-M","question":"fetch join이 뭐야?","expected_concepts":["spring-fetch-join"],"query_type":"mixed"}
+{"id":"nplus1-T","question":"N+1 문제 지연 로딩 추가 쿼리 반복","expected_concepts":["spring-n-plus-one"],"query_type":"exact_token"}
+{"id":"nplus1-S","question":"목록 조회한 뒤에 쿼리가 계속 반복돼서 느려지는 현상","expected_concepts":["spring-n-plus-one"],"query_type":"semantic"}
+{"id":"nplus1-Y","question":"엔플러스원 문제가 뭐임","expected_concepts":["spring-n-plus-one"],"query_type":"typo"}
+{"id":"nplus1-M","question":"N+1 문제가 뭐야?","expected_concepts":["spring-n-plus-one"],"query_type":"mixed"}
+{"id":"equals-T","question":"equals 논리적 동등성 참조 비교 오버라이드","expected_concepts":["java-equals"],"query_type":"exact_token"}
+{"id":"equals-S","question":"두 객체가 내용상 같은 값인지 비교하려면","expected_concepts":["java-equals"],"query_type":"semantic"}
+{"id":"equals-Y","question":"이퀄즈랑 == 차이가 뭐죠","expected_concepts":["java-equals"],"query_type":"typo"}
+{"id":"equals-M","question":"equals가 뭐야?","expected_concepts":["java-equals"],"query_type":"mixed"}
+{"id":"hashcode-T","question":"hashCode HashMap 버킷 해시 충돌 계약","expected_concepts":["java-hashcode","auto-review-hashcode"],"query_type":"exact_token"}
+{"id":"hashcode-S","question":"객체를 정수로 요약해서 해시 컬렉션에서 빨리 찾게 하는 것","expected_concepts":["java-hashcode","auto-review-hashcode"],"query_type":"semantic"}
+{"id":"hashcode-Y","question":"해쉬코드 왜 오버라이드 해야됨","expected_concepts":["java-hashcode","auto-review-hashcode"],"query_type":"typo"}
+{"id":"hashcode-M","question":"hashCode가 뭐야?","expected_concepts":["java-hashcode","auto-review-hashcode"],"query_type":"mixed"}
+{"id":"arraylist-T","question":"ArrayList 동적 배열 자동 확장 분할상환 임의 접근","expected_concepts":["java-arraylist"],"query_type":"exact_token"}
+{"id":"arraylist-S","question":"내부적으로 배열을 써서 중간 삽입이 느린 리스트 자료구조","expected_concepts":["java-arraylist"],"query_type":"semantic"}
+{"id":"arraylist-Y","question":"어레이리스트 중간삽입 시간복잡도","expected_concepts":["java-arraylist"],"query_type":"typo"}
+{"id":"arraylist-M","question":"ArrayList가 뭐야?","expected_concepts":["java-arraylist"],"query_type":"mixed"}
+{"id":"ctrladvice-T","question":"@ControllerAdvice 전역 예외 처리 @ExceptionHandler","expected_concepts":["java-backend-controlleradvice"],"query_type":"exact_token"}
+{"id":"ctrladvice-S","question":"여러 컨트롤러의 예외를 한곳에서 공통으로 처리하는 방법","expected_concepts":["java-backend-controlleradvice"],"query_type":"semantic"}
+{"id":"ctrladvice-Y","question":"컨트롤러어드바이스 적용이 안돼요","expected_concepts":["java-backend-controlleradvice"],"query_type":"typo"}
+{"id":"ctrladvice-M","question":"@ControllerAdvice가 뭐야?","expected_concepts":["java-backend-controlleradvice"],"query_type":"mixed"}
+{"id":"arialabel-T","question":"aria-label 접근성 스크린리더 accessible name","expected_concepts":["frontend-aria-label"],"query_type":"exact_token"}
+{"id":"arialabel-S","question":"아이콘만 있는 버튼을 보조기술이 읽도록 이름 붙이기","expected_concepts":["frontend-aria-label"],"query_type":"semantic"}
+{"id":"arialabel-Y","question":"아리아라벨 언제 써야되나","expected_concepts":["frontend-aria-label"],"query_type":"typo"}
+{"id":"arialabel-M","question":"aria-label이 뭐야?","expected_concepts":["frontend-aria-label"],"query_type":"mixed"}
+{"id":"blockingio-T","question":"Blocking IO 논블로킹 요청당 스레드 CPU 활용률","expected_concepts":["cs-blocking-io"],"query_type":"exact_token"}
+{"id":"blockingio-S","question":"입출력이 끝날 때까지 스레드가 멈춰 기다리는지 아닌지","expected_concepts":["cs-blocking-io"],"query_type":"semantic"}
+{"id":"blockingio-Y","question":"블로킹 논블로킹 아이오 차이","expected_concepts":["cs-blocking-io"],"query_type":"typo"}
+{"id":"blockingio-M","question":"Blocking IO가 뭐야?","expected_concepts":["cs-blocking-io"],"query_type":"mixed"}
+{"id":"recyclerview-T","question":"RecyclerView ViewHolder Adapter 목록 렌더링 재사용","expected_concepts":["auto-review-recyclerview"],"query_type":"exact_token"}
+{"id":"recyclerview-S","question":"안드로이드에서 긴 목록을 뷰 재사용으로 효율적으로 보여주는 위젯","expected_concepts":["auto-review-recyclerview"],"query_type":"semantic"}
+{"id":"recyclerview-Y","question":"리사이클러뷰 어댑터 연결 방법","expected_concepts":["auto-review-recyclerview"],"query_type":"typo"}
+{"id":"recyclerview-M","question":"RecyclerView가 뭐야?","expected_concepts":["auto-review-recyclerview"],"query_type":"mixed"}
+{"id":"textinput-T","question":"TextInput onChange 제어 컴포넌트 상태 반영","expected_concepts":["auto-review-textinput"],"query_type":"exact_token"}
+{"id":"textinput-S","question":"한 줄 텍스트 입력 칸의 값을 상태에 반영하는 입력 UI","expected_concepts":["auto-review-textinput"],"query_type":"semantic"}
+{"id":"textinput-Y","question":"텍스트인풋 밸류 온체인지 연결","expected_concepts":["auto-review-textinput"],"query_type":"typo"}
+{"id":"textinput-M","question":"TextInput이 뭐야?","expected_concepts":["auto-review-textinput"],"query_type":"mixed"}

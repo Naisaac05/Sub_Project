@@ -46,6 +46,7 @@ def evaluate_dataset(
             "retrieval_hit_rate": 0.0,
             "expected_concept_recall": 0.0,
             "intent_accuracy": 0.0,
+            "sub_intent_accuracy": 0.0,
             "rag_policy_accuracy": 0.0,
             "stale_context_absent_rate": 0.0,
             "route_accuracy": 0.0,
@@ -67,6 +68,8 @@ def evaluate_dataset(
     retrieval_rows = 0
     intent_rows = 0
     intent_hits = 0
+    sub_intent_rows = 0
+    sub_intent_hits = 0
     rag_policy_rows = 0
     rag_policy_hits = 0
     stale_context_rows = 0
@@ -114,6 +117,14 @@ def evaluate_dataset(
             if intent.intent == expected_intent:
                 intent_hits += 1
 
+        # 세부 의도(sub_intent) 회귀 가드. classifier 의 intent enum 은 4종뿐이라
+        # comparison/related/practical 같은 세부 라우팅은 sub_intent 로만 검증할 수 있다.
+        expected_sub_intent = row.get("expected_sub_intent")
+        if expected_sub_intent:
+            sub_intent_rows += 1
+            if intent.sub_intent == expected_sub_intent:
+                sub_intent_hits += 1
+
         expected_rag_policy = row.get("expected_rag_policy")
         if expected_rag_policy:
             rag_policy_rows += 1
@@ -126,8 +137,13 @@ def evaluate_dataset(
             if not (forbidden & retrieved_ids):
                 stale_context_absent += 1
 
+        # 게이트 통과 컨텍스트 검사. 지식 베이스 성장(카드 승인)에도 깨지지 않도록
+        # 정확 집합 일치가 아니라 의미 기반으로 판정한다:
+        #  - expected_context_concepts: 이 카드들은 반드시 포함(subset)
+        #  - forbidden_context_concepts: 이 카드들은 절대 미포함(disjoint, 약한 오매칭 회귀 방지)
         expected_context = row.get("expected_context_concepts")
-        if expected_context is not None:
+        forbidden_context = row.get("forbidden_context_concepts")
+        if expected_context is not None or forbidden_context is not None:
             context_rows += 1
             gated_state = retrieve_context_node(
                 ReviewWorkflowState(
@@ -139,7 +155,11 @@ def evaluate_dataset(
                 )
             )
             gated_ids = {context.concept_id for context in gated_state.contexts}
-            if gated_ids == {str(item) for item in expected_context}:
+            expected_ok = expected_context is None or {str(item) for item in expected_context} <= gated_ids
+            forbidden_ok = forbidden_context is None or not (
+                {str(item) for item in forbidden_context} & gated_ids
+            )
+            if expected_ok and forbidden_ok:
                 context_hits += 1
 
         workflow_response = _workflow_response_for(row, workflow_runner)
@@ -216,6 +236,7 @@ def evaluate_dataset(
         "retrieval_hit_rate": round(hit_count / retrieval_rows, 4) if retrieval_rows else 1.0,
         "expected_concept_recall": round(recall_sum / retrieval_rows, 4) if retrieval_rows else 1.0,
         "intent_accuracy": round(intent_hits / intent_rows, 4) if intent_rows else 1.0,
+        "sub_intent_accuracy": round(sub_intent_hits / sub_intent_rows, 4) if sub_intent_rows else 1.0,
         "rag_policy_accuracy": round(rag_policy_hits / rag_policy_rows, 4) if rag_policy_rows else 1.0,
         "stale_context_absent_rate": round(stale_context_absent / stale_context_rows, 4)
         if stale_context_rows
@@ -325,6 +346,11 @@ def _expanded_default_dataset(rows: list[dict[str, object]], minimum_rows: int) 
             variant["id"] = candidate_id
             variant["question"] = template.format(question=question)
             variant["generated_variant"] = True
+            # 변형 질문은 원본과 의도/정책이 달라지므로 classifier 출력 기반 단언은 떼어낸다.
+            # (검색 타깃 expected_concepts 만 유지 → 변형 행은 순수 recall 가드)
+            variant.pop("expected_intent", None)
+            variant.pop("expected_sub_intent", None)
+            variant.pop("expected_rag_policy", None)
             expanded.append(variant)
             seen_ids.add(candidate_id)
             if len(expanded) >= minimum_rows:
