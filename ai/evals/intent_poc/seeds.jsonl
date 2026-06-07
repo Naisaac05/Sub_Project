@@ -1,0 +1,30 @@
+{"seed_id":"ar-a","question":"이 문제 정답이 왜 3번이야?","expected_intent":"ANSWER_REASON","archetype":"prototype"}
+{"seed_id":"ar-b","question":"정답이 B인 이유가 뭐예요?","expected_intent":"ANSWER_REASON","archetype":"variant_concept"}
+{"seed_id":"ar-c","question":"이게 맞는 근거가 뭐지?","expected_intent":"ANSWER_REASON","archetype":"weak_signal"}
+{"seed_id":"war-a","question":"내가 고른 2번은 왜 틀렸어?","expected_intent":"WRONG_ANSWER_REASON","archetype":"prototype"}
+{"seed_id":"war-b","question":"제 답이 오답인 이유가 뭔가요?","expected_intent":"WRONG_ANSWER_REASON","archetype":"variant_concept"}
+{"seed_id":"war-c","question":"이거 내가 왜 틀린 거지?","expected_intent":"WRONG_ANSWER_REASON","archetype":"weak_signal"}
+{"seed_id":"def-a","question":"트랜잭션이 뭐야?","expected_intent":"CONCEPT_DEFINITION","archetype":"prototype"}
+{"seed_id":"def-b","question":"REST API의 정의를 알려줘","expected_intent":"CONCEPT_DEFINITION","archetype":"variant_concept"}
+{"seed_id":"def-c","question":"인덱스 개념 좀 잡아줘","expected_intent":"CONCEPT_DEFINITION","archetype":"weak_signal"}
+{"seed_id":"cmp-a","question":"세션이랑 JWT 차이가 뭐야?","expected_intent":"COMPARISON","archetype":"prototype"}
+{"seed_id":"cmp-b","question":"Process vs Thread 비교해줘","expected_intent":"COMPARISON","archetype":"variant_concept"}
+{"seed_id":"cmp-c","question":"List랑 Set 뭐가 달라?","expected_intent":"COMPARISON","archetype":"weak_signal"}
+{"seed_id":"ex-a","question":"N+1 문제 예시 하나 들어줘","expected_intent":"EXAMPLE_REQUEST","archetype":"prototype"}
+{"seed_id":"ex-b","question":"옵저버 패턴 코드로 보여줄래?","expected_intent":"EXAMPLE_REQUEST","archetype":"variant_concept"}
+{"seed_id":"ex-c","question":"이거 실제 케이스로 설명해줄 수 있어?","expected_intent":"EXAMPLE_REQUEST","archetype":"weak_signal"}
+{"seed_id":"prac-a","question":"인덱스는 실무에서 언제 써?","expected_intent":"PRACTICAL_USAGE","archetype":"prototype"}
+{"seed_id":"prac-b","question":"트랜잭션 격리수준은 현업에서 어떻게 정해요?","expected_intent":"PRACTICAL_USAGE","archetype":"variant_concept"}
+{"seed_id":"prac-c","question":"이거 실제로 많이 쓰나요?","expected_intent":"PRACTICAL_USAGE","archetype":"weak_signal"}
+{"seed_id":"dbg-a","question":"이 코드 왜 NullPointerException 나?","expected_intent":"DEBUG_OR_ERROR","archetype":"prototype"}
+{"seed_id":"dbg-b","question":"스프링 빈 주입이 안 되는데 왜 그래요?","expected_intent":"DEBUG_OR_ERROR","archetype":"variant_concept"}
+{"seed_id":"dbg-c","question":"이거 왜 자꾸 안 되지?","expected_intent":"DEBUG_OR_ERROR","archetype":"weak_signal"}
+{"seed_id":"fu-a","question":"왜요?","expected_intent":"FOLLOW_UP","archetype":"prototype"}
+{"seed_id":"fu-b","question":"다시 쉽게 설명해줄 수 있어요?","expected_intent":"FOLLOW_UP","archetype":"variant_concept"}
+{"seed_id":"fu-c","question":"그게 무슨 말이에요?","expected_intent":"FOLLOW_UP","archetype":"weak_signal"}
+{"seed_id":"off-a","question":"점심 뭐 먹지?","expected_intent":"OFF_TOPIC","archetype":"prototype"}
+{"seed_id":"off-b","question":"주말에 영화 뭐 볼까?","expected_intent":"OFF_TOPIC","archetype":"variant_concept"}
+{"seed_id":"off-c","question":"개발자 되면 연봉 많이 받아요?","expected_intent":"OFF_TOPIC","archetype":"weak_signal"}
+{"seed_id":"unk-a","question":"ㅁㄴㅇㄹ asdf","expected_intent":"UNKNOWN","archetype":"garbled"}
+{"seed_id":"unk-b","question":"그거 있잖아 그거 좀","expected_intent":"UNKNOWN","archetype":"vague"}
+{"seed_id":"unk-c","question":"자바 그거 막 그런 거","expected_intent":"UNKNOWN","archetype":"domain_vague"}
