@@ -1,0 +1,72 @@
+{
+  "card_id": "java-java-api",
+  "category": "java",
+  "term": "java-api",
+  "aliases": [
+    "java api"
+  ],
+  "source_question_ids": [
+    "java:14"
+  ],
+  "retrieval": {
+    "embedding_text": "java-api java api api은(는) Stream API에서 중간 연산(intermediate operation)이 아닌 것은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "java-api",
+      "java"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "api은(는) Stream API에서 중간 연산(intermediate operation)이 아닌 것은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "java-api 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "java-api"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q14_option_2": {
+          "text": "map()",
+          "reason": "java-api의 특성과 일치하지 않는 오답입니다."
+        },
+        "q14_option_3": {
+          "text": "collect()",
+          "reason": "java-api의 특성과 일치하지 않는 오답입니다."
+        },
+        "q14_option_4": {
+          "text": "sorted()",
+          "reason": "java-api의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.044669Z",
+  "updated_at": "2026-06-10T11:01:08.044669Z"
+}

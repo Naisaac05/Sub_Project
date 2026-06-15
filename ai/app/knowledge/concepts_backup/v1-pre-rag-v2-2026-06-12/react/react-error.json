@@ -1,0 +1,72 @@
+{
+  "card_id": "react-error",
+  "category": "react",
+  "term": "error",
+  "aliases": [
+    "react error"
+  ],
+  "source_question_ids": [
+    "react:80"
+  ],
+  "retrieval": {
+    "embedding_text": "error react error error은(는) Error Boundary의 특징으로 올바른 것은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "error",
+      "react"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "error은(는) Error Boundary의 특징으로 올바른 것은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "error 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "error"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q80_option_2": {
+          "text": "이벤트 핸들러의 에러도 잡는다",
+          "reason": "error의 특성과 일치하지 않는 오답입니다."
+        },
+        "q80_option_3": {
+          "text": "클래스 컴포넌트로만 구현 가능하다 (componentDidCatch)",
+          "reason": "error의 특성과 일치하지 않는 오답입니다."
+        },
+        "q80_option_4": {
+          "text": "비동기 에러도 자동으로 잡는다",
+          "reason": "error의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

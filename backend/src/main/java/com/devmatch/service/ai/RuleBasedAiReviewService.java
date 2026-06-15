@@ -229,7 +229,9 @@ public class RuleBasedAiReviewService {
                     selectedAnswer,
                     normalizedAnswer,
                     evaluation,
-                    nextStep
+                    nextStep,
+                    lastAiMessage.getContent(),
+                    activeConcept(lastAiMessage, currentQuestion)
             ).orElse(withFeedback(feedback, buildQuestion(currentQuestion, nextStep)));
             saveAiMessage(session, currentQuestion, AiReviewMessageMode.EXPLANATION, nextQuestion);
         }
@@ -404,7 +406,9 @@ public class RuleBasedAiReviewService {
             String selectedAnswer,
             String userAnswer,
             AiReviewEvaluation evaluation,
-            int nextStep
+            int nextStep,
+            String previousAiQuestion,
+            String activeConcept
     ) {
         try {
             Optional<String> pythonAnswer = pythonAiReviewClient.generateFollowUp(
@@ -413,7 +417,9 @@ public class RuleBasedAiReviewService {
                     selectedAnswer,
                     userAnswer,
                     evaluation,
-                    nextStep
+                    nextStep,
+                    previousAiQuestion,
+                    activeConcept
             ).map(AiGeneratedAnswer::answer);
             if (pythonAnswer.isPresent()) {
                 return pythonAnswer;
@@ -430,6 +436,16 @@ public class RuleBasedAiReviewService {
             log.warn("AI follow-up generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
             return Optional.empty();
         }
+    }
+
+    private static String activeConcept(AiReviewMessage lastAiMessage, Question question) {
+        if (lastAiMessage.getAiMatchedConceptId() != null && !lastAiMessage.getAiMatchedConceptId().isBlank()) {
+            return lastAiMessage.getAiMatchedConceptId();
+        }
+        if (lastAiMessage.getAiResolvedQuery() != null && !lastAiMessage.getAiResolvedQuery().isBlank()) {
+            return lastAiMessage.getAiResolvedQuery();
+        }
+        return question == null ? "" : question.getContent();
     }
 
     private Optional<AiGeneratedAnswer> generateFreeQuestionAnswer(

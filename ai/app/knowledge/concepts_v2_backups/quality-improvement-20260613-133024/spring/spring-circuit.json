@@ -1,0 +1,80 @@
+{
+  "card_id": "spring-circuit",
+  "category": "spring",
+  "term": "circuit",
+  "aliases": [
+    "circuit",
+    "spring circuit"
+  ],
+  "source_question_ids": [
+    "spring:58"
+  ],
+  "retrieval": {
+    "embedding_text": "circuit spring circuit spring 장애가 전파되는 것을 방지하고",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "circuit",
+      "spring",
+      "spring circuit",
+      "장애가",
+      "전파되는",
+      "것을",
+      "방지하고"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "circuit의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 circuit의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "circuit",
+        "spring",
+        "spring circuit"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q58_option_0": {
+          "text": "네트워크 암호화",
+          "reason": "circuit 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q58_option_2": {
+          "text": "로드 밸런싱",
+          "reason": "circuit 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q58_option_3": {
+          "text": "서비스 디스커버리",
+          "reason": "circuit 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

@@ -1,0 +1,113 @@
+{
+  "card_id": "python-multiline-string",
+  "category": "python",
+  "term": "multiline-string",
+  "aliases": [
+    "multiline-string",
+    "\"\"\"텍스트\"\"\" 또는 '''텍스트'''",
+    "Python에서 여러 줄 문자열을 표현하는 방법은?",
+    "Python",
+    "multiline string",
+    "python multiline string"
+  ],
+  "source_question_ids": [
+    "python:94"
+  ],
+  "retrieval": {
+    "embedding_text": "multiline-string \"\"\"텍스트\"\"\" 또는 '''텍스트''' Python에서 여러 줄 문자열을 표현하는 방법은? python 에서 여러 문자열을 표현하는 텍스트 또는",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "multiline-string",
+      "에서",
+      "여러",
+      "문자열을",
+      "표현하는",
+      "텍스트",
+      "또는"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Python 여러 줄 문자열은 작은따옴표 또는 큰따옴표 세 개로 감싸 작성한다. 줄바꿈 문자가 문자열 값에 그대로 포함되며 문서 문자열에도 같은 문법을 사용한다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "`\"\"\"텍스트\"\"\"`와 `'''텍스트'''`는 모두 여러 줄 문자열을 만든다. 둘 중 하나만 제시한 보기는 가능한 문법 하나만 설명해 정답 범위보다 좁고, `<<텍스트>>`는 문자열 구문이 아니다.",
+      "key_points": [
+        "\"\"\"텍스트\"\"\" 또는 '''텍스트'''",
+        "python-multiline-string"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "\"\"\"텍스트\"\"\"",
+          "reason": "큰따옴표 세 개는 유효하지만 작은따옴표 세 개 방식도 있어 가능한 방법 전체를 답하지 못한다."
+        },
+        "option_1": {
+          "text": "'''텍스트'''",
+          "reason": "작은따옴표 세 개 역시 동작하지만 큰따옴표 세 개 방식까지 포함한 보기가 더 완전하다."
+        },
+        "option_3": {
+          "text": "<<텍스트>>",
+          "reason": "꺾쇠괄호는 Python 문자열 리터럴 문법이 아니므로 파싱되지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "삼중 따옴표는 실제 줄바꿈을 포함하고 `\\n`은 한 줄 리터럴 안에서 줄바꿈을 표현한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "double = \"\"\"첫 줄\n둘째 줄\"\"\"\nsingle = '''첫 줄\n둘째 줄'''\nassert double == single;",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "SQL, 템플릿, 문서 문자열처럼 줄바꿈을 보존해야 하는 텍스트에 사용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

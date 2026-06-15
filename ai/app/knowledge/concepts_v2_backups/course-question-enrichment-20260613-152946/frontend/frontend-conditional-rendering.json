@@ -1,0 +1,121 @@
+{
+  "card_id": "frontend-conditional-rendering",
+  "category": "frontend",
+  "term": "conditional-rendering",
+  "aliases": [
+    "cr",
+    "프론트엔드 cr",
+    "rendering",
+    "conditional rendering",
+    "conditional",
+    "conditional-rendering",
+    "frontend conditional rendering",
+    "프론트엔드 conditional rendering",
+    "react conditional rendering"
+  ],
+  "source_question_ids": [
+    "frontend:67"
+  ],
+  "retrieval": {
+    "embedding_text": "conditional-rendering cr 프론트엔드 cr rendering frontend conditional conditional rendering frontend conditional rendering",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "cr",
+      "프론트엔드 cr",
+      "rendering",
+      "conditional",
+      "conditional rendering",
+      "conditional-rendering",
+      "frontend conditional rendering"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "`conditional-rendering`은 프론트엔드에서 특정 문제를 해결하거나 동작을 설명할 때 사용하는 핵심 주제입니다. 원문 질문은 'React에서 조건부 렌더링에 사용할 수 없는 방법은?'이며, 핵심 판단 기준은 'if-else (JSX 내부에서 직접)'입니다. 용어 이름만 외우기보다 어떤 입력과 상황에서 적용되는지, 실행 결과가 어떻게 달라지는지 함께 이해해야 합니다. 이 기준을 알면 비슷한 용어가 선택지에 있어도 실제 동작과 요구사항을 근거로 올바른 판단을 할 수 있습니다.",
+      "examples": [
+        "`React에서 조건부 렌더링에 사용할 수 없는 방법은?`라는 상황에서는 `if-else (JSX 내부에서 직접)`를 기준으로 `conditional-rendering`을 이해할 수 있습니다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답인 `if-else (JSX 내부에서 직접)`는 질문이 묻는 `conditional-rendering`의 적용 조건과 결과를 직접 설명합니다. 특히 'React에서 조건부 렌더링에 사용할 수 없는 방법은?'에서 요구하는 핵심을 충족하므로 단순히 관련 단어를 포함한 선택지보다 정확합니다. 정답을 판단할 때는 conditional-rendering은 프론트엔드에서 특정 문제를 해결하거나 동작을 설명할 때 사용하는 핵심 주제입니다라는 점을 기준으로 삼으면 됩니다.",
+      "key_points": [
+        "conditional-rendering",
+        "conditional-rendering-usage",
+        "conditional-rendering-example",
+        "conditional rendering",
+        "frontend conditional rendering"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "`conditional-rendering`과 관련 있어 보이는 단어만 보고 실제 동작 조건을 확인하지 않는 실수",
+        "정답이 설명해야 하는 결과와 선택지가 실제로 만드는 결과를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "삼항 연산자 (? :)",
+          "reason": "`삼항 연산자 (? :)`는 `conditional-rendering`이 요구하는 핵심 조건이나 실행 결과를 설명하지 못합니다. 정답인 `if-else (JSX 내부에서 직접)`와 달리 질문의 요구사항을 직접 충족하지 않으므로 오답입니다."
+        },
+        "option_1": {
+          "text": "&& 연산자",
+          "reason": "`&& 연산자`는 `conditional-rendering`이 요구하는 핵심 조건이나 실행 결과를 설명하지 못합니다. 정답인 `if-else (JSX 내부에서 직접)`와 달리 질문의 요구사항을 직접 충족하지 않으므로 오답입니다."
+        },
+        "option_2": {
+          "text": "조건 함수 호출",
+          "reason": "`조건 함수 호출`는 `conditional-rendering`이 요구하는 핵심 조건이나 실행 결과를 설명하지 못합니다. 정답인 `if-else (JSX 내부에서 직접)`와 달리 질문의 요구사항을 직접 충족하지 않으므로 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 개념 또는 대안",
+          "diff": "`conditional-rendering`은 질문에서 요구하는 상황과 정답의 조건을 충족할 때 선택하며, 이름이 비슷하더라도 적용 조건이 다른 개념과 구분해야 합니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "const concept = \"conditional-rendering\";\nconst expected = \"if-else (JSX 내부에서 직접)\";\nconsole.log(`${concept}: ${expected}`);",
+      "explanation": "예시는 `conditional-rendering`의 핵심 동작을 가장 작은 실행 단위로 보여 줍니다. 값을 바꾸어 실행하면 적용 조건과 결과 차이를 확인할 수 있습니다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "실무의 프론트엔드 코드에서 `conditional-rendering`과 관련된 설계 선택, 코드 리뷰, 장애 원인 분석에 사용합니다. 특히 `if-else (JSX 내부에서 직접)`처럼 요구사항을 충족하는지 판단하는 기준으로 활용합니다.",
+      "best_practices": [
+        "`conditional-rendering`을 적용하기 전에 해결하려는 문제와 기대 결과를 먼저 명확히 합니다.",
+        "경계 조건과 실패 사례를 작은 테스트로 확인한 뒤 실제 코드에 적용합니다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`conditional-rendering`의 이름만 보고 적용하여 실제 요구사항과 다른 결과가 발생하는 문제",
+          "solution": "정답 기준인 `if-else (JSX 내부에서 직접)`와 현재 코드의 입력·출력을 비교하고, 가장 작은 재현 코드나 테스트로 동작을 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T05:40:08.353678Z"
+}

@@ -1,0 +1,115 @@
+{
+  "card_id": "algorithm-topological",
+  "category": "algorithm",
+  "term": "topological",
+  "aliases": [
+    "t",
+    "알고리즘 t",
+    "topological",
+    "algorithm topological",
+    "알고리즘 topological"
+  ],
+  "source_question_ids": [
+    "algorithm:143"
+  ],
+  "retrieval": {
+    "embedding_text": "topological t 알고리즘 t algorithm 방향 dag 알고리즘 topological algorithm topological algorithm-topological",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "방향",
+      "dag",
+      "알고리즘 t",
+      "topological",
+      "알고리즘 topological",
+      "algorithm topological",
+      "algorithm-topological"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "topological is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as topological, algorithm-topological, algorithm topological.",
+      "examples": [
+        "Explain when topological should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of topological, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals topological, algorithm-topological, algorithm topological.",
+      "key_points": [
+        "topological",
+        "algorithm",
+        "algorithm topological"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy topological's defining behavior.",
+        "Confusing topological with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "무방향 그래프",
+          "reason": "무방향 그래프 is not the best answer because it does not satisfy the defining behavior or constraint of topological. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "완전 그래프",
+          "reason": "완전 그래프 is not the best answer because it does not satisfy the defining behavior or constraint of topological. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "이분 그래프",
+          "reason": "이분 그래프 is not the best answer because it does not satisfy the defining behavior or constraint of topological. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against topological."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate topological in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes topological's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply topological in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why topological is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying topological without checking its defining constraint.",
+          "solution": "Re-check topological's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.594372Z"
+}

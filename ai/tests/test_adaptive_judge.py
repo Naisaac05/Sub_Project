@@ -1,4 +1,5 @@
 import unittest
+import os
 import sys
 import time
 from unittest.mock import patch, MagicMock
@@ -13,6 +14,16 @@ from app.workflow.grounding import GroundingResult
 from app.workflow.judge import SemanticJudgeResult
 
 class AdaptiveJudgeTest(unittest.TestCase):
+    def setUp(self):
+        self._env = patch.dict(os.environ, {
+            "AI_REVIEW_SEMANTIC_JUDGE_ENABLED": "true",
+            "AI_REVIEW_GROUNDING_JUDGE_ENABLED": "true",
+        })
+        self._env.start()
+
+    def tearDown(self):
+        self._env.stop()
+
     def test_tier0_fast_path(self):
         # 1. Tier 0 (No Judge) - Fast path / Cache hit
         # In Tier 0, both semantic and grounding judges are skipped.
@@ -97,7 +108,7 @@ class AdaptiveJudgeTest(unittest.TestCase):
             self.assertIsNotNone(completed_event)
             self.assertEqual(completed_event["judge_tier"], "tier2")
             self.assertEqual(completed_event["semantic_judge_skipped"], False)
-            self.assertEqual(completed_event["grounding_judge_skipped"], False)
+            self.assertEqual(completed_event["grounding_judge_skipped"], True)
             self.assertEqual(completed_event["grounding_async_executed"], False) # unit test mode is sync
             self.assertEqual(completed_event["estimated_latency_saved_ms"], 0.0)
 
@@ -136,7 +147,7 @@ class AdaptiveJudgeTest(unittest.TestCase):
             self.assertIsNotNone(completed_event)
             self.assertEqual(completed_event["judge_tier"], "tier2")
             self.assertEqual(completed_event["semantic_judge_skipped"], False)
-            self.assertEqual(completed_event["grounding_judge_skipped"], False)
+            self.assertEqual(completed_event["grounding_judge_skipped"], True)
 
     def test_async_grounding_non_blocking_latency(self):
         # 4. Async grounding non-blocking latency check

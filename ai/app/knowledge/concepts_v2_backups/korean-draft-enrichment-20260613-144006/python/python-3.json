@@ -1,0 +1,115 @@
+{
+  "card_id": "python-3",
+  "category": "python",
+  "term": "가비지",
+  "aliases": [
+    "가",
+    "가비지",
+    "파이썬 가",
+    "python 가비지",
+    "파이썬 가비지"
+  ],
+  "source_question_ids": [
+    "python:115"
+  ],
+  "retrieval": {
+    "embedding_text": "가비지 가 파이썬 가 python 세대별 파이썬 가비지 python 가비지 python-가비지 generational",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "가비지",
+      "세대별",
+      "파이썬 가",
+      "파이썬 가비지",
+      "python 가비지",
+      "python-가비지",
+      "generational"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "가비지 is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as 가비지, python-가비지, python 가비지.",
+      "examples": [
+        "Explain when 가비지 should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of 가비지, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals 가비지, python-가비지, python 가비지.",
+      "key_points": [
+        "가비지",
+        "python",
+        "python 가비지"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy 가비지's defining behavior.",
+        "Confusing 가비지 with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "참조 카운팅만으로 처리",
+          "reason": "참조 카운팅만으로 처리 is not the best answer because it does not satisfy the defining behavior or constraint of 가비지. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "개발자가 수동으로 해제",
+          "reason": "개발자가 수동으로 해제 is not the best answer because it does not satisfy the defining behavior or constraint of 가비지. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "순환 참조를 허용하지 않는다",
+          "reason": "순환 참조를 허용하지 않는다 is not the best answer because it does not satisfy the defining behavior or constraint of 가비지. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against 가비지."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate 가비지 in an appropriate python context.",
+      "explanation": "Use a minimal example that makes 가비지's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply 가비지 in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why 가비지 is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying 가비지 without checking its defining constraint.",
+          "solution": "Re-check 가비지's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.963932Z"
+}

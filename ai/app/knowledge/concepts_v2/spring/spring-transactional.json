@@ -1,0 +1,117 @@
+{
+  "card_id": "spring-transactional",
+  "category": "spring",
+  "term": "transactional",
+  "aliases": [
+    "transactional",
+    "JPA 변경 감지(Dirty Checking)를 수행하지 않아 성능이 향상된다",
+    "@Transactional(readOnly = true)의 효과는?",
+    "@Transactional(readOnly",
+    "true)",
+    "JPA",
+    "Dirty",
+    "Checking)",
+    "spring transactional"
+  ],
+  "source_question_ids": [
+    "spring:43"
+  ],
+  "retrieval": {
+    "embedding_text": "transactional JPA 변경 감지(Dirty Checking)를 수행하지 않아 성능이 향상된다 @Transactional(readOnly = true)의 효과는? spring @Transactional(readOnly true) 효과는 JPA 변경 감지",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "transactional",
+      "@Transactional(readOnly",
+      "true)",
+      "효과는",
+      "JPA",
+      "변경",
+      "감지"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "@Transactional(readOnly = true)는 읽기 중심 트랜잭션 의도를 전달한다. JPA 구현과 설정에 따라 변경 감지 부담을 줄이고 데이터베이스 읽기 최적화 힌트를 적용할 수 있다.",
+      "examples": [
+        "조회 전용 서비스에서 불필요한 변경 추적을 줄이고 읽기 의도를 명확히 할 때 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "읽기 전용 트랜잭션은 조회를 막거나 트랜잭션을 제거하지 않으며, Hibernate에서는 flush 모드 조정으로 변경 감지 비용을 줄일 수 있다. 캐시 비활성화와도 무관하다.",
+      "key_points": [
+        "@Transactional",
+        "readOnly",
+        "변경 감지"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "표면적인 문법이나 용어만 보고 내부 원리와 선택 기준을 확인하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "읽기도 불가능하다",
+          "reason": "읽기도 불가능하다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 읽기 전용 트랜잭션은 조회를 막거나 트랜잭션을 제거하지 않으며, Hibernate에서는 flush 모드 조정으로 변경 감지 비용을 줄일 수 있다."
+        },
+        "option_2": {
+          "text": "트랜잭션이 적용되지 않는다",
+          "reason": "트랜잭션이 적용되지 않는다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 읽기 전용 트랜잭션은 조회를 막거나 트랜잭션을 제거하지 않으며, Hibernate에서는 flush 모드 조정으로 변경 감지 비용을 줄일 수 있다."
+        },
+        "option_3": {
+          "text": "캐시가 비활성화된다",
+          "reason": "캐시가 비활성화된다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 읽기 전용 트랜잭션은 조회를 막거나 트랜잭션을 제거하지 않으며, Hibernate에서는 flush 모드 조정으로 변경 감지 비용을 줄일 수 있다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`JPA 변경 감지(Dirty Checking)를 수행하지 않아 성능이 향상된다`는 질문의 조건을 충족하지만 다른 선택지는 `transactional`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "@Transactional(readOnly = true)\npublic List<User> findAll() {\n    return repository.findAll();\n}",
+      "explanation": "조회 전용 서비스에서 불필요한 변경 추적을 줄이고 읽기 의도를 명확히 할 때 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "조회 전용 서비스에서 불필요한 변경 추적을 줄이고 읽기 의도를 명확히 할 때 사용한다.",
+      "best_practices": [
+        "경계 사례를 작은 실행 예제로 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`transactional`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `JPA 변경 감지(Dirty Checking)를 수행하지 않아 성능이 향상된다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

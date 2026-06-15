@@ -1,0 +1,2707 @@
+{
+  "card_count": 142,
+  "approved_candidate_count": 4,
+  "approved_candidates": {
+    "algorithm-10": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-10",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 9.707800025353208,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-11": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-11",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.640000025276095,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-12": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-12",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.127699995180592,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-13": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-13",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 12.51199998660013,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-14": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-14",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.1669000026304275,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-2": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-2",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.386199984466657,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-3": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-3",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.0906000037211925,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-4": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-4",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.93980000121519,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-5": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-5",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.455599989043549,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-6": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-6",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.382399995345622,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-7": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-7",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 8.14719998743385,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-8": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-8",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.482099997811019,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-9": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-9",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.158699980005622,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-binary": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-binary",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.119199999375269,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-breadth-first-search": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-breadth-first-search",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 6.399399979272857,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-bst": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-bst",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.246600009035319,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-collision": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-collision",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.630400021094829,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-dfs": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-dfs",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.964300002437085,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-divide": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-divide",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 9.48810001136735,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-heap": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-heap",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.747499981429428,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-knapsack": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-knapsack",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.817600020440295,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-lcs": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-lcs",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.1434999806806445,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-linked": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-linked",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.308899977942929,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-mst": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-mst",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 8.037899999180809,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-np": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-np",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.123000017600134,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-queue": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-queue",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.28039997536689,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-stack": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-stack",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.903500005137175,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-topological": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-topological",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.529799982672557,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm-unionfind": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-unionfind",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 8.254900021711364,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "algorithm": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.611899985931814,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-2": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-2",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.359899998642504,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-button": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-button",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.571800011442974,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-code": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-code",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.261400005314499,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-concurrent": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-concurrent",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.389299989677966,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-conditional-rendering": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-conditional-rendering",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.404000014299527,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-context": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-context",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.598699983442202,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-controlled-uncontrolled-components": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-controlled-uncontrolled-components",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 6.751200009603053,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-custom": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-custom",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.743799982359633,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-dom": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-dom",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.749700016574934,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-error": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-error",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.181699980515987,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-fiber": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-fiber",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.30870001623407,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-functional-component": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-functional-component",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.346799986204132,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-hook": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-hook",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.368600006680936,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-hydration": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-hydration",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.665700017241761,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-jsx-expression": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-jsx-expression",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.3375000027008355,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-nextjs": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-nextjs",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.625300011364743,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-react-key": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-react-key",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 7.7695999934803694,
+      "missing_payloads": []
+    },
+    "frontend-react-project-tool": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-react-project-tool",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 7.962400006363168,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-react-server-components": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-react-server-components",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 12.075400009052828,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-reactmemo": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-reactmemo",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.3439999939873815,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-router": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-router",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.321000022580847,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-streaming": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-streaming",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.345600006170571,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-suspense": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-suspense",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.465799990110099,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-usecallback": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-usecallback",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.347500020638108,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-useeffect": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-useeffect",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.052800017641857,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-useref": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-useref",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.042100005084649,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend-usestate": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend-usestate",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.666600005701184,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "frontend": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "frontend",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.692599999951199,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-access-modifier": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-access-modifier",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.785300007322803,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-array-length": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-array-length",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.475600006524473,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-arraylist": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-arraylist",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.936199984513223,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-checked": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-checked",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 12.389799987431616,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-completablefuture": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-completablefuture",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.644599983701482,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-concurrenthashmap": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-concurrenthashmap",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.758300005458295,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-default": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-default",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.395099975634366,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-delegation": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-delegation",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.054700003005564,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-equals": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-equals",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.283299997448921,
+      "missing_payloads": []
+    },
+    "java-extends-keyword": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-extends-keyword",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 7.366200006799772,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-extends": {
+      "approved_candidate": false,
+      "reasons": [
+        "mojibake_retrieval_fields"
+      ],
+      "top1_card_id": "java-extends",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 8.283000002847984,
+      "missing_payloads": []
+    },
+    "java-final-keyword": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-final-keyword",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 7.75620000786148,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-functional-interface": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-functional-interface",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 7.248900015838444,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-g1-gc": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-g1-gc",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 7.3127000068780035,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-hashmap": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-hashmap",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.935599998338148,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-int-variable": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-int-variable",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 7.0869000046513975,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-jvm": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-jvm",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.759299994679168,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-loop-control": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-loop-control",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.129300018073991,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-main": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-main",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.810600006952882,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-optional": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-optional",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.4329000015277416,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-primitive": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-primitive",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.467300001531839,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-reflection": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-reflection",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 22.059300012188032,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-solid": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-solid",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 10.602499998640269,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-stream": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-stream",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 9.87039998290129,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-string": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-string",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.946499983314425,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-synchronized": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-synchronized",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 15.397999988636002,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-threadsafe": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-threadsafe",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.554499996127561,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "java-volatile": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "java-volatile",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.663999996613711,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-2": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-2",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.94709999859333,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-3": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-3",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.271299993386492,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-args": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-args",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.3430000154767185,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-asyncio": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-asyncio",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 10.813300003064796,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-cpython": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-cpython",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.650000006426126,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-decorator": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-decorator",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.185300007928163,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-def": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-def",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.259099987801164,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-dictionary": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-dictionary",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.817700002808124,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-fstring": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-fstring",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.842499977210537,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-function-definition": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-function-definition",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.881600013002753,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-generator": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-generator",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.238800007849932,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-gil": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-gil",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.226199999218807,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-immutable": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-immutable",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.143099977634847,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-list-comprehension": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-list-comprehension",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 7.471899996744469,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-metaclass": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-metaclass",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.257799996295944,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-mro": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-mro",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.240600003162399,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-multiline-string": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-multiline-string",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 12.629400007426739,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-multiprocessing": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-multiprocessing",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 10.760299977846444,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-negative-indexing": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-negative-indexing",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.623399996897206,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-none": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-none",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.014899990987033,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-private": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-private",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.613000005017966,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-range": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-range",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.2565000262111425,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-slots": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-slots",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.039499974576756,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-staticmethod": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-staticmethod",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.0890000206418335,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-tryexceptelsefinally": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-tryexceptelsefinally",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.967599998461083,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-typing": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-typing",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.786899990402162,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-weakref": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-weakref",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.283599999733269,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-with-statement": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python-with-statement",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.503299984615296,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "python-with": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-with",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.6297000157646835,
+      "missing_payloads": []
+    },
+    "python": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "python",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.855799991171807,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-aop": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-aop",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 20.433600002434105,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-applicationyml": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-applicationyml",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 9.19350000913255,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-async": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-async",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 9.004099993035197,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-autowired": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-autowired",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 12.602800008608028,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-batch": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-batch",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 8.288300014100969,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-boot": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-boot",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.474299985915422,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-circuit": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-circuit",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 13.477099972078577,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-controller": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-controller",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 8.549599995603785,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-dependency-injection": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-dependency-injection",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 7.681699993554503,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-embedded-tomcat": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-embedded-tomcat",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.263899995246902,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-ioc": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-ioc",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.56800001161173,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-jpa": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-jpa",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.060300005832687,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-msa": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-msa",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 8.128599991323426,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-mvc": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-mvc",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.787500005681068,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-phantom": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-phantom",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 8.3398999995552,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-profile": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-profile",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.347699982346967,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-querydsl": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-querydsl",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.126800017431378,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-requestmapping": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-requestmapping",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.2760000000707805,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-requiresnew": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-requiresnew",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 8.893599995644763,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-responseentity": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-responseentity",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.471599994460121,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-security": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-security",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.945899989455938,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-service": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-service",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.927500023972243,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-spring-bean-scope": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-spring-bean-scope",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 11.327400017762557,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-spring-question-59": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-spring-question-59",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 12.444699998013675,
+      "missing_payloads": []
+    },
+    "spring-transactional": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-transactional",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.761799973901361,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    "spring-valid": {
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "spring-valid",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.114399991929531,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    }
+  },
+  "shadow": {
+    "sample_count": 15,
+    "fast_path_count": 9,
+    "fallback_count": 6,
+    "card_hit_rate": 0.6,
+    "shadow_fast_path_success_rate": 0.6,
+    "fallback_rate": 0.4,
+    "expected_ollama_call_reduction_rate": 0.6,
+    "average_retrieval_latency_ms": 10.986380001607662,
+    "top1_score_distribution": {
+      "min": 5.5,
+      "p25": 9.5,
+      "median": 11.0,
+      "p75": 11.0,
+      "p90": 14.5,
+      "max": 14.5
+    },
+    "results": [
+      {
+        "question": "What is React key?",
+        "expected_intent": "CONCEPT_DEFINITION",
+        "classified_intent": "CONCEPT_DEFINITION",
+        "expected_card_id": "frontend-react-key",
+        "top1_card_id": "frontend-react-key",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          },
+          {
+            "rank": 4,
+            "card_id": "frontend-react-server-components",
+            "score": 2.5
+          },
+          {
+            "rank": 5,
+            "card_id": "frontend-conditional-rendering",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 8.50880000507459
+      },
+      {
+        "question": "What is Java equals?",
+        "expected_intent": "CONCEPT_DEFINITION",
+        "classified_intent": "CONCEPT_DEFINITION",
+        "expected_card_id": "java-equals",
+        "top1_card_id": "java-equals",
+        "top1_score": 9.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "java-equals",
+            "score": 9.5
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          },
+          {
+            "rank": 4,
+            "card_id": "java-array-length",
+            "score": 1.0
+          },
+          {
+            "rank": 5,
+            "card_id": "java-arraylist",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 16.12559999921359
+      },
+      {
+        "question": "What is Spring cache?",
+        "expected_intent": "CONCEPT_DEFINITION",
+        "classified_intent": "CONCEPT_DEFINITION",
+        "expected_card_id": "spring-spring-question-59",
+        "top1_card_id": "spring-spring-question-59",
+        "top1_score": 5.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "spring-spring-question-59",
+            "score": 5.5
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "spring-spring-bean-scope",
+            "score": 2.5
+          },
+          {
+            "rank": 4,
+            "card_id": "spring-aop",
+            "score": 1.0
+          },
+          {
+            "rank": 5,
+            "card_id": "spring-applicationyml",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 12.32700000400655
+      },
+      {
+        "question": "What is BFS breadth first search?",
+        "expected_intent": "CONCEPT_DEFINITION",
+        "classified_intent": "CONCEPT_DEFINITION",
+        "expected_card_id": "algorithm-breadth-first-search",
+        "top1_card_id": "algorithm-breadth-first-search",
+        "top1_score": 14.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "algorithm-breadth-first-search",
+            "score": 14.5
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "java-g1-gc",
+            "score": 1.0
+          }
+        ],
+        "payload_available": false,
+        "fast_path": false,
+        "fallback": true,
+        "llm_called": true,
+        "retrieval_latency_ms": 7.066300022415817
+      },
+      {
+        "question": "What is JSX expression?",
+        "expected_intent": "CONCEPT_DEFINITION",
+        "classified_intent": "CONCEPT_DEFINITION",
+        "expected_card_id": "frontend-jsx-expression",
+        "top1_card_id": "frontend-jsx-expression",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-jsx-expression",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          }
+        ],
+        "payload_available": false,
+        "fast_path": false,
+        "fallback": true,
+        "llm_called": true,
+        "retrieval_latency_ms": 10.530400002608076
+      },
+      {
+        "question": "Why is React key correct?",
+        "expected_intent": "ANSWER_REASON",
+        "classified_intent": "ANSWER_REASON",
+        "expected_card_id": "frontend-react-key",
+        "top1_card_id": "frontend-react-key",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          },
+          {
+            "rank": 4,
+            "card_id": "frontend-react-server-components",
+            "score": 2.5
+          },
+          {
+            "rank": 5,
+            "card_id": "frontend-conditional-rendering",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 8.572999999159947
+      },
+      {
+        "question": "Why is Java equals correct?",
+        "expected_intent": "ANSWER_REASON",
+        "classified_intent": "ANSWER_REASON",
+        "expected_card_id": "java-equals",
+        "top1_card_id": "java-equals",
+        "top1_score": 9.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "java-equals",
+            "score": 9.5
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          },
+          {
+            "rank": 4,
+            "card_id": "java-array-length",
+            "score": 1.0
+          },
+          {
+            "rank": 5,
+            "card_id": "java-arraylist",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 13.368100015213713
+      },
+      {
+        "question": "Why is Spring cache correct?",
+        "expected_intent": "ANSWER_REASON",
+        "classified_intent": "ANSWER_REASON",
+        "expected_card_id": "spring-spring-question-59",
+        "top1_card_id": "spring-spring-question-59",
+        "top1_score": 5.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "spring-spring-question-59",
+            "score": 5.5
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "spring-spring-bean-scope",
+            "score": 2.5
+          },
+          {
+            "rank": 4,
+            "card_id": "spring-aop",
+            "score": 1.0
+          },
+          {
+            "rank": 5,
+            "card_id": "spring-applicationyml",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 14.846399979433045
+      },
+      {
+        "question": "Why is BFS breadth first search correct?",
+        "expected_intent": "ANSWER_REASON",
+        "classified_intent": "ANSWER_REASON",
+        "expected_card_id": "algorithm-breadth-first-search",
+        "top1_card_id": "algorithm-breadth-first-search",
+        "top1_score": 14.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "algorithm-breadth-first-search",
+            "score": 14.5
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "java-g1-gc",
+            "score": 1.0
+          }
+        ],
+        "payload_available": false,
+        "fast_path": false,
+        "fallback": true,
+        "llm_called": true,
+        "retrieval_latency_ms": 7.110500009730458
+      },
+      {
+        "question": "Why is JSX expression correct?",
+        "expected_intent": "ANSWER_REASON",
+        "classified_intent": "ANSWER_REASON",
+        "expected_card_id": "frontend-jsx-expression",
+        "top1_card_id": "frontend-jsx-expression",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-jsx-expression",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          }
+        ],
+        "payload_available": false,
+        "fast_path": false,
+        "fallback": true,
+        "llm_called": true,
+        "retrieval_latency_ms": 7.306799991056323
+      },
+      {
+        "question": "Why is index wrong instead of React key?",
+        "expected_intent": "WRONG_ANSWER_REASON",
+        "classified_intent": "WRONG_ANSWER_REASON",
+        "expected_card_id": "frontend-react-key",
+        "top1_card_id": "frontend-react-key",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          },
+          {
+            "rank": 4,
+            "card_id": "frontend-react-server-components",
+            "score": 2.5
+          },
+          {
+            "rank": 5,
+            "card_id": "frontend-conditional-rendering",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 9.950200008461252
+      },
+      {
+        "question": "Why is == wrong for Java equals?",
+        "expected_intent": "WRONG_ANSWER_REASON",
+        "classified_intent": "WRONG_ANSWER_REASON",
+        "expected_card_id": "java-equals",
+        "top1_card_id": "java-equals",
+        "top1_score": 9.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "java-equals",
+            "score": 9.5
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          },
+          {
+            "rank": 4,
+            "card_id": "java-array-length",
+            "score": 1.0
+          },
+          {
+            "rank": 5,
+            "card_id": "java-arraylist",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 19.408499996643513
+      },
+      {
+        "question": "Why is no caching wrong for Spring cache?",
+        "expected_intent": "WRONG_ANSWER_REASON",
+        "classified_intent": "WRONG_ANSWER_REASON",
+        "expected_card_id": "spring-spring-question-59",
+        "top1_card_id": "spring-spring-question-59",
+        "top1_score": 5.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "spring-spring-question-59",
+            "score": 5.5
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "spring-spring-bean-scope",
+            "score": 2.5
+          },
+          {
+            "rank": 4,
+            "card_id": "spring-aop",
+            "score": 1.0
+          },
+          {
+            "rank": 5,
+            "card_id": "spring-applicationyml",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 14.634699997259304
+      },
+      {
+        "question": "Why is stack wrong for BFS breadth first search?",
+        "expected_intent": "WRONG_ANSWER_REASON",
+        "classified_intent": "WRONG_ANSWER_REASON",
+        "expected_card_id": "algorithm-breadth-first-search",
+        "top1_card_id": "algorithm-breadth-first-search",
+        "top1_score": 14.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "algorithm-breadth-first-search",
+            "score": 14.5
+          },
+          {
+            "rank": 2,
+            "card_id": "algorithm-stack",
+            "score": 8.5
+          },
+          {
+            "rank": 3,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "java-g1-gc",
+            "score": 1.0
+          }
+        ],
+        "payload_available": false,
+        "fast_path": false,
+        "fallback": true,
+        "llm_called": true,
+        "retrieval_latency_ms": 8.33710000733845
+      },
+      {
+        "question": "Why are parentheses wrong for JSX expression?",
+        "expected_intent": "WRONG_ANSWER_REASON",
+        "classified_intent": "WRONG_ANSWER_REASON",
+        "expected_card_id": "frontend-jsx-expression",
+        "top1_card_id": "frontend-jsx-expression",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-jsx-expression",
+            "score": 11.0
+          }
+        ],
+        "payload_available": false,
+        "fast_path": false,
+        "fallback": true,
+        "llm_called": true,
+        "retrieval_latency_ms": 6.702299986500293
+      }
+    ]
+  },
+  "problem_cards_top10": [
+    {
+      "card_id": "algorithm-10",
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-10",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 9.707800025353208,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    {
+      "card_id": "algorithm-11",
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-11",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.640000025276095,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    {
+      "card_id": "algorithm-12",
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-12",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.127699995180592,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    {
+      "card_id": "algorithm-13",
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-13",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 12.51199998660013,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    {
+      "card_id": "algorithm-14",
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-14",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.1669000026304275,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    {
+      "card_id": "algorithm-2",
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-2",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.386199984466657,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    {
+      "card_id": "algorithm-3",
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-3",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.0906000037211925,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    {
+      "card_id": "algorithm-4",
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-4",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.93980000121519,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    {
+      "card_id": "algorithm-5",
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-5",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.455599989043549,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    },
+    {
+      "card_id": "algorithm-6",
+      "approved_candidate": false,
+      "reasons": [
+        "payload_missing"
+      ],
+      "top1_card_id": "algorithm-6",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.382399995345622,
+      "missing_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON"
+      ]
+    }
+  ],
+  "shadow_problem_cases": [
+    {
+      "expected_card_id": "algorithm-breadth-first-search",
+      "question": "What is BFS breadth first search?",
+      "top1_card_id": "algorithm-breadth-first-search",
+      "top1_score": 14.5
+    },
+    {
+      "expected_card_id": "frontend-jsx-expression",
+      "question": "What is JSX expression?",
+      "top1_card_id": "frontend-jsx-expression",
+      "top1_score": 11.0
+    },
+    {
+      "expected_card_id": "algorithm-breadth-first-search",
+      "question": "Why is BFS breadth first search correct?",
+      "top1_card_id": "algorithm-breadth-first-search",
+      "top1_score": 14.5
+    },
+    {
+      "expected_card_id": "frontend-jsx-expression",
+      "question": "Why is JSX expression correct?",
+      "top1_card_id": "frontend-jsx-expression",
+      "top1_score": 11.0
+    },
+    {
+      "expected_card_id": "algorithm-breadth-first-search",
+      "question": "Why is stack wrong for BFS breadth first search?",
+      "top1_card_id": "algorithm-breadth-first-search",
+      "top1_score": 14.5
+    },
+    {
+      "expected_card_id": "frontend-jsx-expression",
+      "question": "Why are parentheses wrong for JSX expression?",
+      "top1_card_id": "frontend-jsx-expression",
+      "top1_score": 11.0
+    }
+  ],
+  "production_readiness": "NOT_READY",
+  "safety": {
+    "card_status_changed": false,
+    "payload_status_changed": false,
+    "active_card_store_changed": false
+  }
+}

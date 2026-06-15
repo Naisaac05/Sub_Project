@@ -5,12 +5,12 @@
 {"seed_id":"war-b","question":"제 답이 오답인 이유가 뭔가요?","expected_intent":"WRONG_ANSWER_REASON","archetype":"variant_concept"}
 {"seed_id":"war-c","question":"이거 내가 왜 틀린 거지?","expected_intent":"WRONG_ANSWER_REASON","archetype":"weak_signal"}
 {"seed_id":"def-a","question":"트랜잭션이 뭐야?","expected_intent":"CONCEPT_DEFINITION","archetype":"prototype"}
-{"seed_id":"def-b","question":"REST API의 정의를 알려줘","expected_intent":"CONCEPT_DEFINITION","archetype":"variant_concept"}
+{"seed_id":"def-b","question":"메시지 큐의 정의를 알려줘","expected_intent":"CONCEPT_DEFINITION","archetype":"variant_concept"}
 {"seed_id":"def-c","question":"인덱스 개념 좀 잡아줘","expected_intent":"CONCEPT_DEFINITION","archetype":"weak_signal"}
 {"seed_id":"cmp-a","question":"세션이랑 JWT 차이가 뭐야?","expected_intent":"COMPARISON","archetype":"prototype"}
 {"seed_id":"cmp-b","question":"Process vs Thread 비교해줘","expected_intent":"COMPARISON","archetype":"variant_concept"}
 {"seed_id":"cmp-c","question":"List랑 Set 뭐가 달라?","expected_intent":"COMPARISON","archetype":"weak_signal"}
-{"seed_id":"ex-a","question":"N+1 문제 예시 하나 들어줘","expected_intent":"EXAMPLE_REQUEST","archetype":"prototype"}
+{"seed_id":"ex-a","question":"캐시 스탬피드 예시 하나 들어줘","expected_intent":"EXAMPLE_REQUEST","archetype":"prototype"}
 {"seed_id":"ex-b","question":"옵저버 패턴 코드로 보여줄래?","expected_intent":"EXAMPLE_REQUEST","archetype":"variant_concept"}
 {"seed_id":"ex-c","question":"이거 실제 케이스로 설명해줄 수 있어?","expected_intent":"EXAMPLE_REQUEST","archetype":"weak_signal"}
 {"seed_id":"prac-a","question":"인덱스는 실무에서 언제 써?","expected_intent":"PRACTICAL_USAGE","archetype":"prototype"}

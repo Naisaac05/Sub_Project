@@ -1,0 +1,115 @@
+{
+  "card_id": "frontend-streaming",
+  "category": "frontend",
+  "term": "streaming",
+  "aliases": [
+    "s",
+    "프론트엔드 s",
+    "streaming",
+    "frontend streaming",
+    "프론트엔드 streaming"
+  ],
+  "source_question_ids": [
+    "frontend:90"
+  ],
+  "retrieval": {
+    "embedding_text": "streaming s 프론트엔드 s frontend 전체 페이지를 프론트엔드 streaming frontend streaming frontend-streaming",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "전체",
+      "페이지를",
+      "프론트엔드 s",
+      "streaming",
+      "프론트엔드 streaming",
+      "frontend streaming",
+      "frontend-streaming"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "streaming is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as streaming, frontend-streaming, frontend streaming.",
+      "examples": [
+        "Explain when streaming should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of streaming, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals streaming, frontend-streaming, frontend streaming.",
+      "key_points": [
+        "streaming",
+        "frontend",
+        "frontend streaming"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy streaming's defining behavior.",
+        "Confusing streaming with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "번들 사이즈가 줄어든다",
+          "reason": "번들 사이즈가 줄어든다 is not the best answer because it does not satisfy the defining behavior or constraint of streaming. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "SEO가 불필요해진다",
+          "reason": "SEO가 불필요해진다 is not the best answer because it does not satisfy the defining behavior or constraint of streaming. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "CDN 캐싱이 가능해진다",
+          "reason": "CDN 캐싱이 가능해진다 is not the best answer because it does not satisfy the defining behavior or constraint of streaming. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against streaming."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate streaming in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes streaming's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply streaming in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why streaming is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying streaming without checking its defining constraint.",
+          "solution": "Re-check streaming's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.730438Z"
+}

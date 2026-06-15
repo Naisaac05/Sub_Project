@@ -1,0 +1,113 @@
+{
+  "card_id": "spring-circuit",
+  "category": "spring",
+  "term": "circuit",
+  "aliases": [
+    "circuit",
+    "spring circuit",
+    "스프링 circuit"
+  ],
+  "source_question_ids": [
+    "spring:58"
+  ],
+  "retrieval": {
+    "embedding_text": "circuit spring circuit 스프링 circuit spring spring-circuit 장애가 전파되는 것을",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "circuit",
+      "spring-circuit",
+      "spring circuit",
+      "스프링 circuit",
+      "장애가",
+      "전파되는",
+      "것을"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "circuit is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as circuit, spring-circuit, spring circuit.",
+      "examples": [
+        "Explain when circuit should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of circuit, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals circuit, spring-circuit, spring circuit.",
+      "key_points": [
+        "circuit",
+        "spring",
+        "spring circuit"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy circuit's defining behavior.",
+        "Confusing circuit with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "네트워크 암호화",
+          "reason": "네트워크 암호화 is not the best answer because it does not satisfy the defining behavior or constraint of circuit. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "로드 밸런싱",
+          "reason": "로드 밸런싱 is not the best answer because it does not satisfy the defining behavior or constraint of circuit. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "서비스 디스커버리",
+          "reason": "서비스 디스커버리 is not the best answer because it does not satisfy the defining behavior or constraint of circuit. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against circuit."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate circuit in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes circuit's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply circuit in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why circuit is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying circuit without checking its defining constraint.",
+          "solution": "Re-check circuit's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.977492Z"
+}

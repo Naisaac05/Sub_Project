@@ -1,0 +1,68 @@
+{
+  "candidate_cards": [
+    "python-range",
+    "algorithm-dfs",
+    "python-def",
+    "frontend-jsx-expression",
+    "python-fstring",
+    "python-dictionary",
+    "java-hashmap",
+    "algorithm-11",
+    "python-multiline-string",
+    "java-main"
+  ],
+  "patched_cards": [
+    "python-range",
+    "algorithm-dfs"
+  ],
+  "rolled_back_cards": [],
+  "skipped_cards": [
+    "python-def",
+    "frontend-jsx-expression",
+    "python-fstring",
+    "python-dictionary",
+    "java-hashmap",
+    "algorithm-11",
+    "python-multiline-string",
+    "java-main"
+  ],
+  "production_hit_diff": 0.0,
+  "production_loo_diff": 0.0,
+  "content_hit_diff": 0.0,
+  "content_loo_diff": 0.0,
+  "false_regression_detected": false,
+  "json_failed": [],
+  "production_before": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9797297297297297,
+    "loo_average_score": 5.296551724137931,
+    "loo_same_category_rate": 0.6689655172413793
+  },
+  "production_after": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9797297297297297,
+    "loo_average_score": 5.296551724137931,
+    "loo_same_category_rate": 0.6689655172413793
+  },
+  "content_before": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.294520547945205,
+    "loo_same_category_rate": 0.6643835616438356
+  },
+  "content_after": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.294520547945205,
+    "loo_same_category_rate": 0.6643835616438356
+  },
+  "backup_root": "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\app\\knowledge\\concepts_v2_backups\\payload-batch-v2-1-3-first10-20260613"
+}

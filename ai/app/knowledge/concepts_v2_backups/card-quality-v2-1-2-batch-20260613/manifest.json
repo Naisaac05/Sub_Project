@@ -1,0 +1,28 @@
+{
+  "candidate_cards": [
+    "spring-spring-question-59",
+    "java-extends",
+    "frontend-react-key",
+    "python-range",
+    "java-arraylist",
+    "algorithm-queue",
+    "algorithm-dfs",
+    "algorithm-bst",
+    "java-jvm",
+    "spring-jpa"
+  ],
+  "patched_cards": [
+    "python-range",
+    "algorithm-queue",
+    "algorithm-dfs",
+    "algorithm-bst",
+    "java-jvm",
+    "spring-jpa"
+  ],
+  "skipped_cards": [
+    "frontend-react-key",
+    "java-arraylist",
+    "java-extends",
+    "spring-spring-question-59"
+  ]
+}

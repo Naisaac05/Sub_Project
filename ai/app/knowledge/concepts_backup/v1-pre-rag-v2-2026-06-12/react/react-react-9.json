@@ -1,0 +1,72 @@
+{
+  "card_id": "react-react-9",
+  "category": "react",
+  "term": "react",
+  "aliases": [
+    "react react"
+  ],
+  "source_question_ids": [
+    "react:82"
+  ],
+  "retrieval": {
+    "embedding_text": "react react react react은(는) React Fiber 아키텍처의 핵심 개선점은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "react",
+      "react"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "react은(는) React Fiber 아키텍처의 핵심 개선점은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "react 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "react"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q82_option_2": {
+          "text": "렌더링 작업을 분할(time-slicing)하여 우선순위 기반으로 처리할 수 있다",
+          "reason": "react의 특성과 일치하지 않는 오답입니다."
+        },
+        "q82_option_3": {
+          "text": "TypeScript 지원",
+          "reason": "react의 특성과 일치하지 않는 오답입니다."
+        },
+        "q82_option_4": {
+          "text": "CSS-in-JS 지원",
+          "reason": "react의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

@@ -3,11 +3,16 @@ import json
 import logging
 import re
 import inspect
+import os
 from app.ollama.client import call_ollama, FALLBACK_MODEL
 from app.schemas import AiGenerateRequest
 from app.prompts.registry import compute_prompt_hash
 
 logger = logging.getLogger("ai_review.workflow.grounding")
+
+
+def grounding_judge_enabled() -> bool:
+    return os.getenv("AI_REVIEW_GROUNDING_JUDGE_ENABLED", "false").lower() in {"1", "true", "yes", "on"}
 
 
 @dataclass(frozen=True)
@@ -31,6 +36,8 @@ def validate_grounding(
     Retrieved context와 생성된 답변의 semantic grounding 상태를 분석하여 검증 결과를 반환합니다.
     이 호출은 완전히 timeout-safe 및 exception-safe하여 실패 시에도 본 서비스 응답을 막지 않습니다.
     """
+    if not grounding_judge_enabled():
+        return GroundingResult(1.0, 1.0, [], True, "Skipped grounding: disabled by configuration")
     if not answer:
         return GroundingResult(1.0, 1.0, [], True, "Skipped grounding: empty answer")
 

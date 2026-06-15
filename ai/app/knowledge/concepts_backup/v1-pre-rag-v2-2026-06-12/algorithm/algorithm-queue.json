@@ -1,0 +1,72 @@
+{
+  "card_id": "algorithm-queue",
+  "category": "algorithm",
+  "term": "queue",
+  "aliases": [
+    "algorithm queue"
+  ],
+  "source_question_ids": [
+    "algorithm:123"
+  ],
+  "retrieval": {
+    "embedding_text": "queue algorithm queue queue은(는) 큐(Queue)의 특성은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "queue",
+      "algorithm"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "queue은(는) 큐(Queue)의 특성은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "queue 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "queue"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q123_option_2": {
+          "text": "FIFO",
+          "reason": "queue의 특성과 일치하지 않는 오답입니다."
+        },
+        "q123_option_3": {
+          "text": "LILO",
+          "reason": "queue의 특성과 일치하지 않는 오답입니다."
+        },
+        "q123_option_4": {
+          "text": "임의 접근",
+          "reason": "queue의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.066841Z",
+  "updated_at": "2026-06-10T11:01:08.066841Z"
+}

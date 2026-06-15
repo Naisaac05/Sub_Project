@@ -1,0 +1,534 @@
+{
+  "patched_count": 20,
+  "rolled_back_count": 0,
+  "skipped_count": 0,
+  "patched_cards": [
+    "algorithm-14",
+    "python-private",
+    "python-args",
+    "algorithm-10",
+    "python-staticmethod",
+    "frontend-context",
+    "python-gil",
+    "algorithm-unionfind",
+    "algorithm-6",
+    "frontend-usestate",
+    "python-decorator",
+    "python-with-statement",
+    "frontend-reactmemo",
+    "python-3",
+    "frontend-error",
+    "python-list-comprehension",
+    "frontend-nextjs",
+    "python-tryexceptelsefinally",
+    "algorithm-stack",
+    "algorithm"
+  ],
+  "rolled_back_cards": [],
+  "skipped_cards": [],
+  "json_failed": [],
+  "failed_cards": {},
+  "backup_root": "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\app\\knowledge\\concepts_v2_backups\\v218_ready20_20260613T220911617667",
+  "before_after_diff_summary": {
+    "algorithm-14": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2305,
+      "after_length": 1225,
+      "example_before": "def check_concept():\n    return \"목표까지의 예상 비용을 추정하여 탐색 방향을 안내한다\"\n\nprint(check_concept())",
+      "example_after": "cost = 4\nheuristic = 3\npriority = cost + heuristic",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-private": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2248,
+      "after_length": 1286,
+      "example_before": "def check_concept():\n    return \"속성 이름 앞에 언더스코어 (_) 또는 더블 언더스코어 (__)\"\n\nprint(check_concept())",
+      "example_after": "class User:\n    def __init__(self): self._name = \"A\"; self.__token = 1\nuser = User()",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-args": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2336,
+      "after_length": 1321,
+      "example_before": "def check_concept():\n    return \"*args는 위치 인자를 튜플로, **kwargs는 키워드 인자를 딕셔너리로 받는다\"\n\nprint(check_concept())",
+      "example_after": "def collect(*args, **kwargs): return args, kwargs\npositions, keywords = collect(1, 2, name=\"A\")\nname = keywords[\"name\"]",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "algorithm-10": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2251,
+      "after_length": 1269,
+      "example_before": "def check_concept():\n    return \"DFS에서 방문 중인 노드를 다시 만나면 사이클\"\n\nprint(check_concept())",
+      "example_after": "visiting = {\"A\", \"B\"}\nnext_node = \"A\"\nhas_cycle = next_node in visiting",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-staticmethod": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2543,
+      "after_length": 1442,
+      "example_before": "def check_concept():\n    return \"@classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다\"\n\nprint(check_concept())",
+      "example_after": "class Factory:\n    @classmethod\n    def name(cls): return cls.__name__\n    @staticmethod\n    def add(a, b): return a + b",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-context": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2291,
+      "after_length": 1380,
+      "example_before": "const concept = \"context\";\nconst expected = \"Provider 값이 변경되면 모든 Consumer가 리렌더링된다\";\nconsole.log({ concept, expected });",
+      "example_after": "const Theme = React.createContext(\"light\");\nconst view = <Theme.Provider value=\"dark\"><App /></Theme.Provider>;\nconst value = view.props.value;",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-gil": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2236,
+      "after_length": 1377,
+      "example_before": "def check_concept():\n    return \"CPU-bound 작업에서 멀티스레딩의 성능 이점이 제한된다\"\n\nprint(check_concept())",
+      "example_after": "from concurrent.futures import ThreadPoolExecutor\nwith ThreadPoolExecutor(2) as pool:\n    futures = [pool.submit(len, str(i)) for i in range(2)]",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "algorithm-unionfind": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2252,
+      "after_length": 1295,
+      "example_before": "def check_concept():\n    return \"Find 연산의 시간 복잡도를 거의 O(1)에 근접하게 한다\"\n\nprint(check_concept())",
+      "example_after": "parent = [0, 0, 1]\nroot = parent[parent[2]]\nparent[2] = root",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "algorithm-6": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2306,
+      "after_length": 1285,
+      "example_before": "def check_concept():\n    return \"입력 크기와 관계없이 일정한 추가 메모리만 사용한다\"\n\nprint(check_concept())",
+      "example_after": "values = [3, 1, 2]\nsmallest = values[0]\nfor value in values: smallest = min(smallest, value)",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-usestate": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2086,
+      "after_length": 1250,
+      "example_before": "const concept = \"usestate\";\nconst expected = \"[현재 상태값, 상태 변경 함수]\";\nconsole.log({ concept, expected });",
+      "example_after": "const [count, setCount] = React.useState(0);\nsetCount(value => value + 1);\nconst current = count;",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-decorator": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2076,
+      "after_length": 1265,
+      "example_before": "def check_concept():\n    return \"함수를 수정하지 않고 기능을 추가한다\"\n\nprint(check_concept())",
+      "example_after": "def traced(fn):\n    def wrapper(*args): return fn(*args)\n    return wrapper\n@traced\ndef add(a, b): return a + b",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-with-statement": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2252,
+      "after_length": 1333,
+      "example_before": "def check_concept():\n    return \"with open('file.txt') as f:\"\n\nprint(check_concept())",
+      "example_after": "from io import StringIO\nwith StringIO(\"data\") as file:\n    content = file.read()\nclosed = file.closed",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-reactmemo": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2193,
+      "after_length": 1328,
+      "example_before": "const concept = \"reactmemo\";\nconst expected = \"props가 변경되지 않으면 리렌더링을 방지한다\";\nconsole.log({ concept, expected });",
+      "example_after": "const Row = React.memo(({ name }) => <span>{name}</span>);\nconst first = <Row name=\"A\" />;\nconst second = <Row name=\"A\" />;",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-3": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2299,
+      "after_length": 1305,
+      "example_before": "def check_concept():\n    return \"세대별(generational) 가비지 컬렉터를 사용\"\n\nprint(check_concept())",
+      "example_after": "import gc\ncycle = []\ncycle.append(cycle)\ntracked = gc.is_tracked(cycle)",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-error": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2324,
+      "after_length": 1448,
+      "example_before": "const concept = \"error\";\nconst expected = \"클래스 컴포넌트로만 구현 가능하다 (componentDidCatch)\";\nconsole.log({ concept, expected });",
+      "example_after": "class Boundary extends React.Component {\n  componentDidCatch(error) { this.error = error; }\n  render() { return this.props.children; }\n}",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-list-comprehension": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2412,
+      "after_length": 1338,
+      "example_before": "def check_concept():\n    return \"[x for x in range(10) if x > 5]\"\n\nprint(check_concept())",
+      "example_after": "numbers = range(10)\nfiltered = [x for x in numbers if x > 5]\nlast = filtered[-1]",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-nextjs": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2133,
+      "after_length": 1357,
+      "example_before": "const concept = \"nextjs\";\nconst expected = \"모두 서버 측에서 HTML을 생성한다\";\nconsole.log({ concept, expected });",
+      "example_after": "const modes = { SSR: \"request\", SSG: \"build\", ISR: \"revalidate\" };\nconst serverGenerated = Object.keys(modes);\nconst count = serverGenerated.length;",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-tryexceptelsefinally": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2159,
+      "after_length": 1359,
+      "example_before": "def check_concept():\n    return \"예외가 발생하지 않았을 때\"\n\nprint(check_concept())",
+      "example_after": "events = []\ntry: value = 10 / 2\nexcept ZeroDivisionError: events.append(\"except\")\nelse: events.append(\"else\")\nfinally: events.append(\"finally\")",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "algorithm-stack": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2087,
+      "after_length": 1195,
+      "example_before": "def check_concept():\n    return \"LIFO (Last In First Out)\"\n\nprint(check_concept())",
+      "example_after": "stack = [\"A\"]\nstack.append(\"B\")\nlatest = stack.pop()",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "algorithm": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2206,
+      "after_length": 1223,
+      "example_before": "def check_concept():\n    return \"입력 크기에 비례하여 시간이 증가한다\"\n\nprint(check_concept())",
+      "example_after": "values = [1, 2, 3, 4]\ntotal = 0\nfor value in values: total += value",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    }
+  },
+  "production_hit1_diff": 0.0,
+  "production_hit3_diff": 0.0,
+  "production_hit5_diff": 0.0,
+  "production_loo_diff": 0.0,
+  "content_hit1_diff": 0.0,
+  "content_hit3_diff": 0.0,
+  "content_hit5_diff": 0.0,
+  "content_loo_diff": 0.0,
+  "production_before": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9797297297297297,
+    "loo_average_score": 5.296551724137931,
+    "loo_same_category_rate": 0.6689655172413793
+  },
+  "production_after": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9797297297297297,
+    "loo_average_score": 5.296551724137931,
+    "loo_same_category_rate": 0.6689655172413793
+  },
+  "content_before": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.294520547945205,
+    "loo_same_category_rate": 0.6643835616438356
+  },
+  "content_after": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.294520547945205,
+    "loo_same_category_rate": 0.6575342465753424
+  }
+}

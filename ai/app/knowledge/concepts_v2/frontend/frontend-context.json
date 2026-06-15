@@ -1,0 +1,116 @@
+{
+  "card_id": "frontend-context",
+  "category": "frontend",
+  "term": "context",
+  "aliases": [
+    "context",
+    "Provider 값이 변경되면 모든 Consumer가 리렌더링된다",
+    "Context API의 단점은?",
+    "Context",
+    "API",
+    "Provider",
+    "Consumer",
+    "frontend context"
+  ],
+  "source_question_ids": [
+    "frontend:76"
+  ],
+  "retrieval": {
+    "embedding_text": "context Provider 값이 변경되면 모든 Consumer가 리렌더링된다 Context API의 단점은? frontend Context API 단점은 Provider 값이 변경되면",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "context",
+      "Context",
+      "API",
+      "단점은",
+      "Provider",
+      "값이",
+      "변경되면"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "React Context는 Provider value가 바뀌면 해당 Context를 읽는 Consumer를 다시 렌더링한다.",
+      "examples": [
+        "Context 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "큰 value를 자주 바꾸면 관련 Consumer의 리렌더 범위가 넓어질 수 있다.",
+      "key_points": [
+        "Context",
+        "Provider value",
+        "리렌더링"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "사용법이 어렵다",
+          "reason": "Context API 사용법 자체가 핵심 단점은 아니다."
+        },
+        "option_2": {
+          "text": "함수형 컴포넌트에서 사용 불가",
+          "reason": "useContext로 함수형 컴포넌트에서도 사용할 수 있다."
+        },
+        "option_3": {
+          "text": "전역 상태 관리가 불가능하다",
+          "reason": "공유 상태 전달이 Context의 주요 목적이다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`Provider 값이 변경되면 모든 Consumer가 리렌더링된다`는 질문의 조건을 충족하지만 다른 선택지는 `context`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "const Theme = React.createContext(\"light\");\nconst view = <Theme.Provider value=\"dark\"><App /></Theme.Provider>;\nconst value = view.props.value;",
+      "explanation": "Context 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Context 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`context`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `Provider 값이 변경되면 모든 Consumer가 리렌더링된다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

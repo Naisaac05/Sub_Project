@@ -1,0 +1,115 @@
+{
+  "card_id": "python-3",
+  "category": "python",
+  "term": "python-question-115",
+  "aliases": [
+    "python-question-115",
+    "세대별(generational) 가비지 컬렉터를 사용",
+    "Python의 가비지 컬렉션에서 순환 참조를 처리하는 방식은?",
+    "Python",
+    "generational)",
+    "python question 115",
+    "python python question 115"
+  ],
+  "source_question_ids": [
+    "python:115"
+  ],
+  "retrieval": {
+    "embedding_text": "python-question-115 세대별(generational) 가비지 컬렉터를 사용 Python의 가비지 컬렉션에서 순환 참조를 처리하는 방식은? python 가비지 컬렉션에서 순환 참조를 처리하는 방식은",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "python-question-115",
+      "가비지",
+      "컬렉션에서",
+      "순환",
+      "참조를",
+      "처리하는",
+      "방식은"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "CPython은 참조 카운팅으로 즉시 회수하고 세대별 순환 가비지 컬렉터로 도달 불가능한 참조 순환을 탐지한다.",
+      "examples": [
+        "CPython GC 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "순환 객체는 참조 카운트만으로 0이 되지 않을 수 있어 별도 cyclic GC가 처리한다.",
+      "key_points": [
+        "CPython GC",
+        "순환 참조",
+        "세대별"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "참조 카운팅만으로 처리",
+          "reason": "참조 카운팅만으로는 순환 참조를 회수하지 못할 수 있다."
+        },
+        "option_2": {
+          "text": "개발자가 수동으로 해제",
+          "reason": "일반적으로 개발자가 직접 메모리를 해제하지 않는다."
+        },
+        "option_3": {
+          "text": "순환 참조를 허용하지 않는다",
+          "reason": "Python은 순환 참조 생성을 허용한다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`세대별(generational) 가비지 컬렉터를 사용`는 질문의 조건을 충족하지만 다른 선택지는 `python-question-115`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import gc\ncycle = []\ncycle.append(cycle)\ntracked = gc.is_tracked(cycle)",
+      "explanation": "CPython GC 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "CPython GC 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`python-question-115`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `세대별(generational) 가비지 컬렉터를 사용`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

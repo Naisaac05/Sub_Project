@@ -1,0 +1,113 @@
+{
+  "card_id": "python-args",
+  "category": "python",
+  "term": "args",
+  "aliases": [
+    "args",
+    "*args는 위치 인자를 튜플로, **kwargs는 키워드 인자를 딕셔너리로 받는다",
+    "*args와 **kwargs의 차이는?",
+    "kwargs",
+    "python args"
+  ],
+  "source_question_ids": [
+    "python:107"
+  ],
+  "retrieval": {
+    "embedding_text": "args *args는 위치 인자를 튜플로, **kwargs는 키워드 인자를 딕셔너리로 받는다 *args와 **kwargs의 차이는? python kwargs 차이는 위치 인자를 튜플로 키워드",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "args",
+      "kwargs",
+      "차이는",
+      "위치",
+      "인자를",
+      "튜플로",
+      "키워드"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "*args는 추가 위치 인자를 튜플로, **kwargs는 추가 키워드 인자를 딕셔너리로 수집한다.",
+      "examples": [
+        "*args 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "두 문법은 인자 전달 방식과 저장 자료구조가 서로 다르다.",
+      "key_points": [
+        "*args",
+        "**kwargs",
+        "가변 인자"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "차이 없다",
+          "reason": "위치 인자와 키워드 인자를 구분하므로 차이가 있다."
+        },
+        "option_2": {
+          "text": "*args는 딕셔너리, **kwargs는 리스트",
+          "reason": "*args는 튜플이고 **kwargs는 딕셔너리다."
+        },
+        "option_3": {
+          "text": "*args만 가변 인자이다",
+          "reason": "둘 다 가변 개수 인자를 받을 수 있다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`*args는 위치 인자를 튜플로, **kwargs는 키워드 인자를 딕셔너리로 받는다`는 질문의 조건을 충족하지만 다른 선택지는 `args`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "def collect(*args, **kwargs): return args, kwargs\npositions, keywords = collect(1, 2, name=\"A\")\nname = keywords[\"name\"]",
+      "explanation": "*args 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "*args 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`args`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `*args는 위치 인자를 튜플로, **kwargs는 키워드 인자를 딕셔너리로 받는다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

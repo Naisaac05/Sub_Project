@@ -1,0 +1,99 @@
+{
+  "policy_version": "v2.1.2",
+  "mode": "PATCH_ONLY",
+  "eligible_statuses": [
+    "approved",
+    "approved_locked"
+  ],
+  "validation_batch_sequence": [
+    10,
+    20,
+    40,
+    80
+  ],
+  "locked_fields": [
+    "card_id",
+    "category",
+    "term",
+    "source_question_ids",
+    "retrieval.embedding_text",
+    "retrieval.embedding_hash",
+    "retrieval.intent_types",
+    "aliases",
+    "retrieval.boost_keywords",
+    "created_at",
+    "related_card_ids"
+  ],
+  "allowed_fields": [
+    "payloads.*",
+    "review.*",
+    "updated_at"
+  ],
+  "searchable_checksum": {
+    "algorithm": "sha256",
+    "inputs": [
+      "category",
+      "term",
+      "aliases",
+      "retrieval.embedding_text",
+      "retrieval.boost_keywords"
+    ]
+  },
+  "retrieval_metrics": [
+    "Exact",
+    "LOO",
+    "Hit@1",
+    "Hit@3",
+    "Hit@5"
+  ],
+  "retrieval_abort_loss_thresholds": {
+    "Hit@1": 0.01,
+    "LOO": 0.005,
+    "Exact": 0.005
+  },
+  "payload_quality_gate": {
+    "answer_reason": {
+      "required": [
+        "concept_principle",
+        "answer_derivation",
+        "wrong_answer_comparison"
+      ],
+      "answer_overlap_max": 0.3
+    },
+    "wrong_answer_reason": {
+      "same_reason_ratio_max": 0.25,
+      "requires_card_specific_reason": true
+    },
+    "example_request": {
+      "minimum_lines": 3,
+      "must_be_executable": true,
+      "must_show_behavior": true,
+      "reject_answer_print": true
+    },
+    "generic_score_max": 0.35,
+    "duplicate_score_max": 0.25,
+    "payload_length_min": 120
+  },
+  "auto_downgrade": {
+    "from": "approved_locked",
+    "to": "needs_revision",
+    "allowed_reasons": [
+      "invalid_json",
+      "retrieval_break",
+      "critical_fact_error"
+    ],
+    "forbidden_reasons": [
+      "wording",
+      "style",
+      "length",
+      "minor_explanation_weakness"
+    ],
+    "dry_run_only": true
+  },
+  "writes_forbidden": [
+    "concepts_v2",
+    "payloads",
+    "review",
+    "PATCHES_READY"
+  ]
+}

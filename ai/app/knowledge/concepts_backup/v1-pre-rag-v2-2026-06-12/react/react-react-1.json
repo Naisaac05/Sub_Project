@@ -1,0 +1,72 @@
+{
+  "card_id": "react-react-1",
+  "category": "react",
+  "term": "react",
+  "aliases": [
+    "react react"
+  ],
+  "source_question_ids": [
+    "react:63"
+  ],
+  "retrieval": {
+    "embedding_text": "react react react react은(는) React 컴포넌트에서 부모로부터 데이터를 전달받는 방법은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "react",
+      "react"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "react은(는) React 컴포넌트에서 부모로부터 데이터를 전달받는 방법은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "react 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "react"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q63_option_2": {
+          "text": "props",
+          "reason": "react의 특성과 일치하지 않는 오답입니다."
+        },
+        "q63_option_3": {
+          "text": "context",
+          "reason": "react의 특성과 일치하지 않는 오답입니다."
+        },
+        "q63_option_4": {
+          "text": "ref",
+          "reason": "react의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

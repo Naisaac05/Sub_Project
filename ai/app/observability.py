@@ -3,11 +3,16 @@ from __future__ import annotations
 import json
 import logging
 import uuid
+from datetime import date
+from pathlib import Path
+import threading
 
 from app.schemas import AiGenerateResponse
 
 CORRELATION_ID_HEADER = "X-Correlation-ID"
 LOGGER_NAME = "ai_review.observability"
+OLLAMA_FALLBACK_LOG_DIR = Path(__file__).resolve().parents[1] / "logs"
+_OLLAMA_FALLBACK_LOG_LOCK = threading.Lock()
 
 
 def correlation_id_from(value: str | None) -> str:
@@ -46,3 +51,21 @@ def emit_observability_events(
         enriched_events.append(enriched)
         sink.info(json.dumps(enriched, ensure_ascii=False, sort_keys=True))
     response.observability_events = enriched_events
+
+
+def emit_ollama_fallback_log(event: dict[str, object]) -> Path:
+    OLLAMA_FALLBACK_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    path = OLLAMA_FALLBACK_LOG_DIR / f"ollama_fallback_{date.today().isoformat()}.log"
+    payload = {
+        "route": event.get("route"),
+        "ollama_duration": event.get("ollama_duration", 0),
+        "fallback_reason": event.get("fallback_reason"),
+        "v2_hit": bool(event.get("v2_hit", False)),
+    }
+    try:
+        with _OLLAMA_FALLBACK_LOG_LOCK:
+            with path.open("a", encoding="utf-8") as log_file:
+                log_file.write(json.dumps(payload, ensure_ascii=False, sort_keys=True) + "\n")
+    except OSError:
+        logging.getLogger(LOGGER_NAME).exception("Failed to write Ollama fallback log")
+    return path

@@ -1,0 +1,72 @@
+{
+  "card_id": "react-useeffect-1",
+  "category": "react",
+  "term": "useeffect",
+  "aliases": [
+    "react useeffect"
+  ],
+  "source_question_ids": [
+    "react:78"
+  ],
+  "retrieval": {
+    "embedding_text": "useeffect react useeffect useeffect은(는) 비동기 데이터 페칭 시 useEffect에서 async를 직접 사용할 수 없는 이유는? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "useeffect",
+      "react"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "useeffect은(는) 비동기 데이터 페칭 시 useEffect에서 async를 직접 사용할 수 없는 이유는? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "useeffect 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "useeffect"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q78_option_2": {
+          "text": "useEffect의 콜백은 cleanup 함수만 반환해야 하는데, async는 Promise를 반환하기 때문",
+          "reason": "useeffect의 특성과 일치하지 않는 오답입니다."
+        },
+        "q78_option_3": {
+          "text": "React가 async를 지원하지 않는다",
+          "reason": "useeffect의 특성과 일치하지 않는 오답입니다."
+        },
+        "q78_option_4": {
+          "text": "성능 문제 때문",
+          "reason": "useeffect의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

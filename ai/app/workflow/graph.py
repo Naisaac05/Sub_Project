@@ -130,8 +130,11 @@ def candidate_save_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
         confidence_score=state.confidence.score if state.confidence else None,
         retrieved_concept_ids=[context.concept_id for context in state.contexts],
         fallback_used=state.fallback_used,
+        v2_miss_reason=str(state.v2_fast_path_decision.get("reason", "")) or None,
     )
     if not reason:
+        return state
+    if not state.answer.strip():
         return state
 
     candidate = build_auto_candidate(

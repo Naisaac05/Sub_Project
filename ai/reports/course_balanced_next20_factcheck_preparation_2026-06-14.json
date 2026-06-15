@@ -1,0 +1,720 @@
+{
+  "candidate_count": 20,
+  "source_packet_count": 20,
+  "payload_draft_count": 0,
+  "skipped_count": 0,
+  "FACTCHECK_SOURCE_PACKETS": {
+    "java-delegation": {
+      "course_id": "java",
+      "test_id": 3,
+      "question_id": 29,
+      "source_question_id": "java:29",
+      "question": "클래스 로더의 동작 원칙 중 '위임 모델(Delegation Model)'이란?",
+      "options": [
+        "자식 클래스 로더가 먼저 로딩을 시도한다",
+        "부모 클래스 로더에게 먼저 위임하고, 없으면 자식이 로딩한다",
+        "모든 클래스 로더가 동시에 로딩을 시도한다",
+        "Application 클래스 로더만 사용한다"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "부모 클래스 로더에게 먼저 위임하고, 없으면 자식이 로딩한다",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.16666666666666666,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9032258064516129,
+        "payload_length": 1810
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "java-completablefuture": {
+      "course_id": "java",
+      "test_id": 3,
+      "question_id": 28,
+      "source_question_id": "java:28",
+      "question": "CompletableFuture에서 thenApply와 thenCompose의 차이는?",
+      "options": [
+        "차이 없다",
+        "thenApply는 값 변환, thenCompose는 비동기 체이닝",
+        "thenCompose는 동기, thenApply는 비동기",
+        "thenApply만 예외 처리 가능"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "thenApply는 값 변환, thenCompose는 비동기 체이닝",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.15942028985507245,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.5416666666666666,
+        "duplicate_score": 0.88,
+        "payload_length": 1917
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "java-g1-gc": {
+      "course_id": "java",
+      "test_id": 3,
+      "question_id": 22,
+      "source_question_id": "java:22",
+      "question": "G1 GC의 특징으로 올바르지 않은 것은?",
+      "options": [
+        "Region 기반으로 힙을 관리한다",
+        "STW(Stop-The-World) 시간을 예측 가능하게 한다",
+        "Young/Old 영역이 물리적으로 고정되어 있다",
+        "Java 9부터 기본 GC이다"
+      ],
+      "correct_answer_index": 2,
+      "correct_answer": "Young/Old 영역이 물리적으로 고정되어 있다",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.14666666666666667,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.71875,
+        "payload_length": 1675
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "java-checked": {
+      "course_id": "java",
+      "test_id": 2,
+      "question_id": 15,
+      "source_question_id": "java:15",
+      "question": "Java에서 checked exception과 unchecked exception의 차이는?",
+      "options": [
+        "checked는 컴파일 시점에 처리가 강제된다",
+        "unchecked는 컴파일 시점에 처리가 강제된다",
+        "둘 다 반드시 try-catch가 필요하다",
+        "차이가 없다"
+      ],
+      "correct_answer_index": 0,
+      "correct_answer": "checked는 컴파일 시점에 처리가 강제된다",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.14285714285714285,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.875,
+        "payload_length": 1686
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "spring-responseentity": {
+      "course_id": "spring",
+      "test_id": 5,
+      "question_id": 50,
+      "source_question_id": "spring:50",
+      "question": "ResponseEntity를 사용하는 이유는?",
+      "options": [
+        "성능 향상",
+        "HTTP 상태 코드와 헤더를 직접 제어할 수 있다",
+        "자동으로 JSON 변환이 된다",
+        "보안이 강화된다"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "HTTP 상태 코드와 헤더를 직접 제어할 수 있다",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.16901408450704225,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8571428571428571,
+        "payload_length": 1704
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "spring-circuit": {
+      "course_id": "spring",
+      "test_id": 6,
+      "question_id": 58,
+      "source_question_id": "spring:58",
+      "question": "Circuit Breaker 패턴의 목적은?",
+      "options": [
+        "네트워크 암호화",
+        "장애가 전파되는 것을 방지하고 빠르게 실패를 반환한다",
+        "로드 밸런싱",
+        "서비스 디스커버리"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "장애가 전파되는 것을 방지하고 빠르게 실패를 반환한다",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.1643835616438356,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8571428571428571,
+        "payload_length": 1640
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "spring-valid": {
+      "course_id": "spring",
+      "test_id": 5,
+      "question_id": 49,
+      "source_question_id": "spring:49",
+      "question": "@Valid와 @Validated의 차이는?",
+      "options": [
+        "차이 없다",
+        "@Valid는 JSR-303 표준, @Validated는 Spring 전용으로 그룹 검증을 지원한다",
+        "@Validated는 Java 표준이다",
+        "@Valid만 Controller에서 사용 가능하다"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "@Valid는 JSR-303 표준, @Validated는 Spring 전용으로 그룹 검증을 지원한다",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.16901408450704225,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8620689655172413,
+        "payload_length": 1974
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "spring-profile": {
+      "course_id": "spring",
+      "test_id": 5,
+      "question_id": 47,
+      "source_question_id": "spring:47",
+      "question": "Spring에서 프로파일(Profile)의 용도는?",
+      "options": [
+        "코드 성능 분석",
+        "환경별(dev/prod) 설정 분리",
+        "사용자 프로필 관리",
+        "로깅 레벨 설정"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "환경별(dev/prod) 설정 분리",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.15492957746478872,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8148148148148148,
+        "payload_length": 1537
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "frontend-usecallback": {
+      "course_id": "frontend",
+      "test_id": 8,
+      "question_id": 74,
+      "source_question_id": "frontend:74",
+      "question": "useCallback과 useMemo의 차이는?",
+      "options": [
+        "차이 없다",
+        "useCallback은 함수를 메모이제이션, useMemo는 값을 메모이제이션",
+        "useMemo는 함수를 메모이제이션, useCallback은 값을 메모이제이션",
+        "useCallback은 클래스 컴포넌트 전용"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "useCallback은 함수를 메모이제이션, useMemo는 값을 메모이제이션",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.13043478260869565,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9130434782608695,
+        "payload_length": 1931
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "frontend-functional-component": {
+      "course_id": "frontend",
+      "test_id": 7,
+      "question_id": 66,
+      "source_question_id": "frontend:66",
+      "question": "함수형 컴포넌트의 올바른 선언 방법은?",
+      "options": [
+        "function App { return <div/> }",
+        "function App() { return <div/> }",
+        "class App() { return <div/> }",
+        "def App(): return <div/>"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "function App() { return <div/> }",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.1232876712328767,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9130434782608695,
+        "payload_length": 1920
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "frontend-conditional-rendering": {
+      "course_id": "frontend",
+      "test_id": 7,
+      "question_id": 67,
+      "source_question_id": "frontend:67",
+      "question": "React에서 조건부 렌더링에 사용할 수 없는 방법은?",
+      "options": [
+        "삼항 연산자 (? :)",
+        "&& 연산자",
+        "if-else (JSX 내부에서 직접)",
+        "조건 함수 호출"
+      ],
+      "correct_answer_index": 2,
+      "correct_answer": "if-else (JSX 내부에서 직접)",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.1232876712328767,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9565217391304348,
+        "payload_length": 1699
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "frontend-react-server-components": {
+      "course_id": "frontend",
+      "test_id": 9,
+      "question_id": 83,
+      "source_question_id": "frontend:83",
+      "question": "React Server Components(RSC)의 특징이 아닌 것은?",
+      "options": [
+        "서버에서만 실행된다",
+        "클라이언트 번들에 포함되지 않는다",
+        "useState를 사용할 수 있다",
+        "데이터베이스에 직접 접근 가능하다"
+      ],
+      "correct_answer_index": 2,
+      "correct_answer": "useState를 사용할 수 있다",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.1111111111111111,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.7692307692307693,
+        "payload_length": 1752
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "python-multiline-string": {
+      "course_id": "python",
+      "test_id": 10,
+      "question_id": 94,
+      "source_question_id": "python:94",
+      "question": "Python에서 여러 줄 문자열을 표현하는 방법은?",
+      "options": [
+        "\"\"\"텍스트\"\"\"",
+        "'''텍스트'''",
+        "\"\"\"텍스트\"\"\" 또는 '''텍스트'''",
+        "<<텍스트>>"
+      ],
+      "correct_answer_index": 2,
+      "correct_answer": "\"\"\"텍스트\"\"\" 또는 '''텍스트'''",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.11594202898550725,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 1.0,
+        "payload_length": 1605
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "python-dictionary": {
+      "course_id": "python",
+      "test_id": 10,
+      "question_id": 92,
+      "source_question_id": "python:92",
+      "question": "Python에서 딕셔너리를 생성하는 올바른 방법은?",
+      "options": [
+        "d = [key: value]",
+        "d = {key: value}",
+        "d = (key, value)",
+        "d = <key, value>"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "d = {key: value}",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.11594202898550725,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 1.0,
+        "payload_length": 1521
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "python-fstring": {
+      "course_id": "python",
+      "test_id": 10,
+      "question_id": 99,
+      "source_question_id": "python:99",
+      "question": "f-string 포매팅의 올바른 예시는?",
+      "options": [
+        "f'이름은 {name}입니다'",
+        "'이름은 ${name}입니다'",
+        "f'이름은 (name)입니다'",
+        "'이름은 #{name}입니다'"
+      ],
+      "correct_answer_index": 0,
+      "correct_answer": "f'이름은 {name}입니다'",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.11594202898550725,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 1.0,
+        "payload_length": 1489
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "python-multiprocessing": {
+      "course_id": "python",
+      "test_id": 12,
+      "question_id": 119,
+      "source_question_id": "python:119",
+      "question": "multiprocessing과 threading의 사용 시나리오로 올바른 것은?",
+      "options": [
+        "CPU-bound → threading, I/O-bound → multiprocessing",
+        "CPU-bound → multiprocessing, I/O-bound → threading",
+        "둘 다 CPU-bound에 적합",
+        "둘 다 I/O-bound에 적합"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "CPU-bound → multiprocessing, I/O-bound → threading",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.11428571428571428,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 1.0,
+        "payload_length": 2037
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "algorithm-5": {
+      "course_id": "algorithm",
+      "test_id": 13,
+      "question_id": 128,
+      "source_question_id": "algorithm:128",
+      "question": "삽입 정렬이 효율적인 경우는?",
+      "options": [
+        "완전히 역순으로 정렬된 경우",
+        "데이터가 거의 정렬되어 있는 경우",
+        "데이터가 매우 큰 경우",
+        "모든 경우에 동일"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "데이터가 거의 정렬되어 있는 경우",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.125,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8461538461538461,
+        "payload_length": 1619
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "algorithm-linked": {
+      "course_id": "algorithm",
+      "test_id": 13,
+      "question_id": 127,
+      "source_question_id": "algorithm:127",
+      "question": "연결 리스트(Linked List)의 장점은?",
+      "options": [
+        "인덱스 접근이 O(1)이다",
+        "삽입/삭제가 O(1)이다 (위치를 알 때)",
+        "메모리를 적게 사용한다",
+        "정렬이 빠르다"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "삽입/삭제가 O(1)이다 (위치를 알 때)",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.125,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8461538461538461,
+        "payload_length": 1521
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "algorithm-4": {
+      "course_id": "algorithm",
+      "test_id": 13,
+      "question_id": 126,
+      "source_question_id": "algorithm:126",
+      "question": "재귀 함수에 반드시 필요한 것은?",
+      "options": [
+        "반복문",
+        "기저 조건(Base Case)",
+        "전역 변수",
+        "배열"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "기저 조건(Base Case)",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.11267605633802817,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9130434782608695,
+        "payload_length": 1546
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    },
+    "algorithm-7": {
+      "course_id": "algorithm",
+      "test_id": 13,
+      "question_id": 130,
+      "source_question_id": "algorithm:130",
+      "question": "선택 정렬의 동작 방식은?",
+      "options": [
+        "인접한 두 요소를 비교하여 교환",
+        "최솟값을 찾아 맨 앞과 교환",
+        "이미 정렬된 부분에 삽입",
+        "배열을 반으로 나눠 정렬"
+      ],
+      "correct_answer_index": 1,
+      "correct_answer": "최솟값을 찾아 맨 앞과 교환",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.11267605633802817,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.75,
+        "payload_length": 1596
+      },
+      "preparation_requirements": [
+        "실제 테스트 문제와 정답을 기준으로 payload 결함을 확인한다.",
+        "선택지별 오답 이유와 실제 동작 예제를 fact-check 후 작성한다."
+      ]
+    }
+  },
+  "PREPARATION_BACKLOG": [
+    "java-delegation",
+    "java-completablefuture",
+    "java-g1-gc",
+    "java-checked",
+    "spring-responseentity",
+    "spring-circuit",
+    "spring-valid",
+    "spring-profile",
+    "frontend-usecallback",
+    "frontend-functional-component",
+    "frontend-conditional-rendering",
+    "frontend-react-server-components",
+    "python-multiline-string",
+    "python-dictionary",
+    "python-fstring",
+    "python-multiprocessing",
+    "algorithm-5",
+    "algorithm-linked",
+    "algorithm-4",
+    "algorithm-7"
+  ],
+  "cards_by_course": {
+    "java": {
+      "candidate": 4,
+      "source_ready": 4,
+      "source_missing": 0
+    },
+    "spring": {
+      "candidate": 4,
+      "source_ready": 4,
+      "source_missing": 0
+    },
+    "frontend": {
+      "candidate": 4,
+      "source_ready": 4,
+      "source_missing": 0
+    },
+    "python": {
+      "candidate": 4,
+      "source_ready": 4,
+      "source_missing": 0
+    },
+    "algorithm": {
+      "candidate": 4,
+      "source_ready": 4,
+      "source_missing": 0
+    }
+  },
+  "skipped_cards": [],
+  "skip_reasons": {},
+  "selection_skip_reasons": {},
+  "execution_performed": false,
+  "card_files_modified": false,
+  "patches_ready_created": false,
+  "json_validation_result": "pass"
+}

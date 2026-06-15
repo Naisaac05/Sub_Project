@@ -1,0 +1,115 @@
+{
+  "card_id": "java-concurrenthashmap",
+  "category": "java",
+  "term": "concurrenthashmap",
+  "aliases": [
+    "c",
+    "자바 c",
+    "concurrenthashmap",
+    "java concurrenthashmap",
+    "자바 concurrenthashmap"
+  ],
+  "source_question_ids": [
+    "java:26"
+  ],
+  "retrieval": {
+    "embedding_text": "concurrenthashmap c 자바 c java 버킷 세그먼트 자바 concurrenthashmap java concurrenthashmap java-concurrenthashmap",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "버킷",
+      "세그먼트",
+      "자바 c",
+      "concurrenthashmap",
+      "자바 concurrenthashmap",
+      "java concurrenthashmap",
+      "java-concurrenthashmap"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "concurrenthashmap is a java concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as concurrenthashmap, java-concurrenthashmap, java concurrenthashmap.",
+      "examples": [
+        "Explain when concurrenthashmap should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of concurrenthashmap, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals concurrenthashmap, java-concurrenthashmap, java concurrenthashmap.",
+      "key_points": [
+        "concurrenthashmap",
+        "java",
+        "java concurrenthashmap"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy concurrenthashmap's defining behavior.",
+        "Confusing concurrenthashmap with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "해시 함수가 더 빠르다",
+          "reason": "해시 함수가 더 빠르다 is not the best answer because it does not satisfy the defining behavior or constraint of concurrenthashmap. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "동기화를 하지 않는다",
+          "reason": "동기화를 하지 않는다 is not the best answer because it does not satisfy the defining behavior or constraint of concurrenthashmap. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "LinkedList 대신 배열을 사용한다",
+          "reason": "LinkedList 대신 배열을 사용한다 is not the best answer because it does not satisfy the defining behavior or constraint of concurrenthashmap. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against concurrenthashmap."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate concurrenthashmap in an appropriate java context.",
+      "explanation": "Use a minimal example that makes concurrenthashmap's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply concurrenthashmap in java work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why concurrenthashmap is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying concurrenthashmap without checking its defining constraint.",
+          "solution": "Re-check concurrenthashmap's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.812130Z"
+}

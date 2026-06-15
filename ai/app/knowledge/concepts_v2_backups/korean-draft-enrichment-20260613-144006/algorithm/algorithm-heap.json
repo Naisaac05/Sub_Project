@@ -1,0 +1,115 @@
+{
+  "card_id": "algorithm-heap",
+  "category": "algorithm",
+  "term": "heap",
+  "aliases": [
+    "h",
+    "heap",
+    "알고리즘 h",
+    "algorithm heap",
+    "알고리즘 heap"
+  ],
+  "source_question_ids": [
+    "algorithm:138"
+  ],
+  "retrieval": {
+    "embedding_text": "heap h 알고리즘 h algorithm 완전 이진 알고리즘 heap algorithm heap algorithm-heap",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "완전",
+      "이진",
+      "heap",
+      "알고리즘 h",
+      "알고리즘 heap",
+      "algorithm heap",
+      "algorithm-heap"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "heap is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as heap, algorithm-heap, algorithm heap.",
+      "examples": [
+        "Explain when heap should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of heap, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals heap, algorithm-heap, algorithm heap.",
+      "key_points": [
+        "heap",
+        "algorithm",
+        "algorithm heap"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy heap's defining behavior.",
+        "Confusing heap with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "완전 정렬된 트리",
+          "reason": "완전 정렬된 트리 is not the best answer because it does not satisfy the defining behavior or constraint of heap. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "이진 탐색 트리의 일종",
+          "reason": "이진 탐색 트리의 일종 is not the best answer because it does not satisfy the defining behavior or constraint of heap. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "선형 자료구조",
+          "reason": "선형 자료구조 is not the best answer because it does not satisfy the defining behavior or constraint of heap. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against heap."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate heap in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes heap's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply heap in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why heap is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying heap without checking its defining constraint.",
+          "solution": "Re-check heap's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.550637Z"
+}

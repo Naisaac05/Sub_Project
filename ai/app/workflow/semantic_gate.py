@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.evaluation.semantic import judge_answer_semantics, should_cache_answer
-from app.workflow.nodes import _context_text
+from app.workflow.nodes import _context_text, _fallback_for_state, _fallback_message
 from app.workflow.state import ReviewWorkflowState
 
 
@@ -17,6 +17,12 @@ def semantic_evaluate_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
         context_text=_context_text(state),
         existing_quality_flags=state.quality_flags,
     )
+    if "contradiction_suspected" in state.quality_flags and not state.fallback_used:
+        state.fallback_reason = "quality_validation"
+        state.answer = f"{_fallback_message(state.fallback_reason)} {_fallback_for_state(state)}"
+        state.model_used = "template"
+        state.fallback_used = True
+        state.route = "fallback_template"
     return state
 
 

@@ -1,0 +1,115 @@
+{
+  "card_id": "spring-mvc",
+  "category": "spring",
+  "term": "mvc",
+  "aliases": [
+    "m",
+    "mvc",
+    "스프링 m",
+    "spring mvc",
+    "스프링 mvc"
+  ],
+  "source_question_ids": [
+    "spring:41"
+  ],
+  "retrieval": {
+    "embedding_text": "mvc m 스프링 m spring 스프링 mvc spring mvc spring-mvc handlermapping dispatcherservlet",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "mvc",
+      "스프링 m",
+      "스프링 mvc",
+      "spring mvc",
+      "spring-mvc",
+      "handlermapping",
+      "dispatcherservlet"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "mvc is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as mvc, spring-mvc, spring mvc.",
+      "examples": [
+        "Explain when mvc should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of mvc, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals mvc, spring-mvc, spring mvc.",
+      "key_points": [
+        "mvc",
+        "spring",
+        "spring mvc"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy mvc's defining behavior.",
+        "Confusing mvc with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "Filter → Controller → Service → DispatcherServlet",
+          "reason": "Filter → Controller → Service → DispatcherServlet is not the best answer because it does not satisfy the defining behavior or constraint of mvc. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "Controller → DispatcherServlet → View",
+          "reason": "Controller → DispatcherServlet → View is not the best answer because it does not satisfy the defining behavior or constraint of mvc. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "HandlerMapping → Filter → Controller → Service",
+          "reason": "HandlerMapping → Filter → Controller → Service is not the best answer because it does not satisfy the defining behavior or constraint of mvc. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against mvc."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate mvc in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes mvc's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply mvc in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why mvc is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying mvc without checking its defining constraint.",
+          "solution": "Re-check mvc's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:23.223426Z"
+}

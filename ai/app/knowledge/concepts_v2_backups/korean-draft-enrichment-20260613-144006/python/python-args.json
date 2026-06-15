@@ -1,0 +1,115 @@
+{
+  "card_id": "python-args",
+  "category": "python",
+  "term": "args",
+  "aliases": [
+    "a",
+    "args",
+    "파이썬 a",
+    "python args",
+    "파이썬 args"
+  ],
+  "source_question_ids": [
+    "python:107"
+  ],
+  "retrieval": {
+    "embedding_text": "args a 파이썬 a python 위치 인자를 파이썬 args python args python-args",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "위치",
+      "인자를",
+      "args",
+      "파이썬 a",
+      "파이썬 args",
+      "python args",
+      "python-args"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "args is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as args, python-args, python args.",
+      "examples": [
+        "Explain when args should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of args, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals args, python-args, python args.",
+      "key_points": [
+        "args",
+        "python",
+        "python args"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy args's defining behavior.",
+        "Confusing args with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "차이 없다",
+          "reason": "차이 없다 is not the best answer because it does not satisfy the defining behavior or constraint of args. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "*args는 딕셔너리, **kwargs는 리스트",
+          "reason": "*args는 딕셔너리, **kwargs는 리스트 is not the best answer because it does not satisfy the defining behavior or constraint of args. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "*args만 가변 인자이다",
+          "reason": "*args만 가변 인자이다 is not the best answer because it does not satisfy the defining behavior or constraint of args. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against args."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate args in an appropriate python context.",
+      "explanation": "Use a minimal example that makes args's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply args in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why args is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying args without checking its defining constraint.",
+          "solution": "Re-check args's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.970340Z"
+}

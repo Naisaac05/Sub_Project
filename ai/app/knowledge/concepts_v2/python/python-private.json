@@ -1,0 +1,113 @@
+{
+  "card_id": "python-private",
+  "category": "python",
+  "term": "private",
+  "aliases": [
+    "private",
+    "속성 이름 앞에 언더스코어 (_) 또는 더블 언더스코어 (__)",
+    "Python에서 private 속성을 나타내는 관례는?",
+    "Python",
+    "python private"
+  ],
+  "source_question_ids": [
+    "python:108"
+  ],
+  "retrieval": {
+    "embedding_text": "private 속성 이름 앞에 언더스코어 (_) 또는 더블 언더스코어 (__) Python에서 private 속성을 나타내는 관례는? python 에서 속성을 나타내는 관례는 속성 이름",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "private",
+      "에서",
+      "속성을",
+      "나타내는",
+      "관례는",
+      "속성",
+      "이름"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Python은 접근을 강제하는 private 키워드 대신 밑줄 이름 규약과 이름 맹글링을 사용한다.",
+      "examples": [
+        "밑줄 관례 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "단일 밑줄은 내부용 관례이고 이중 밑줄은 클래스 이름 기반 맹글링을 적용한다.",
+      "key_points": [
+        "밑줄 관례",
+        "이름 맹글링",
+        "private"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "@private 어노테이션",
+          "reason": "Python에는 @private 표준 애너테이션이 없다."
+        },
+        "option_2": {
+          "text": "private 키워드 사용",
+          "reason": "private 접근 제어 키워드를 지원하지 않는다."
+        },
+        "option_3": {
+          "text": "# private 주석 추가",
+          "reason": "주석은 접근 관례나 이름 맹글링을 만들지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`속성 이름 앞에 언더스코어 (_) 또는 더블 언더스코어 (__)`는 질문의 조건을 충족하지만 다른 선택지는 `private`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "class User:\n    def __init__(self): self._name = \"A\"; self.__token = 1\nuser = User()",
+      "explanation": "밑줄 관례 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "밑줄 관례 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`private`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `속성 이름 앞에 언더스코어 (_) 또는 더블 언더스코어 (__)`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

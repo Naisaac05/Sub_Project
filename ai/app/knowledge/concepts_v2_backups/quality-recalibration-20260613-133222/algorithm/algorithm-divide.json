@@ -1,0 +1,113 @@
+{
+  "card_id": "algorithm-divide",
+  "category": "algorithm",
+  "term": "divide",
+  "aliases": [
+    "divide",
+    "algorithm divide",
+    "알고리즘 divide"
+  ],
+  "source_question_ids": [
+    "algorithm:140"
+  ],
+  "retrieval": {
+    "embedding_text": "divide algorithm divide 알고리즘 divide algorithm algorithm-divide 병합 정렬 merge",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "divide",
+      "algorithm-divide",
+      "algorithm divide",
+      "알고리즘 divide",
+      "병합",
+      "정렬",
+      "merge"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "divide is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as divide, algorithm-divide, algorithm divide.",
+      "examples": [
+        "Explain when divide should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of divide, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals divide, algorithm-divide, algorithm divide.",
+      "key_points": [
+        "divide",
+        "algorithm",
+        "algorithm divide"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy divide's defining behavior.",
+        "Confusing divide with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "버블 정렬",
+          "reason": "버블 정렬 is not the best answer because it does not satisfy the defining behavior or constraint of divide. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "삽입 정렬",
+          "reason": "삽입 정렬 is not the best answer because it does not satisfy the defining behavior or constraint of divide. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "선택 정렬",
+          "reason": "선택 정렬 is not the best answer because it does not satisfy the defining behavior or constraint of divide. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against divide."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate divide in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes divide's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply divide in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why divide is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying divide without checking its defining constraint.",
+          "solution": "Re-check divide's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.445455Z"
+}

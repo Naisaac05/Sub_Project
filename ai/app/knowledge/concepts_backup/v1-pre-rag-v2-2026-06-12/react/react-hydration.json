@@ -1,0 +1,72 @@
+{
+  "card_id": "react-hydration",
+  "category": "react",
+  "term": "hydration",
+  "aliases": [
+    "react hydration"
+  ],
+  "source_question_ids": [
+    "react:88"
+  ],
+  "retrieval": {
+    "embedding_text": "hydration react hydration hydration은(는) Hydration이란? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "hydration",
+      "react"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "hydration은(는) Hydration이란? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "hydration 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "hydration"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q88_option_2": {
+          "text": "서버에서 렌더링된 HTML에 클라이언트 JavaScript 이벤트와 상태를 연결하는 과정",
+          "reason": "hydration의 특성과 일치하지 않는 오답입니다."
+        },
+        "q88_option_3": {
+          "text": "데이터 직렬화",
+          "reason": "hydration의 특성과 일치하지 않는 오답입니다."
+        },
+        "q88_option_4": {
+          "text": "메모리 해제",
+          "reason": "hydration의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.066248Z",
+  "updated_at": "2026-06-10T11:01:08.066248Z"
+}

@@ -1,0 +1,113 @@
+{
+  "card_id": "frontend-useref",
+  "category": "frontend",
+  "term": "useref",
+  "aliases": [
+    "useref",
+    "frontend useref",
+    "프론트엔드 useref"
+  ],
+  "source_question_ids": [
+    "frontend:77"
+  ],
+  "retrieval": {
+    "embedding_text": "useref frontend useref 프론트엔드 useref frontend frontend-useref 상태를 변경하고 리렌더링을",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "useref",
+      "frontend-useref",
+      "frontend useref",
+      "프론트엔드 useref",
+      "상태를",
+      "변경하고",
+      "리렌더링을"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "useref is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as useref, frontend-useref, frontend useref.",
+      "examples": [
+        "Explain when useref should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of useref, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals useref, frontend-useref, frontend useref.",
+      "key_points": [
+        "useref",
+        "frontend",
+        "frontend useref"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy useref's defining behavior.",
+        "Confusing useref with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "DOM 요소에 직접 접근",
+          "reason": "DOM 요소에 직접 접근 is not the best answer because it does not satisfy the defining behavior or constraint of useref. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "렌더링 간 값을 유지 (리렌더링 없이)",
+          "reason": "렌더링 간 값을 유지 (리렌더링 없이) is not the best answer because it does not satisfy the defining behavior or constraint of useref. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "이전 값을 저장",
+          "reason": "이전 값을 저장 is not the best answer because it does not satisfy the defining behavior or constraint of useref. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against useref."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate useref in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes useref's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply useref in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why useref is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying useref without checking its defining constraint.",
+          "solution": "Re-check useref's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.639581Z"
+}

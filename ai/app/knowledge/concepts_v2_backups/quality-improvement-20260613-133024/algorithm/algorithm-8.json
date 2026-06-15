@@ -1,0 +1,80 @@
+{
+  "card_id": "algorithm-8",
+  "category": "algorithm",
+  "term": "다이나믹",
+  "aliases": [
+    "다이나믹",
+    "algorithm 다이나믹"
+  ],
+  "source_question_ids": [
+    "algorithm:136"
+  ],
+  "retrieval": {
+    "embedding_text": "다이나믹 algorithm 다이나믹 algorithm 최적 부분 구조와 중복",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "다이나믹",
+      "algorithm",
+      "algorithm 다이나믹",
+      "최적",
+      "부분",
+      "구조와",
+      "중복"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "다이나믹의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 다이나믹의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "다이나믹",
+        "algorithm",
+        "algorithm 다이나믹"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q136_option_0": {
+          "text": "정렬과 탐색",
+          "reason": "다이나믹 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q136_option_2": {
+          "text": "분할과 병합",
+          "reason": "다이나믹 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q136_option_3": {
+          "text": "그리디와 백트래킹",
+          "reason": "다이나믹 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

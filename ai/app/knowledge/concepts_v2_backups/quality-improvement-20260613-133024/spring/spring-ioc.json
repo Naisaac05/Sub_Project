@@ -1,0 +1,80 @@
+{
+  "card_id": "spring-ioc",
+  "category": "spring",
+  "term": "ioc",
+  "aliases": [
+    "ioc",
+    "spring ioc"
+  ],
+  "source_question_ids": [
+    "spring:31"
+  ],
+  "retrieval": {
+    "embedding_text": "ioc spring ioc spring 프레임워크가 객체의 생성과 생명주기를",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "ioc",
+      "spring",
+      "spring ioc",
+      "프레임워크가",
+      "객체의",
+      "생성과",
+      "생명주기를"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "ioc의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 ioc의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "ioc",
+        "spring",
+        "spring ioc"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q31_option_0": {
+          "text": "개발자가 직접 객체를 생성하고 관리한다",
+          "reason": "ioc 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q31_option_2": {
+          "text": "모든 객체를 싱글턴으로 만든다",
+          "reason": "ioc 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q31_option_3": {
+          "text": "인터페이스를 반드시 사용해야 한다",
+          "reason": "ioc 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

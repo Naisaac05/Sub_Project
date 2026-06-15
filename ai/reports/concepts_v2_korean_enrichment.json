@@ -1,0 +1,584 @@
+{
+  "total_cards": 142,
+  "improved_cards": 137,
+  "approved_cards_unchanged": true,
+  "modified_files": [
+    "algorithm\\algorithm-10.json",
+    "algorithm\\algorithm-11.json",
+    "algorithm\\algorithm-12.json",
+    "algorithm\\algorithm-13.json",
+    "algorithm\\algorithm-14.json",
+    "algorithm\\algorithm-2.json",
+    "algorithm\\algorithm-3.json",
+    "algorithm\\algorithm-4.json",
+    "algorithm\\algorithm-5.json",
+    "algorithm\\algorithm-6.json",
+    "algorithm\\algorithm-7.json",
+    "algorithm\\algorithm-8.json",
+    "algorithm\\algorithm-9.json",
+    "algorithm\\algorithm-binary.json",
+    "algorithm\\algorithm-breadth-first-search.json",
+    "algorithm\\algorithm-bst.json",
+    "algorithm\\algorithm-collision.json",
+    "algorithm\\algorithm-dfs.json",
+    "algorithm\\algorithm-divide.json",
+    "algorithm\\algorithm-heap.json",
+    "algorithm\\algorithm-knapsack.json",
+    "algorithm\\algorithm-lcs.json",
+    "algorithm\\algorithm-linked.json",
+    "algorithm\\algorithm-mst.json",
+    "algorithm\\algorithm-np.json",
+    "algorithm\\algorithm-queue.json",
+    "algorithm\\algorithm-stack.json",
+    "algorithm\\algorithm-topological.json",
+    "algorithm\\algorithm-unionfind.json",
+    "algorithm\\algorithm.json",
+    "frontend\\frontend-2.json",
+    "frontend\\frontend-button.json",
+    "frontend\\frontend-code.json",
+    "frontend\\frontend-concurrent.json",
+    "frontend\\frontend-conditional-rendering.json",
+    "frontend\\frontend-context.json",
+    "frontend\\frontend-controlled-uncontrolled-components.json",
+    "frontend\\frontend-custom.json",
+    "frontend\\frontend-dom.json",
+    "frontend\\frontend-error.json",
+    "frontend\\frontend-fiber.json",
+    "frontend\\frontend-functional-component.json",
+    "frontend\\frontend-hook.json",
+    "frontend\\frontend-hydration.json",
+    "frontend\\frontend-jsx-expression.json",
+    "frontend\\frontend-nextjs.json",
+    "frontend\\frontend-react-project-tool.json",
+    "frontend\\frontend-react-server-components.json",
+    "frontend\\frontend-reactmemo.json",
+    "frontend\\frontend-router.json",
+    "frontend\\frontend-streaming.json",
+    "frontend\\frontend-suspense.json",
+    "frontend\\frontend-usecallback.json",
+    "frontend\\frontend-useeffect.json",
+    "frontend\\frontend-useref.json",
+    "frontend\\frontend-usestate.json",
+    "frontend\\frontend.json",
+    "java\\java-access-modifier.json",
+    "java\\java-array-length.json",
+    "java\\java-arraylist.json",
+    "java\\java-checked.json",
+    "java\\java-completablefuture.json",
+    "java\\java-concurrenthashmap.json",
+    "java\\java-default.json",
+    "java\\java-delegation.json",
+    "java\\java-extends-keyword.json",
+    "java\\java-final-keyword.json",
+    "java\\java-functional-interface.json",
+    "java\\java-g1-gc.json",
+    "java\\java-hashmap.json",
+    "java\\java-int-variable.json",
+    "java\\java-jvm.json",
+    "java\\java-loop-control.json",
+    "java\\java-main.json",
+    "java\\java-optional.json",
+    "java\\java-primitive.json",
+    "java\\java-reflection.json",
+    "java\\java-solid.json",
+    "java\\java-stream.json",
+    "java\\java-string.json",
+    "java\\java-synchronized.json",
+    "java\\java-threadsafe.json",
+    "java\\java-volatile.json",
+    "python\\python-2.json",
+    "python\\python-3.json",
+    "python\\python-args.json",
+    "python\\python-asyncio.json",
+    "python\\python-cpython.json",
+    "python\\python-decorator.json",
+    "python\\python-def.json",
+    "python\\python-dictionary.json",
+    "python\\python-fstring.json",
+    "python\\python-function-definition.json",
+    "python\\python-generator.json",
+    "python\\python-gil.json",
+    "python\\python-immutable.json",
+    "python\\python-list-comprehension.json",
+    "python\\python-metaclass.json",
+    "python\\python-mro.json",
+    "python\\python-multiline-string.json",
+    "python\\python-multiprocessing.json",
+    "python\\python-negative-indexing.json",
+    "python\\python-none.json",
+    "python\\python-private.json",
+    "python\\python-range.json",
+    "python\\python-slots.json",
+    "python\\python-staticmethod.json",
+    "python\\python-tryexceptelsefinally.json",
+    "python\\python-typing.json",
+    "python\\python-weakref.json",
+    "python\\python-with-statement.json",
+    "python\\python.json",
+    "spring\\spring-aop.json",
+    "spring\\spring-applicationyml.json",
+    "spring\\spring-async.json",
+    "spring\\spring-autowired.json",
+    "spring\\spring-batch.json",
+    "spring\\spring-boot.json",
+    "spring\\spring-circuit.json",
+    "spring\\spring-controller.json",
+    "spring\\spring-dependency-injection.json",
+    "spring\\spring-embedded-tomcat.json",
+    "spring\\spring-ioc.json",
+    "spring\\spring-jpa.json",
+    "spring\\spring-msa.json",
+    "spring\\spring-mvc.json",
+    "spring\\spring-phantom.json",
+    "spring\\spring-profile.json",
+    "spring\\spring-querydsl.json",
+    "spring\\spring-requestmapping.json",
+    "spring\\spring-requiresnew.json",
+    "spring\\spring-responseentity.json",
+    "spring\\spring-security.json",
+    "spring\\spring-service.json",
+    "spring\\spring-spring-bean-scope.json",
+    "spring\\spring-transactional.json",
+    "spring\\spring-valid.json"
+  ],
+  "representative_before": {
+    "java-primitive": {
+      "CONCEPT_DEFINITION": {
+        "content": "primitive is a java concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as primitive, java-primitive, java primitive.",
+        "examples": [
+          "Explain when primitive should be used and name one important constraint."
+        ]
+      },
+      "ANSWER_REASON": {
+        "why_correct": "The answer is correct because it matches the defining behavior of primitive, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals primitive, java-primitive, java primitive.",
+        "key_points": [
+          "primitive",
+          "java",
+          "java primitive"
+        ]
+      },
+      "WRONG_ANSWER_REASON": {
+        "common_mistakes": [
+          "Choosing an option that mentions related terminology but does not satisfy primitive's defining behavior.",
+          "Confusing primitive with a neighboring concept that has a different responsibility or constraint."
+        ],
+        "per_option": {
+          "option_0": {
+            "text": "int",
+            "reason": "int is not the best answer because it does not satisfy the defining behavior or constraint of primitive. Compare the option's responsibility directly with the concept."
+          },
+          "option_1": {
+            "text": "boolean",
+            "reason": "boolean is not the best answer because it does not satisfy the defining behavior or constraint of primitive. Compare the option's responsibility directly with the concept."
+          },
+          "option_2": {
+            "text": "double",
+            "reason": "double is not the best answer because it does not satisfy the defining behavior or constraint of primitive. Compare the option's responsibility directly with the concept."
+          }
+        }
+      },
+      "COMPARISON": {
+        "comparisons": [
+          {
+            "with": "related concept",
+            "diff": "Compare responsibilities, constraints, and use cases against primitive."
+          }
+        ]
+      },
+      "EXAMPLE_REQUEST": {
+        "code_example": "# Demonstrate primitive in an appropriate java context.",
+        "explanation": "Use a minimal example that makes primitive's defining behavior and boundary visible."
+      },
+      "PRACTICAL_USAGE": {
+        "real_world": "Apply primitive in java work when its responsibility and constraints match the problem.",
+        "best_practices": [
+          "State why primitive is appropriate before applying it.",
+          "Verify edge cases and trade-offs with a focused test."
+        ]
+      },
+      "DEBUG_OR_ERROR": {
+        "common_errors": [
+          {
+            "error": "Applying primitive without checking its defining constraint.",
+            "solution": "Re-check primitive's responsibility, inputs, outputs, and boundary conditions."
+          }
+        ]
+      }
+    },
+    "python-decorator": {
+      "CONCEPT_DEFINITION": {
+        "content": "decorator is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as decorator, python-decorator, python decorator.",
+        "examples": [
+          "Explain when decorator should be used and name one important constraint."
+        ]
+      },
+      "ANSWER_REASON": {
+        "why_correct": "The answer is correct because it matches the defining behavior of decorator, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals decorator, python-decorator, python decorator.",
+        "key_points": [
+          "decorator",
+          "python",
+          "python decorator"
+        ]
+      },
+      "WRONG_ANSWER_REASON": {
+        "common_mistakes": [
+          "Choosing an option that mentions related terminology but does not satisfy decorator's defining behavior.",
+          "Confusing decorator with a neighboring concept that has a different responsibility or constraint."
+        ],
+        "per_option": {
+          "option_0": {
+            "text": "클래스를 생성한다",
+            "reason": "클래스를 생성한다 is not the best answer because it does not satisfy the defining behavior or constraint of decorator. Compare the option's responsibility directly with the concept."
+          },
+          "option_1": {
+            "text": "변수를 상수로 만든다",
+            "reason": "변수를 상수로 만든다 is not the best answer because it does not satisfy the defining behavior or constraint of decorator. Compare the option's responsibility directly with the concept."
+          },
+          "option_2": {
+            "text": "메모리를 해제한다",
+            "reason": "메모리를 해제한다 is not the best answer because it does not satisfy the defining behavior or constraint of decorator. Compare the option's responsibility directly with the concept."
+          }
+        }
+      },
+      "COMPARISON": {
+        "comparisons": [
+          {
+            "with": "related concept",
+            "diff": "Compare responsibilities, constraints, and use cases against decorator."
+          }
+        ]
+      },
+      "EXAMPLE_REQUEST": {
+        "code_example": "# Demonstrate decorator in an appropriate python context.",
+        "explanation": "Use a minimal example that makes decorator's defining behavior and boundary visible."
+      },
+      "PRACTICAL_USAGE": {
+        "real_world": "Apply decorator in python work when its responsibility and constraints match the problem.",
+        "best_practices": [
+          "State why decorator is appropriate before applying it.",
+          "Verify edge cases and trade-offs with a focused test."
+        ]
+      },
+      "DEBUG_OR_ERROR": {
+        "common_errors": [
+          {
+            "error": "Applying decorator without checking its defining constraint.",
+            "solution": "Re-check decorator's responsibility, inputs, outputs, and boundary conditions."
+          }
+        ]
+      }
+    },
+    "python-private": {
+      "CONCEPT_DEFINITION": {
+        "content": "private is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as private, python-private, python private.",
+        "examples": [
+          "Explain when private should be used and name one important constraint."
+        ]
+      },
+      "ANSWER_REASON": {
+        "why_correct": "The answer is correct because it matches the defining behavior of private, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals private, python-private, python private.",
+        "key_points": [
+          "private",
+          "python",
+          "python private"
+        ]
+      },
+      "WRONG_ANSWER_REASON": {
+        "common_mistakes": [
+          "Choosing an option that mentions related terminology but does not satisfy private's defining behavior.",
+          "Confusing private with a neighboring concept that has a different responsibility or constraint."
+        ],
+        "per_option": {
+          "option_0": {
+            "text": "@private 어노테이션",
+            "reason": "@private 어노테이션 is not the best answer because it does not satisfy the defining behavior or constraint of private. Compare the option's responsibility directly with the concept."
+          },
+          "option_1": {
+            "text": "private 키워드 사용",
+            "reason": "private 키워드 사용 is not the best answer because it does not satisfy the defining behavior or constraint of private. Compare the option's responsibility directly with the concept."
+          },
+          "option_2": {
+            "text": "# private 주석 추가",
+            "reason": "# private 주석 추가 is not the best answer because it does not satisfy the defining behavior or constraint of private. Compare the option's responsibility directly with the concept."
+          }
+        }
+      },
+      "COMPARISON": {
+        "comparisons": [
+          {
+            "with": "related concept",
+            "diff": "Compare responsibilities, constraints, and use cases against private."
+          }
+        ]
+      },
+      "EXAMPLE_REQUEST": {
+        "code_example": "# Demonstrate private in an appropriate python context.",
+        "explanation": "Use a minimal example that makes private's defining behavior and boundary visible."
+      },
+      "PRACTICAL_USAGE": {
+        "real_world": "Apply private in python work when its responsibility and constraints match the problem.",
+        "best_practices": [
+          "State why private is appropriate before applying it.",
+          "Verify edge cases and trade-offs with a focused test."
+        ]
+      },
+      "DEBUG_OR_ERROR": {
+        "common_errors": [
+          {
+            "error": "Applying private without checking its defining constraint.",
+            "solution": "Re-check private's responsibility, inputs, outputs, and boundary conditions."
+          }
+        ]
+      }
+    }
+  },
+  "representative_after": {
+    "java-primitive": {
+      "CONCEPT_DEFINITION": {
+        "content": "자바 기본형은 객체 참조가 아니라 실제 값을 직접 저장하는 언어 내장 자료형입니다. `byte`, `short`, `int`, `long`, `float`, `double`, `char`, `boolean`의 여덟 종류가 있으며 `null`을 저장할 수 없습니다. 메모리 사용과 연산 비용이 작고 값의 범위가 명확하므로 수치 계산과 조건 처리의 기본이 됩니다.",
+        "examples": [
+          "`다음 중 Java의 기본 자료형(primitive type)이 아닌 것은?`라는 상황에서는 `String`를 기준으로 `primitive`을 이해할 수 있습니다."
+        ]
+      },
+      "ANSWER_REASON": {
+        "why_correct": "정답인 `String`는 질문이 묻는 `primitive`의 적용 조건과 결과를 직접 설명합니다. 특히 '다음 중 Java의 기본 자료형(primitive type)이 아닌 것은?'에서 요구하는 핵심을 충족하므로 단순히 관련 단어를 포함한 선택지보다 정확합니다. 정답을 판단할 때는 자바 기본형은 객체 참조가 아니라 실제 값을 직접 저장하는 언어 내장 자료형입니다라는 점을 기준으로 삼으면 됩니다.",
+        "key_points": [
+          "java-primitive",
+          "primitive-type",
+          "value-type",
+          "int-boolean-double",
+          "wrapper-class"
+        ]
+      },
+      "WRONG_ANSWER_REASON": {
+        "common_mistakes": [
+          "`String`을 기본형으로 오해하는 실수. String은 문자열 객체를 나타내는 참조형입니다.",
+          "래퍼 클래스와 기본형을 같은 타입으로 보는 실수. Integer와 int는 자동 박싱이 가능하지만 서로 다른 타입입니다."
+        ],
+        "per_option": {
+          "option_0": {
+            "text": "int",
+            "reason": "`int`는 자바의 여덟 기본형 중 하나입니다. 질문이 기본형이 아닌 항목을 묻는다면 참조형인 `String`과 구분해야 하므로 오답입니다."
+          },
+          "option_1": {
+            "text": "boolean",
+            "reason": "`boolean`는 자바의 여덟 기본형 중 하나입니다. 질문이 기본형이 아닌 항목을 묻는다면 참조형인 `String`과 구분해야 하므로 오답입니다."
+          },
+          "option_2": {
+            "text": "double",
+            "reason": "`double`는 자바의 여덟 기본형 중 하나입니다. 질문이 기본형이 아닌 항목을 묻는다면 참조형인 `String`과 구분해야 하므로 오답입니다."
+          }
+        }
+      },
+      "COMPARISON": {
+        "comparisons": [
+          {
+            "with": "래퍼 클래스",
+            "diff": "기본형은 값을 직접 저장하고 null을 가질 수 없지만 `Integer` 같은 래퍼 클래스는 객체이며 null과 제네릭 컬렉션에 사용할 수 있습니다."
+          }
+        ]
+      },
+      "EXAMPLE_REQUEST": {
+        "code_example": "public class Main {\n    public static void main(String[] args) {\n        int count = 3;\n        boolean active = true;\n        double price = 12.5;\n        System.out.println(count + \", \" + active + \", \" + price);\n    }\n}",
+        "explanation": "예시는 `primitive`의 핵심 동작을 가장 작은 실행 단위로 보여 줍니다. 값을 바꾸어 실행하면 적용 조건과 결과 차이를 확인할 수 있습니다."
+      },
+      "PRACTICAL_USAGE": {
+        "real_world": "반복 계산, 카운터, 플래그처럼 null이 필요 없고 값 연산이 중심인 코드에서 사용합니다. 컬렉션이나 nullable 값이 필요하면 래퍼 클래스를 선택합니다.",
+        "best_practices": [
+          "`primitive`을 적용하기 전에 해결하려는 문제와 기대 결과를 먼저 명확히 합니다.",
+          "경계 조건과 실패 사례를 작은 테스트로 확인한 뒤 실제 코드에 적용합니다."
+        ]
+      },
+      "DEBUG_OR_ERROR": {
+        "common_errors": [
+          {
+            "error": "기본형과 래퍼 클래스 사이의 자동 박싱 과정에서 null을 언박싱하는 문제",
+            "solution": "래퍼 값을 기본형에 대입하기 전에 null 여부를 확인하고 불필요한 박싱을 줄입니다."
+          }
+        ]
+      }
+    },
+    "python-decorator": {
+      "CONCEPT_DEFINITION": {
+        "content": "파이썬 데코레이터는 기존 함수나 클래스를 직접 수정하지 않고 다른 호출 가능한 객체로 감싸 기능을 추가하는 문법입니다. `@decorator` 표기는 대상 함수를 데코레이터 함수에 전달한 뒤 반환된 래퍼로 이름을 다시 바인딩합니다. 인증, 로깅, 실행 시간 측정처럼 여러 함수에 반복되는 부가 기능을 한곳에서 관리할 수 있어 중요합니다.",
+        "examples": [
+          "`데코레이터(decorator)의 역할은?`라는 상황에서는 `함수를 수정하지 않고 기능을 추가한다`를 기준으로 `decorator`을 이해할 수 있습니다."
+        ]
+      },
+      "ANSWER_REASON": {
+        "why_correct": "정답인 `함수를 수정하지 않고 기능을 추가한다`는 질문이 묻는 `decorator`의 적용 조건과 결과를 직접 설명합니다. 특히 '데코레이터(decorator)의 역할은?'에서 요구하는 핵심을 충족하므로 단순히 관련 단어를 포함한 선택지보다 정확합니다. 정답을 판단할 때는 파이썬 데코레이터는 기존 함수나 클래스를 직접 수정하지 않고 다른 호출 가능한 객체로 감싸 기능을 추가하는 문법입니다라는 점을 기준으로 삼으면 됩니다.",
+        "key_points": [
+          "python-decorator",
+          "decorator-syntax",
+          "function-wrapper",
+          "functools-wraps",
+          "cross-cutting-concern"
+        ]
+      },
+      "WRONG_ANSWER_REASON": {
+        "common_mistakes": [
+          "`decorator`과 관련 있어 보이는 단어만 보고 실제 동작 조건을 확인하지 않는 실수",
+          "정답이 설명해야 하는 결과와 선택지가 실제로 만드는 결과를 비교하지 않는 실수"
+        ],
+        "per_option": {
+          "option_0": {
+            "text": "클래스를 생성한다",
+            "reason": "`클래스를 생성한다`는 데코레이터가 수행하는 함수 감싸기와 부가 기능 결합을 설명하지 않습니다. 데코레이터는 원본 함수 호출 전후에 공통 동작을 추가합니다."
+          },
+          "option_1": {
+            "text": "변수를 상수로 만든다",
+            "reason": "`변수를 상수로 만든다`는 데코레이터가 수행하는 함수 감싸기와 부가 기능 결합을 설명하지 않습니다. 데코레이터는 원본 함수 호출 전후에 공통 동작을 추가합니다."
+          },
+          "option_2": {
+            "text": "메모리를 해제한다",
+            "reason": "`메모리를 해제한다`는 데코레이터가 수행하는 함수 감싸기와 부가 기능 결합을 설명하지 않습니다. 데코레이터는 원본 함수 호출 전후에 공통 동작을 추가합니다."
+          }
+        }
+      },
+      "COMPARISON": {
+        "comparisons": [
+          {
+            "with": "일반 함수 호출",
+            "diff": "일반 호출은 매번 부가 기능을 직접 호출하지만 데코레이터는 함수 정의 시 공통 동작을 일관되게 결합합니다."
+          }
+        ]
+      },
+      "EXAMPLE_REQUEST": {
+        "code_example": "from functools import wraps\n\ndef log_call(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f\"호출: {func.__name__}\")\n        return func(*args, **kwargs)\n    return wrapper\n\n@log_call\ndef add(a, b):\n    return a + b\n\nprint(add(2, 3))",
+        "explanation": "예시는 `decorator`의 핵심 동작을 가장 작은 실행 단위로 보여 줍니다. 값을 바꾸어 실행하면 적용 조건과 결과 차이를 확인할 수 있습니다."
+      },
+      "PRACTICAL_USAGE": {
+        "real_world": "웹 요청의 인증 확인, 함수 실행 시간 측정, 재시도, 캐싱처럼 여러 함수에 반복되는 횡단 관심사를 분리할 때 사용합니다.",
+        "best_practices": [
+          "`decorator`을 적용하기 전에 해결하려는 문제와 기대 결과를 먼저 명확히 합니다.",
+          "경계 조건과 실패 사례를 작은 테스트로 확인한 뒤 실제 코드에 적용합니다."
+        ]
+      },
+      "DEBUG_OR_ERROR": {
+        "common_errors": [
+          {
+            "error": "래퍼가 원본 함수의 이름과 문서 문자열을 잃어버리는 문제",
+            "solution": "래퍼 함수에 `functools.wraps(func)`를 적용하고 `*args`, `**kwargs`를 빠뜨리지 않습니다."
+          }
+        ]
+      }
+    },
+    "python-private": {
+      "CONCEPT_DEFINITION": {
+        "content": "파이썬에는 자바의 `private`처럼 외부 접근을 완전히 금지하는 접근 제어자가 없습니다. 이름 앞에 밑줄 하나를 붙이면 내부용이라는 관례를 나타내고, 밑줄 두 개로 시작하면 이름 맹글링이 적용되어 `__balance`가 `_ClassName__balance` 형태로 바뀝니다. 이름 충돌과 우발적 접근을 줄이는 장치이지 보안 기능은 아닙니다.",
+        "examples": [
+          "`Python에서 private 속성을 나타내는 관례는?`라는 상황에서는 `속성 이름 앞에 언더스코어 (_) 또는 더블 언더스코어 (__)`를 기준으로 `private`을 이해할 수 있습니다."
+        ]
+      },
+      "ANSWER_REASON": {
+        "why_correct": "정답인 `속성 이름 앞에 언더스코어 (_) 또는 더블 언더스코어 (__)`는 질문이 묻는 `private`의 적용 조건과 결과를 직접 설명합니다. 특히 'Python에서 private 속성을 나타내는 관례는?'에서 요구하는 핵심을 충족하므로 단순히 관련 단어를 포함한 선택지보다 정확합니다. 정답을 판단할 때는 파이썬에는 자바의 private처럼 외부 접근을 완전히 금지하는 접근 제어자가 없습니다라는 점을 기준으로 삼으면 됩니다.",
+        "key_points": [
+          "python-private",
+          "name-mangling",
+          "double-underscore",
+          "encapsulation",
+          "private-attribute"
+        ]
+      },
+      "WRONG_ANSWER_REASON": {
+        "common_mistakes": [
+          "`private`과 관련 있어 보이는 단어만 보고 실제 동작 조건을 확인하지 않는 실수",
+          "정답이 설명해야 하는 결과와 선택지가 실제로 만드는 결과를 비교하지 않는 실수"
+        ],
+        "per_option": {
+          "option_0": {
+            "text": "@private 어노테이션",
+            "reason": "`@private 어노테이션`는 파이썬에서 비공개 의도를 나타내는 방법이 아닙니다. 파이썬은 밑줄 관례와 밑줄 두 개의 이름 맹글링을 사용합니다."
+          },
+          "option_1": {
+            "text": "private 키워드 사용",
+            "reason": "`private 키워드 사용`는 파이썬에서 비공개 의도를 나타내는 방법이 아닙니다. 파이썬은 밑줄 관례와 밑줄 두 개의 이름 맹글링을 사용합니다."
+          },
+          "option_2": {
+            "text": "# private 주석 추가",
+            "reason": "`# private 주석 추가`는 파이썬에서 비공개 의도를 나타내는 방법이 아닙니다. 파이썬은 밑줄 관례와 밑줄 두 개의 이름 맹글링을 사용합니다."
+          }
+        }
+      },
+      "COMPARISON": {
+        "comparisons": [
+          {
+            "with": "자바 private",
+            "diff": "자바 private는 언어 수준에서 접근을 제한하지만 파이썬의 밑줄과 이름 맹글링은 관례와 우발적 충돌 방지에 가깝습니다."
+          }
+        ]
+      },
+      "EXAMPLE_REQUEST": {
+        "code_example": "class Account:\n    def __init__(self, balance):\n        self.__balance = balance\n\n    def deposit(self, amount):\n        self.__balance += amount\n\n    def balance(self):\n        return self.__balance\n\naccount = Account(1000)\naccount.deposit(500)\nprint(account.balance())",
+        "explanation": "예시는 `private`의 핵심 동작을 가장 작은 실행 단위로 보여 줍니다. 값을 바꾸어 실행하면 적용 조건과 결과 차이를 확인할 수 있습니다."
+      },
+      "PRACTICAL_USAGE": {
+        "real_world": "라이브러리의 내부 구현 세부사항을 공개 API와 구분하고, 상속 과정에서 하위 클래스의 속성 이름과 충돌하는 일을 줄일 때 사용합니다.",
+        "best_practices": [
+          "`private`을 적용하기 전에 해결하려는 문제와 기대 결과를 먼저 명확히 합니다.",
+          "경계 조건과 실패 사례를 작은 테스트로 확인한 뒤 실제 코드에 적용합니다."
+        ]
+      },
+      "DEBUG_OR_ERROR": {
+        "common_errors": [
+          {
+            "error": "밑줄 두 개 속성을 외부에서 절대 접근할 수 없다고 오해하는 문제",
+            "solution": "이름 맹글링은 접근 금지가 아니라 충돌 방지임을 이해하고, 중요한 상태 변경은 공개 메서드로 통제합니다."
+          }
+        ]
+      }
+    }
+  },
+  "remaining_low_quality": [
+    {
+      "card_id": "algorithm-10",
+      "reasons": [
+        "term이 조사 또는 일반어 중심"
+      ]
+    },
+    {
+      "card_id": "algorithm-14",
+      "reasons": [
+        "term이 조사 또는 일반어 중심"
+      ]
+    },
+    {
+      "card_id": "algorithm-3",
+      "reasons": [
+        "term이 조사 또는 일반어 중심"
+      ]
+    },
+    {
+      "card_id": "algorithm-6",
+      "reasons": [
+        "term이 조사 또는 일반어 중심"
+      ]
+    },
+    {
+      "card_id": "algorithm",
+      "reasons": [
+        "term이 조사 또는 일반어 중심"
+      ]
+    },
+    {
+      "card_id": "frontend-2",
+      "reasons": [
+        "term이 조사 또는 일반어 중심"
+      ]
+    },
+    {
+      "card_id": "frontend",
+      "reasons": [
+        "term이 조사 또는 일반어 중심"
+      ]
+    },
+    {
+      "card_id": "python",
+      "reasons": [
+        "term이 조사 또는 일반어 중심"
+      ]
+    }
+  ],
+  "backup_root": "app\\knowledge\\concepts_v2_backups\\korean-draft-enrichment-20260613-144006",
+  "prompt_instruction": "너는 한국어로 설명하는 Python/Java/Spring 전문 강사이다. 모든 답변은 자연스러운 한국어로 작성하고, 영어 템플릿 문장을 절대 사용하지 마라. 초중급 개발자가 바로 이해하고 실무에 적용할 수 있도록 구체적으로 설명해."
+}

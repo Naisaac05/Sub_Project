@@ -1,0 +1,115 @@
+{
+  "card_id": "frontend-hydration",
+  "category": "frontend",
+  "term": "hydration",
+  "aliases": [
+    "hydration",
+    "서버에서 렌더링된 HTML에 클라이언트 JavaScript 이벤트와 상태를 연결하는 과정",
+    "Hydration이란?",
+    "Hydration",
+    "HTML",
+    "JavaScript",
+    "frontend hydration"
+  ],
+  "source_question_ids": [
+    "frontend:88"
+  ],
+  "retrieval": {
+    "embedding_text": "hydration 서버에서 렌더링된 HTML에 클라이언트 JavaScript 이벤트와 상태를 연결하는 과정 Hydration이란? frontend Hydration 이란 서버에서 렌더링된 HTML 클라이언트",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "hydration",
+      "Hydration",
+      "이란",
+      "서버에서",
+      "렌더링된",
+      "HTML",
+      "클라이언트"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Hydration은 서버가 만든 HTML에 클라이언트 JavaScript의 상태와 이벤트 처리를 연결하는 과정이다. 초기 화면은 기존 HTML을 활용하고 이후 상호작용을 활성화한다.",
+      "examples": [
+        "SSR 화면의 초기 표시 속도를 유지하면서 버튼과 입력 같은 클라이언트 상호작용을 활성화할 때 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "서버 HTML이 이미 있으므로 클라이언트는 이벤트와 상태를 연결해 상호작용 가능한 화면으로 만든다. CSS 적용, 직렬화, 메모리 해제는 이 연결 과정이 아니다.",
+      "key_points": [
+        "Hydration",
+        "SSR",
+        "이벤트 연결"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "표면적인 문법이나 용어만 보고 내부 원리와 선택 기준을 확인하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "CSS 적용 과정",
+          "reason": "CSS 적용 과정은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 서버 HTML이 이미 있으므로 클라이언트는 이벤트와 상태를 연결해 상호작용 가능한 화면으로 만든다."
+        },
+        "option_2": {
+          "text": "데이터 직렬화",
+          "reason": "데이터 직렬화은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 서버 HTML이 이미 있으므로 클라이언트는 이벤트와 상태를 연결해 상호작용 가능한 화면으로 만든다."
+        },
+        "option_3": {
+          "text": "메모리 해제",
+          "reason": "메모리 해제은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 서버 HTML이 이미 있으므로 클라이언트는 이벤트와 상태를 연결해 상호작용 가능한 화면으로 만든다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`서버에서 렌더링된 HTML에 클라이언트 JavaScript 이벤트와 상태를 연결하는 과정`는 질문의 조건을 충족하지만 다른 선택지는 `hydration`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "const root = document.getElementById(\"root\");\nconst app = React.createElement(\"button\", null, \"확인\");\nReactDOM.hydrateRoot(root, app);",
+      "explanation": "SSR 화면의 초기 표시 속도를 유지하면서 버튼과 입력 같은 클라이언트 상호작용을 활성화할 때 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "SSR 화면의 초기 표시 속도를 유지하면서 버튼과 입력 같은 클라이언트 상호작용을 활성화할 때 사용한다.",
+      "best_practices": [
+        "경계 사례를 작은 실행 예제로 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`hydration`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `서버에서 렌더링된 HTML에 클라이언트 JavaScript 이벤트와 상태를 연결하는 과정`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

@@ -1,0 +1,117 @@
+{
+  "card_id": "frontend-react-server-components",
+  "category": "frontend",
+  "term": "react-server-components",
+  "aliases": [
+    "rsc",
+    "프론트엔드 rsc",
+    "components",
+    "react server components",
+    "react-server-components",
+    "frontend react server components",
+    "프론트엔드 react server components"
+  ],
+  "source_question_ids": [
+    "frontend:83"
+  ],
+  "retrieval": {
+    "embedding_text": "react-server-components rsc 프론트엔드 rsc components frontend react server components 프론트엔드 react server components frontend react server components",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "rsc",
+      "프론트엔드 rsc",
+      "components",
+      "react server components",
+      "react-server-components",
+      "프론트엔드 react server components",
+      "frontend react server components"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "react server components is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as react-server-components, frontend-react-server-components, react server components.",
+      "examples": [
+        "Explain when react server components should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of react server components, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals react-server-components, frontend-react-server-components, react server components.",
+      "key_points": [
+        "react-server-components",
+        "frontend",
+        "react server components"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy react server components's defining behavior.",
+        "Confusing react server components with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "서버에서만 실행된다",
+          "reason": "서버에서만 실행된다 is not the best answer because it does not satisfy the defining behavior or constraint of react server components. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "클라이언트 번들에 포함되지 않는다",
+          "reason": "클라이언트 번들에 포함되지 않는다 is not the best answer because it does not satisfy the defining behavior or constraint of react server components. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "데이터베이스에 직접 접근 가능하다",
+          "reason": "데이터베이스에 직접 접근 가능하다 is not the best answer because it does not satisfy the defining behavior or constraint of react server components. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against react server components."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate react server components in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes react server components's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply react server components in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why react server components is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying react server components without checking its defining constraint.",
+          "solution": "Re-check react server components's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.710818Z"
+}

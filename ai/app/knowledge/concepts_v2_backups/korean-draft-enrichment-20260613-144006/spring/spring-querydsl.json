@@ -1,0 +1,115 @@
+{
+  "card_id": "spring-querydsl",
+  "category": "spring",
+  "term": "querydsl",
+  "aliases": [
+    "q",
+    "스프링 q",
+    "querydsl",
+    "spring querydsl",
+    "스프링 querydsl"
+  ],
+  "source_question_ids": [
+    "spring:60"
+  ],
+  "retrieval": {
+    "embedding_text": "querydsl q 스프링 q spring sql 성능이 스프링 querydsl spring querydsl spring-querydsl",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "sql",
+      "성능이",
+      "스프링 q",
+      "querydsl",
+      "스프링 querydsl",
+      "spring querydsl",
+      "spring-querydsl"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "querydsl is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as querydsl, spring-querydsl, spring querydsl.",
+      "examples": [
+        "Explain when querydsl should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of querydsl, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals querydsl, spring-querydsl, spring querydsl.",
+      "key_points": [
+        "querydsl",
+        "spring",
+        "spring querydsl"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy querydsl's defining behavior.",
+        "Confusing querydsl with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "컴파일 시점에 쿼리 오류를 검출할 수 있다",
+          "reason": "컴파일 시점에 쿼리 오류를 검출할 수 있다 is not the best answer because it does not satisfy the defining behavior or constraint of querydsl. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "동적 쿼리 작성이 용이하다",
+          "reason": "동적 쿼리 작성이 용이하다 is not the best answer because it does not satisfy the defining behavior or constraint of querydsl. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "타입 안전한 쿼리를 작성할 수 있다",
+          "reason": "타입 안전한 쿼리를 작성할 수 있다 is not the best answer because it does not satisfy the defining behavior or constraint of querydsl. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against querydsl."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate querydsl in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes querydsl's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply querydsl in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why querydsl is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying querydsl without checking its defining constraint.",
+          "solution": "Re-check querydsl's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:23.244225Z"
+}

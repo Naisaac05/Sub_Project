@@ -1,0 +1,119 @@
+{
+  "card_id": "python-with-statement",
+  "category": "python",
+  "term": "with-statement",
+  "aliases": [
+    "ws",
+    "with",
+    "파이썬 ws",
+    "with statement",
+    "statement",
+    "with-statement",
+    "python with statement",
+    "파이썬 with statement",
+    "python context manager"
+  ],
+  "source_question_ids": [
+    "python:100"
+  ],
+  "retrieval": {
+    "embedding_text": "with-statement ws with 파이썬 ws python statement with statement python with statement",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "ws",
+      "with",
+      "파이썬 ws",
+      "statement",
+      "with statement",
+      "with-statement",
+      "python with statement"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "with statement is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as with-statement, python-with-statement, with statement.",
+      "examples": [
+        "Explain when with statement should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of with statement, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals with-statement, python-with-statement, with statement.",
+      "key_points": [
+        "with-statement",
+        "python",
+        "with statement"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy with statement's defining behavior.",
+        "Confusing with statement with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "f = open('file.txt')",
+          "reason": "f = open('file.txt') is not the best answer because it does not satisfy the defining behavior or constraint of with statement. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "file.read('file.txt')",
+          "reason": "file.read('file.txt') is not the best answer because it does not satisfy the defining behavior or constraint of with statement. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "read('file.txt')",
+          "reason": "read('file.txt') is not the best answer because it does not satisfy the defining behavior or constraint of with statement. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against with statement."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate with statement in an appropriate python context.",
+      "explanation": "Use a minimal example that makes with statement's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply with statement in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why with statement is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying with statement without checking its defining constraint.",
+          "solution": "Re-check with statement's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:23.127769Z"
+}
