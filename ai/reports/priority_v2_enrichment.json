@@ -1,0 +1,121 @@
+{
+  "backup_root": "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\app\\knowledge\\concepts_v2_backups\\priority-enrichment-20260613-050346",
+  "cards": {
+    "frontend-react-key": {
+      "before": {
+        "card_id": "frontend-react-key",
+        "retrieval_quality": 34,
+        "payload_quality": 15,
+        "alias_boost_quality": 17,
+        "card_quality_score": 66,
+        "improvement_needs": [
+          "retrieval specificity",
+          "payload depth",
+          "alias/boost distinctiveness"
+        ]
+      },
+      "after": {
+        "card_id": "frontend-react-key",
+        "retrieval_quality": 40,
+        "payload_quality": 32,
+        "alias_boost_quality": 20,
+        "card_quality_score": 92,
+        "improvement_needs": [
+          "payload depth"
+        ]
+      }
+    },
+    "java-equals": {
+      "before": {
+        "card_id": "java-equals",
+        "retrieval_quality": 40,
+        "payload_quality": 15,
+        "alias_boost_quality": 17,
+        "card_quality_score": 72,
+        "improvement_needs": [
+          "payload depth",
+          "alias/boost distinctiveness"
+        ]
+      },
+      "after": {
+        "card_id": "java-equals",
+        "retrieval_quality": 40,
+        "payload_quality": 32,
+        "alias_boost_quality": 20,
+        "card_quality_score": 92,
+        "improvement_needs": [
+          "payload depth"
+        ]
+      }
+    },
+    "java-extends": {
+      "before": {
+        "card_id": "java-extends",
+        "retrieval_quality": 40,
+        "payload_quality": 15,
+        "alias_boost_quality": 10,
+        "card_quality_score": 65,
+        "improvement_needs": [
+          "payload depth",
+          "alias/boost distinctiveness"
+        ]
+      },
+      "after": {
+        "card_id": "java-extends",
+        "retrieval_quality": 40,
+        "payload_quality": 32,
+        "alias_boost_quality": 20,
+        "card_quality_score": 92,
+        "improvement_needs": [
+          "payload depth"
+        ]
+      }
+    },
+    "python-with": {
+      "before": {
+        "card_id": "python-with",
+        "retrieval_quality": 40,
+        "payload_quality": 15,
+        "alias_boost_quality": 10,
+        "card_quality_score": 65,
+        "improvement_needs": [
+          "payload depth",
+          "alias/boost distinctiveness"
+        ]
+      },
+      "after": {
+        "card_id": "python-with",
+        "retrieval_quality": 40,
+        "payload_quality": 32,
+        "alias_boost_quality": 20,
+        "card_quality_score": 92,
+        "improvement_needs": [
+          "payload depth"
+        ]
+      }
+    },
+    "spring-spring-question-59": {
+      "before": {
+        "card_id": "spring-spring-question-59",
+        "retrieval_quality": 40,
+        "payload_quality": 20,
+        "alias_boost_quality": 17,
+        "card_quality_score": 77,
+        "improvement_needs": [
+          "payload depth",
+          "alias/boost distinctiveness"
+        ]
+      },
+      "after": {
+        "card_id": "spring-spring-question-59",
+        "retrieval_quality": 40,
+        "payload_quality": 32,
+        "alias_boost_quality": 20,
+        "card_quality_score": 92,
+        "improvement_needs": [
+          "payload depth"
+        ]
+      }
+    }
+  }
+}

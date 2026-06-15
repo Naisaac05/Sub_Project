@@ -1,0 +1,113 @@
+{
+  "card_id": "algorithm-5",
+  "category": "algorithm",
+  "term": "삽입",
+  "aliases": [
+    "삽입",
+    "algorithm 삽입",
+    "알고리즘 삽입"
+  ],
+  "source_question_ids": [
+    "algorithm:128"
+  ],
+  "retrieval": {
+    "embedding_text": "삽입 algorithm 삽입 알고리즘 삽입 algorithm algorithm-삽입 데이터가 거의 정렬되어",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "삽입",
+      "algorithm-삽입",
+      "algorithm 삽입",
+      "알고리즘 삽입",
+      "데이터가",
+      "거의",
+      "정렬되어"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "삽입 is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as 삽입, algorithm-삽입, algorithm 삽입.",
+      "examples": [
+        "Explain when 삽입 should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of 삽입, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals 삽입, algorithm-삽입, algorithm 삽입.",
+      "key_points": [
+        "삽입",
+        "algorithm",
+        "algorithm 삽입"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy 삽입's defining behavior.",
+        "Confusing 삽입 with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "완전히 역순으로 정렬된 경우",
+          "reason": "완전히 역순으로 정렬된 경우 is not the best answer because it does not satisfy the defining behavior or constraint of 삽입. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "데이터가 매우 큰 경우",
+          "reason": "데이터가 매우 큰 경우 is not the best answer because it does not satisfy the defining behavior or constraint of 삽입. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "모든 경우에 동일",
+          "reason": "모든 경우에 동일 is not the best answer because it does not satisfy the defining behavior or constraint of 삽입. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against 삽입."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate 삽입 in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes 삽입's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply 삽입 in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why 삽입 is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying 삽입 without checking its defining constraint.",
+          "solution": "Re-check 삽입's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.398451Z"
+}

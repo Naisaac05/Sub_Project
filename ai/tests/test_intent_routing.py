@@ -1,115 +1,92 @@
 import unittest
 
-from app.workflow.intent import classify_free_question
-
-
-HIGH_CONFIDENCE_TOPIC_THRESHOLD = 0.8
-FAST_PATH_CONFIDENCE_THRESHOLD = 0.95
-SPECIFIC_TOPIC_CONFIDENCE_FLOOR = 0.7
+from app.workflow.embedding_intent import EmbeddingIntentClassifier, intent_from_label
 
 
 class FreeQuestionIntentTest(unittest.TestCase):
-    def test_korean_concept_definition_uses_latest_question_only(self):
-        result = classify_free_question("분산환경이 어떤 환경을 의미하는 것인가요?")
+    def test_definition_embedding_uses_latest_question_and_extracts_topic(self):
+        classifier = _classifier_for("CONCEPT_DEFINITION")
+
+        result = classifier.classify("REST API가 뭐야?")
 
         self.assertEqual(result.intent, "concept_definition")
         self.assertEqual(result.sub_intent, "definition")
         self.assertEqual(result.rag_policy, "latest_question_only")
-        self.assertEqual(result.topic, "분산환경")
+        self.assertEqual(result.topic, "REST API")
 
-    def test_comparison_question_uses_latest_question_only(self):
-        result = classify_free_question("페이지네이션이랑 무한스크롤 차이가 뭐야?")
+    def test_comparison_embedding_maps_to_comparison_answer_style(self):
+        result = _classifier_for("COMPARISON").classify("세션과 JWT 차이를 비교해줘")
 
         self.assertEqual(result.intent, "concept_definition")
         self.assertEqual(result.sub_intent, "comparison")
         self.assertEqual(result.rag_policy, "latest_question_only")
 
-    def test_practical_question_keeps_background_as_weak_context(self):
-        result = classify_free_question("실무에서는 이걸 어떻게 처리해?")
+    def test_practical_embedding_maps_to_practical_answer_style(self):
+        result = _classifier_for("PRACTICAL_USAGE").classify("실무에서는 이걸 언제 사용해?")
 
         self.assertEqual(result.intent, "concept_definition")
         self.assertEqual(result.sub_intent, "practical")
         self.assertEqual(result.rag_policy, "latest_question_only")
 
-    def test_vague_clarification_uses_original_context(self):
-        result = classify_free_question("왜요?")
+    def test_follow_up_embedding_keeps_original_context(self):
+        result = _classifier_for("FOLLOW_UP").classify("방금 설명을 더 쉽게 말해줘")
 
         self.assertEqual(result.intent, "follow_up")
         self.assertEqual(result.sub_intent, "follow_up")
         self.assertEqual(result.rag_policy, "original_context_mixed")
 
-    def test_known_clarification_phrase_stays_clarification(self):
-        for question in ("다시 설명해줘", "다시 설명해줘?"):
-            with self.subTest(question=question):
-                result = classify_free_question(question)
-
-                self.assertEqual(result.intent, "follow_up")
-                self.assertEqual(result.sub_intent, "follow_up")
-                self.assertEqual(result.rag_policy, "original_context_mixed")
-                self.assertFalse(result.context_dependent)
-
-    def test_original_problem_reason_uses_original_context(self):
-        result = classify_free_question("이 답이 왜 맞아?")
-
-        self.assertEqual(result.intent, "wrong_answer_explanation")
-        self.assertEqual(result.sub_intent, "explanation")
-        self.assertEqual(result.rag_policy, "original_context_mixed")
-
-    def test_api_definition_extracts_topic(self):
-        result = classify_free_question("API가 뭔데?")
-
-        self.assertEqual(result.intent, "concept_definition")
-        self.assertEqual(result.sub_intent, "definition")
-        self.assertEqual(result.rag_policy, "latest_question_only")
-        self.assertEqual(result.topic, "API")
-
-    def test_english_what_is_definition_extracts_topic(self):
-        result = classify_free_question("What is API?")
-
-        self.assertEqual(result.intent, "concept_definition")
-        self.assertEqual(result.sub_intent, "definition")
-        self.assertEqual(result.rag_policy, "latest_question_only")
-        self.assertEqual(result.topic, "API")
-
-    def test_domain_word_comparison_does_not_force_comparison_intent(self):
-        result = classify_free_question("문자열 비교에서 equals를 쓰는 이유가 뭐야?")
-
-        self.assertEqual(result.intent, "concept_definition")
-        self.assertEqual(result.sub_intent, "definition")
-        self.assertEqual(result.rag_policy, "latest_question_only")
-
-    def test_discourse_marker_is_removed_before_topic_extraction(self):
-        result = classify_free_question("혹시 AI 프롬프트가 뭐야?")
-
-        self.assertEqual(result.intent, "concept_definition")
-        self.assertEqual(result.sub_intent, "definition")
-        self.assertEqual(result.rag_policy, "latest_question_only")
-        self.assertEqual(result.topic, "AI 프롬프트")
-        self.assertGreaterEqual(result.confidence, HIGH_CONFIDENCE_TOPIC_THRESHOLD)
-
-    def test_context_dependent_question_keeps_original_context(self):
-        result = classify_free_question("그럼 이건 왜 틀린 거야?")
+    def test_wrong_answer_embedding_keeps_original_context(self):
+        result = _classifier_for("WRONG_ANSWER_REASON").classify("내 답은 왜 틀렸어?")
 
         self.assertEqual(result.intent, "wrong_answer_explanation")
         self.assertEqual(result.sub_intent, "explanation")
         self.assertEqual(result.rag_policy, "original_context_mixed")
         self.assertTrue(result.context_dependent)
 
-    def test_generic_ai_token_does_not_get_high_confidence_fast_path(self):
-        result = classify_free_question("AI가 뭐야?")
+    def test_unknown_embedding_uses_fallback_without_rag(self):
+        result = intent_from_label("UNKNOWN", "모호한 질문", confidence=0.0)
 
-        self.assertEqual(result.intent, "concept_definition")
-        self.assertEqual(result.sub_intent, "definition")
-        self.assertEqual(result.topic, "AI")
-        self.assertLess(result.confidence, FAST_PATH_CONFIDENCE_THRESHOLD)
+        self.assertEqual(result.intent, "unknown")
+        self.assertEqual(result.sub_intent, "unknown")
+        self.assertEqual(result.rag_policy, "fallback")
+        self.assertFalse(result.context_dependent)
 
-    def test_specific_ai_prompt_topic_is_not_collapsed_to_ai(self):
-        result = classify_free_question("근데 AI 프롬프트가 뭐야?")
+    def test_off_topic_embedding_disables_rag(self):
+        result = intent_from_label("OFF_TOPIC", "오늘 점심 뭐야?", confidence=0.9)
 
-        self.assertEqual(result.intent, "concept_definition")
-        self.assertEqual(result.sub_intent, "definition")
-        self.assertEqual(result.topic, "AI 프롬프트")
-        self.assertGreater(result.confidence, SPECIFIC_TOPIC_CONFIDENCE_FLOOR)
+        self.assertEqual(result.intent, "off_topic")
+        self.assertEqual(result.rag_policy, "no_rag")
+
+
+def _classifier_for(selected_label: str) -> EmbeddingIntentClassifier:
+    prototypes = {
+        "ANSWER_REASON": ("ANSWER_REASON",),
+        "WRONG_ANSWER_REASON": ("WRONG_ANSWER_REASON",),
+        "CONCEPT_DEFINITION": ("CONCEPT_DEFINITION",),
+        "COMPARISON": ("COMPARISON",),
+        "EXAMPLE_REQUEST": ("EXAMPLE_REQUEST",),
+        "PRACTICAL_USAGE": ("PRACTICAL_USAGE",),
+        "DEBUG_OR_ERROR": ("DEBUG_OR_ERROR",),
+        "FOLLOW_UP": ("FOLLOW_UP",),
+        "OFF_TOPIC": ("OFF_TOPIC",),
+        "UNKNOWN": ("UNKNOWN",),
+    }
+    labels = list(prototypes)
+    dimensions = len(labels)
+    vectors = {
+        label: [1.0 if index == label_index else 0.0 for index in range(dimensions)]
+        for label_index, label in enumerate(labels)
+    }
+
+    def embed(text: str) -> list[float]:
+        return vectors.get(text, vectors[selected_label])
+
+    return EmbeddingIntentClassifier(
+        embed=embed,
+        prototypes=prototypes,
+        min_similarity=0.5,
+        min_margin=0.1,
+    )
 
 
 if __name__ == "__main__":

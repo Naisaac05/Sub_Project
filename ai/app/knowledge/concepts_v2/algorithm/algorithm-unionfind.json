@@ -1,0 +1,117 @@
+{
+  "card_id": "algorithm-unionfind",
+  "category": "algorithm",
+  "term": "unionfind",
+  "aliases": [
+    "unionfind",
+    "Find 연산의 시간 복잡도를 거의 O(1)에 근접하게 한다",
+    "Union-Find에서 경로 압축(Path Compression)의 효과는?",
+    "Union-Find",
+    "Path",
+    "Compression)",
+    "Find",
+    "O(1)",
+    "algorithm unionfind"
+  ],
+  "source_question_ids": [
+    "algorithm:148"
+  ],
+  "retrieval": {
+    "embedding_text": "unionfind Find 연산의 시간 복잡도를 거의 O(1)에 근접하게 한다 Union-Find에서 경로 압축(Path Compression)의 효과는? algorithm Union-Find 에서 경로 압축 Path Compression)",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "unionfind",
+      "Union-Find",
+      "에서",
+      "경로",
+      "압축",
+      "Path",
+      "Compression)"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Union-Find 경로 압축은 Find 중 만난 노드가 루트를 직접 가리키도록 부모 포인터를 갱신한다.",
+      "examples": [
+        "Union-Find 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "트리 높이가 낮아져 이후 Find 연산이 역 아커만 함수 수준으로 빨라진다.",
+      "key_points": [
+        "Union-Find",
+        "경로 압축",
+        "Find"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "공간 복잡도를 줄인다",
+          "reason": "부모 배열 공간은 계속 필요하므로 공간 절약이 핵심이 아니다."
+        },
+        "option_2": {
+          "text": "Union 연산을 빠르게 한다",
+          "reason": "Union 최적화는 rank나 size 결합과 더 직접 관련된다."
+        },
+        "option_3": {
+          "text": "사이클을 자동으로 감지한다",
+          "reason": "사이클 감지는 활용 사례이며 경로 압축이 자동 판정하지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`Find 연산의 시간 복잡도를 거의 O(1)에 근접하게 한다`는 질문의 조건을 충족하지만 다른 선택지는 `unionfind`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "parent = [0, 0, 1]\nroot = parent[parent[2]]\nparent[2] = root",
+      "explanation": "Union-Find 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Union-Find 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`unionfind`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `Find 연산의 시간 복잡도를 거의 O(1)에 근접하게 한다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

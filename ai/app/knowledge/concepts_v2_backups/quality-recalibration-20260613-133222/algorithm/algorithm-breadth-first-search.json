@@ -1,0 +1,117 @@
+{
+  "card_id": "algorithm-breadth-first-search",
+  "category": "algorithm",
+  "term": "breadth-first-search",
+  "aliases": [
+    "breadth-first-search",
+    "breadth first search",
+    "algorithm breadth first search",
+    "알고리즘 breadth first search",
+    "bfs traversal",
+    "bfs queue",
+    "bfs"
+  ],
+  "source_question_ids": [
+    "algorithm:134"
+  ],
+  "retrieval": {
+    "embedding_text": "breadth-first-search breadth first search algorithm breadth first search algorithm algorithm-breadth-first-search 알고리즘 breadth first search",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "breadth-first-search",
+      "algorithm-breadth-first-search",
+      "breadth first search",
+      "algorithm breadth first search",
+      "알고리즘 breadth first search",
+      "bfs traversal",
+      "bfs queue"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "breadth first search is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as breadth-first-search, algorithm-breadth-first-search, breadth first search.",
+      "examples": [
+        "Explain when breadth first search should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of breadth first search, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals breadth-first-search, algorithm-breadth-first-search, breadth first search.",
+      "key_points": [
+        "breadth-first-search",
+        "algorithm",
+        "breadth first search"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy breadth first search's defining behavior.",
+        "Confusing breadth first search with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "스택",
+          "reason": "스택 is not the best answer because it does not satisfy the defining behavior or constraint of breadth first search. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "힙",
+          "reason": "힙 is not the best answer because it does not satisfy the defining behavior or constraint of breadth first search. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "트리",
+          "reason": "트리 is not the best answer because it does not satisfy the defining behavior or constraint of breadth first search. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against breadth first search."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate breadth first search in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes breadth first search's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply breadth first search in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why breadth first search is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying breadth first search without checking its defining constraint.",
+          "solution": "Re-check breadth first search's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.428539Z"
+}

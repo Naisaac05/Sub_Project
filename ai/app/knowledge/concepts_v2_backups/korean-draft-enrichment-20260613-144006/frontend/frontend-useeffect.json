@@ -1,0 +1,130 @@
+{
+  "card_id": "frontend-useeffect",
+  "category": "frontend",
+  "term": "useeffect",
+  "aliases": [
+    "u",
+    "프론트엔드 u",
+    "useeffect",
+    "frontend useeffect",
+    "프론트엔드 useeffect",
+    "use effect",
+    "react effect"
+  ],
+  "source_question_ids": [
+    "frontend:71",
+    "frontend:78"
+  ],
+  "retrieval": {
+    "embedding_text": "useeffect u 프론트엔드 u frontend use effect react effect 프론트엔드 useeffect frontend useeffect frontend-useeffect",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "프론트엔드 u",
+      "useeffect",
+      "use effect",
+      "react effect",
+      "프론트엔드 useeffect",
+      "frontend useeffect",
+      "frontend-useeffect"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "useeffect is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as useeffect, frontend-useeffect, frontend useeffect.",
+      "examples": [
+        "Explain when useeffect should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of useeffect, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals useeffect, frontend-useeffect, frontend useeffect.",
+      "key_points": [
+        "useeffect",
+        "frontend",
+        "use effect"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy useeffect's defining behavior.",
+        "Confusing useeffect with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "매 렌더링마다 실행",
+          "reason": "매 렌더링마다 실행 is not the best answer because it does not satisfy the defining behavior or constraint of useeffect. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "상태 변경 시마다 실행",
+          "reason": "상태 변경 시마다 실행 is not the best answer because it does not satisfy the defining behavior or constraint of useeffect. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "실행되지 않는다",
+          "reason": "실행되지 않는다 is not the best answer because it does not satisfy the defining behavior or constraint of useeffect. Compare the option's responsibility directly with the concept."
+        },
+        "option_3": {
+          "text": "문법 오류이다",
+          "reason": "문법 오류이다 is not the best answer because it does not satisfy the defining behavior or constraint of useeffect. Compare the option's responsibility directly with the concept."
+        },
+        "option_4": {
+          "text": "React가 async를 지원하지 않는다",
+          "reason": "React가 async를 지원하지 않는다 is not the best answer because it does not satisfy the defining behavior or constraint of useeffect. Compare the option's responsibility directly with the concept."
+        },
+        "option_5": {
+          "text": "성능 문제 때문",
+          "reason": "성능 문제 때문 is not the best answer because it does not satisfy the defining behavior or constraint of useeffect. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against useeffect."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate useeffect in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes useeffect's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply useeffect in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why useeffect is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying useeffect without checking its defining constraint.",
+          "solution": "Re-check useeffect's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.749771Z"
+}

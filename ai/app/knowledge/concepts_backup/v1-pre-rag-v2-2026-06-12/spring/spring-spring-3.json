@@ -1,0 +1,72 @@
+{
+  "card_id": "spring-spring-3",
+  "category": "spring",
+  "term": "spring",
+  "aliases": [
+    "spring spring"
+  ],
+  "source_question_ids": [
+    "spring:44"
+  ],
+  "retrieval": {
+    "embedding_text": "spring spring spring spring은(는) Spring Security에서 비밀번호 암호화에 사용되는 인터페이스는? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "spring",
+      "spring"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "spring은(는) Spring Security에서 비밀번호 암호화에 사용되는 인터페이스는? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "spring 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "spring"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q44_option_2": {
+          "text": "PasswordEncoder",
+          "reason": "spring의 특성과 일치하지 않는 오답입니다."
+        },
+        "q44_option_3": {
+          "text": "CryptoService",
+          "reason": "spring의 특성과 일치하지 않는 오답입니다."
+        },
+        "q44_option_4": {
+          "text": "HashProvider",
+          "reason": "spring의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

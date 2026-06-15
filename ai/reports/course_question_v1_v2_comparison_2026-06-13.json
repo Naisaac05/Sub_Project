@@ -1,0 +1,2519 @@
+{
+  "evaluation_note": "관련성은 questions source id 연결 기준이며, 응답 품질은 payload 길이와 한국어 포함 여부를 사용한 자동 평가입니다.",
+  "v1": {
+    "question_count": 50,
+    "top1_relevance_rate": 0.78,
+    "top3_relevance_rate": 0.8,
+    "fast_path_hit_rate": 0.78,
+    "fallback_rate": 0.22,
+    "average_latency_ms": 13.70888999721501,
+    "average_response_quality_score": 2.56,
+    "fallback_reasons": {
+      "top1_miss": 11,
+      "payload_not_approved": 0
+    },
+    "rows": [
+      {
+        "question_id": "java:1",
+        "question": "Java에서 정수형 변수를 선언하는 올바른 방법은?",
+        "correct_answer": "int number = 10;",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 18.27420000336133,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "java-java",
+            "score": 14.5
+          },
+          {
+            "card_id": "java-java-1",
+            "score": 11.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "java:2",
+        "question": "Java에서 문자열을 비교할 때 올바른 방법은?",
+        "correct_answer": "str1.equals(str2)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 16.763899999205023,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "java-java-1",
+            "score": 13.5
+          },
+          {
+            "card_id": "java-java",
+            "score": 11.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "java:3",
+        "question": "다음 중 Java의 기본 자료형(primitive type)이 아닌 것은?",
+        "correct_answer": "String",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 17.072999995434657,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "java-java-2",
+            "score": 15.5
+          },
+          {
+            "card_id": "java-java-7",
+            "score": 10.5
+          },
+          {
+            "card_id": "java-java-8",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "java:4",
+        "question": "Java에서 배열의 길이를 구하는 방법은?",
+        "correct_answer": "arr.length",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 20.47589997528121,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "java-java-3",
+            "score": 13.5
+          },
+          {
+            "card_id": "java-java-1",
+            "score": 10.5
+          },
+          {
+            "card_id": "java-java",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "java:6",
+        "question": "Java에서 상수를 선언할 때 사용하는 키워드는?",
+        "correct_answer": "final",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 22.100700007285923,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "java-java-4",
+            "score": 13.5
+          },
+          {
+            "card_id": "java-java-5",
+            "score": 11.5
+          },
+          {
+            "card_id": "java-java-1",
+            "score": 9.5
+          }
+        ]
+      },
+      {
+        "question_id": "java:7",
+        "question": "다음 중 반복문이 아닌 것은?",
+        "correct_answer": "switch",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 17.13189997826703,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "java-concept",
+            "score": 4.0
+          },
+          {
+            "card_id": "java-concept-3",
+            "score": 3.0
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 3.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:8",
+        "question": "Java에서 클래스를 상속할 때 사용하는 키워드는?",
+        "correct_answer": "extends",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 32.36240000114776,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "java-java-5",
+            "score": 13.5
+          },
+          {
+            "card_id": "java-java-4",
+            "score": 11.5
+          },
+          {
+            "card_id": "java-java-1",
+            "score": 9.5
+          }
+        ]
+      },
+      {
+        "question_id": "java:9",
+        "question": "접근 제어자 중 같은 패키지 내에서만 접근 가능한 것은?",
+        "correct_answer": "default (접근 제어자 없음)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 11.378099996363744,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "java-concept-1",
+            "score": 7.0
+          },
+          {
+            "card_id": "algorithm-collision",
+            "score": 1.0
+          },
+          {
+            "card_id": "algorithm-concept-2",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:10",
+        "question": "main 메서드의 올바른 선언은?",
+        "correct_answer": "public static void main(String[] args)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 10.257000016281381,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "java-main",
+            "score": 11.5
+          },
+          {
+            "card_id": "java-default",
+            "score": 2.0
+          },
+          {
+            "card_id": "algorithm-heap",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:11",
+        "question": "ArrayList와 LinkedList의 차이에 대한 설명으로 올바른 것은?",
+        "correct_answer": "ArrayList는 인덱스 접근이 O(1)이다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 19.846400013193488,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "java-arraylist",
+            "score": 14.5
+          },
+          {
+            "card_id": "algorithm-heap",
+            "score": 2.0
+          },
+          {
+            "card_id": "java-default",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:31",
+        "question": "Spring의 핵심 개념인 IoC(Inversion of Control)란?",
+        "correct_answer": "프레임워크가 객체의 생성과 생명주기를 관리한다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 24.09089999855496,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "spring-ioc",
+            "score": 14.5
+          },
+          {
+            "card_id": "spring-spring-6",
+            "score": 9.5
+          },
+          {
+            "card_id": "spring-spring-1",
+            "score": 8.5
+          }
+        ]
+      },
+      {
+        "question_id": "spring:32",
+        "question": "Spring Boot 프로젝트에서 설정 파일의 기본 이름은?",
+        "correct_answer": "application.properties (또는 application.yml)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 10.129899979801849,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "spring-spring",
+            "score": 14.5
+          },
+          {
+            "card_id": "spring-spring-2",
+            "score": 9.5
+          },
+          {
+            "card_id": "spring-spring-1",
+            "score": 8.5
+          }
+        ]
+      },
+      {
+        "question_id": "spring:33",
+        "question": "@Controller와 @RestController의 차이는?",
+        "correct_answer": "@RestController는 @ResponseBody가 포함되어 있다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 8.387599984416738,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "spring-controller",
+            "score": 15.5
+          },
+          {
+            "card_id": "algorithm-knapsack",
+            "score": 1.0
+          },
+          {
+            "card_id": "java-completablefuture",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:34",
+        "question": "Spring에서 의존성 주입(DI) 방법이 아닌 것은?",
+        "correct_answer": "Static 주입",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 23.507500009145588,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "spring-spring-1",
+            "score": 15.5
+          },
+          {
+            "card_id": "spring-spring-2",
+            "score": 10.5
+          },
+          {
+            "card_id": "spring-spring-5",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "spring:35",
+        "question": "@Autowired 어노테이션의 역할은?",
+        "correct_answer": "의존성을 자동으로 주입한다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 10.067199997138232,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "spring-autowired",
+            "score": 10.5
+          },
+          {
+            "card_id": "spring-service",
+            "score": 2.0
+          },
+          {
+            "card_id": "algorithm-concept-10",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:36",
+        "question": "Spring Boot에서 내장 서버로 사용되는 것은?",
+        "correct_answer": "Tomcat",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 25.37079999456182,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "spring-spring-2",
+            "score": 14.5
+          },
+          {
+            "card_id": "spring-spring-1",
+            "score": 10.5
+          },
+          {
+            "card_id": "spring-spring-3",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "spring:37",
+        "question": "@RequestMapping의 HTTP 메서드별 축약 어노테이션이 아닌 것은?",
+        "correct_answer": "@SendMapping",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 13.490999990608543,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "spring-requestmapping",
+            "score": 14.5
+          },
+          {
+            "card_id": "algorithm-collision",
+            "score": 2.0
+          },
+          {
+            "card_id": "algorithm-mst",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:38",
+        "question": "Spring Bean의 기본 스코프는?",
+        "correct_answer": "singleton",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 13.254899997264147,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "spring-bean",
+            "score": 11.5
+          },
+          {
+            "card_id": "spring-spring",
+            "score": 9.5
+          },
+          {
+            "card_id": "spring-spring-1",
+            "score": 8.5
+          }
+        ]
+      },
+      {
+        "question_id": "spring:39",
+        "question": "@Service 어노테이션의 역할은?",
+        "correct_answer": "비즈니스 로직 계층의 빈 등록",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 9.648000006563962,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "spring-service",
+            "score": 10.5
+          },
+          {
+            "card_id": "spring-autowired",
+            "score": 2.0
+          },
+          {
+            "card_id": "algorithm-concept-10",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:40",
+        "question": "application.yml에서 서버 포트를 변경하는 설정은?",
+        "correct_answer": "server.port: 9090",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 15.329899993957952,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "spring-application",
+            "score": 6.0
+          },
+          {
+            "card_id": "algorithm-bfs",
+            "score": 1.0
+          },
+          {
+            "card_id": "algorithm-bst",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:61",
+        "question": "React에서 컴포넌트의 상태를 관리하기 위해 사용하는 Hook은?",
+        "correct_answer": "useState",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 19.93049998418428,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "react-react",
+            "score": 15.5
+          },
+          {
+            "card_id": "react-react-6",
+            "score": 10.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 9.5
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:62",
+        "question": "JSX에서 JavaScript 표현식을 사용할 때 감싸는 기호는?",
+        "correct_answer": "{ }",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 17.942699982086197,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "react-jsx",
+            "score": 14.5
+          },
+          {
+            "card_id": "react-react-3",
+            "score": 2.0
+          },
+          {
+            "card_id": "react-useeffect-1",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:63",
+        "question": "React 컴포넌트에서 부모로부터 데이터를 전달받는 방법은?",
+        "correct_answer": "props",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 17.50219997484237,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "react-react-1",
+            "score": 13.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 9.5
+          },
+          {
+            "card_id": "react-react-3",
+            "score": 9.5
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:64",
+        "question": "다음 중 올바른 이벤트 핸들링 방법은?",
+        "correct_answer": "<button onClick={handleClick}>",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 12.966200010851026,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "react-concept",
+            "score": 5.0
+          },
+          {
+            "card_id": "java-java-1",
+            "score": 2.0
+          },
+          {
+            "card_id": "java-java",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:65",
+        "question": "React에서 리스트를 렌더링할 때 각 요소에 필요한 속성은?",
+        "correct_answer": "key",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 18.61810000264086,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "react-react-2",
+            "score": 14.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 9.5
+          },
+          {
+            "card_id": "react-react-3",
+            "score": 9.5
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:66",
+        "question": "함수형 컴포넌트의 올바른 선언 방법은?",
+        "correct_answer": "function App() { return <div/> }",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 12.39670001086779,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "react-concept-1",
+            "score": 5.0
+          },
+          {
+            "card_id": "java-java-1",
+            "score": 2.0
+          },
+          {
+            "card_id": "java-java",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:67",
+        "question": "React에서 조건부 렌더링에 사용할 수 없는 방법은?",
+        "correct_answer": "if-else (JSX 내부에서 직접)",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 22.575599985430017,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "react-react-3",
+            "score": 14.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 10.5
+          },
+          {
+            "card_id": "react-react-1",
+            "score": 9.5
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:68",
+        "question": "useState의 반환값은?",
+        "correct_answer": "[현재 상태값, 상태 변경 함수]",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 7.650499988812953,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "react-usestate",
+            "score": 9.5
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:69",
+        "question": "React 프로젝트를 생성할 때 사용하는 도구가 아닌 것은?",
+        "correct_answer": "Maven",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 19.048699992708862,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "react-react-4",
+            "score": 14.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 10.5
+          },
+          {
+            "card_id": "react-react",
+            "score": 9.5
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:70",
+        "question": "컴포넌트가 화면에서 사라질 때를 뜻하는 용어는?",
+        "correct_answer": "Unmounting",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 10.466800013091415,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "react-concept-2",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:91",
+        "question": "Python에서 리스트의 마지막 요소에 접근하는 방법은?",
+        "correct_answer": "list[-1]",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 20.340299990493804,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "python-python",
+            "score": 14.5
+          },
+          {
+            "card_id": "python-python-1",
+            "score": 10.5
+          },
+          {
+            "card_id": "python-python-3",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "python:92",
+        "question": "Python에서 딕셔너리를 생성하는 올바른 방법은?",
+        "correct_answer": "d = {key: value}",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 17.51279999734834,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "python-python-1",
+            "score": 13.5
+          },
+          {
+            "card_id": "python-python-5",
+            "score": 11.5
+          },
+          {
+            "card_id": "python-python-3",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "python:93",
+        "question": "다음 중 Python의 불변(immutable) 자료형은?",
+        "correct_answer": "tuple",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 11.682200012728572,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "python-python-2",
+            "score": 12.5
+          },
+          {
+            "card_id": "python-python-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-python-10",
+            "score": 8.5
+          }
+        ]
+      },
+      {
+        "question_id": "python:94",
+        "question": "Python에서 여러 줄 문자열을 표현하는 방법은?",
+        "correct_answer": "\"\"\"텍스트\"\"\" 또는 '''텍스트'''",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 17.566999973496422,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "python-python-3",
+            "score": 13.5
+          },
+          {
+            "card_id": "python-python-1",
+            "score": 10.5
+          },
+          {
+            "card_id": "python-python-5",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "python:95",
+        "question": "range(1, 10, 2)의 결과에 포함되지 않는 값은?",
+        "correct_answer": "10",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 11.19509999989532,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "python-range",
+            "score": 15.5
+          },
+          {
+            "card_id": "python-ndef",
+            "score": 2.0
+          },
+          {
+            "card_id": "spring-jpa-2",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:96",
+        "question": "Python 함수 정의에 사용하는 키워드는?",
+        "correct_answer": "def",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 12.583600007928908,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "python-python-4",
+            "score": 12.5
+          },
+          {
+            "card_id": "python-python-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-python-10",
+            "score": 8.5
+          }
+        ]
+      },
+      {
+        "question_id": "python:97",
+        "question": "리스트에 요소를 추가하는 메서드는?",
+        "correct_answer": "append()",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 6.908399984240532,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "python-concept",
+            "score": 4.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:98",
+        "question": "Python에서 None을 확인하는 올바른 방법은?",
+        "correct_answer": "x is None",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 17.191999999340624,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "python-python-5",
+            "score": 13.5
+          },
+          {
+            "card_id": "python-python-1",
+            "score": 11.5
+          },
+          {
+            "card_id": "python-python-3",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "python:99",
+        "question": "f-string 포매팅의 올바른 예시는?",
+        "correct_answer": "f'이름은 {name}입니다'",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 9.362499986309558,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "python-string",
+            "score": 12.5
+          },
+          {
+            "card_id": "algorithm-heap",
+            "score": 1.0
+          },
+          {
+            "card_id": "java-arraylist",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:100",
+        "question": "Python에서 파일을 안전하게 읽는 방법은?",
+        "correct_answer": "with open('file.txt') as f:",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 15.837499988265336,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "python-python-6",
+            "score": 13.5
+          },
+          {
+            "card_id": "python-python-1",
+            "score": 10.5
+          },
+          {
+            "card_id": "python-python-3",
+            "score": 10.5
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:121",
+        "question": "시간 복잡도 O(n)의 의미는?",
+        "correct_answer": "입력 크기에 비례하여 시간이 증가한다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 5.568199994741008,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "algorithm-concept",
+            "score": 6.0
+          },
+          {
+            "card_id": "algorithm-concept-4",
+            "score": 2.0
+          },
+          {
+            "card_id": "python-ndef",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:122",
+        "question": "스택(Stack)의 특성은?",
+        "correct_answer": "LIFO (Last In First Out)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 3.8059000216890126,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "algorithm-stack",
+            "score": 10.5
+          },
+          {
+            "card_id": "algorithm-complete",
+            "score": 1.0
+          },
+          {
+            "card_id": "algorithm-queue",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:123",
+        "question": "큐(Queue)의 특성은?",
+        "correct_answer": "FIFO",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 4.040100000565872,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "algorithm-queue",
+            "score": 9.5
+          },
+          {
+            "card_id": "algorithm-complete",
+            "score": 1.0
+          },
+          {
+            "card_id": "algorithm-stack",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:124",
+        "question": "버블 정렬의 평균 시간 복잡도는?",
+        "correct_answer": "O(n^2)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 4.325100017013028,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "algorithm-concept-1",
+            "score": 5.0
+          },
+          {
+            "card_id": "algorithm-bst",
+            "score": 3.0
+          },
+          {
+            "card_id": "algorithm-concept-8",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:125",
+        "question": "배열에서 특정 값을 선형 탐색할 때 최악의 시간 복잡도는?",
+        "correct_answer": "O(n)",
+        "top1_relevant": false,
+        "top3_relevant": true,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 5.089699989184737,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "algorithm-bst",
+            "score": 2.0
+          },
+          {
+            "card_id": "algorithm-concept-1",
+            "score": 2.0
+          },
+          {
+            "card_id": "algorithm-concept-8",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:126",
+        "question": "재귀 함수에 반드시 필요한 것은?",
+        "correct_answer": "기저 조건(Base Case)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 5.621799995424226,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "algorithm-concept-2",
+            "score": 5.0
+          },
+          {
+            "card_id": "algorithm-collision",
+            "score": 1.0
+          },
+          {
+            "card_id": "algorithm-heap",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:127",
+        "question": "연결 리스트(Linked List)의 장점은?",
+        "correct_answer": "삽입/삭제가 O(1)이다 (위치를 알 때)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 3.688900003908202,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "algorithm-list",
+            "score": 12.5
+          },
+          {
+            "card_id": "python-python-7",
+            "score": 1.0
+          },
+          {
+            "card_id": "react-streaming",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:128",
+        "question": "삽입 정렬이 효율적인 경우는?",
+        "correct_answer": "데이터가 거의 정렬되어 있는 경우",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 4.048800008604303,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "algorithm-concept-3",
+            "score": 4.0
+          },
+          {
+            "card_id": "algorithm-concept-9",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:129",
+        "question": "공간 복잡도가 O(1)이라는 의미는?",
+        "correct_answer": "입력 크기와 관계없이 일정한 추가 메모리만 사용한다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 6.845399999292567,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "algorithm-concept-4",
+            "score": 6.0
+          },
+          {
+            "card_id": "algorithm-concept",
+            "score": 2.0
+          },
+          {
+            "card_id": "algorithm-concept-1",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:130",
+        "question": "선택 정렬의 동작 방식은?",
+        "correct_answer": "최솟값을 찾아 맨 앞과 교환",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 4.19000000692904,
+        "response_quality_score": 3,
+        "top3": [
+          {
+            "card_id": "algorithm-concept-5",
+            "score": 4.0
+          },
+          {
+            "card_id": "algorithm-concept-1",
+            "score": 1.0
+          },
+          {
+            "card_id": "python-python-11",
+            "score": 1.0
+          }
+        ]
+      }
+    ]
+  },
+  "v2": {
+    "question_count": 50,
+    "top1_relevance_rate": 0.96,
+    "top3_relevance_rate": 0.96,
+    "fast_path_hit_rate": 0.96,
+    "fallback_rate": 0.04,
+    "average_latency_ms": 31.75975800026208,
+    "average_response_quality_score": 4.84,
+    "fallback_reasons": {
+      "top1_miss": 2,
+      "payload_not_approved": 0
+    },
+    "rows": [
+      {
+        "question_id": "java:1",
+        "question": "Java에서 정수형 변수를 선언하는 올바른 방법은?",
+        "correct_answer": "int number = 10;",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 50.52320001414046,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "java-int-variable",
+            "score": 11.0
+          },
+          {
+            "card_id": "java-array-length",
+            "score": 7.0
+          },
+          {
+            "card_id": "java-checked",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:2",
+        "question": "Java에서 문자열을 비교할 때 올바른 방법은?",
+        "correct_answer": "str1.equals(str2)",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 27.352900011464953,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "java-int-variable",
+            "score": 8.0
+          },
+          {
+            "card_id": "java-array-length",
+            "score": 7.0
+          },
+          {
+            "card_id": "java-checked",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:3",
+        "question": "다음 중 Java의 기본 자료형(primitive type)이 아닌 것은?",
+        "correct_answer": "String",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 24.367300007725134,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "java-primitive",
+            "score": 15.5
+          },
+          {
+            "card_id": "java-reflection",
+            "score": 7.0
+          },
+          {
+            "card_id": "java-string",
+            "score": 7.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:4",
+        "question": "Java에서 배열의 길이를 구하는 방법은?",
+        "correct_answer": "arr.length",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 24.93849999154918,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "java-array-length",
+            "score": 10.0
+          },
+          {
+            "card_id": "java-int-variable",
+            "score": 7.0
+          },
+          {
+            "card_id": "java-checked",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:6",
+        "question": "Java에서 상수를 선언할 때 사용하는 키워드는?",
+        "correct_answer": "final",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 25.961800012737513,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "java-final-keyword",
+            "score": 10.0
+          },
+          {
+            "card_id": "java-extends-keyword",
+            "score": 8.0
+          },
+          {
+            "card_id": "java-array-length",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:7",
+        "question": "다음 중 반복문이 아닌 것은?",
+        "correct_answer": "switch",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 18.735999998170882,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "java-loop-control",
+            "score": 8.0
+          },
+          {
+            "card_id": "java-functional-interface",
+            "score": 5.0
+          },
+          {
+            "card_id": "java-primitive",
+            "score": 5.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:8",
+        "question": "Java에서 클래스를 상속할 때 사용하는 키워드는?",
+        "correct_answer": "extends",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 21.24790000380017,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "java-extends-keyword",
+            "score": 10.0
+          },
+          {
+            "card_id": "java-final-keyword",
+            "score": 8.0
+          },
+          {
+            "card_id": "java-array-length",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:9",
+        "question": "접근 제어자 중 같은 패키지 내에서만 접근 가능한 것은?",
+        "correct_answer": "default (접근 제어자 없음)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 19.43549999850802,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "java-access-modifier",
+            "score": 11.0
+          },
+          {
+            "card_id": "java-reflection",
+            "score": 4.0
+          },
+          {
+            "card_id": "spring-async",
+            "score": 4.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:10",
+        "question": "main 메서드의 올바른 선언은?",
+        "correct_answer": "public static void main(String[] args)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 13.73879998573102,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "java-main",
+            "score": 11.5
+          },
+          {
+            "card_id": "java-default",
+            "score": 4.0
+          },
+          {
+            "card_id": "algorithm-heap",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "java:11",
+        "question": "ArrayList와 LinkedList의 차이에 대한 설명으로 올바른 것은?",
+        "correct_answer": "ArrayList는 인덱스 접근이 O(1)이다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 26.429699995787814,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "java-arraylist",
+            "score": 14.5
+          },
+          {
+            "card_id": "algorithm-heap",
+            "score": 4.0
+          },
+          {
+            "card_id": "frontend-error",
+            "score": 4.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:31",
+        "question": "Spring의 핵심 개념인 IoC(Inversion of Control)란?",
+        "correct_answer": "프레임워크가 객체의 생성과 생명주기를 관리한다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 32.57339997799136,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "spring-ioc",
+            "score": 14.5
+          },
+          {
+            "card_id": "spring-spring-bean-scope",
+            "score": 7.5
+          },
+          {
+            "card_id": "spring-batch",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:32",
+        "question": "Spring Boot 프로젝트에서 설정 파일의 기본 이름은?",
+        "correct_answer": "application.properties (또는 application.yml)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 15.972799999872223,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "spring-boot",
+            "score": 14.5
+          },
+          {
+            "card_id": "spring-spring-bean-scope",
+            "score": 7.5
+          },
+          {
+            "card_id": "spring-embedded-tomcat",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:33",
+        "question": "@Controller와 @RestController의 차이는?",
+        "correct_answer": "@RestController는 @ResponseBody가 포함되어 있다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 12.397400016197935,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "spring-controller",
+            "score": 15.5
+          },
+          {
+            "card_id": "spring-mvc",
+            "score": 7.0
+          },
+          {
+            "card_id": "algorithm-knapsack",
+            "score": 3.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:34",
+        "question": "Spring에서 의존성 주입(DI) 방법이 아닌 것은?",
+        "correct_answer": "Static 주입",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 24.68669999507256,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "spring-dependency-injection",
+            "score": 12.0
+          },
+          {
+            "card_id": "spring-async",
+            "score": 7.0
+          },
+          {
+            "card_id": "spring-batch",
+            "score": 7.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:35",
+        "question": "@Autowired 어노테이션의 역할은?",
+        "correct_answer": "의존성을 자동으로 주입한다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 13.462900009471923,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "spring-autowired",
+            "score": 10.5
+          },
+          {
+            "card_id": "spring-service",
+            "score": 4.0
+          },
+          {
+            "card_id": "algorithm-14",
+            "score": 3.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:36",
+        "question": "Spring Boot에서 내장 서버로 사용되는 것은?",
+        "correct_answer": "Tomcat",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 48.20680001284927,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "spring-embedded-tomcat",
+            "score": 11.0
+          },
+          {
+            "card_id": "spring-boot",
+            "score": 9.5
+          },
+          {
+            "card_id": "spring-async",
+            "score": 7.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:37",
+        "question": "@RequestMapping의 HTTP 메서드별 축약 어노테이션이 아닌 것은?",
+        "correct_answer": "@SendMapping",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 51.87730002216995,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "spring-requestmapping",
+            "score": 14.5
+          },
+          {
+            "card_id": "spring-responseentity",
+            "score": 5.0
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 4.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:38",
+        "question": "Spring Bean의 기본 스코프는?",
+        "correct_answer": "singleton",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 43.6111000017263,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "spring-spring-bean-scope",
+            "score": 11.0
+          },
+          {
+            "card_id": "spring-boot",
+            "score": 6.0
+          },
+          {
+            "card_id": "spring-async",
+            "score": 5.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:39",
+        "question": "@Service 어노테이션의 역할은?",
+        "correct_answer": "비즈니스 로직 계층의 빈 등록",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 29.502299992600456,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "spring-service",
+            "score": 10.5
+          },
+          {
+            "card_id": "spring-autowired",
+            "score": 4.0
+          },
+          {
+            "card_id": "algorithm-14",
+            "score": 3.0
+          }
+        ]
+      },
+      {
+        "question_id": "spring:40",
+        "question": "application.yml에서 서버 포트를 변경하는 설정은?",
+        "correct_answer": "server.port: 9090",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 67.5455000018701,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "spring-applicationyml",
+            "score": 10.0
+          },
+          {
+            "card_id": "spring-boot",
+            "score": 5.0
+          },
+          {
+            "card_id": "frontend-nextjs",
+            "score": 4.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:61",
+        "question": "React에서 컴포넌트의 상태를 관리하기 위해 사용하는 Hook은?",
+        "correct_answer": "useState",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 40.37050000624731,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "frontend-hook",
+            "score": 15.5
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 7.5
+          },
+          {
+            "card_id": "frontend-router",
+            "score": 7.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:62",
+        "question": "JSX에서 JavaScript 표현식을 사용할 때 감싸는 기호는?",
+        "correct_answer": "{ }",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 61.43500001053326,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "frontend-jsx-expression",
+            "score": 12.5
+          },
+          {
+            "card_id": "frontend-conditional-rendering",
+            "score": 7.0
+          },
+          {
+            "card_id": "frontend-hydration",
+            "score": 5.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:63",
+        "question": "React 컴포넌트에서 부모로부터 데이터를 전달받는 방법은?",
+        "correct_answer": "props",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 28.290599992033094,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "frontend",
+            "score": 10.0
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 6.5
+          },
+          {
+            "card_id": "frontend-react-server-components",
+            "score": 6.5
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:64",
+        "question": "다음 중 올바른 이벤트 핸들링 방법은?",
+        "correct_answer": "<button onClick={handleClick}>",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 61.645700014196336,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "frontend-button",
+            "score": 9.0
+          },
+          {
+            "card_id": "frontend-functional-component",
+            "score": 2.0
+          },
+          {
+            "card_id": "java-int-variable",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:65",
+        "question": "React에서 리스트를 렌더링할 때 각 요소에 필요한 속성은?",
+        "correct_answer": "key",
+        "top1_relevant": false,
+        "top3_relevant": false,
+        "fast_path_hit": false,
+        "fallback_reason": "top1_miss",
+        "latency_ms": 35.231699992436916,
+        "response_quality_score": 1,
+        "top3": [
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 6.5
+          },
+          {
+            "card_id": "frontend-react-server-components",
+            "score": 6.5
+          },
+          {
+            "card_id": "frontend-code",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:66",
+        "question": "함수형 컴포넌트의 올바른 선언 방법은?",
+        "correct_answer": "function App() { return <div/> }",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 25.619399995775893,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "frontend-functional-component",
+            "score": 9.0
+          },
+          {
+            "card_id": "frontend-hook",
+            "score": 3.0
+          },
+          {
+            "card_id": "java-functional-interface",
+            "score": 3.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:67",
+        "question": "React에서 조건부 렌더링에 사용할 수 없는 방법은?",
+        "correct_answer": "if-else (JSX 내부에서 직접)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 29.659799998626113,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "frontend-conditional-rendering",
+            "score": 11.0
+          },
+          {
+            "card_id": "frontend-react-server-components",
+            "score": 7.5
+          },
+          {
+            "card_id": "frontend-code",
+            "score": 7.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:68",
+        "question": "useState의 반환값은?",
+        "correct_answer": "[현재 상태값, 상태 변경 함수]",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 16.483500017784536,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "frontend-usestate",
+            "score": 9.5
+          },
+          {
+            "card_id": "frontend-hook",
+            "score": 5.0
+          },
+          {
+            "card_id": "frontend-react-server-components",
+            "score": 5.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:69",
+        "question": "React 프로젝트를 생성할 때 사용하는 도구가 아닌 것은?",
+        "correct_answer": "Maven",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 48.24000000371598,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 12.5
+          },
+          {
+            "card_id": "frontend-react-server-components",
+            "score": 8.5
+          },
+          {
+            "card_id": "frontend-hook",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "frontend:70",
+        "question": "컴포넌트가 화면에서 사라질 때를 뜻하는 용어는?",
+        "correct_answer": "Unmounting",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 15.47829998889938,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "frontend-2",
+            "score": 10.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:91",
+        "question": "Python에서 리스트의 마지막 요소에 접근하는 방법은?",
+        "correct_answer": "list[-1]",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 42.46620001504198,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "python-negative-indexing",
+            "score": 11.0
+          },
+          {
+            "card_id": "python-dictionary",
+            "score": 7.0
+          },
+          {
+            "card_id": "python-multiline-string",
+            "score": 7.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:92",
+        "question": "Python에서 딕셔너리를 생성하는 올바른 방법은?",
+        "correct_answer": "d = {key: value}",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 39.921199990203604,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "python-dictionary",
+            "score": 10.0
+          },
+          {
+            "card_id": "python-none",
+            "score": 8.0
+          },
+          {
+            "card_id": "python-list-comprehension",
+            "score": 7.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:93",
+        "question": "다음 중 Python의 불변(immutable) 자료형은?",
+        "correct_answer": "tuple",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 43.078499991679564,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "python-immutable",
+            "score": 12.5
+          },
+          {
+            "card_id": "python-2",
+            "score": 6.5
+          },
+          {
+            "card_id": "python-3",
+            "score": 6.5
+          }
+        ]
+      },
+      {
+        "question_id": "python:94",
+        "question": "Python에서 여러 줄 문자열을 표현하는 방법은?",
+        "correct_answer": "\"\"\"텍스트\"\"\" 또는 '''텍스트'''",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 63.59790000715293,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "python-multiline-string",
+            "score": 10.0
+          },
+          {
+            "card_id": "python-dictionary",
+            "score": 7.0
+          },
+          {
+            "card_id": "python-negative-indexing",
+            "score": 7.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:95",
+        "question": "range(1, 10, 2)의 결과에 포함되지 않는 값은?",
+        "correct_answer": "10",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 48.118700011400506,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "python-range",
+            "score": 15.5
+          },
+          {
+            "card_id": "python-weakref",
+            "score": 3.0
+          },
+          {
+            "card_id": "python-def",
+            "score": 2.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:96",
+        "question": "Python 함수 정의에 사용하는 키워드는?",
+        "correct_answer": "def",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 43.19729999406263,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "python-function-definition",
+            "score": 9.0
+          },
+          {
+            "card_id": "python-2",
+            "score": 6.5
+          },
+          {
+            "card_id": "python-3",
+            "score": 6.5
+          }
+        ]
+      },
+      {
+        "question_id": "python:97",
+        "question": "리스트에 요소를 추가하는 메서드는?",
+        "correct_answer": "append()",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 29.886400006944314,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "python",
+            "score": 8.0
+          },
+          {
+            "card_id": "java-equals",
+            "score": 1.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:98",
+        "question": "Python에서 None을 확인하는 올바른 방법은?",
+        "correct_answer": "x is None",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 51.74339999211952,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "python-none",
+            "score": 13.5
+          },
+          {
+            "card_id": "python-dictionary",
+            "score": 8.0
+          },
+          {
+            "card_id": "python-list-comprehension",
+            "score": 7.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:99",
+        "question": "f-string 포매팅의 올바른 예시는?",
+        "correct_answer": "f'이름은 {name}입니다'",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 30.154000007314608,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "python-fstring",
+            "score": 9.0
+          },
+          {
+            "card_id": "java-string",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-primitive",
+            "score": 5.0
+          }
+        ]
+      },
+      {
+        "question_id": "python:100",
+        "question": "Python에서 파일을 안전하게 읽는 방법은?",
+        "correct_answer": "with open('file.txt') as f:",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 38.935999997192994,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "python-with-statement",
+            "score": 10.0
+          },
+          {
+            "card_id": "python-dictionary",
+            "score": 7.0
+          },
+          {
+            "card_id": "python-multiline-string",
+            "score": 7.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:121",
+        "question": "시간 복잡도 O(n)의 의미는?",
+        "correct_answer": "입력 크기에 비례하여 시간이 증가한다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 22.28159998776391,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "algorithm",
+            "score": 10.0
+          },
+          {
+            "card_id": "algorithm-13",
+            "score": 8.0
+          },
+          {
+            "card_id": "algorithm-2",
+            "score": 8.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:122",
+        "question": "스택(Stack)의 특성은?",
+        "correct_answer": "LIFO (Last In First Out)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 16.307299985783175,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "algorithm-stack",
+            "score": 10.5
+          },
+          {
+            "card_id": "algorithm-np",
+            "score": 3.0
+          },
+          {
+            "card_id": "algorithm-queue",
+            "score": 3.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:123",
+        "question": "큐(Queue)의 특성은?",
+        "correct_answer": "FIFO",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 16.61319998675026,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "algorithm-queue",
+            "score": 9.5
+          },
+          {
+            "card_id": "algorithm-np",
+            "score": 3.0
+          },
+          {
+            "card_id": "algorithm-stack",
+            "score": 3.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:124",
+        "question": "버블 정렬의 평균 시간 복잡도는?",
+        "correct_answer": "O(n^2)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 18.949299992527813,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "algorithm-2",
+            "score": 9.0
+          },
+          {
+            "card_id": "algorithm-11",
+            "score": 4.0
+          },
+          {
+            "card_id": "algorithm-13",
+            "score": 4.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:125",
+        "question": "배열에서 특정 값을 선형 탐색할 때 최악의 시간 복잡도는?",
+        "correct_answer": "O(n)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 20.738399995025247,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "algorithm-3",
+            "score": 12.0
+          },
+          {
+            "card_id": "algorithm-11",
+            "score": 4.0
+          },
+          {
+            "card_id": "algorithm-13",
+            "score": 4.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:126",
+        "question": "재귀 함수에 반드시 필요한 것은?",
+        "correct_answer": "기저 조건(Base Case)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 28.030999994371086,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "algorithm-4",
+            "score": 9.0
+          },
+          {
+            "card_id": "algorithm-heap",
+            "score": 3.0
+          },
+          {
+            "card_id": "frontend-error",
+            "score": 3.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:127",
+        "question": "연결 리스트(Linked List)의 장점은?",
+        "correct_answer": "삽입/삭제가 O(1)이다 (위치를 알 때)",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 13.657999981660396,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "algorithm-linked",
+            "score": 12.5
+          },
+          {
+            "card_id": "python-list-comprehension",
+            "score": 5.5
+          },
+          {
+            "card_id": "java-functional-interface",
+            "score": 5.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:128",
+        "question": "삽입 정렬이 효율적인 경우는?",
+        "correct_answer": "데이터가 거의 정렬되어 있는 경우",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 28.227200004039332,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "algorithm-5",
+            "score": 8.0
+          },
+          {
+            "card_id": "algorithm-12",
+            "score": 3.0
+          },
+          {
+            "card_id": "algorithm-linked",
+            "score": 3.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:129",
+        "question": "공간 복잡도가 O(1)이라는 의미는?",
+        "correct_answer": "입력 크기와 관계없이 일정한 추가 메모리만 사용한다",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 20.554800023091957,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "algorithm-6",
+            "score": 10.0
+          },
+          {
+            "card_id": "algorithm-linked",
+            "score": 6.0
+          },
+          {
+            "card_id": "algorithm-unionfind",
+            "score": 6.0
+          }
+        ]
+      },
+      {
+        "question_id": "algorithm:130",
+        "question": "선택 정렬의 동작 방식은?",
+        "correct_answer": "최솟값을 찾아 맨 앞과 교환",
+        "top1_relevant": true,
+        "top3_relevant": true,
+        "fast_path_hit": true,
+        "fallback_reason": null,
+        "latency_ms": 16.50519997929223,
+        "response_quality_score": 5,
+        "top3": [
+          {
+            "card_id": "algorithm-7",
+            "score": 8.0
+          },
+          {
+            "card_id": "algorithm-2",
+            "score": 3.0
+          },
+          {
+            "card_id": "frontend-controlled-uncontrolled-components",
+            "score": 3.0
+          }
+        ]
+      }
+    ]
+  },
+  "comparison": {
+    "top1_relevance_rate": {
+      "v1": 0.78,
+      "v2": 0.96
+    },
+    "top3_relevance_rate": {
+      "v1": 0.8,
+      "v2": 0.96
+    },
+    "fast_path_hit_rate": {
+      "v1": 0.78,
+      "v2": 0.96
+    },
+    "fallback_rate": {
+      "v1": 0.22,
+      "v2": 0.04
+    },
+    "average_latency_ms": {
+      "v1": 13.70888999721501,
+      "v2": 31.75975800026208
+    },
+    "average_response_quality_score": {
+      "v1": 2.56,
+      "v2": 4.84
+    }
+  }
+}

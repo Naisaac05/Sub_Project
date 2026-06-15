@@ -1,0 +1,314 @@
+{
+  "patched_count": 10,
+  "rolled_back_count": 0,
+  "skipped_count": 0,
+  "patched_cards": [
+    "java-extends",
+    "java-equals",
+    "spring-spring-question-59",
+    "spring-aop",
+    "frontend-react-key",
+    "frontend-useref",
+    "python-with",
+    "python-metaclass",
+    "algorithm-8",
+    "algorithm-divide"
+  ],
+  "rolled_back_cards": [],
+  "skipped_cards": [],
+  "json_failed": [],
+  "failed_cards": {},
+  "backup_root": "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\app\\knowledge\\concepts_v2_backups\\course_balanced_ready10_retry_20260614T175718900409",
+  "before_after_diff_summary": {
+    "java-extends": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "COMPARISON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE",
+        "DEBUG_OR_ERROR"
+      ],
+      "before_length": 1294,
+      "after_length": 1620,
+      "example_before": "List<? extends Number> values = List.of(1, 2, 3);\nNumber first = values.get(0);\ndouble total = values.stream().mapToDouble(Number::doubleValue).sum();",
+      "example_after": "List<? extends Number> numbers = List.of(1, 2, 3);\nNumber first = numbers.get(0);\nassert first.intValue() == 1;",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "java-equals": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "COMPARISON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE",
+        "DEBUG_OR_ERROR"
+      ],
+      "before_length": 1261,
+      "after_length": 1545,
+      "example_before": "String first = new String(\"A\");\nString second = new String(\"A\");\nboolean sameValue = first.equals(second);\nboolean sameReference = first == second;",
+      "example_after": "String left = new String(\"Java\");\nString right = new String(\"Java\");\nassert left.equals(right) && left != right;",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "spring-spring-question-59": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "COMPARISON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE",
+        "DEBUG_OR_ERROR"
+      ],
+      "before_length": 1220,
+      "after_length": 1653,
+      "example_before": "@CacheEvict(cacheNames = \"users\", key = \"#id\")\npublic void updateUser(Long id) { repository.update(id); }\nservice.updateUser(1L);",
+      "example_after": "@CacheEvict(cacheNames = \"users\", key = \"#id\")\npublic void deleteUser(Long id) { repository.deleteById(id); }\nservice.deleteUser(7L);\nassert cache.get(\"users\", 7L) == null;",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "spring-aop": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "COMPARISON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE",
+        "DEBUG_OR_ERROR"
+      ],
+      "before_length": 2244,
+      "after_length": 1735,
+      "example_before": "public class ConceptCheck {\n    public static void main(String[] args) {\n        System.out.println(\"메서드 실행 전후 모두 동작하며 실행 자체를 제어할 수 있다\");\n    }\n}",
+      "example_after": "@Around(\"execution(* service.*.*(..))\")\nObject measure(ProceedingJoinPoint joinPoint) throws Throwable {\n    long started = System.nanoTime();\n    Object result = joinPoint.proceed();\n    assert System.nanoTime() >= started;\n    return result;\n}",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-react-key": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "COMPARISON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE",
+        "DEBUG_OR_ERROR"
+      ],
+      "before_length": 1561,
+      "after_length": 1694,
+      "example_before": "const items = [{ id: 7, name: \"A\" }, { id: 9, name: \"B\" }];\nconst rows = items.map(item => <li key={item.id}>{item.name}</li>);\nconst firstKey = rows[0].key;",
+      "example_after": "const mounts = [];\nfunction Row({ id }) { React.useEffect(() => mounts.push(id), []); return <span>{id}</span>; }\nconst rows = ids => <>{ids.map(id => <Row key={id} id={id} />)}</>;\nconst view = TestRenderer.create(rows([1, 2]));\nview.update(rows([2, 1]));\nassert(mounts.join(',') === '1,2');",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-useref": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "COMPARISON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE",
+        "DEBUG_OR_ERROR"
+      ],
+      "before_length": 2081,
+      "after_length": 1661,
+      "example_before": "const concept = \"useref\";\nconst expected = \"상태를 변경하고 리렌더링을 트리거\";\nconsole.log({ concept, expected });",
+      "example_after": "let renders = 0;\nlet counterRef;\nfunction Demo() { renders += 1; counterRef = React.useRef(0); return null; }\nTestRenderer.create(<Demo />);\ncounterRef.current += 1;\nassert(renders === 1);",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-with": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "COMPARISON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE",
+        "DEBUG_OR_ERROR"
+      ],
+      "before_length": 1332,
+      "after_length": 1621,
+      "example_before": "class Resource:\n    def __enter__(self): self.opened = True; return self\n    def __exit__(self, *args): self.opened = False\nwith Resource() as resource: active = resource.opened",
+      "example_after": "path = 'sample.txt'\nwith open(path, 'w', encoding='utf-8') as file:\n    file.write('A')\nassert file.closed",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-metaclass": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "COMPARISON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE",
+        "DEBUG_OR_ERROR"
+      ],
+      "before_length": 2009,
+      "after_length": 1477,
+      "example_before": "def check_concept():\n    return \"클래스를 생성하는 클래스\"\n\nprint(check_concept())",
+      "example_after": "class Meta(type):\n    pass\nclass Service(metaclass=Meta):\n    pass\nassert isinstance(Service, Meta)",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "algorithm-8": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "COMPARISON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE",
+        "DEBUG_OR_ERROR"
+      ],
+      "before_length": 2160,
+      "after_length": 1447,
+      "example_before": "def check_concept():\n    return \"최적 부분 구조와 중복 부분 문제\"\n\nprint(check_concept())",
+      "example_after": "dp = [0, 1]\nfor n in range(2, 6):\n    dp.append(dp[n - 1] + dp[n - 2])\nassert dp[5] == 5",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "algorithm-divide": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "COMPARISON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE",
+        "DEBUG_OR_ERROR"
+      ],
+      "before_length": 1985,
+      "after_length": 1568,
+      "example_before": "def check_concept():\n    return \"병합 정렬(Merge Sort)\"\n\nprint(check_concept())",
+      "example_after": "def merge(left, right):\n    result = []\n    while left and right: result.append(left.pop(0) if left[0] <= right[0] else right.pop(0))\n    return result + left + right\nmerged = merge([1, 4], [2, 3])\nassert merged == [1, 2, 3, 4]",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    }
+  },
+  "production_hit1_diff": 0.0,
+  "production_hit3_diff": 0.0,
+  "production_hit5_diff": 0.0,
+  "production_loo_diff": 0.0,
+  "content_hit1_diff": 0.0,
+  "content_hit3_diff": 0.0,
+  "content_hit5_diff": 0.0,
+  "content_loo_diff": 0.0,
+  "production_before": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9797297297297297,
+    "loo_average_score": 5.296551724137931,
+    "loo_same_category_rate": 0.6689655172413793
+  },
+  "production_after": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9797297297297297,
+    "loo_average_score": 5.296551724137931,
+    "loo_same_category_rate": 0.6689655172413793
+  },
+  "content_before": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.294520547945205,
+    "loo_same_category_rate": 0.6575342465753424
+  },
+  "content_after": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.294520547945205,
+    "loo_same_category_rate": 0.6575342465753424
+  }
+}

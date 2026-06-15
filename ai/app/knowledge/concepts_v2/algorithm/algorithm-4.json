@@ -1,0 +1,114 @@
+{
+  "card_id": "algorithm-4",
+  "category": "algorithm",
+  "term": "algorithm-question-126",
+  "aliases": [
+    "algorithm-question-126",
+    "기저 조건(Base Case)",
+    "재귀 함수에 반드시 필요한 것은?",
+    "Base",
+    "Case)",
+    "algorithm question 126",
+    "algorithm algorithm question 126"
+  ],
+  "source_question_ids": [
+    "algorithm:126"
+  ],
+  "retrieval": {
+    "embedding_text": "algorithm-question-126 기저 조건(Base Case) 재귀 함수에 반드시 필요한 것은? algorithm 재귀 함수에 반드시 필요한 것은 기저",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "algorithm-question-126",
+      "재귀",
+      "함수에",
+      "반드시",
+      "필요한",
+      "것은",
+      "기저"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "재귀 함수는 자기 자신을 호출해 문제 크기를 줄이며, 기저 조건은 더 호출하지 않고 결과를 반환하는 종료 조건이다. 기저 조건에 도달하지 못하면 호출 스택이 계속 쌓인다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "기저 조건이 재귀 호출을 멈춰 유한하게 종료시키므로 반드시 필요하다. 반복문·전역 변수·배열은 구현에 사용할 수 있지만 재귀 종료를 보장하는 필수 요소가 아니다.",
+      "key_points": [
+        "기저 조건(Base Case)",
+        "algorithm-4"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "반복문",
+          "reason": "반복문 없이도 재귀를 구현할 수 있으며 반복문은 종료 조건을 대신하지 않는다."
+        },
+        "option_2": {
+          "text": "전역 변수",
+          "reason": "매개변수와 반환값만으로 재귀 상태를 전달할 수 있어 전역 변수는 필수가 아니다."
+        },
+        "option_3": {
+          "text": "배열",
+          "reason": "숫자 계산이나 트리 탐색 재귀는 배열 없이도 구현할 수 있다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "기저 조건은 종료를 결정하고 재귀 단계는 문제를 더 작은 상태로 바꾼다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "def countdown(n):\n    if n == 0: return '끝'\n    return countdown(n - 1)\nassert countdown(3) == '끝'",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "트리 순회와 분할 정복에서 입력을 줄이며 안전하게 종료하도록 기저 조건을 설계한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

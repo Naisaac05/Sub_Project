@@ -1,0 +1,113 @@
+{
+  "card_id": "algorithm-10",
+  "category": "algorithm",
+  "term": "그래프에서",
+  "aliases": [
+    "그래프에서",
+    "algorithm 그래프에서",
+    "알고리즘 그래프에서"
+  ],
+  "source_question_ids": [
+    "algorithm:139"
+  ],
+  "retrieval": {
+    "embedding_text": "그래프에서 algorithm 그래프에서 알고리즘 그래프에서 algorithm algorithm-그래프에서 dfs 에서 방문",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "그래프에서",
+      "algorithm-그래프에서",
+      "algorithm 그래프에서",
+      "알고리즘 그래프에서",
+      "dfs",
+      "에서",
+      "방문"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "그래프에서 is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as 그래프에서, algorithm-그래프에서, algorithm 그래프에서.",
+      "examples": [
+        "Explain when 그래프에서 should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of 그래프에서, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals 그래프에서, algorithm-그래프에서, algorithm 그래프에서.",
+      "key_points": [
+        "그래프에서",
+        "algorithm",
+        "algorithm 그래프에서"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy 그래프에서's defining behavior.",
+        "Confusing 그래프에서 with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "BFS만 가능",
+          "reason": "BFS만 가능 is not the best answer because it does not satisfy the defining behavior or constraint of 그래프에서. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "힙 정렬 사용",
+          "reason": "힙 정렬 사용 is not the best answer because it does not satisfy the defining behavior or constraint of 그래프에서. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "사이클 감지는 불가능",
+          "reason": "사이클 감지는 불가능 is not the best answer because it does not satisfy the defining behavior or constraint of 그래프에서. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against 그래프에서."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate 그래프에서 in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes 그래프에서's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply 그래프에서 in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why 그래프에서 is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying 그래프에서 without checking its defining constraint.",
+          "solution": "Re-check 그래프에서's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.351452Z"
+}

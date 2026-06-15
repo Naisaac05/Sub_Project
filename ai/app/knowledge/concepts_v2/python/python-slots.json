@@ -1,0 +1,114 @@
+{
+  "card_id": "python-slots",
+  "category": "python",
+  "term": "slots",
+  "aliases": [
+    "slots",
+    "인스턴스 속성을 제한하고 __dict__를 생성하지 않아 메모리를 절약한다",
+    "__slots__의 용도는?",
+    "slots__",
+    "dict__",
+    "python slots"
+  ],
+  "source_question_ids": [
+    "python:116"
+  ],
+  "retrieval": {
+    "embedding_text": "slots 인스턴스 속성을 제한하고 __dict__를 생성하지 않아 메모리를 절약한다 __slots__의 용도는? python slots__ 용도는 인스턴스 속성을 제한하고 dict__",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "slots",
+      "slots__",
+      "용도는",
+      "인스턴스",
+      "속성을",
+      "제한하고",
+      "dict__"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "__slots__는 클래스 인스턴스가 가질 속성 이름을 선언하고 일반적인 인스턴스 __dict__ 생성을 생략할 수 있게 한다. 인스턴스가 많을 때 메모리 사용량을 줄일 수 있다.",
+      "examples": [
+        "동일한 형태의 작은 객체를 대량 생성할 때 속성 유연성과 메모리 절약의 trade-off를 판단하는 데 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "__slots__는 인스턴스 속성 저장 방식을 제한해 메모리를 절약한다. 메서드나 상속을 차단하거나 직렬화를 자동 지원하는 기능과는 다르다.",
+      "key_points": [
+        "__slots__",
+        "__dict__",
+        "메모리 절약"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "표면적인 문법이나 용어만 보고 내부 원리와 선택 기준을 확인하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "메서드를 제한한다",
+          "reason": "메서드를 제한한다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 __slots__는 인스턴스 속성 저장 방식을 제한해 메모리를 절약한다."
+        },
+        "option_2": {
+          "text": "상속을 방지한다",
+          "reason": "상속을 방지한다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 __slots__는 인스턴스 속성 저장 방식을 제한해 메모리를 절약한다."
+        },
+        "option_3": {
+          "text": "직렬화를 지원한다",
+          "reason": "직렬화를 지원한다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 __slots__는 인스턴스 속성 저장 방식을 제한해 메모리를 절약한다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`인스턴스 속성을 제한하고 __dict__를 생성하지 않아 메모리를 절약한다`는 질문의 조건을 충족하지만 다른 선택지는 `slots`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "class Point:\n    __slots__ = (\"x\", \"y\")\npoint = Point()\npoint.x = 1",
+      "explanation": "동일한 형태의 작은 객체를 대량 생성할 때 속성 유연성과 메모리 절약의 trade-off를 판단하는 데 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "동일한 형태의 작은 객체를 대량 생성할 때 속성 유연성과 메모리 절약의 trade-off를 판단하는 데 사용한다.",
+      "best_practices": [
+        "경계 사례를 작은 실행 예제로 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`slots`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `인스턴스 속성을 제한하고 __dict__를 생성하지 않아 메모리를 절약한다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

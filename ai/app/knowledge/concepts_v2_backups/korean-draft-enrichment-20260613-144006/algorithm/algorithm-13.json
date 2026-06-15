@@ -1,0 +1,114 @@
+{
+  "card_id": "algorithm-13",
+  "category": "algorithm",
+  "term": "세그먼트",
+  "aliases": [
+    "세",
+    "세그먼트",
+    "알고리즘 세",
+    "algorithm 세그먼트",
+    "알고리즘 세그먼트"
+  ],
+  "source_question_ids": [
+    "algorithm:144"
+  ],
+  "retrieval": {
+    "embedding_text": "세그먼트 세 알고리즘 세 algorithm log 알고리즘 세그먼트 algorithm 세그먼트 algorithm-세그먼트",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "log",
+      "세그먼트",
+      "알고리즘 세",
+      "알고리즘 세그먼트",
+      "algorithm 세그먼트",
+      "algorithm-세그먼트"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "세그먼트 is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as 세그먼트, algorithm-세그먼트, algorithm 세그먼트.",
+      "examples": [
+        "Explain when 세그먼트 should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of 세그먼트, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals 세그먼트, algorithm-세그먼트, algorithm 세그먼트.",
+      "key_points": [
+        "세그먼트",
+        "algorithm",
+        "algorithm 세그먼트"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy 세그먼트's defining behavior.",
+        "Confusing 세그먼트 with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "O(1)",
+          "reason": "O(1) is not the best answer because it does not satisfy the defining behavior or constraint of 세그먼트. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "O(n)",
+          "reason": "O(n) is not the best answer because it does not satisfy the defining behavior or constraint of 세그먼트. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "O(n log n)",
+          "reason": "O(n log n) is not the best answer because it does not satisfy the defining behavior or constraint of 세그먼트. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against 세그먼트."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate 세그먼트 in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes 세그먼트's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply 세그먼트 in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why 세그먼트 is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying 세그먼트 without checking its defining constraint.",
+          "solution": "Re-check 세그먼트's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.457735Z"
+}

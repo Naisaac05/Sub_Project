@@ -1,0 +1,72 @@
+{
+  "card_id": "spring-transactional",
+  "category": "spring",
+  "term": "transactional",
+  "aliases": [
+    "spring transactional"
+  ],
+  "source_question_ids": [
+    "spring:43"
+  ],
+  "retrieval": {
+    "embedding_text": "transactional spring transactional transactional은(는) @Transactional(readOnly = true)의 효과는? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "transactional",
+      "spring"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "transactional은(는) @Transactional(readOnly = true)의 효과는? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "transactional 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "transactional"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q43_option_2": {
+          "text": "JPA 변경 감지(Dirty Checking)를 수행하지 않아 성능이 향상된다",
+          "reason": "transactional의 특성과 일치하지 않는 오답입니다."
+        },
+        "q43_option_3": {
+          "text": "트랜잭션이 적용되지 않는다",
+          "reason": "transactional의 특성과 일치하지 않는 오답입니다."
+        },
+        "q43_option_4": {
+          "text": "캐시가 비활성화된다",
+          "reason": "transactional의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.054910Z",
+  "updated_at": "2026-06-10T11:01:08.054910Z"
+}

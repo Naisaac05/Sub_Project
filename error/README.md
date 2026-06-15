@@ -1,5 +1,14 @@
 # 에러 기록 가이드
 
+- [2026-06-15 승인된 useEffect 카드 Fast Path 미스 및 기술 식별자 답변 잘림](2026-06-15-approved-useeffect-fast-path-miss-and-answer-truncation.md)
+- [2026-06-15 AI v2-only 전환 후 테스트 계약 및 lightweight-only 우회 오류](2026-06-15-ai-v2-only-test-contract-and-lightweight-mode.md)
+- [2026-06-15 v2 Fast Path 도입 후에도 v1 RAG 운영 경로가 남음](2026-06-15-v1-rag-runtime-path-survived-v2-fast-path.md)
+- [2026-06-15 승인 전 dry-run 품질 통과 집계 범위 오류](2026-06-15-approval-dryrun-quality-summary-scope.md)
+- [2026-06-15 Gradle 개념 검증기 샌드박스 캐시 제한](2026-06-15-gradle-concept-verifier-sandbox-cache.md)
+- [2026-06-15 Java 예시 실행 성공 후 낮은 품질 점수](2026-06-15-java-example-executable-but-low-quality.md)
+- [2026-06-15 다음 40개 preparation 자기 제외](2026-06-15-next40-preparation-self-exclusion.md)
+- [2026-06-15 PowerShell UTF-8 JSON pipeline mojibake](2026-06-15-powershell-utf8-json-pipeline-mojibake.md)
+
 프로젝트에서 원인까지 확인한 에러와 재발 가능성이 있는 이슈를 남기는 공간입니다. 기록은 짧아도 되지만, 다음 사람이 같은 문제를 만났을 때 바로 이해하고 대응할 수 있어야 합니다.
 
 ## 파일명 규칙
@@ -31,6 +40,42 @@
 ```
 
 ## 인덱스
+- [2026-06-15 v2 Fast Path 도입 후에도 v1 RAG 운영 경로가 남음](2026-06-15-v1-rag-runtime-path-survived-v2-fast-path.md)
+- [2026-06-15 승인 전 dry-run 품질 통과 집계 범위 오류](2026-06-15-approval-dryrun-quality-summary-scope.md)
+- [2026-06-14 AI Python 명령 PATH 누락](2026-06-14-ai-python-command-path-missing.md)
+- [2026-06-14 코스 균등 payload 적용 프로세스 시간 초과](2026-06-14-course-balanced-payload-apply-timeout.md)
+- [2026-06-14 Payload duplicate score 선택지 원문 오탐](2026-06-14-payload-duplicate-score-option-text-false-positive.md)
+- [2026-06-14 Payload ANSWER_REASON 오답 비교 검출 누락](2026-06-14-payload-answer-comparison-validator-false-negative.md)
+- [2026-06-13 v2.1.5 간접 정답 출력 예시 탐지 누락](2026-06-13-v2-1-5-indirect-print-answer-detection.md)
+- [2026-06-13 v2.1.4 선택적 payload null 점수 계산 오류](2026-06-13-v2-1-4-null-optional-payload-scoring.md)
+- [2026-06-13 v2.1.3 검색 평가 범위 분리](2026-06-13-v2-1-3-retrieval-evaluation-scope-split.md)
+- [2026-06-13 v2.1.2 배치 LOO 회귀 롤백](2026-06-13-v2-1-2-batch-loo-regression-rollback.md)
+- [2026-06-13 v2.1.1 승인 전환 후 searchable text 변경](2026-06-13-v2-1-1-approval-changed-searchable-text.md)
+- [2026-06-13 v2.1.1 canonical 기술명 정규화](2026-06-13-v2-1-1-canonical-technical-name-normalization.md)
+- [2026-06-13 v2.1 카드 품질 검사 영문 비율 범위와 오답 근거 반복](2026-06-13-v2-1-quality-check-value-scope-and-repetition.md)
+- [2026-06-13 v2 Shadow 평가와 카드 write 병렬 실행으로 이전 상태 측정](2026-06-13-v2-shadow-evaluation-write-race.md)
+- [2026-06-13 Ollama fallback 재시도 생략 및 목록 답변 절단](2026-06-13-ollama-fallback-retry-and-list-truncation.md)
+- [2026-06-13 v2 코스 문항 보강 compact 불일치와 mojibake 감사 오탐](2026-06-13-v2-course-enrichment-compact-and-audit-false-positive.md)
+- [2026-06-13 v2 quality improver default root](2026-06-13-v2-quality-improver-default-root.md)
+- [2026-06-13 priority v2 enrichment duplicate embedding tokens](2026-06-13-priority-v2-enrichment-duplicate-embedding-tokens.md)
+- [2026-06-13 v2 Korean enrichment direct execution import failure](2026-06-13-v2-korean-enrichment-direct-import.md)
+- [2026-06-13 draft retrieval enrichment Shadow ranking regression](2026-06-13-draft-retrieval-enrichment-shadow-regression.md)
+- [2026-06-13 v2 approved Fast Path streaming bypass](2026-06-13-v2-fast-path-streaming-bypass.md)
+- [2026-06-13 v2 Shadow miss reason overrode existing v1 fallback](2026-06-13-v2-shadow-miss-overrode-v1-fallback.md)
+- [2026-06-13 v2 quality improver compact embedding](2026-06-13-v2-quality-improver-compact-embedding.md)
+- [2026-06-13 priority v2 enrichment import path](2026-06-13-priority-v2-enrichment-import-path.md)
+- [2026-06-13 shadow Fast Path counted draft payloads](2026-06-13-shadow-fast-path-counted-draft-payloads.md)
+- [2026-06-13 v2 partial approval lint policy](2026-06-13-v2-partial-approval-lint-policy.md)
+- [2026-06-13 RAG v2 lexical ranking ties and JSON BOM](2026-06-13-rag-v2-lexical-ranking-and-json-bom.md)
+- [2026-06-12 Markdown and JSON card loader compatibility regression](2026-06-12-markdown-json-card-loader-compatibility.md)
+- [2026-06-12 RAG v2 generic term extraction and false concept merges](2026-06-12-rag-v2-generic-term-and-false-merge.md)
+- [2026-06-12 v2 knowledge lint legacy ConceptCard import](2026-06-12-v2-knowledge-lint-legacy-conceptcard-import.md)
+- [2026-06-12 RAG v2 follow-up v1 context regression](2026-06-12-rag-v2-follow-up-v1-context-regression.md)
+- [2026-06-12 RAG v2 migration SQL options escape](2026-06-12-rag-v2-sql-options-escape.md)
+- [2026-06-09 AI lightweight evaluator rule intent import](2026-06-09-ai-lightweight-evaluator-rule-intent-import.md)
+- [2026-06-09 AI semantic judge lite prompt version drift](2026-06-09-ai-semantic-judge-lite-prompt-version-drift.md)
+- [2026-06-09 AI workflow fast path context mismatch](2026-06-09-ai-workflow-fast-path-context-mismatch.md)
+- [2026-06-08 Intent PoC embedding evaluation timed out](2026-06-08-intent-poc-embedding-eval-timeout.md)
 - [2026-05-29 AI 품질 감사 — golden eval intent-enum 불일치 + 생성 지식카드 검토 누락 (해결됨)](2026-05-29-ai-eval-and-knowledge-card-quality.md)
 - [2026-05-29 보안 감사 하드닝 — 인증/IDOR/결제/설정 10건 (로그인 백도어·결제취소 우회 등)](2026-05-29-security-audit-hardening.md)
 - [2026-05-27 GlobalExceptionHandler가 NoResourceFoundException을 잡아 404 대신 500 반환](2026-05-27-global-exception-handler-404-swallowed-as-500.md)
@@ -161,3 +206,4 @@
 - [2026-04-12 LMS 커리큘럼 주차 추가 실패](2026-04-12-lms-curriculum-week-add-fails.md)
 - [2026-04-12 LMS 커리큘럼 주차 데이터 재시작 후 유지 문제](2026-04-12-lms-curriculum-weeks-persist-restart.md)
 - [2026-04-12 Refresh token 세션 구조 개편](2026-04-12-auth-refresh-token-session-redesign.md)
+- [2026-06-15 관리자 후보 승인이 삭제된 v1 카드를 발행함](2026-06-15-ai-review-admin-approved-v1-card.md)

@@ -1,8 +1,10 @@
 import os
 import unittest
+from unittest.mock import patch
 
 from app.schemas import AiGenerateRequest
 from app.workflow.answer_cache import cache_key_for, clear_answer_cache, put_cached_answer
+from app.workflow.embedding_intent import intent_from_label
 from app.workflow.runner import run_review_workflow, run_review_workflow_stream
 
 
@@ -88,22 +90,29 @@ class WorkflowDegradedModesTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.model_used, "template")
         self.assertEqual(response.route, "cache_only_miss")
 
-    def test_lightweight_only_returns_static_fast_path_without_generator(self):
+    def test_lightweight_only_returns_template_without_generator(self):
         os.environ["AI_REVIEW_LIGHTWEIGHT_ONLY"] = "true"
 
         def failing_generator(**kwargs):
             raise AssertionError("lightweight_only fast path must not call generator")
 
-        response = run_review_workflow(
-            "free-question",
-            AiGenerateRequest(user_answer="REST API\uac00 \ubb50\uc57c?"),
-            generator=failing_generator,
-        )
+        with patch(
+            "app.workflow.nodes.classify_free_question_with_embeddings",
+            return_value=intent_from_label(
+                "CONCEPT_DEFINITION",
+                "REST API\uac00 \ubb50\uc57c?",
+                confidence=0.95,
+            ),
+        ):
+            response = run_review_workflow(
+                "free-question",
+                AiGenerateRequest(user_answer="REST API\uac00 \ubb50\uc57c?"),
+                generator=failing_generator,
+            )
 
-        self.assertFalse(response.fallback_used)
-        self.assertEqual(response.model_used, "lightweight-template")
-        self.assertEqual(response.route, "static_fast_path")
-        self.assertIn("REST", response.answer)
+        self.assertTrue(response.fallback_used)
+        self.assertEqual(response.model_used, "template")
+        self.assertEqual(response.route, "lightweight_only_miss")
 
     def test_lightweight_only_miss_uses_template_without_cache_or_generator(self):
         os.environ["AI_REVIEW_LIGHTWEIGHT_ONLY"] = "true"

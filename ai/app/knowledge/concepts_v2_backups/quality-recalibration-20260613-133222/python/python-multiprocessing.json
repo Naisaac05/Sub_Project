@@ -1,0 +1,112 @@
+{
+  "card_id": "python-multiprocessing",
+  "category": "python",
+  "term": "multiprocessing",
+  "aliases": [
+    "multiprocessing",
+    "python multiprocessing",
+    "파이썬 multiprocessing"
+  ],
+  "source_question_ids": [
+    "python:119"
+  ],
+  "retrieval": {
+    "embedding_text": "multiprocessing python multiprocessing 파이썬 multiprocessing python python-multiprocessing cpu bound",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "multiprocessing",
+      "python-multiprocessing",
+      "python multiprocessing",
+      "파이썬 multiprocessing",
+      "cpu",
+      "bound"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "multiprocessing is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as multiprocessing, python-multiprocessing, python multiprocessing.",
+      "examples": [
+        "Explain when multiprocessing should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of multiprocessing, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals multiprocessing, python-multiprocessing, python multiprocessing.",
+      "key_points": [
+        "multiprocessing",
+        "python",
+        "python multiprocessing"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy multiprocessing's defining behavior.",
+        "Confusing multiprocessing with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "CPU-bound → threading, I/O-bound → multiprocessing",
+          "reason": "CPU-bound → threading, I/O-bound → multiprocessing is not the best answer because it does not satisfy the defining behavior or constraint of multiprocessing. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "둘 다 CPU-bound에 적합",
+          "reason": "둘 다 CPU-bound에 적합 is not the best answer because it does not satisfy the defining behavior or constraint of multiprocessing. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "둘 다 I/O-bound에 적합",
+          "reason": "둘 다 I/O-bound에 적합 is not the best answer because it does not satisfy the defining behavior or constraint of multiprocessing. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against multiprocessing."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate multiprocessing in an appropriate python context.",
+      "explanation": "Use a minimal example that makes multiprocessing's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply multiprocessing in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why multiprocessing is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying multiprocessing without checking its defining constraint.",
+          "solution": "Re-check multiprocessing's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.879815Z"
+}

@@ -1,0 +1,115 @@
+{
+  "card_id": "java-checked",
+  "category": "java",
+  "term": "checked",
+  "aliases": [
+    "checked",
+    "checked는 컴파일 시점에 처리가 강제된다",
+    "Java에서 checked exception과 unchecked exception의 차이는?",
+    "Java",
+    "exception",
+    "unchecked",
+    "java checked"
+  ],
+  "source_question_ids": [
+    "java:15"
+  ],
+  "retrieval": {
+    "embedding_text": "checked checked는 컴파일 시점에 처리가 강제된다 Java에서 checked exception과 unchecked exception의 차이는? java 에서 exception unchecked 차이는 컴파일 시점에",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "checked",
+      "에서",
+      "exception",
+      "unchecked",
+      "차이는",
+      "컴파일",
+      "시점에"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "checked exception은 컴파일러가 호출자에게 처리하거나 `throws`로 선언하도록 요구하는 예외다. unchecked exception은 RuntimeException 계열로 컴파일 시 처리가 강제되지 않는다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "checked exception은 컴파일 시점에 처리 여부가 검사된다. unchecked 강제 처리, 모든 예외의 try-catch 의무, 차이가 없다는 설명은 예외 계층과 컴파일러 검사를 구분하지 못한다.",
+      "key_points": [
+        "checked는 컴파일 시점에 처리가 강제된다",
+        "java-checked"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_1": {
+          "text": "unchecked는 컴파일 시점에 처리가 강제된다",
+          "reason": "unchecked exception은 명시적으로 처리할 수 있지만 컴파일러가 강제하지 않는다."
+        },
+        "option_2": {
+          "text": "둘 다 반드시 try-catch가 필요하다",
+          "reason": "checked exception도 `throws`로 전파할 수 있어 모두 try-catch가 반드시 필요한 것은 아니다."
+        },
+        "option_3": {
+          "text": "차이가 없다",
+          "reason": "두 종류는 컴파일러의 처리 강제 여부와 상속 계층이 다르다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "checked는 처리·선언이 필수이고 unchecked는 호출자의 선택이다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import java.io.IOException;\npublic class ConceptCheck {\n    static void load() throws IOException { throw new IOException(\"read failed\"); }\n    public static void main(String[] args) {\n        try { load(); throw new AssertionError(); }\n        catch (IOException expected) { assert expected.getMessage().equals(\"read failed\"); }\n    }\n}",
+      "explanation": "IOException을 선언한 메서드를 호출하고 catch로 처리한다. 검증기는 예외를 처리하지 않은 동일 호출이 컴파일에 실패하는지도 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "복구 가능한 외부 자원 오류는 checked로 전달하고 프로그래밍 오류는 unchecked로 표현할지 결정한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved",
+      "EXAMPLE_REQUEST": "approved"
+    },
+    "approved_at": "2026-06-14T23:11:38.676798Z",
+    "reviewer": "concept-execution-verifier",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

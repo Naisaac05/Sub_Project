@@ -1,0 +1,120 @@
+{
+  "card_id": "frontend-controlled-uncontrolled-components",
+  "category": "frontend",
+  "term": "controlled-uncontrolled-components",
+  "aliases": [
+    "cuc",
+    "프론트엔드 cuc",
+    "components",
+    "controlled uncontrolled components",
+    "controlled",
+    "uncontrolled",
+    "controlled-uncontrolled-components",
+    "frontend controlled uncontrolled components",
+    "프론트엔드 controlled uncontrolled components",
+    "react form control"
+  ],
+  "source_question_ids": [
+    "frontend:79"
+  ],
+  "retrieval": {
+    "embedding_text": "controlled-uncontrolled-components cuc 프론트엔드 cuc components frontend controlled uncontrolled controlled uncontrolled components",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "cuc",
+      "프론트엔드 cuc",
+      "components",
+      "controlled",
+      "uncontrolled",
+      "controlled uncontrolled components",
+      "controlled-uncontrolled-components"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "controlled uncontrolled components is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as controlled-uncontrolled-components, frontend-controlled-uncontrolled-components, controlled uncontrolled components.",
+      "examples": [
+        "Explain when controlled uncontrolled components should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of controlled uncontrolled components, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals controlled-uncontrolled-components, frontend-controlled-uncontrolled-components, controlled uncontrolled components.",
+      "key_points": [
+        "controlled-uncontrolled-components",
+        "frontend",
+        "controlled uncontrolled components"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy controlled uncontrolled components's defining behavior.",
+        "Confusing controlled uncontrolled components with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "Client/Server",
+          "reason": "Client/Server is not the best answer because it does not satisfy the defining behavior or constraint of controlled uncontrolled components. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "Sync/Async",
+          "reason": "Sync/Async is not the best answer because it does not satisfy the defining behavior or constraint of controlled uncontrolled components. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "Static/Dynamic",
+          "reason": "Static/Dynamic is not the best answer because it does not satisfy the defining behavior or constraint of controlled uncontrolled components. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against controlled uncontrolled components."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate controlled uncontrolled components in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes controlled uncontrolled components's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply controlled uncontrolled components in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why controlled uncontrolled components is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying controlled uncontrolled components without checking its defining constraint.",
+          "solution": "Re-check controlled uncontrolled components's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.646161Z"
+}

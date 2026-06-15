@@ -1,0 +1,115 @@
+{
+  "card_id": "java-loop-control",
+  "category": "java",
+  "term": "loop-control",
+  "aliases": [
+    "loop-control",
+    "switch",
+    "다음 중 반복문이 아닌 것은?",
+    "loop control",
+    "java loop control"
+  ],
+  "source_question_ids": [
+    "java:7"
+  ],
+  "retrieval": {
+    "embedding_text": "loop-control switch 다음 중 반복문이 아닌 것은? java 반복문이 아닌 것은",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "loop-control",
+      "반복문이",
+      "아닌",
+      "것은",
+      "switch"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "`loop-control`은(는) Java 문항에서 다루는 핵심 개념입니다. 이 문항은 “다음 중 반복문이 아닌 것은?”를 통해 개념의 적용 조건과 결과를 확인합니다. 핵심은 정답인 “switch”가 어떤 동작을 보장하는지 이해하고, 비슷해 보이는 선택지와 구분하는 것입니다. 문법만 암기하기보다 입력 조건, 실행 과정, 결과를 함께 확인해야 실무 코드에서도 올바르게 적용할 수 있습니다.",
+      "examples": [
+        "문항의 조건에서 `switch`가 성립하는 이유를 코드 실행 흐름과 함께 설명합니다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 `switch`입니다. 질문이 요구하는 loop-control의 조건을 직접 충족하며, Java에서 기대하는 동작과 결과를 정확히 설명합니다. 선택지를 판단할 때는 관련 용어가 포함됐는지만 보지 말고 실제 실행 결과가 질문의 요구사항과 일치하는지 확인해야 합니다.",
+      "key_points": [
+        "loop-control",
+        "반복문이",
+        "아닌",
+        "것은",
+        "switch"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "관련 용어가 있다는 이유만으로 선택지를 고르는 실수",
+        "실제 실행 결과를 확인하지 않고 문법 형태만 비교하는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "for",
+          "reason": "`for`은(는) 질문이 요구하는 `loop-control`의 조건이나 실행 결과를 충족하지 않습니다. 정답 `switch`와 비교하면 적용 대상 또는 보장하는 결과가 다르므로 오답입니다."
+        },
+        "option_1": {
+          "text": "while",
+          "reason": "`while`은(는) 질문이 요구하는 `loop-control`의 조건이나 실행 결과를 충족하지 않습니다. 정답 `switch`와 비교하면 적용 대상 또는 보장하는 결과가 다르므로 오답입니다."
+        },
+        "option_2": {
+          "text": "do-while",
+          "reason": "`do-while`은(는) 질문이 요구하는 `loop-control`의 조건이나 실행 결과를 충족하지 않습니다. 정답 `switch`와 비교하면 적용 대상 또는 보장하는 결과가 다르므로 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`switch`는 질문의 조건을 충족하지만 다른 선택지는 `loop-control`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "public class ConceptCheck {\n    public static void main(String[] args) {\n        System.out.println(\"switch\");\n    }\n}",
+      "explanation": "예시는 `loop-control`의 핵심 결과인 `switch`를 가장 작은 실행 단위로 확인하도록 구성했습니다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "실무에서는 Java 코드 리뷰, 장애 원인 분석, 구현 방식 선택 과정에서 `loop-control`의 조건을 확인합니다. 특히 `switch`가 보장되는지 테스트로 검증하면 비슷한 개념을 잘못 적용하는 문제를 줄일 수 있습니다.",
+      "best_practices": [
+        "개념을 적용하기 전에 입력 조건과 기대 결과를 먼저 적습니다.",
+        "정상 사례와 경계 사례를 각각 작은 테스트로 검증합니다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`loop-control`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `switch`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

@@ -38,9 +38,12 @@ def limit_sentences(text: str, sentence_limit: int) -> str:
     sentence_count = 0
     result: list[str] = []
 
-    for char in text:
+    for index, char in enumerate(text):
         result.append(char)
-        if char in ".!?\n":
+        previous = text[index - 1] if index > 0 else ""
+        following = text[index + 1] if index + 1 < len(text) else ""
+        identifier_dot = char == "." and previous.isalnum() and following.isalnum()
+        if char in ".!?" and not identifier_dot:
             sentence_count += 1
             if sentence_count >= sentence_limit:
                 break

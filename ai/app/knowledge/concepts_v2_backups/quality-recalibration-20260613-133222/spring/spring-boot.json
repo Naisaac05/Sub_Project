@@ -1,0 +1,113 @@
+{
+  "card_id": "spring-boot",
+  "category": "spring",
+  "term": "boot",
+  "aliases": [
+    "boot",
+    "spring boot",
+    "스프링 boot"
+  ],
+  "source_question_ids": [
+    "spring:32"
+  ],
+  "retrieval": {
+    "embedding_text": "boot spring boot 스프링 boot spring spring-boot application.properties 또는 application.yml",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "boot",
+      "spring-boot",
+      "spring boot",
+      "스프링 boot",
+      "application.properties",
+      "또는",
+      "application.yml"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "boot is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as boot, spring-boot, spring boot.",
+      "examples": [
+        "Explain when boot should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of boot, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals boot, spring-boot, spring boot.",
+      "key_points": [
+        "boot",
+        "spring",
+        "spring boot"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy boot's defining behavior.",
+        "Confusing boot with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "config.xml",
+          "reason": "config.xml is not the best answer because it does not satisfy the defining behavior or constraint of boot. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "settings.properties",
+          "reason": "settings.properties is not the best answer because it does not satisfy the defining behavior or constraint of boot. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "spring.conf",
+          "reason": "spring.conf is not the best answer because it does not satisfy the defining behavior or constraint of boot. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against boot."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate boot in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes boot's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply boot in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why boot is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying boot without checking its defining constraint.",
+          "solution": "Re-check boot's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.971411Z"
+}

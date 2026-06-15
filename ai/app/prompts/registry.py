@@ -51,6 +51,12 @@ PROMPT_REGISTRY = {
         "alias": "latest",
         "description": "Semantic quality and bias assessment LLM judge template"
     },
+    "semantic_judge_lite_v1": {
+        "name": "semantic_judge_lite",
+        "version": "1.0.0",
+        "alias": "latest",
+        "description": "Lightweight semantic quality and bias assessment LLM judge template"
+    },
     "grounding_judge_v1": {
         "name": "grounding_judge",
         "version": "1.0.0",

@@ -1,0 +1,111 @@
+{
+  "card_id": "python-mro",
+  "category": "python",
+  "term": "mro",
+  "aliases": [
+    "mro",
+    "python mro",
+    "파이썬 mro"
+  ],
+  "source_question_ids": [
+    "python:104"
+  ],
+  "retrieval": {
+    "embedding_text": "mro python mro 파이썬 mro python python-mro class.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "mro",
+      "python-mro",
+      "python mro",
+      "파이썬 mro",
+      "class."
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "mro is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as mro, python-mro, python mro.",
+      "examples": [
+        "Explain when mro should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of mro, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals mro, python-mro, python mro.",
+      "key_points": [
+        "mro",
+        "python",
+        "python mro"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy mro's defining behavior.",
+        "Confusing mro with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "Class.order()",
+          "reason": "Class.order() is not the best answer because it does not satisfy the defining behavior or constraint of mro. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "Class.inheritance()",
+          "reason": "Class.inheritance() is not the best answer because it does not satisfy the defining behavior or constraint of mro. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "Class.__bases_order__",
+          "reason": "Class.__bases_order__ is not the best answer because it does not satisfy the defining behavior or constraint of mro. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against mro."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate mro in an appropriate python context.",
+      "explanation": "Use a minimal example that makes mro's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply mro in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why mro is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying mro without checking its defining constraint.",
+          "solution": "Re-check mro's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.871777Z"
+}

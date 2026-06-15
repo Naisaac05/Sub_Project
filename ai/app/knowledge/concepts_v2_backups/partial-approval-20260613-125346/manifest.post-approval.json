@@ -1,0 +1,22 @@
+{
+  "approved_card_ids": [
+    "frontend-react-key",
+    "java-equals",
+    "java-extends",
+    "python-with",
+    "spring-spring-question-59"
+  ],
+  "approved_card_count": 5,
+  "approved_payload_count": 15,
+  "target_post_sha256": {
+    "frontend/frontend-react-key.json": "446cb9568514dec62eaef2d850379adf406b2db565d4b3cce8ca895e8a5082ec",
+    "java/java-equals.json": "227a2d16b58646904223a70de538149ac4c09b44967c72afcf087246ecbff3c1",
+    "spring/spring-spring-question-59.json": "1025abf8299ffd9ebe6adc09338496f22b0424d3cdd159c705c3057f37ed5c49",
+    "java/java-extends.json": "67337cd8ad2fe29eb7bcc66c6a1ca62cf6036320e8b2123aa43595d7d2c9c948",
+    "python/python-with.json": "bc918096aacdfe25b57014a16a16bcf9fe3199d033228490db47725a6a989ae8"
+  },
+  "v1_tree_sha256": "6c76c68f7106288cbe60da485754a2ec8e8840753338484e5cb28184e3aebc64",
+  "non_target_v2_tree_sha256": "1b36b0102041f3e64509c63fbd72008d1f42001347e55ad8b8ece387a28f7fa3",
+  "non_target_approved": [],
+  "rollback_verified": true
+}

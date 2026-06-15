@@ -1,0 +1,72 @@
+{
+  "card_id": "spring-responseentity",
+  "category": "spring",
+  "term": "responseentity",
+  "aliases": [
+    "spring responseentity"
+  ],
+  "source_question_ids": [
+    "spring:50"
+  ],
+  "retrieval": {
+    "embedding_text": "responseentity spring responseentity responseentity은(는) ResponseEntity를 사용하는 이유는? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "responseentity",
+      "spring"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "responseentity은(는) ResponseEntity를 사용하는 이유는? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "responseentity 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "responseentity"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q50_option_2": {
+          "text": "HTTP 상태 코드와 헤더를 직접 제어할 수 있다",
+          "reason": "responseentity의 특성과 일치하지 않는 오답입니다."
+        },
+        "q50_option_3": {
+          "text": "자동으로 JSON 변환이 된다",
+          "reason": "responseentity의 특성과 일치하지 않는 오답입니다."
+        },
+        "q50_option_4": {
+          "text": "보안이 강화된다",
+          "reason": "responseentity의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

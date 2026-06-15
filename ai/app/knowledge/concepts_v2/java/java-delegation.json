@@ -1,0 +1,114 @@
+{
+  "card_id": "java-delegation",
+  "category": "java",
+  "term": "delegation",
+  "aliases": [
+    "delegation",
+    "부모 클래스 로더에게 먼저 위임하고, 없으면 자식이 로딩한다",
+    "클래스 로더의 동작 원칙 중 '위임 모델(Delegation Model)'이란?",
+    "Delegation",
+    "Model)",
+    "java delegation"
+  ],
+  "source_question_ids": [
+    "java:29"
+  ],
+  "retrieval": {
+    "embedding_text": "delegation 부모 클래스 로더에게 먼저 위임하고, 없으면 자식이 로딩한다 클래스 로더의 동작 원칙 중 '위임 모델(Delegation Model)'이란? java 클래스 로더의 동작 원칙 위임 모델",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "delegation",
+      "클래스",
+      "로더의",
+      "동작",
+      "원칙",
+      "위임",
+      "모델"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "클래스 로더 위임 모델은 클래스를 요청받은 로더가 먼저 부모 로더에 탐색을 맡기고, 부모가 찾지 못했을 때 자신이 로딩하는 방식이다. 핵심 Java 클래스가 애플리케이션 클래스에 의해 대체되는 일을 막는다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "부모 로더가 우선 탐색하고 실패한 경우에만 자식 로더가 직접 로딩하므로 위임 모델을 정확히 설명한다. 자식 우선·동시 로딩·Application 로더 단독 사용은 부모 우선 계층을 따르지 않는다.",
+      "key_points": [
+        "부모 클래스 로더에게 먼저 위임하고, 없으면 자식이 로딩한다",
+        "java-delegation"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "자식 클래스 로더가 먼저 로딩을 시도한다",
+          "reason": "자식 우선 로딩은 일부 컨테이너의 별도 전략이며 기본 위임 모델과 순서가 반대다."
+        },
+        "option_2": {
+          "text": "모든 클래스 로더가 동시에 로딩을 시도한다",
+          "reason": "모든 로더가 동시에 시도하면 계층별 책임과 클래스 동일성이 보장되지 않는다."
+        },
+        "option_3": {
+          "text": "Application 클래스 로더만 사용한다",
+          "reason": "Application 로더만 사용하면 Bootstrap·Platform 로더가 담당하는 표준 클래스를 처리할 수 없다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "부모 우선은 표준 클래스 보호에 유리하고, 자식 우선은 애플리케이션별 라이브러리 격리에 유리하다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "public class ConceptCheck {\n    static class TrackingLoader extends ClassLoader {\n        boolean findClassCalled;\n        TrackingLoader(ClassLoader parent) { super(parent); }\n        protected Class<?> findClass(String name) throws ClassNotFoundException {\n            findClassCalled = true;\n            throw new ClassNotFoundException(name);\n        }\n    }\n    public static void main(String[] args) throws Exception {\n        TrackingLoader child = new TrackingLoader(ClassLoader.getSystemClassLoader());\n        Class<?> loaded = child.loadClass(\"java.lang.String\");\n        assert loaded == String.class && !child.findClassCalled;\n    }\n}",
+      "explanation": "자식 ClassLoader가 String을 요청했을 때 부모가 먼저 찾아 자식의 findClass가 호출되지 않는 부모 우선 위임을 검증한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "클래스 충돌 진단과 플러그인 로딩 구조를 설계할 때 부모 우선 위임 여부를 확인한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved",
+      "EXAMPLE_REQUEST": "approved"
+    },
+    "approved_at": "2026-06-14T23:11:38.676798Z",
+    "reviewer": "concept-execution-verifier",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

@@ -1,0 +1,118 @@
+{
+  "card_id": "frontend-nextjs",
+  "category": "frontend",
+  "term": "nextjs",
+  "aliases": [
+    "nextjs",
+    "모두 서버 측에서 HTML을 생성한다",
+    "Next.js에서 SSR, SSG, ISR의 공통점은?",
+    "Next.js",
+    "SSR",
+    "SSG",
+    "ISR",
+    "HTML",
+    "frontend nextjs"
+  ],
+  "source_question_ids": [
+    "frontend:85"
+  ],
+  "retrieval": {
+    "embedding_text": "nextjs 모두 서버 측에서 HTML을 생성한다 Next.js에서 SSR, SSG, ISR의 공통점은? frontend Next.js 에서 SSR SSG ISR 공통점은",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "nextjs",
+      "Next.js",
+      "에서",
+      "SSR",
+      "SSG",
+      "ISR",
+      "공통점은"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Next.js의 SSR, SSG, ISR은 생성 시점은 다르지만 클라이언트 요청 전에 서버 환경에서 HTML을 만든다.",
+      "examples": [
+        "Next.js 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "SSR은 요청마다, SSG는 빌드 시, ISR은 재검증 주기에 따라 정적 페이지를 갱신한다.",
+      "key_points": [
+        "Next.js",
+        "SSR",
+        "SSG",
+        "ISR"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "모두 클라이언트에서 렌더링된다",
+          "reason": "모두 클라이언트 전용 렌더링 방식은 아니다."
+        },
+        "option_2": {
+          "text": "모두 실시간으로 데이터를 반영한다",
+          "reason": "SSG와 ISR은 모든 요청에서 실시간 데이터를 반영하지 않는다."
+        },
+        "option_3": {
+          "text": "모두 CDN 캐싱이 불가능하다",
+          "reason": "정적 결과는 CDN 캐싱과 함께 사용할 수 있다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`모두 서버 측에서 HTML을 생성한다`는 질문의 조건을 충족하지만 다른 선택지는 `nextjs`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "const modes = { SSR: \"request\", SSG: \"build\", ISR: \"revalidate\" };\nconst serverGenerated = Object.keys(modes);\nconst count = serverGenerated.length;",
+      "explanation": "Next.js 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Next.js 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`nextjs`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `모두 서버 측에서 HTML을 생성한다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

@@ -1,0 +1,86 @@
+{
+  "card_id": "java-equals",
+  "category": "java",
+  "term": "equals",
+  "aliases": [
+    "java equals",
+    "자바 equals",
+    "object equality",
+    "logical equality",
+    "equals method",
+    "객체 동등성"
+  ],
+  "source_question_ids": [
+    "java:2"
+  ],
+  "retrieval": {
+    "embedding_text": "equals java equals 자바 equals object equality java java-equals logical-equality object-equality equals-method hashcode-contract",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "java-equals",
+      "logical-equality",
+      "object-equality",
+      "equals-method",
+      "hashcode-contract"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Java의 equals 메서드는 두 객체가 논리적으로 같은 값을 나타내는지 판단합니다. 기본 Object.equals는 참조 동일성을 비교하지만, 값 객체는 필요한 필드를 기준으로 equals를 재정의하며 hashCode도 같은 계약에 맞춰 재정의해야 합니다.",
+      "examples": [
+        "java equals 사용 조건을 설명하세요."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "문자열이나 값 객체의 내용 동등성을 비교하려면 equals를 사용해야 합니다. ==는 객체 참조가 같은지 확인하므로 서로 다른 인스턴스가 같은 값을 담은 경우 올바른 동등성 판단을 하지 못합니다.",
+      "key_points": [
+        "java-equals",
+        "logical-equality",
+        "object-equality"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "equals만 재정의하고 hashCode를 재정의하지 않으면 HashMap과 HashSet에서 동등한 객체가 다르게 처리될 수 있습니다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "str1 == str2",
+          "reason": "`str1 == str2`은(는) Java의 equals 메서드는 두 객체가 논리적으로 같은 값을 나타내는지 판단합니다의 책임과 일치하지 않습니다."
+        },
+        "option_1": {
+          "text": "str1.compare(str2)",
+          "reason": "`str1.compare(str2)`은(는) Java의 equals 메서드는 두 객체가 논리적으로 같은 값을 나타내는지 판단합니다의 책임과 일치하지 않습니다."
+        },
+        "option_2": {
+          "text": "str1.match(str2)",
+          "reason": "`str1.match(str2)`은(는) Java의 equals 메서드는 두 객체가 논리적으로 같은 값을 나타내는지 판단합니다의 책임과 일치하지 않습니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T05:03:46.229958Z"
+}

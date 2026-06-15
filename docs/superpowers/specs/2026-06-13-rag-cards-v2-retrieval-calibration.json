@@ -1,0 +1,1715 @@
+{
+  "card_count": 142,
+  "approved_candidate_count": 142,
+  "approved_candidates": {
+    "algorithm-10": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-10",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.654000003938563,
+      "missing_payloads": []
+    },
+    "algorithm-11": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-11",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.005899998242967,
+      "missing_payloads": []
+    },
+    "algorithm-12": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-12",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.417899996042252,
+      "missing_payloads": []
+    },
+    "algorithm-13": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-13",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.355100001906976,
+      "missing_payloads": []
+    },
+    "algorithm-14": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-14",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.125600000610575,
+      "missing_payloads": []
+    },
+    "algorithm-2": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-2",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.47659999190364,
+      "missing_payloads": []
+    },
+    "algorithm-3": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-3",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.335100002004765,
+      "missing_payloads": []
+    },
+    "algorithm-4": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-4",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.4789000055752695,
+      "missing_payloads": []
+    },
+    "algorithm-5": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-5",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.594199995859526,
+      "missing_payloads": []
+    },
+    "algorithm-6": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-6",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.0809000018052757,
+      "missing_payloads": []
+    },
+    "algorithm-7": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-7",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.971800008206628,
+      "missing_payloads": []
+    },
+    "algorithm-8": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-8",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.3681000059004873,
+      "missing_payloads": []
+    },
+    "algorithm-9": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-9",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.3662999921943992,
+      "missing_payloads": []
+    },
+    "algorithm-binary": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-binary",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.27290000859648,
+      "missing_payloads": []
+    },
+    "algorithm-breadth-first-search": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-breadth-first-search",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 3.495400000247173,
+      "missing_payloads": []
+    },
+    "algorithm-bst": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-bst",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 2.9233999957796186,
+      "missing_payloads": []
+    },
+    "algorithm-collision": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-collision",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.1433000112883747,
+      "missing_payloads": []
+    },
+    "algorithm-dfs": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-dfs",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.2396000024164096,
+      "missing_payloads": []
+    },
+    "algorithm-divide": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-divide",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.1688999879406765,
+      "missing_payloads": []
+    },
+    "algorithm-heap": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-heap",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.419199995230883,
+      "missing_payloads": []
+    },
+    "algorithm-knapsack": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-knapsack",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.174199992325157,
+      "missing_payloads": []
+    },
+    "algorithm-lcs": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-lcs",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.412600003182888,
+      "missing_payloads": []
+    },
+    "algorithm-linked": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-linked",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.317199989804067,
+      "missing_payloads": []
+    },
+    "algorithm-mst": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-mst",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.055300003732555,
+      "missing_payloads": []
+    },
+    "algorithm-np": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-np",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.463400000939146,
+      "missing_payloads": []
+    },
+    "algorithm-queue": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-queue",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.161800003610551,
+      "missing_payloads": []
+    },
+    "algorithm-stack": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-stack",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.180500000482425,
+      "missing_payloads": []
+    },
+    "algorithm-topological": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-topological",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.1823000103468075,
+      "missing_payloads": []
+    },
+    "algorithm-unionfind": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm-unionfind",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.289600001764484,
+      "missing_payloads": []
+    },
+    "algorithm": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "algorithm",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.139299992355518,
+      "missing_payloads": []
+    },
+    "frontend-2": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-2",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.40640000347048,
+      "missing_payloads": []
+    },
+    "frontend-button": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-button",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 8.905599999707192,
+      "missing_payloads": []
+    },
+    "frontend-code": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-code",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 9.476799998083152,
+      "missing_payloads": []
+    },
+    "frontend-concurrent": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-concurrent",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.802499996614642,
+      "missing_payloads": []
+    },
+    "frontend-conditional-rendering": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-conditional-rendering",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 9.377599999425001,
+      "missing_payloads": []
+    },
+    "frontend-context": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-context",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.456500006606802,
+      "missing_payloads": []
+    },
+    "frontend-controlled-uncontrolled-components": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-controlled-uncontrolled-components",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 5.9705000021494925,
+      "missing_payloads": []
+    },
+    "frontend-custom": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-custom",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.530999991809949,
+      "missing_payloads": []
+    },
+    "frontend-dom": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-dom",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 12.898400003905408,
+      "missing_payloads": []
+    },
+    "frontend-error": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-error",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.335999991279095,
+      "missing_payloads": []
+    },
+    "frontend-fiber": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-fiber",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 10.335300001315773,
+      "missing_payloads": []
+    },
+    "frontend-functional-component": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-functional-component",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.033099998603575,
+      "missing_payloads": []
+    },
+    "frontend-hook": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-hook",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.4534999983152375,
+      "missing_payloads": []
+    },
+    "frontend-hydration": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-hydration",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.660699989879504,
+      "missing_payloads": []
+    },
+    "frontend-jsx-expression": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-jsx-expression",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 12.21570000052452,
+      "missing_payloads": []
+    },
+    "frontend-nextjs": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-nextjs",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.157000010716729,
+      "missing_payloads": []
+    },
+    "frontend-react-key": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-react-key",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 7.736100000329316,
+      "missing_payloads": []
+    },
+    "frontend-react-project-tool": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-react-project-tool",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 7.07469999906607,
+      "missing_payloads": []
+    },
+    "frontend-react-server-components": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-react-server-components",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 6.733400005032308,
+      "missing_payloads": []
+    },
+    "frontend-reactmemo": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-reactmemo",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.524499996681698,
+      "missing_payloads": []
+    },
+    "frontend-router": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-router",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.4143000015756115,
+      "missing_payloads": []
+    },
+    "frontend-streaming": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-streaming",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.5514999985462055,
+      "missing_payloads": []
+    },
+    "frontend-suspense": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-suspense",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.609500003629364,
+      "missing_payloads": []
+    },
+    "frontend-usecallback": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-usecallback",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.624500001431443,
+      "missing_payloads": []
+    },
+    "frontend-useeffect": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-useeffect",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.290899993269704,
+      "missing_payloads": []
+    },
+    "frontend-useref": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-useref",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.097600005683489,
+      "missing_payloads": []
+    },
+    "frontend-usestate": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend-usestate",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.748299998231232,
+      "missing_payloads": []
+    },
+    "frontend": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "frontend",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.152700003236532,
+      "missing_payloads": []
+    },
+    "java-access-modifier": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-access-modifier",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 5.390900012571365,
+      "missing_payloads": []
+    },
+    "java-array-length": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-array-length",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 5.621800009976141,
+      "missing_payloads": []
+    },
+    "java-arraylist": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-arraylist",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.978700002538972,
+      "missing_payloads": []
+    },
+    "java-checked": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-checked",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.137900006957352,
+      "missing_payloads": []
+    },
+    "java-completablefuture": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-completablefuture",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.998099994030781,
+      "missing_payloads": []
+    },
+    "java-concurrenthashmap": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-concurrenthashmap",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.850099987583235,
+      "missing_payloads": []
+    },
+    "java-default": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-default",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.656800003838725,
+      "missing_payloads": []
+    },
+    "java-delegation": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-delegation",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.732699995860457,
+      "missing_payloads": []
+    },
+    "java-equals": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-equals",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.978600005619228,
+      "missing_payloads": []
+    },
+    "java-extends-keyword": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-extends-keyword",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 4.634999990230426,
+      "missing_payloads": []
+    },
+    "java-extends": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-extends",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.399399989983067,
+      "missing_payloads": []
+    },
+    "java-final-keyword": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-final-keyword",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 5.36120000469964,
+      "missing_payloads": []
+    },
+    "java-functional-interface": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-functional-interface",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 5.886799990548752,
+      "missing_payloads": []
+    },
+    "java-g1-gc": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-g1-gc",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 5.471100012073293,
+      "missing_payloads": []
+    },
+    "java-hashmap": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-hashmap",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.645199998980388,
+      "missing_payloads": []
+    },
+    "java-int-variable": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-int-variable",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 3.6108999920543283,
+      "missing_payloads": []
+    },
+    "java-jvm": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-jvm",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.604600009974092,
+      "missing_payloads": []
+    },
+    "java-loop-control": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-loop-control",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 5.617799994070083,
+      "missing_payloads": []
+    },
+    "java-main": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-main",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.235399992670864,
+      "missing_payloads": []
+    },
+    "java-optional": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-optional",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.2034000002313405,
+      "missing_payloads": []
+    },
+    "java-primitive": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-primitive",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.146900006569922,
+      "missing_payloads": []
+    },
+    "java-reflection": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-reflection",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.473499997402541,
+      "missing_payloads": []
+    },
+    "java-solid": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-solid",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.936700002872385,
+      "missing_payloads": []
+    },
+    "java-stream": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-stream",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.773300003260374,
+      "missing_payloads": []
+    },
+    "java-string": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-string",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.965400000102818,
+      "missing_payloads": []
+    },
+    "java-synchronized": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-synchronized",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.838800011086278,
+      "missing_payloads": []
+    },
+    "java-threadsafe": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-threadsafe",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 8.654700010083616,
+      "missing_payloads": []
+    },
+    "java-volatile": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "java-volatile",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.52490001427941,
+      "missing_payloads": []
+    },
+    "python-2": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-2",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.336000005831011,
+      "missing_payloads": []
+    },
+    "python-3": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-3",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.545699994196184,
+      "missing_payloads": []
+    },
+    "python-args": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-args",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.263700011302717,
+      "missing_payloads": []
+    },
+    "python-asyncio": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-asyncio",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.228900008252822,
+      "missing_payloads": []
+    },
+    "python-cpython": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-cpython",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.2961000106297433,
+      "missing_payloads": []
+    },
+    "python-decorator": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-decorator",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.3136999991256744,
+      "missing_payloads": []
+    },
+    "python-def": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-def",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.777700003818609,
+      "missing_payloads": []
+    },
+    "python-dictionary": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-dictionary",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.9014000105671585,
+      "missing_payloads": []
+    },
+    "python-fstring": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-fstring",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 3.4377999982098117,
+      "missing_payloads": []
+    },
+    "python-function-definition": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-function-definition",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 5.278800002997741,
+      "missing_payloads": []
+    },
+    "python-generator": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-generator",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.582400001003407,
+      "missing_payloads": []
+    },
+    "python-gil": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-gil",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.723899987060577,
+      "missing_payloads": []
+    },
+    "python-immutable": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-immutable",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.988899996737018,
+      "missing_payloads": []
+    },
+    "python-list-comprehension": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-list-comprehension",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 6.198299990501255,
+      "missing_payloads": []
+    },
+    "python-metaclass": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-metaclass",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.408199998782948,
+      "missing_payloads": []
+    },
+    "python-mro": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-mro",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.029799998737872,
+      "missing_payloads": []
+    },
+    "python-multiline-string": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-multiline-string",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 5.571700006839819,
+      "missing_payloads": []
+    },
+    "python-multiprocessing": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-multiprocessing",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 10.199500000453554,
+      "missing_payloads": []
+    },
+    "python-negative-indexing": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-negative-indexing",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 5.125800002133474,
+      "missing_payloads": []
+    },
+    "python-none": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-none",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.3850999975111336,
+      "missing_payloads": []
+    },
+    "python-private": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-private",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.382199989981018,
+      "missing_payloads": []
+    },
+    "python-range": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-range",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.872100005741231,
+      "missing_payloads": []
+    },
+    "python-slots": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-slots",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.061599993496202,
+      "missing_payloads": []
+    },
+    "python-staticmethod": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-staticmethod",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.52340000285767,
+      "missing_payloads": []
+    },
+    "python-tryexceptelsefinally": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-tryexceptelsefinally",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.668900004820898,
+      "missing_payloads": []
+    },
+    "python-typing": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-typing",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.713999998988584,
+      "missing_payloads": []
+    },
+    "python-weakref": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-weakref",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 7.714399995165877,
+      "missing_payloads": []
+    },
+    "python-with-statement": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-with-statement",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 5.632299988064915,
+      "missing_payloads": []
+    },
+    "python-with": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python-with",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.3784000085433945,
+      "missing_payloads": []
+    },
+    "python": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "python",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.6711999932304025,
+      "missing_payloads": []
+    },
+    "spring-aop": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-aop",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.495399993378669,
+      "missing_payloads": []
+    },
+    "spring-applicationyml": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-applicationyml",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.587800002307631,
+      "missing_payloads": []
+    },
+    "spring-async": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-async",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 11.756299994885921,
+      "missing_payloads": []
+    },
+    "spring-autowired": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-autowired",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.12800000817515,
+      "missing_payloads": []
+    },
+    "spring-batch": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-batch",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.341599990264513,
+      "missing_payloads": []
+    },
+    "spring-boot": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-boot",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.297800002153963,
+      "missing_payloads": []
+    },
+    "spring-circuit": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-circuit",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.155200003879145,
+      "missing_payloads": []
+    },
+    "spring-controller": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-controller",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 6.432200010749511,
+      "missing_payloads": []
+    },
+    "spring-dependency-injection": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-dependency-injection",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 8.275999993202277,
+      "missing_payloads": []
+    },
+    "spring-embedded-tomcat": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-embedded-tomcat",
+      "top1_score": 11.0,
+      "retrieval_latency_ms": 8.337899998878129,
+      "missing_payloads": []
+    },
+    "spring-ioc": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-ioc",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.132599999546073,
+      "missing_payloads": []
+    },
+    "spring-jpa": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-jpa",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.858799999463372,
+      "missing_payloads": []
+    },
+    "spring-msa": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-msa",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.352800002787262,
+      "missing_payloads": []
+    },
+    "spring-mvc": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-mvc",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.955099997459911,
+      "missing_payloads": []
+    },
+    "spring-phantom": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-phantom",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.521900009829551,
+      "missing_payloads": []
+    },
+    "spring-profile": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-profile",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.637600003159605,
+      "missing_payloads": []
+    },
+    "spring-querydsl": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-querydsl",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.80929999705404,
+      "missing_payloads": []
+    },
+    "spring-requestmapping": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-requestmapping",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.9231000050203875,
+      "missing_payloads": []
+    },
+    "spring-requiresnew": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-requiresnew",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.851900005131029,
+      "missing_payloads": []
+    },
+    "spring-responseentity": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-responseentity",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.758100000093691,
+      "missing_payloads": []
+    },
+    "spring-security": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-security",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 4.52850000874605,
+      "missing_payloads": []
+    },
+    "spring-service": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-service",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 5.157099993084557,
+      "missing_payloads": []
+    },
+    "spring-spring-bean-scope": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-spring-bean-scope",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 9.6756999992067,
+      "missing_payloads": []
+    },
+    "spring-spring-question-59": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-spring-question-59",
+      "top1_score": 13.5,
+      "retrieval_latency_ms": 9.19620000058785,
+      "missing_payloads": []
+    },
+    "spring-transactional": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-transactional",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.314500002190471,
+      "missing_payloads": []
+    },
+    "spring-valid": {
+      "approved_candidate": true,
+      "reasons": [],
+      "top1_card_id": "spring-valid",
+      "top1_score": 8.5,
+      "retrieval_latency_ms": 6.405799998901784,
+      "missing_payloads": []
+    }
+  },
+  "shadow": {
+    "sample_count": 15,
+    "fast_path_count": 15,
+    "fallback_count": 0,
+    "card_hit_rate": 1.0,
+    "shadow_fast_path_success_rate": 1.0,
+    "fallback_rate": 0.0,
+    "expected_ollama_call_reduction_rate": 1.0,
+    "average_retrieval_latency_ms": 7.438179999007843,
+    "top1_score_distribution": {
+      "min": 7.5,
+      "p25": 9.5,
+      "median": 11.0,
+      "p75": 11.0,
+      "p90": 14.5,
+      "max": 14.5
+    },
+    "results": [
+      {
+        "question": "What is React key?",
+        "expected_intent": "CONCEPT_DEFINITION",
+        "classified_intent": "CONCEPT_DEFINITION",
+        "expected_card_id": "frontend-react-key",
+        "top1_card_id": "frontend-react-key",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-dictionary",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          },
+          {
+            "rank": 5,
+            "card_id": "frontend-react-server-components",
+            "score": 2.5
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 8.352000004379079
+      },
+      {
+        "question": "What is Java equals?",
+        "expected_intent": "CONCEPT_DEFINITION",
+        "classified_intent": "CONCEPT_DEFINITION",
+        "expected_card_id": "java-equals",
+        "top1_card_id": "java-equals",
+        "top1_score": 9.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "java-equals",
+            "score": 9.5
+          },
+          {
+            "rank": 2,
+            "card_id": "java-access-modifier",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "java-array-length",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "java-arraylist",
+            "score": 3.0
+          },
+          {
+            "rank": 5,
+            "card_id": "java-checked",
+            "score": 3.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 11.4876000006916
+      },
+      {
+        "question": "What is Spring cache?",
+        "expected_intent": "CONCEPT_DEFINITION",
+        "classified_intent": "CONCEPT_DEFINITION",
+        "expected_card_id": "spring-spring-question-59",
+        "top1_card_id": "spring-spring-question-59",
+        "top1_score": 7.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "spring-spring-question-59",
+            "score": 7.5
+          },
+          {
+            "rank": 2,
+            "card_id": "spring-spring-bean-scope",
+            "score": 4.5
+          },
+          {
+            "rank": 3,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "spring-aop",
+            "score": 3.0
+          },
+          {
+            "rank": 5,
+            "card_id": "spring-applicationyml",
+            "score": 3.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 11.937100003706291
+      },
+      {
+        "question": "What is BFS breadth first search?",
+        "expected_intent": "CONCEPT_DEFINITION",
+        "classified_intent": "CONCEPT_DEFINITION",
+        "expected_card_id": "algorithm-breadth-first-search",
+        "top1_card_id": "algorithm-breadth-first-search",
+        "top1_score": 14.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "algorithm-breadth-first-search",
+            "score": 14.5
+          },
+          {
+            "rank": 2,
+            "card_id": "algorithm-stack",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "java-g1-gc",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 7.063600001856685
+      },
+      {
+        "question": "What is JSX expression?",
+        "expected_intent": "CONCEPT_DEFINITION",
+        "classified_intent": "CONCEPT_DEFINITION",
+        "expected_card_id": "frontend-jsx-expression",
+        "top1_card_id": "frontend-jsx-expression",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-jsx-expression",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 5.796400000690483
+      },
+      {
+        "question": "Why is React key correct?",
+        "expected_intent": "ANSWER_REASON",
+        "classified_intent": "ANSWER_REASON",
+        "expected_card_id": "frontend-react-key",
+        "top1_card_id": "frontend-react-key",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-dictionary",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          },
+          {
+            "rank": 5,
+            "card_id": "frontend-react-server-components",
+            "score": 2.5
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 6.747599996742792
+      },
+      {
+        "question": "Why is Java equals correct?",
+        "expected_intent": "ANSWER_REASON",
+        "classified_intent": "ANSWER_REASON",
+        "expected_card_id": "java-equals",
+        "top1_card_id": "java-equals",
+        "top1_score": 9.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "java-equals",
+            "score": 9.5
+          },
+          {
+            "rank": 2,
+            "card_id": "java-access-modifier",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "java-array-length",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "java-arraylist",
+            "score": 3.0
+          },
+          {
+            "rank": 5,
+            "card_id": "java-checked",
+            "score": 3.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 9.67409998702351
+      },
+      {
+        "question": "Why is Spring cache correct?",
+        "expected_intent": "ANSWER_REASON",
+        "classified_intent": "ANSWER_REASON",
+        "expected_card_id": "spring-spring-question-59",
+        "top1_card_id": "spring-spring-question-59",
+        "top1_score": 7.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "spring-spring-question-59",
+            "score": 7.5
+          },
+          {
+            "rank": 2,
+            "card_id": "spring-spring-bean-scope",
+            "score": 4.5
+          },
+          {
+            "rank": 3,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "spring-aop",
+            "score": 3.0
+          },
+          {
+            "rank": 5,
+            "card_id": "spring-applicationyml",
+            "score": 3.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 7.376000008662231
+      },
+      {
+        "question": "Why is BFS breadth first search correct?",
+        "expected_intent": "ANSWER_REASON",
+        "classified_intent": "ANSWER_REASON",
+        "expected_card_id": "algorithm-breadth-first-search",
+        "top1_card_id": "algorithm-breadth-first-search",
+        "top1_score": 14.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "algorithm-breadth-first-search",
+            "score": 14.5
+          },
+          {
+            "rank": 2,
+            "card_id": "algorithm-stack",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "java-g1-gc",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 4.210799990687519
+      },
+      {
+        "question": "Why is JSX expression correct?",
+        "expected_intent": "ANSWER_REASON",
+        "classified_intent": "ANSWER_REASON",
+        "expected_card_id": "frontend-jsx-expression",
+        "top1_card_id": "frontend-jsx-expression",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-jsx-expression",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-none",
+            "score": 3.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 4.463199991732836
+      },
+      {
+        "question": "Why is index wrong instead of React key?",
+        "expected_intent": "WRONG_ANSWER_REASON",
+        "classified_intent": "WRONG_ANSWER_REASON",
+        "expected_card_id": "frontend-react-key",
+        "top1_card_id": "frontend-react-key",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-dictionary",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          },
+          {
+            "rank": 5,
+            "card_id": "frontend-react-server-components",
+            "score": 2.5
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 5.180100008146837
+      },
+      {
+        "question": "Why is == wrong for Java equals?",
+        "expected_intent": "WRONG_ANSWER_REASON",
+        "classified_intent": "WRONG_ANSWER_REASON",
+        "expected_card_id": "java-equals",
+        "top1_card_id": "java-equals",
+        "top1_score": 9.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "java-equals",
+            "score": 9.5
+          },
+          {
+            "rank": 2,
+            "card_id": "java-access-modifier",
+            "score": 3.0
+          },
+          {
+            "rank": 3,
+            "card_id": "java-array-length",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "java-arraylist",
+            "score": 3.0
+          },
+          {
+            "rank": 5,
+            "card_id": "java-checked",
+            "score": 3.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 8.352500008186325
+      },
+      {
+        "question": "Why is no caching wrong for Spring cache?",
+        "expected_intent": "WRONG_ANSWER_REASON",
+        "classified_intent": "WRONG_ANSWER_REASON",
+        "expected_card_id": "spring-spring-question-59",
+        "top1_card_id": "spring-spring-question-59",
+        "top1_score": 7.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "spring-spring-question-59",
+            "score": 7.5
+          },
+          {
+            "rank": 2,
+            "card_id": "spring-spring-bean-scope",
+            "score": 4.5
+          },
+          {
+            "rank": 3,
+            "card_id": "python-list-comprehension",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 5,
+            "card_id": "spring-aop",
+            "score": 3.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 10.137099990970455
+      },
+      {
+        "question": "Why is stack wrong for BFS breadth first search?",
+        "expected_intent": "WRONG_ANSWER_REASON",
+        "classified_intent": "WRONG_ANSWER_REASON",
+        "expected_card_id": "algorithm-breadth-first-search",
+        "top1_card_id": "algorithm-breadth-first-search",
+        "top1_score": 14.5,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "algorithm-breadth-first-search",
+            "score": 14.5
+          },
+          {
+            "rank": 2,
+            "card_id": "algorithm-stack",
+            "score": 9.5
+          },
+          {
+            "rank": 3,
+            "card_id": "python-list-comprehension",
+            "score": 3.0
+          },
+          {
+            "rank": 4,
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "rank": 5,
+            "card_id": "java-g1-gc",
+            "score": 1.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 5.102499999338761
+      },
+      {
+        "question": "Why are parentheses wrong for JSX expression?",
+        "expected_intent": "WRONG_ANSWER_REASON",
+        "classified_intent": "WRONG_ANSWER_REASON",
+        "expected_card_id": "frontend-jsx-expression",
+        "top1_card_id": "frontend-jsx-expression",
+        "top1_score": 11.0,
+        "top5": [
+          {
+            "rank": 1,
+            "card_id": "frontend-jsx-expression",
+            "score": 11.0
+          },
+          {
+            "rank": 2,
+            "card_id": "python-list-comprehension",
+            "score": 3.0
+          }
+        ],
+        "payload_available": true,
+        "fast_path": true,
+        "fallback": false,
+        "llm_called": false,
+        "retrieval_latency_ms": 5.692099992302246
+      }
+    ]
+  },
+  "problem_cards_top10": [],
+  "shadow_problem_cases": [],
+  "production_readiness": "READY",
+  "safety": {
+    "card_status_changed": false,
+    "payload_status_changed": false,
+    "active_card_store_changed": false
+  }
+}

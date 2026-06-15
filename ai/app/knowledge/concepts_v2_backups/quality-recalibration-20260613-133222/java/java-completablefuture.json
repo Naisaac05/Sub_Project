@@ -1,0 +1,113 @@
+{
+  "card_id": "java-completablefuture",
+  "category": "java",
+  "term": "completablefuture",
+  "aliases": [
+    "completablefuture",
+    "java completablefuture",
+    "자바 completablefuture"
+  ],
+  "source_question_ids": [
+    "java:28"
+  ],
+  "retrieval": {
+    "embedding_text": "completablefuture java completablefuture 자바 completablefuture java java-completablefuture thenapply 변환 thencompose",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "completablefuture",
+      "java-completablefuture",
+      "java completablefuture",
+      "자바 completablefuture",
+      "thenapply",
+      "변환",
+      "thencompose"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "completablefuture is a java concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as completablefuture, java-completablefuture, java completablefuture.",
+      "examples": [
+        "Explain when completablefuture should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of completablefuture, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals completablefuture, java-completablefuture, java completablefuture.",
+      "key_points": [
+        "completablefuture",
+        "java",
+        "java completablefuture"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy completablefuture's defining behavior.",
+        "Confusing completablefuture with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "차이 없다",
+          "reason": "차이 없다 is not the best answer because it does not satisfy the defining behavior or constraint of completablefuture. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "thenCompose는 동기, thenApply는 비동기",
+          "reason": "thenCompose는 동기, thenApply는 비동기 is not the best answer because it does not satisfy the defining behavior or constraint of completablefuture. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "thenApply만 예외 처리 가능",
+          "reason": "thenApply만 예외 처리 가능 is not the best answer because it does not satisfy the defining behavior or constraint of completablefuture. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against completablefuture."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate completablefuture in an appropriate java context.",
+      "explanation": "Use a minimal example that makes completablefuture's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply completablefuture in java work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why completablefuture is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying completablefuture without checking its defining constraint.",
+          "solution": "Re-check completablefuture's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.671338Z"
+}

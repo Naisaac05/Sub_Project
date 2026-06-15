@@ -1,0 +1,80 @@
+{
+  "card_id": "spring-transactional",
+  "category": "spring",
+  "term": "transactional",
+  "aliases": [
+    "transactional",
+    "spring transactional"
+  ],
+  "source_question_ids": [
+    "spring:43"
+  ],
+  "retrieval": {
+    "embedding_text": "transactional spring transactional spring jpa 변경 감지 dirty",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "transactional",
+      "spring",
+      "spring transactional",
+      "jpa",
+      "변경",
+      "감지",
+      "dirty"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "transactional의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 transactional의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "transactional",
+        "spring",
+        "spring transactional"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q43_option_0": {
+          "text": "읽기도 불가능하다",
+          "reason": "transactional 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q43_option_2": {
+          "text": "트랜잭션이 적용되지 않는다",
+          "reason": "transactional 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q43_option_3": {
+          "text": "캐시가 비활성화된다",
+          "reason": "transactional 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

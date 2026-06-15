@@ -1,0 +1,72 @@
+{
+  "card_id": "react-useeffect",
+  "category": "react",
+  "term": "useeffect",
+  "aliases": [
+    "react useeffect"
+  ],
+  "source_question_ids": [
+    "react:71"
+  ],
+  "retrieval": {
+    "embedding_text": "useeffect react useeffect useeffect은(는) useEffect의 의존성 배열(dependency array)이 빈 배열 []일 때 동작은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "useeffect",
+      "react"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "useeffect은(는) useEffect의 의존성 배열(dependency array)이 빈 배열 []일 때 동작은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "useeffect 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "useeffect"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q71_option_2": {
+          "text": "컴포넌트 마운트 시 1회만 실행",
+          "reason": "useeffect의 특성과 일치하지 않는 오답입니다."
+        },
+        "q71_option_3": {
+          "text": "상태 변경 시마다 실행",
+          "reason": "useeffect의 특성과 일치하지 않는 오답입니다."
+        },
+        "q71_option_4": {
+          "text": "실행되지 않는다",
+          "reason": "useeffect의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

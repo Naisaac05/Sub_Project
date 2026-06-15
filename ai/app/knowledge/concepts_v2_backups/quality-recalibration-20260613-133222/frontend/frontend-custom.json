@@ -1,0 +1,112 @@
+{
+  "card_id": "frontend-custom",
+  "category": "frontend",
+  "term": "custom",
+  "aliases": [
+    "custom",
+    "frontend custom",
+    "프론트엔드 custom"
+  ],
+  "source_question_ids": [
+    "frontend:73"
+  ],
+  "retrieval": {
+    "embedding_text": "custom frontend custom 프론트엔드 custom frontend frontend-custom use 시작",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "custom",
+      "frontend-custom",
+      "frontend custom",
+      "프론트엔드 custom",
+      "use",
+      "시작"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "custom is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as custom, frontend-custom, frontend custom.",
+      "examples": [
+        "Explain when custom should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of custom, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals custom, frontend-custom, frontend custom.",
+      "key_points": [
+        "custom",
+        "frontend",
+        "frontend custom"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy custom's defining behavior.",
+        "Confusing custom with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "get으로 시작",
+          "reason": "get으로 시작 is not the best answer because it does not satisfy the defining behavior or constraint of custom. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "hook으로 시작",
+          "reason": "hook으로 시작 is not the best answer because it does not satisfy the defining behavior or constraint of custom. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "규칙 없음",
+          "reason": "규칙 없음 is not the best answer because it does not satisfy the defining behavior or constraint of custom. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against custom."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate custom in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes custom's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply custom in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why custom is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying custom without checking its defining constraint.",
+          "solution": "Re-check custom's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.546898Z"
+}

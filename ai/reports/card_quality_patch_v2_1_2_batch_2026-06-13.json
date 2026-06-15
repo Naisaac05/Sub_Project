@@ -1,0 +1,59 @@
+{
+  "policy": "CARD QUALITY PATCH POLICY v2.1.2",
+  "mode": "PATCH ONLY - BATCH EXPANSION",
+  "status": "aborted_and_rolled_back",
+  "candidate_cards": [
+    "spring-spring-question-59",
+    "java-extends",
+    "frontend-react-key",
+    "python-range",
+    "java-arraylist",
+    "algorithm-queue",
+    "algorithm-dfs",
+    "algorithm-bst",
+    "java-jvm",
+    "spring-jpa"
+  ],
+  "patched_cards": [],
+  "skipped_cards": [
+    "spring-spring-question-59",
+    "java-extends",
+    "frontend-react-key",
+    "python-range",
+    "java-arraylist",
+    "algorithm-queue",
+    "algorithm-dfs",
+    "algorithm-bst",
+    "java-jvm",
+    "spring-jpa"
+  ],
+  "estimated_hit_diff": {
+    "exact_hit1": 0.0,
+    "exact_hit3": 0.0,
+    "exact_hit5": 0.0,
+    "loo_candidate_rate": 0.0,
+    "loo_average_score": 0.0,
+    "loo_same_category_rate": 0.0
+  },
+  "abort_reason": {
+    "loo_average_score_change_percent_before_rollback": -0.5174,
+    "threshold_percent": -0.5,
+    "quality_failed_cards": [
+      "java-jvm",
+      "spring-jpa"
+    ]
+  },
+  "json_validate_before_rollback": {
+    "passed": 6,
+    "failed": 0
+  },
+  "retrieval_baseline": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.294520547945205,
+    "loo_same_category_rate": 0.6643835616438356
+  },
+  "backup_root": "ai/app/knowledge/concepts_v2_backups/card-quality-v2-1-2-batch-20260613"
+}

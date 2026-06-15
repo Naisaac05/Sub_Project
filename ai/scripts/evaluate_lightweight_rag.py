@@ -14,8 +14,8 @@ if str(ROOT) not in sys.path:
 from app.rag.retriever import retrieve_context
 from app.schemas import AiGenerateRequest
 from app.evaluation.semantic import should_cache_answer
+from app.workflow.embedding_intent import classify_free_question_with_embeddings
 from app.workflow.runner import run_review_workflow
-from app.workflow.intent import classify_free_question
 from app.workflow.nodes import retrieve_context_node
 from app.workflow.state import ReviewWorkflowState
 
@@ -38,6 +38,7 @@ def load_dataset(path: Path | None = None) -> list[dict[str, object]]:
 def evaluate_dataset(
     rows: list[dict[str, object]],
     workflow_runner=None,
+    intent_classifier=classify_free_question_with_embeddings,
 ) -> dict[str, float | int]:
     total = len(rows)
     if total == 0:
@@ -110,7 +111,7 @@ def evaluate_dataset(
                 hit_count += 1
             recall_sum += len(matched) / len(expected)
 
-        intent = classify_free_question(str(row.get("question", "")))
+        intent = intent_classifier(str(row.get("question", "")))
         expected_intent = row.get("expected_intent")
         if expected_intent:
             intent_rows += 1

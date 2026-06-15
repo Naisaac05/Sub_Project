@@ -1,0 +1,72 @@
+{
+  "card_id": "java-synchronized",
+  "category": "java",
+  "term": "synchronized",
+  "aliases": [
+    "java synchronized"
+  ],
+  "source_question_ids": [
+    "java:24"
+  ],
+  "retrieval": {
+    "embedding_text": "synchronized java synchronized synchronized은(는) synchronized와 ReentrantLock의 차이로 올바른 것은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "synchronized",
+      "java"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "synchronized은(는) synchronized와 ReentrantLock의 차이로 올바른 것은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "synchronized 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "synchronized"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q24_option_2": {
+          "text": "ReentrantLock은 tryLock으로 타임아웃이 가능하다",
+          "reason": "synchronized의 특성과 일치하지 않는 오답입니다."
+        },
+        "q24_option_3": {
+          "text": "둘 다 인터럽트 처리가 불가능하다",
+          "reason": "synchronized의 특성과 일치하지 않는 오답입니다."
+        },
+        "q24_option_4": {
+          "text": "ReentrantLock은 암묵적 잠금이다",
+          "reason": "synchronized의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.054910Z",
+  "updated_at": "2026-06-10T11:01:08.054910Z"
+}

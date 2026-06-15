@@ -1,0 +1,107 @@
+{
+  "card_id": "spring-spring-question-59",
+  "category": "spring",
+  "term": "spring-question-59",
+  "aliases": [
+    "spring cache evict",
+    "스프링 캐시 제거",
+    "@CacheEvict",
+    "cache eviction",
+    "spring cache invalidation",
+    "캐시 무효화"
+  ],
+  "source_question_ids": [
+    "spring:59"
+  ],
+  "retrieval": {
+    "embedding_text": "spring-question-59 spring cache evict 스프링 캐시 제거 @CacheEvict spring spring-cache-evict cache-eviction cache-invalidation spring-cache",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "spring-cache-evict",
+      "@CacheEvict",
+      "cache-eviction",
+      "cache-invalidation",
+      "spring-cache"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "`@CacheEvict`는 Spring Cache의 지정된 캐시 항목을 제거하는 애너테이션이다. 메서드 호출 전후에 키 하나 또는 캐시 전체를 무효화해 이후 조회가 최신 데이터를 다시 적재하도록 만든다.",
+      "examples": [
+        "예: 작은 입력에서 핵심 동작을 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "`@CacheEvict`는 변경되거나 삭제된 원본 데이터와 캐시가 어긋나지 않도록 캐시 항목을 삭제한다. 저장은 `@CachePut` 또는 `@Cacheable`이 담당하며 생성·상태 조회 기능은 아니다.",
+      "key_points": [
+        "캐시에서 데이터를 삭제한다",
+        "spring-spring-question-59"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "기술 용어의 적용 범위와 유사 개념의 역할을 구분하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "캐시에 데이터를 저장한다",
+          "reason": "캐시에 값을 저장하거나 갱신하는 역할은 `@CachePut` 또는 조회 결과를 적재하는 `@Cacheable`에 가깝다. `@CacheEvict`는 기존 항목을 제거한다."
+        },
+        "option_2": {
+          "text": "캐시를 생성한다",
+          "reason": "캐시 저장소 자체의 생성은 CacheManager 설정이 담당한다. `@CacheEvict`는 이미 구성된 캐시에서 항목을 무효화한다."
+        },
+        "option_3": {
+          "text": "캐시 상태를 조회한다",
+          "reason": "캐시 상태 조회는 모니터링이나 CacheManager API의 영역이다. `@CacheEvict`는 조회 결과를 반환하지 않고 삭제 동작을 수행한다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "`@Cacheable`은 캐시 미스 시 결과를 저장하고, `@CachePut`은 결과를 갱신하며, `@CacheEvict`는 오래된 항목을 삭제한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "@CacheEvict(cacheNames = \"users\", key = \"#id\")\npublic void deleteUser(Long id) { repository.deleteById(id); }\nservice.deleteUser(7L);\nassert cache.get(\"users\", 7L) == null;",
+      "explanation": "실제 `@CacheEvict` 메서드 호출 뒤 users 캐시에서 같은 ID 항목이 제거됐는지 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "DB 수정·삭제 후 기존 조회 캐시가 오래된 값을 반환하지 않도록 무효화할 때 사용한다.",
+      "best_practices": [
+        "문제의 전제와 실제 동작을 작은 실행 예제로 먼저 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사한 용어의 적용 범위를 구분하지 않아 잘못된 구현을 선택한다.",
+          "solution": "입력 조건, 핵심 동작, 결과를 각각 확인하고 비교 대상과 차이를 검증한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T05:03:46.263841Z"
+}

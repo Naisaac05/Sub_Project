@@ -1,0 +1,112 @@
+{
+  "card_id": "java-arraylist",
+  "category": "java",
+  "term": "arraylist",
+  "aliases": [
+    "arraylist",
+    "java arraylist",
+    "자바 arraylist"
+  ],
+  "source_question_ids": [
+    "java:11"
+  ],
+  "retrieval": {
+    "embedding_text": "arraylist java arraylist 자바 arraylist java java-arraylist 인덱스 접근이",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "arraylist",
+      "java-arraylist",
+      "java arraylist",
+      "자바 arraylist",
+      "인덱스",
+      "접근이"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "arraylist is a java concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as arraylist, java-arraylist, java arraylist.",
+      "examples": [
+        "Explain when arraylist should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of arraylist, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals arraylist, java-arraylist, java arraylist.",
+      "key_points": [
+        "arraylist",
+        "java",
+        "java arraylist"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy arraylist's defining behavior.",
+        "Confusing arraylist with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "ArrayList는 삽입/삭제가 빠르다",
+          "reason": "ArrayList는 삽입/삭제가 빠르다 is not the best answer because it does not satisfy the defining behavior or constraint of arraylist. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "LinkedList는 인덱스 접근이 빠르다",
+          "reason": "LinkedList는 인덱스 접근이 빠르다 is not the best answer because it does not satisfy the defining behavior or constraint of arraylist. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "둘 다 동기화가 보장된다",
+          "reason": "둘 다 동기화가 보장된다 is not the best answer because it does not satisfy the defining behavior or constraint of arraylist. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against arraylist."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate arraylist in an appropriate java context.",
+      "explanation": "Use a minimal example that makes arraylist's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply arraylist in java work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why arraylist is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying arraylist without checking its defining constraint.",
+          "solution": "Re-check arraylist's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.665330Z"
+}

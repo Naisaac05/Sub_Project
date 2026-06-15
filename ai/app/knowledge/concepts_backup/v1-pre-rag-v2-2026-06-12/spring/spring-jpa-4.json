@@ -1,0 +1,72 @@
+{
+  "card_id": "spring-jpa-4",
+  "category": "spring",
+  "term": "jpa",
+  "aliases": [
+    "spring jpa"
+  ],
+  "source_question_ids": [
+    "spring:57"
+  ],
+  "retrieval": {
+    "embedding_text": "jpa spring jpa jpa은(는) JPA에서 벌크 연산(Bulk Operation) 후 주의해야 할 점은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "jpa",
+      "spring"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "jpa은(는) JPA에서 벌크 연산(Bulk Operation) 후 주의해야 할 점은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "jpa 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "jpa"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q57_option_2": {
+          "text": "영속성 컨텍스트를 초기화해야 한다",
+          "reason": "jpa의 특성과 일치하지 않는 오답입니다."
+        },
+        "q57_option_3": {
+          "text": "인덱스를 재구성해야 한다",
+          "reason": "jpa의 특성과 일치하지 않는 오답입니다."
+        },
+        "q57_option_4": {
+          "text": "트랜잭션을 수동 커밋해야 한다",
+          "reason": "jpa의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

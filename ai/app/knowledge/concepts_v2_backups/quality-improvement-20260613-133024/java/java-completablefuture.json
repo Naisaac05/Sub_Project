@@ -1,0 +1,80 @@
+{
+  "card_id": "java-completablefuture",
+  "category": "java",
+  "term": "completablefuture",
+  "aliases": [
+    "completablefuture",
+    "java completablefuture"
+  ],
+  "source_question_ids": [
+    "java:28"
+  ],
+  "retrieval": {
+    "embedding_text": "completablefuture java completablefuture java thenapply 변환 thencompose 비동기",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "completablefuture",
+      "java",
+      "java completablefuture",
+      "thenapply",
+      "변환",
+      "thencompose",
+      "비동기"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "completablefuture의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 completablefuture의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "completablefuture",
+        "java",
+        "java completablefuture"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q28_option_0": {
+          "text": "차이 없다",
+          "reason": "completablefuture 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q28_option_2": {
+          "text": "thenCompose는 동기, thenApply는 비동기",
+          "reason": "completablefuture 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q28_option_3": {
+          "text": "thenApply만 예외 처리 가능",
+          "reason": "completablefuture 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

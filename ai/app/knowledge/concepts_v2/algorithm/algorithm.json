@@ -1,0 +1,114 @@
+{
+  "card_id": "algorithm",
+  "category": "algorithm",
+  "term": "algorithm-question-121",
+  "aliases": [
+    "algorithm-question-121",
+    "입력 크기에 비례하여 시간이 증가한다",
+    "시간 복잡도 O(n)의 의미는?",
+    "O(n)",
+    "algorithm question 121",
+    "algorithm algorithm question 121"
+  ],
+  "source_question_ids": [
+    "algorithm:121"
+  ],
+  "retrieval": {
+    "embedding_text": "algorithm-question-121 입력 크기에 비례하여 시간이 증가한다 시간 복잡도 O(n)의 의미는? algorithm 시간 복잡도 O(n) 의미는 입력 크기에",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "algorithm-question-121",
+      "시간",
+      "복잡도",
+      "O(n)",
+      "의미는",
+      "입력",
+      "크기에"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "시간 복잡도 O(n)은 입력 크기 n에 비례하는 횟수로 핵심 연산이 증가하는 선형 복잡도다.",
+      "examples": [
+        "시간 복잡도 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "입력이 두 배가 되면 연산량도 대략 두 배로 증가하는 경향을 뜻한다.",
+      "key_points": [
+        "시간 복잡도",
+        "O(n)",
+        "선형"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "항상 일정한 시간이 걸린다",
+          "reason": "일정 시간은 O(1)에 해당한다."
+        },
+        "option_2": {
+          "text": "입력 크기의 제곱에 비례한다",
+          "reason": "입력 크기의 제곱 비례는 O(n²)이다."
+        },
+        "option_3": {
+          "text": "로그 시간이 걸린다",
+          "reason": "로그 시간은 O(log n)이다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`입력 크기에 비례하여 시간이 증가한다`는 질문의 조건을 충족하지만 다른 선택지는 `algorithm-question-121`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "values = [1, 2, 3, 4]\ntotal = 0\nfor value in values: total += value",
+      "explanation": "시간 복잡도 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "시간 복잡도 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`algorithm-question-121`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `입력 크기에 비례하여 시간이 증가한다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

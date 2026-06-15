@@ -1,0 +1,116 @@
+{
+  "card_id": "python-list-comprehension",
+  "category": "python",
+  "term": "list-comprehension",
+  "aliases": [
+    "list-comprehension",
+    "list comprehension",
+    "python list comprehension",
+    "파이썬 list comprehension",
+    "python comprehension",
+    "lc"
+  ],
+  "source_question_ids": [
+    "python:101"
+  ],
+  "retrieval": {
+    "embedding_text": "list-comprehension list comprehension python list comprehension python python-list-comprehension 파이썬 list comprehension python comprehension lc",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "list-comprehension",
+      "python-list-comprehension",
+      "list comprehension",
+      "python list comprehension",
+      "파이썬 list comprehension",
+      "python comprehension",
+      "lc"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "list comprehension is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as list-comprehension, python-list-comprehension, list comprehension.",
+      "examples": [
+        "Explain when list comprehension should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of list comprehension, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals list-comprehension, python-list-comprehension, list comprehension.",
+      "key_points": [
+        "list-comprehension",
+        "python",
+        "list comprehension"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy list comprehension's defining behavior.",
+        "Confusing list comprehension with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "[for x in range(10): x if x > 5]",
+          "reason": "[for x in range(10): x if x > 5] is not the best answer because it does not satisfy the defining behavior or constraint of list comprehension. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "[x if x > 5 for x in range(10)]",
+          "reason": "[x if x > 5 for x in range(10)] is not the best answer because it does not satisfy the defining behavior or constraint of list comprehension. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "[x in range(10) for if x > 5]",
+          "reason": "[x in range(10) for if x > 5] is not the best answer because it does not satisfy the defining behavior or constraint of list comprehension. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against list comprehension."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate list comprehension in an appropriate python context.",
+      "explanation": "Use a minimal example that makes list comprehension's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply list comprehension in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why list comprehension is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying list comprehension without checking its defining constraint.",
+          "solution": "Re-check list comprehension's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.860112Z"
+}

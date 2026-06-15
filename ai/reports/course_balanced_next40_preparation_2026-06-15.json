@@ -1,0 +1,984 @@
+{
+  "candidate_count": 40,
+  "prepared_count": 40,
+  "skipped_count": 0,
+  "PREPARATION_BACKLOG": {
+    "java-primitive": {
+      "course_id": "java",
+      "test_id": 1,
+      "question_id": 3,
+      "source_question_id": "java:3",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08571428571428572,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1396
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "java-loop-control": {
+      "course_id": "java",
+      "test_id": 1,
+      "question_id": 7,
+      "source_question_id": "java:7",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08823529411764706,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1403
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "java-final-keyword": {
+      "course_id": "java",
+      "test_id": 1,
+      "question_id": 6,
+      "source_question_id": "java:6",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.10294117647058823,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1419
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "java-stream": {
+      "course_id": "java",
+      "test_id": 2,
+      "question_id": 14,
+      "source_question_id": "java:14",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.09859154929577464,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1419
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "java-extends-keyword": {
+      "course_id": "java",
+      "test_id": 1,
+      "question_id": 8,
+      "source_question_id": "java:8",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.10294117647058823,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1469
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "java-array-length": {
+      "course_id": "java",
+      "test_id": 1,
+      "question_id": 4,
+      "source_question_id": "java:4",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.10294117647058823,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1477
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "java-functional-interface": {
+      "course_id": "java",
+      "test_id": 2,
+      "question_id": 13,
+      "source_question_id": "java:13",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08695652173913043,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1488
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "java-reflection": {
+      "course_id": "java",
+      "test_id": 3,
+      "question_id": 27,
+      "source_question_id": "java:27",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.136986301369863,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8148148148148148,
+        "payload_length": 1559
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "spring-msa": {
+      "course_id": "spring",
+      "test_id": 6,
+      "question_id": 55,
+      "source_question_id": "spring:55",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.11428571428571428,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8260869565217391,
+        "payload_length": 1365
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "spring-embedded-tomcat": {
+      "course_id": "spring",
+      "test_id": 4,
+      "question_id": 36,
+      "source_question_id": "spring:36",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.10144927536231885,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1469
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "spring-batch": {
+      "course_id": "spring",
+      "test_id": 6,
+      "question_id": 56,
+      "source_question_id": "spring:56",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08955223880597014,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1497
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "spring-autowired": {
+      "course_id": "spring",
+      "test_id": 4,
+      "question_id": 35,
+      "source_question_id": "spring:35",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.11764705882352941,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8333333333333334,
+        "payload_length": 1504
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "spring-phantom": {
+      "course_id": "spring",
+      "test_id": 6,
+      "question_id": 52,
+      "source_question_id": "spring:52",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08450704225352113,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1507
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "spring-service": {
+      "course_id": "spring",
+      "test_id": 4,
+      "question_id": 39,
+      "source_question_id": "spring:39",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.13043478260869565,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8846153846153846,
+        "payload_length": 1516
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "spring-spring-bean-scope": {
+      "course_id": "spring",
+      "test_id": 4,
+      "question_id": 38,
+      "source_question_id": "spring:38",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08955223880597014,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1516
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "spring-requestmapping": {
+      "course_id": "spring",
+      "test_id": 4,
+      "question_id": 37,
+      "source_question_id": "spring:37",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08571428571428572,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1575
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "frontend-hook": {
+      "course_id": "frontend",
+      "test_id": 7,
+      "question_id": 61,
+      "source_question_id": "frontend:61",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08450704225352113,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1376
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "frontend-router": {
+      "course_id": "frontend",
+      "test_id": 8,
+      "question_id": 75,
+      "source_question_id": "frontend:75",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08450704225352113,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1448
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "frontend-react-project-tool": {
+      "course_id": "frontend",
+      "test_id": 7,
+      "question_id": 69,
+      "source_question_id": "frontend:69",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08450704225352113,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1496
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "frontend": {
+      "course_id": "frontend",
+      "test_id": 7,
+      "question_id": 63,
+      "source_question_id": "frontend:63",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08571428571428572,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1500
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "frontend-code": {
+      "course_id": "frontend",
+      "test_id": 9,
+      "question_id": 89,
+      "source_question_id": "frontend:89",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.09722222222222222,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9047619047619048,
+        "payload_length": 1540
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "frontend-2": {
+      "course_id": "frontend",
+      "test_id": 7,
+      "question_id": 70,
+      "source_question_id": "frontend:70",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08450704225352113,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1563
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "frontend-controlled-uncontrolled-components": {
+      "course_id": "frontend",
+      "test_id": 8,
+      "question_id": 79,
+      "source_question_id": "frontend:79",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.09859154929577464,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8260869565217391,
+        "payload_length": 1883
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "frontend-custom": {
+      "course_id": "frontend",
+      "test_id": 8,
+      "question_id": 73,
+      "source_question_id": "frontend:73",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "fake_example",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.10144927536231885,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 1.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9090909090909091,
+        "payload_length": 1365
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "python-immutable": {
+      "course_id": "python",
+      "test_id": 10,
+      "question_id": 93,
+      "source_question_id": "python:93",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08823529411764706,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1327
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "python-generator": {
+      "course_id": "python",
+      "test_id": 11,
+      "question_id": 103,
+      "source_question_id": "python:103",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.10144927536231885,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1331
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "python": {
+      "course_id": "python",
+      "test_id": 10,
+      "question_id": 97,
+      "source_question_id": "python:97",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08823529411764706,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1457
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "python-mro": {
+      "course_id": "python",
+      "test_id": 11,
+      "question_id": 104,
+      "source_question_id": "python:104",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08450704225352113,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1467
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "python-2": {
+      "course_id": "python",
+      "test_id": 12,
+      "question_id": 113,
+      "source_question_id": "python:113",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08571428571428572,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1530
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "python-none": {
+      "course_id": "python",
+      "test_id": 10,
+      "question_id": 98,
+      "source_question_id": "python:98",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.1044776119402985,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9473684210526315,
+        "payload_length": 1338
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "python-function-definition": {
+      "course_id": "python",
+      "test_id": 10,
+      "question_id": 96,
+      "source_question_id": "python:96",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08823529411764706,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9,
+        "payload_length": 1402
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "python-negative-indexing": {
+      "course_id": "python",
+      "test_id": 10,
+      "question_id": 91,
+      "source_question_id": "python:91",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.10144927536231885,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9473684210526315,
+        "payload_length": 1464
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "algorithm-breadth-first-search": {
+      "course_id": "algorithm",
+      "test_id": 14,
+      "question_id": 134,
+      "source_question_id": "algorithm:134",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.05714285714285714,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9444444444444444,
+        "payload_length": 1359
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "algorithm-9": {
+      "course_id": "algorithm",
+      "test_id": 14,
+      "question_id": 137,
+      "source_question_id": "algorithm:137",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.07142857142857142,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9047619047619048,
+        "payload_length": 1448
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "algorithm-mst": {
+      "course_id": "algorithm",
+      "test_id": 15,
+      "question_id": 146,
+      "source_question_id": "algorithm:146",
+      "current_quality": {
+        "reasons": [
+          "answer_wrong_comparison_missing",
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.0945945945945946,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8333333333333334,
+        "payload_length": 1493
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "algorithm-lcs": {
+      "course_id": "algorithm",
+      "test_id": 15,
+      "question_id": 147,
+      "source_question_id": "algorithm:147",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08571428571428572,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9090909090909091,
+        "payload_length": 1331
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "algorithm-13": {
+      "course_id": "algorithm",
+      "test_id": 15,
+      "question_id": 144,
+      "source_question_id": "algorithm:144",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.08450704225352113,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9047619047619048,
+        "payload_length": 1481
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "algorithm-topological": {
+      "course_id": "algorithm",
+      "test_id": 15,
+      "question_id": 143,
+      "source_question_id": "algorithm:143",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.1111111111111111,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.9130434782608695,
+        "payload_length": 1482
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "algorithm-collision": {
+      "course_id": "algorithm",
+      "test_id": 14,
+      "question_id": 132,
+      "source_question_id": "algorithm:132",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.10666666666666667,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.84,
+        "payload_length": 1591
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    },
+    "algorithm-12": {
+      "course_id": "algorithm",
+      "test_id": 15,
+      "question_id": 142,
+      "source_question_id": "algorithm:142",
+      "current_quality": {
+        "reasons": [
+          "same_reason_ratio_over_25_percent",
+          "generic_score_over_0_35",
+          "duplicate_score_over_0_25"
+        ],
+        "answer_overlap": 0.1095890410958904,
+        "same_reason_ratio": 1.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.52,
+        "duplicate_score": 0.8076923076923077,
+        "payload_length": 1593
+      },
+      "execution_verifier_readiness": "harness_missing",
+      "preparation_scope": "payloads.* only",
+      "factcheck_status": "preparation_backlog"
+    }
+  },
+  "skip_reasons": {},
+  "cards_by_course": {
+    "java": {
+      "candidate": 8,
+      "prepared": 8,
+      "source_missing": 0,
+      "factcheck_not_ready": 0
+    },
+    "spring": {
+      "candidate": 8,
+      "prepared": 8,
+      "source_missing": 0,
+      "factcheck_not_ready": 0
+    },
+    "frontend": {
+      "candidate": 8,
+      "prepared": 8,
+      "source_missing": 0,
+      "factcheck_not_ready": 0
+    },
+    "python": {
+      "candidate": 8,
+      "prepared": 8,
+      "source_missing": 0,
+      "factcheck_not_ready": 0
+    },
+    "algorithm": {
+      "candidate": 8,
+      "prepared": 8,
+      "source_missing": 0,
+      "factcheck_not_ready": 0
+    }
+  },
+  "execution_performed": false,
+  "card_files_modified": false,
+  "patches_ready_created": false,
+  "json_validation_result": "pass",
+  "production_hit_diff": 0.0,
+  "production_loo_diff": 0.0,
+  "content_hit_diff": 0.0,
+  "content_loo_diff": 0.0,
+  "retrieval_changed": 0
+}

@@ -1,0 +1,118 @@
+{
+  "card_id": "algorithm-stack",
+  "category": "algorithm",
+  "term": "stack",
+  "aliases": [
+    "stack",
+    "LIFO (Last In First Out)",
+    "스택(Stack)의 특성은?",
+    "Stack)",
+    "LIFO",
+    "Last",
+    "In",
+    "First",
+    "Out)",
+    "algorithm stack"
+  ],
+  "source_question_ids": [
+    "algorithm:122"
+  ],
+  "retrieval": {
+    "embedding_text": "stack LIFO (Last In First Out) 스택(Stack)의 특성은? algorithm 스택 Stack) 특성은 LIFO Last In",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "stack",
+      "스택",
+      "Stack)",
+      "특성은",
+      "LIFO",
+      "Last",
+      "In"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "스택은 가장 나중에 넣은 항목을 가장 먼저 꺼내는 LIFO 자료구조다.",
+      "examples": [
+        "Stack 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "push와 pop이 같은 끝에서 이루어져 최근 작업을 먼저 되돌릴 수 있다.",
+      "key_points": [
+        "Stack",
+        "LIFO",
+        "push/pop"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "FIFO (First In First Out)",
+          "reason": "FIFO는 큐의 처리 순서다."
+        },
+        "option_2": {
+          "text": "임의 접근 가능",
+          "reason": "스택은 임의 위치 접근보다 top 항목 처리에 초점을 둔다."
+        },
+        "option_3": {
+          "text": "정렬된 상태 유지",
+          "reason": "원소가 정렬된 상태를 유지하지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`LIFO (Last In First Out)`는 질문의 조건을 충족하지만 다른 선택지는 `stack`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "stack = [\"A\"]\nstack.append(\"B\")\nlatest = stack.pop()",
+      "explanation": "Stack 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Stack 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`stack`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `LIFO (Last In First Out)`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

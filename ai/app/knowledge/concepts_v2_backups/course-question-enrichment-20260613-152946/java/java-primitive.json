@@ -1,0 +1,115 @@
+{
+  "card_id": "java-primitive",
+  "category": "java",
+  "term": "primitive",
+  "aliases": [
+    "java primitive type",
+    "자바 기본형",
+    "원시 타입",
+    "primitive type",
+    "8 primitive types"
+  ],
+  "source_question_ids": [
+    "java:3"
+  ],
+  "retrieval": {
+    "embedding_text": "primitive java primitive type 자바 기본형 원시 타입 java java-primitive primitive-type value-type int-boolean-double wrapper-class",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "java-primitive",
+      "primitive-type",
+      "value-type",
+      "int-boolean-double",
+      "wrapper-class"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "자바 기본형은 객체 참조가 아니라 실제 값을 직접 저장하는 언어 내장 자료형입니다. `byte`, `short`, `int`, `long`, `float`, `double`, `char`, `boolean`의 여덟 종류가 있으며 `null`을 저장할 수 없습니다. 메모리 사용과 연산 비용이 작고 값의 범위가 명확하므로 수치 계산과 조건 처리의 기본이 됩니다.",
+      "examples": [
+        "`다음 중 Java의 기본 자료형(primitive type)이 아닌 것은?`라는 상황에서는 `String`를 기준으로 `primitive`을 이해할 수 있습니다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답인 `String`는 질문이 묻는 `primitive`의 적용 조건과 결과를 직접 설명합니다. 특히 '다음 중 Java의 기본 자료형(primitive type)이 아닌 것은?'에서 요구하는 핵심을 충족하므로 단순히 관련 단어를 포함한 선택지보다 정확합니다. 정답을 판단할 때는 자바 기본형은 객체 참조가 아니라 실제 값을 직접 저장하는 언어 내장 자료형입니다라는 점을 기준으로 삼으면 됩니다.",
+      "key_points": [
+        "java-primitive",
+        "primitive-type",
+        "value-type",
+        "int-boolean-double",
+        "wrapper-class"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "`String`을 기본형으로 오해하는 실수. String은 문자열 객체를 나타내는 참조형입니다.",
+        "래퍼 클래스와 기본형을 같은 타입으로 보는 실수. Integer와 int는 자동 박싱이 가능하지만 서로 다른 타입입니다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "int",
+          "reason": "`int`는 자바의 여덟 기본형 중 하나입니다. 질문이 기본형이 아닌 항목을 묻는다면 참조형인 `String`과 구분해야 하므로 오답입니다."
+        },
+        "option_1": {
+          "text": "boolean",
+          "reason": "`boolean`는 자바의 여덟 기본형 중 하나입니다. 질문이 기본형이 아닌 항목을 묻는다면 참조형인 `String`과 구분해야 하므로 오답입니다."
+        },
+        "option_2": {
+          "text": "double",
+          "reason": "`double`는 자바의 여덟 기본형 중 하나입니다. 질문이 기본형이 아닌 항목을 묻는다면 참조형인 `String`과 구분해야 하므로 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "래퍼 클래스",
+          "diff": "기본형은 값을 직접 저장하고 null을 가질 수 없지만 `Integer` 같은 래퍼 클래스는 객체이며 null과 제네릭 컬렉션에 사용할 수 있습니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "public class Main {\n    public static void main(String[] args) {\n        int count = 3;\n        boolean active = true;\n        double price = 12.5;\n        System.out.println(count + \", \" + active + \", \" + price);\n    }\n}",
+      "explanation": "예시는 `primitive`의 핵심 동작을 가장 작은 실행 단위로 보여 줍니다. 값을 바꾸어 실행하면 적용 조건과 결과 차이를 확인할 수 있습니다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "반복 계산, 카운터, 플래그처럼 null이 필요 없고 값 연산이 중심인 코드에서 사용합니다. 컬렉션이나 nullable 값이 필요하면 래퍼 클래스를 선택합니다.",
+      "best_practices": [
+        "`primitive`을 적용하기 전에 해결하려는 문제와 기대 결과를 먼저 명확히 합니다.",
+        "경계 조건과 실패 사례를 작은 테스트로 확인한 뒤 실제 코드에 적용합니다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "기본형과 래퍼 클래스 사이의 자동 박싱 과정에서 null을 언박싱하는 문제",
+          "solution": "래퍼 값을 기본형에 대입하기 전에 null 여부를 확인하고 불필요한 박싱을 줄입니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T05:40:08.651417Z"
+}

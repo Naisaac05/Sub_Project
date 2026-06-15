@@ -1,0 +1,113 @@
+{
+  "card_id": "python-decorator",
+  "category": "python",
+  "term": "decorator",
+  "aliases": [
+    "decorator",
+    "함수를 수정하지 않고 기능을 추가한다",
+    "데코레이터(decorator)의 역할은?",
+    "decorator)",
+    "python decorator"
+  ],
+  "source_question_ids": [
+    "python:102"
+  ],
+  "retrieval": {
+    "embedding_text": "decorator 함수를 수정하지 않고 기능을 추가한다 데코레이터(decorator)의 역할은? python 데코레이터 decorator) 역할은 함수를 수정하지 않고",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "decorator",
+      "데코레이터",
+      "decorator)",
+      "역할은",
+      "함수를",
+      "수정하지",
+      "않고"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Python 데코레이터는 함수를 다른 함수로 감싸거나 변환해 원본 본문 수정 없이 기능을 추가한다.",
+      "examples": [
+        "decorator 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "호출 전후 로깅, 권한 검사, 캐싱 같은 공통 동작을 재사용할 수 있다.",
+      "key_points": [
+        "decorator",
+        "wrapper",
+        "공통 기능"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "클래스를 생성한다",
+          "reason": "클래스 생성은 데코레이터의 필수 역할이 아니다."
+        },
+        "option_2": {
+          "text": "변수를 상수로 만든다",
+          "reason": "변수를 상수로 만드는 기능이 아니다."
+        },
+        "option_3": {
+          "text": "메모리를 해제한다",
+          "reason": "메모리 해제를 직접 담당하지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`함수를 수정하지 않고 기능을 추가한다`는 질문의 조건을 충족하지만 다른 선택지는 `decorator`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "def traced(fn):\n    def wrapper(*args): return fn(*args)\n    return wrapper\n@traced\ndef add(a, b): return a + b",
+      "explanation": "decorator 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "decorator 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`decorator`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `함수를 수정하지 않고 기능을 추가한다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:58:04.726235Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

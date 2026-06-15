@@ -1,0 +1,115 @@
+{
+  "card_id": "algorithm-np",
+  "category": "algorithm",
+  "term": "np",
+  "aliases": [
+    "n",
+    "np",
+    "알고리즘 n",
+    "algorithm np",
+    "알고리즘 np"
+  ],
+  "source_question_ids": [
+    "algorithm:150"
+  ],
+  "retrieval": {
+    "embedding_text": "np n 알고리즘 n algorithm 해를 검증하는 알고리즘 np algorithm np algorithm-np",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "np",
+      "해를",
+      "검증하는",
+      "알고리즘 n",
+      "알고리즘 np",
+      "algorithm np",
+      "algorithm-np"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "np is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as np, algorithm-np, algorithm np.",
+      "examples": [
+        "Explain when np should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of np, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals np, algorithm-np, algorithm np.",
+      "key_points": [
+        "np",
+        "algorithm",
+        "algorithm np"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy np's defining behavior.",
+        "Confusing np with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "다항 시간 알고리즘이 알려져 있다",
+          "reason": "다항 시간 알고리즘이 알려져 있다 is not the best answer because it does not satisfy the defining behavior or constraint of np. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "해가 존재하지 않는다",
+          "reason": "해가 존재하지 않는다 is not the best answer because it does not satisfy the defining behavior or constraint of np. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "근사 알고리즘이 불가능하다",
+          "reason": "근사 알고리즘이 불가능하다 is not the best answer because it does not satisfy the defining behavior or constraint of np. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against np."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate np in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes np's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply np in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why np is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying np without checking its defining constraint.",
+          "solution": "Re-check np's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.576318Z"
+}

@@ -45,7 +45,7 @@ FILLER_WORDS = {"좀", "요", "네", "음", "그", "이제"}
 GENERIC_SINGLETON_TOPICS = {"ai", "db", "it"}
 
 
-def classify_free_question(text: str) -> FreeQuestionIntent:
+def classify_free_question_rule_based(text: str) -> FreeQuestionIntent:
     canonical_text = canonicalize_question(text)
     normalized = normalize_question(canonical_text)
     topic = extract_topic(canonical_text)

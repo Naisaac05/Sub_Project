@@ -1,0 +1,115 @@
+{
+  "card_id": "frontend-suspense",
+  "category": "frontend",
+  "term": "suspense",
+  "aliases": [
+    "s",
+    "프론트엔드 s",
+    "suspense",
+    "frontend suspense",
+    "프론트엔드 suspense"
+  ],
+  "source_question_ids": [
+    "frontend:84"
+  ],
+  "retrieval": {
+    "embedding_text": "suspense s 프론트엔드 s frontend 비동기 작업이 프론트엔드 suspense frontend suspense frontend-suspense",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "비동기",
+      "작업이",
+      "프론트엔드 s",
+      "suspense",
+      "프론트엔드 suspense",
+      "frontend suspense",
+      "frontend-suspense"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "suspense is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as suspense, frontend-suspense, frontend suspense.",
+      "examples": [
+        "Explain when suspense should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of suspense, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals suspense, frontend-suspense, frontend suspense.",
+      "key_points": [
+        "suspense",
+        "frontend",
+        "frontend suspense"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy suspense's defining behavior.",
+        "Confusing suspense with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "에러를 처리한다",
+          "reason": "에러를 처리한다 is not the best answer because it does not satisfy the defining behavior or constraint of suspense. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "컴포넌트를 지연 로딩한다",
+          "reason": "컴포넌트를 지연 로딩한다 is not the best answer because it does not satisfy the defining behavior or constraint of suspense. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "상태를 초기화한다",
+          "reason": "상태를 초기화한다 is not the best answer because it does not satisfy the defining behavior or constraint of suspense. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against suspense."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate suspense in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes suspense's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply suspense in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why suspense is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying suspense without checking its defining constraint.",
+          "solution": "Re-check suspense's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.736190Z"
+}

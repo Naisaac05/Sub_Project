@@ -48,9 +48,9 @@ CURRENT_INTENT_DEFAULT = {
 
 def _current(question):
     # app import 는 이 함수 안에서만 일어난다(phase1 만 쓸 땐 app 불필요).
-    from app.workflow.intent import classify_free_question
+    from app.workflow.intent import classify_free_question_rule_based
 
-    r = classify_free_question(question)
+    r = classify_free_question_rule_based(question)
     mapped = CURRENT_SUB_MAP.get((r.intent, r.sub_intent))
     if mapped is None:
         mapped = CURRENT_INTENT_DEFAULT.get(r.intent, "UNKNOWN")
@@ -226,20 +226,63 @@ def _ml(question):
 # bge-m3(Ollama)로 dev 예시를 임베딩해 의도별 중심(centroid)을 만들고,
 # 질문 임베딩과 코사인 최대인 의도로 분류한다. 의미 기반이라 오타/말바꿈에 강하다.
 _EMBED_CENTROIDS = None
+_EMBED_CACHE_PATH = pathlib.Path(__file__).parent / ".embed_cache.json"
+_EMBED_CACHE = None
 
 
-def _ollama_embed(text):
+def _embed_cache_key(model, text):
+    import hashlib
+
+    return hashlib.sha256(f"{model}\0{text}".encode("utf-8")).hexdigest()
+
+
+def _load_embed_cache():
+    global _EMBED_CACHE
+    if _EMBED_CACHE is not None:
+        return _EMBED_CACHE
+    import json
+
+    if _EMBED_CACHE_PATH.exists():
+        try:
+            _EMBED_CACHE = json.loads(_EMBED_CACHE_PATH.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            _EMBED_CACHE = {}
+    else:
+        _EMBED_CACHE = {}
+    return _EMBED_CACHE
+
+
+def _save_embed_cache(cache):
+    import json
+
+    _EMBED_CACHE_PATH.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+
+
+def _fetch_ollama_embedding(model, text):
     import json
     import os
     import urllib.request
 
     base = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-    model = os.getenv("POC_EMBED_MODEL", "bge-m3")
     body = json.dumps({"model": model, "prompt": text}).encode("utf-8")
     req = urllib.request.Request(f"{base}/api/embeddings", data=body,
                                  headers={"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=60) as r:
         return json.loads(r.read().decode("utf-8"))["embedding"]
+
+
+def _ollama_embed(text):
+    import os
+
+    model = os.getenv("POC_EMBED_MODEL", "bge-m3")
+    cache = _load_embed_cache()
+    key = _embed_cache_key(model, text)
+    if key in cache:
+        return cache[key]
+    embedding = _fetch_ollama_embedding(model, text)
+    cache[key] = embedding
+    _save_embed_cache(cache)
+    return embedding
 
 
 def _embed_fit():
@@ -291,7 +334,7 @@ CLASSIFIERS = {
 
 # 리포트 헤더에 쓰는 대상 설명
 TARGET_DESC = {
-    "current": "현재 `ai/app/workflow/intent.py` 의 `classify_free_question` (4-intent 규칙기반)",
+    "current": "PoC 비교용 `ai/app/workflow/intent.py` 의 `classify_free_question_rule_based` (4-intent 규칙기반, 운영 미사용)",
     "phase1": "Phase 1 10-class Intent Extractor (미구현)",
     "rule10": "PoC 참조 구현 `rule10` — 트리거 신호 기반 10-class 규칙 분류기 (순수 PoC, app 무관)",
     "llm": "로컬 Ollama LLM 분류기 (기본 qwen2.5:3b, format=json, temperature=0)",

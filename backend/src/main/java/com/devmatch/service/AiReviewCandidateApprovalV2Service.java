@@ -109,6 +109,19 @@ public class AiReviewCandidateApprovalV2Service {
             throw new IllegalArgumentException("Unsupported candidate review action: " + request.action());
         }
 
+        if (candidate.getStatus() == AiReviewCandidateStatus.APPROVED) {
+            try {
+                knowledgeReindexer.reindexChanged(candidate);
+                String cardId = LoggingAiReviewKnowledgeReindexer.cardId(candidate);
+                candidate.markPublished(
+                        cardId,
+                        "ai/app/knowledge/concepts_v2/" + LoggingAiReviewKnowledgeReindexer.categorySlug(candidate) + "/" + cardId + ".json"
+                );
+            } catch (RuntimeException ex) {
+                candidate.markPublishFailed(ex.getMessage(), reviewer, now, retentionUntil);
+            }
+        }
+
         AiReviewCandidate saved = candidateRepository.save(candidate);
         auditRepository.save(AiReviewCandidateAudit.builder()
                 .candidate(saved)
@@ -119,9 +132,6 @@ public class AiReviewCandidateApprovalV2Service {
                 .reviewerEditedAnswer(request.reviewerEditedAnswer())
                 .reason(request.rejectedReason())
                 .build());
-        if (saved.getStatus() == AiReviewCandidateStatus.APPROVED) {
-            knowledgeReindexer.reindexChanged(saved);
-        }
         logCandidateBacklog("review_" + request.action().name().toLowerCase());
         return toResponse(saved);
     }
@@ -235,6 +245,9 @@ public class AiReviewCandidateApprovalV2Service {
                 candidate.getRoute(),
                 candidate.getConfidenceScore(),
                 candidate.getNeedsReviewReason(),
+                candidate.getPublishError(),
+                candidate.getPublishedCardId(),
+                candidate.getPublishedCardPath(),
                 candidate.getReviewer(),
                 candidate.getReviewedAt(),
                 candidate.getRetentionUntil(),

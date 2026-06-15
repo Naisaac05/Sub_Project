@@ -1,0 +1,113 @@
+{
+  "card_id": "spring-responseentity",
+  "category": "spring",
+  "term": "responseentity",
+  "aliases": [
+    "responseentity",
+    "spring responseentity",
+    "스프링 responseentity"
+  ],
+  "source_question_ids": [
+    "spring:50"
+  ],
+  "retrieval": {
+    "embedding_text": "responseentity spring responseentity 스프링 responseentity spring spring-responseentity http 상태 코드와",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "responseentity",
+      "spring-responseentity",
+      "spring responseentity",
+      "스프링 responseentity",
+      "http",
+      "상태",
+      "코드와"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "responseentity is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as responseentity, spring-responseentity, spring responseentity.",
+      "examples": [
+        "Explain when responseentity should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of responseentity, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals responseentity, spring-responseentity, spring responseentity.",
+      "key_points": [
+        "responseentity",
+        "spring",
+        "spring responseentity"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy responseentity's defining behavior.",
+        "Confusing responseentity with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "성능 향상",
+          "reason": "성능 향상 is not the best answer because it does not satisfy the defining behavior or constraint of responseentity. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "자동으로 JSON 변환이 된다",
+          "reason": "자동으로 JSON 변환이 된다 is not the best answer because it does not satisfy the defining behavior or constraint of responseentity. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "보안이 강화된다",
+          "reason": "보안이 강화된다 is not the best answer because it does not satisfy the defining behavior or constraint of responseentity. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against responseentity."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate responseentity in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes responseentity's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply responseentity in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why responseentity is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying responseentity without checking its defining constraint.",
+          "solution": "Re-check responseentity's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:25.057427Z"
+}

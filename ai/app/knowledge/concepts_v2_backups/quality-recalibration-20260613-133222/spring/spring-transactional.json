@@ -1,0 +1,113 @@
+{
+  "card_id": "spring-transactional",
+  "category": "spring",
+  "term": "transactional",
+  "aliases": [
+    "transactional",
+    "spring transactional",
+    "스프링 transactional"
+  ],
+  "source_question_ids": [
+    "spring:43"
+  ],
+  "retrieval": {
+    "embedding_text": "transactional spring transactional 스프링 transactional spring spring-transactional jpa 변경 감지",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "transactional",
+      "spring-transactional",
+      "spring transactional",
+      "스프링 transactional",
+      "jpa",
+      "변경",
+      "감지"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "transactional is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as transactional, spring-transactional, spring transactional.",
+      "examples": [
+        "Explain when transactional should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of transactional, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals transactional, spring-transactional, spring transactional.",
+      "key_points": [
+        "transactional",
+        "spring",
+        "spring transactional"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy transactional's defining behavior.",
+        "Confusing transactional with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "읽기도 불가능하다",
+          "reason": "읽기도 불가능하다 is not the best answer because it does not satisfy the defining behavior or constraint of transactional. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "트랜잭션이 적용되지 않는다",
+          "reason": "트랜잭션이 적용되지 않는다 is not the best answer because it does not satisfy the defining behavior or constraint of transactional. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "캐시가 비활성화된다",
+          "reason": "캐시가 비활성화된다 is not the best answer because it does not satisfy the defining behavior or constraint of transactional. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against transactional."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate transactional in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes transactional's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply transactional in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why transactional is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying transactional without checking its defining constraint.",
+          "solution": "Re-check transactional's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:25.079116Z"
+}

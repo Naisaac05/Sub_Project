@@ -1,0 +1,115 @@
+{
+  "card_id": "algorithm-7",
+  "category": "algorithm",
+  "term": "선택",
+  "aliases": [
+    "선",
+    "선택",
+    "알고리즘 선",
+    "algorithm 선택",
+    "알고리즘 선택"
+  ],
+  "source_question_ids": [
+    "algorithm:130"
+  ],
+  "retrieval": {
+    "embedding_text": "선택 선 알고리즘 선 algorithm 찾아 최솟값을 알고리즘 선택 algorithm 선택 algorithm-선택",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "선택",
+      "찾아",
+      "최솟값을",
+      "알고리즘 선",
+      "알고리즘 선택",
+      "algorithm 선택",
+      "algorithm-선택"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "선택 is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as 선택, algorithm-선택, algorithm 선택.",
+      "examples": [
+        "Explain when 선택 should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of 선택, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals 선택, algorithm-선택, algorithm 선택.",
+      "key_points": [
+        "선택",
+        "algorithm",
+        "algorithm 선택"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy 선택's defining behavior.",
+        "Confusing 선택 with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "인접한 두 요소를 비교하여 교환",
+          "reason": "인접한 두 요소를 비교하여 교환 is not the best answer because it does not satisfy the defining behavior or constraint of 선택. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "이미 정렬된 부분에 삽입",
+          "reason": "이미 정렬된 부분에 삽입 is not the best answer because it does not satisfy the defining behavior or constraint of 선택. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "배열을 반으로 나눠 정렬",
+          "reason": "배열을 반으로 나눠 정렬 is not the best answer because it does not satisfy the defining behavior or constraint of 선택. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against 선택."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate 선택 in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes 선택's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply 선택 in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why 선택 is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying 선택 without checking its defining constraint.",
+          "solution": "Re-check 선택's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.502470Z"
+}

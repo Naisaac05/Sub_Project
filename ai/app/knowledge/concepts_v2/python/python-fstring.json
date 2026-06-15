@@ -1,0 +1,113 @@
+{
+  "card_id": "python-fstring",
+  "category": "python",
+  "term": "fstring",
+  "aliases": [
+    "fstring",
+    "f'이름은 {name}입니다'",
+    "f-string 포매팅의 올바른 예시는?",
+    "f-string",
+    "name",
+    "python fstring"
+  ],
+  "source_question_ids": [
+    "python:99"
+  ],
+  "retrieval": {
+    "embedding_text": "fstring f'이름은 {name}입니다' f-string 포매팅의 올바른 예시는? python f-string 포매팅의 예시는 이름은 name 입니다",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "fstring",
+      "f-string",
+      "포매팅의",
+      "예시는",
+      "이름은",
+      "name",
+      "입니다"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Python f-string은 문자열 앞에 `f`를 붙이고 중괄호 안의 표현식을 평가해 문자열에 삽입한다. 변수뿐 아니라 계산식과 포맷 지정자도 사용할 수 있다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "`f'이름은 {name}입니다'`는 f 접두사와 중괄호 표현식을 모두 갖춘 올바른 문법이다. `$`, 일반 괄호, `#` 표기는 Python f-string 치환 구문이 아니다.",
+      "key_points": [
+        "f'이름은 {name}입니다'",
+        "python-fstring"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_1": {
+          "text": "'이름은 ${name}입니다'",
+          "reason": "`${name}`은 JavaScript 템플릿 리터럴 계열 표기이며 Python f-string 문법이 아니다."
+        },
+        "option_2": {
+          "text": "f'이름은 (name)입니다'",
+          "reason": "일반 괄호는 문자열 안에서 표현식을 평가하지 않고 그대로 출력된다."
+        },
+        "option_3": {
+          "text": "'이름은 #{name}입니다'",
+          "reason": "f 접두사 없이 `#{name}`을 쓰면 변수 값이 치환되지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "f-string은 표현식을 평가하고 일반 문자열은 중괄호 내용을 그대로 보존한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "name = '민수'\nmessage = f'이름은 {name}입니다'\nassert message == '이름은 민수입니다'",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "로그·메시지·보고서에 변수와 계산 결과를 읽기 좋게 삽입할 때 사용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

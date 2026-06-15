@@ -1,0 +1,413 @@
+import os
+import unittest
+from unittest.mock import Mock, patch
+
+from app.schemas import AiGenerateRequest
+from app.schemas.rag_card import RagCard
+from app.workflow.embedding_intent import intent_from_label
+from app.workflow.nodes import generate_answer_node
+from app.workflow.runner import _build_response_from_state, run_review_workflow_stream
+from app.workflow.state import ReviewWorkflowState
+from app.workflow.v2_approved_fast_path import (
+    APPROVED_V2_CARD_IDS,
+    V2FastPathDecision,
+    _load_allowlisted_v2_cards_cached,
+    approved_v2_card_ids,
+    load_allowlisted_v2_cards,
+    resolve_v2_approved_fast_path,
+)
+from app.rag.parallel_config import ParallelRagConfig
+
+
+def _card(
+    card_id: str = "frontend-react-key",
+    *,
+    card_status: str = "approved",
+    payload_status: str = "approved",
+) -> RagCard:
+    category, term = card_id.split("-", 1)
+    return RagCard.model_validate(
+        {
+            "card_id": card_id,
+            "category": category,
+            "term": term,
+            "aliases": [term.replace("-", " ")],
+            "retrieval": {
+                "embedding_text": f"{term} {category}",
+                "boost_keywords": [term, category],
+            },
+            "payloads": {
+                "CONCEPT_DEFINITION": {"content": f"{term} definition"},
+                "ANSWER_REASON": {"why_correct": f"{term} is correct", "key_points": [term]},
+                "WRONG_ANSWER_REASON": {
+                    "common_mistakes": [f"{term} mistake"],
+                    "per_option": {},
+                },
+            },
+            "review": {
+                "card_status": card_status,
+                "payload_status": {
+                    "CONCEPT_DEFINITION": payload_status,
+                    "ANSWER_REASON": payload_status,
+                    "WRONG_ANSWER_REASON": payload_status,
+                },
+            },
+        }
+    )
+
+
+class V2ApprovedFastPathPolicyTest(unittest.TestCase):
+    def tearDown(self):
+        _load_allowlisted_v2_cards_cached.cache_clear()
+
+    def test_comparison_intent_uses_approved_concept_definition_payload(self):
+        with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true"}), patch(
+            "app.workflow.v2_approved_fast_path.load_parallel_rag_config",
+            return_value=ParallelRagConfig(shadow_mode=True, v2_percentage=10),
+        ):
+            decision = resolve_v2_approved_fast_path(
+                "Java equals와 ==의 차이는 무엇인가요?",
+                intent_from_label("COMPARISON", "Java equals와 ==의 차이는 무엇인가요?", 0.99),
+                card_loader=lambda _: [_card("java-equals")],
+            )
+
+        self.assertTrue(decision.hit)
+        self.assertEqual(decision.card_id, "java-equals")
+        self.assertEqual(decision.payload_intent, "CONCEPT_DEFINITION")
+
+    def test_disabled_reason_has_clear_message(self):
+        with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "false"}):
+            decision = resolve_v2_approved_fast_path(
+                "What is React key?",
+                intent_from_label("CONCEPT_DEFINITION", "What is React key?", 0.99),
+            )
+
+        self.assertEqual(decision.reason_message, "Fast Path 기능이 비활성화되어 있습니다")
+
+    def test_disabled_mode_does_not_call_v2_loader(self):
+        loader = Mock(side_effect=AssertionError("disabled mode must not read v2"))
+
+        with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "false"}):
+            decision = resolve_v2_approved_fast_path(
+                "What is React key?",
+                intent_from_label("CONCEPT_DEFINITION", "What is React key?", 0.99),
+                card_loader=loader,
+            )
+
+        loader.assert_not_called()
+        self.assertFalse(decision.hit)
+        self.assertEqual(decision.reason, "disabled")
+
+    def test_allowlisted_cards_are_loaded_once_for_repeated_shadow_lookups(self):
+        with patch("app.workflow.v2_approved_fast_path.parse_concept_card", return_value=_card()) as parse:
+            load_allowlisted_v2_cards(["frontend-react-key"])
+            load_allowlisted_v2_cards(["frontend-react-key"])
+
+        parse.assert_called_once()
+
+    def test_loader_receives_only_immutable_approved_card_allowlist(self):
+        loaded_ids = []
+
+        def loader(card_ids):
+            loaded_ids.extend(card_ids)
+            return [_card()]
+
+        with patch.dict(
+            os.environ,
+            {
+                "AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true",
+                "AI_REVIEW_V2_APPROVED_FAST_PATH_MODE": "shadow",
+                "AI_REVIEW_V2_APPROVED_FAST_PATH_CARD_IDS": (
+                        "frontend-react-key,java-equals,spring-spring-question-59,"
+                    "java-extends,python-with,java-primitive,frontend-useeffect"
+                    ",frontend-suspense"
+                ),
+            },
+        ):
+            resolve_v2_approved_fast_path(
+                "What is React key?",
+                intent_from_label("CONCEPT_DEFINITION", "What is React key?", 0.99),
+                card_loader=loader,
+            )
+
+        self.assertEqual(
+            set(loaded_ids),
+            {"frontend-react-key", "java-equals", "spring-spring-question-59", "java-extends", "python-with", "java-primitive", "frontend-useeffect"},
+        )
+        self.assertNotIn("frontend-suspense", loaded_ids)
+        self.assertIn("java-primitive", loaded_ids)
+
+    def test_runtime_approved_ids_match_actual_v2_approved_cards(self):
+        actual = {
+            path.stem
+            for path in (__import__("pathlib").Path(__file__).resolve().parents[1] / "app" / "knowledge" / "concepts_v2").rglob("*.json")
+            if __import__("json").loads(path.read_text(encoding="utf-8-sig")).get("review", {}).get("card_status") == "approved"
+        }
+
+        self.assertEqual(approved_v2_card_ids(), frozenset(actual))
+        self.assertEqual(APPROVED_V2_CARD_IDS, frozenset(actual))
+
+    def test_draft_card_or_payload_is_never_a_hit(self):
+        for card in (_card(card_status="draft"), _card(payload_status="draft")):
+            with self.subTest(card_status=card.review.card_status, payload_status=card.review.payload_status):
+                with patch.dict(
+                    os.environ,
+                    {
+                        "AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true",
+                        "AI_REVIEW_V2_APPROVED_FAST_PATH_MODE": "shadow",
+                    },
+                ):
+                    decision = resolve_v2_approved_fast_path(
+                        "What is React key?",
+                        intent_from_label("CONCEPT_DEFINITION", "What is React key?", 0.99),
+                        card_loader=lambda _: [card],
+                    )
+
+                self.assertFalse(decision.hit)
+
+    def test_non_approved_card_is_not_fast_path_eligible(self):
+        with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true"}), patch(
+            "app.workflow.v2_approved_fast_path.load_parallel_rag_config",
+            return_value=ParallelRagConfig(shadow_mode=True, v2_percentage=10),
+        ):
+            decision = resolve_v2_approved_fast_path(
+                "What is React key?",
+                intent_from_label("CONCEPT_DEFINITION", "What is React key?", 0.99),
+                card_loader=lambda _: [_card(card_status="approved_locked")],
+            )
+
+        self.assertFalse(decision.hit)
+
+    def test_generic_overlap_without_term_or_specific_phrase_is_not_a_hit(self):
+        unrelated = _card("java-int-variable")
+        unrelated.aliases = ["Java", "integer variable"]
+        unrelated.retrieval.boost_keywords = ["java", "variable", "declaration"]
+
+        with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true"}), patch(
+            "app.workflow.v2_approved_fast_path.load_parallel_rag_config",
+            return_value=ParallelRagConfig(shadow_mode=True, v2_percentage=10),
+        ):
+            decision = resolve_v2_approved_fast_path(
+                "Java에서 문자열을 비교하는 방법은?",
+                intent_from_label("CONCEPT_DEFINITION", "Java에서 문자열을 비교하는 방법은?", 0.99),
+                card_loader=lambda _: [unrelated],
+            )
+
+        self.assertFalse(decision.hit)
+        self.assertEqual(decision.reason, "anchor_miss")
+
+    def test_enabled_default_mode_is_shadow(self):
+        with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true"}, clear=True), patch(
+            "app.workflow.v2_approved_fast_path.load_parallel_rag_config",
+            return_value=ParallelRagConfig(shadow_mode=True, v2_percentage=10),
+        ):
+            decision = resolve_v2_approved_fast_path(
+                "What is React key?",
+                intent_from_label("CONCEPT_DEFINITION", "What is React key?", 0.99),
+                card_loader=lambda _: [_card()],
+            )
+
+        self.assertTrue(decision.hit)
+        self.assertEqual(decision.mode, "shadow")
+
+    def test_explicit_serve_mode_can_return_approved_payload(self):
+        with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true"}, clear=True), patch(
+            "app.workflow.v2_approved_fast_path.load_parallel_rag_config",
+            return_value=ParallelRagConfig(shadow_mode=False, v2_percentage=10),
+        ):
+            decision = resolve_v2_approved_fast_path(
+                "What is React key?",
+                intent_from_label("CONCEPT_DEFINITION", "What is React key?", 0.99),
+                card_loader=lambda _: [_card()],
+                random_value=0.05,
+            )
+
+        self.assertTrue(decision.hit)
+        self.assertEqual(decision.mode, "serve")
+        self.assertEqual(decision.answer, "react-key definition")
+
+
+class V2ApprovedFastPathWorkflowTest(unittest.TestCase):
+    def _state(self) -> ReviewWorkflowState:
+        return ReviewWorkflowState(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="What is React key?"),
+            free_question_intent=intent_from_label(
+                "CONCEPT_DEFINITION",
+                "What is React key?",
+                0.99,
+            ),
+        )
+
+    def test_shadow_mode_records_hit_but_preserves_existing_answer_flow(self):
+        decision = V2FastPathDecision(
+            mode="shadow",
+            hit=True,
+            reason="hit",
+            card_id="frontend-react-key",
+            payload_intent="CONCEPT_DEFINITION",
+            answer="v2 shadow answer",
+            score=10.0,
+        )
+
+        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision), patch(
+            "app.workflow.nodes.resolve_lightweight_answer",
+            return_value=None,
+        ):
+            state = generate_answer_node(self._state(), generator=lambda **_: "existing answer")
+
+        self.assertEqual(state.answer, "existing answer")
+        self.assertEqual(state.route, "generation")
+        self.assertEqual(state.v2_fast_path_decision["mode"], "shadow")
+        self.assertTrue(state.v2_fast_path_decision["hit"])
+
+    def test_serve_mode_returns_approved_payload_without_generator(self):
+        decision = V2FastPathDecision(
+            mode="serve",
+            hit=True,
+            reason="hit",
+            card_id="frontend-react-key",
+            payload_intent="CONCEPT_DEFINITION",
+            answer="v2 approved answer",
+            score=10.0,
+        )
+
+        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision):
+            state = generate_answer_node(
+                self._state(),
+                generator=lambda **_: (_ for _ in ()).throw(AssertionError("generator called")),
+            )
+
+        self.assertEqual(state.answer, "v2 approved answer")
+        self.assertEqual(state.route, "v2_approved_fast_path")
+        self.assertEqual(state.model_used, "v2-approved-payload")
+        self.assertFalse(state.fallback_used)
+
+    def test_serve_mode_miss_skips_lightweight_and_calls_ollama(self):
+        decision = V2FastPathDecision(mode="serve", hit=False, reason="retrieval_miss")
+
+        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision), patch(
+            "app.workflow.nodes.resolve_lightweight_answer",
+            side_effect=AssertionError("free-question v2 miss must not use lightweight answers"),
+        ):
+            state = generate_answer_node(self._state(), generator=lambda **_: "Ollama 생성 답변")
+
+        self.assertEqual(state.answer, "Ollama 생성 답변")
+        self.assertEqual(state.route, "generation")
+
+    def test_shadow_decision_is_recorded_in_workflow_event(self):
+        state = self._state()
+        state.answer = "existing answer"
+        state.route = "generation"
+        state.model_used = "test-model"
+        state.v2_fast_path_decision = {
+            "mode": "shadow",
+            "hit": True,
+            "reason": "hit",
+            "card_id": "frontend-react-key",
+            "payload_intent": "CONCEPT_DEFINITION",
+            "score": 10.0,
+        }
+
+        response = _build_response_from_state(state, latency_ms=1)
+        completed = next(
+            event for event in response.observability_events
+            if event["event"] == "ai_review.workflow_completed"
+        )
+
+        self.assertEqual(completed["v2_fast_path"]["mode"], "shadow")
+        self.assertTrue(completed["v2_fast_path"]["hit"])
+
+
+class V2ApprovedFastPathStreamingTest(unittest.IsolatedAsyncioTestCase):
+    async def test_fast_path_miss_retries_ollama_once_before_fallback(self):
+        decision = V2FastPathDecision(mode="serve", hit=False, reason="retrieval_miss")
+        attempts = 0
+
+        async def generator(**_):
+            nonlocal attempts
+            attempts += 1
+            if attempts == 1:
+                raise TimeoutError("first Ollama call timed out")
+            yield "equals는 객체의 논리적 동등성을 비교하고 ==는 참조를 비교합니다."
+
+        request = AiGenerateRequest(
+            user_answer="Java에서 equals와 ==는 무엇이 다른가요?",
+            stream=True,
+        )
+        with patch("app.workflow.runner.resolve_v2_approved_fast_path", return_value=decision), patch(
+            "app.workflow.semantic_gate.judge_answer_semantics",
+            return_value=[],
+        ):
+            events = [event async for event in run_review_workflow_stream("free-question", request, generator)]
+
+        response = events[-1]["response"]
+        self.assertEqual(attempts, 2)
+        self.assertFalse(response.fallback_used)
+        self.assertIn("논리적 동등성", response.answer)
+
+    async def test_shadow_stream_records_hit_and_keeps_existing_stream(self):
+        decision = V2FastPathDecision(
+            mode="shadow", hit=True, reason="hit", card_id="java-equals",
+            payload_intent="CONCEPT_DEFINITION", answer="v2 shadow answer", score=9.5,
+        )
+
+        generator_called = False
+
+        async def generator(**_):
+            nonlocal generator_called
+            generator_called = True
+            yield "기존 Ollama 스트리밍 응답"
+
+        request = AiGenerateRequest(user_answer="Java equals와 ==의 차이는 무엇인가요?", stream=True)
+        with patch("app.workflow.runner.resolve_v2_approved_fast_path", return_value=decision):
+            events = [event async for event in run_review_workflow_stream("free-question", request, generator)]
+
+        response = events[-1]["response"]
+        completed = next(event for event in response.observability_events if event["event"] == "ai_review.workflow_completed")
+        self.assertTrue(generator_called)
+        self.assertEqual(completed["v2_fast_path"]["mode"], "shadow")
+        self.assertTrue(completed["v2_fast_path"]["hit"])
+
+    async def test_serve_stream_returns_approved_payload_without_generator(self):
+        decision = V2FastPathDecision(
+            mode="serve", hit=True, reason="hit", card_id="java-equals",
+            payload_intent="CONCEPT_DEFINITION", answer="Java equals 승인 payload", score=9.5,
+        )
+
+        async def generator(**_):
+            raise AssertionError("generator must not be called")
+            yield ""
+
+        request = AiGenerateRequest(user_answer="Java equals와 ==의 차이는 무엇인가요?", stream=True)
+        with patch("app.workflow.runner.resolve_v2_approved_fast_path", return_value=decision):
+            events = [event async for event in run_review_workflow_stream("free-question", request, generator)]
+
+        self.assertEqual([event["type"] for event in events], ["start", "chunk", "done"])
+        self.assertEqual(events[1]["chunk"], "Java equals 승인 payload")
+        self.assertEqual(events[-1]["response"].route, "v2_approved_fast_path")
+        self.assertEqual(events[-1]["response"].model_used, "v2-approved-payload")
+
+    async def test_draft_payload_stream_decision_never_skips_generator(self):
+        decision = V2FastPathDecision(
+            mode="serve", hit=False, reason="payload_not_approved", card_id="java-equals",
+            payload_intent="CONCEPT_DEFINITION", score=9.5,
+        )
+
+        generator_called = False
+
+        async def generator(**_):
+            nonlocal generator_called
+            generator_called = True
+            yield "기존 생성 응답"
+
+        request = AiGenerateRequest(user_answer="Java equals가 무엇인가요?", stream=True)
+        with patch("app.workflow.runner.resolve_v2_approved_fast_path", return_value=decision):
+            events = [event async for event in run_review_workflow_stream("free-question", request, generator)]
+
+        self.assertTrue(generator_called)
+        self.assertNotEqual(events[-1]["response"].route, "v2_approved_fast_path")
+
+
+if __name__ == "__main__":
+    unittest.main()

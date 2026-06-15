@@ -1,0 +1,72 @@
+{
+  "card_id": "spring-autowired",
+  "category": "spring",
+  "term": "autowired",
+  "aliases": [
+    "spring autowired"
+  ],
+  "source_question_ids": [
+    "spring:35"
+  ],
+  "retrieval": {
+    "embedding_text": "autowired spring autowired autowired은(는) @Autowired 어노테이션의 역할은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "autowired",
+      "spring"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "autowired은(는) @Autowired 어노테이션의 역할은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "autowired 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "autowired"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q35_option_2": {
+          "text": "의존성을 자동으로 주입한다",
+          "reason": "autowired의 특성과 일치하지 않는 오답입니다."
+        },
+        "q35_option_3": {
+          "text": "트랜잭션을 관리한다",
+          "reason": "autowired의 특성과 일치하지 않는 오답입니다."
+        },
+        "q35_option_4": {
+          "text": "URL 매핑을 한다",
+          "reason": "autowired의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.054910Z",
+  "updated_at": "2026-06-10T11:01:08.054910Z"
+}

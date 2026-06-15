@@ -1,0 +1,113 @@
+{
+  "card_id": "algorithm-14",
+  "category": "algorithm",
+  "term": "algorithm-question-149",
+  "aliases": [
+    "algorithm-question-149",
+    "목표까지의 예상 비용을 추정하여 탐색 방향을 안내한다",
+    "A* 알고리즘에서 휴리스틱 함수의 역할은?",
+    "algorithm question 149",
+    "algorithm algorithm question 149"
+  ],
+  "source_question_ids": [
+    "algorithm:149"
+  ],
+  "retrieval": {
+    "embedding_text": "algorithm-question-149 목표까지의 예상 비용을 추정하여 탐색 방향을 안내한다 A* 알고리즘에서 휴리스틱 함수의 역할은? algorithm 알고리즘에서 휴리스틱 함수의 역할은 목표까지의 예상",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "algorithm-question-149",
+      "알고리즘에서",
+      "휴리스틱",
+      "함수의",
+      "역할은",
+      "목표까지의",
+      "예상"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "A*는 현재까지 비용 g와 목표까지 예상 비용 h를 더한 값을 기준으로 탐색한다.",
+      "examples": [
+        "A* 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "휴리스틱은 목표까지 남은 비용을 추정해 유망한 탐색 방향을 우선한다.",
+      "key_points": [
+        "A*",
+        "휴리스틱",
+        "예상 비용"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "정확한 최단 거리를 계산",
+          "reason": "휴리스틱은 예상값이며 정확한 최단 거리를 직접 계산하지 않는다."
+        },
+        "option_2": {
+          "text": "그래프를 정렬한다",
+          "reason": "그래프 정렬은 탐색 방향 추정과 무관하다."
+        },
+        "option_3": {
+          "text": "음의 가중치를 처리한다",
+          "reason": "음수 가중치 처리는 휴리스틱의 역할이 아니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`목표까지의 예상 비용을 추정하여 탐색 방향을 안내한다`는 질문의 조건을 충족하지만 다른 선택지는 `algorithm-question-149`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "cost = 4\nheuristic = 3\npriority = cost + heuristic",
+      "explanation": "A* 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "A* 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`algorithm-question-149`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `목표까지의 예상 비용을 추정하여 탐색 방향을 안내한다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

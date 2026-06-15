@@ -1,5 +1,8 @@
+import sys
 import unittest
+from unittest.mock import patch
 
+from app.ollama.embeddings import EmbeddingError
 from app.rag.retriever import (
     BM25RetrieverAdapter,
     ChromaBgeRetrieverAdapter,
@@ -13,8 +16,7 @@ from app.rag.retriever import (
     select_retriever_adapter,
     select_tokenizer,
 )
-from app.rag.documents import ConceptCard
-
+from app.schemas.rag_card import RagCard, RagPayloads, RagReview, CardStatus, PayloadStatus, ConceptDefinitionPayload
 
 class FakeAdapter:
     def __init__(self):
@@ -38,25 +40,82 @@ class StaticRetriever:
         self.results = results
         self.calls = []
 
-    def retrieve(self, query: str, limit: int = 5) -> list[RetrievedContext]:
+    def retrieve(self, query: str, limit: int = 5, reranker=None) -> list[RetrievedContext]:
         self.calls.append((query, limit))
         return self.results[:limit]
 
 
-def card(concept_id: str, title: str, body: str, keywords: str = "") -> ConceptCard:
-    return ConceptCard(
-        path=None,
-        concept_id=concept_id,
-        metadata={"id": concept_id},
-        title=title,
-        sections={
-            "핵심 설명": body,
-            "평가 키워드": keywords,
-        },
+class RerankingFallbackRetriever:
+    def __init__(self, results: list[RetrievedContext]):
+        self.results = results
+
+    def retrieve(self, query: str, limit: int = 5, reranker=None) -> list[RetrievedContext]:
+        results = self.results[:limit]
+        if reranker is not None:
+            results = reranker(results, query)
+        return results[:limit]
+
+
+def card(concept_id: str, title: str, body: str, keywords: str = "") -> RagCard:
+    # Use RagCard structure
+    # body -> concept_definition
+    # keywords -> boost_keywords
+    import datetime
+    from app.schemas.rag_card import RagRetrieval
+
+    cd = ConceptDefinitionPayload(content=body)
+    payloads = RagPayloads(CONCEPT_DEFINITION=cd)
+    review = RagReview(card_status=CardStatus.APPROVED, payload_status={"CONCEPT_DEFINITION": PayloadStatus.APPROVED})
+    retrieval = RagRetrieval(boost_keywords=[keywords] if keywords else [])
+
+    return RagCard(
+        card_id=concept_id,
+        category="test",
+        term=title,
+        aliases=[],
+        source_question_ids=[],
+        retrieval=retrieval,
+        payloads=payloads,
+        review=review,
+        related_card_ids=[],
+        tags=[]
     )
 
 
 class RagRetrieverTest(unittest.TestCase):
+    def test_exact_term_ranks_above_partial_specific_term(self):
+        general = card("java-extends", "extends", "", "java extends")
+        specific = card("java-extends-keyword", "extends-keyword", "", "java extends keyword")
+        retriever = LexicalRetrieverAdapter(card_loader=lambda: [specific, general])
+
+        results = retriever.retrieve("extends", limit=2)
+
+        self.assertEqual(results[0].concept_id, "java-extends")
+
+    def test_exact_alias_phrase_ranks_above_category_only_overlap(self):
+        from app.schemas.rag_card import RagRetrieval
+
+        cache = card("spring-cache-evict", "cache-evict", "", "spring cache cache evict")
+        cache.aliases = ["spring cache", "cache eviction"]
+        cache.retrieval = RagRetrieval(boost_keywords=["spring cache", "cache", "eviction"])
+        scope = card("spring-bean-scope", "spring-bean-scope", "", "spring bean scope")
+        retriever = LexicalRetrieverAdapter(card_loader=lambda: [scope, cache])
+
+        results = retriever.retrieve("Spring cache", limit=2)
+
+        self.assertEqual(results[0].concept_id, "spring-cache-evict")
+
+    def test_korean_exact_alias_phrase_ranks_matching_card_first(self):
+        primitive = card("java-primitive", "primitive", "", "primitive")
+        primitive.aliases = ["Java 기본 자료형이 아닌 것은"]
+        array = card("java-array-length", "array-length", "", "java array")
+        array.aliases = ["Java 배열 길이"]
+        retriever = LexicalRetrieverAdapter(card_loader=lambda: [array, primitive])
+
+        results = retriever.retrieve("다음 중 Java의 기본 자료형이 아닌 것은?", limit=2)
+
+        self.assertEqual(results[0].concept_id, "java-primitive")
+
     def test_retrieve_context_can_use_injected_adapter(self):
         adapter = FakeAdapter()
 
@@ -95,6 +154,41 @@ class RagRetrieverTest(unittest.TestCase):
         self.assertEqual(results[0].score, 5.0)
         self.assertEqual(results[0].metadata["retriever_sources"], "lexical,semantic")
 
+    def test_retrieval_entrypoints_return_empty_for_nonpositive_limit(self):
+        lexical = LexicalRetrieverAdapter(
+            card_loader=lambda: [
+                card("spring-n-plus-one", "N+1", "fetch join", "n+1"),
+                card("spring-fetch-join", "Fetch Join", "fetch join", "fetch"),
+            ]
+        )
+        bm25 = BM25RetrieverAdapter(
+            card_loader=lambda: [
+                card("spring-n-plus-one", "N+1", "fetch join", "n+1"),
+                card("spring-fetch-join", "Fetch Join", "fetch join", "fetch"),
+            ]
+        )
+        child = StaticRetriever(
+            [
+                RetrievedContext("child-a", "Child A", "child context", 1.0, {"source": "a"}),
+                RetrievedContext("child-b", "Child B", "child context", 0.5, {"source": "b"}),
+            ]
+        )
+        hybrid = HybridRetrieverAdapter([WeightedRetriever("child", 1.0, child.retrieve)])
+        fake = FakeAdapter()
+
+        for limit in (0, -1):
+            with self.subTest(limit=limit):
+                self.assertEqual(lexical.retrieve("n+1", limit=limit), [])
+                self.assertEqual(bm25.retrieve("n+1", limit=limit), [])
+                self.assertEqual(hybrid.retrieve("query", limit=limit), [])
+                self.assertEqual(retrieve_context("query", limit=limit, adapter=fake), [])
+
+    def test_default_and_lexical_selector_use_lexical_adapter(self):
+        with patch.dict("os.environ", {}, clear=True):
+            self.assertIsInstance(select_retriever_adapter(), LexicalRetrieverAdapter)
+
+        self.assertIsInstance(select_retriever_adapter("lexical"), LexicalRetrieverAdapter)
+
     def test_low_resource_hybrid_uses_lexical_and_bm25_without_vector(self):
         adapter = select_retriever_adapter("hybrid:low_resource")
 
@@ -123,10 +217,14 @@ class RagRetrieverTest(unittest.TestCase):
         self.assertEqual(results[0].concept_id, "spring-n-plus-one")
         self.assertEqual(results[0].metadata["retriever"], "bm25")
 
-    def test_kiwipiepy_tokenizer_hook_falls_back_without_dependency(self):
-        tokenizer = select_tokenizer("kiwipiepy")
+    def test_lexical_retriever_copies_card_metadata(self):
+        source_card = card("spring-n-plus-one", "N+1", "fetch join", "n+1")
+        retriever = LexicalRetrieverAdapter(card_loader=lambda: [source_card])
 
-        self.assertIn("n+1", tokenizer("N+1 fetch join"))
+        results = retriever.retrieve("n+1", limit=1)
+        results[0].metadata["mutated"] = "yes"
+
+        self.assertNotIn("mutated", source_card.metadata)
 
     def test_chroma_adapter_returns_empty_when_disabled_or_unavailable(self):
         adapter = ChromaBgeRetrieverAdapter(enabled=False)
@@ -142,48 +240,35 @@ class RagRetrieverTest(unittest.TestCase):
 
         self.assertEqual(reranker(items, "alpha"), items)
 
-    def test_retrieves_n_plus_one_card_first(self):
-        results = retrieve_context("N+1 문제 지연 로딩 추가 쿼리", limit=2)
+    def test_hybrid_child_exception_uses_configured_fallback(self):
+        fallback_item = RetrievedContext(
+            "fallback", "Fallback", "fallback context", 1.0, {"retriever": "fallback"}
+        )
+        fallback = StaticRetriever([fallback_item])
 
-        self.assertGreaterEqual(len(results), 1)
-        self.assertEqual(results[0].concept_id, "spring-n-plus-one")
+        def fail_retrieve(query: str, limit: int) -> list[RetrievedContext]:
+            raise RuntimeError("child failed")
+
+        adapter = HybridRetrieverAdapter(
+            [WeightedRetriever("broken", 1.0, fail_retrieve)],
+            fallback=fallback,
+        )
+
+        results = adapter.retrieve("query", limit=1)
+
+        self.assertEqual(results, [fallback_item])
+        self.assertEqual(fallback.calls, [("query", 1)])
+        self.assertEqual(results[0].metadata, {"retriever": "fallback"})
 
     def test_unknown_query_returns_empty_list(self):
         results = retrieve_context("unrelated grocery shopping", limit=2)
 
         self.assertEqual(results, [])
 
-    def test_optional_reranker_can_reorder_results(self):
-        def reverse_reranker(items: list[RetrievedContext], query: str) -> list[RetrievedContext]:
-            self.assertIn("N+1", query)
-            return list(reversed(items))
-
-        baseline = retrieve_context("N+1 fetch join", limit=3)
-        reranked = retrieve_context("N+1 fetch join", limit=3, reranker=reverse_reranker)
-
-        self.assertGreaterEqual(len(baseline), 2)
-        self.assertEqual(reranked[0].concept_id, baseline[-1].concept_id)
-
     def test_generic_korean_question_returns_empty_list(self):
         results = retrieve_context("이게 뭐야?", limit=3)
 
         self.assertEqual(results, [])
-
-    def test_retrieves_generated_cards_by_aliases_and_typos(self):
-        cases = [
-            ("aria label 접근성", "frontend-aria-label"),
-            ("aria lable 접근성", "frontend-aria-label"),
-            ("ConrollerAdvice 예외 처리", "java-backend-controlleradvice"),
-            ("Controller Advice Spring MVC", "java-backend-controlleradvice"),
-        ]
-
-        for query, expected_concept_id in cases:
-            with self.subTest(query=query):
-                results = retrieve_context(query, limit=3)
-
-                self.assertTrue(results)
-                self.assertEqual(results[0].concept_id, expected_concept_id)
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,78 @@
+{
+  "card_id": "python-with",
+  "category": "python",
+  "term": "with",
+  "aliases": [
+    "with",
+    "python with"
+  ],
+  "source_question_ids": [
+    "python:106"
+  ],
+  "retrieval": {
+    "embedding_text": "with python with python enter exit",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "with",
+      "python",
+      "python with",
+      "enter",
+      "exit"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "with의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 with의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "with",
+        "python",
+        "python with"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q106_option_0": {
+          "text": "__init__과 __del__",
+          "reason": "with 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q106_option_2": {
+          "text": "__open__과 __close__",
+          "reason": "with 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q106_option_3": {
+          "text": "__start__과 __end__",
+          "reason": "with 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

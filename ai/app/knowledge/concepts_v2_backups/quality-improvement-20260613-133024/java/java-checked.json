@@ -1,0 +1,80 @@
+{
+  "card_id": "java-checked",
+  "category": "java",
+  "term": "checked",
+  "aliases": [
+    "checked",
+    "java checked"
+  ],
+  "source_question_ids": [
+    "java:15"
+  ],
+  "retrieval": {
+    "embedding_text": "checked java checked java 컴파일 시점에 처리가 강제된다",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "checked",
+      "java",
+      "java checked",
+      "컴파일",
+      "시점에",
+      "처리가",
+      "강제된다"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "checked의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 checked의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "checked",
+        "java",
+        "java checked"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q15_option_1": {
+          "text": "unchecked는 컴파일 시점에 처리가 강제된다",
+          "reason": "checked 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q15_option_2": {
+          "text": "둘 다 반드시 try-catch가 필요하다",
+          "reason": "checked 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q15_option_3": {
+          "text": "차이가 없다",
+          "reason": "checked 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

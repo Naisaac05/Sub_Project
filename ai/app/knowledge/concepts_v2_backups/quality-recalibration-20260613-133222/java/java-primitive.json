@@ -1,0 +1,111 @@
+{
+  "card_id": "java-primitive",
+  "category": "java",
+  "term": "primitive",
+  "aliases": [
+    "primitive",
+    "java primitive",
+    "자바 primitive"
+  ],
+  "source_question_ids": [
+    "java:3"
+  ],
+  "retrieval": {
+    "embedding_text": "primitive java primitive 자바 primitive java java-primitive string",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "primitive",
+      "java-primitive",
+      "java primitive",
+      "자바 primitive",
+      "string"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "primitive is a java concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as primitive, java-primitive, java primitive.",
+      "examples": [
+        "Explain when primitive should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of primitive, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals primitive, java-primitive, java primitive.",
+      "key_points": [
+        "primitive",
+        "java",
+        "java primitive"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy primitive's defining behavior.",
+        "Confusing primitive with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "int",
+          "reason": "int is not the best answer because it does not satisfy the defining behavior or constraint of primitive. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "boolean",
+          "reason": "boolean is not the best answer because it does not satisfy the defining behavior or constraint of primitive. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "double",
+          "reason": "double is not the best answer because it does not satisfy the defining behavior or constraint of primitive. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against primitive."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate primitive in an appropriate java context.",
+      "explanation": "Use a minimal example that makes primitive's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply primitive in java work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why primitive is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying primitive without checking its defining constraint.",
+          "solution": "Re-check primitive's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.749069Z"
+}
