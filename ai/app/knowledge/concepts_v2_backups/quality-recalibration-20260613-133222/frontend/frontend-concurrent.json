@@ -1,0 +1,113 @@
+{
+  "card_id": "frontend-concurrent",
+  "category": "frontend",
+  "term": "concurrent",
+  "aliases": [
+    "concurrent",
+    "frontend concurrent",
+    "프론트엔드 concurrent"
+  ],
+  "source_question_ids": [
+    "frontend:86"
+  ],
+  "retrieval": {
+    "embedding_text": "concurrent frontend concurrent 프론트엔드 concurrent frontend frontend-concurrent 우선순위가 낮은 상태",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "concurrent",
+      "frontend-concurrent",
+      "frontend concurrent",
+      "프론트엔드 concurrent",
+      "우선순위가",
+      "낮은",
+      "상태"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "concurrent is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as concurrent, frontend-concurrent, frontend concurrent.",
+      "examples": [
+        "Explain when concurrent should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of concurrent, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals concurrent, frontend-concurrent, frontend concurrent.",
+      "key_points": [
+        "concurrent",
+        "frontend",
+        "frontend concurrent"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy concurrent's defining behavior.",
+        "Confusing concurrent with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "페이지 전환 애니메이션",
+          "reason": "페이지 전환 애니메이션 is not the best answer because it does not satisfy the defining behavior or constraint of concurrent. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "데이터베이스 트랜잭션 관리",
+          "reason": "데이터베이스 트랜잭션 관리 is not the best answer because it does not satisfy the defining behavior or constraint of concurrent. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "CSS 트랜지션 제어",
+          "reason": "CSS 트랜지션 제어 is not the best answer because it does not satisfy the defining behavior or constraint of concurrent. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against concurrent."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate concurrent in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes concurrent's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply concurrent in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why concurrent is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying concurrent without checking its defining constraint.",
+          "solution": "Re-check concurrent's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.524509Z"
+}

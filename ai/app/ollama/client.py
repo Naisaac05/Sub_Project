@@ -14,7 +14,7 @@ from app.validation.text import strip_thinking
 
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-OLLAMA_REQUEST_TIMEOUT_SECONDS = int(os.getenv("OLLAMA_REQUEST_TIMEOUT_SECONDS", "30"))
+OLLAMA_REQUEST_TIMEOUT_SECONDS = int(os.getenv("OLLAMA_REQUEST_TIMEOUT_SECONDS", "50"))
 OLLAMA_QUEUE_WAIT_TIMEOUT_SECONDS = int(os.getenv("OLLAMA_QUEUE_WAIT_TIMEOUT_SECONDS", "3"))
 DEFAULT_MODEL = os.getenv("PYTHON_AI_MODEL") or os.getenv("OLLAMA_SMALL_MODEL") or "exaone3.5:2.4b"
 FALLBACK_MODEL = os.getenv("PYTHON_AI_FALLBACK_MODEL", "exaone3.5:2.4b")
@@ -30,7 +30,7 @@ _GATEWAY: ModelPoolGateway | None = None
 
 
 def bounded_ollama_request_timeout_seconds(value: int) -> int:
-    return value if value > 0 else 30
+    return value if value > 0 else 50
 
 
 def bounded_ollama_queue_wait_timeout_seconds(value: int) -> int:
@@ -79,10 +79,14 @@ def call_ollama(model: str, prompt: str, temperature: float, max_tokens: int, nu
                 payload = json.loads(response.read().decode("utf-8"))
         finally:
             gateway.release(acquisition)
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+    except (TimeoutError, urllib.error.URLError) as exc:
         if status != "queue_timeout":
-            status = "error"
-        raise RuntimeError("Ollama request failed") from exc
+            status = "timeout" if _is_timeout_error(exc) else "error"
+        error_type = OllamaTimeoutError if status in {"timeout", "queue_timeout"} else OllamaRequestError
+        raise error_type("Ollama request failed") from exc
+    except json.JSONDecodeError as exc:
+        status = "error"
+        raise OllamaRequestError("Ollama response was invalid") from exc
     finally:
         _emit_ollama_generation_finished_metric(
             model=model,
@@ -96,7 +100,7 @@ def call_ollama(model: str, prompt: str, temperature: float, max_tokens: int, nu
 
     answer = str(payload.get("response", "")).strip()
     if not answer:
-        raise RuntimeError("Ollama returned an empty response")
+        raise OllamaRequestError("Ollama returned an empty response")
     return strip_thinking(answer)
 
 
@@ -220,11 +224,11 @@ async def call_ollama_stream_async(
     except (httpx.TimeoutException, TimeoutError) as exc:
         if status != "queue_timeout":
             status = "timeout"
-        raise RuntimeError("Ollama streaming request failed") from exc
+        raise OllamaTimeoutError("Ollama streaming request timed out") from exc
     except Exception as exc:
         if status == "completed":
             status = "error"
-        raise RuntimeError("Ollama streaming request failed") from exc
+        raise OllamaRequestError("Ollama streaming request failed") from exc
     finally:
         semaphore_released = False
         if acquired:
@@ -314,5 +318,17 @@ def _ollama_gateway() -> ModelPoolGateway:
 def reset_ollama_gateway_for_tests() -> None:
     global _GATEWAY
     _GATEWAY = None
+
+
+class OllamaRequestError(RuntimeError):
+    pass
+
+
+class OllamaTimeoutError(OllamaRequestError):
+    pass
+
+
+def _is_timeout_error(exc: BaseException) -> bool:
+    return isinstance(exc, TimeoutError) or "timed out" in str(exc).lower() or "timeout" in str(exc).lower()
 
 

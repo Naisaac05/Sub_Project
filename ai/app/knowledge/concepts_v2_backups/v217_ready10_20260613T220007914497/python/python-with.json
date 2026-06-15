@@ -1,0 +1,87 @@
+{
+  "card_id": "python-with",
+  "category": "python",
+  "term": "with",
+  "aliases": [
+    "python with",
+    "파이썬 with",
+    "with statement",
+    "context manager",
+    "컨텍스트 매니저",
+    "__enter__ __exit__"
+  ],
+  "source_question_ids": [
+    "python:106"
+  ],
+  "retrieval": {
+    "embedding_text": "with python with 파이썬 with with statement python python-with context-manager with-statement __enter__ __exit__ resource-cleanup",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "python-with",
+      "context-manager",
+      "with-statement",
+      "__enter__",
+      "__exit__",
+      "resource-cleanup"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Python의 with 문은 컨텍스트 매니저를 사용해 자원 획득과 정리를 하나의 블록으로 관리합니다. 블록 진입 시 __enter__가 호출되고 종료 시 예외 발생 여부와 관계없이 __exit__가 호출되어 파일이나 락 같은 자원을 안전하게 정리합니다.",
+      "examples": [
+        "python with 사용 조건을 설명하세요."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "with 문은 __enter__와 __exit__ 프로토콜을 사용하므로 예외가 발생해도 정리 로직이 실행됩니다. 따라서 직접 close를 호출하는 방식보다 누락 가능성이 낮고 자원 수명 범위가 명확합니다.",
+      "key_points": [
+        "python-with",
+        "context-manager",
+        "with-statement"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "__init__/__del__은 객체 수명 주기 메서드이며 with 문의 진입과 종료를 보장하는 컨텍스트 매니저 프로토콜이 아닙니다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "__init__과 __del__",
+          "reason": "`__init__과 __del__`은(는) Python의 with 문은 컨텍스트 매니저를 사용해 자원 획득과 정리를 하나의 블록으로 관리합니다의 책임과 일치하지 않습니다."
+        },
+        "option_1": {
+          "text": "__open__과 __close__",
+          "reason": "`__open__과 __close__`은(는) Python의 with 문은 컨텍스트 매니저를 사용해 자원 획득과 정리를 하나의 블록으로 관리합니다의 책임과 일치하지 않습니다."
+        },
+        "option_2": {
+          "text": "__start__과 __end__",
+          "reason": "`__start__과 __end__`은(는) Python의 with 문은 컨텍스트 매니저를 사용해 자원 획득과 정리를 하나의 블록으로 관리합니다의 책임과 일치하지 않습니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T05:03:46.253685Z"
+}

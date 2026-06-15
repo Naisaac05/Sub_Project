@@ -1,0 +1,80 @@
+{
+  "card_id": "python-staticmethod",
+  "category": "python",
+  "term": "staticmethod",
+  "aliases": [
+    "staticmethod",
+    "python staticmethod"
+  ],
+  "source_question_ids": [
+    "python:105"
+  ],
+  "retrieval": {
+    "embedding_text": "staticmethod python staticmethod python @classmethod cls 번째 인자로",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "staticmethod",
+      "python",
+      "python staticmethod",
+      "@classmethod",
+      "cls",
+      "번째",
+      "인자로"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "staticmethod의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 staticmethod의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "staticmethod",
+        "python",
+        "python staticmethod"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q105_option_0": {
+          "text": "차이 없다",
+          "reason": "staticmethod 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q105_option_2": {
+          "text": "@staticmethod는 self를 받는다",
+          "reason": "staticmethod 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q105_option_3": {
+          "text": "@classmethod는 인스턴스 메서드이다",
+          "reason": "staticmethod 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

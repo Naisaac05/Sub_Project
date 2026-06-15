@@ -1,0 +1,113 @@
+{
+  "card_id": "python-typing",
+  "category": "python",
+  "term": "typing",
+  "aliases": [
+    "typing",
+    "python typing",
+    "파이썬 typing"
+  ],
+  "source_question_ids": [
+    "python:118"
+  ],
+  "retrieval": {
+    "embedding_text": "typing python typing 파이썬 typing python python-typing 구조적 서브타이핑 structural",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "typing",
+      "python-typing",
+      "python typing",
+      "파이썬 typing",
+      "구조적",
+      "서브타이핑",
+      "structural"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "typing is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as typing, python-typing, python typing.",
+      "examples": [
+        "Explain when typing should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of typing, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals typing, python-typing, python typing.",
+      "key_points": [
+        "typing",
+        "python",
+        "python typing"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy typing's defining behavior.",
+        "Confusing typing with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "차이 없다",
+          "reason": "차이 없다 is not the best answer because it does not satisfy the defining behavior or constraint of typing. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "더 빠르다",
+          "reason": "더 빠르다 is not the best answer because it does not satisfy the defining behavior or constraint of typing. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "런타임에 타입 체크를 한다",
+          "reason": "런타임에 타입 체크를 한다 is not the best answer because it does not satisfy the defining behavior or constraint of typing. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against typing."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate typing in an appropriate python context.",
+      "explanation": "Use a minimal example that makes typing's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply typing in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why typing is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying typing without checking its defining constraint.",
+          "solution": "Re-check typing's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.922344Z"
+}

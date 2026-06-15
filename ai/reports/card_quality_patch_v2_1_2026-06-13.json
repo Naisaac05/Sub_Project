@@ -1,0 +1,64 @@
+{
+  "policy": "CARD QUALITY PATCH POLICY v2.1",
+  "mode": "PATCH ONLY",
+  "workflow": [
+    "draft",
+    "auto_patch",
+    "quality_check",
+    "retrieval_test",
+    "approved"
+  ],
+  "modified_count": 2,
+  "skipped_count": 140,
+  "downgraded_count": 0,
+  "approved_count": 2,
+  "estimated_hit_diff": {
+    "exact_hit1": 0.0,
+    "exact_hit3": 0.0,
+    "exact_hit5": 0.0,
+    "loo_candidate_rate": 0.0,
+    "loo_average_score": 0.0,
+    "loo_same_category_rate": 0.0
+  },
+  "retrieval_changed": 0,
+  "failed_cards": [],
+  "approved_cards": [
+    "java-arraylist",
+    "algorithm-binary"
+  ],
+  "quality_check": {
+    "java-arraylist": {
+      "answer_length": 104,
+      "definition_length": 123,
+      "same_reason_ratio": 0.029,
+      "english_ratio": 0.068,
+      "payload_length": 1185,
+      "example_quality": 1.0
+    },
+    "algorithm-binary": {
+      "answer_length": 96,
+      "definition_length": 123,
+      "same_reason_ratio": 0.029,
+      "english_ratio": 0.041,
+      "payload_length": 1116,
+      "example_quality": 1.0
+    }
+  },
+  "retrieval_baseline": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.280821917808219,
+    "loo_same_category_rate": 0.6643835616438356
+  },
+  "retrieval_final": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.280821917808219,
+    "loo_same_category_rate": 0.6643835616438356
+  },
+  "backup_root": "ai/app/knowledge/concepts_v2_backups/card-quality-v2-1-20260613"
+}

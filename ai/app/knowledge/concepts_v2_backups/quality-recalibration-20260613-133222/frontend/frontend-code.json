@@ -1,0 +1,112 @@
+{
+  "card_id": "frontend-code",
+  "category": "frontend",
+  "term": "code",
+  "aliases": [
+    "code",
+    "frontend code",
+    "프론트엔드 code"
+  ],
+  "source_question_ids": [
+    "frontend:89"
+  ],
+  "retrieval": {
+    "embedding_text": "code frontend code 프론트엔드 code frontend frontend-code react.lazy suspense",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "code",
+      "frontend-code",
+      "frontend code",
+      "프론트엔드 code",
+      "react.lazy",
+      "suspense"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "code is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as code, frontend-code, frontend code.",
+      "examples": [
+        "Explain when code should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of code, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals code, frontend-code, frontend code.",
+      "key_points": [
+        "code",
+        "frontend",
+        "frontend code"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy code's defining behavior.",
+        "Confusing code with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "React.memo",
+          "reason": "React.memo is not the best answer because it does not satisfy the defining behavior or constraint of code. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "useReducer",
+          "reason": "useReducer is not the best answer because it does not satisfy the defining behavior or constraint of code. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "React.Fragment",
+          "reason": "React.Fragment is not the best answer because it does not satisfy the defining behavior or constraint of code. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against code."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate code in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes code's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply code in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why code is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying code without checking its defining constraint.",
+          "solution": "Re-check code's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.518395Z"
+}

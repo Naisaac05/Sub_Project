@@ -1,0 +1,115 @@
+{
+  "card_id": "algorithm-4",
+  "category": "algorithm",
+  "term": "재귀",
+  "aliases": [
+    "재",
+    "재귀",
+    "알고리즘 재",
+    "algorithm 재귀",
+    "알고리즘 재귀"
+  ],
+  "source_question_ids": [
+    "algorithm:126"
+  ],
+  "retrieval": {
+    "embedding_text": "재귀 재 알고리즘 재 algorithm 기저 조건 알고리즘 재귀 algorithm 재귀 algorithm-재귀",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "기저",
+      "재귀",
+      "조건",
+      "알고리즘 재",
+      "알고리즘 재귀",
+      "algorithm 재귀",
+      "algorithm-재귀"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "재귀 is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as 재귀, algorithm-재귀, algorithm 재귀.",
+      "examples": [
+        "Explain when 재귀 should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of 재귀, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals 재귀, algorithm-재귀, algorithm 재귀.",
+      "key_points": [
+        "재귀",
+        "algorithm",
+        "algorithm 재귀"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy 재귀's defining behavior.",
+        "Confusing 재귀 with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "반복문",
+          "reason": "반복문 is not the best answer because it does not satisfy the defining behavior or constraint of 재귀. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "전역 변수",
+          "reason": "전역 변수 is not the best answer because it does not satisfy the defining behavior or constraint of 재귀. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "배열",
+          "reason": "배열 is not the best answer because it does not satisfy the defining behavior or constraint of 재귀. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against 재귀."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate 재귀 in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes 재귀's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply 재귀 in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why 재귀 is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying 재귀 without checking its defining constraint.",
+          "solution": "Re-check 재귀's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.482638Z"
+}

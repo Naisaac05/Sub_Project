@@ -1,0 +1,72 @@
+{
+  "card_id": "java-default",
+  "category": "java",
+  "term": "default",
+  "aliases": [
+    "java default"
+  ],
+  "source_question_ids": [
+    "java:20"
+  ],
+  "retrieval": {
+    "embedding_text": "default java default default은(는) 인터페이스에서 default 메서드의 특징으로 올바른 것은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "default",
+      "java"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "default은(는) 인터페이스에서 default 메서드의 특징으로 올바른 것은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "default 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "default"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q20_option_2": {
+          "text": "구현 클래스에서 반드시 오버라이드해야 한다",
+          "reason": "default의 특성과 일치하지 않는 오답입니다."
+        },
+        "q20_option_3": {
+          "text": "메서드 본문(body)을 가질 수 있다",
+          "reason": "default의 특성과 일치하지 않는 오답입니다."
+        },
+        "q20_option_4": {
+          "text": "static이어야 한다",
+          "reason": "default의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.054910Z",
+  "updated_at": "2026-06-10T11:01:08.054910Z"
+}

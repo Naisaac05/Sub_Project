@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 import re
 
-from app.rag.documents import load_concept_cards
 from app.workflow.intent import FreeQuestionIntent, normalize_question
 
 
@@ -253,7 +252,7 @@ def resolve_lightweight_answer(
     ):
         static_answer_key, _ = static_match
         return LightweightAnswer(_ANSWERS[static_answer_key], "static_fast_path", _style_for_intent(intent))
-    concept_answer = _concept_card_answer_for(matched_concept_id)
+    concept_answer = _concept_card_answer_for(matched_concept_id, match_text, intent)
     if concept_answer:
         return LightweightAnswer(concept_answer, "generated_card_fast_path", _style_for_intent(intent))
     return None
@@ -263,18 +262,51 @@ def _style_for_intent(intent: FreeQuestionIntent) -> str:
     return intent.sub_intent if intent.sub_intent in {"comparison", "practical", "related"} else "definition"
 
 
-def _concept_card_answer_for(concept_id: str | None) -> str | None:
+def _concept_card_answer_for(
+    concept_id: str | None,
+    match_text: str = "",
+    intent: FreeQuestionIntent | None = None,
+) -> str | None:
     if not concept_id:
         return None
 
     card = _concept_cards_by_id().get(concept_id)
     if not card:
         return None
+    if not concept_title_matches_query(match_text, intent.topic if intent else "", card.title):
+        return None
     return card.sections.get("핵심 설명") or None
 
 
 def _concept_cards_by_id():
-    return {card.concept_id: card for card in load_concept_cards()}
+    return {}
+
+
+def concept_title_matches_query(question: str, topic: str, title: str) -> bool:
+    normalized_question = normalize_question(question)
+    normalized_topic = normalize_question(topic)
+    normalized_title = normalize_question(title)
+    if not normalized_title:
+        return False
+
+    if len(normalized_title) >= 3 and normalized_title in normalized_question:
+        return True
+    if normalized_topic and len(normalized_topic) >= 3:
+        if normalized_topic in normalized_title or normalized_title in normalized_topic:
+            return True
+        topic_tokens = _distinctive_title_tokens(topic)
+        title_tokens = _distinctive_title_tokens(title)
+        return bool(topic_tokens & title_tokens)
+    return False
+
+
+def _distinctive_title_tokens(text: str) -> set[str]:
+    generic_tokens = {"개념", "설명", "문제", "비교", "차이", "java", "spring", "backend", "frontend"}
+    return {
+        token
+        for token in re.findall(r"[a-z0-9+#@.-]+|[가-힣]{2,}", text.lower())
+        if len(token) >= 3 and token not in generic_tokens
+    }
 
 
 def _static_answer_match_for(text: str) -> tuple[str, str] | None:

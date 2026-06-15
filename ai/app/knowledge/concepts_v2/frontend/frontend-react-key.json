@@ -1,0 +1,108 @@
+{
+  "card_id": "frontend-react-key",
+  "category": "frontend",
+  "term": "react-key",
+  "aliases": [
+    "react key",
+    "리액트 key",
+    "list key",
+    "reconciliation key",
+    "stable react key",
+    "react list identity"
+  ],
+  "source_question_ids": [
+    "frontend:65",
+    "frontend:87"
+  ],
+  "retrieval": {
+    "embedding_text": "react-key react key 리액트 key list key frontend reconciliation-key list-identity stable-key react-list",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "react-key",
+      "reconciliation-key",
+      "list-identity",
+      "stable-key",
+      "react-list"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "React의 `key`는 리스트 형제 요소를 렌더링 사이에서 식별하는 안정적인 값이다. React는 key로 이전 요소와 다음 요소를 대응시켜 필요한 DOM만 갱신하고 컴포넌트 상태를 올바른 항목에 유지한다.",
+      "examples": [
+        "예: 작은 입력에서 핵심 동작을 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "리스트 요소를 안정적으로 구별하는 전용 속성은 `key`다. `id`와 `name`은 DOM·폼 의미를 가지며, 배열 `index`는 재정렬 시 항목 정체성이 바뀔 수 있어 안정적인 key가 아니다.",
+      "key_points": [
+        "key",
+        "frontend-react-key"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "기술 용어의 적용 범위와 유사 개념의 역할을 구분하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "id",
+          "reason": "`id`는 DOM에서 요소를 식별하지만 React의 리스트 비교에 사용되는 전용 식별자는 아니다. 목록 조정에는 형제 사이에서 고유한 `key`가 필요하다."
+        },
+        "option_1": {
+          "text": "name",
+          "reason": "`name`은 폼 필드 등의 이름을 표현한다. React가 이전 렌더와 다음 렌더의 목록 항목을 대응시키는 기준은 `key`다."
+        },
+        "option_3": {
+          "text": "index",
+          "reason": "배열 index를 key로 쓸 수는 있지만 삽입·삭제·정렬 시 같은 index가 다른 항목을 가리켜 상태가 잘못 재사용될 수 있다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "`key`는 React 조정 과정의 항목 정체성을 나타내고, DOM `id`는 문서 안에서 요소를 찾거나 연결하는 데 사용한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "const mounts = [];\nfunction Row({ id }) { React.useEffect(() => mounts.push(id), []); return <span>{id}</span>; }\nconst rows = ids => <>{ids.map(id => <Row key={id} id={id} />)}</>;\nconst view = TestRenderer.create(rows([1, 2]));\nview.update(rows([2, 1]));\nassert(mounts.join(',') === '1,2');",
+      "explanation": "안정적인 key로 순서를 바꿔도 기존 Row가 다시 마운트되지 않아 항목 정체성이 유지됨을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "서버에서 받은 게시글·상품·사용자 목록을 추가, 삭제, 재정렬하며 렌더링할 때 사용한다.",
+      "best_practices": [
+        "문제의 전제와 실제 동작을 작은 실행 예제로 먼저 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사한 용어의 적용 범위를 구분하지 않아 잘못된 구현을 선택한다.",
+          "solution": "입력 조건, 핵심 동작, 결과를 각각 확인하고 비교 대상과 차이를 검증한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T05:03:46.218992Z"
+}

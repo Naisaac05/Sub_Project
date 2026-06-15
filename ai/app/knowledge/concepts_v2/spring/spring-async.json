@@ -1,0 +1,114 @@
+{
+  "card_id": "spring-async",
+  "category": "spring",
+  "term": "async",
+  "aliases": [
+    "async",
+    "프록시 기반이므로 같은 클래스 내부 호출에서는 동작하지 않는다",
+    "Spring에서 @Async의 주의사항으로 올바른 것은?",
+    "Spring",
+    "@Async",
+    "spring async"
+  ],
+  "source_question_ids": [
+    "spring:54"
+  ],
+  "retrieval": {
+    "embedding_text": "async 프록시 기반이므로 같은 클래스 내부 호출에서는 동작하지 않는다 Spring에서 @Async의 주의사항으로 올바른 것은? spring 에서 @Async 주의사항으로 것은 프록시 기반이므로",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "async",
+      "에서",
+      "@Async",
+      "주의사항으로",
+      "것은",
+      "프록시",
+      "기반이므로"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Spring @Async는 프록시가 외부 호출을 가로채 별도 실행기에서 메서드를 수행한다. 같은 객체 내부에서 직접 호출하면 프록시를 거치지 않아 비동기 처리가 적용되지 않는다.",
+      "examples": [
+        "메일 발송이나 외부 API 호출처럼 요청 응답과 분리할 작업을 실행할 때 프록시 호출 경계를 점검한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "같은 클래스 내부 호출은 프록시 경계를 통과하지 않으므로 @Async 인터셉터가 실행되지 않는다. 반환형은 void 외에도 Future 계열을 사용할 수 있다.",
+      "key_points": [
+        "@Async",
+        "프록시",
+        "내부 호출"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "표면적인 문법이나 용어만 보고 내부 원리와 선택 기준을 확인하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "같은 클래스 내부 호출에서도 동작한다",
+          "reason": "같은 클래스 내부 호출에서도 동작한다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 같은 클래스 내부 호출은 프록시 경계를 통과하지 않으므로 @Async 인터셉터가 실행되지 않는다."
+        },
+        "option_1": {
+          "text": "별도의 설정 없이 사용 가능하다",
+          "reason": "별도의 설정 없이 사용 가능하다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 같은 클래스 내부 호출은 프록시 경계를 통과하지 않으므로 @Async 인터셉터가 실행되지 않는다."
+        },
+        "option_3": {
+          "text": "반드시 void 반환 타입이어야 한다",
+          "reason": "반드시 void 반환 타입이어야 한다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 같은 클래스 내부 호출은 프록시 경계를 통과하지 않으므로 @Async 인터셉터가 실행되지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`프록시 기반이므로 같은 클래스 내부 호출에서는 동작하지 않는다`는 질문의 조건을 충족하지만 다른 선택지는 `async`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "@Async\npublic CompletableFuture<String> load() {\n    return CompletableFuture.completedFuture(\"done\");\n}",
+      "explanation": "메일 발송이나 외부 API 호출처럼 요청 응답과 분리할 작업을 실행할 때 프록시 호출 경계를 점검한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "메일 발송이나 외부 API 호출처럼 요청 응답과 분리할 작업을 실행할 때 프록시 호출 경계를 점검한다.",
+      "best_practices": [
+        "경계 사례를 작은 실행 예제로 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`async`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `프록시 기반이므로 같은 클래스 내부 호출에서는 동작하지 않는다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

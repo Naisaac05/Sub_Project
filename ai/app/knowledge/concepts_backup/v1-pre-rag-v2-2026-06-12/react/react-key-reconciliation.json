@@ -1,0 +1,72 @@
+{
+  "card_id": "react-key-reconciliation",
+  "category": "react",
+  "term": "key-reconciliation",
+  "aliases": [
+    "react key-reconciliation"
+  ],
+  "source_question_ids": [
+    "react:87"
+  ],
+  "retrieval": {
+    "embedding_text": "key-reconciliation react key-reconciliation key-reconciliation은(는) React의 재조정(Reconciliation) 알고리즘에서 key가 중요한 이유는? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "key-reconciliation",
+      "react"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "key-reconciliation은(는) React의 재조정(Reconciliation) 알고리즘에서 key가 중요한 이유는? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "key-reconciliation 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "key-reconciliation"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q87_option_2": {
+          "text": "리스트 요소의 동일성을 판별하여 불필요한 DOM 조작을 최소화하기 위해",
+          "reason": "key-reconciliation의 특성과 일치하지 않는 오답입니다."
+        },
+        "q87_option_3": {
+          "text": "이벤트 바인딩을 위해",
+          "reason": "key-reconciliation의 특성과 일치하지 않는 오답입니다."
+        },
+        "q87_option_4": {
+          "text": "접근성(a11y)을 위해",
+          "reason": "key-reconciliation의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.065449Z",
+  "updated_at": "2026-06-10T11:01:08.065449Z"
+}

@@ -1,0 +1,117 @@
+{
+  "card_id": "frontend-dom",
+  "category": "frontend",
+  "term": "dom",
+  "aliases": [
+    "dom",
+    "변경된 부분만 계산(diff)하여 실제 DOM에 최소한의 업데이트를 적용한다",
+    "React의 가상 DOM(Virtual DOM)이 성능에 기여하는 방식은?",
+    "React",
+    "DOM(Virtual",
+    "DOM)",
+    "diff)",
+    "DOM",
+    "frontend dom"
+  ],
+  "source_question_ids": [
+    "frontend:81"
+  ],
+  "retrieval": {
+    "embedding_text": "dom 변경된 부분만 계산(diff)하여 실제 DOM에 최소한의 업데이트를 적용한다 React의 가상 DOM(Virtual DOM)이 성능에 기여하는 방식은? frontend 가상 DOM(Virtual DOM) 성능에 기여하는 방식은",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "dom",
+      "가상",
+      "DOM(Virtual",
+      "DOM)",
+      "성능에",
+      "기여하는",
+      "방식은"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "React의 가상 DOM은 UI 구조를 메모리 표현으로 만들고 이전 결과와 비교해 변경된 부분을 계산한다. React는 계산 결과를 바탕으로 실제 DOM 업데이트를 필요한 범위로 제한한다.",
+      "examples": [
+        "상태 변화가 잦은 화면에서 선언적으로 UI를 갱신하고 변경 범위를 추적할 때 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "가상 DOM 비교는 변경 지점을 찾아 실제 DOM 반영 범위를 줄인다. DOM을 없애거나 매번 전체를 다시 만들거나 WebWorker에서 직접 처리하는 방식은 아니다.",
+      "key_points": [
+        "가상 DOM",
+        "diff",
+        "최소 업데이트"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "표면적인 문법이나 용어만 보고 내부 원리와 선택 기준을 확인하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "DOM을 사용하지 않는다",
+          "reason": "DOM을 사용하지 않는다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 가상 DOM 비교는 변경 지점을 찾아 실제 DOM 반영 범위를 줄인다."
+        },
+        "option_2": {
+          "text": "모든 DOM을 매번 다시 생성한다",
+          "reason": "모든 DOM을 매번 다시 생성한다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 가상 DOM 비교는 변경 지점을 찾아 실제 DOM 반영 범위를 줄인다."
+        },
+        "option_3": {
+          "text": "WebWorker에서 DOM을 처리한다",
+          "reason": "WebWorker에서 DOM을 처리한다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 가상 DOM 비교는 변경 지점을 찾아 실제 DOM 반영 범위를 줄인다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`변경된 부분만 계산(diff)하여 실제 DOM에 최소한의 업데이트를 적용한다`는 질문의 조건을 충족하지만 다른 선택지는 `dom`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "const before = <p>이전</p>;\nconst after = <p>변경</p>;\nconst changedText = before.props.children !== after.props.children;",
+      "explanation": "상태 변화가 잦은 화면에서 선언적으로 UI를 갱신하고 변경 범위를 추적할 때 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "상태 변화가 잦은 화면에서 선언적으로 UI를 갱신하고 변경 범위를 추적할 때 사용한다.",
+      "best_practices": [
+        "경계 사례를 작은 실행 예제로 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`dom`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `변경된 부분만 계산(diff)하여 실제 DOM에 최소한의 업데이트를 적용한다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

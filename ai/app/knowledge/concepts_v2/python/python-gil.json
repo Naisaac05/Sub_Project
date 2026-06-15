@@ -1,0 +1,117 @@
+{
+  "card_id": "python-gil",
+  "category": "python",
+  "term": "gil",
+  "aliases": [
+    "gil",
+    "CPU-bound 작업에서 멀티스레딩의 성능 이점이 제한된다",
+    "Python GIL(Global Interpreter Lock)의 영향은?",
+    "Python",
+    "GIL(Global",
+    "Interpreter",
+    "Lock)",
+    "CPU-bound",
+    "python gil"
+  ],
+  "source_question_ids": [
+    "python:111"
+  ],
+  "retrieval": {
+    "embedding_text": "gil CPU-bound 작업에서 멀티스레딩의 성능 이점이 제한된다 Python GIL(Global Interpreter Lock)의 영향은? python GIL(Global Interpreter Lock) 영향은 CPU-bound 작업에서",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "gil",
+      "GIL(Global",
+      "Interpreter",
+      "Lock)",
+      "영향은",
+      "CPU-bound",
+      "작업에서"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "CPython GIL은 한 프로세스에서 한 번에 하나의 스레드만 Python 바이트코드를 실행하게 한다.",
+      "examples": [
+        "GIL 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "CPU-bound 작업은 스레드 병렬 실행 이점이 제한되지만 I/O 대기 중에는 다른 스레드가 실행될 수 있다.",
+      "key_points": [
+        "GIL",
+        "CPU-bound",
+        "I/O-bound"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "멀티프로세싱이 불가능하다",
+          "reason": "멀티프로세싱은 별도 인터프리터와 GIL을 사용해 가능하다."
+        },
+        "option_2": {
+          "text": "I/O-bound 작업에서도 병렬 처리가 불가능하다",
+          "reason": "I/O 대기 작업은 스레드 전환의 이점을 얻을 수 있다."
+        },
+        "option_3": {
+          "text": "메모리 사용량이 증가한다",
+          "reason": "GIL의 핵심 영향은 메모리 증가가 아니라 바이트코드 실행 직렬화다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`CPU-bound 작업에서 멀티스레딩의 성능 이점이 제한된다`는 질문의 조건을 충족하지만 다른 선택지는 `gil`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "from concurrent.futures import ThreadPoolExecutor\nwith ThreadPoolExecutor(2) as pool:\n    futures = [pool.submit(len, str(i)) for i in range(2)]",
+      "explanation": "GIL 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "GIL 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`gil`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `CPU-bound 작업에서 멀티스레딩의 성능 이점이 제한된다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

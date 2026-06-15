@@ -87,6 +87,15 @@ public class AiReviewCandidate {
     @Column(length = 120)
     private String needsReviewReason;
 
+    @Column(length = 500)
+    private String publishError;
+
+    @Column(length = 160)
+    private String publishedCardId;
+
+    @Column(length = 500)
+    private String publishedCardPath;
+
     @Column(length = 80)
     private String reviewer;
 
@@ -154,5 +163,22 @@ public class AiReviewCandidate {
         this.reviewer = reviewer;
         this.reviewedAt = reviewedAt;
         this.retentionUntil = retentionUntil;
+    }
+
+    public void markPublished(String cardId, String cardPath) {
+        this.publishedCardId = cardId;
+        this.publishedCardPath = cardPath;
+        this.publishError = null;
+    }
+
+    public void markPublishFailed(String error, String reviewer, LocalDateTime reviewedAt, LocalDateTime retentionUntil) {
+        this.status = AiReviewCandidateStatus.PENDING;
+        this.workflowPhase = AiReviewCandidateWorkflowPhase.PUBLISH_FAILED;
+        this.publishError = error;
+        this.reviewer = reviewer;
+        this.reviewedAt = reviewedAt;
+        this.retentionUntil = retentionUntil;
+        this.publishedCardId = null;
+        this.publishedCardPath = null;
     }
 }

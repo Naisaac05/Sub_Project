@@ -1,0 +1,1819 @@
+{
+  "candidate_count": 20,
+  "ready_count": 20,
+  "backlog_count": 0,
+  "patched_count": 0,
+  "candidate_rank": [
+    {
+      "card_id": "algorithm-14",
+      "priority_score": 4.207975120849695,
+      "template_density": 0.026525129737191268,
+      "generic_density": 0.01706642946866806,
+      "answer_reason_overlap": 0.1643835616438356,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "python-private",
+      "priority_score": 4.207947348035107,
+      "template_density": 0.02511897828124378,
+      "generic_density": 0.0161617030871965,
+      "answer_reason_overlap": 0.16666666666666666,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "python-args",
+      "priority_score": 4.207598505155472,
+      "template_density": 0.023478324294405783,
+      "generic_density": 0.015106096354023756,
+      "answer_reason_overlap": 0.16901408450704225,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "algorithm-10",
+      "priority_score": 4.202509882798767,
+      "template_density": 0.025866937932298183,
+      "generic_density": 0.016642944866467863,
+      "answer_reason_overlap": 0.16,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "python-staticmethod",
+      "priority_score": 4.1997312033198435,
+      "template_density": 0.022860473655079316,
+      "generic_density": 0.014708567502602079,
+      "answer_reason_overlap": 0.16216216216216217,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "frontend-context",
+      "priority_score": 4.19507773522939,
+      "template_density": 0.025739199967200414,
+      "generic_density": 0.01656075748441123,
+      "answer_reason_overlap": 0.1527777777777778,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "python-gil",
+      "priority_score": 4.194838237609691,
+      "template_density": 0.026866948419371567,
+      "generic_density": 0.017286357683470484,
+      "answer_reason_overlap": 0.1506849315068493,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "algorithm-unionfind",
+      "priority_score": 4.194635398531636,
+      "template_density": 0.024819942825514685,
+      "generic_density": 0.01596930185996797,
+      "answer_reason_overlap": 0.15384615384615385,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "algorithm-6",
+      "priority_score": 4.192019491099035,
+      "template_density": 0.02639082528282574,
+      "generic_density": 0.016980017167560882,
+      "answer_reason_overlap": 0.14864864864864866,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "frontend-usestate",
+      "priority_score": 4.188419597027097,
+      "template_density": 0.02772440421998981,
+      "generic_density": 0.017838049949964224,
+      "answer_reason_overlap": 0.14285714285714285,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "python-decorator",
+      "priority_score": 4.187524859980853,
+      "template_density": 0.02840429424173343,
+      "generic_density": 0.018275495316584598,
+      "answer_reason_overlap": 0.14084507042253522,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "python-with-statement",
+      "priority_score": 4.185227150132128,
+      "template_density": 0.027006155406000435,
+      "generic_density": 0.017375924303592093,
+      "answer_reason_overlap": 0.14084507042253522,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "frontend-reactmemo",
+      "priority_score": 4.184884871882439,
+      "template_density": 0.026797881713923312,
+      "generic_density": 0.017241919745980844,
+      "answer_reason_overlap": 0.14084507042253522,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "python-3",
+      "priority_score": 4.182427900223717,
+      "template_density": 0.027650864686249783,
+      "generic_density": 0.017790734167603576,
+      "answer_reason_overlap": 0.136986301369863,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "frontend-error",
+      "priority_score": 4.181026102829767,
+      "template_density": 0.026797881713923312,
+      "generic_density": 0.017241919745980844,
+      "answer_reason_overlap": 0.136986301369863,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "python-list-comprehension",
+      "priority_score": 4.1803185330213894,
+      "template_density": 0.0240192995085626,
+      "generic_density": 0.015454163090291585,
+      "answer_reason_overlap": 0.14084507042253522,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "frontend-nextjs",
+      "priority_score": 4.176269380370684,
+      "template_density": 0.02612625560580493,
+      "generic_density": 0.01680979143154523,
+      "answer_reason_overlap": 0.13333333333333333,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "python-tryexceptelsefinally",
+      "priority_score": 4.174348015513345,
+      "template_density": 0.028956599963100467,
+      "generic_density": 0.018630852169962634,
+      "answer_reason_overlap": 0.1267605633802817,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "algorithm-stack",
+      "priority_score": 4.172566667037776,
+      "template_density": 0.02787266306608601,
+      "generic_density": 0.017933440591407883,
+      "answer_reason_overlap": 0.1267605633802817,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    },
+    {
+      "card_id": "algorithm",
+      "priority_score": 4.172444517428023,
+      "template_density": 0.027798335964576447,
+      "generic_density": 0.017885618083164127,
+      "answer_reason_overlap": 0.1267605633802817,
+      "same_reason_ratio": 1.0,
+      "option_similarity": 1.0,
+      "fake_example_score": 1.0,
+      "missing_payload_count": 0,
+      "null_payload_count": 0,
+      "comparison_missing": 0,
+      "example_quality": 0.0,
+      "print_answer": true
+    }
+  ],
+  "PATCHES_READY": {
+    "algorithm-14": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "A*는 현재까지 비용 g와 목표까지 예상 비용 h를 더한 값을 기준으로 탐색한다.",
+          "examples": [
+            "A* 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "휴리스틱은 목표까지 남은 비용을 추정해 유망한 탐색 방향을 우선한다.",
+          "key_points": [
+            "A*",
+            "휴리스틱",
+            "예상 비용"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "정확한 최단 거리를 계산",
+              "reason": "휴리스틱은 예상값이며 정확한 최단 거리를 직접 계산하지 않는다."
+            },
+            "option_2": {
+              "text": "그래프를 정렬한다",
+              "reason": "그래프 정렬은 탐색 방향 추정과 무관하다."
+            },
+            "option_3": {
+              "text": "음의 가중치를 처리한다",
+              "reason": "음수 가중치 처리는 휴리스틱의 역할이 아니다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`목표까지의 예상 비용을 추정하여 탐색 방향을 안내한다`는 질문의 조건을 충족하지만 다른 선택지는 `algorithm-question-149`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "cost = 4\nheuristic = 3\npriority = cost + heuristic",
+          "explanation": "A* 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "A* 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`algorithm-question-149`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `목표까지의 예상 비용을 추정하여 탐색 방향을 안내한다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "A*는 현재까지 비용 g와 목표까지 예상 비용 h를 더한 값을 기준으로 탐색한다.",
+        "휴리스틱은 목표까지 남은 비용을 추정해 유망한 탐색 방향을 우선한다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.5,
+        "example_quality": 0.5
+      }
+    },
+    "python-private": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "Python은 접근을 강제하는 private 키워드 대신 밑줄 이름 규약과 이름 맹글링을 사용한다.",
+          "examples": [
+            "밑줄 관례 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "단일 밑줄은 내부용 관례이고 이중 밑줄은 클래스 이름 기반 맹글링을 적용한다.",
+          "key_points": [
+            "밑줄 관례",
+            "이름 맹글링",
+            "private"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "@private 어노테이션",
+              "reason": "Python에는 @private 표준 애너테이션이 없다."
+            },
+            "option_2": {
+              "text": "private 키워드 사용",
+              "reason": "private 접근 제어 키워드를 지원하지 않는다."
+            },
+            "option_3": {
+              "text": "# private 주석 추가",
+              "reason": "주석은 접근 관례나 이름 맹글링을 만들지 않는다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`속성 이름 앞에 언더스코어 (_) 또는 더블 언더스코어 (__)`는 질문의 조건을 충족하지만 다른 선택지는 `private`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "class User:\n    def __init__(self): self._name = \"A\"; self.__token = 1\nuser = User()",
+          "explanation": "밑줄 관례 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "밑줄 관례 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`private`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `속성 이름 앞에 언더스코어 (_) 또는 더블 언더스코어 (__)`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "Python은 접근을 강제하는 private 키워드 대신 밑줄 이름 규약과 이름 맹글링을 사용한다.",
+        "단일 밑줄은 내부용 관례이고 이중 밑줄은 클래스 이름 기반 맹글링을 적용한다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "python-args": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "*args는 추가 위치 인자를 튜플로, **kwargs는 추가 키워드 인자를 딕셔너리로 수집한다.",
+          "examples": [
+            "*args 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "두 문법은 인자 전달 방식과 저장 자료구조가 서로 다르다.",
+          "key_points": [
+            "*args",
+            "**kwargs",
+            "가변 인자"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "차이 없다",
+              "reason": "위치 인자와 키워드 인자를 구분하므로 차이가 있다."
+            },
+            "option_2": {
+              "text": "*args는 딕셔너리, **kwargs는 리스트",
+              "reason": "*args는 튜플이고 **kwargs는 딕셔너리다."
+            },
+            "option_3": {
+              "text": "*args만 가변 인자이다",
+              "reason": "둘 다 가변 개수 인자를 받을 수 있다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`*args는 위치 인자를 튜플로, **kwargs는 키워드 인자를 딕셔너리로 받는다`는 질문의 조건을 충족하지만 다른 선택지는 `args`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "def collect(*args, **kwargs): return args, kwargs\npositions, keywords = collect(1, 2, name=\"A\")\nname = keywords[\"name\"]",
+          "explanation": "*args 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "*args 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`args`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `*args는 위치 인자를 튜플로, **kwargs는 키워드 인자를 딕셔너리로 받는다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "*args는 추가 위치 인자를 튜플로, **kwargs는 추가 키워드 인자를 딕셔너리로 수집한다.",
+        "두 문법은 인자 전달 방식과 저장 자료구조가 서로 다르다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "example_quality": 1.0
+      }
+    },
+    "algorithm-10": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "방향 그래프 DFS에서는 현재 재귀 경로에 있는 정점을 다시 만나면 사이클이 존재한다.",
+          "examples": [
+            "DFS 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "방문 중 상태를 별도로 기록하면 완료된 정점과 현재 경로의 정점을 구분할 수 있다.",
+          "key_points": [
+            "DFS",
+            "방문 중",
+            "사이클"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "BFS만 가능",
+              "reason": "BFS로도 조건에 따라 감지할 수 있어 DFS만의 반대인 설명은 틀리다."
+            },
+            "option_2": {
+              "text": "힙 정렬 사용",
+              "reason": "힙 정렬은 그래프 경로의 순환을 판별하지 않는다."
+            },
+            "option_3": {
+              "text": "사이클 감지는 불가능",
+              "reason": "방문 상태나 Union-Find 등으로 사이클 감지가 가능하다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`DFS에서 방문 중인 노드를 다시 만나면 사이클`는 질문의 조건을 충족하지만 다른 선택지는 `algorithm-question-139`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "visiting = {\"A\", \"B\"}\nnext_node = \"A\"\nhas_cycle = next_node in visiting",
+          "explanation": "DFS 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "DFS 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`algorithm-question-139`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `DFS에서 방문 중인 노드를 다시 만나면 사이클`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "방향 그래프 DFS에서는 현재 재귀 경로에 있는 정점을 다시 만나면 사이클이 존재한다.",
+        "방문 중 상태를 별도로 기록하면 완료된 정점과 현재 경로의 정점을 구분할 수 있다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.5,
+        "example_quality": 0.5
+      }
+    },
+    "python-staticmethod": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "@classmethod는 클래스 객체 cls를 첫 인자로 받고 @staticmethod는 자동 인자를 받지 않는다.",
+          "examples": [
+            "@classmethod 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "클래스 상태가 필요하면 classmethod, 클래스와 무관한 보조 기능이면 staticmethod가 적합하다.",
+          "key_points": [
+            "@classmethod",
+            "@staticmethod",
+            "cls"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "차이 없다",
+              "reason": "두 데코레이터는 자동으로 전달받는 인자가 다르다."
+            },
+            "option_2": {
+              "text": "@staticmethod는 self를 받는다",
+              "reason": "staticmethod는 self를 자동 전달받지 않는다."
+            },
+            "option_3": {
+              "text": "@classmethod는 인스턴스 메서드이다",
+              "reason": "classmethod는 인스턴스가 아니라 클래스를 받는다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`@classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다`는 질문의 조건을 충족하지만 다른 선택지는 `staticmethod`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "class Factory:\n    @classmethod\n    def name(cls): return cls.__name__\n    @staticmethod\n    def add(a, b): return a + b",
+          "explanation": "@classmethod 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "@classmethod 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`staticmethod`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `@classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "@classmethod는 클래스 객체 cls를 첫 인자로 받고 @staticmethod는 자동 인자를 받지 않는다.",
+        "클래스 상태가 필요하면 classmethod, 클래스와 무관한 보조 기능이면 staticmethod가 적합하다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "frontend-context": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "React Context는 Provider value가 바뀌면 해당 Context를 읽는 Consumer를 다시 렌더링한다.",
+          "examples": [
+            "Context 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "큰 value를 자주 바꾸면 관련 Consumer의 리렌더 범위가 넓어질 수 있다.",
+          "key_points": [
+            "Context",
+            "Provider value",
+            "리렌더링"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "사용법이 어렵다",
+              "reason": "Context API 사용법 자체가 핵심 단점은 아니다."
+            },
+            "option_2": {
+              "text": "함수형 컴포넌트에서 사용 불가",
+              "reason": "useContext로 함수형 컴포넌트에서도 사용할 수 있다."
+            },
+            "option_3": {
+              "text": "전역 상태 관리가 불가능하다",
+              "reason": "공유 상태 전달이 Context의 주요 목적이다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`Provider 값이 변경되면 모든 Consumer가 리렌더링된다`는 질문의 조건을 충족하지만 다른 선택지는 `context`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "const Theme = React.createContext(\"light\");\nconst view = <Theme.Provider value=\"dark\"><App /></Theme.Provider>;\nconst value = view.props.value;",
+          "explanation": "Context 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "Context 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`context`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `Provider 값이 변경되면 모든 Consumer가 리렌더링된다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "React Context는 Provider value가 바뀌면 해당 Context를 읽는 Consumer를 다시 렌더링한다.",
+        "큰 value를 자주 바꾸면 관련 Consumer의 리렌더 범위가 넓어질 수 있다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "python-gil": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "CPython GIL은 한 프로세스에서 한 번에 하나의 스레드만 Python 바이트코드를 실행하게 한다.",
+          "examples": [
+            "GIL 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "CPU-bound 작업은 스레드 병렬 실행 이점이 제한되지만 I/O 대기 중에는 다른 스레드가 실행될 수 있다.",
+          "key_points": [
+            "GIL",
+            "CPU-bound",
+            "I/O-bound"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "멀티프로세싱이 불가능하다",
+              "reason": "멀티프로세싱은 별도 인터프리터와 GIL을 사용해 가능하다."
+            },
+            "option_2": {
+              "text": "I/O-bound 작업에서도 병렬 처리가 불가능하다",
+              "reason": "I/O 대기 작업은 스레드 전환의 이점을 얻을 수 있다."
+            },
+            "option_3": {
+              "text": "메모리 사용량이 증가한다",
+              "reason": "GIL의 핵심 영향은 메모리 증가가 아니라 바이트코드 실행 직렬화다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`CPU-bound 작업에서 멀티스레딩의 성능 이점이 제한된다`는 질문의 조건을 충족하지만 다른 선택지는 `gil`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "from concurrent.futures import ThreadPoolExecutor\nwith ThreadPoolExecutor(2) as pool:\n    futures = [pool.submit(len, str(i)) for i in range(2)]",
+          "explanation": "GIL 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "GIL 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`gil`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `CPU-bound 작업에서 멀티스레딩의 성능 이점이 제한된다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "CPython GIL은 한 프로세스에서 한 번에 하나의 스레드만 Python 바이트코드를 실행하게 한다.",
+        "CPU-bound 작업은 스레드 병렬 실행 이점이 제한되지만 I/O 대기 중에는 다른 스레드가 실행될 수 있다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "example_quality": 1.0
+      }
+    },
+    "algorithm-unionfind": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "Union-Find 경로 압축은 Find 중 만난 노드가 루트를 직접 가리키도록 부모 포인터를 갱신한다.",
+          "examples": [
+            "Union-Find 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "트리 높이가 낮아져 이후 Find 연산이 역 아커만 함수 수준으로 빨라진다.",
+          "key_points": [
+            "Union-Find",
+            "경로 압축",
+            "Find"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "공간 복잡도를 줄인다",
+              "reason": "부모 배열 공간은 계속 필요하므로 공간 절약이 핵심이 아니다."
+            },
+            "option_2": {
+              "text": "Union 연산을 빠르게 한다",
+              "reason": "Union 최적화는 rank나 size 결합과 더 직접 관련된다."
+            },
+            "option_3": {
+              "text": "사이클을 자동으로 감지한다",
+              "reason": "사이클 감지는 활용 사례이며 경로 압축이 자동 판정하지 않는다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`Find 연산의 시간 복잡도를 거의 O(1)에 근접하게 한다`는 질문의 조건을 충족하지만 다른 선택지는 `unionfind`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "parent = [0, 0, 1]\nroot = parent[parent[2]]\nparent[2] = root",
+          "explanation": "Union-Find 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "Union-Find 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`unionfind`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `Find 연산의 시간 복잡도를 거의 O(1)에 근접하게 한다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "Union-Find 경로 압축은 Find 중 만난 노드가 루트를 직접 가리키도록 부모 포인터를 갱신한다.",
+        "트리 높이가 낮아져 이후 Find 연산이 역 아커만 함수 수준으로 빨라진다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "algorithm-6": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "공간 복잡도 O(1)은 입력 크기가 커져도 추가로 사용하는 메모리 양이 일정한 것을 뜻한다.",
+          "examples": [
+            "공간 복잡도 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "입력 자체를 제외한 보조 변수 수가 입력 크기에 비례해 늘지 않는다.",
+          "key_points": [
+            "공간 복잡도",
+            "O(1)",
+            "추가 메모리"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "메모리를 사용하지 않는다",
+              "reason": "O(1)도 상수 크기 메모리를 사용한다."
+            },
+            "option_2": {
+              "text": "입력 크기에 비례하여 메모리가 증가한다",
+              "reason": "입력 크기에 비례하면 O(n) 공간이다."
+            },
+            "option_3": {
+              "text": "메모리가 무한하다",
+              "reason": "유한한 상수 공간을 뜻하며 무한 메모리가 아니다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`입력 크기와 관계없이 일정한 추가 메모리만 사용한다`는 질문의 조건을 충족하지만 다른 선택지는 `algorithm-question-129`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "values = [3, 1, 2]\nsmallest = values[0]\nfor value in values: smallest = min(smallest, value)",
+          "explanation": "공간 복잡도 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "공간 복잡도 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`algorithm-question-129`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `입력 크기와 관계없이 일정한 추가 메모리만 사용한다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "공간 복잡도 O(1)은 입력 크기가 커져도 추가로 사용하는 메모리 양이 일정한 것을 뜻한다.",
+        "입력 자체를 제외한 보조 변수 수가 입력 크기에 비례해 늘지 않는다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "frontend-usestate": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "React useState는 현재 상태값과 그 상태를 갱신하는 setter를 배열로 반환한다.",
+          "examples": [
+            "useState 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "배열 구조 분해로 state와 setState 역할의 두 값을 받는다.",
+          "key_points": [
+            "useState",
+            "상태값",
+            "setter"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "현재 상태값만",
+              "reason": "현재 값만 반환하지 않고 setter도 함께 반환한다."
+            },
+            "option_1": {
+              "text": "상태 변경 함수만",
+              "reason": "변경 함수만 반환하지 않고 현재 상태도 제공한다."
+            },
+            "option_3": {
+              "text": "{state, setState}",
+              "reason": "반환형은 객체가 아니라 두 원소 배열이다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`[현재 상태값, 상태 변경 함수]`는 질문의 조건을 충족하지만 다른 선택지는 `usestate`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "const [count, setCount] = React.useState(0);\nsetCount(value => value + 1);\nconst current = count;",
+          "explanation": "useState 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "useState 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`usestate`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `[현재 상태값, 상태 변경 함수]`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "React useState는 현재 상태값과 그 상태를 갱신하는 setter를 배열로 반환한다.",
+        "배열 구조 분해로 state와 setState 역할의 두 값을 받는다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "example_quality": 1.0
+      }
+    },
+    "python-decorator": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "Python 데코레이터는 함수를 다른 함수로 감싸거나 변환해 원본 본문 수정 없이 기능을 추가한다.",
+          "examples": [
+            "decorator 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "호출 전후 로깅, 권한 검사, 캐싱 같은 공통 동작을 재사용할 수 있다.",
+          "key_points": [
+            "decorator",
+            "wrapper",
+            "공통 기능"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "클래스를 생성한다",
+              "reason": "클래스 생성은 데코레이터의 필수 역할이 아니다."
+            },
+            "option_2": {
+              "text": "변수를 상수로 만든다",
+              "reason": "변수를 상수로 만드는 기능이 아니다."
+            },
+            "option_3": {
+              "text": "메모리를 해제한다",
+              "reason": "메모리 해제를 직접 담당하지 않는다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`함수를 수정하지 않고 기능을 추가한다`는 질문의 조건을 충족하지만 다른 선택지는 `decorator`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "def traced(fn):\n    def wrapper(*args): return fn(*args)\n    return wrapper\n@traced\ndef add(a, b): return a + b",
+          "explanation": "decorator 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "decorator 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`decorator`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `함수를 수정하지 않고 기능을 추가한다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "Python 데코레이터는 함수를 다른 함수로 감싸거나 변환해 원본 본문 수정 없이 기능을 추가한다.",
+        "호출 전후 로깅, 권한 검사, 캐싱 같은 공통 동작을 재사용할 수 있다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "python-with-statement": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "with open(...)은 파일 컨텍스트 매니저를 사용해 블록 종료 시 파일을 자동으로 닫는다.",
+          "examples": [
+            "with open 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "예외가 발생해도 정리 단계가 실행되어 직접 close 호출 누락을 줄인다.",
+          "key_points": [
+            "with open",
+            "파일 닫기",
+            "컨텍스트 매니저"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "f = open('file.txt')",
+              "reason": "open만 호출하면 직접 닫는 책임이 남는다."
+            },
+            "option_2": {
+              "text": "file.read('file.txt')",
+              "reason": "file.read는 파일 경로를 열어 주는 표준 호출이 아니다."
+            },
+            "option_3": {
+              "text": "read('file.txt')",
+              "reason": "read 단독 호출은 파일 객체 없이 사용할 수 없다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`with open('file.txt') as f:`는 질문의 조건을 충족하지만 다른 선택지는 `with-statement`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "from io import StringIO\nwith StringIO(\"data\") as file:\n    content = file.read()\nclosed = file.closed",
+          "explanation": "with open 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "with open 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`with-statement`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `with open('file.txt') as f:`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "with open(...)은 파일 컨텍스트 매니저를 사용해 블록 종료 시 파일을 자동으로 닫는다.",
+        "예외가 발생해도 정리 단계가 실행되어 직접 close 호출 누락을 줄인다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "frontend-reactmemo": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "React.memo는 props가 이전 렌더와 같으면 함수 컴포넌트의 불필요한 재렌더를 건너뛴다.",
+          "examples": [
+            "React.memo 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "얕은 props 비교가 기본이며 내부 state 변화나 context 변화까지 막지는 않는다.",
+          "key_points": [
+            "React.memo",
+            "props 비교",
+            "재렌더링"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "메모리를 절약한다",
+              "reason": "메모리 절약 자체가 주목적은 아니다."
+            },
+            "option_2": {
+              "text": "state를 캐싱한다",
+              "reason": "컴포넌트 state를 캐시하는 API가 아니다."
+            },
+            "option_3": {
+              "text": "이벤트 핸들러를 최적화한다",
+              "reason": "이벤트 핸들러 참조 최적화는 useCallback의 역할에 가깝다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`props가 변경되지 않으면 리렌더링을 방지한다`는 질문의 조건을 충족하지만 다른 선택지는 `reactmemo`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "const Row = React.memo(({ name }) => <span>{name}</span>);\nconst first = <Row name=\"A\" />;\nconst second = <Row name=\"A\" />;",
+          "explanation": "React.memo 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "React.memo 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`reactmemo`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `props가 변경되지 않으면 리렌더링을 방지한다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "React.memo는 props가 이전 렌더와 같으면 함수 컴포넌트의 불필요한 재렌더를 건너뛴다.",
+        "얕은 props 비교가 기본이며 내부 state 변화나 context 변화까지 막지는 않는다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "python-3": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "CPython은 참조 카운팅으로 즉시 회수하고 세대별 순환 가비지 컬렉터로 도달 불가능한 참조 순환을 탐지한다.",
+          "examples": [
+            "CPython GC 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "순환 객체는 참조 카운트만으로 0이 되지 않을 수 있어 별도 cyclic GC가 처리한다.",
+          "key_points": [
+            "CPython GC",
+            "순환 참조",
+            "세대별"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "참조 카운팅만으로 처리",
+              "reason": "참조 카운팅만으로는 순환 참조를 회수하지 못할 수 있다."
+            },
+            "option_2": {
+              "text": "개발자가 수동으로 해제",
+              "reason": "일반적으로 개발자가 직접 메모리를 해제하지 않는다."
+            },
+            "option_3": {
+              "text": "순환 참조를 허용하지 않는다",
+              "reason": "Python은 순환 참조 생성을 허용한다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`세대별(generational) 가비지 컬렉터를 사용`는 질문의 조건을 충족하지만 다른 선택지는 `python-question-115`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "import gc\ncycle = []\ncycle.append(cycle)\ntracked = gc.is_tracked(cycle)",
+          "explanation": "CPython GC 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "CPython GC 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`python-question-115`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `세대별(generational) 가비지 컬렉터를 사용`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "CPython은 참조 카운팅으로 즉시 회수하고 세대별 순환 가비지 컬렉터로 도달 불가능한 참조 순환을 탐지한다.",
+        "순환 객체는 참조 카운트만으로 0이 되지 않을 수 있어 별도 cyclic GC가 처리한다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "frontend-error": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "React Error Boundary는 렌더링 중 하위 트리 오류를 포착해 대체 UI를 표시하는 클래스 컴포넌트다.",
+          "examples": [
+            "Error Boundary 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "getDerivedStateFromError 또는 componentDidCatch를 구현한 클래스가 경계를 만든다.",
+          "key_points": [
+            "Error Boundary",
+            "componentDidCatch",
+            "대체 UI"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "함수형 컴포넌트에서만 사용 가능하다",
+              "reason": "기본 React API에서는 함수 컴포넌트만으로 Error Boundary를 구현하지 않는다."
+            },
+            "option_1": {
+              "text": "이벤트 핸들러의 에러도 잡는다",
+              "reason": "이벤트 핸들러 오류는 Error Boundary 포착 범위 밖이다."
+            },
+            "option_3": {
+              "text": "비동기 에러도 자동으로 잡는다",
+              "reason": "비동기 콜백 오류도 자동 포착하지 않는다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`클래스 컴포넌트로만 구현 가능하다 (componentDidCatch)`는 질문의 조건을 충족하지만 다른 선택지는 `error`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "class Boundary extends React.Component {\n  componentDidCatch(error) { this.error = error; }\n  render() { return this.props.children; }\n}",
+          "explanation": "Error Boundary 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "Error Boundary 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`error`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `클래스 컴포넌트로만 구현 가능하다 (componentDidCatch)`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "React Error Boundary는 렌더링 중 하위 트리 오류를 포착해 대체 UI를 표시하는 클래스 컴포넌트다.",
+        "getDerivedStateFromError 또는 componentDidCatch를 구현한 클래스가 경계를 만든다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "example_quality": 1.0
+      }
+    },
+    "python-list-comprehension": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "리스트 컴프리헨션은 [표현식 for 변수 in 반복가능객체 if 조건] 순서로 새 리스트를 만든다.",
+          "examples": [
+            "리스트 컴프리헨션 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "표현식이 먼저 오고 for 절과 선택적 필터 조건이 뒤따른다.",
+          "key_points": [
+            "리스트 컴프리헨션",
+            "for 절",
+            "if 필터"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_1": {
+              "text": "[for x in range(10): x if x > 5]",
+              "reason": "for 앞에 표현식이 없어 문법이 성립하지 않는다."
+            },
+            "option_2": {
+              "text": "[x if x > 5 for x in range(10)]",
+              "reason": "필터용 if는 for 절 뒤에 와야 한다."
+            },
+            "option_3": {
+              "text": "[x in range(10) for if x > 5]",
+              "reason": "in과 for의 순서가 뒤바뀌어 문법이 아니다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`[x for x in range(10) if x > 5]`는 질문의 조건을 충족하지만 다른 선택지는 `list-comprehension`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "numbers = range(10)\nfiltered = [x for x in numbers if x > 5]\nlast = filtered[-1]",
+          "explanation": "리스트 컴프리헨션 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "리스트 컴프리헨션 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`list-comprehension`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `[x for x in range(10) if x > 5]`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "리스트 컴프리헨션은 [표현식 for 변수 in 반복가능객체 if 조건] 순서로 새 리스트를 만든다.",
+        "표현식이 먼저 오고 for 절과 선택적 필터 조건이 뒤따른다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "frontend-nextjs": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "Next.js의 SSR, SSG, ISR은 생성 시점은 다르지만 클라이언트 요청 전에 서버 환경에서 HTML을 만든다.",
+          "examples": [
+            "Next.js 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "SSR은 요청마다, SSG는 빌드 시, ISR은 재검증 주기에 따라 정적 페이지를 갱신한다.",
+          "key_points": [
+            "Next.js",
+            "SSR",
+            "SSG",
+            "ISR"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "모두 클라이언트에서 렌더링된다",
+              "reason": "모두 클라이언트 전용 렌더링 방식은 아니다."
+            },
+            "option_2": {
+              "text": "모두 실시간으로 데이터를 반영한다",
+              "reason": "SSG와 ISR은 모든 요청에서 실시간 데이터를 반영하지 않는다."
+            },
+            "option_3": {
+              "text": "모두 CDN 캐싱이 불가능하다",
+              "reason": "정적 결과는 CDN 캐싱과 함께 사용할 수 있다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`모두 서버 측에서 HTML을 생성한다`는 질문의 조건을 충족하지만 다른 선택지는 `nextjs`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "const modes = { SSR: \"request\", SSG: \"build\", ISR: \"revalidate\" };\nconst serverGenerated = Object.keys(modes);\nconst count = serverGenerated.length;",
+          "explanation": "Next.js 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "Next.js 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`nextjs`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `모두 서버 측에서 HTML을 생성한다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "Next.js의 SSR, SSG, ISR은 생성 시점은 다르지만 클라이언트 요청 전에 서버 환경에서 HTML을 만든다.",
+        "SSR은 요청마다, SSG는 빌드 시, ISR은 재검증 주기에 따라 정적 페이지를 갱신한다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "python-tryexceptelsefinally": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "try-except의 else 블록은 try 블록에서 예외가 발생하지 않았을 때 실행된다.",
+          "examples": [
+            "try-except-else 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "finally는 예외 발생 여부와 관계없이 정리 목적으로 실행된다.",
+          "key_points": [
+            "try-except-else",
+            "정상 완료",
+            "finally"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "예외가 발생했을 때",
+              "reason": "예외가 발생하면 일치하는 except가 실행되고 else는 건너뛴다."
+            },
+            "option_2": {
+              "text": "항상 실행된다",
+              "reason": "else는 항상 실행되지 않고 정상 완료 때만 실행된다."
+            },
+            "option_3": {
+              "text": "finally 후에 실행된다",
+              "reason": "else는 finally보다 먼저 실행된다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`예외가 발생하지 않았을 때`는 질문의 조건을 충족하지만 다른 선택지는 `tryexceptelsefinally`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "events = []\ntry: value = 10 / 2\nexcept ZeroDivisionError: events.append(\"except\")\nelse: events.append(\"else\")\nfinally: events.append(\"finally\")",
+          "explanation": "try-except-else 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "try-except-else 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`tryexceptelsefinally`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `예외가 발생하지 않았을 때`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "try-except의 else 블록은 try 블록에서 예외가 발생하지 않았을 때 실행된다.",
+        "finally는 예외 발생 여부와 관계없이 정리 목적으로 실행된다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.5,
+        "example_quality": 0.5
+      }
+    },
+    "algorithm-stack": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "스택은 가장 나중에 넣은 항목을 가장 먼저 꺼내는 LIFO 자료구조다.",
+          "examples": [
+            "Stack 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "push와 pop이 같은 끝에서 이루어져 최근 작업을 먼저 되돌릴 수 있다.",
+          "key_points": [
+            "Stack",
+            "LIFO",
+            "push/pop"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "FIFO (First In First Out)",
+              "reason": "FIFO는 큐의 처리 순서다."
+            },
+            "option_2": {
+              "text": "임의 접근 가능",
+              "reason": "스택은 임의 위치 접근보다 top 항목 처리에 초점을 둔다."
+            },
+            "option_3": {
+              "text": "정렬된 상태 유지",
+              "reason": "원소가 정렬된 상태를 유지하지 않는다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`LIFO (Last In First Out)`는 질문의 조건을 충족하지만 다른 선택지는 `stack`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "stack = [\"A\"]\nstack.append(\"B\")\nlatest = stack.pop()",
+          "explanation": "Stack 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "Stack 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`stack`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `LIFO (Last In First Out)`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "스택은 가장 나중에 넣은 항목을 가장 먼저 꺼내는 LIFO 자료구조다.",
+        "push와 pop이 같은 끝에서 이루어져 최근 작업을 먼저 되돌릴 수 있다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    },
+    "algorithm": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "시간 복잡도 O(n)은 입력 크기 n에 비례하는 횟수로 핵심 연산이 증가하는 선형 복잡도다.",
+          "examples": [
+            "시간 복잡도 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "입력이 두 배가 되면 연산량도 대략 두 배로 증가하는 경향을 뜻한다.",
+          "key_points": [
+            "시간 복잡도",
+            "O(n)",
+            "선형"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "항상 일정한 시간이 걸린다",
+              "reason": "일정 시간은 O(1)에 해당한다."
+            },
+            "option_2": {
+              "text": "입력 크기의 제곱에 비례한다",
+              "reason": "입력 크기의 제곱 비례는 O(n²)이다."
+            },
+            "option_3": {
+              "text": "로그 시간이 걸린다",
+              "reason": "로그 시간은 O(log n)이다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "유사한 선택지",
+              "diff": "`입력 크기에 비례하여 시간이 증가한다`는 질문의 조건을 충족하지만 다른 선택지는 `algorithm-question-121`의 적용 조건이나 실행 결과가 다릅니다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "values = [1, 2, 3, 4]\ntotal = 0\nfor value in values: total += value",
+          "explanation": "시간 복잡도 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "시간 복잡도 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+          "best_practices": [
+            "작은 실행 예제로 핵심 동작을 확인한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "`algorithm-question-121`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+              "solution": "문항의 조건을 재현하고 결과가 `입력 크기에 비례하여 시간이 증가한다`와 일치하는지 단계별로 확인합니다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "시간 복잡도 O(n)은 입력 크기 n에 비례하는 횟수로 핵심 연산이 증가하는 선형 복잡도다.",
+        "입력이 두 배가 되면 연산량도 대략 두 배로 증가하는 경향을 뜻한다."
+      ],
+      "patch_reason": "반복 템플릿, 동일 오답 근거, 정답 출력 예시를 사실 기반 설명과 실행 예시로 교체한다.",
+      "quality": {
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.25,
+        "example_quality": 0.75
+      }
+    }
+  },
+  "PREPARATION_BACKLOG": [],
+  "failed_preparation": {},
+  "same_reason_ratio": {
+    "algorithm-14": 0.0,
+    "python-private": 0.0,
+    "python-args": 0.0,
+    "algorithm-10": 0.0,
+    "python-staticmethod": 0.0,
+    "frontend-context": 0.0,
+    "python-gil": 0.0,
+    "algorithm-unionfind": 0.0,
+    "algorithm-6": 0.0,
+    "frontend-usestate": 0.0,
+    "python-decorator": 0.0,
+    "python-with-statement": 0.0,
+    "frontend-reactmemo": 0.0,
+    "python-3": 0.0,
+    "frontend-error": 0.0,
+    "python-list-comprehension": 0.0,
+    "frontend-nextjs": 0.0,
+    "python-tryexceptelsefinally": 0.0,
+    "algorithm-stack": 0.0,
+    "algorithm": 0.0
+  },
+  "fake_example_score": {
+    "algorithm-14": 0.5,
+    "python-private": 0.25,
+    "python-args": 0.0,
+    "algorithm-10": 0.5,
+    "python-staticmethod": 0.25,
+    "frontend-context": 0.25,
+    "python-gil": 0.0,
+    "algorithm-unionfind": 0.25,
+    "algorithm-6": 0.25,
+    "frontend-usestate": 0.0,
+    "python-decorator": 0.25,
+    "python-with-statement": 0.25,
+    "frontend-reactmemo": 0.25,
+    "python-3": 0.25,
+    "frontend-error": 0.0,
+    "python-list-comprehension": 0.25,
+    "frontend-nextjs": 0.25,
+    "python-tryexceptelsefinally": 0.5,
+    "algorithm-stack": 0.25,
+    "algorithm": 0.25
+  },
+  "execution_performed": false,
+  "card_files_modified": false
+}

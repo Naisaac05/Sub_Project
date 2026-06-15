@@ -1,0 +1,115 @@
+{
+  "card_id": "frontend-suspense",
+  "category": "frontend",
+  "term": "suspense",
+  "aliases": [
+    "suspense",
+    "비동기 작업이 완료될 때까지 fallback UI를 보여준다",
+    "Suspense의 역할은?",
+    "Suspense",
+    "fallback",
+    "UI",
+    "frontend suspense"
+  ],
+  "source_question_ids": [
+    "frontend:84"
+  ],
+  "retrieval": {
+    "embedding_text": "suspense 비동기 작업이 완료될 때까지 fallback UI를 보여준다 Suspense의 역할은? frontend Suspense 역할은 비동기 작업이 완료될 때까지",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "suspense",
+      "Suspense",
+      "역할은",
+      "비동기",
+      "작업이",
+      "완료될",
+      "때까지"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "React Suspense는 하위 트리가 준비되지 않은 동안 fallback UI를 표시하는 경계다. React.lazy 기반 코드 로딩이나 Suspense 지원 데이터 소스와 함께 준비 상태를 선언적으로 다룬다.",
+      "examples": [
+        "코드 분할이나 지원되는 비동기 데이터 로딩에서 준비되지 않은 영역에 대체 UI를 표시할 때 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "하위 콘텐츠가 준비될 때까지 fallback을 보여주는 것이 Suspense의 역할이다. 오류 처리는 Error Boundary가 담당하며 상태 초기화나 지연 로딩 함수 자체와도 역할이 다르다.",
+      "key_points": [
+        "Suspense",
+        "fallback",
+        "대기 경계"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기의 용어만 확인하지 말고 각 보기의 실제 책임과 정답 개념의 선택 기준을 비교한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "에러를 처리한다",
+          "reason": "렌더 오류를 잡아 대체 화면을 보여주는 책임은 Error Boundary에 있으며 Suspense는 대기 상태를 처리한다."
+        },
+        "option_2": {
+          "text": "컴포넌트를 지연 로딩한다",
+          "reason": "React.lazy가 컴포넌트 로딩을 지연하고 Suspense는 로딩 중 fallback 경계를 제공한다."
+        },
+        "option_3": {
+          "text": "상태를 초기화한다",
+          "reason": "Suspense는 하위 컴포넌트 상태를 임의로 초기화하는 API가 아니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`비동기 작업이 완료될 때까지 fallback UI를 보여준다`는 질문의 조건을 충족하지만 다른 선택지는 `suspense`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "const Profile = React.lazy(() => import(\"./Profile\"));\nconst view = <React.Suspense fallback={<span>로딩 중</span>}><Profile /></React.Suspense>;\nconst fallback = view.props.fallback;",
+      "explanation": "코드 분할이나 지원되는 비동기 데이터 로딩에서 준비되지 않은 영역에 대체 UI를 표시할 때 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "코드 분할이나 지원되는 비동기 데이터 로딩에서 준비되지 않은 영역에 대체 UI를 표시할 때 사용한다.",
+      "best_practices": [
+        "작은 실행 예제와 경계 사례로 동작을 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`suspense`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `비동기 작업이 완료될 때까지 fallback UI를 보여준다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

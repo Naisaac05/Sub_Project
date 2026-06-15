@@ -1,0 +1,82 @@
+{
+  "card_id": "java-g1-gc",
+  "category": "java",
+  "term": "g1-gc",
+  "aliases": [
+    "g1-gc",
+    "g1 gc",
+    "garbage first collector",
+    "java g1 gc"
+  ],
+  "source_question_ids": [
+    "java:22"
+  ],
+  "retrieval": {
+    "embedding_text": "g1-gc g1 gc garbage first collector java java g1 gc young old",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "g1-gc",
+      "java",
+      "g1 gc",
+      "garbage first collector",
+      "java g1 gc",
+      "young",
+      "old"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "g1-gc의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 g1-gc의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "g1-gc",
+        "java",
+        "g1 gc"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q22_option_0": {
+          "text": "Region 기반으로 힙을 관리한다",
+          "reason": "g1-gc 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q22_option_1": {
+          "text": "STW(Stop-The-World) 시간을 예측 가능하게 한다",
+          "reason": "g1-gc 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q22_option_3": {
+          "text": "Java 9부터 기본 GC이다",
+          "reason": "g1-gc 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

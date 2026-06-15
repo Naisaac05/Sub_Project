@@ -1,0 +1,80 @@
+{
+  "card_id": "algorithm",
+  "category": "algorithm",
+  "term": "시간",
+  "aliases": [
+    "시간",
+    "algorithm 시간"
+  ],
+  "source_question_ids": [
+    "algorithm:121"
+  ],
+  "retrieval": {
+    "embedding_text": "시간 algorithm 시간 algorithm 입력 크기에 비례하여 시간이",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "시간",
+      "algorithm",
+      "algorithm 시간",
+      "입력",
+      "크기에",
+      "비례하여",
+      "시간이"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "시간의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 시간의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "시간",
+        "algorithm",
+        "algorithm 시간"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q121_option_0": {
+          "text": "항상 일정한 시간이 걸린다",
+          "reason": "시간 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q121_option_2": {
+          "text": "입력 크기의 제곱에 비례한다",
+          "reason": "시간 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q121_option_3": {
+          "text": "로그 시간이 걸린다",
+          "reason": "시간 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

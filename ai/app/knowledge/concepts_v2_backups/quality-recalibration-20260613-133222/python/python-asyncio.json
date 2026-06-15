@@ -1,0 +1,113 @@
+{
+  "card_id": "python-asyncio",
+  "category": "python",
+  "term": "asyncio",
+  "aliases": [
+    "asyncio",
+    "python asyncio",
+    "파이썬 asyncio"
+  ],
+  "source_question_ids": [
+    "python:114"
+  ],
+  "retrieval": {
+    "embedding_text": "asyncio python asyncio 파이썬 asyncio python python-asyncio 코루틴의 실행을 일시",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "asyncio",
+      "python-asyncio",
+      "python asyncio",
+      "파이썬 asyncio",
+      "코루틴의",
+      "실행을",
+      "일시"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "asyncio is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as asyncio, python-asyncio, python asyncio.",
+      "examples": [
+        "Explain when asyncio should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of asyncio, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals asyncio, python-asyncio, python asyncio.",
+      "key_points": [
+        "asyncio",
+        "python",
+        "python asyncio"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy asyncio's defining behavior.",
+        "Confusing asyncio with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "스레드를 생성한다",
+          "reason": "스레드를 생성한다 is not the best answer because it does not satisfy the defining behavior or constraint of asyncio. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "함수를 동기 함수로 변환한다",
+          "reason": "함수를 동기 함수로 변환한다 is not the best answer because it does not satisfy the defining behavior or constraint of asyncio. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "예외를 발생시킨다",
+          "reason": "예외를 발생시킨다 is not the best answer because it does not satisfy the defining behavior or constraint of asyncio. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against asyncio."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate asyncio in an appropriate python context.",
+      "explanation": "Use a minimal example that makes asyncio's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply asyncio in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why asyncio is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying asyncio without checking its defining constraint.",
+          "solution": "Re-check asyncio's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.803126Z"
+}

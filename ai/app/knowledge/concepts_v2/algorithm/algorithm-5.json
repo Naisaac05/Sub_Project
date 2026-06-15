@@ -1,0 +1,112 @@
+{
+  "card_id": "algorithm-5",
+  "category": "algorithm",
+  "term": "algorithm-question-128",
+  "aliases": [
+    "algorithm-question-128",
+    "데이터가 거의 정렬되어 있는 경우",
+    "삽입 정렬이 효율적인 경우는?",
+    "algorithm question 128",
+    "algorithm algorithm question 128"
+  ],
+  "source_question_ids": [
+    "algorithm:128"
+  ],
+  "retrieval": {
+    "embedding_text": "algorithm-question-128 데이터가 거의 정렬되어 있는 경우 삽입 정렬이 효율적인 경우는? algorithm 삽입 정렬이 효율적인 경우는 데이터가 거의",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "algorithm-question-128",
+      "삽입",
+      "정렬이",
+      "효율적인",
+      "경우는",
+      "데이터가",
+      "거의"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "삽입 정렬은 앞쪽 정렬 구간에서 현재 원소가 들어갈 위치를 찾아 큰 원소를 밀고 삽입한다. 거의 정렬된 입력에서는 이동 횟수가 적어 선형 시간에 가까워진다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "데이터가 거의 정렬되어 있으면 각 원소가 짧은 거리만 이동하므로 삽입 정렬이 효율적이다. 역순·매우 큰 입력은 이동량이 커지고 모든 입력에서 성능이 같지도 않다.",
+      "key_points": [
+        "데이터가 거의 정렬되어 있는 경우",
+        "algorithm-5"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "완전히 역순으로 정렬된 경우",
+          "reason": "완전 역순은 매 원소가 앞까지 이동해 최악 O(n²)이 된다."
+        },
+        "option_2": {
+          "text": "데이터가 매우 큰 경우",
+          "reason": "매우 큰 무작위 데이터에는 평균 O(n²)보다 O(n log n) 정렬이 유리하다."
+        },
+        "option_3": {
+          "text": "모든 경우에 동일",
+          "reason": "입력 순서에 따라 이동 횟수가 달라져 모든 경우 성능이 같지 않다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "삽입 정렬은 거의 정렬된 입력에 강하고 선택 정렬은 입력 순서와 무관하게 비교량이 비슷하다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "values = [1, 2, 4, 3]\nvalue = values.pop()\nvalues.insert(2, value)\nassert values == [1, 2, 3, 4]",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "작은 배열이나 대부분 정렬된 데이터의 마무리 정렬에 사용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

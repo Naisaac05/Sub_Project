@@ -1,0 +1,111 @@
+{
+  "card_id": "python-2",
+  "category": "python",
+  "term": "디스크립터",
+  "aliases": [
+    "디스크립터",
+    "python 디스크립터",
+    "파이썬 디스크립터"
+  ],
+  "source_question_ids": [
+    "python:113"
+  ],
+  "retrieval": {
+    "embedding_text": "디스크립터 python 디스크립터 파이썬 디스크립터 python python-디스크립터 describe",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "디스크립터",
+      "python-디스크립터",
+      "python 디스크립터",
+      "파이썬 디스크립터",
+      "describe"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "디스크립터 is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as 디스크립터, python-디스크립터, python 디스크립터.",
+      "examples": [
+        "Explain when 디스크립터 should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of 디스크립터, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals 디스크립터, python-디스크립터, python 디스크립터.",
+      "key_points": [
+        "디스크립터",
+        "python",
+        "python 디스크립터"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy 디스크립터's defining behavior.",
+        "Confusing 디스크립터 with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "__get__",
+          "reason": "__get__ is not the best answer because it does not satisfy the defining behavior or constraint of 디스크립터. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "__set__",
+          "reason": "__set__ is not the best answer because it does not satisfy the defining behavior or constraint of 디스크립터. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "__delete__",
+          "reason": "__delete__ is not the best answer because it does not satisfy the defining behavior or constraint of 디스크립터. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against 디스크립터."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate 디스크립터 in an appropriate python context.",
+      "explanation": "Use a minimal example that makes 디스크립터's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply 디스크립터 in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why 디스크립터 is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying 디스크립터 without checking its defining constraint.",
+          "solution": "Re-check 디스크립터's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.786852Z"
+}

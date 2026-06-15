@@ -1,0 +1,167 @@
+{
+  "card_id": "spring-jpa",
+  "category": "spring",
+  "term": "jpa",
+  "aliases": [
+    "j",
+    "jpa",
+    "스프링 j",
+    "spring jpa",
+    "스프링 jpa"
+  ],
+  "source_question_ids": [
+    "spring:42",
+    "spring:45",
+    "spring:48",
+    "spring:53",
+    "spring:57"
+  ],
+  "retrieval": {
+    "embedding_text": "jpa j 스프링 j spring @lazy eager 스프링 jpa spring jpa spring-jpa",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "jpa",
+      "@lazy",
+      "eager",
+      "스프링 j",
+      "스프링 jpa",
+      "spring jpa",
+      "spring-jpa"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "jpa is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as jpa, spring-jpa, spring jpa.",
+      "examples": [
+        "Explain when jpa should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of jpa, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals jpa, spring-jpa, spring jpa.",
+      "key_points": [
+        "jpa",
+        "spring",
+        "spring jpa"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy jpa's defining behavior.",
+        "Confusing jpa with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "LAZY",
+          "reason": "LAZY is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "NONE",
+          "reason": "NONE is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "SELECT",
+          "reason": "SELECT is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_3": {
+          "text": "Fetch Join",
+          "reason": "Fetch Join is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_4": {
+          "text": "@EntityGraph",
+          "reason": "@EntityGraph is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_5": {
+          "text": "Batch Size 설정",
+          "reason": "Batch Size 설정 is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_6": {
+          "text": "데이터베이스 쿼리 결과를 캐싱한다",
+          "reason": "데이터베이스 쿼리 결과를 캐싱한다 is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_7": {
+          "text": "Redis와 연동하여 캐시한다",
+          "reason": "Redis와 연동하여 캐시한다 is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_8": {
+          "text": "모든 엔티티를 메모리에 유지한다",
+          "reason": "모든 엔티티를 메모리에 유지한다 is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_9": {
+          "text": "성능 향상을 위해",
+          "reason": "성능 향상을 위해 is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_10": {
+          "text": "보안을 위해",
+          "reason": "보안을 위해 is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_11": {
+          "text": "메모리 절약을 위해",
+          "reason": "메모리 절약을 위해 is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_12": {
+          "text": "커넥션을 닫아야 한다",
+          "reason": "커넥션을 닫아야 한다 is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_13": {
+          "text": "인덱스를 재구성해야 한다",
+          "reason": "인덱스를 재구성해야 한다 is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        },
+        "option_14": {
+          "text": "트랜잭션을 수동 커밋해야 한다",
+          "reason": "트랜잭션을 수동 커밋해야 한다 is not the best answer because it does not satisfy the defining behavior or constraint of jpa. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against jpa."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate jpa in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes jpa's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply jpa in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why jpa is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying jpa without checking its defining constraint.",
+          "solution": "Re-check jpa's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:23.211151Z"
+}

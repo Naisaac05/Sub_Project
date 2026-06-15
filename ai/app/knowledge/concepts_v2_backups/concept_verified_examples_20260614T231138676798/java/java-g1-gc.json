@@ -1,0 +1,116 @@
+{
+  "card_id": "java-g1-gc",
+  "category": "java",
+  "term": "g1-gc",
+  "aliases": [
+    "g1-gc",
+    "Young/Old 영역이 물리적으로 고정되어 있다",
+    "G1 GC의 특징으로 올바르지 않은 것은?",
+    "G1",
+    "GC",
+    "Young",
+    "Old",
+    "g1 gc",
+    "java g1 gc"
+  ],
+  "source_question_ids": [
+    "java:22"
+  ],
+  "retrieval": {
+    "embedding_text": "g1-gc Young/Old 영역이 물리적으로 고정되어 있다 G1 GC의 특징으로 올바르지 않은 것은? java G1 GC 특징으로 올바르지 않은 것은",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "g1-gc",
+      "G1",
+      "GC",
+      "특징으로",
+      "올바르지",
+      "않은",
+      "것은"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "G1 GC는 힙을 동일 크기 Region으로 나누고 각 Region의 역할을 필요에 따라 Eden, Survivor, Old 등으로 바꾼다. 회수 효율이 높은 Region을 우선 처리해 목표 일시정지 시간에 맞춘다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "Young과 Old 영역이 물리적으로 고정되어 있다는 설명은 Region 역할이 동적으로 바뀌는 G1 구조와 반대이므로 올바르지 않다. Region 관리, 일시정지 목표, Java 9 기본 GC는 특징에 해당한다.",
+      "key_points": [
+        "Young/Old 영역이 물리적으로 고정되어 있다",
+        "java-g1-gc"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "Region 기반으로 힙을 관리한다",
+          "reason": "Region 기반 관리는 G1이라는 이름과 동작의 핵심이므로 올바른 특징이다."
+        },
+        "option_1": {
+          "text": "STW(Stop-The-World) 시간을 예측 가능하게 한다",
+          "reason": "목표 일시정지 시간을 설정해 수집 작업량을 조절하므로 예측 가능성을 높인다는 설명은 맞다."
+        },
+        "option_3": {
+          "text": "Java 9부터 기본 GC이다",
+          "reason": "Java 9부터 서버급 환경의 기본 GC로 채택되었다는 설명은 맞다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "고정 세대형 수집기는 물리 구역이 나뉘지만 G1은 Region 역할을 동적으로 지정한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "List<String> regions = new ArrayList<>(List.of(\"Eden\", \"Old\"));\nregions.set(0, \"Old\");\nassert regions.get(0).equals(\"Old\");",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "대용량 힙의 GC 일시정지 시간을 튜닝할 때 Region 점유와 목표 pause 시간을 관찰한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

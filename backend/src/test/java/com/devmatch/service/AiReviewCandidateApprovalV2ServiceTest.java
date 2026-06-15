@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -171,6 +172,32 @@ class AiReviewCandidateApprovalV2ServiceTest {
         assertThat(response.retentionUntil()).isNotNull();
         verify(auditRepository).save(any(AiReviewCandidateAudit.class));
         verify(knowledgeReindexer).reindexChanged(candidate);
+    }
+
+    @Test
+    void editAndApprove_keepsCandidatePendingWhenV2PublishFails() {
+        AiReviewCandidate candidate = candidate("auto-publish-fail", "pagination");
+        when(candidateRepository.findById(10L)).thenReturn(Optional.of(candidate));
+        when(candidateRepository.save(any(AiReviewCandidate.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        doThrow(new IllegalStateException("v2 card collision")).when(knowledgeReindexer).reindexChanged(candidate);
+
+        var response = service.reviewCandidate(
+                10L,
+                new AiReviewCandidateReviewV2Request(
+                        AiReviewCandidateReviewAction.EDIT_AND_APPROVE,
+                        null,
+                        "검토된 페이지네이션 정의",
+                        null,
+                        null,
+                        "admin-ui",
+                        90
+                )
+        );
+
+        assertThat(response.status()).isEqualTo(AiReviewCandidateStatus.PENDING);
+        assertThat(response.workflowPhase()).isEqualTo(AiReviewCandidateWorkflowPhase.PUBLISH_FAILED);
+        assertThat(response.publishError()).contains("collision");
+        assertThat(response.publishedCardId()).isNull();
     }
 
     @Test

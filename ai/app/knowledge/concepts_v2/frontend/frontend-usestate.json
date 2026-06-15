@@ -1,0 +1,113 @@
+{
+  "card_id": "frontend-usestate",
+  "category": "frontend",
+  "term": "usestate",
+  "aliases": [
+    "usestate",
+    "[현재 상태값, 상태 변경 함수]",
+    "useState의 반환값은?",
+    "useState",
+    "frontend usestate"
+  ],
+  "source_question_ids": [
+    "frontend:68"
+  ],
+  "retrieval": {
+    "embedding_text": "usestate [현재 상태값, 상태 변경 함수] useState의 반환값은? frontend useState 반환값은 현재 상태값 상태 변경",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "usestate",
+      "useState",
+      "반환값은",
+      "현재",
+      "상태값",
+      "상태",
+      "변경"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "React useState는 현재 상태값과 그 상태를 갱신하는 setter를 배열로 반환한다.",
+      "examples": [
+        "useState 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "배열 구조 분해로 state와 setState 역할의 두 값을 받는다.",
+      "key_points": [
+        "useState",
+        "상태값",
+        "setter"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "현재 상태값만",
+          "reason": "현재 값만 반환하지 않고 setter도 함께 반환한다."
+        },
+        "option_1": {
+          "text": "상태 변경 함수만",
+          "reason": "변경 함수만 반환하지 않고 현재 상태도 제공한다."
+        },
+        "option_3": {
+          "text": "{state, setState}",
+          "reason": "반환형은 객체가 아니라 두 원소 배열이다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`[현재 상태값, 상태 변경 함수]`는 질문의 조건을 충족하지만 다른 선택지는 `usestate`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "const [count, setCount] = React.useState(0);\nsetCount(value => value + 1);\nconst current = count;",
+      "explanation": "useState 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "useState 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`usestate`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `[현재 상태값, 상태 변경 함수]`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

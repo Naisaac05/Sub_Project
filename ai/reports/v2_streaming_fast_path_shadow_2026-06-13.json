@@ -1,0 +1,61 @@
+{
+  "sample_count": 4,
+  "hit_count": 4,
+  "hit_rate": 1.0,
+  "average_latency_ms": 171.6006000060588,
+  "fallback_reasons": {},
+  "rows": [
+    {
+      "question": "Java에서 equals와 ==는 무엇이 다른가요?",
+      "intent_label": "COMPARISON",
+      "mode": "shadow",
+      "hit": true,
+      "reason": "hit",
+      "reason_message": "hit",
+      "card_id": "java-equals",
+      "payload_intent": "CONCEPT_DEFINITION",
+      "score": 9.5,
+      "latency_ms": 505.83090001600794,
+      "answer_snippet": "Java의 equals 메서드는 두 객체가 논리적으로 같은 값을 나타내는지 판단합니다. 기본 Object.equals는 참조 동일성을 비교하지만, 값 객체는 필요한 필드를 기준으로 equals를 재정의하며 hashCode도 같은 계약에 맞춰 재정의해야 합니다."
+    },
+    {
+      "question": "Java equals와 hashCode를 함께 재정의해야 하는 이유는 무엇인가요?",
+      "intent_label": "ANSWER_REASON",
+      "mode": "shadow",
+      "hit": true,
+      "reason": "hit",
+      "reason_message": "hit",
+      "card_id": "java-equals",
+      "payload_intent": "ANSWER_REASON",
+      "score": 11.5,
+      "latency_ms": 68.41450001229532,
+      "answer_snippet": "문자열이나 값 객체의 내용 동등성을 비교하려면 equals를 사용해야 합니다. ==는 객체 참조가 같은지 확인하므로 서로 다른 인스턴스가 같은 값을 담은 경우 올바른 동등성 판단을 하지 못합니다."
+    },
+    {
+      "question": "Java equals가 무엇인가요?",
+      "intent_label": "CONCEPT_DEFINITION",
+      "mode": "shadow",
+      "hit": true,
+      "reason": "hit",
+      "reason_message": "hit",
+      "card_id": "java-equals",
+      "payload_intent": "CONCEPT_DEFINITION",
+      "score": 9.5,
+      "latency_ms": 55.03280000993982,
+      "answer_snippet": "Java의 equals 메서드는 두 객체가 논리적으로 같은 값을 나타내는지 판단합니다. 기본 Object.equals는 참조 동일성을 비교하지만, 값 객체는 필요한 필드를 기준으로 equals를 재정의하며 hashCode도 같은 계약에 맞춰 재정의해야 합니다."
+    },
+    {
+      "question": "== 대신 equals를 사용해야 하는 이유는 무엇인가요?",
+      "intent_label": "ANSWER_REASON",
+      "mode": "shadow",
+      "hit": true,
+      "reason": "hit",
+      "reason_message": "hit",
+      "card_id": "java-equals",
+      "payload_intent": "ANSWER_REASON",
+      "score": 8.5,
+      "latency_ms": 57.12419998599216,
+      "answer_snippet": "문자열이나 값 객체의 내용 동등성을 비교하려면 equals를 사용해야 합니다. ==는 객체 참조가 같은지 확인하므로 서로 다른 인스턴스가 같은 값을 담은 경우 올바른 동등성 판단을 하지 못합니다."
+    }
+  ]
+}

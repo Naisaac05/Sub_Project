@@ -104,12 +104,12 @@ MANUAL = {
     "war-b": ["제 답 오답인 이유 뭐예요?", "내 답이 왜 오답임?", "제가 쓴 답이 틀린 이유가 뭐죠?", "왜 제 답이 오답이에요?"],
     "war-c": ["이거 나 왜 틀림?", "내가 이거 왜 틀렸어?", "이 문제 제가 왜 틀린 거예요?", "나 이거 왜 틀린 거야"],
     "def-a": ["트랜잭션 뭐임?", "트랜잭션이 뭔데?", "트랜잭션 뜻이 뭐야?", "트랜잭션이 무엇인가요?"],
-    "def-b": ["REST API 정의 좀 알려줘", "REST API가 뭐예요?", "REST API 뜻 알려줄래?", "REST API의 개념 설명해줘"],
+    "def-b": ["메시지 큐 정의 좀 알려줘", "메시지 큐가 뭐예요?", "메시지 큐 뜻 알려줄래?", "메시지 큐의 개념 설명해줘"],
     "def-c": ["인덱스 개념 좀 설명해줘", "인덱스가 뭔지 알려줘", "인덱스 뜻 좀 잡아줄래?", "인덱스 개념 정리해줘"],
     "cmp-a": ["세션이랑 JWT 뭐가 달라?", "세션이랑 JWT 차이 뭐임?", "세션과 JWT의 차이점이 뭔가요?", "JWT랑 세션 비교 좀"],
     "cmp-b": ["프로세스랑 스레드 비교해줘", "Process랑 Thread 차이가 뭐야?", "프로세스 vs 스레드 뭐가 달라요?", "프로세스와 스레드 비교 좀 해줄래?"],
     "cmp-c": ["List랑 Set 차이가 뭐야?", "리스트랑 셋 뭐가 다름?", "List와 Set의 차이점은?", "Set이랑 List 비교해줘"],
-    "ex-a": ["N+1 문제 예시 좀 들어줄래?", "N+1 문제 예 하나만", "N+1 예시 보여줘", "N+1 문제 사례 하나 알려줘"],
+    "ex-a": ["캐시 스탬피드 예시 좀 들어줄래?", "캐시 스탬피드 예 하나만", "캐시 스탬피드 예시 보여줘", "캐시 스탬피드 사례 하나 알려줘"],
     "ex-b": ["옵저버 패턴 코드 예시 보여줘", "옵저버 패턴 코드로 좀 보여줘", "옵저버 패턴 예제 코드 있어?", "옵저버 패턴 코드 짜서 보여줄 수 있어?"],
     "ex-c": ["이거 실제 예시로 설명해줘", "실제 사례 하나 들어서 설명해줄래?", "예를 들어서 설명해줘", "구체적인 예시로 보여줘"],
     "prac-a": ["인덱스 실무에서 언제 씀?", "인덱스 실제로 언제 써요?", "현업에서 인덱스 언제 쓰는 거야?", "인덱스는 어떤 상황에 실무에서 써?"],
@@ -128,6 +128,83 @@ MANUAL = {
     "unk-b": ["그거 그거 있잖아", "그 뭐냐 그거", "아 그거 뭐였지", "그거 좀 해줘", "그거 있지 않나", "그 뭐더라"],
     "unk-c": ["자바 막 그런 거 있잖아", "그 자바 뭐시기", "자바 그거 뭐였더라", "자바 막 이것저것", "자바 그 뭐냐 그거", "자바 관련 그런 거"],
 }
+
+
+PATTERN_TOPICS = [
+    {"topic": "트랜잭션", "related": "커밋"},
+    {"topic": "인덱스", "related": "검색 성능"},
+    {"topic": "캐시", "related": "메모리"},
+    {"topic": "스레드", "related": "프로세스"},
+    {"topic": "커넥션 풀", "related": "데이터베이스 연결"},
+    {"topic": "동시성 제어", "related": "락"},
+]
+
+INTENT_PATTERNS = {
+    "ANSWER_REASON": [
+        ("answer_basis", "이 문제에서 {topic}을 고르는 근거가 뭐야?"),
+        ("answer_basis", "{topic}이 답이 되는 이유 알려줘"),
+    ],
+    "WRONG_ANSWER_REASON": [
+        ("wrong_choice", "{topic}을 답으로 고르면 왜 틀려?"),
+        ("wrong_choice", "{topic}이라고 생각한 부분이 왜 오답이야?"),
+    ],
+    "CONCEPT_DEFINITION": [
+        ("pure_definition", "{topic}이 뭐야?"),
+        ("purpose", "{topic}은 왜 써?"),
+        ("cause", "{topic}은 왜 생겨?"),
+        ("mechanism", "{topic}은 내부적으로 어떻게 동작해?"),
+        ("relationship", "{topic}이랑 {related}는 무슨 관계야?"),
+        ("beginner_vague", "{topic}이 뭔지 모르겠어"),
+    ],
+    "COMPARISON": [
+        ("difference", "{topic}이랑 {related} 차이가 뭐야?"),
+        ("compare", "{topic}과 {related}를 비교해줘"),
+    ],
+    "EXAMPLE_REQUEST": [
+        ("example", "{topic} 예시 하나 들어줘"),
+        ("case", "{topic}을 실제 케이스로 보여줘"),
+    ],
+    "PRACTICAL_USAGE": [
+        ("practical", "{topic}은 실무에서 언제 써?"),
+        ("practical", "{topic}은 현업에서 어떻게 판단해?"),
+    ],
+    "DEBUG_OR_ERROR": [
+        ("debug", "{topic} 설정이 안 먹히는데 왜 그래?"),
+        ("debug", "{topic} 적용했는데 계속 오류가 나"),
+    ],
+    "FOLLOW_UP": [
+        ("follow_up", "조금 더 쉽게 풀어서 설명해줘"),
+        ("follow_up", "방금 말한 부분을 다시 설명해줘"),
+    ],
+    "OFF_TOPIC": [
+        ("off_topic", "오늘 집중이 안 되는데 뭐 하지?"),
+        ("off_topic", "주말에 뭐 하면서 쉬면 좋을까?"),
+    ],
+    "UNKNOWN": [
+        ("vague", "{topic} 그거 있잖아 그거"),
+        ("vague", "{topic} 관련해서 뭔가 좀 알려줘"),
+    ],
+}
+
+
+def build_pattern_rows():
+    rows = []
+    for intent, patterns in INTENT_PATTERNS.items():
+        for pattern_idx, (archetype, template) in enumerate(patterns):
+            for topic_idx, topic in enumerate(PATTERN_TOPICS):
+                idx = len(rows)
+                rows.append(
+                    {
+                        "id": f"{intent}-pattern-{pattern_idx:02d}-{topic_idx:02d}",
+                        "seed_id": f"pattern-{intent.lower()}",
+                        "question": template.format(**topic),
+                        "expected_intent": intent,
+                        "variation_type": "pattern",
+                        "pattern_archetype": archetype,
+                        "split": "dev" if idx % 2 == 0 else "holdout",
+                    }
+                )
+    return rows
 
 
 def build_rows_for_seed(seed):
@@ -170,6 +247,7 @@ def main():
         rows = build_rows_for_seed(seed)
         per_seed[seed["seed_id"]] = len(rows)
         all_rows.extend(rows)
+    all_rows.extend(build_pattern_rows())
 
     with OUT_PATH.open("w", encoding="utf-8") as f:
         for row in all_rows:

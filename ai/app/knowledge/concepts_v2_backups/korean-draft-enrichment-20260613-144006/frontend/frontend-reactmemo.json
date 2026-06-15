@@ -1,0 +1,115 @@
+{
+  "card_id": "frontend-reactmemo",
+  "category": "frontend",
+  "term": "reactmemo",
+  "aliases": [
+    "r",
+    "프론트엔드 r",
+    "reactmemo",
+    "frontend reactmemo",
+    "프론트엔드 reactmemo"
+  ],
+  "source_question_ids": [
+    "frontend:72"
+  ],
+  "retrieval": {
+    "embedding_text": "reactmemo r 프론트엔드 r frontend 변경되지 props 프론트엔드 reactmemo frontend reactmemo frontend-reactmemo",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "변경되지",
+      "props",
+      "프론트엔드 r",
+      "reactmemo",
+      "프론트엔드 reactmemo",
+      "frontend reactmemo",
+      "frontend-reactmemo"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "reactmemo is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as reactmemo, frontend-reactmemo, frontend reactmemo.",
+      "examples": [
+        "Explain when reactmemo should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of reactmemo, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals reactmemo, frontend-reactmemo, frontend reactmemo.",
+      "key_points": [
+        "reactmemo",
+        "frontend",
+        "frontend reactmemo"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy reactmemo's defining behavior.",
+        "Confusing reactmemo with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "메모리를 절약한다",
+          "reason": "메모리를 절약한다 is not the best answer because it does not satisfy the defining behavior or constraint of reactmemo. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "state를 캐싱한다",
+          "reason": "state를 캐싱한다 is not the best answer because it does not satisfy the defining behavior or constraint of reactmemo. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "이벤트 핸들러를 최적화한다",
+          "reason": "이벤트 핸들러를 최적화한다 is not the best answer because it does not satisfy the defining behavior or constraint of reactmemo. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against reactmemo."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate reactmemo in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes reactmemo's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply reactmemo in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why reactmemo is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying reactmemo without checking its defining constraint.",
+          "solution": "Re-check reactmemo's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.717949Z"
+}

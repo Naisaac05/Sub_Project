@@ -1,0 +1,118 @@
+{
+  "card_id": "python-list-comprehension",
+  "category": "python",
+  "term": "list-comprehension",
+  "aliases": [
+    "list-comprehension",
+    "[x for x in range(10) if x > 5]",
+    "Python에서 리스트 컴프리헨션의 올바른 문법은?",
+    "Python",
+    "for",
+    "in",
+    "range(10)",
+    "if",
+    "list comprehension",
+    "python list comprehension"
+  ],
+  "source_question_ids": [
+    "python:101"
+  ],
+  "retrieval": {
+    "embedding_text": "list-comprehension [x for x in range(10) if x > 5] Python에서 리스트 컴프리헨션의 올바른 문법은? python 에서 리스트 컴프리헨션의 문법은 for in",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "list-comprehension",
+      "에서",
+      "리스트",
+      "컴프리헨션의",
+      "문법은",
+      "for",
+      "in"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "리스트 컴프리헨션은 [표현식 for 변수 in 반복가능객체 if 조건] 순서로 새 리스트를 만든다.",
+      "examples": [
+        "리스트 컴프리헨션 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "표현식이 먼저 오고 for 절과 선택적 필터 조건이 뒤따른다.",
+      "key_points": [
+        "리스트 컴프리헨션",
+        "for 절",
+        "if 필터"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_1": {
+          "text": "[for x in range(10): x if x > 5]",
+          "reason": "for 앞에 표현식이 없어 문법이 성립하지 않는다."
+        },
+        "option_2": {
+          "text": "[x if x > 5 for x in range(10)]",
+          "reason": "필터용 if는 for 절 뒤에 와야 한다."
+        },
+        "option_3": {
+          "text": "[x in range(10) for if x > 5]",
+          "reason": "in과 for의 순서가 뒤바뀌어 문법이 아니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`[x for x in range(10) if x > 5]`는 질문의 조건을 충족하지만 다른 선택지는 `list-comprehension`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "numbers = range(10)\nfiltered = [x for x in numbers if x > 5]\nlast = filtered[-1]",
+      "explanation": "리스트 컴프리헨션 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "리스트 컴프리헨션 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`list-comprehension`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `[x for x in range(10) if x > 5]`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

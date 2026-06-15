@@ -1,0 +1,113 @@
+{
+  "card_id": "spring-ioc",
+  "category": "spring",
+  "term": "ioc",
+  "aliases": [
+    "ioc",
+    "spring ioc",
+    "스프링 ioc"
+  ],
+  "source_question_ids": [
+    "spring:31"
+  ],
+  "retrieval": {
+    "embedding_text": "ioc spring ioc 스프링 ioc spring spring-ioc 프레임워크가 객체의 생성과",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "ioc",
+      "spring-ioc",
+      "spring ioc",
+      "스프링 ioc",
+      "프레임워크가",
+      "객체의",
+      "생성과"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "ioc is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as ioc, spring-ioc, spring ioc.",
+      "examples": [
+        "Explain when ioc should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of ioc, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals ioc, spring-ioc, spring ioc.",
+      "key_points": [
+        "ioc",
+        "spring",
+        "spring ioc"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy ioc's defining behavior.",
+        "Confusing ioc with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "개발자가 직접 객체를 생성하고 관리한다",
+          "reason": "개발자가 직접 객체를 생성하고 관리한다 is not the best answer because it does not satisfy the defining behavior or constraint of ioc. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "모든 객체를 싱글턴으로 만든다",
+          "reason": "모든 객체를 싱글턴으로 만든다 is not the best answer because it does not satisfy the defining behavior or constraint of ioc. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "인터페이스를 반드시 사용해야 한다",
+          "reason": "인터페이스를 반드시 사용해야 한다 is not the best answer because it does not satisfy the defining behavior or constraint of ioc. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against ioc."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate ioc in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes ioc's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply ioc in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why ioc is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying ioc without checking its defining constraint.",
+          "solution": "Re-check ioc's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:25.005189Z"
+}

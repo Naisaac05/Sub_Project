@@ -1,0 +1,115 @@
+{
+  "card_id": "spring-autowired",
+  "category": "spring",
+  "term": "autowired",
+  "aliases": [
+    "a",
+    "스프링 a",
+    "autowired",
+    "spring autowired",
+    "스프링 autowired"
+  ],
+  "source_question_ids": [
+    "spring:35"
+  ],
+  "retrieval": {
+    "embedding_text": "autowired a 스프링 a spring 의존성을 자동으로 스프링 autowired spring autowired spring-autowired",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "의존성을",
+      "자동으로",
+      "스프링 a",
+      "autowired",
+      "스프링 autowired",
+      "spring autowired",
+      "spring-autowired"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "autowired is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as autowired, spring-autowired, spring autowired.",
+      "examples": [
+        "Explain when autowired should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of autowired, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals autowired, spring-autowired, spring autowired.",
+      "key_points": [
+        "autowired",
+        "spring",
+        "spring autowired"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy autowired's defining behavior.",
+        "Confusing autowired with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "빈을 등록한다",
+          "reason": "빈을 등록한다 is not the best answer because it does not satisfy the defining behavior or constraint of autowired. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "트랜잭션을 관리한다",
+          "reason": "트랜잭션을 관리한다 is not the best answer because it does not satisfy the defining behavior or constraint of autowired. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "URL 매핑을 한다",
+          "reason": "URL 매핑을 한다 is not the best answer because it does not satisfy the defining behavior or constraint of autowired. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against autowired."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate autowired in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes autowired's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply autowired in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why autowired is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying autowired without checking its defining constraint.",
+          "solution": "Re-check autowired's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:23.161806Z"
+}

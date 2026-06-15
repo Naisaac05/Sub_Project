@@ -1,0 +1,112 @@
+{
+  "card_id": "algorithm-7",
+  "category": "algorithm",
+  "term": "algorithm-question-130",
+  "aliases": [
+    "algorithm-question-130",
+    "최솟값을 찾아 맨 앞과 교환",
+    "선택 정렬의 동작 방식은?",
+    "algorithm question 130",
+    "algorithm algorithm question 130"
+  ],
+  "source_question_ids": [
+    "algorithm:130"
+  ],
+  "retrieval": {
+    "embedding_text": "algorithm-question-130 최솟값을 찾아 맨 앞과 교환 선택 정렬의 동작 방식은? algorithm 선택 정렬의 동작 방식은 최솟값을 찾아",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "algorithm-question-130",
+      "선택",
+      "정렬의",
+      "동작",
+      "방식은",
+      "최솟값을",
+      "찾아"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "선택 정렬은 정렬되지 않은 구간에서 최솟값을 찾아 그 구간의 첫 원소와 교환하며 정렬 구간을 확장한다. 매 회차 한 위치의 최종 값을 확정한다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "최솟값을 찾아 맨 앞과 교환하는 절차가 선택 정렬의 핵심이다. 인접 교환은 버블, 정렬 구간 삽입은 삽입, 반으로 분할은 병합 정렬 방식이다.",
+      "key_points": [
+        "최솟값을 찾아 맨 앞과 교환",
+        "algorithm-7"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "인접한 두 요소를 비교하여 교환",
+          "reason": "인접한 두 요소를 비교해 교환하는 방식은 버블 정렬이다."
+        },
+        "option_2": {
+          "text": "이미 정렬된 부분에 삽입",
+          "reason": "이미 정렬된 부분의 위치에 원소를 넣는 방식은 삽입 정렬이다."
+        },
+        "option_3": {
+          "text": "배열을 반으로 나눠 정렬",
+          "reason": "배열을 반으로 나누고 결과를 합치는 방식은 병합 정렬이다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "선택 정렬은 최솟값을 선택하고 버블 정렬은 인접 원소를 반복 교환한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "values = [3, 1, 2]\nminimum = values.index(min(values))\nvalues[0], values[minimum] = values[minimum], values[0]\nassert values == [1, 3, 2]",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "작은 입력에서 교환 횟수를 제한하며 정렬 원리를 설명할 때 사용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

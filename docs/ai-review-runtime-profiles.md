@@ -25,6 +25,35 @@ $env:AI_REVIEW_MAX_TOKENS="256"
 $env:AI_REVIEW_NUM_CTX="1024"
 ```
 
+## Ollama BGE-M3 Semantic RAG Profile
+
+이 프로필은 Chroma/SentenceTransformer 기반 vector store가 아니라, 로컬 Ollama `/api/embeddings`의 `bge-m3`를 직접 호출해서 knowledge card를 semantic-only cosine ranking으로 정렬한다.
+
+```powershell
+$env:AI_REVIEW_RAG_RETRIEVER="bge"
+$env:AI_REVIEW_EMBEDDING_MODEL="bge-m3"
+$env:AI_REVIEW_EMBEDDING_TIMEOUT_SECONDS="10"
+$env:AI_REVIEW_BGE_MIN_SCORE="0.50"
+```
+
+운영 보장:
+
+- Normal path: Ollama `bge-m3` semantic-only ranking.
+- BM25 and lexical scores are not fused into BGE ranking.
+- Failure path: lexical fallback with `fallback_from`, `fallback_reason` metadata and warning log.
+- Default remains lexical unless `AI_REVIEW_RAG_RETRIEVER=bge` is set.
+- Approved/generated knowledge cards remain the retrieval corpus.
+
+검증 명령:
+
+```powershell
+cd C:\Users\User\Desktop\Sub_Project\ai
+python -m unittest tests.test_ollama_embeddings tests.test_rag_retriever tests.test_workflow_runner -v
+python scripts/lint_knowledge_cards.py
+python scripts/smoke_ollama_bge_retriever.py
+python evals/retrieval_poc/evaluate.py
+```
+
 특징:
 
 - BM25 중심 검색을 먼저 사용한다.
@@ -88,3 +117,19 @@ cd C:\Users\User\Desktop\Sub_Project\backend
 cd C:\Users\User\Desktop\Sub_Project\frontend
 npm.cmd run build
 ```
+
+## Ollama BGE-M3 Intent Profile
+
+The production free-question workflow uses `bge-m3` embedding similarity for intent classification before RAG retrieval.
+
+```powershell
+$env:AI_REVIEW_EMBEDDING_MODEL="bge-m3"
+$env:AI_REVIEW_INTENT_MIN_SIMILARITY="0.43"
+$env:AI_REVIEW_INTENT_MIN_MARGIN="0.005"
+```
+
+- Runtime classification does not call the legacy rule classifier.
+- Prototype vectors are lazily initialized and cached in `app/vectorstore/intent_centroids.json` and process memory.
+- Warm requests use one intent embedding call per free question.
+- Embedding failure and low-confidence classification map to `UNKNOWN/general_question`.
+- The general-question fallback does not attempt rule-based recovery.

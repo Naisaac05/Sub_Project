@@ -1,0 +1,80 @@
+{
+  "card_id": "frontend-nextjs",
+  "category": "frontend",
+  "term": "nextjs",
+  "aliases": [
+    "nextjs",
+    "frontend nextjs"
+  ],
+  "source_question_ids": [
+    "frontend:85"
+  ],
+  "retrieval": {
+    "embedding_text": "nextjs frontend nextjs frontend 모두 서버 측에서 html",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "nextjs",
+      "frontend",
+      "frontend nextjs",
+      "모두",
+      "서버",
+      "측에서",
+      "html"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "nextjs의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 nextjs의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "nextjs",
+        "frontend",
+        "frontend nextjs"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q85_option_0": {
+          "text": "모두 클라이언트에서 렌더링된다",
+          "reason": "nextjs 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q85_option_2": {
+          "text": "모두 실시간으로 데이터를 반영한다",
+          "reason": "nextjs 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q85_option_3": {
+          "text": "모두 CDN 캐싱이 불가능하다",
+          "reason": "nextjs 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

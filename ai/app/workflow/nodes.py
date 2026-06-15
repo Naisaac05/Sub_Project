@@ -1,5 +1,7 @@
 from collections.abc import Callable
+import os
 import re
+import time
 
 from app.ollama.client import FALLBACK_MODEL, call_ollama
 from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_for_mode, compute_prompt_hash
@@ -9,10 +11,12 @@ from app.scoring import ConfidenceInputs, ConfidenceResult, calculate_confidence
 from app.validation.text import compact_answer, contains_korean, korean_fallback
 from app.workflow.answer_cache import cache_key_for, get_cached_answer
 from app.workflow.degraded import lightweight_only_enabled, lightweight_only_miss_state
-from app.workflow.intent import FreeQuestionIntent, classify_free_question, normalize_question
+from app.workflow.embedding_intent import classify_free_question_with_embeddings
+from app.workflow.intent import FreeQuestionIntent, normalize_question
 from app.workflow.lightweight_answers import LIGHTWEIGHT_MODEL_NAME, resolve_lightweight_answer
 from app.workflow.query_resolver import resolve_learner_query
 from app.workflow.state import ReviewWorkflowState, ValidationResult
+from app.workflow.v2_approved_fast_path import resolve_v2_approved_fast_path
 
 
 Generator = Callable[..., str]
@@ -25,6 +29,19 @@ FORBIDDEN_CLAIMS = (
     "트랜잭션 문제",
     "네트워크 지연 문제",
 )
+
+OFF_TOPIC_REJECTION_MESSAGE = (
+    "이 질문은 프로그래밍 학습과 관련이 없어 답변드리기 어렵습니다. "
+    "학습 중인 개념이나 문제에 대해 질문해주세요!"
+)
+
+
+def should_use_workflow_context(context) -> bool:
+    if context.metadata.get("retriever") == "ollama_bge_m3":
+        threshold = float(os.getenv("AI_REVIEW_BGE_MIN_SCORE", "0.50"))
+        return context.score >= threshold
+    threshold = MIN_WORKFLOW_CONTEXT_SCORE
+    return context.score >= threshold
 
 
 def _is_high_risk_question(state: ReviewWorkflowState) -> bool:
@@ -42,13 +59,15 @@ def retrieve_context_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
     if state.mode == "free-question":
         state.resolved_query = resolve_learner_query(state.request.user_answer)
         learner_query = state.resolved_query.resolved_query
-        state.free_question_intent = classify_free_question(learner_query)
+        state.free_question_intent = classify_free_question_with_embeddings(learner_query)
+        state.contexts = []
+        return state
 
     query = _query_for_request(state.mode, state.request, state.free_question_intent, learner_query)
     state.contexts = [
         context
         for context in retrieve_context(query, limit=3)
-        if context.score >= MIN_WORKFLOW_CONTEXT_SCORE
+        if should_use_workflow_context(context)
     ]
     return state
 
@@ -62,20 +81,36 @@ def generate_answer_node(
     generator: Generator = call_ollama,
 ) -> ReviewWorkflowState:
     learner_query = _learner_query_for_state(state)
-    lightweight_answer = resolve_lightweight_answer(
+
+    # Off-topic / unknown intent 차단
+    if (
+        state.mode == "free-question"
+        and state.free_question_intent
+        and state.free_question_intent.intent in {"off_topic", "unknown"}
+    ):
+        state.answer = OFF_TOPIC_REJECTION_MESSAGE
+        state.prompt_version = prompt_version_for_mode(state.mode)
+        state.model_used = "template"
+        state.fallback_used = False
+        state.route = "off_topic_rejected"
+        state.answer_style = _answer_style_for_state(state)
+        state.contexts = []
+        return state
+
+    v2_decision = resolve_v2_approved_fast_path(
         learner_query,
         state.free_question_intent,
-        matched_concept_id=_matched_concept_id_for_lightweight(state),
+        selected_answer=state.request.selected_answer,
     )
-    if state.mode == "free-question" and lightweight_answer:
-        state.answer = lightweight_answer.answer
+    state.v2_fast_path_decision = v2_decision.metadata()
+    if state.mode == "free-question" and v2_decision.mode == "serve" and v2_decision.hit:
+        state.answer = v2_decision.answer or ""
         state.prompt_version = prompt_version_for_mode(state.mode)
-        state.model_used = LIGHTWEIGHT_MODEL_NAME
+        state.model_used = "v2-approved-payload"
         state.fallback_used = False
-        state.route = lightweight_answer.route
-        state.answer_style = lightweight_answer.style
-        if lightweight_answer.route == "static_fast_path":
-            state.contexts = []
+        state.route = "v2_approved_fast_path"
+        state.answer_style = _answer_style_for_state(state)
+        state.contexts = []
         return state
 
     if lightweight_only_enabled():
@@ -96,6 +131,7 @@ def generate_answer_node(
     state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
     state.prompt_hash = compute_prompt_hash(prompt)
     generation_model = _generation_model_for_state(state)
+    started = time.perf_counter()
     try:
         state.answer = generator(
             model=generation_model,
@@ -105,11 +141,13 @@ def generate_answer_node(
             num_ctx=state.request.num_ctx,
             num_thread=state.request.num_thread,
         )
+        state.generation_ms = int((time.perf_counter() - started) * 1000)
         state.answer = compact_answer(state.answer, state.mode)
         state.model_used = generation_model
         state.route = "rag_generation" if state.contexts else "generation"
         state.answer_style = _answer_style_for_state(state)
         if _should_retry_fallback_model(state) and not contains_korean(state.answer):
+            retry_started = time.perf_counter()
             state.answer = generator(
                 model=FALLBACK_MODEL,
                 prompt=prompt,
@@ -121,8 +159,11 @@ def generate_answer_node(
             state.answer = compact_answer(state.answer, state.mode)
             state.model_used = FALLBACK_MODEL
             state.error = None
+            state.retry_generation_ms = int((time.perf_counter() - retry_started) * 1000)
     except Exception as exc:
+        state.generation_ms = int((time.perf_counter() - started) * 1000)
         if _should_retry_fallback_model(state):
+            retry_started = time.perf_counter()
             try:
                 state.answer = generator(
                     model=FALLBACK_MODEL,
@@ -137,19 +178,24 @@ def generate_answer_node(
                 state.route = "rag_generation" if state.contexts else "generation"
                 state.answer_style = _answer_style_for_state(state)
                 state.error = None
+                state.retry_generation_ms = int((time.perf_counter() - retry_started) * 1000)
                 return state
             except Exception as fallback_exc:
+                state.retry_generation_ms = int((time.perf_counter() - retry_started) * 1000)
                 state.error = f"{exc}; fallback model failed: {fallback_exc}"
+                state.fallback_reason = _fallback_reason_from_exception(fallback_exc, exc)
         else:
             state.error = str(exc)
-        state.answer = korean_fallback(state.mode, state.request)
+            state.fallback_reason = _fallback_reason_from_exception(exc)
+        state.answer = _fallback_message(state.fallback_reason)
         state.model_used = "template"
         state.fallback_used = True
         state.route = "fallback_template"
         state.answer_style = _answer_style_for_state(state)
 
     # Semantic Judge 사후 평가 검증 레이어 연동
-    if state.mode == "free-question" and state.route in {"generation", "rag_generation"} and state.answer:
+    from app.workflow.judge import semantic_judge_enabled
+    if state.mode == "free-question" and state.route in {"generation", "rag_generation"} and state.answer and semantic_judge_enabled():
         # 1. Determine Tier (Tier 1 vs Tier 2)
         tier = "tier2"
         is_concept_def = state.free_question_intent and state.free_question_intent.intent == "concept_definition"
@@ -230,23 +276,11 @@ def generate_answer_node(
         # 3. 최종 판사 검증 실패 및 Fallback 우회 제어
         final_judge = state.judge_result
         if final_judge and (final_judge.relevance_score < 0.7 or final_judge.context_bias_score > 0.6 or final_judge.hallucination_risk == "high"):
-            lightweight_fallback = resolve_lightweight_answer(
-                learner_query,
-                state.free_question_intent,
-                matched_concept_id=_matched_concept_id_for_lightweight(state),
-            )
-            if lightweight_fallback:
-                state.answer = lightweight_fallback.answer
-                state.model_used = LIGHTWEIGHT_MODEL_NAME
-                state.route = lightweight_fallback.route
-                state.answer_style = lightweight_fallback.style
-                state.fallback_used = True
-            else:
-                state.answer = _fallback_for_state(state)
-                state.model_used = "template" if state.model_used is None else state.model_used
-                state.fallback_used = True
-                state.route = "fallback_template"
-                state.answer_style = _answer_style_for_state(state)
+            state.answer = _fallback_for_state(state)
+            state.model_used = "template" if state.model_used is None else state.model_used
+            state.fallback_used = True
+            state.route = "fallback_template"
+            state.answer_style = _answer_style_for_state(state)
 
         # Set metrics according to final tier
         if state.judge_tier == "tier1":
@@ -258,11 +292,13 @@ def generate_answer_node(
 
     if state.mode == "free-question" and state.answer:
         from app.workflow.grounding import validate_grounding, GroundingResult
+        from app.workflow.grounding import grounding_judge_enabled
         is_skipped = (
             state.route in {"static_fast_path", "generated_card_fast_path", "cache"}
             or not state.contexts
             or state.judge_tier == "tier0"
             or state.judge_tier == "tier1"
+            or not grounding_judge_enabled()
         )
         if is_skipped:
             state.grounding_result = GroundingResult(
@@ -373,6 +409,7 @@ def validate_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
     forbidden_claims_ok = not any(claim in state.answer for claim in FORBIDDEN_CLAIMS)
     relevance_ok = _answer_relevance_ok(state)
     topic_ok = _answer_mentions_topic(state)
+    complete_ok = not re.search(r"(?:^|\n)\s*(?:\d+[.)]|[-*])\s*$", state.answer)
 
     reasons: list[str] = []
     if not korean_ok:
@@ -385,8 +422,10 @@ def validate_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
         reasons.append("stale_original_context")
     if not topic_ok:
         reasons.append("missing_topic")
+    if not complete_ok:
+        reasons.append("incomplete_answer")
 
-    score = sum((korean_ok, required_keywords_ok, forbidden_claims_ok, relevance_ok, topic_ok)) / 5
+    score = sum((korean_ok, required_keywords_ok, forbidden_claims_ok, relevance_ok, topic_ok, complete_ok)) / 6
     state.quality_flags = reasons.copy()
     state.validation = ValidationResult(
         korean_ok=korean_ok,
@@ -424,16 +463,24 @@ def fallback_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
     graph_route = state.route if state.route in {"dead_end_state", "error_state"} else None
     relevance_ok = state.validation.relevance_ok if state.validation else True
     topic_ok = "missing_topic" not in state.quality_flags
+    complete_ok = "incomplete_answer" not in state.quality_flags
     if (
         state.confidence
         and not state.confidence.should_fallback
         and contains_korean(state.answer)
         and relevance_ok
         and topic_ok
+        and complete_ok
     ):
         return state
 
-    state.answer = _fallback_for_state(state)
+    state.fallback_reason = state.fallback_reason or "quality_validation"
+    reason_message = _fallback_message(state.fallback_reason)
+    state.answer = (
+        f"{reason_message} {_fallback_for_state(state)}"
+        if state.fallback_reason == "quality_validation"
+        else reason_message
+    )
     state.model_used = "template" if state.model_used is None else state.model_used
     state.fallback_used = True
     state.route = graph_route or "fallback_template"
@@ -465,7 +512,7 @@ def _query_for_request(
     learner_query: str | None = None,
 ) -> str:
     if mode == "free-question" and request.user_answer:
-        free_question_intent = intent or classify_free_question(request.user_answer)
+        free_question_intent = intent or classify_free_question_with_embeddings(request.user_answer)
         if free_question_intent.rag_policy == "latest_question_only":
             return learner_query or request.user_answer
 
@@ -504,6 +551,11 @@ def _fallback_for_state(state: ReviewWorkflowState) -> str:
 def _topic_specific_fallback(topic: str, user_answer: str) -> str | None:
     normalized = normalize_question(" ".join((topic, user_answer))).lower()
     compact = normalized.replace(" ", "")
+    if "equals" in normalized and "==" in normalized:
+        return (
+            "Java에서 `equals()`는 객체의 논리적 동등성, 즉 내용이나 값이 같은지를 비교합니다. "
+            "`==`는 기본형에서는 값을 비교하지만 객체 참조형에서는 두 변수가 같은 객체를 가리키는지 비교합니다."
+        )
     if "@transactional" in normalized or "transactional" in normalized or "트랜잭션" in normalized:
         return (
             "@Transactional은 Spring에서 한 업무 단위를 하나의 transaction으로 묶는 선언입니다. "
@@ -637,7 +689,7 @@ def _matched_concept_id_for_lightweight(state: ReviewWorkflowState) -> str | Non
     for context in state.contexts:
         if (
             context.concept_id
-            and context.score >= MIN_WORKFLOW_CONTEXT_SCORE
+            and should_use_workflow_context(context)
             and context.metadata.get("version") in {"admin-approved-candidate", "course-candidate"}
         ):
             return context.concept_id
@@ -645,15 +697,27 @@ def _matched_concept_id_for_lightweight(state: ReviewWorkflowState) -> str | Non
 
 
 def _should_retry_fallback_model(state: ReviewWorkflowState) -> bool:
-    if _generation_model_for_state(state) == FALLBACK_MODEL:
-        return False
-    if state.mode == "follow-up":
-        return True
-    return (
-        state.mode == "free-question"
-        and state.free_question_intent is not None
-        and state.free_question_intent.rag_policy == "latest_question_only"
-    )
+    return state.mode in {"first-question", "follow-up", "free-question"}
+
+
+def _fallback_reason_from_exception(*exceptions: BaseException) -> str:
+    for exc in exceptions:
+        current: BaseException | None = exc
+        while current is not None:
+            name = current.__class__.__name__.lower()
+            message = str(current).lower()
+            if "timeout" in name or "timed out" in message or "timeout" in message:
+                return "timeout"
+            current = current.__cause__
+    return "other_error"
+
+
+def _fallback_message(reason: str | None) -> str:
+    if reason == "timeout":
+        return "답변 생성에 시간이 조금 더 걸리고 있습니다. 잠시 후 다시 시도해주세요."
+    if reason == "quality_validation":
+        return "더 정확한 답변을 준비하고 있습니다. 질문을 조금 더 구체적으로 작성해 다시 시도해주세요."
+    return "지금은 답변을 준비하지 못했습니다. 잠시 후 다시 시도해주세요."
 
 
 def _generation_model_for_state(state: ReviewWorkflowState) -> str:
@@ -663,50 +727,12 @@ def _generation_model_for_state(state: ReviewWorkflowState) -> str:
 
 
 def _required_keywords_ok(state: ReviewWorkflowState) -> bool:
+    if state.mode == "follow-up":
+        return True
     if state.mode != "free-question":
         return True
 
     validation_contexts = state.contexts
-
-    # follow_up 인텐트인 경우 검증 기준 개선
-    if state.free_question_intent and state.free_question_intent.intent == "follow_up":
-        # current RAG top card required_keywords 강제 적용 금지
-        # 1. previous/session active concept 우선 사용
-        active_concept_id = _matched_concept_id_for_lightweight(state)
-        active_contexts = []
-        
-        if active_concept_id:
-            from app.rag.documents import load_concept_cards
-            card = next((c for c in load_concept_cards() if c.concept_id == active_concept_id), None)
-            if card:
-                from app.rag.retriever import RetrievedContext
-                content_parts = [f"# {card.title}"]
-                for sec_title, sec_content in card.sections.items():
-                    content_parts.append(f"## {sec_title}\n{sec_content}")
-                card_content = "\n\n".join(content_parts)
-                active_contexts = [RetrievedContext(
-                    concept_id=card.concept_id,
-                    title=card.title,
-                    content=card_content,
-                    score=10.0,
-                    metadata=card.metadata
-                )]
-        
-        # 2. 그것이 없으면 original question 기반 RAG fallback
-        if not active_contexts:
-            fallback_query = state.request.correct_answer or state.request.question
-            if fallback_query:
-                from app.rag.retriever import retrieve_context
-                active_contexts = [
-                    ctx for ctx in retrieve_context(fallback_query, limit=3)
-                    if ctx.score >= MIN_WORKFLOW_CONTEXT_SCORE
-                ]
-                
-        # 3. 그래도 애매하면 required_keywords 완화 (통과)
-        if not active_contexts:
-            return True
-            
-        validation_contexts = active_contexts
 
     if not validation_contexts:
         return True

@@ -3,12 +3,12 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from app.rag.documents import ConceptCard
+from app.schemas.rag_card import RagCard
 
 
 def mark_duplicate_candidates(
     candidates: list[dict[str, Any]],
-    cards: list[ConceptCard],
+    cards: list[RagCard],
 ) -> list[dict[str, Any]]:
     marked: list[dict[str, Any]] = []
     for candidate in candidates:
@@ -29,7 +29,7 @@ def mark_duplicate_candidates(
     return marked
 
 
-def _duplicate_concept_ids(candidate: dict[str, Any], cards: list[ConceptCard]) -> list[str]:
+def _duplicate_concept_ids(candidate: dict[str, Any], cards: list[RagCard]) -> list[str]:
     needles = _candidate_needles(candidate)
     duplicates: list[str] = []
     for card in cards:

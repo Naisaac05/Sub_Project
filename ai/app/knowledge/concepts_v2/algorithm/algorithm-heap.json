@@ -1,0 +1,113 @@
+{
+  "card_id": "algorithm-heap",
+  "category": "algorithm",
+  "term": "heap",
+  "aliases": [
+    "heap",
+    "완전 이진 트리이며 부모가 자식보다 크거나(최대힙) 작다(최소힙)",
+    "힙(Heap)의 특성으로 올바른 것은?",
+    "Heap)",
+    "algorithm heap"
+  ],
+  "source_question_ids": [
+    "algorithm:138"
+  ],
+  "retrieval": {
+    "embedding_text": "heap 완전 이진 트리이며 부모가 자식보다 크거나(최대힙) 작다(최소힙) 힙(Heap)의 특성으로 올바른 것은? algorithm Heap) 특성으로 것은 완전 이진 트리이며",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "heap",
+      "Heap)",
+      "특성으로",
+      "것은",
+      "완전",
+      "이진",
+      "트리이며"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "힙은 완전 이진 트리 형태를 유지하며 부모와 자식 사이에 힙 속성을 만족하는 자료구조다. 최소 힙은 부모가 자식보다 작거나 같아 루트에서 최솟값을 빠르게 꺼낸다.",
+      "examples": [
+        "우선순위 큐와 상위 k개 선택처럼 최솟값이나 최댓값을 반복해서 꺼내는 작업에 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "완전 이진 트리이며 부모·자식 간 대소 관계를 유지한다는 설명이 힙의 핵심이다. 전체 정렬이나 BST 순서 규칙을 보장하지 않으며 논리 구조는 비선형 트리다.",
+      "key_points": [
+        "Heap",
+        "완전 이진 트리",
+        "힙 속성"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기의 용어만 확인하지 말고 각 보기의 실제 책임과 정답 개념의 선택 기준을 비교한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "완전 정렬된 트리",
+          "reason": "힙은 루트 우선순위만 보장하며 모든 원소가 완전히 정렬되어 있지는 않다."
+        },
+        "option_2": {
+          "text": "이진 탐색 트리의 일종",
+          "reason": "이진 탐색 트리는 왼쪽·오른쪽 서브트리의 순서를 보장하지만 힙은 부모·자식 관계만 보장한다."
+        },
+        "option_3": {
+          "text": "선형 자료구조",
+          "reason": "배열로 구현할 수 있어도 힙의 논리 구조는 완전 이진 트리이므로 선형 자료구조가 아니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`완전 이진 트리이며 부모가 자식보다 크거나(최대힙) 작다(최소힙)`는 질문의 조건을 충족하지만 다른 선택지는 `heap`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import heapq\nvalues = [7, 2, 5]\nheapq.heapify(values)\nsmallest = heapq.heappop(values)",
+      "explanation": "우선순위 큐와 상위 k개 선택처럼 최솟값이나 최댓값을 반복해서 꺼내는 작업에 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "우선순위 큐와 상위 k개 선택처럼 최솟값이나 최댓값을 반복해서 꺼내는 작업에 사용한다.",
+      "best_practices": [
+        "작은 실행 예제와 경계 사례로 동작을 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`heap`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `완전 이진 트리이며 부모가 자식보다 크거나(최대힙) 작다(최소힙)`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

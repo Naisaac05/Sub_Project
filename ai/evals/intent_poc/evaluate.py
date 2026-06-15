@@ -21,6 +21,12 @@ DEFAULT_DATA = HERE / "dataset.jsonl"
 DEFAULT_REPORT = HERE / "REPORT.md"
 
 
+def filter_rows_by_split(rows, split):
+    if split is None:
+        return list(rows)
+    return [row for row in rows if row.get("split") == split]
+
+
 def prf(support, predicted_total, correct):
     recall = correct / support if support else 0.0
     precision = correct / predicted_total if predicted_total else 0.0
@@ -32,11 +38,14 @@ def main():
     ap = argparse.ArgumentParser(description="의도분류 PoC 평가기")
     ap.add_argument("--classifier", default="current", help="classifiers.py 의 분류기 이름 (current|phase1)")
     ap.add_argument("--dataset", type=pathlib.Path, default=DEFAULT_DATA)
+    ap.add_argument("--split", choices=("dev", "holdout"), default=None,
+                    help="dataset.jsonl split filter. omitted means all rows.")
     ap.add_argument("--out", type=pathlib.Path, default=DEFAULT_REPORT)
     args = ap.parse_args()
 
     predict = get_classifier(args.classifier)
-    rows = [json.loads(l) for l in args.dataset.read_text(encoding="utf-8").splitlines() if l.strip()]
+    all_rows = [json.loads(l) for l in args.dataset.read_text(encoding="utf-8").splitlines() if l.strip()]
+    rows = filter_rows_by_split(all_rows, args.split)
 
     confusion = defaultdict(Counter)
     support = Counter()
@@ -81,6 +90,8 @@ def main():
         out.append(f"- dev 정확도: {by_split['dev'][0] / by_split['dev'][1]:.1%}  /  "
                    f"holdout 정확도: {by_split['holdout'][0] / by_split['holdout'][1]:.1%}")
     macro_f1 = sum(prf(support[c], predicted_total[c], correct[c])[2] for c in CLASSES) / len(CLASSES)
+    if args.split:
+        out.append(f"- split filter: `{args.split}`")
     out.append(f"- macro-F1: {macro_f1:.3f}\n")
 
     out.append("## 2. 클래스별 정밀도/재현율/F1\n")
@@ -148,7 +159,8 @@ def main():
     args.out.write_text("\n".join(out), encoding="utf-8")
 
     print(f"classifier={args.classifier} total={total} acc={overall_acc:.3f} macro_f1={macro_f1:.3f} "
-          f"dev={by_split['dev'][0]}/{by_split['dev'][1]} holdout={by_split['holdout'][0]}/{by_split['holdout'][1]}")
+          f"split={args.split or 'all'} dev={by_split['dev'][0]}/{by_split['dev'][1]} "
+          f"holdout={by_split['holdout'][0]}/{by_split['holdout'][1]}")
     print("zero_recall=", zero_recall)
     print("by_vtype=", {k: f"{v[0]}/{v[1]}" for k, v in by_vtype.items()})
     print(f"report -> {args.out}")

@@ -1,0 +1,1324 @@
+{
+  "dry_run": true,
+  "candidate_count": 20,
+  "json_passed_count": 20,
+  "checksum_passed_count": 20,
+  "lock_violation_count": 0,
+  "semantic_shift_failed_count": 0,
+  "quality_passed_count": 10,
+  "payload_validator_passed_count": 20,
+  "retrieval_passed_count": 17,
+  "approved_locked_eligible_count": 3,
+  "approval_distribution": {
+    "draft": 11,
+    "approved": 9,
+    "approved_locked": 0,
+    "rejected": 0
+  },
+  "full_batch": {
+    "baseline_metrics": {
+      "production_mode": {
+        "exact_hit1": 0.9797297297297297,
+        "exact_hit3": 0.9864864864864865,
+        "exact_hit5": 0.9864864864864865,
+        "loo_candidate_rate": 0.9797297297297297,
+        "loo_average_score": 5.296551724137931,
+        "loo_same_category_rate": 0.6689655172413793
+      },
+      "content_mode": {
+        "exact_hit1": 0.9797297297297297,
+        "exact_hit3": 0.9864864864864865,
+        "exact_hit5": 0.9864864864864865,
+        "loo_candidate_rate": 0.9864864864864865,
+        "loo_average_score": 5.301369863013699,
+        "loo_same_category_rate": 0.6575342465753424
+      }
+    },
+    "simulated_metrics": {
+      "production_mode": {
+        "exact_hit1": 0.9797297297297297,
+        "exact_hit3": 0.9864864864864865,
+        "exact_hit5": 0.9864864864864865,
+        "loo_candidate_rate": 0.9797297297297297,
+        "loo_average_score": 5.296551724137931,
+        "loo_same_category_rate": 0.6689655172413793
+      },
+      "content_mode": {
+        "exact_hit1": 0.9797297297297297,
+        "exact_hit3": 0.9864864864864865,
+        "exact_hit5": 0.9864864864864865,
+        "loo_candidate_rate": 0.9864864864864865,
+        "loo_average_score": 5.318493150684931,
+        "loo_same_category_rate": 0.6643835616438356
+      }
+    },
+    "diff": {
+      "production_exact_hit1_diff": 0.0,
+      "production_exact_hit3_diff": 0.0,
+      "production_exact_hit5_diff": 0.0,
+      "production_loo_candidate_rate_diff": 0.0,
+      "production_loo_average_score_diff": 0.0,
+      "production_loo_same_category_rate_diff": 0.0,
+      "content_exact_hit1_diff": 0.0,
+      "content_exact_hit3_diff": 0.0,
+      "content_exact_hit5_diff": 0.0,
+      "content_loo_candidate_rate_diff": 0.0,
+      "content_loo_average_score_diff": 0.01712328767123239,
+      "content_loo_same_category_rate_diff": 0.006849315068493178,
+      "exact_diff": 0.0
+    },
+    "retrieval_reasons": [
+      "retrieval_changed:content_loo_average_score_diff",
+      "retrieval_changed:content_loo_same_category_rate_diff"
+    ]
+  },
+  "cards": {
+    "java-primitive": {
+      "path": "app\\knowledge\\concepts_v2\\java\\java-primitive.json",
+      "current_status": "approved",
+      "json_valid": true,
+      "searchable_checksum_before": "de75fb3f730c053dad1ae5a9e0fe37065aa063c283e2d87ddf47bbaab81bc94b",
+      "searchable_checksum_after": "de75fb3f730c053dad1ae5a9e0fe37065aa063c283e2d87ddf47bbaab81bc94b",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.1388888888888889,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17647058823529413,
+        "payload_length": 702
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 1.0,
+          "print_answer": 0.0,
+          "example_quality": 1.0,
+          "fake_example_score": 0.0
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [],
+      "approval_decision": {
+        "eligible": true,
+        "result": "approved_locked_candidate",
+        "reasons": []
+      }
+    },
+    "java-array-length": {
+      "path": "app\\knowledge\\concepts_v2\\java\\java-array-length.json",
+      "current_status": "approved",
+      "json_valid": true,
+      "searchable_checksum_before": "eabf0dd818438e881954d1dcde50148cfe8ada2905b491c946dd9a6ea7c868fb",
+      "searchable_checksum_after": "eabf0dd818438e881954d1dcde50148cfe8ada2905b491c946dd9a6ea7c868fb",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.05,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17647058823529413,
+        "payload_length": 698
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 0.0,
+          "print_answer": 0.0,
+          "example_quality": 0.75,
+          "fake_example_score": 0.25
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "fake_example_score_nonzero"
+        ]
+      }
+    },
+    "java-final-keyword": {
+      "path": "app\\knowledge\\concepts_v2\\java\\java-final-keyword.json",
+      "current_status": "approved",
+      "json_valid": true,
+      "searchable_checksum_before": "df19be6bf62580cbbf7d735620c46e9b71138c5df37ac7c8a888eb5023772c17",
+      "searchable_checksum_after": "df19be6bf62580cbbf7d735620c46e9b71138c5df37ac7c8a888eb5023772c17",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.07692307692307693,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17647058823529413,
+        "payload_length": 679
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 0.0,
+          "print_answer": 0.0,
+          "example_quality": 0.75,
+          "fake_example_score": 0.25
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.006849315068492956,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "fake_example_score_nonzero",
+        "retrieval_changed:content_loo_average_score_diff"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "fake_example_score_nonzero",
+          "retrieval_changed:content_loo_average_score_diff"
+        ]
+      }
+    },
+    "java-loop-control": {
+      "path": "app\\knowledge\\concepts_v2\\java\\java-loop-control.json",
+      "current_status": "approved",
+      "json_valid": true,
+      "searchable_checksum_before": "6bab58e8435a24b741c52a735e61f13271a8e87303b1f270cc37fab80db71c85",
+      "searchable_checksum_after": "6bab58e8435a24b741c52a735e61f13271a8e87303b1f270cc37fab80db71c85",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.10810810810810811,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17647058823529413,
+        "payload_length": 744
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 4,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 1.0,
+          "print_answer": 0.0,
+          "example_quality": 1.0,
+          "fake_example_score": 0.0
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [],
+      "approval_decision": {
+        "eligible": true,
+        "result": "approved_locked_candidate",
+        "reasons": []
+      }
+    },
+    "java-extends-keyword": {
+      "path": "app\\knowledge\\concepts_v2\\java\\java-extends-keyword.json",
+      "current_status": "approved",
+      "json_valid": true,
+      "searchable_checksum_before": "07b63a33d89f190cf01550180a7d8c0e58b9cb6f3f4dbc03538111cc684fd7fe",
+      "searchable_checksum_after": "07b63a33d89f190cf01550180a7d8c0e58b9cb6f3f4dbc03538111cc684fd7fe",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.15625,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.25,
+        "payload_length": 723
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 1.0,
+          "print_answer": 0.0,
+          "example_quality": 1.0,
+          "fake_example_score": 0.0
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [],
+      "approval_decision": {
+        "eligible": true,
+        "result": "approved_locked_candidate",
+        "reasons": []
+      }
+    },
+    "java-functional-interface": {
+      "path": "app\\knowledge\\concepts_v2\\java\\java-functional-interface.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "ef9495158366bc1cf8308ac663d2c67e64d04260892b1f84a2f879ab66ab844a",
+      "searchable_checksum_after": "ef9495158366bc1cf8308ac663d2c67e64d04260892b1f84a2f879ab66ab844a",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.07894736842105263,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17647058823529413,
+        "payload_length": 799
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 4,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 1.0,
+          "print_answer": 0.0,
+          "example_quality": 1.0,
+          "fake_example_score": 0.0
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [],
+      "approval_decision": {
+        "eligible": false,
+        "result": "quality_verified_retrieval_passed",
+        "reasons": [
+          "transition_requires_approved"
+        ]
+      }
+    },
+    "java-stream": {
+      "path": "app\\knowledge\\concepts_v2\\java\\java-stream.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "d69f08db5e531ee625ac8581e7929ecc1ef65b618bc2d3bba72c43c0255b1d45",
+      "searchable_checksum_after": "d69f08db5e531ee625ac8581e7929ecc1ef65b618bc2d3bba72c43c0255b1d45",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.125,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17647058823529413,
+        "payload_length": 849
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 0.0,
+          "print_answer": 0.0,
+          "example_quality": 0.75,
+          "fake_example_score": 0.25
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "fake_example_score_nonzero"
+        ]
+      }
+    },
+    "java-reflection": {
+      "path": "app\\knowledge\\concepts_v2\\java\\java-reflection.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "568b84735587ef5d012cf3664c5c85873eec56705f52220da59b2df0bc95d935",
+      "searchable_checksum_after": "568b84735587ef5d012cf3664c5c85873eec56705f52220da59b2df0bc95d935",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.09302325581395349,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.21052631578947367,
+        "payload_length": 844
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 5,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 1.0,
+          "print_answer": 0.0,
+          "example_quality": 1.0,
+          "fake_example_score": 0.0
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [],
+      "approval_decision": {
+        "eligible": false,
+        "result": "quality_verified_retrieval_passed",
+        "reasons": [
+          "transition_requires_approved"
+        ]
+      }
+    },
+    "python-immutable": {
+      "path": "app\\knowledge\\concepts_v2\\python\\python-immutable.json",
+      "current_status": "approved",
+      "json_valid": true,
+      "searchable_checksum_before": "1a85e9adaf853100aa6ca4813c658e0da8c71fc7e0d7facada4dc10ed0a9f3e3",
+      "searchable_checksum_after": "1a85e9adaf853100aa6ca4813c658e0da8c71fc7e0d7facada4dc10ed0a9f3e3",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.25,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.25,
+        "payload_length": 662
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 0.0,
+          "print_answer": 0.0,
+          "example_quality": 0.75,
+          "fake_example_score": 0.25
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "fake_example_score_nonzero"
+        ]
+      }
+    },
+    "python-function-definition": {
+      "path": "app\\knowledge\\concepts_v2\\python\\python-function-definition.json",
+      "current_status": "approved",
+      "json_valid": true,
+      "searchable_checksum_before": "fd867f0cc709fcb857bb72cf649de501e29abaff112339a20ae9ab8132b5aeb8",
+      "searchable_checksum_after": "fd867f0cc709fcb857bb72cf649de501e29abaff112339a20ae9ab8132b5aeb8",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.08571428571428572,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17647058823529413,
+        "payload_length": 668
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 1.0,
+          "print_answer": 0.0,
+          "example_quality": 1.0,
+          "fake_example_score": 0.0
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.006849315068492956,
+        "content_loo_same_category_rate_diff": 0.006849315068493178,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "retrieval_changed:content_loo_average_score_diff",
+        "retrieval_changed:content_loo_same_category_rate_diff"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "retrieval_changed:content_loo_average_score_diff",
+          "retrieval_changed:content_loo_same_category_rate_diff"
+        ]
+      }
+    },
+    "python": {
+      "path": "app\\knowledge\\concepts_v2\\python\\python.json",
+      "current_status": "approved",
+      "json_valid": true,
+      "searchable_checksum_before": "1332fdc4e13fae68ab4d38083c297f7844fe1f5c494938ea60aa19dcb30bdb40",
+      "searchable_checksum_after": "1332fdc4e13fae68ab4d38083c297f7844fe1f5c494938ea60aa19dcb30bdb40",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.1935483870967742,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.1935483870967742,
+        "payload_length": 668
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 0.0,
+          "print_answer": 0.0,
+          "example_quality": 0.75,
+          "fake_example_score": 0.25
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "fake_example_score_nonzero"
+        ]
+      }
+    },
+    "python-none": {
+      "path": "app\\knowledge\\concepts_v2\\python\\python-none.json",
+      "current_status": "approved",
+      "json_valid": true,
+      "searchable_checksum_before": "72cde5f6f42ffac3cd9764a45ceb7f25ea07ef5de95e9015356ce30323020f16",
+      "searchable_checksum_after": "72cde5f6f42ffac3cd9764a45ceb7f25ea07ef5de95e9015356ce30323020f16",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.05,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.2,
+        "payload_length": 683
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 0.0,
+          "print_answer": 0.0,
+          "example_quality": 0.75,
+          "fake_example_score": 0.25
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.003424657534246478,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "fake_example_score_nonzero",
+        "retrieval_changed:content_loo_average_score_diff"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "fake_example_score_nonzero",
+          "retrieval_changed:content_loo_average_score_diff"
+        ]
+      }
+    },
+    "python-generator": {
+      "path": "app\\knowledge\\concepts_v2\\python\\python-generator.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "45426c6a89b5817ee5ea9d82e584cbab0fc3417491096e783e4eea4bcf145fd4",
+      "searchable_checksum_after": "45426c6a89b5817ee5ea9d82e584cbab0fc3417491096e783e4eea4bcf145fd4",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.11428571428571428,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17857142857142858,
+        "payload_length": 668
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 4,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 1.0,
+          "print_answer": 0.0,
+          "example_quality": 1.0,
+          "fake_example_score": 0.0
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [],
+      "approval_decision": {
+        "eligible": false,
+        "result": "quality_verified_retrieval_passed",
+        "reasons": [
+          "transition_requires_approved"
+        ]
+      }
+    },
+    "python-mro": {
+      "path": "app\\knowledge\\concepts_v2\\python\\python-mro.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "53ce8793c29482ef6da49946ed9c904bcd4e4f0cd87c9ceb76ebe417dddf6297",
+      "searchable_checksum_after": "53ce8793c29482ef6da49946ed9c904bcd4e4f0cd87c9ceb76ebe417dddf6297",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.07317073170731707,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17647058823529413,
+        "payload_length": 738
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 1.0,
+          "print_answer": 0.0,
+          "example_quality": 1.0,
+          "fake_example_score": 0.0
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [],
+      "approval_decision": {
+        "eligible": false,
+        "result": "quality_verified_retrieval_passed",
+        "reasons": [
+          "transition_requires_approved"
+        ]
+      }
+    },
+    "algorithm-breadth-first-search": {
+      "path": "app\\knowledge\\concepts_v2\\algorithm\\algorithm-breadth-first-search.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "14f6e9cf27d0cbb1fb591fb244e9a4097e4a9d6f5eb58fb605dacbd519050a84",
+      "searchable_checksum_after": "14f6e9cf27d0cbb1fb591fb244e9a4097e4a9d6f5eb58fb605dacbd519050a84",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.07317073170731707,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.1935483870967742,
+        "payload_length": 662
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 1.0,
+          "print_answer": 0.0,
+          "example_quality": 1.0,
+          "fake_example_score": 0.0
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [],
+      "approval_decision": {
+        "eligible": false,
+        "result": "quality_verified_retrieval_passed",
+        "reasons": [
+          "transition_requires_approved"
+        ]
+      }
+    },
+    "algorithm-mst": {
+      "path": "app\\knowledge\\concepts_v2\\algorithm\\algorithm-mst.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "326c8a49963cda599c9acac7d31c85235cdaa110b1d5cc8f73ecc5fde2a358b9",
+      "searchable_checksum_after": "326c8a49963cda599c9acac7d31c85235cdaa110b1d5cc8f73ecc5fde2a358b9",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.047619047619047616,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.1875,
+        "payload_length": 833
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 0.0,
+          "print_answer": 0.0,
+          "example_quality": 0.75,
+          "fake_example_score": 0.25
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "fake_example_score_nonzero"
+        ]
+      }
+    },
+    "algorithm-lcs": {
+      "path": "app\\knowledge\\concepts_v2\\algorithm\\algorithm-lcs.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "354c296b8829871ca19794d23c6c5463f6b1b67c1fd64dda760b4b63f6263fb2",
+      "searchable_checksum_after": "354c296b8829871ca19794d23c6c5463f6b1b67c1fd64dda760b4b63f6263fb2",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.022222222222222223,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17647058823529413,
+        "payload_length": 840
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 5,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 0.0,
+          "print_answer": 0.0,
+          "example_quality": 0.75,
+          "fake_example_score": 0.25
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "fake_example_score_nonzero"
+        ]
+      }
+    },
+    "algorithm-topological": {
+      "path": "app\\knowledge\\concepts_v2\\algorithm\\algorithm-topological.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "931ba918dfe190b2e84e9a5771710d5a0edfe044b47cb5c2efc54aaf4917cdf3",
+      "searchable_checksum_after": "931ba918dfe190b2e84e9a5771710d5a0edfe044b47cb5c2efc54aaf4917cdf3",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.2,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.05,
+        "duplicate_score": 0.23529411764705882,
+        "payload_length": 856
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 4,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 1.0,
+          "print_answer": 0.0,
+          "example_quality": 1.0,
+          "fake_example_score": 0.0
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [],
+      "approval_decision": {
+        "eligible": false,
+        "result": "quality_verified_retrieval_passed",
+        "reasons": [
+          "transition_requires_approved"
+        ]
+      }
+    },
+    "algorithm-collision": {
+      "path": "app\\knowledge\\concepts_v2\\algorithm\\algorithm-collision.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "3b8abb45b58eae91d342ec300411a803fdaf68d2ac2eaabe07cbb7565fea5258",
+      "searchable_checksum_after": "3b8abb45b58eae91d342ec300411a803fdaf68d2ac2eaabe07cbb7565fea5258",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.125,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.23529411764705882,
+        "payload_length": 783
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 3,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 0.0,
+          "print_answer": 0.0,
+          "example_quality": 0.75,
+          "fake_example_score": 0.25
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "fake_example_score_nonzero"
+        ]
+      }
+    },
+    "algorithm-12": {
+      "path": "app\\knowledge\\concepts_v2\\algorithm\\algorithm-12.json",
+      "current_status": "draft",
+      "json_valid": true,
+      "searchable_checksum_before": "bcb6eabccfa51886a2423d1b33ea5aff1cd8cceb56df021e49647558328c14f4",
+      "searchable_checksum_after": "bcb6eabccfa51886a2423d1b33ea5aff1cd8cceb56df021e49647558328c14f4",
+      "searchable_checksum_changed": false,
+      "lock_reasons": [],
+      "semantic_shift": false,
+      "quality": {
+        "reasons": [],
+        "answer_overlap": 0.17142857142857143,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17647058823529413,
+        "payload_length": 924
+      },
+      "quality_review": {
+        "same_reason_ratio": 0.0,
+        "example_metrics": {
+          "lines": 5,
+          "state_change": 1.0,
+          "runtime_behavior": 1.0,
+          "context_exists": 0.0,
+          "print_answer": 0.0,
+          "example_quality": 0.75,
+          "fake_example_score": 0.25
+        },
+        "execution": {
+          "passed": true,
+          "reason": null,
+          "stderr": ""
+        }
+      },
+      "quality_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "retrieval_diff": {
+        "production_exact_hit1_diff": 0.0,
+        "production_exact_hit3_diff": 0.0,
+        "production_exact_hit5_diff": 0.0,
+        "production_loo_candidate_rate_diff": 0.0,
+        "production_loo_average_score_diff": 0.0,
+        "production_loo_same_category_rate_diff": 0.0,
+        "content_exact_hit1_diff": 0.0,
+        "content_exact_hit3_diff": 0.0,
+        "content_exact_hit5_diff": 0.0,
+        "content_loo_candidate_rate_diff": 0.0,
+        "content_loo_average_score_diff": 0.0,
+        "content_loo_same_category_rate_diff": 0.0,
+        "exact_diff": 0.0
+      },
+      "gate_reasons": [
+        "fake_example_score_nonzero"
+      ],
+      "approval_decision": {
+        "eligible": false,
+        "result": "retrieval_pending",
+        "reasons": [
+          "fake_example_score_nonzero"
+        ]
+      }
+    }
+  },
+  "concepts_v2_modified": false,
+  "concepts_v2_changed_files": [],
+  "approval_status_changed": false,
+  "payload_modified": false,
+  "patches_ready_created": false
+}

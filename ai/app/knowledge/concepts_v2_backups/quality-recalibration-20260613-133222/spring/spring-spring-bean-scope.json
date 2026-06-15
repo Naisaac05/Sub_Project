@@ -1,0 +1,116 @@
+{
+  "card_id": "spring-spring-bean-scope",
+  "category": "spring",
+  "term": "spring-bean-scope",
+  "aliases": [
+    "spring-bean-scope",
+    "spring bean scope",
+    "spring spring bean scope",
+    "스프링 spring bean scope",
+    "singleton scope",
+    "sbs"
+  ],
+  "source_question_ids": [
+    "spring:38"
+  ],
+  "retrieval": {
+    "embedding_text": "spring-bean-scope spring bean scope spring spring bean scope spring spring-spring-bean-scope 스프링 spring bean scope singleton scope sbs",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "spring-bean-scope",
+      "spring-spring-bean-scope",
+      "spring bean scope",
+      "spring spring bean scope",
+      "스프링 spring bean scope",
+      "singleton scope",
+      "sbs"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "spring bean scope is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as spring-bean-scope, spring-spring-bean-scope, spring bean scope.",
+      "examples": [
+        "Explain when spring bean scope should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of spring bean scope, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals spring-bean-scope, spring-spring-bean-scope, spring bean scope.",
+      "key_points": [
+        "spring-bean-scope",
+        "spring",
+        "spring bean scope"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy spring bean scope's defining behavior.",
+        "Confusing spring bean scope with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "prototype",
+          "reason": "prototype is not the best answer because it does not satisfy the defining behavior or constraint of spring bean scope. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "request",
+          "reason": "request is not the best answer because it does not satisfy the defining behavior or constraint of spring bean scope. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "session",
+          "reason": "session is not the best answer because it does not satisfy the defining behavior or constraint of spring bean scope. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against spring bean scope."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate spring bean scope in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes spring bean scope's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply spring bean scope in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why spring bean scope is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying spring bean scope without checking its defining constraint.",
+          "solution": "Re-check spring bean scope's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:25.073830Z"
+}

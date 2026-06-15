@@ -69,4 +69,5 @@ class ReviewWorkflowState:
     topic_check_passed: bool = False
     semantic_judge_cache_hit: bool = False
     semantic_judge_cache_key_hash: str | None = None
+    v2_fast_path_decision: dict[str, object] = field(default_factory=dict)
 

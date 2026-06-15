@@ -1,0 +1,115 @@
+{
+  "card_id": "java-synchronized",
+  "category": "java",
+  "term": "synchronized",
+  "aliases": [
+    "s",
+    "자바 s",
+    "synchronized",
+    "java synchronized",
+    "자바 synchronized"
+  ],
+  "source_question_ids": [
+    "java:24"
+  ],
+  "retrieval": {
+    "embedding_text": "synchronized s 자바 s java trylock reentrantlock 자바 synchronized java synchronized java-synchronized",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "자바 s",
+      "trylock",
+      "synchronized",
+      "reentrantlock",
+      "자바 synchronized",
+      "java synchronized",
+      "java-synchronized"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "synchronized is a java concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as synchronized, java-synchronized, java synchronized.",
+      "examples": [
+        "Explain when synchronized should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of synchronized, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals synchronized, java-synchronized, java synchronized.",
+      "key_points": [
+        "synchronized",
+        "java",
+        "java synchronized"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy synchronized's defining behavior.",
+        "Confusing synchronized with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "synchronized가 더 유연하다",
+          "reason": "synchronized가 더 유연하다 is not the best answer because it does not satisfy the defining behavior or constraint of synchronized. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "둘 다 인터럽트 처리가 불가능하다",
+          "reason": "둘 다 인터럽트 처리가 불가능하다 is not the best answer because it does not satisfy the defining behavior or constraint of synchronized. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "ReentrantLock은 암묵적 잠금이다",
+          "reason": "ReentrantLock은 암묵적 잠금이다 is not the best answer because it does not satisfy the defining behavior or constraint of synchronized. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against synchronized."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate synchronized in an appropriate java context.",
+      "explanation": "Use a minimal example that makes synchronized's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply synchronized in java work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why synchronized is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying synchronized without checking its defining constraint.",
+          "solution": "Re-check synchronized's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.937586Z"
+}

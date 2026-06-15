@@ -1,0 +1,115 @@
+{
+  "card_id": "algorithm-mst",
+  "category": "algorithm",
+  "term": "mst",
+  "aliases": [
+    "m",
+    "mst",
+    "알고리즘 m",
+    "algorithm mst",
+    "알고리즘 mst"
+  ],
+  "source_question_ids": [
+    "algorithm:146"
+  ],
+  "retrieval": {
+    "embedding_text": "mst m 알고리즘 m algorithm 워셜 플로이드 알고리즘 mst algorithm mst algorithm-mst",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "워셜",
+      "mst",
+      "플로이드",
+      "알고리즘 m",
+      "알고리즘 mst",
+      "algorithm mst",
+      "algorithm-mst"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "mst is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as mst, algorithm-mst, algorithm mst.",
+      "examples": [
+        "Explain when mst should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of mst, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals mst, algorithm-mst, algorithm mst.",
+      "key_points": [
+        "mst",
+        "algorithm",
+        "algorithm mst"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy mst's defining behavior.",
+        "Confusing mst with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "크루스칼(Kruskal)",
+          "reason": "크루스칼(Kruskal) is not the best answer because it does not satisfy the defining behavior or constraint of mst. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "프림(Prim)",
+          "reason": "프림(Prim) is not the best answer because it does not satisfy the defining behavior or constraint of mst. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "보루프카(Borůvka)",
+          "reason": "보루프카(Borůvka) is not the best answer because it does not satisfy the defining behavior or constraint of mst. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against mst."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate mst in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes mst's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply mst in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why mst is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying mst without checking its defining constraint.",
+          "solution": "Re-check mst's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.571314Z"
+}

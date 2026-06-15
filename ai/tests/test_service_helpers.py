@@ -12,6 +12,26 @@ class ServiceHelpersTest(unittest.TestCase):
 
         self.assertEqual(answer, "첫 문장입니다. 둘째 문장입니다.")
 
+    def test_compact_answer_does_not_count_list_newlines_as_sentences(self):
+        answer = compact_answer(
+            "Java에서 equals와 ==는 서로 다른 용도입니다:\n\n"
+            "- equals는 객체의 논리적 동등성을 비교합니다.\n"
+            "- ==는 참조 동일성을 비교합니다.",
+            "free-question",
+        )
+
+        self.assertIn("equals는 객체의 논리적 동등성을 비교합니다.", answer)
+        self.assertIn("==는 참조 동일성을 비교합니다.", answer)
+
+    def test_compact_answer_does_not_cut_at_technical_identifier_dot(self):
+        answer = compact_answer(
+            "첫 문장입니다. 둘째 문장입니다. ReactDOM.render로 화면을 갱신합니다.",
+            "free-question",
+        )
+
+        self.assertIn("ReactDOM.render", answer)
+        self.assertTrue(answer.endswith("갱신합니다."))
+
     def test_prompt_version_for_mode(self):
         self.assertEqual(prompt_version_for_mode("first-question"), "first_question_v1")
         self.assertEqual(prompt_version_for_mode("follow-up"), "follow_up_v1")

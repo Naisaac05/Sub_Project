@@ -16,11 +16,14 @@ from app.workflow.nodes import (
     _learner_query_for_state,
     _matched_concept_id_for_lightweight,
     _answer_style_for_state,
+    _fallback_message,
+    _fallback_reason_from_exception,
     _should_retry_fallback_model,
     max_tokens_for_mode,
 )
 from app.workflow.state import ReviewWorkflowState
 from app.workflow.lightweight_answers import LIGHTWEIGHT_MODEL_NAME, resolve_lightweight_answer
+from app.workflow.v2_approved_fast_path import resolve_v2_approved_fast_path
 from app.workflow.semantic_gate import semantic_evaluate_node, should_store_answer_cache
 from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_for_mode
 from app.validation.text import compact_answer, korean_fallback
@@ -48,6 +51,8 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
     )
     
     events = [_workflow_completed_event(state, response)]
+    from app.observability import emit_ollama_fallback_log
+    emit_ollama_fallback_log(events[0])
     
     if state.mode == "free-question":
         judge_res = state.judge_result
@@ -297,34 +302,46 @@ async def run_review_workflow_stream(
     state = retrieve_context_node(state)
     state = rule_evaluate_node(state)
 
-    # 1. Fast Path (Lightweight Answer) Check
     learner_query = _learner_query_for_state(state)
-    lightweight_answer = resolve_lightweight_answer(
-        learner_query,
-        state.free_question_intent,
-        matched_concept_id=_matched_concept_id_for_lightweight(state),
-    )
-    if state.mode == "free-question" and lightweight_answer and not state.request.stream:
-        state.answer = lightweight_answer.answer
+
+    # Off-topic / unknown intent 차단 (스트리밍 경로)
+    from app.workflow.nodes import OFF_TOPIC_REJECTION_MESSAGE
+    if (
+        state.mode == "free-question"
+        and state.free_question_intent
+        and state.free_question_intent.intent in {"off_topic", "unknown"}
+    ):
+        state.answer = OFF_TOPIC_REJECTION_MESSAGE
         state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
         state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
-        state.model_used = LIGHTWEIGHT_MODEL_NAME
+        state.model_used = "template"
         state.fallback_used = False
-        state.route = lightweight_answer.route
-        state.answer_style = lightweight_answer.style
-        if lightweight_answer.route == "static_fast_path":
-            state.contexts = []
-
+        state.route = "off_topic_rejected"
+        state.answer_style = _answer_style_for_state(state)
+        state.contexts = []
         yield {"type": "start"}
         yield {"type": "chunk", "chunk": state.answer}
+        yield {"type": "done", "response": _build_response_from_state(state, 0)}
+        return
 
-        state = validate_answer_node(state)
-        state = confidence_gate_node(state)
-        state = fallback_answer_node(state)
-        state = candidate_save_node(state)
-
-        response = _build_response_from_state(state, 0)
-        yield {"type": "done", "response": response}
+    v2_decision = resolve_v2_approved_fast_path(
+        learner_query,
+        state.free_question_intent,
+        selected_answer=state.request.selected_answer,
+    )
+    state.v2_fast_path_decision = v2_decision.metadata()
+    if state.mode == "free-question" and v2_decision.mode == "serve" and v2_decision.hit:
+        state.answer = v2_decision.answer or ""
+        state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+        state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
+        state.model_used = "v2-approved-payload"
+        state.fallback_used = False
+        state.route = "v2_approved_fast_path"
+        state.answer_style = _answer_style_for_state(state)
+        state.contexts = []
+        yield {"type": "start"}
+        yield {"type": "chunk", "chunk": state.answer}
+        yield {"type": "done", "response": _build_response_from_state(state, 0)}
         return
 
     if lightweight_only_enabled():
@@ -389,12 +406,15 @@ async def run_review_workflow_stream(
             yield {"type": "chunk", "chunk": chunk}
 
         state.answer = "".join(chunks)
+        state.generation_ms = int((time.perf_counter() - started) * 1000)
         state.answer = compact_answer(state.answer, state.mode)
         state.model_used = state.request.model
         state.route = "rag_generation" if state.contexts else "generation"
         state.answer_style = _answer_style_for_state(state)
     except Exception as exc:
+        state.generation_ms = int((time.perf_counter() - started) * 1000)
         if _should_retry_fallback_model(state):
+            retry_started = time.perf_counter()
             try:
                 chunks = []
                 async for chunk in stream_gen(
@@ -414,9 +434,12 @@ async def run_review_workflow_stream(
                 state.route = "rag_generation" if state.contexts else "generation"
                 state.answer_style = _answer_style_for_state(state)
                 state.error = None
+                state.retry_generation_ms = int((time.perf_counter() - retry_started) * 1000)
             except Exception as fallback_exc:
+                state.retry_generation_ms = int((time.perf_counter() - retry_started) * 1000)
                 state.error = f"{exc}; fallback model failed: {fallback_exc}"
-                state.answer = korean_fallback(state.mode, state.request)
+                state.fallback_reason = _fallback_reason_from_exception(fallback_exc, exc)
+                state.answer = _fallback_message(state.fallback_reason)
                 state.model_used = "template"
                 state.fallback_used = True
                 state.route = "fallback_template"
@@ -424,7 +447,8 @@ async def run_review_workflow_stream(
                 yield {"type": "chunk", "chunk": state.answer}
         else:
             state.error = str(exc)
-            state.answer = korean_fallback(state.mode, state.request)
+            state.fallback_reason = _fallback_reason_from_exception(exc)
+            state.answer = _fallback_message(state.fallback_reason)
             state.model_used = "template"
             state.fallback_used = True
             state.route = "fallback_template"
@@ -490,4 +514,8 @@ def _workflow_completed_event(state: ReviewWorkflowState, response: AiGenerateRe
         "grounding_judge_skipped": state.grounding_judge_skipped,
         "grounding_async_executed": state.grounding_async_executed,
         "estimated_latency_saved_ms": state.estimated_latency_saved_ms,
+        "v2_fast_path": state.v2_fast_path_decision,
+        "v2_hit": bool(state.v2_fast_path_decision.get("hit", False)),
+        "ollama_duration": state.generation_ms + state.retry_generation_ms,
+        "fallback_reason": state.fallback_reason,
     }

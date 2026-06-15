@@ -98,3 +98,52 @@ frontend
 
 Ollama 또는 Python AI 서버가 실패하면 백엔드는 기존 규칙 기반 복습으로 fallback합니다.
 
+
+## Ollama BGE-M3 RAG retrieval
+
+기본 RAG 검색기는 여전히 lexical입니다. Ollama `bge-m3` 임베딩 기반 semantic-only 검색을 사용하려면 Python AI 서버 실행 전에 아래 환경 변수를 설정합니다.
+
+```powershell
+$env:AI_REVIEW_RAG_RETRIEVER="bge"
+$env:AI_REVIEW_EMBEDDING_MODEL="bge-m3"
+$env:AI_REVIEW_EMBEDDING_TIMEOUT_SECONDS="10"
+$env:AI_REVIEW_BGE_MIN_SCORE="0.50"
+```
+
+동작 보장:
+
+- Normal path: Ollama `bge-m3` semantic-only ranking.
+- BM25 and lexical scores are not fused into BGE ranking.
+- Failure path: lexical fallback with `fallback_from`, `fallback_reason` metadata and warning log.
+- Default remains lexical unless `AI_REVIEW_RAG_RETRIEVER=bge` is set.
+- Approved/generated knowledge cards remain the retrieval corpus.
+
+검증 명령:
+
+```powershell
+cd C:\Users\User\Desktop\Sub_Project\ai
+python -m unittest tests.test_ollama_embeddings tests.test_rag_retriever tests.test_workflow_runner -v
+python scripts/lint_knowledge_cards.py
+python scripts/smoke_ollama_bge_retriever.py
+python evals/retrieval_poc/evaluate.py
+```
+
+## Ollama BGE-M3 intent classification
+
+Free-question intent classification uses Ollama `bge-m3` embeddings in the production workflow.
+The legacy rule classifier is not used by the runtime and remains only as an isolated PoC comparison target.
+
+```powershell
+$env:AI_REVIEW_EMBEDDING_MODEL="bge-m3"
+$env:AI_REVIEW_INTENT_MIN_SIMILARITY="0.43"
+$env:AI_REVIEW_INTENT_MIN_MARGIN="0.005"
+```
+
+- The classifier selects one of the 10 intent labels and maps it to the existing workflow intent contract.
+- Intent prototype vectors are cached on disk and in memory; warm requests require one embedding request.
+- Ollama failure, timeout, malformed embeddings, low similarity, or an insufficient score margin maps to `UNKNOWN` and uses the general-question path.
+- There is no rule-based runtime fallback.
+
+```powershell
+python -m pytest tests/test_embedding_intent.py tests/test_intent_routing.py tests/test_workflow_runner.py -q
+```

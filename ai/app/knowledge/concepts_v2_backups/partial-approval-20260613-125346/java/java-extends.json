@@ -1,0 +1,80 @@
+{
+  "card_id": "java-extends",
+  "category": "java",
+  "term": "extends",
+  "aliases": [
+    "extends",
+    "java extends"
+  ],
+  "source_question_ids": [
+    "java:12"
+  ],
+  "retrieval": {
+    "embedding_text": "extends java extends java number 상속한 모든 타입",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "extends",
+      "java",
+      "java extends",
+      "number",
+      "상속한",
+      "모든",
+      "타입"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "extends의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 extends의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "extends",
+        "java",
+        "java extends"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q12_option_1": {
+          "text": "Number만 허용",
+          "reason": "extends 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q12_option_2": {
+          "text": "Number의 부모 타입만 허용",
+          "reason": "extends 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q12_option_3": {
+          "text": "모든 타입 허용",
+          "reason": "extends 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

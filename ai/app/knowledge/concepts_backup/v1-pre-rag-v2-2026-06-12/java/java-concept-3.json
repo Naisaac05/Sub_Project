@@ -1,0 +1,72 @@
+{
+  "card_id": "java-concept-3",
+  "category": "java",
+  "term": "concept",
+  "aliases": [
+    "java concept"
+  ],
+  "source_question_ids": [
+    "java:13"
+  ],
+  "retrieval": {
+    "embedding_text": "concept java concept concept은(는) 다음 중 함수형 인터페이스가 아닌 것은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "concept",
+      "java"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "concept은(는) 다음 중 함수형 인터페이스가 아닌 것은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "concept 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "concept"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q13_option_2": {
+          "text": "Comparator",
+          "reason": "concept의 특성과 일치하지 않는 오답입니다."
+        },
+        "q13_option_3": {
+          "text": "List",
+          "reason": "concept의 특성과 일치하지 않는 오답입니다."
+        },
+        "q13_option_4": {
+          "text": "Predicate",
+          "reason": "concept의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.044669Z",
+  "updated_at": "2026-06-10T11:01:08.044669Z"
+}

@@ -1,0 +1,117 @@
+{
+  "card_id": "java-default",
+  "category": "java",
+  "term": "default",
+  "aliases": [
+    "d",
+    "자바 d",
+    "default",
+    "java default",
+    "자바 default"
+  ],
+  "source_question_ids": [
+    "java:20"
+  ],
+  "retrieval": {
+    "embedding_text": "default d 자바 d java 본문 메서드 자바 default java default java-default",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "본문",
+      "메서드",
+      "자바 d",
+      "default",
+      "자바 default",
+      "java default",
+      "java-default"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "`default`은 자바에서 특정 문제를 해결하거나 동작을 설명할 때 사용하는 핵심 주제입니다. 원문 질문은 '인터페이스에서 default 메서드의 특징으로 올바른 것은?'이며, 핵심 판단 기준은 '메서드 본문(body)을 가질 수 있다'입니다. 용어 이름만 외우기보다 어떤 입력과 상황에서 적용되는지, 실행 결과가 어떻게 달라지는지 함께 이해해야 합니다. 이 기준을 알면 비슷한 용어가 선택지에 있어도 실제 동작과 요구사항을 근거로 올바른 판단을 할 수 있습니다.",
+      "examples": [
+        "`인터페이스에서 default 메서드의 특징으로 올바른 것은?`라는 상황에서는 `메서드 본문(body)을 가질 수 있다`를 기준으로 `default`을 이해할 수 있습니다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답인 `메서드 본문(body)을 가질 수 있다`는 질문이 묻는 `default`의 적용 조건과 결과를 직접 설명합니다. 특히 '인터페이스에서 default 메서드의 특징으로 올바른 것은?'에서 요구하는 핵심을 충족하므로 단순히 관련 단어를 포함한 선택지보다 정확합니다. 정답을 판단할 때는 default은 자바에서 특정 문제를 해결하거나 동작을 설명할 때 사용하는 핵심 주제입니다라는 점을 기준으로 삼으면 됩니다.",
+      "key_points": [
+        "default",
+        "default-usage",
+        "default-example",
+        "java default",
+        "자바 default"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "`default`과 관련 있어 보이는 단어만 보고 실제 동작 조건을 확인하지 않는 실수",
+        "정답이 설명해야 하는 결과와 선택지가 실제로 만드는 결과를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "추상 메서드이다",
+          "reason": "`추상 메서드이다`는 `default`이 요구하는 핵심 조건이나 실행 결과를 설명하지 못합니다. 정답인 `메서드 본문(body)을 가질 수 있다`와 달리 질문의 요구사항을 직접 충족하지 않으므로 오답입니다."
+        },
+        "option_1": {
+          "text": "구현 클래스에서 반드시 오버라이드해야 한다",
+          "reason": "`구현 클래스에서 반드시 오버라이드해야 한다`는 `default`이 요구하는 핵심 조건이나 실행 결과를 설명하지 못합니다. 정답인 `메서드 본문(body)을 가질 수 있다`와 달리 질문의 요구사항을 직접 충족하지 않으므로 오답입니다."
+        },
+        "option_2": {
+          "text": "static이어야 한다",
+          "reason": "`static이어야 한다`는 `default`이 요구하는 핵심 조건이나 실행 결과를 설명하지 못합니다. 정답인 `메서드 본문(body)을 가질 수 있다`와 달리 질문의 요구사항을 직접 충족하지 않으므로 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 개념 또는 대안",
+          "diff": "`default`은 질문에서 요구하는 상황과 정답의 조건을 충족할 때 선택하며, 이름이 비슷하더라도 적용 조건이 다른 개념과 구분해야 합니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"메서드 본문(body)을 가질 수 있다\");\n    }\n}",
+      "explanation": "예시는 `default`의 핵심 동작을 가장 작은 실행 단위로 보여 줍니다. 값을 바꾸어 실행하면 적용 조건과 결과 차이를 확인할 수 있습니다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "실무의 자바 코드에서 `default`과 관련된 설계 선택, 코드 리뷰, 장애 원인 분석에 사용합니다. 특히 `메서드 본문(body)을 가질 수 있다`처럼 요구사항을 충족하는지 판단하는 기준으로 활용합니다.",
+      "best_practices": [
+        "`default`을 적용하기 전에 해결하려는 문제와 기대 결과를 먼저 명확히 합니다.",
+        "경계 조건과 실패 사례를 작은 테스트로 확인한 뒤 실제 코드에 적용합니다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`default`의 이름만 보고 적용하여 실제 요구사항과 다른 결과가 발생하는 문제",
+          "solution": "정답 기준인 `메서드 본문(body)을 가질 수 있다`와 현재 코드의 입력·출력을 비교하고, 가장 작은 재현 코드나 테스트로 동작을 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T05:40:08.565886Z"
+}

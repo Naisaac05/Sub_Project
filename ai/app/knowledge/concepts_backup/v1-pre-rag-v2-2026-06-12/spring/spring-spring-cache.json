@@ -1,0 +1,72 @@
+{
+  "card_id": "spring-spring-cache",
+  "category": "spring",
+  "term": "spring-cache",
+  "aliases": [
+    "spring cache"
+  ],
+  "source_question_ids": [
+    "spring:59"
+  ],
+  "retrieval": {
+    "embedding_text": "spring-cache spring cache cache은(는) Spring Cache에서 @CacheEvict의 역할은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "spring-cache",
+      "spring"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "cache은(는) Spring Cache에서 @CacheEvict의 역할은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "spring-cache 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "spring-cache"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q59_option_2": {
+          "text": "캐시에서 데이터를 삭제한다",
+          "reason": "spring-cache의 특성과 일치하지 않는 오답입니다."
+        },
+        "q59_option_3": {
+          "text": "캐시를 생성한다",
+          "reason": "spring-cache의 특성과 일치하지 않는 오답입니다."
+        },
+        "q59_option_4": {
+          "text": "캐시 상태를 조회한다",
+          "reason": "spring-cache의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}
