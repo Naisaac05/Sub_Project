@@ -1,0 +1,115 @@
+{
+  "card_id": "java-array-length",
+  "category": "java",
+  "term": "array-length",
+  "aliases": [
+    "array-length",
+    "array length",
+    "java array length",
+    "자바 array length",
+    "al"
+  ],
+  "source_question_ids": [
+    "java:4"
+  ],
+  "retrieval": {
+    "embedding_text": "array-length array length java array length java java-array-length 자바 array length al arr.length",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "array-length",
+      "java-array-length",
+      "array length",
+      "java array length",
+      "자바 array length",
+      "al",
+      "arr.length"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "array length is a java concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as array-length, java-array-length, array length.",
+      "examples": [
+        "Explain when array length should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of array length, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals array-length, java-array-length, array length.",
+      "key_points": [
+        "array-length",
+        "java",
+        "array length"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy array length's defining behavior.",
+        "Confusing array length with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "arr.size()",
+          "reason": "arr.size() is not the best answer because it does not satisfy the defining behavior or constraint of array length. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "arr.count()",
+          "reason": "arr.count() is not the best answer because it does not satisfy the defining behavior or constraint of array length. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "len(arr)",
+          "reason": "len(arr) is not the best answer because it does not satisfy the defining behavior or constraint of array length. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against array length."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate array length in an appropriate java context.",
+      "explanation": "Use a minimal example that makes array length's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply array length in java work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why array length is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying array length without checking its defining constraint.",
+          "solution": "Re-check array length's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.661303Z"
+}

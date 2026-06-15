@@ -1,0 +1,95 @@
+{
+  "card_id": "frontend-useeffect",
+  "category": "frontend",
+  "term": "useeffect",
+  "aliases": [
+    "useeffect",
+    "use effect",
+    "react effect",
+    "frontend useeffect"
+  ],
+  "source_question_ids": [
+    "frontend:71",
+    "frontend:78"
+  ],
+  "retrieval": {
+    "embedding_text": "useeffect use effect react effect frontend frontend useeffect 컴포넌트 마운트",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "useeffect",
+      "frontend",
+      "use effect",
+      "react effect",
+      "frontend useeffect",
+      "컴포넌트",
+      "마운트"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "useeffect의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 useeffect의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "useeffect",
+        "frontend",
+        "use effect"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q71_option_0": {
+          "text": "매 렌더링마다 실행",
+          "reason": "useeffect 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q71_option_2": {
+          "text": "상태 변경 시마다 실행",
+          "reason": "useeffect 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q71_option_3": {
+          "text": "실행되지 않는다",
+          "reason": "useeffect 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q78_option_0": {
+          "text": "문법 오류이다",
+          "reason": "useeffect 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q78_option_2": {
+          "text": "React가 async를 지원하지 않는다",
+          "reason": "useeffect 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q78_option_3": {
+          "text": "성능 문제 때문",
+          "reason": "useeffect 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

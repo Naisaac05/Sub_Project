@@ -1,0 +1,12 @@
+{"id":"rest-api-definition","question":"REST API가 무엇이고 HTTP 메서드와 자원은 어떤 관계야?","required_keywords":["HTTP","자원"],"forbidden_claims":["데이터베이스 인덱스 프로토콜"],"human_review_required":true}
+{"id":"equals-hashcode-comparison","question":"Java equals와 hashCode의 역할 차이와 함께 재정의해야 하는 이유를 설명해줘.","required_keywords":["equals","hashCode"],"forbidden_claims":["항상 같은 객체 참조만 비교"],"human_review_required":true}
+{"id":"spring-n-plus-one-debug","question":"Spring JPA에서 목록 조회 시 쿼리가 예상보다 많이 실행되는 N+1 문제의 원인과 해결 방법은?","required_keywords":["N+1","fetch"],"forbidden_claims":["인덱스를 만들면 항상 완전히 해결"],"human_review_required":true}
+{"id":"controller-advice-practical","question":"Spring에서 ControllerAdvice를 언제 사용하고 예외 응답을 어떻게 구성하는 게 좋아?","required_keywords":["ControllerAdvice","예외"],"forbidden_claims":["모든 예외를 무조건 200으로 반환"],"human_review_required":true}
+{"id":"aria-label-practical","question":"아이콘 버튼에 aria-label이 필요한 이유와 작성할 때 주의점을 알려줘.","required_keywords":["aria-label","접근성"],"forbidden_claims":["화면에 항상 표시되는 텍스트"],"human_review_required":true}
+{"id":"transaction-propagation","question":"Spring 트랜잭션 전파 옵션 REQUIRED와 REQUIRES_NEW는 어떤 상황에서 다르게 동작해?","required_keywords":["REQUIRED","REQUIRES_NEW"],"forbidden_claims":["항상 같은 트랜잭션을 사용"],"human_review_required":true}
+{"id":"database-index-tradeoff","question":"데이터베이스 인덱스가 조회를 빠르게 하지만 쓰기 성능과 저장 공간에 영향을 주는 이유는?","required_keywords":["인덱스","쓰기"],"forbidden_claims":["모든 컬럼에 만들수록 항상 좋다"],"human_review_required":true}
+{"id":"http-401-403","question":"HTTP 401과 403의 차이를 인증과 권한 관점에서 비교해줘.","required_keywords":["401","403"],"forbidden_claims":["401은 서버 내부 오류"],"human_review_required":true}
+{"id":"react-key-debug","question":"React 목록 렌더링에서 key로 배열 index를 쓰면 어떤 버그가 생길 수 있어?","required_keywords":["key","상태"],"forbidden_claims":["성능과 동작에 아무 영향이 없다"],"human_review_required":true}
+{"id":"docker-image-container","question":"Docker 이미지와 컨테이너의 차이를 실행 관점에서 설명해줘.","required_keywords":["이미지","컨테이너"],"forbidden_claims":["이미지가 실행 중인 프로세스다"],"human_review_required":true}
+{"id":"sql-injection-prevention","question":"SQL Injection이 발생하는 원인과 prepared statement가 이를 막는 원리를 설명해줘.","required_keywords":["SQL","prepared"],"forbidden_claims":["입력값 길이만 제한하면 완전히 방지"],"human_review_required":true}
+{"id":"async-await-error","question":"JavaScript async/await 코드에서 비동기 오류를 안전하게 처리하는 방법과 흔한 실수를 알려줘.","required_keywords":["async","await"],"forbidden_claims":["비동기 오류는 try/catch로 처리할 수 없다"],"human_review_required":true}

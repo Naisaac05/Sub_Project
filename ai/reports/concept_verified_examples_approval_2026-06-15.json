@@ -1,0 +1,82 @@
+{
+  "candidate_count": 9,
+  "approved_count": 4,
+  "rolled_back_count": 5,
+  "approved_cards": [
+    "java-delegation",
+    "java-g1-gc",
+    "java-checked",
+    "python-multiprocessing"
+  ],
+  "rolled_back_cards": [
+    "spring-circuit",
+    "spring-valid",
+    "spring-profile",
+    "frontend-usecallback",
+    "frontend-react-server-components"
+  ],
+  "failed_cards": {
+    "spring-circuit": [
+      "dependency_not_available:resilience4j"
+    ],
+    "spring-valid": [
+      "execution_harness_not_available:spring"
+    ],
+    "spring-profile": [
+      "execution_harness_not_available:spring"
+    ],
+    "frontend-usecallback": [
+      "dependency_not_available:react-test-renderer"
+    ],
+    "frontend-react-server-components": [
+      "execution_harness_not_available:rsc"
+    ]
+  },
+  "execution_results": {
+    "java-delegation": {
+      "passed": true,
+      "reason": null,
+      "stderr": ""
+    },
+    "java-g1-gc": {
+      "passed": true,
+      "reason": null,
+      "stderr": ""
+    },
+    "java-checked": {
+      "passed": true,
+      "reason": null,
+      "stderr": ""
+    },
+    "spring-circuit": {
+      "passed": false,
+      "reason": "dependency_not_available:resilience4j"
+    },
+    "spring-valid": {
+      "passed": false,
+      "reason": "execution_harness_not_available:spring"
+    },
+    "spring-profile": {
+      "passed": false,
+      "reason": "execution_harness_not_available:spring"
+    },
+    "frontend-usecallback": {
+      "passed": false,
+      "reason": "dependency_not_available:react-test-renderer"
+    },
+    "frontend-react-server-components": {
+      "passed": false,
+      "reason": "execution_harness_not_available:rsc"
+    },
+    "python-multiprocessing": {
+      "passed": true,
+      "reason": null,
+      "stderr": ""
+    }
+  },
+  "backup_root": "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\app\\knowledge\\concepts_v2_backups\\concept_verified_examples_20260614T231138676798",
+  "production_hit1_diff": 0.0,
+  "production_loo_diff": 0.0,
+  "content_hit1_diff": 0.0,
+  "content_loo_diff": 0.0
+}

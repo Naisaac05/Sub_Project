@@ -1,0 +1,2515 @@
+{
+  "evaluation_note": "Relevance uses a human-authored expected-card rubric: Top1=5, Top2-3=4, miss=1. Response quality is a payload-depth proxy, not live human review.",
+  "v1": {
+    "question_count": 60,
+    "fast_path_hit_rate": 0.7666666666666667,
+    "average_relevance_score": 1,
+    "average_response_quality_score": 2.4166666666666665,
+    "ollama_fallback_count": 14,
+    "average_latency_ms": 9.11017333419295,
+    "rows": [
+      {
+        "question": "What is React key?",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "react-react-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 6.564400013303384
+      },
+      {
+        "question": "React list key purpose",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "algorithm-list",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.050500010838732
+      },
+      {
+        "question": "Why does React need stable keys?",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "react-react-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.155799997737631
+      },
+      {
+        "question": "리액트 key가 뭐야?",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "react-key-reconciliation",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 3.404200018849224
+      },
+      {
+        "question": "목록 렌더링 key 역할",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "react-key-reconciliation",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 3.388099983567372
+      },
+      {
+        "question": "React reconciliation key 설명",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "react-react-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.169599986402318
+      },
+      {
+        "question": "Why is index wrong instead of React key?",
+        "expected_card_id": "frontend-react-key",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "react-react-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 5.3662999998778105
+      },
+      {
+        "question": "Why is React key correct?",
+        "expected_card_id": "frontend-react-key",
+        "intent": "ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "react-react-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 2,
+        "ollama_fallback": false,
+        "latency_ms": 5.266399995889515
+      },
+      {
+        "question": "stable identity in React lists",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "react-react-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.182799999602139
+      },
+      {
+        "question": "React key and component state",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "react-react-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.391999991843477
+      },
+      {
+        "question": "list item identity React",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "algorithm-list",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.083900003228337
+      },
+      {
+        "question": "React key prevents wrong DOM reuse",
+        "expected_card_id": "frontend-react-key",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "react-react-8",
+            "score": 9.5
+          },
+          {
+            "card_id": "react-react-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "react-react-10",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 5.027399980463088
+      },
+      {
+        "question": "What is Java equals?",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-java-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.035000009229407
+      },
+      {
+        "question": "Java object equality",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-java-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 4.663500003516674
+      },
+      {
+        "question": "equals와 == 차이",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 3.027700004167855
+      },
+      {
+        "question": "자바 객체 동등성",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-jvm",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 3.2492000027559698
+      },
+      {
+        "question": "Why is Java equals correct?",
+        "expected_card_id": "java-equals",
+        "intent": "ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "java-java-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 2,
+        "ollama_fallback": false,
+        "latency_ms": 5.011599976569414
+      },
+      {
+        "question": "Why is == wrong for Java equals?",
+        "expected_card_id": "java-equals",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "java-java-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 8.844600000884384
+      },
+      {
+        "question": "equals hashCode contract",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 4.817600012756884
+      },
+      {
+        "question": "logical equality Java",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-java-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 10.757300013210624
+      },
+      {
+        "question": "String equals comparison",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-string",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-8",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 8.48950000363402
+      },
+      {
+        "question": "object equals method",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-python-8",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.612200009636581
+      },
+      {
+        "question": "참조 동일성과 값 동등성",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 4.182400007266551
+      },
+      {
+        "question": "Java equals 재정의 이유",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-java-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.560099991271272
+      },
+      {
+        "question": "What is Java extends?",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-java-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.610500025795773
+      },
+      {
+        "question": "Java generic extends wildcard",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-java-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 6.402200000593439
+      },
+      {
+        "question": "? extends Number 의미",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 3.670100006274879
+      },
+      {
+        "question": "upper bounded wildcard Java",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-java-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.618399998638779
+      },
+      {
+        "question": "제네릭 상한 경계",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 3.940199996577576
+      },
+      {
+        "question": "Why is extends correct?",
+        "expected_card_id": "java-extends",
+        "intent": "ANSWER_REASON",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 3.660699992906302
+      },
+      {
+        "question": "producer extends consumer super",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 3.715400001965463
+      },
+      {
+        "question": "Number 하위 타입 와일드카드",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 3.785100008826703
+      },
+      {
+        "question": "extends generic read only",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-phantom",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 4.785800003446639
+      },
+      {
+        "question": "Why is every type wrong for extends Number?",
+        "expected_card_id": "java-extends",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "java-java-2",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 6.735200004186481
+      },
+      {
+        "question": "Java covariance extends",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-java-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-java-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 11.825800000224262
+      },
+      {
+        "question": "extends wildcard restriction",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 11.618099990300834
+      },
+      {
+        "question": "What is Python with?",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-python-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-python-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-python-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 12.225000013131648
+      },
+      {
+        "question": "Python context manager",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-python-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-python-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-python-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 9.610300010535866
+      },
+      {
+        "question": "파이썬 with 문",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 4.221199982566759
+      },
+      {
+        "question": "__enter__ __exit__",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 8.060899999691173
+      },
+      {
+        "question": "Why is Python with correct?",
+        "expected_card_id": "python-with",
+        "intent": "ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "python-python-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-python-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-python-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 2,
+        "ollama_fallback": false,
+        "latency_ms": 25.254900014260784
+      },
+      {
+        "question": "with statement resource cleanup",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 8.201999997254461
+      },
+      {
+        "question": "파일을 with로 여는 이유",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-python-6",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 7.805200002621859
+      },
+      {
+        "question": "context manager exception cleanup",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-java-6",
+            "score": 1.0
+          },
+          {
+            "card_id": "react-react-api",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 7.062699995003641
+      },
+      {
+        "question": "Why is init del wrong for with?",
+        "expected_card_id": "python-with",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 8.241500006988645
+      },
+      {
+        "question": "Python lock with statement",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-python-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-python-10",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-python-11",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 11.629399989033118
+      },
+      {
+        "question": "with 문 자원 정리",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 6.638899998506531
+      },
+      {
+        "question": "context manager protocol",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-typing",
+            "score": 1.0
+          },
+          {
+            "card_id": "react-react-api",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 5.108300014398992
+      },
+      {
+        "question": "What is Spring cache evict?",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-cache",
+            "score": 11.0
+          },
+          {
+            "card_id": "spring-spring-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "spring-spring-2",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 6.039200001396239
+      },
+      {
+        "question": "@CacheEvict 설명",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-cache",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 6.678500009002164
+      },
+      {
+        "question": "스프링 캐시 제거",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-jpa-2",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 6.756799994036555
+      },
+      {
+        "question": "cache eviction Spring",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "spring-spring-2",
+            "score": 8.5
+          },
+          {
+            "card_id": "spring-spring-3",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 26.667899976018816
+      },
+      {
+        "question": "Why is Spring cache correct?",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "spring-spring-cache",
+            "score": 11.0
+          },
+          {
+            "card_id": "spring-spring-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "spring-spring-2",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 11.407400015741587
+      },
+      {
+        "question": "Why is storing data wrong for CacheEvict?",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "spring-spring-cache",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 10.792899993248284
+      },
+      {
+        "question": "Spring cache invalidation",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-cache",
+            "score": 11.0
+          },
+          {
+            "card_id": "spring-spring-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "spring-spring-2",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 34.8490999895148
+      },
+      {
+        "question": "캐시 무효화 애너테이션",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-jpa-2",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 8.044099988183007
+      },
+      {
+        "question": "@Cacheable과 @CacheEvict 차이",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-cache",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 7.497900020098314
+      },
+      {
+        "question": "remove stale Spring cache",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-cache",
+            "score": 11.0
+          },
+          {
+            "card_id": "spring-spring-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "spring-spring-2",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 33.324999996693805
+      },
+      {
+        "question": "allEntries CacheEvict",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-cache",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 11.265200009802356
+      },
+      {
+        "question": "Spring cache entry removal",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-cache",
+            "score": 11.0
+          },
+          {
+            "card_id": "spring-spring-1",
+            "score": 8.5
+          },
+          {
+            "card_id": "spring-spring-2",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 1,
+        "response_quality_score": 3,
+        "ollama_fallback": false,
+        "latency_ms": 68.55649998760782
+      }
+    ]
+  },
+  "v2": {
+    "question_count": 60,
+    "fast_path_hit_rate": 0.9,
+    "average_relevance_score": 4.9,
+    "average_response_quality_score": 3.7,
+    "ollama_fallback_count": 6,
+    "average_latency_ms": 23.654248331149574,
+    "rows": [
+      {
+        "question": "What is React key?",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 15.001499996287748
+      },
+      {
+        "question": "React list key purpose",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 10.0
+          },
+          {
+            "card_id": "python-list-comprehension",
+            "score": 6.5
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 15.144000004511327
+      },
+      {
+        "question": "Why does React need stable keys?",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 3.5
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          },
+          {
+            "card_id": "frontend-react-server-components",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 11.590300011448562
+      },
+      {
+        "question": "리액트 key가 뭐야?",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 7.5
+          },
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 12.26780001888983
+      },
+      {
+        "question": "목록 렌더링 key 역할",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 3.5
+          },
+          {
+            "card_id": "frontend-fiber",
+            "score": 3.0
+          },
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 10.62310000997968
+      },
+      {
+        "question": "React reconciliation key 설명",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 10.0
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          },
+          {
+            "card_id": "frontend-react-server-components",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 14.027199998963624
+      },
+      {
+        "question": "Why is index wrong instead of React key?",
+        "expected_card_id": "frontend-react-key",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 48.038899985840544
+      },
+      {
+        "question": "Why is React key correct?",
+        "expected_card_id": "frontend-react-key",
+        "intent": "ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 11.972199979936704
+      },
+      {
+        "question": "stable identity in React lists",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 4.5
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          },
+          {
+            "card_id": "frontend-react-server-components",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 12.248699989868328
+      },
+      {
+        "question": "React key and component state",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "card_id": "frontend-functional-component",
+            "score": 7.5
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 12.677000020630658
+      },
+      {
+        "question": "list item identity React",
+        "expected_card_id": "frontend-react-key",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-list-comprehension",
+            "score": 6.5
+          },
+          {
+            "card_id": "frontend-react-key",
+            "score": 4.5
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 4,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 13.7109000061173
+      },
+      {
+        "question": "React key prevents wrong DOM reuse",
+        "expected_card_id": "frontend-react-key",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "frontend-react-key",
+            "score": 11.0
+          },
+          {
+            "card_id": "frontend-dom",
+            "score": 8.5
+          },
+          {
+            "card_id": "frontend-react-project-tool",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 32.86169999046251
+      },
+      {
+        "question": "What is Java equals?",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 9.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 32.5656000059098
+      },
+      {
+        "question": "Java object equality",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 7.0
+          },
+          {
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          },
+          {
+            "card_id": "java-array-length",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 70.06040000123903
+      },
+      {
+        "question": "equals와 == 차이",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 8.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 8.363399974768981
+      },
+      {
+        "question": "자바 객체 동등성",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 7.0
+          },
+          {
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          },
+          {
+            "card_id": "java-array-length",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 44.75780000211671
+      },
+      {
+        "question": "Why is Java equals correct?",
+        "expected_card_id": "java-equals",
+        "intent": "ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 9.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 49.82600000221282
+      },
+      {
+        "question": "Why is == wrong for Java equals?",
+        "expected_card_id": "java-equals",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 9.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 18.583400000352412
+      },
+      {
+        "question": "equals hashCode contract",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 10.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 13.129099999787286
+      },
+      {
+        "question": "logical equality Java",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 7.0
+          },
+          {
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          },
+          {
+            "card_id": "java-array-length",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 18.518999975640327
+      },
+      {
+        "question": "String equals comparison",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-string",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-multiline-string",
+            "score": 6.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 9.050599997863173
+      },
+      {
+        "question": "object equals method",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 10.5
+          },
+          {
+            "card_id": "java-functional-interface",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 17.90540001820773
+      },
+      {
+        "question": "참조 동일성과 값 동등성",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-weakref",
+            "score": 3.0
+          },
+          {
+            "card_id": "java-equals",
+            "score": 2.0
+          }
+        ],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 4,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 9.152299986453727
+      },
+      {
+        "question": "Java equals 재정의 이유",
+        "expected_card_id": "java-equals",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-equals",
+            "score": 9.5
+          },
+          {
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          },
+          {
+            "card_id": "java-array-length",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 16.76309999311343
+      },
+      {
+        "question": "What is Java extends?",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 9.5
+          },
+          {
+            "card_id": "java-extends-keyword",
+            "score": 7.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 16.09900000039488
+      },
+      {
+        "question": "Java generic extends wildcard",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 11.5
+          },
+          {
+            "card_id": "java-extends-keyword",
+            "score": 7.5
+          },
+          {
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 37.34119998989627
+      },
+      {
+        "question": "? extends Number 의미",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 9.5
+          },
+          {
+            "card_id": "java-extends-keyword",
+            "score": 6.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 15.46790002612397
+      },
+      {
+        "question": "upper bounded wildcard Java",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 8.0
+          },
+          {
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          },
+          {
+            "card_id": "java-array-length",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 74.32529999641702
+      },
+      {
+        "question": "제네릭 상한 경계",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 7.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 12.446100008673966
+      },
+      {
+        "question": "Why is extends correct?",
+        "expected_card_id": "java-extends",
+        "intent": "ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 8.5
+          },
+          {
+            "card_id": "java-extends-keyword",
+            "score": 6.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 48.25459999847226
+      },
+      {
+        "question": "producer extends consumer super",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 9.5
+          },
+          {
+            "card_id": "java-extends-keyword",
+            "score": 6.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 12.708499998552725
+      },
+      {
+        "question": "Number 하위 타입 와일드카드",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 2.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 19.96019997750409
+      },
+      {
+        "question": "extends generic read only",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 9.5
+          },
+          {
+            "card_id": "java-extends-keyword",
+            "score": 6.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 11.076199996750802
+      },
+      {
+        "question": "Why is every type wrong for extends Number?",
+        "expected_card_id": "java-extends",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 9.5
+          },
+          {
+            "card_id": "java-extends-keyword",
+            "score": 6.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 8.999599987873808
+      },
+      {
+        "question": "Java covariance extends",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 10.5
+          },
+          {
+            "card_id": "java-extends-keyword",
+            "score": 7.5
+          },
+          {
+            "card_id": "java-access-modifier",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 69.12430000375025
+      },
+      {
+        "question": "extends wildcard restriction",
+        "expected_card_id": "java-extends",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "java-extends",
+            "score": 9.5
+          },
+          {
+            "card_id": "java-extends-keyword",
+            "score": 6.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 10.013799997977912
+      },
+      {
+        "question": "What is Python with?",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-with",
+            "score": 9.5
+          },
+          {
+            "card_id": "python-with-statement",
+            "score": 7.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 4.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 21.189099992625415
+      },
+      {
+        "question": "Python context manager",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-context",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-with-statement",
+            "score": 7.0
+          },
+          {
+            "card_id": "python-with",
+            "score": 7.0
+          }
+        ],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 4,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 19.096999982139096
+      },
+      {
+        "question": "파이썬 with 문",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-with",
+            "score": 9.5
+          },
+          {
+            "card_id": "python-with-statement",
+            "score": 7.5
+          },
+          {
+            "card_id": "python-2",
+            "score": 5.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 17.532700003357604
+      },
+      {
+        "question": "__enter__ __exit__",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-with",
+            "score": 6.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 8.974700001999736
+      },
+      {
+        "question": "Why is Python with correct?",
+        "expected_card_id": "python-with",
+        "intent": "ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "python-with",
+            "score": 9.5
+          },
+          {
+            "card_id": "python-with-statement",
+            "score": 7.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 4.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 107.7586000028532
+      },
+      {
+        "question": "with statement resource cleanup",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-with",
+            "score": 11.5
+          },
+          {
+            "card_id": "python-with-statement",
+            "score": 11.0
+          },
+          {
+            "card_id": "java-loop-control",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 15.52139999694191
+      },
+      {
+        "question": "파일을 with로 여는 이유",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-with",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-with-statement",
+            "score": 6.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 34.67719999025576
+      },
+      {
+        "question": "context manager exception cleanup",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-context",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-with",
+            "score": 7.0
+          },
+          {
+            "card_id": "python-with-statement",
+            "score": 2.0
+          }
+        ],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 4,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 16.372100013541058
+      },
+      {
+        "question": "Why is init del wrong for with?",
+        "expected_card_id": "python-with",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "python-with",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-with-statement",
+            "score": 6.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 19.34700002311729
+      },
+      {
+        "question": "Python lock with statement",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-with-statement",
+            "score": 12.0
+          },
+          {
+            "card_id": "python-with",
+            "score": 10.5
+          },
+          {
+            "card_id": "java-loop-control",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 4,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 33.05019999970682
+      },
+      {
+        "question": "with 문 자원 정리",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "python-with",
+            "score": 9.5
+          },
+          {
+            "card_id": "python-with-statement",
+            "score": 6.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 12.710199982393533
+      },
+      {
+        "question": "context manager protocol",
+        "expected_card_id": "python-with",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "frontend-context",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-with",
+            "score": 6.0
+          },
+          {
+            "card_id": "python-with-statement",
+            "score": 2.0
+          }
+        ],
+        "fast_path_hit": false,
+        "rubric_relevance_score": 4,
+        "response_quality_score": 0,
+        "ollama_fallback": true,
+        "latency_ms": 19.898300000932068
+      },
+      {
+        "question": "What is Spring cache evict?",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 8.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "card_id": "spring-spring-bean-scope",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 40.1168999960646
+      },
+      {
+        "question": "@CacheEvict 설명",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 5.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 13.99380000657402
+      },
+      {
+        "question": "스프링 캐시 제거",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 7.0
+          },
+          {
+            "card_id": "spring-aop",
+            "score": 1.0
+          },
+          {
+            "card_id": "spring-applicationyml",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 30.310300004202873
+      },
+      {
+        "question": "cache eviction Spring",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 8.5
+          },
+          {
+            "card_id": "spring-spring-bean-scope",
+            "score": 2.5
+          },
+          {
+            "card_id": "spring-aop",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 15.263999986927956
+      },
+      {
+        "question": "Why is Spring cache correct?",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 5.5
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          },
+          {
+            "card_id": "spring-spring-bean-scope",
+            "score": 2.5
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 21.88749998458661
+      },
+      {
+        "question": "Why is storing data wrong for CacheEvict?",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "WRONG_ANSWER_REASON",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 5.0
+          },
+          {
+            "card_id": "python-none",
+            "score": 3.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 5,
+        "ollama_fallback": false,
+        "latency_ms": 11.283999978331849
+      },
+      {
+        "question": "Spring cache invalidation",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 8.5
+          },
+          {
+            "card_id": "spring-spring-bean-scope",
+            "score": 2.5
+          },
+          {
+            "card_id": "spring-aop",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 21.5885000070557
+      },
+      {
+        "question": "캐시 무효화 애너테이션",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 6.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 10.518700000829995
+      },
+      {
+        "question": "@Cacheable과 @CacheEvict 차이",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 5.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 9.386599995195866
+      },
+      {
+        "question": "remove stale Spring cache",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 5.5
+          },
+          {
+            "card_id": "spring-spring-bean-scope",
+            "score": 2.5
+          },
+          {
+            "card_id": "spring-aop",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 34.813999984180555
+      },
+      {
+        "question": "allEntries CacheEvict",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 6.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 8.803300006547943
+      },
+      {
+        "question": "Spring cache entry removal",
+        "expected_card_id": "spring-spring-question-59",
+        "intent": "CONCEPT_DEFINITION",
+        "top_3": [
+          {
+            "card_id": "spring-spring-question-59",
+            "score": 5.5
+          },
+          {
+            "card_id": "spring-spring-bean-scope",
+            "score": 2.5
+          },
+          {
+            "card_id": "spring-aop",
+            "score": 1.0
+          }
+        ],
+        "fast_path_hit": true,
+        "rubric_relevance_score": 5,
+        "response_quality_score": 4,
+        "ollama_fallback": false,
+        "latency_ms": 20.502699975622818
+      }
+    ]
+  },
+  "comparison": {
+    "fast_path_hit_rate": {
+      "v1": 0.7666666666666667,
+      "v2": 0.9
+    },
+    "average_relevance_score": {
+      "v1": 1,
+      "v2": 4.9
+    },
+    "average_response_quality_score": {
+      "v1": 2.4166666666666665,
+      "v2": 3.7
+    },
+    "ollama_fallback_count": {
+      "v1": 14,
+      "v2": 6
+    },
+    "average_latency_ms": {
+      "v1": 9.11017333419295,
+      "v2": 23.654248331149574
+    }
+  }
+}

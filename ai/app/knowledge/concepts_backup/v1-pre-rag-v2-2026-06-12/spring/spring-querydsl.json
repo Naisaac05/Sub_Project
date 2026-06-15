@@ -1,0 +1,72 @@
+{
+  "card_id": "spring-querydsl",
+  "category": "spring",
+  "term": "querydsl",
+  "aliases": [
+    "spring querydsl"
+  ],
+  "source_question_ids": [
+    "spring:60"
+  ],
+  "retrieval": {
+    "embedding_text": "querydsl spring querydsl querydsl은(는) QueryDSL을 JPA와 함께 사용하는 이유로 올바르지 않은 것은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "querydsl",
+      "spring"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "querydsl은(는) QueryDSL을 JPA와 함께 사용하는 이유로 올바르지 않은 것은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "querydsl 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "querydsl"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q60_option_2": {
+          "text": "동적 쿼리 작성이 용이하다",
+          "reason": "querydsl의 특성과 일치하지 않는 오답입니다."
+        },
+        "q60_option_3": {
+          "text": "타입 안전한 쿼리를 작성할 수 있다",
+          "reason": "querydsl의 특성과 일치하지 않는 오답입니다."
+        },
+        "q60_option_4": {
+          "text": "SQL 성능이 자동으로 최적화된다",
+          "reason": "querydsl의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

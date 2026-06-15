@@ -1,0 +1,72 @@
+{
+  "card_id": "algorithm-knapsack",
+  "category": "algorithm",
+  "term": "knapsack",
+  "aliases": [
+    "algorithm knapsack"
+  ],
+  "source_question_ids": [
+    "algorithm:145"
+  ],
+  "retrieval": {
+    "embedding_text": "knapsack algorithm knapsack knapsack은(는) Knapsack 문제에서 0/1 Knapsack과 Fractional Knapsack의 차이는? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "knapsack",
+      "algorithm"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "knapsack은(는) Knapsack 문제에서 0/1 Knapsack과 Fractional Knapsack의 차이는? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "knapsack 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "knapsack"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q145_option_2": {
+          "text": "0/1은 DP, Fractional은 그리디로 풀 수 있다",
+          "reason": "knapsack의 특성과 일치하지 않는 오답입니다."
+        },
+        "q145_option_3": {
+          "text": "0/1은 그리디, Fractional은 DP",
+          "reason": "knapsack의 특성과 일치하지 않는 오답입니다."
+        },
+        "q145_option_4": {
+          "text": "둘 다 그리디로 풀 수 있다",
+          "reason": "knapsack의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.066841Z",
+  "updated_at": "2026-06-10T11:01:08.066841Z"
+}

@@ -1,0 +1,115 @@
+{
+  "card_id": "frontend-error",
+  "category": "frontend",
+  "term": "error",
+  "aliases": [
+    "error",
+    "클래스 컴포넌트로만 구현 가능하다 (componentDidCatch)",
+    "Error Boundary의 특징으로 올바른 것은?",
+    "Error",
+    "Boundary",
+    "componentDidCatch)",
+    "frontend error"
+  ],
+  "source_question_ids": [
+    "frontend:80"
+  ],
+  "retrieval": {
+    "embedding_text": "error 클래스 컴포넌트로만 구현 가능하다 (componentDidCatch) Error Boundary의 특징으로 올바른 것은? frontend Error Boundary 특징으로 것은 클래스 컴포넌트로만",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "error",
+      "Error",
+      "Boundary",
+      "특징으로",
+      "것은",
+      "클래스",
+      "컴포넌트로만"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "React Error Boundary는 렌더링 중 하위 트리 오류를 포착해 대체 UI를 표시하는 클래스 컴포넌트다.",
+      "examples": [
+        "Error Boundary 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "getDerivedStateFromError 또는 componentDidCatch를 구현한 클래스가 경계를 만든다.",
+      "key_points": [
+        "Error Boundary",
+        "componentDidCatch",
+        "대체 UI"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "함수형 컴포넌트에서만 사용 가능하다",
+          "reason": "기본 React API에서는 함수 컴포넌트만으로 Error Boundary를 구현하지 않는다."
+        },
+        "option_1": {
+          "text": "이벤트 핸들러의 에러도 잡는다",
+          "reason": "이벤트 핸들러 오류는 Error Boundary 포착 범위 밖이다."
+        },
+        "option_3": {
+          "text": "비동기 에러도 자동으로 잡는다",
+          "reason": "비동기 콜백 오류도 자동 포착하지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`클래스 컴포넌트로만 구현 가능하다 (componentDidCatch)`는 질문의 조건을 충족하지만 다른 선택지는 `error`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "class Boundary extends React.Component {\n  componentDidCatch(error) { this.error = error; }\n  render() { return this.props.children; }\n}",
+      "explanation": "Error Boundary 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Error Boundary 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`error`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `클래스 컴포넌트로만 구현 가능하다 (componentDidCatch)`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

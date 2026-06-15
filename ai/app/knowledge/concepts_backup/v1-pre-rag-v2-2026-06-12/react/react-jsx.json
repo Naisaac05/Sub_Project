@@ -1,0 +1,72 @@
+{
+  "card_id": "react-jsx",
+  "category": "react",
+  "term": "jsx",
+  "aliases": [
+    "react jsx"
+  ],
+  "source_question_ids": [
+    "react:62"
+  ],
+  "retrieval": {
+    "embedding_text": "jsx react jsx jsx은(는) JSX에서 JavaScript 표현식을 사용할 때 감싸는 기호는? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "jsx",
+      "react"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "jsx은(는) JSX에서 JavaScript 표현식을 사용할 때 감싸는 기호는? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "jsx 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "jsx"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q62_option_2": {
+          "text": "{ }",
+          "reason": "jsx의 특성과 일치하지 않는 오답입니다."
+        },
+        "q62_option_3": {
+          "text": "[ ]",
+          "reason": "jsx의 특성과 일치하지 않는 오답입니다."
+        },
+        "q62_option_4": {
+          "text": "< >",
+          "reason": "jsx의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

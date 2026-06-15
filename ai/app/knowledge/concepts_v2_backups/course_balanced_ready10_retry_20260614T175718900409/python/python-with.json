@@ -1,0 +1,95 @@
+{
+  "card_id": "python-with",
+  "category": "python",
+  "term": "with",
+  "aliases": [
+    "python with",
+    "파이썬 with",
+    "with statement",
+    "context manager",
+    "컨텍스트 매니저",
+    "__enter__ __exit__"
+  ],
+  "source_question_ids": [
+    "python:106"
+  ],
+  "retrieval": {
+    "embedding_text": "with python with 파이썬 with with statement python python-with context-manager with-statement __enter__ __exit__ resource-cleanup",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "python-with",
+      "context-manager",
+      "with-statement",
+      "__enter__",
+      "__exit__",
+      "resource-cleanup"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Python의 with 문은 컨텍스트 매니저의 __enter__와 __exit__를 호출해 자원의 획득과 정리를 블록 범위로 관리한다. 파일 처리 중 예외가 발생해도 종료 단계에서 자원을 닫는다.",
+      "examples": [
+        "파일, 락, 데이터베이스 연결처럼 사용 후 반드시 정리해야 하는 자원의 수명 관리에 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "with 문이 사용하는 프로토콜은 __enter__와 __exit__다. __init__과 __del__은 객체 수명 주기용이며, 나머지 메서드 쌍은 컨텍스트 매니저 프로토콜에 정의되지 않는다.",
+      "key_points": [
+        "with",
+        "__enter__",
+        "__exit__"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기의 용어만 확인하지 말고 각 보기의 실제 책임과 정답 개념의 선택 기준을 비교한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "__init__과 __del__",
+          "reason": "__init__과 __del__은 객체 생성·소멸 훅이며 with 블록 진입과 종료를 담당하지 않는다."
+        },
+        "option_1": {
+          "text": "__open__과 __close__",
+          "reason": "__open__과 __close__는 Python 컨텍스트 매니저 프로토콜에 존재하지 않는다."
+        },
+        "option_2": {
+          "text": "__start__과 __end__",
+          "reason": "__start__와 __end__도 with 문이 호출하는 특수 메서드가 아니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": {
+      "code_example": "class Resource:\n    def __enter__(self): self.opened = True; return self\n    def __exit__(self, *args): self.opened = False\nwith Resource() as resource: active = resource.opened",
+      "explanation": "파일, 락, 데이터베이스 연결처럼 사용 후 반드시 정리해야 하는 자원의 수명 관리에 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "파일, 락, 데이터베이스 연결처럼 사용 후 반드시 정리해야 하는 자원의 수명 관리에 사용한다.",
+      "best_practices": [
+        "작은 실행 예제와 경계 사례로 동작을 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T05:03:46.253685Z"
+}

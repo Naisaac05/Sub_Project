@@ -1,0 +1,86 @@
+{
+  "card_id": "spring-spring-question-59",
+  "category": "spring",
+  "term": "spring-question-59",
+  "aliases": [
+    "spring cache evict",
+    "스프링 캐시 제거",
+    "@CacheEvict",
+    "cache eviction",
+    "spring cache invalidation",
+    "캐시 무효화"
+  ],
+  "source_question_ids": [
+    "spring:59"
+  ],
+  "retrieval": {
+    "embedding_text": "spring-question-59 spring cache evict 스프링 캐시 제거 @CacheEvict spring spring-cache-evict cache-eviction cache-invalidation spring-cache",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "spring-cache-evict",
+      "@CacheEvict",
+      "cache-eviction",
+      "cache-invalidation",
+      "spring-cache"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Spring의 @CacheEvict는 지정한 캐시에서 기존 항목을 제거하는 애너테이션입니다. 데이터 변경 이후 오래된 캐시 값이 반환되지 않도록 특정 key를 제거하거나 allEntries 옵션으로 캐시 전체를 비울 때 사용합니다.",
+      "examples": [
+        "spring cache evict 사용 조건을 설명하세요."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "@CacheEvict의 책임은 캐시에 값을 저장하거나 조회하는 것이 아니라 기존 캐시 항목을 제거해 다음 요청이 최신 데이터를 다시 읽도록 만드는 것입니다.",
+      "key_points": [
+        "spring-cache-evict",
+        "@CacheEvict",
+        "cache-eviction"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "@Cacheable은 결과 저장과 조회 재사용에 사용되고 @CacheEvict는 오래된 항목 제거에 사용됩니다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "캐시에 데이터를 저장한다",
+          "reason": "`캐시에 데이터를 저장한다`은(는) Spring의 @CacheEvict는 지정한 캐시에서 기존 항목을 제거하는 애너테이션입니다의 책임과 일치하지 않습니다."
+        },
+        "option_1": {
+          "text": "캐시를 생성한다",
+          "reason": "`캐시를 생성한다`은(는) Spring의 @CacheEvict는 지정한 캐시에서 기존 항목을 제거하는 애너테이션입니다의 책임과 일치하지 않습니다."
+        },
+        "option_2": {
+          "text": "캐시 상태를 조회한다",
+          "reason": "`캐시 상태를 조회한다`은(는) Spring의 @CacheEvict는 지정한 캐시에서 기존 항목을 제거하는 애너테이션입니다의 책임과 일치하지 않습니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T05:03:46.263841Z"
+}

@@ -1,0 +1,72 @@
+{
+  "card_id": "algorithm-topological",
+  "category": "algorithm",
+  "term": "topological",
+  "aliases": [
+    "algorithm topological"
+  ],
+  "source_question_ids": [
+    "algorithm:143"
+  ],
+  "retrieval": {
+    "embedding_text": "topological algorithm topological topological은(는) 위상 정렬(Topological Sort)이 가능한 그래프 조건은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "topological",
+      "algorithm"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "topological은(는) 위상 정렬(Topological Sort)이 가능한 그래프 조건은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "topological 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "topological"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q143_option_2": {
+          "text": "DAG (방향 비순환 그래프)",
+          "reason": "topological의 특성과 일치하지 않는 오답입니다."
+        },
+        "q143_option_3": {
+          "text": "완전 그래프",
+          "reason": "topological의 특성과 일치하지 않는 오답입니다."
+        },
+        "q143_option_4": {
+          "text": "이분 그래프",
+          "reason": "topological의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.066841Z",
+  "updated_at": "2026-06-10T11:01:08.066841Z"
+}

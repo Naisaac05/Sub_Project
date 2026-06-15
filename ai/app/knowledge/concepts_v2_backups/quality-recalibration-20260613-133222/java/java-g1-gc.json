@@ -1,0 +1,116 @@
+{
+  "card_id": "java-g1-gc",
+  "category": "java",
+  "term": "g1-gc",
+  "aliases": [
+    "g1-gc",
+    "g1 gc",
+    "java g1 gc",
+    "자바 g1 gc",
+    "garbage first collector",
+    "gg"
+  ],
+  "source_question_ids": [
+    "java:22"
+  ],
+  "retrieval": {
+    "embedding_text": "g1-gc g1 gc java g1 gc java java-g1-gc 자바 g1 gc garbage first collector gg",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "g1-gc",
+      "java-g1-gc",
+      "g1 gc",
+      "java g1 gc",
+      "자바 g1 gc",
+      "garbage first collector",
+      "gg"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "g1 gc is a java concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as g1-gc, java-g1-gc, g1 gc.",
+      "examples": [
+        "Explain when g1 gc should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of g1 gc, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals g1-gc, java-g1-gc, g1 gc.",
+      "key_points": [
+        "g1-gc",
+        "java",
+        "g1 gc"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy g1 gc's defining behavior.",
+        "Confusing g1 gc with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "Region 기반으로 힙을 관리한다",
+          "reason": "Region 기반으로 힙을 관리한다 is not the best answer because it does not satisfy the defining behavior or constraint of g1 gc. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "STW(Stop-The-World) 시간을 예측 가능하게 한다",
+          "reason": "STW(Stop-The-World) 시간을 예측 가능하게 한다 is not the best answer because it does not satisfy the defining behavior or constraint of g1 gc. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "Java 9부터 기본 GC이다",
+          "reason": "Java 9부터 기본 GC이다 is not the best answer because it does not satisfy the defining behavior or constraint of g1 gc. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against g1 gc."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate g1 gc in an appropriate java context.",
+      "explanation": "Use a minimal example that makes g1 gc's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply g1 gc in java work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why g1 gc is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying g1 gc without checking its defining constraint.",
+          "solution": "Re-check g1 gc's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.711661Z"
+}

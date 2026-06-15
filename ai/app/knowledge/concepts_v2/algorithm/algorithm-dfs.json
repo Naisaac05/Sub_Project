@@ -1,0 +1,113 @@
+{
+  "card_id": "algorithm-dfs",
+  "category": "algorithm",
+  "term": "dfs",
+  "aliases": [
+    "dfs",
+    "스택 (또는 재귀)",
+    "DFS(깊이 우선 탐색)에서 사용하는 자료구조는?",
+    "DFS(",
+    "algorithm dfs"
+  ],
+  "source_question_ids": [
+    "algorithm:135"
+  ],
+  "retrieval": {
+    "embedding_text": "dfs 스택 (또는 재귀) DFS(깊이 우선 탐색)에서 사용하는 자료구조는? algorithm DFS( 깊이 우선 탐색 에서 자료구조는",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "dfs",
+      "DFS(",
+      "깊이",
+      "우선",
+      "탐색",
+      "에서",
+      "자료구조는"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "DFS(깊이 우선 탐색)는 한 경로를 끝까지 따라간 뒤 이전 분기점으로 돌아가 다른 경로를 탐색한다. 호출 스택이나 명시적 스택에 다음 방문 지점을 저장한다.",
+      "examples": [
+        "경로 존재 확인과 백트래킹처럼 한 분기를 깊게 조사해야 할 때 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "DFS는 최근에 발견한 정점을 먼저 방문하므로 후입선출 구조인 스택이 맞다. 재귀도 호출 스택을 사용하며 큐는 BFS 순서를 만든다.",
+      "key_points": [
+        "DFS",
+        "스택",
+        "재귀"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "용어 이름만 보고 실제 원리와 비교 기준을 확인하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "큐",
+          "reason": "큐는 먼저 발견한 정점을 처리해 BFS 순서를 만든다."
+        },
+        "option_1": {
+          "text": "힙",
+          "reason": "힙은 우선순위를 관리하지만 DFS의 경로 복귀 순서를 보존하지 않는다."
+        },
+        "option_2": {
+          "text": "해시 테이블",
+          "reason": "해시 테이블은 방문 여부 확인에는 쓰지만 다음 경로 순서를 관리하지 못한다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`스택 (또는 재귀)`는 질문의 조건을 충족하지만 다른 선택지는 `dfs`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "stack = [\"A\"]\nstack.append(\"B\")\nnext_node = stack.pop()",
+      "explanation": "경로 존재 확인과 백트래킹처럼 한 분기를 깊게 조사해야 할 때 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "경로 존재 확인과 백트래킹처럼 한 분기를 깊게 조사해야 할 때 사용한다.",
+      "best_practices": [
+        "경계 조건을 작은 테스트로 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`dfs`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `스택 (또는 재귀)`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T12:24:47.901403Z",
+    "reviewer": "approved_locked:v2.1.3",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

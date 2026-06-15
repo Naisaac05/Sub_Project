@@ -1,0 +1,115 @@
+{
+  "card_id": "spring-valid",
+  "category": "spring",
+  "term": "valid",
+  "aliases": [
+    "v",
+    "valid",
+    "스프링 v",
+    "spring valid",
+    "스프링 valid"
+  ],
+  "source_question_ids": [
+    "spring:49"
+  ],
+  "retrieval": {
+    "embedding_text": "valid v 스프링 v spring jsr @valid 스프링 valid spring valid spring-valid",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "jsr",
+      "valid",
+      "스프링 v",
+      "@valid",
+      "스프링 valid",
+      "spring valid",
+      "spring-valid"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "valid is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as valid, spring-valid, spring valid.",
+      "examples": [
+        "Explain when valid should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of valid, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals valid, spring-valid, spring valid.",
+      "key_points": [
+        "valid",
+        "spring",
+        "spring valid"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy valid's defining behavior.",
+        "Confusing valid with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "차이 없다",
+          "reason": "차이 없다 is not the best answer because it does not satisfy the defining behavior or constraint of valid. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "@Validated는 Java 표준이다",
+          "reason": "@Validated는 Java 표준이다 is not the best answer because it does not satisfy the defining behavior or constraint of valid. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "@Valid만 Controller에서 사용 가능하다",
+          "reason": "@Valid만 Controller에서 사용 가능하다 is not the best answer because it does not satisfy the defining behavior or constraint of valid. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against valid."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate valid in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes valid's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply valid in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why valid is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying valid without checking its defining constraint.",
+          "solution": "Re-check valid's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:23.302279Z"
+}

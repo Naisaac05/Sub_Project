@@ -1,0 +1,464 @@
+{
+  "sample_count": 50,
+  "hit_rate": 0.96,
+  "relevant_fast_path_rate": 0.96,
+  "fallback_rate": 0.04,
+  "average_latency_ms": 7.755054000299424,
+  "p95_latency_ms": 14.494100003503263,
+  "irrelevant_hits": [],
+  "fallback_reasons": {
+    "anchor_miss": 2
+  },
+  "rows": [
+    {
+      "question_id": "java:1",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "java-int-variable",
+      "score": 11.0,
+      "latency_ms": 20.830199995543808
+    },
+    {
+      "question_id": "java:2",
+      "hit": false,
+      "relevant": false,
+      "reason": "anchor_miss",
+      "card_id": "java-int-variable",
+      "score": 8.0,
+      "latency_ms": 13.774599996395409
+    },
+    {
+      "question_id": "java:3",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "java-primitive",
+      "score": 15.5,
+      "latency_ms": 12.44849999784492
+    },
+    {
+      "question_id": "java:4",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "java-array-length",
+      "score": 10.0,
+      "latency_ms": 7.099800015566871
+    },
+    {
+      "question_id": "java:6",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "java-final-keyword",
+      "score": 10.0,
+      "latency_ms": 6.894099991768599
+    },
+    {
+      "question_id": "java:7",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "java-loop-control",
+      "score": 8.0,
+      "latency_ms": 5.765300011262298
+    },
+    {
+      "question_id": "java:8",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "java-extends-keyword",
+      "score": 10.0,
+      "latency_ms": 6.924800021806732
+    },
+    {
+      "question_id": "java:9",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "java-access-modifier",
+      "score": 11.0,
+      "latency_ms": 7.59759999345988
+    },
+    {
+      "question_id": "java:10",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "java-main",
+      "score": 11.5,
+      "latency_ms": 8.502200013026595
+    },
+    {
+      "question_id": "java:11",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "java-arraylist",
+      "score": 14.5,
+      "latency_ms": 13.157899986254051
+    },
+    {
+      "question_id": "spring:31",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "spring-ioc",
+      "score": 14.5,
+      "latency_ms": 14.86060000024736
+    },
+    {
+      "question_id": "spring:32",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "spring-boot",
+      "score": 14.5,
+      "latency_ms": 6.691300019156188
+    },
+    {
+      "question_id": "spring:33",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "spring-controller",
+      "score": 15.5,
+      "latency_ms": 5.128899996634573
+    },
+    {
+      "question_id": "spring:34",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "spring-dependency-injection",
+      "score": 12.0,
+      "latency_ms": 9.197300008963794
+    },
+    {
+      "question_id": "spring:35",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "spring-autowired",
+      "score": 10.5,
+      "latency_ms": 5.673700012266636
+    },
+    {
+      "question_id": "spring:36",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "spring-embedded-tomcat",
+      "score": 11.0,
+      "latency_ms": 9.202499990351498
+    },
+    {
+      "question_id": "spring:37",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "spring-requestmapping",
+      "score": 14.5,
+      "latency_ms": 8.171699999365956
+    },
+    {
+      "question_id": "spring:38",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "spring-spring-bean-scope",
+      "score": 11.0,
+      "latency_ms": 6.753699999535456
+    },
+    {
+      "question_id": "spring:39",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "spring-service",
+      "score": 10.5,
+      "latency_ms": 6.538099987665191
+    },
+    {
+      "question_id": "spring:40",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "spring-applicationyml",
+      "score": 10.0,
+      "latency_ms": 11.541200015926734
+    },
+    {
+      "question_id": "frontend:61",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "frontend-hook",
+      "score": 15.5,
+      "latency_ms": 10.339000000385568
+    },
+    {
+      "question_id": "frontend:62",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "frontend-jsx-expression",
+      "score": 12.5,
+      "latency_ms": 6.012800004100427
+    },
+    {
+      "question_id": "frontend:63",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "frontend",
+      "score": 10.0,
+      "latency_ms": 6.538999994518235
+    },
+    {
+      "question_id": "frontend:64",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "frontend-button",
+      "score": 9.0,
+      "latency_ms": 6.551400001626462
+    },
+    {
+      "question_id": "frontend:65",
+      "hit": false,
+      "relevant": false,
+      "reason": "anchor_miss",
+      "card_id": "frontend-react-project-tool",
+      "score": 6.5,
+      "latency_ms": 7.101200026227161
+    },
+    {
+      "question_id": "frontend:66",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "frontend-functional-component",
+      "score": 9.0,
+      "latency_ms": 6.562800001120195
+    },
+    {
+      "question_id": "frontend:67",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "frontend-conditional-rendering",
+      "score": 11.0,
+      "latency_ms": 6.638299993937835
+    },
+    {
+      "question_id": "frontend:68",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "frontend-usestate",
+      "score": 9.5,
+      "latency_ms": 4.205799981718883
+    },
+    {
+      "question_id": "frontend:69",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "frontend-react-project-tool",
+      "score": 12.5,
+      "latency_ms": 6.919199979165569
+    },
+    {
+      "question_id": "frontend:70",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "frontend-2",
+      "score": 10.0,
+      "latency_ms": 5.956099979812279
+    },
+    {
+      "question_id": "python:91",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "python-negative-indexing",
+      "score": 11.0,
+      "latency_ms": 7.29099998716265
+    },
+    {
+      "question_id": "python:92",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "python-dictionary",
+      "score": 10.0,
+      "latency_ms": 6.842899980256334
+    },
+    {
+      "question_id": "python:93",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "python-immutable",
+      "score": 12.5,
+      "latency_ms": 5.273999995552003
+    },
+    {
+      "question_id": "python:94",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "python-multiline-string",
+      "score": 10.0,
+      "latency_ms": 6.833599996753037
+    },
+    {
+      "question_id": "python:95",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "python-range",
+      "score": 15.5,
+      "latency_ms": 5.8359999966342
+    },
+    {
+      "question_id": "python:96",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "python-function-definition",
+      "score": 9.0,
+      "latency_ms": 6.106300017563626
+    },
+    {
+      "question_id": "python:97",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "python",
+      "score": 8.0,
+      "latency_ms": 5.051999993156642
+    },
+    {
+      "question_id": "python:98",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "python-none",
+      "score": 13.5,
+      "latency_ms": 8.274099993286654
+    },
+    {
+      "question_id": "python:99",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "python-fstring",
+      "score": 9.0,
+      "latency_ms": 6.2615000060759485
+    },
+    {
+      "question_id": "python:100",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "python-with-statement",
+      "score": 10.0,
+      "latency_ms": 8.259599999291822
+    },
+    {
+      "question_id": "algorithm:121",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "algorithm",
+      "score": 10.0,
+      "latency_ms": 5.65240002470091
+    },
+    {
+      "question_id": "algorithm:122",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "algorithm-stack",
+      "score": 10.5,
+      "latency_ms": 6.083099986426532
+    },
+    {
+      "question_id": "algorithm:123",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "algorithm-queue",
+      "score": 9.5,
+      "latency_ms": 8.145700005115941
+    },
+    {
+      "question_id": "algorithm:124",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "algorithm-2",
+      "score": 9.0,
+      "latency_ms": 7.0832000055816025
+    },
+    {
+      "question_id": "algorithm:125",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "algorithm-3",
+      "score": 12.0,
+      "latency_ms": 5.051899992395192
+    },
+    {
+      "question_id": "algorithm:126",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "algorithm-4",
+      "score": 9.0,
+      "latency_ms": 5.797699996037409
+    },
+    {
+      "question_id": "algorithm:127",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "algorithm-linked",
+      "score": 12.5,
+      "latency_ms": 4.793500003870577
+    },
+    {
+      "question_id": "algorithm:128",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "algorithm-5",
+      "score": 8.0,
+      "latency_ms": 4.977500007953495
+    },
+    {
+      "question_id": "algorithm:129",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "algorithm-6",
+      "score": 10.0,
+      "latency_ms": 14.494100003503263
+    },
+    {
+      "question_id": "algorithm:130",
+      "hit": true,
+      "relevant": true,
+      "reason": "hit",
+      "card_id": "algorithm-7",
+      "score": 8.0,
+      "latency_ms": 6.063000007998198
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "card_id": "frontend-error",
+  "category": "frontend",
+  "term": "error",
+  "aliases": [
+    "error",
+    "frontend error",
+    "프론트엔드 error"
+  ],
+  "source_question_ids": [
+    "frontend:80"
+  ],
+  "retrieval": {
+    "embedding_text": "error frontend error 프론트엔드 error frontend frontend-error 클래스 컴포넌트로만 구현",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "error",
+      "frontend-error",
+      "frontend error",
+      "프론트엔드 error",
+      "클래스",
+      "컴포넌트로만",
+      "구현"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "error is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as error, frontend-error, frontend error.",
+      "examples": [
+        "Explain when error should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of error, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals error, frontend-error, frontend error.",
+      "key_points": [
+        "error",
+        "frontend",
+        "frontend error"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy error's defining behavior.",
+        "Confusing error with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "함수형 컴포넌트에서만 사용 가능하다",
+          "reason": "함수형 컴포넌트에서만 사용 가능하다 is not the best answer because it does not satisfy the defining behavior or constraint of error. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "이벤트 핸들러의 에러도 잡는다",
+          "reason": "이벤트 핸들러의 에러도 잡는다 is not the best answer because it does not satisfy the defining behavior or constraint of error. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "비동기 에러도 자동으로 잡는다",
+          "reason": "비동기 에러도 자동으로 잡는다 is not the best answer because it does not satisfy the defining behavior or constraint of error. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against error."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate error in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes error's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply error in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why error is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying error without checking its defining constraint.",
+          "solution": "Re-check error's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.556615Z"
+}

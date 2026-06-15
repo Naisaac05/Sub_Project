@@ -1,0 +1,114 @@
+{
+  "card_id": "frontend-reactmemo",
+  "category": "frontend",
+  "term": "reactmemo",
+  "aliases": [
+    "reactmemo",
+    "props가 변경되지 않으면 리렌더링을 방지한다",
+    "React.memo의 역할은?",
+    "React.memo",
+    "props",
+    "frontend reactmemo"
+  ],
+  "source_question_ids": [
+    "frontend:72"
+  ],
+  "retrieval": {
+    "embedding_text": "reactmemo props가 변경되지 않으면 리렌더링을 방지한다 React.memo의 역할은? frontend React.memo 역할은 props 변경되지 않으면 리렌더링을",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "reactmemo",
+      "React.memo",
+      "역할은",
+      "props",
+      "변경되지",
+      "않으면",
+      "리렌더링을"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "React.memo는 props가 이전 렌더와 같으면 함수 컴포넌트의 불필요한 재렌더를 건너뛴다.",
+      "examples": [
+        "React.memo 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "얕은 props 비교가 기본이며 내부 state 변화나 context 변화까지 막지는 않는다.",
+      "key_points": [
+        "React.memo",
+        "props 비교",
+        "재렌더링"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "메모리를 절약한다",
+          "reason": "메모리 절약 자체가 주목적은 아니다."
+        },
+        "option_2": {
+          "text": "state를 캐싱한다",
+          "reason": "컴포넌트 state를 캐시하는 API가 아니다."
+        },
+        "option_3": {
+          "text": "이벤트 핸들러를 최적화한다",
+          "reason": "이벤트 핸들러 참조 최적화는 useCallback의 역할에 가깝다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`props가 변경되지 않으면 리렌더링을 방지한다`는 질문의 조건을 충족하지만 다른 선택지는 `reactmemo`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "const Row = React.memo(({ name }) => <span>{name}</span>);\nconst first = <Row name=\"A\" />;\nconst second = <Row name=\"A\" />;",
+      "explanation": "React.memo 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "React.memo 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`reactmemo`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `props가 변경되지 않으면 리렌더링을 방지한다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

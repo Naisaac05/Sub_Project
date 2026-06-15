@@ -1,0 +1,83 @@
+{
+  "card_id": "java-int-variable",
+  "category": "java",
+  "term": "int-variable",
+  "aliases": [
+    "int-variable",
+    "integer variable",
+    "java int declaration",
+    "int variable",
+    "java int variable"
+  ],
+  "source_question_ids": [
+    "java:1"
+  ],
+  "retrieval": {
+    "embedding_text": "int-variable integer variable java int declaration java int variable java int variable int",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "int-variable",
+      "java",
+      "integer variable",
+      "java int declaration",
+      "int variable",
+      "java int variable",
+      "int"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "int-variable의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 int-variable의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "int-variable",
+        "java",
+        "integer variable"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q1_option_1": {
+          "text": "number int = 10;",
+          "reason": "int-variable 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q1_option_2": {
+          "text": "integer number = 10;",
+          "reason": "int-variable 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q1_option_3": {
+          "text": "var: int number = 10;",
+          "reason": "int-variable 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

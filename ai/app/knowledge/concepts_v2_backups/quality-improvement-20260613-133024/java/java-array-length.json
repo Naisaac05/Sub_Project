@@ -1,0 +1,79 @@
+{
+  "card_id": "java-array-length",
+  "category": "java",
+  "term": "array-length",
+  "aliases": [
+    "array-length",
+    "array length",
+    "java array length"
+  ],
+  "source_question_ids": [
+    "java:4"
+  ],
+  "retrieval": {
+    "embedding_text": "array-length array length java array length java arr.length",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "array-length",
+      "java",
+      "array length",
+      "java array length",
+      "arr.length"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "array-length의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 array-length의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "array-length",
+        "java",
+        "array length"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q4_option_0": {
+          "text": "arr.size()",
+          "reason": "array-length 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q4_option_2": {
+          "text": "arr.count()",
+          "reason": "array-length 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q4_option_3": {
+          "text": "len(arr)",
+          "reason": "array-length 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

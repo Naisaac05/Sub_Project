@@ -1,0 +1,294 @@
+{
+  "patched_count": 10,
+  "rolled_back_count": 0,
+  "skipped_count": 0,
+  "patched_cards": [
+    "python-with",
+    "java-equals",
+    "frontend-react-key",
+    "java-extends",
+    "spring-spring-question-59",
+    "frontend-streaming",
+    "frontend-concurrent",
+    "python-asyncio",
+    "frontend-suspense",
+    "algorithm-heap"
+  ],
+  "rolled_back_cards": [],
+  "skipped_cards": [],
+  "json_failed": [],
+  "failed_cards": {},
+  "backup_root": "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\app\\knowledge\\concepts_v2_backups\\v217_ready10_20260613T220007914497",
+  "before_after_diff_summary": {
+    "python-with": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 1139,
+      "after_length": 1332,
+      "example_before": null,
+      "example_after": "class Resource:\n    def __enter__(self): self.opened = True; return self\n    def __exit__(self, *args): self.opened = False\nwith Resource() as resource: active = resource.opened",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "java-equals": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 1102,
+      "after_length": 1261,
+      "example_before": null,
+      "example_after": "String first = new String(\"A\");\nString second = new String(\"A\");\nboolean sameValue = first.equals(second);\nboolean sameReference = first == second;",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-react-key": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 1390,
+      "after_length": 1561,
+      "example_before": null,
+      "example_after": "const items = [{ id: 7, name: \"A\" }, { id: 9, name: \"B\" }];\nconst rows = items.map(item => <li key={item.id}>{item.name}</li>);\nconst firstKey = rows[0].key;",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "java-extends": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 1138,
+      "after_length": 1294,
+      "example_before": null,
+      "example_after": "List<? extends Number> values = List.of(1, 2, 3);\nNumber first = values.get(0);\ndouble total = values.stream().mapToDouble(Number::doubleValue).sum();",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "spring-spring-question-59": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 1039,
+      "after_length": 1220,
+      "example_before": null,
+      "example_after": "@CacheEvict(cacheNames = \"users\", key = \"#id\")\npublic void updateUser(Long id) { repository.update(id); }\nservice.updateUser(1L);",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-streaming": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2294,
+      "after_length": 1659,
+      "example_before": "const concept = \"streaming\";\nconst expected = \"전체 페이지를 기다리지 않고 준비된 부분부터 점진적으로 전송한다\";\nconsole.log({ concept, expected });",
+      "example_after": "const stream = new ReadableStream({ start(controller) { controller.enqueue(\"<header>준비됨</header>\"); controller.close(); } });\nconst reader = stream.getReader();\nconst firstChunk = reader.read();",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-concurrent": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2337,
+      "after_length": 1627,
+      "example_before": "const concept = \"concurrent\";\nconst expected = \"우선순위가 낮은 상태 업데이트를 표시하여 UI 블로킹을 방지한다\";\nconsole.log({ concept, expected });",
+      "example_after": "const [isPending, startTransition] = React.useTransition();\nconst [query, setQuery] = React.useState(\"\");\nstartTransition(() => setQuery(\"검색어\"));",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "python-asyncio": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2115,
+      "after_length": 1485,
+      "example_before": "def check_concept():\n    return \"코루틴의 실행을 일시 중단하고 완료를 기다린다\"\n\nprint(check_concept())",
+      "example_after": "import asyncio\nasync def load():\n    await asyncio.sleep(0.01)\n    return 1\nresult = asyncio.run(load())",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "frontend-suspense": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2244,
+      "after_length": 1645,
+      "example_before": "const concept = \"suspense\";\nconst expected = \"비동기 작업이 완료될 때까지 fallback UI를 보여준다\";\nconsole.log({ concept, expected });",
+      "example_after": "const Profile = React.lazy(() => import(\"./Profile\"));\nconst view = <React.Suspense fallback={<span>로딩 중</span>}><Profile /></React.Suspense>;\nconst fallback = view.props.fallback;",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    },
+    "algorithm-heap": {
+      "changed_payloads": [
+        "CONCEPT_DEFINITION",
+        "ANSWER_REASON",
+        "WRONG_ANSWER_REASON",
+        "EXAMPLE_REQUEST",
+        "PRACTICAL_USAGE"
+      ],
+      "before_length": 2185,
+      "after_length": 1440,
+      "example_before": "def check_concept():\n    return \"완전 이진 트리이며 부모가 자식보다 크거나(최대힙) 작다(최소힙)\"\n\nprint(check_concept())",
+      "example_after": "import heapq\nvalues = [7, 2, 5]\nheapq.heapify(values)\nsmallest = heapq.heappop(values)",
+      "metric_diff": {
+        "production_hit1_diff": 0.0,
+        "production_hit3_diff": 0.0,
+        "production_hit5_diff": 0.0,
+        "production_loo_diff": 0.0,
+        "content_hit1_diff": 0.0,
+        "content_hit3_diff": 0.0,
+        "content_hit5_diff": 0.0,
+        "content_loo_diff": 0.0
+      }
+    }
+  },
+  "production_hit1_diff": 0.0,
+  "production_hit3_diff": 0.0,
+  "production_hit5_diff": 0.0,
+  "production_loo_diff": 0.0,
+  "content_hit1_diff": 0.0,
+  "content_hit3_diff": 0.0,
+  "content_hit5_diff": 0.0,
+  "content_loo_diff": 0.0,
+  "production_before": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9797297297297297,
+    "loo_average_score": 5.296551724137931,
+    "loo_same_category_rate": 0.6689655172413793
+  },
+  "production_after": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9797297297297297,
+    "loo_average_score": 5.296551724137931,
+    "loo_same_category_rate": 0.6689655172413793
+  },
+  "content_before": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.294520547945205,
+    "loo_same_category_rate": 0.6643835616438356
+  },
+  "content_after": {
+    "exact_hit1": 0.9797297297297297,
+    "exact_hit3": 0.9864864864864865,
+    "exact_hit5": 0.9864864864864865,
+    "loo_candidate_rate": 0.9864864864864865,
+    "loo_average_score": 5.294520547945205,
+    "loo_same_category_rate": 0.6643835616438356
+  }
+}

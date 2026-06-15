@@ -1,0 +1,815 @@
+{
+  "candidate_count": 10,
+  "prepared_count": 10,
+  "skipped_count": 0,
+  "FACTCHECK_PREPARATION": {
+    "algorithm": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "시간 복잡도 O(n)은 입력 크기 n이 증가할 때 핵심 연산 횟수의 상한이 n에 비례해 증가하는 선형 복잡도다. 배열의 모든 원소를 한 번씩 확인하는 순회가 대표 사례다.",
+          "examples": [
+            "선형 시간 복잡도 O(n)을 작은 입력에 적용해 핵심 연산과 결과의 변화를 관찰한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "원소마다 한 번씩 수행하는 연산은 입력이 두 배가 되면 연산 횟수도 대체로 두 배가 되므로 O(n)이다. 항상 같은 횟수인 O(1), 절반씩 줄이는 O(log n), 중첩 순회의 O(n²)와 구별된다.",
+          "key_points": [
+            "선형 시간 복잡도 O(n)",
+            "입력 크기에 비례하여 시간이 증가한다"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "복잡도나 자료구조의 적용 전제를 제외하고 결과 표현만 암기하는 실수"
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "항상 일정한 시간이 걸린다",
+              "reason": "항상 일정한 시간은 입력 크기와 무관한 O(1)이며 선형 증가가 아니다."
+            },
+            "option_2": {
+              "text": "입력 크기의 제곱에 비례한다",
+              "reason": "입력 크기의 제곱에 비례하는 경우는 중첩 순회에서 나타나는 O(n²)이다."
+            },
+            "option_3": {
+              "text": "로그 시간이 걸린다",
+              "reason": "로그 시간은 탐색 범위를 반복해서 절반으로 줄이는 O(log n)이다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "혼동하기 쉬운 개념",
+              "diff": "O(n)은 전체 원소를 한 번 순회하고, O(1)은 입력 크기와 무관하며, O(n²)은 원소 쌍을 중첩 순회한다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "values = [3, 5, 7, 9]\nvisited = [value for value in values]\nassert len(visited) == len(values)",
+          "explanation": "입력 원소 수와 실제 방문 횟수가 같음을 검증해 선형 순회를 보여준다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "목록 전체 검사, 합계 계산, 로그 한 번 순회처럼 입력량에 따라 처리 시간이 선형으로 늘어나는 코드를 평가할 때 사용한다.",
+          "best_practices": [
+            "입력 조건과 기대 결과를 작은 실행 예제로 먼저 검증한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "선형 시간 복잡도 O(n)의 적용 전제와 다른 알고리즘의 특징을 혼동한다.",
+              "solution": "입력 조건, 핵심 연산, 시간·공간 복잡도를 각각 분리해 비교한다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "출처 문제 '시간 복잡도 O(n)의 의미는?'와 정답 '입력 크기에 비례하여 시간이 증가한다'를 대조했다.",
+        "검색 필드와 승인 상태는 초안 대상에서 제외했다."
+      ],
+      "patch_reason": "java-arraylist 기준으로 원리, 정답 도출, 선택지별 차이, 실행 검증 예시를 구체화한다.",
+      "quality_review": {
+        "reasons": [],
+        "answer_overlap": 0.06818181818181818,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.2222222222222222,
+        "payload_length": 888
+      }
+    },
+    "algorithm-2": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "버블 정렬은 인접한 두 원소를 반복 비교해 순서가 잘못되면 교환하고, 각 회차마다 큰 값을 배열 끝으로 이동시키는 정렬이다. 평균적으로 약 n번의 회차에서 n번에 가까운 비교를 수행한다.",
+          "examples": [
+            "버블 정렬을 작은 입력에 적용해 핵심 연산과 결과의 변화를 관찰한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "평균 입력에서는 인접 비교와 교환을 중첩 반복하므로 비교 횟수가 n(n-1)/2 수준으로 증가해 O(n²)이다. O(n log n)은 병합 정렬 계열, O(n)은 단일 순회, O(log n)은 범위 절반 감소에 가깝다.",
+          "key_points": [
+            "버블 정렬",
+            "O(n^2)"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "복잡도나 자료구조의 적용 전제를 제외하고 결과 표현만 암기하는 실수"
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "O(n)",
+              "reason": "O(n)은 배열을 한 번 순회하는 수준이며 버블 정렬의 반복 회차를 반영하지 못한다."
+            },
+            "option_1": {
+              "text": "O(n log n)",
+              "reason": "O(n log n)은 분할 정복 정렬의 평균 복잡도이며 인접 교환을 중첩하는 버블 정렬과 다르다."
+            },
+            "option_3": {
+              "text": "O(log n)",
+              "reason": "O(log n)은 탐색 범위를 절반씩 줄일 때 나타나며 버블 정렬은 그런 방식으로 범위를 줄이지 않는다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "혼동하기 쉬운 개념",
+              "diff": "버블 방식은 인접 역전을 반복 제거해 제곱 시간이 들고, 병합·힙 방식은 다른 구조적 전략으로 준선형 시간을 낸다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "values = [3, 2, 1]\ncomparisons = sum(len(values) - end - 1 for end in range(len(values)))\nassert comparisons == 3",
+          "explanation": "세 원소 버블 정렬의 비교 횟수가 중첩 반복으로 누적되는 것을 확인한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "작은 입력의 교육용 구현이나 거의 정렬된 입력에서 조기 종료 최적화의 효과를 설명할 때 사용한다.",
+          "best_practices": [
+            "입력 조건과 기대 결과를 작은 실행 예제로 먼저 검증한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "버블 정렬의 적용 전제와 다른 알고리즘의 특징을 혼동한다.",
+              "solution": "입력 조건, 핵심 연산, 시간·공간 복잡도를 각각 분리해 비교한다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "출처 문제 '버블 정렬의 평균 시간 복잡도는?'와 정답 'O(n^2)'를 대조했다.",
+        "검색 필드와 승인 상태는 초안 대상에서 제외했다."
+      ],
+      "patch_reason": "java-arraylist 기준으로 원리, 정답 도출, 선택지별 차이, 실행 검증 예시를 구체화한다.",
+      "quality_review": {
+        "reasons": [],
+        "answer_overlap": 0.0,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.17142857142857143,
+        "payload_length": 894
+      }
+    },
+    "algorithm-3": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "선형 탐색은 배열의 처음부터 목표값과 일치하는 원소를 순서대로 비교하는 탐색 방식이다. 목표가 마지막에 있거나 없으면 모든 n개 원소를 확인한다.",
+          "examples": [
+            "선형 탐색을 작은 입력에 적용해 핵심 연산과 결과의 변화를 관찰한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "최악의 경우 목표를 찾기 위해 배열 전체를 끝까지 비교하므로 O(n)이다. O(1)은 위치를 이미 아는 직접 접근, O(log n)은 정렬된 범위를 절반씩 줄이는 탐색, O(n²)은 중첩 순회에 해당한다.",
+          "key_points": [
+            "선형 탐색",
+            "O(n)"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "복잡도나 자료구조의 적용 전제를 제외하고 결과 표현만 암기하는 실수"
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "O(1)",
+              "reason": "O(1)은 인덱스를 알고 직접 접근할 때 가능하며 값의 위치를 모르는 선형 탐색에는 적용되지 않는다."
+            },
+            "option_1": {
+              "text": "O(log n)",
+              "reason": "O(log n)은 정렬된 데이터에서 탐색 범위를 절반씩 줄이는 이진 탐색의 복잡도다."
+            },
+            "option_3": {
+              "text": "O(n^2)",
+              "reason": "O(n²)은 두 수준의 중첩 반복에서 나타나며 선형 탐색은 원소를 한 번씩만 확인한다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "혼동하기 쉬운 개념",
+              "diff": "선형 탐색은 정렬 없이 O(n)에 사용할 수 있고, 이진 탐색은 정렬을 전제로 O(log n)에 탐색한다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "values = [4, 7, 9]\nchecks = [value for value in values if value != 10]\nassert len(checks) == len(values)",
+          "explanation": "없는 값을 찾는 최악 사례에서 모든 원소를 확인함을 검증한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "데이터가 작거나 정렬되지 않았고 탐색 횟수가 적을 때 단순하고 안전한 검색 방식으로 사용한다.",
+          "best_practices": [
+            "입력 조건과 기대 결과를 작은 실행 예제로 먼저 검증한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "선형 탐색의 적용 전제와 다른 알고리즘의 특징을 혼동한다.",
+              "solution": "입력 조건, 핵심 연산, 시간·공간 복잡도를 각각 분리해 비교한다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "출처 문제 '배열에서 특정 값을 선형 탐색할 때 최악의 시간 복잡도는?'와 정답 'O(n)'를 대조했다.",
+        "검색 필드와 승인 상태는 초안 대상에서 제외했다."
+      ],
+      "patch_reason": "java-arraylist 기준으로 원리, 정답 도출, 선택지별 차이, 실행 검증 예시를 구체화한다.",
+      "quality_review": {
+        "reasons": [],
+        "answer_overlap": 0.022727272727272728,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.21875,
+        "payload_length": 827
+      }
+    },
+    "algorithm-4": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "기저 조건(Base Case)은 재귀 호출을 더 진행하지 않고 결과를 반환하는 종료 조건이다. 각 호출이 기저 조건에 가까워져야 호출 스택이 유한하게 끝난다.",
+          "examples": [
+            "재귀 함수의 기저 조건을 작은 입력에 적용해 핵심 연산과 결과의 변화를 관찰한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "기저 조건이 있어야 재귀 호출이 특정 입력에서 멈추므로 반드시 필요하다. 반복문, 전역 변수, 배열은 구현에 사용할 수 있지만 재귀 종료 자체를 보장하는 필수 요소는 아니다.",
+          "key_points": [
+            "재귀 함수의 기저 조건",
+            "기저 조건(Base Case)"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "복잡도나 자료구조의 적용 전제를 제외하고 결과 표현만 암기하는 실수"
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "반복문",
+              "reason": "반복문은 재귀 대신 사용할 수 있지만 재귀 호출을 종료시키는 필수 구성 요소는 아니다."
+            },
+            "option_2": {
+              "text": "전역 변수",
+              "reason": "전역 변수 없이도 매개변수와 반환값만으로 재귀 함수를 구현할 수 있다."
+            },
+            "option_3": {
+              "text": "배열",
+              "reason": "배열은 입력 표현 중 하나일 뿐이며 숫자나 트리 등 배열 없이도 재귀를 사용할 수 있다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "혼동하기 쉬운 개념",
+              "diff": "기저 조건은 재귀 종료를 보장하고, 재귀 단계는 문제 크기를 줄여 기저 조건으로 접근하게 만든다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "def countdown(n):\n    return 0 if n == 0 else countdown(n - 1)\nassert countdown(3) == 0",
+          "explanation": "n이 0인 기저 조건에서 호출이 종료되는 동작을 검증한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "트리 순회, 분할 정복, 백트래킹 구현에서 무한 재귀와 스택 오버플로를 방지할 때 사용한다.",
+          "best_practices": [
+            "입력 조건과 기대 결과를 작은 실행 예제로 먼저 검증한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "재귀 함수의 기저 조건의 적용 전제와 다른 알고리즘의 특징을 혼동한다.",
+              "solution": "입력 조건, 핵심 연산, 시간·공간 복잡도를 각각 분리해 비교한다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "출처 문제 '재귀 함수에 반드시 필요한 것은?'와 정답 '기저 조건(Base Case)'를 대조했다.",
+        "검색 필드와 승인 상태는 초안 대상에서 제외했다."
+      ],
+      "patch_reason": "java-arraylist 기준으로 원리, 정답 도출, 선택지별 차이, 실행 검증 예시를 구체화한다.",
+      "quality_review": {
+        "reasons": [],
+        "answer_overlap": 0.10526315789473684,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.21428571428571427,
+        "payload_length": 802
+      }
+    },
+    "algorithm-5": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "삽입 정렬은 앞쪽의 정렬된 구간에서 새 원소가 들어갈 위치를 찾고 더 큰 원소를 오른쪽으로 이동해 삽입하는 정렬이다. 역전된 원소 쌍이 적으면 이동 횟수도 적다.",
+          "examples": [
+            "삽입 정렬을 작은 입력에 적용해 핵심 연산과 결과의 변화를 관찰한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "데이터가 거의 정렬되어 있으면 각 원소가 가까운 위치만 확인하고 이동하므로 삽입 정렬이 효율적이다. 역순 입력은 이동이 최대가 되고, 매우 큰 임의 입력에는 O(n log n) 정렬이 일반적으로 유리하다.",
+          "key_points": [
+            "삽입 정렬",
+            "데이터가 거의 정렬되어 있는 경우"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "복잡도나 자료구조의 적용 전제를 제외하고 결과 표현만 암기하는 실수"
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "완전히 역순으로 정렬된 경우",
+              "reason": "완전 역순에서는 각 원소가 앞의 모든 원소를 지나야 하므로 삽입 정렬의 최악 사례가 된다."
+            },
+            "option_2": {
+              "text": "데이터가 매우 큰 경우",
+              "reason": "데이터가 매우 크다는 사실만으로 효율적이지 않으며 평균 O(n²) 비용이 부담될 수 있다."
+            },
+            "option_3": {
+              "text": "모든 경우에 동일",
+              "reason": "입력 순서에 따라 이동 횟수가 달라지므로 모든 경우의 성능이 동일하지 않다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "혼동하기 쉬운 개념",
+              "diff": "삽입 정렬은 거의 정렬된 데이터에서 빠르고 안정적이며, 선택 정렬은 입력 순서와 관계없이 비교 횟수가 크게 줄지 않는다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "values = [1, 2, 4, 3]\nvalues.remove(3)\nvalues.insert(2, 3)\nassert values == [1, 2, 3, 4]",
+          "explanation": "거의 정렬된 배열에서 한 원소만 가까운 위치로 이동하는 동작을 보여준다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "작은 배열이나 대부분 정렬된 데이터의 마무리 정렬, 하이브리드 정렬의 소구간 처리에 사용한다.",
+          "best_practices": [
+            "입력 조건과 기대 결과를 작은 실행 예제로 먼저 검증한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "삽입 정렬의 적용 전제와 다른 알고리즘의 특징을 혼동한다.",
+              "solution": "입력 조건, 핵심 연산, 시간·공간 복잡도를 각각 분리해 비교한다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "출처 문제 '삽입 정렬이 효율적인 경우는?'와 정답 '데이터가 거의 정렬되어 있는 경우'를 대조했다.",
+        "검색 필드와 승인 상태는 초안 대상에서 제외했다."
+      ],
+      "patch_reason": "java-arraylist 기준으로 원리, 정답 도출, 선택지별 차이, 실행 검증 예시를 구체화한다.",
+      "quality_review": {
+        "reasons": [],
+        "answer_overlap": 0.045454545454545456,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.10526315789473684,
+        "payload_length": 857
+      }
+    },
+    "algorithm-6": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "공간 복잡도 O(1)은 입력 크기가 증가해도 알고리즘이 사용하는 추가 메모리의 상한이 일정하다는 뜻이다. 입력 저장 공간과 별도로 사용하는 변수 몇 개가 대표 사례다.",
+          "examples": [
+            "상수 공간 복잡도 O(1)을 작은 입력에 적용해 핵심 연산과 결과의 변화를 관찰한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "입력 크기와 무관하게 일정한 수의 추가 변수만 사용하면 공간 복잡도는 O(1)이다. 메모리를 전혀 쓰지 않는다는 뜻이 아니며, 입력에 비례한 배열을 만들면 O(n), 무한 메모리는 복잡도 개념과 무관하다.",
+          "key_points": [
+            "상수 공간 복잡도 O(1)",
+            "입력 크기와 관계없이 일정한 추가 메모리만 사용한다"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "복잡도나 자료구조의 적용 전제를 제외하고 결과 표현만 암기하는 실수"
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "메모리를 사용하지 않는다",
+              "reason": "O(1)은 메모리를 전혀 사용하지 않는다는 뜻이 아니라 추가 메모리 크기가 입력에 따라 늘지 않는다는 뜻이다."
+            },
+            "option_2": {
+              "text": "입력 크기에 비례하여 메모리가 증가한다",
+              "reason": "입력 크기에 비례해 추가 메모리가 증가하면 O(n) 공간이며 상수 공간이 아니다."
+            },
+            "option_3": {
+              "text": "메모리가 무한하다",
+              "reason": "메모리가 무한하다는 설명은 실제 자원 사용량의 증가율을 표현하지 못한다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "혼동하기 쉬운 개념",
+              "diff": "O(1) 공간은 고정 개수 변수만 사용하고, O(n) 공간은 입력 크기만큼 추가 배열이나 자료구조를 만든다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "values = [3, 1, 2]\nminimum = values[0]\nfor value in values: minimum = min(minimum, value)\nassert minimum == 1",
+          "explanation": "입력 크기와 관계없이 minimum 변수 하나만 추가로 사용한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "대용량 입력을 처리하면서 보조 배열 생성을 피하고 메모리 사용량을 제한해야 할 때 평가 기준으로 사용한다.",
+          "best_practices": [
+            "입력 조건과 기대 결과를 작은 실행 예제로 먼저 검증한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "상수 공간 복잡도 O(1)의 적용 전제와 다른 알고리즘의 특징을 혼동한다.",
+              "solution": "입력 조건, 핵심 연산, 시간·공간 복잡도를 각각 분리해 비교한다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "출처 문제 '공간 복잡도가 O(1)이라는 의미는?'와 정답 '입력 크기와 관계없이 일정한 추가 메모리만 사용한다'를 대조했다.",
+        "검색 필드와 승인 상태는 초안 대상에서 제외했다."
+      ],
+      "patch_reason": "java-arraylist 기준으로 원리, 정답 도출, 선택지별 차이, 실행 검증 예시를 구체화한다.",
+      "quality_review": {
+        "reasons": [],
+        "answer_overlap": 0.11627906976744186,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.2222222222222222,
+        "payload_length": 925
+      }
+    },
+    "algorithm-7": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "선택 정렬은 정렬되지 않은 구간에서 최솟값을 찾아 그 구간의 맨 앞 원소와 교환하고, 정렬 구간을 한 칸씩 확장하는 정렬이다.",
+          "examples": [
+            "선택 정렬을 작은 입력에 적용해 핵심 연산과 결과의 변화를 관찰한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "매 회차마다 남은 구간의 최솟값을 찾아 현재 앞자리와 교환하는 방식이 선택 정렬이다. 인접 원소 교환은 버블 정렬, 정렬 구간에 삽입은 삽입 정렬, 반으로 분할은 병합 정렬 계열이다.",
+          "key_points": [
+            "선택 정렬",
+            "최솟값을 찾아 맨 앞과 교환"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "복잡도나 자료구조의 적용 전제를 제외하고 결과 표현만 암기하는 실수"
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "인접한 두 요소를 비교하여 교환",
+              "reason": "인접한 두 원소를 반복 비교하고 교환하는 방식은 버블 정렬이다."
+            },
+            "option_2": {
+              "text": "이미 정렬된 부분에 삽입",
+              "reason": "이미 정렬된 앞부분의 적절한 위치에 새 원소를 넣는 방식은 삽입 정렬이다."
+            },
+            "option_3": {
+              "text": "배열을 반으로 나눠 정렬",
+              "reason": "배열을 반으로 나눠 각각 정렬한 뒤 결합하는 방식은 병합 정렬이다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "혼동하기 쉬운 개념",
+              "diff": "선택 방식은 남은 구간의 최솟값 위치를 확정한다. 버블 방식은 인접 역전을 제거하고 삽입 방식은 앞 구간 안으로 값을 이동한다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "values = [3, 1, 2]\nminimum_index = values.index(min(values))\nvalues[0], values[minimum_index] = values[minimum_index], values[0]\nassert values == [1, 3, 2]",
+          "explanation": "남은 구간의 최솟값을 찾아 첫 위치와 교환하는 한 회차를 검증한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "추가 메모리 없이 정렬하고 교환 횟수를 제한해야 하는 작은 데이터에서 원리를 설명할 때 사용한다.",
+          "best_practices": [
+            "입력 조건과 기대 결과를 작은 실행 예제로 먼저 검증한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "선택 정렬의 적용 전제와 다른 알고리즘의 특징을 혼동한다.",
+              "solution": "입력 조건, 핵심 연산, 시간·공간 복잡도를 각각 분리해 비교한다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "출처 문제 '선택 정렬의 동작 방식은?'와 정답 '최솟값을 찾아 맨 앞과 교환'를 대조했다.",
+        "검색 필드와 승인 상태는 초안 대상에서 제외했다."
+      ],
+      "patch_reason": "java-arraylist 기준으로 원리, 정답 도출, 선택지별 차이, 실행 검증 예시를 구체화한다.",
+      "quality_review": {
+        "reasons": [],
+        "answer_overlap": 0.1875,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.2,
+        "payload_length": 870
+      }
+    },
+    "algorithm-binary": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "이진 탐색(Binary Search)은 정렬된 데이터의 중앙값과 목표값을 비교해 탐색 범위를 절반씩 줄이는 알고리즘이다. 정렬 순서가 있어야 버릴 절반을 판단할 수 있다.",
+          "examples": [
+            "이진 탐색(Binary Search)을 작은 입력에 적용해 핵심 연산과 결과의 변화를 관찰한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "중앙값 비교 뒤 어느 절반을 제외할지 결정하려면 데이터가 정렬되어 있어야 한다. 연결 리스트나 해시 테이블 저장 여부, 원소 수가 2의 거듭제곱인지 여부는 필수 전제가 아니다.",
+          "key_points": [
+            "이진 탐색(Binary Search)",
+            "데이터가 정렬되어 있어야 한다"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "복잡도나 자료구조의 적용 전제를 제외하고 결과 표현만 암기하는 실수"
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "데이터가 연결 리스트에 저장",
+              "reason": "연결 리스트 저장은 전제 조건이 아니며 중앙 위치 접근이 느려 일반적인 이진 탐색 구현에도 불리하다."
+            },
+            "option_2": {
+              "text": "데이터가 해시 테이블에 저장",
+              "reason": "해시 테이블은 정렬 순서를 보장하지 않으므로 중앙값 기준으로 절반을 버리는 이진 탐색과 다르다."
+            },
+            "option_3": {
+              "text": "데이터 크기가 2의 거듭제곱",
+              "reason": "원소 수가 2의 거듭제곱이 아니어도 경계를 조정하며 탐색 범위를 나눌 수 있다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "혼동하기 쉬운 개념",
+              "diff": "이진 탐색은 정렬을 전제로 O(log n)에 찾고, 선형 탐색은 정렬 없이 O(n)에 모든 원소를 확인할 수 있다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "from bisect import bisect_left\nvalues = [1, 4, 7, 9]\nindex = bisect_left(values, 7)\nassert values[index] == 7",
+          "explanation": "정렬된 배열에서 목표값의 위치를 찾아 결과를 검증한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "정렬된 상품 번호, 로그 시각, 점수 목록에서 값이나 경계 위치를 반복 조회할 때 사용한다.",
+          "best_practices": [
+            "입력 조건과 기대 결과를 작은 실행 예제로 먼저 검증한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "이진 탐색(Binary Search)의 적용 전제와 다른 알고리즘의 특징을 혼동한다.",
+              "solution": "입력 조건, 핵심 연산, 시간·공간 복잡도를 각각 분리해 비교한다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "출처 문제 '이진 탐색(Binary Search)의 전제 조건은?'와 정답 '데이터가 정렬되어 있어야 한다'를 대조했다.",
+        "검색 필드와 승인 상태는 초안 대상에서 제외했다."
+      ],
+      "patch_reason": "java-arraylist 기준으로 원리, 정답 도출, 선택지별 차이, 실행 검증 예시를 구체화한다.",
+      "quality_review": {
+        "reasons": [],
+        "answer_overlap": 0.04878048780487805,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.2222222222222222,
+        "payload_length": 916
+      }
+    },
+    "algorithm-dfs": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "DFS(깊이 우선 탐색)는 한 경로를 끝까지 따라간 뒤 이전 분기점으로 돌아가 다른 경로를 탐색한다. 다음 방문 지점을 후입선출 순서로 관리하기 위해 스택이나 재귀 호출을 사용한다.",
+          "examples": [
+            "DFS(깊이 우선 탐색)을 작은 입력에 적용해 핵심 연산과 결과의 변화를 관찰한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "DFS는 가장 최근에 발견한 정점을 먼저 방문해야 하므로 후입선출 구조인 스택이 맞다. 재귀도 호출 스택으로 같은 순서를 만들며, 큐는 먼저 발견한 정점을 처리하는 BFS에 사용된다.",
+          "key_points": [
+            "DFS(깊이 우선 탐색)",
+            "스택 (또는 재귀)"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "복잡도나 자료구조의 적용 전제를 제외하고 결과 표현만 암기하는 실수"
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "큐",
+              "reason": "큐는 선입선출 순서로 정점을 처리하므로 너비 우선 탐색의 방문 순서를 만든다."
+            },
+            "option_2": {
+              "text": "힙",
+              "reason": "힙은 우선순위가 높은 항목을 꺼내지만 최근 경로로 되돌아가는 순서를 보장하지 않는다."
+            },
+            "option_3": {
+              "text": "해시 테이블",
+              "reason": "해시 테이블은 방문 여부 기록에는 유용하지만 다음 방문 경로의 순서를 관리하지 않는다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "혼동하기 쉬운 개념",
+              "diff": "DFS는 스택으로 경로를 깊게 탐색하고, BFS는 큐로 같은 깊이의 정점을 먼저 탐색한다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "stack = ['A']\nstack.append('B')\nnext_node = stack.pop()\nassert next_node == 'B'",
+          "explanation": "마지막에 추가한 정점이 먼저 꺼내지는 후입선출 동작을 검증한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "미로 경로 탐색, 연결 요소 확인, 백트래킹처럼 한 분기를 깊게 조사해야 할 때 사용한다.",
+          "best_practices": [
+            "입력 조건과 기대 결과를 작은 실행 예제로 먼저 검증한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "DFS(깊이 우선 탐색)의 적용 전제와 다른 알고리즘의 특징을 혼동한다.",
+              "solution": "입력 조건, 핵심 연산, 시간·공간 복잡도를 각각 분리해 비교한다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "출처 문제 'DFS(깊이 우선 탐색)에서 사용하는 자료구조는?'와 정답 '스택 (또는 재귀)'를 대조했다.",
+        "검색 필드와 승인 상태는 초안 대상에서 제외했다."
+      ],
+      "patch_reason": "java-arraylist 기준으로 원리, 정답 도출, 선택지별 차이, 실행 검증 예시를 구체화한다.",
+      "quality_review": {
+        "reasons": [],
+        "answer_overlap": 0.022727272727272728,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.2222222222222222,
+        "payload_length": 807
+      }
+    },
+    "algorithm-linked": {
+      "payloads": {
+        "CONCEPT_DEFINITION": {
+          "content": "연결 리스트(Linked List)는 각 노드가 값과 다음 노드의 참조를 저장하는 자료구조다. 삽입하거나 삭제할 위치의 노드를 이미 알고 있으면 주변 참조만 변경하므로 O(1)에 처리할 수 있다.",
+          "examples": [
+            "연결 리스트(Linked List)을 작은 입력에 적용해 핵심 연산과 결과의 변화를 관찰한다."
+          ]
+        },
+        "ANSWER_REASON": {
+          "why_correct": "위치를 이미 알고 있는 삽입·삭제는 노드 연결만 바꾸므로 O(1)이다. 인덱스 조회는 처음부터 노드를 따라가 O(n)이고, 참조 저장 비용 때문에 배열보다 메모리를 적게 쓴다고 단정할 수 없으며 정렬 속도도 자동으로 빨라지지 않는다.",
+          "key_points": [
+            "연결 리스트(Linked List)",
+            "삽입/삭제가 O(1)이다 (위치를 알 때)"
+          ]
+        },
+        "WRONG_ANSWER_REASON": {
+          "common_mistakes": [
+            "복잡도나 자료구조의 적용 전제를 제외하고 결과 표현만 암기하는 실수"
+          ],
+          "per_option": {
+            "option_0": {
+              "text": "인덱스 접근이 O(1)이다",
+              "reason": "연결 리스트는 원하는 인덱스까지 노드를 순서대로 따라가야 하므로 인덱스 접근이 O(n)이다."
+            },
+            "option_2": {
+              "text": "메모리를 적게 사용한다",
+              "reason": "각 노드가 다음 노드 참조를 추가로 저장하므로 배열보다 메모리를 적게 쓴다고 일반화할 수 없다."
+            },
+            "option_3": {
+              "text": "정렬이 빠르다",
+              "reason": "연결 리스트라는 구조만으로 정렬이 빨라지지 않으며 정렬 알고리즘의 비교와 탐색 비용을 고려해야 한다."
+            }
+          }
+        },
+        "COMPARISON": {
+          "comparisons": [
+            {
+              "with": "혼동하기 쉬운 개념",
+              "diff": "연결 리스트는 위치를 아는 삽입·삭제가 O(1)이고 조회는 O(n)이며, 배열 목록은 인덱스 조회가 O(1)이지만 중간 변경에 요소 이동이 필요하다."
+            }
+          ]
+        },
+        "EXAMPLE_REQUEST": {
+          "code_example": "from collections import deque\nvalues = deque(['B', 'C'])\nvalues.appendleft('A')\nassert list(values) == ['A', 'B', 'C']",
+          "explanation": "앞쪽 연결을 변경해 원소를 삽입한 결과를 검증한다."
+        },
+        "PRACTICAL_USAGE": {
+          "real_world": "큐나 덱처럼 양 끝 삽입·삭제가 빈번하고 임의 인덱스 조회가 중요하지 않은 구조에 사용한다.",
+          "best_practices": [
+            "입력 조건과 기대 결과를 작은 실행 예제로 먼저 검증한다."
+          ]
+        },
+        "DEBUG_OR_ERROR": {
+          "common_errors": [
+            {
+              "error": "연결 리스트(Linked List)의 적용 전제와 다른 알고리즘의 특징을 혼동한다.",
+              "solution": "입력 조건, 핵심 연산, 시간·공간 복잡도를 각각 분리해 비교한다."
+            }
+          ]
+        }
+      },
+      "fact_check_notes": [
+        "출처 문제 '연결 리스트(Linked List)의 장점은?'와 정답 '삽입/삭제가 O(1)이다 (위치를 알 때)'를 대조했다.",
+        "검색 필드와 승인 상태는 초안 대상에서 제외했다."
+      ],
+      "patch_reason": "java-arraylist 기준으로 원리, 정답 도출, 선택지별 차이, 실행 검증 예시를 구체화한다.",
+      "quality_review": {
+        "reasons": [],
+        "answer_overlap": 0.07547169811320754,
+        "same_reason_ratio": 0.0,
+        "fake_example_score": 0.0,
+        "generic_score": 0.0,
+        "duplicate_score": 0.2222222222222222,
+        "payload_length": 987
+      }
+    }
+  },
+  "review_summary": {
+    "algorithm": {
+      "pass": true,
+      "remaining_reasons": []
+    },
+    "algorithm-2": {
+      "pass": true,
+      "remaining_reasons": []
+    },
+    "algorithm-3": {
+      "pass": true,
+      "remaining_reasons": []
+    },
+    "algorithm-4": {
+      "pass": true,
+      "remaining_reasons": []
+    },
+    "algorithm-5": {
+      "pass": true,
+      "remaining_reasons": []
+    },
+    "algorithm-6": {
+      "pass": true,
+      "remaining_reasons": []
+    },
+    "algorithm-7": {
+      "pass": true,
+      "remaining_reasons": []
+    },
+    "algorithm-binary": {
+      "pass": true,
+      "remaining_reasons": []
+    },
+    "algorithm-dfs": {
+      "pass": true,
+      "remaining_reasons": []
+    },
+    "algorithm-linked": {
+      "pass": true,
+      "remaining_reasons": []
+    }
+  },
+  "skipped_cards": [],
+  "execution_performed": false,
+  "card_files_modified": false,
+  "approval_status_changed": false,
+  "patches_ready_created": false,
+  "json_validation_result": "pass"
+}

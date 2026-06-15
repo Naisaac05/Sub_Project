@@ -1,0 +1,112 @@
+{
+  "card_id": "spring-msa",
+  "category": "spring",
+  "term": "msa",
+  "aliases": [
+    "msa",
+    "spring msa",
+    "스프링 msa"
+  ],
+  "source_question_ids": [
+    "spring:55"
+  ],
+  "retrieval": {
+    "embedding_text": "msa spring msa 스프링 msa spring spring-msa saga 패턴",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "msa",
+      "spring-msa",
+      "spring msa",
+      "스프링 msa",
+      "saga",
+      "패턴"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "msa is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as msa, spring-msa, spring msa.",
+      "examples": [
+        "Explain when msa should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of msa, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals msa, spring-msa, spring msa.",
+      "key_points": [
+        "msa",
+        "spring",
+        "spring msa"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy msa's defining behavior.",
+        "Confusing msa with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "2PC만 사용",
+          "reason": "2PC만 사용 is not the best answer because it does not satisfy the defining behavior or constraint of msa. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "모든 서비스가 같은 DB 사용",
+          "reason": "모든 서비스가 같은 DB 사용 is not the best answer because it does not satisfy the defining behavior or constraint of msa. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "캐시로 해결",
+          "reason": "캐시로 해결 is not the best answer because it does not satisfy the defining behavior or constraint of msa. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against msa."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate msa in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes msa's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply msa in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why msa is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying msa without checking its defining constraint.",
+          "solution": "Re-check msa's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:25.016459Z"
+}

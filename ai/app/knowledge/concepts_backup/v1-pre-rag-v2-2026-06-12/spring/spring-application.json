@@ -1,0 +1,72 @@
+{
+  "card_id": "spring-application",
+  "category": "spring",
+  "term": "application",
+  "aliases": [
+    "spring application"
+  ],
+  "source_question_ids": [
+    "spring:40"
+  ],
+  "retrieval": {
+    "embedding_text": "application spring application application은(는) application.yml에서 서버 포트를 변경하는 설정은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "application",
+      "spring"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "application은(는) application.yml에서 서버 포트를 변경하는 설정은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "application 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "application"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q40_option_2": {
+          "text": "server.port: 9090",
+          "reason": "application의 특성과 일치하지 않는 오답입니다."
+        },
+        "q40_option_3": {
+          "text": "spring.port: 9090",
+          "reason": "application의 특성과 일치하지 않는 오답입니다."
+        },
+        "q40_option_4": {
+          "text": "web.port: 9090",
+          "reason": "application의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.054910Z",
+  "updated_at": "2026-06-10T11:01:08.054910Z"
+}

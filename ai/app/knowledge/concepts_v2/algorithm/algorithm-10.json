@@ -1,0 +1,114 @@
+{
+  "card_id": "algorithm-10",
+  "category": "algorithm",
+  "term": "algorithm-question-139",
+  "aliases": [
+    "algorithm-question-139",
+    "DFS에서 방문 중인 노드를 다시 만나면 사이클",
+    "그래프에서 사이클을 감지하는 방법은?",
+    "DFS",
+    "algorithm question 139",
+    "algorithm algorithm question 139"
+  ],
+  "source_question_ids": [
+    "algorithm:139"
+  ],
+  "retrieval": {
+    "embedding_text": "algorithm-question-139 DFS에서 방문 중인 노드를 다시 만나면 사이클 그래프에서 사이클을 감지하는 방법은? algorithm 그래프에서 사이클을 감지하는 DFS 에서 방문",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "algorithm-question-139",
+      "그래프에서",
+      "사이클을",
+      "감지하는",
+      "DFS",
+      "에서",
+      "방문"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "방향 그래프 DFS에서는 현재 재귀 경로에 있는 정점을 다시 만나면 사이클이 존재한다.",
+      "examples": [
+        "DFS 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "방문 중 상태를 별도로 기록하면 완료된 정점과 현재 경로의 정점을 구분할 수 있다.",
+      "key_points": [
+        "DFS",
+        "방문 중",
+        "사이클"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "BFS만 가능",
+          "reason": "BFS로도 조건에 따라 감지할 수 있어 DFS만의 반대인 설명은 틀리다."
+        },
+        "option_2": {
+          "text": "힙 정렬 사용",
+          "reason": "힙 정렬은 그래프 경로의 순환을 판별하지 않는다."
+        },
+        "option_3": {
+          "text": "사이클 감지는 불가능",
+          "reason": "방문 상태나 Union-Find 등으로 사이클 감지가 가능하다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`DFS에서 방문 중인 노드를 다시 만나면 사이클`는 질문의 조건을 충족하지만 다른 선택지는 `algorithm-question-139`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "visiting = {\"A\", \"B\"}\nnext_node = \"A\"\nhas_cycle = next_node in visiting",
+      "explanation": "DFS 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "DFS 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`algorithm-question-139`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `DFS에서 방문 중인 노드를 다시 만나면 사이클`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

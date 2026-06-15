@@ -1,0 +1,117 @@
+{
+  "card_id": "java-int-variable",
+  "category": "java",
+  "term": "int-variable",
+  "aliases": [
+    "int-variable",
+    "int variable",
+    "java int variable",
+    "자바 int variable",
+    "integer variable",
+    "java int declaration",
+    "iv"
+  ],
+  "source_question_ids": [
+    "java:1"
+  ],
+  "retrieval": {
+    "embedding_text": "int-variable int variable java int variable java java-int-variable 자바 int variable integer variable java int declaration",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "int-variable",
+      "java-int-variable",
+      "int variable",
+      "java int variable",
+      "자바 int variable",
+      "integer variable",
+      "java int declaration"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "int variable is a java concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as int-variable, java-int-variable, int variable.",
+      "examples": [
+        "Explain when int variable should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of int variable, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals int-variable, java-int-variable, int variable.",
+      "key_points": [
+        "int-variable",
+        "java",
+        "integer variable"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy int variable's defining behavior.",
+        "Confusing int variable with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "number int = 10;",
+          "reason": "number int = 10; is not the best answer because it does not satisfy the defining behavior or constraint of int variable. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "integer number = 10;",
+          "reason": "integer number = 10; is not the best answer because it does not satisfy the defining behavior or constraint of int variable. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "var: int number = 10;",
+          "reason": "var: int number = 10; is not the best answer because it does not satisfy the defining behavior or constraint of int variable. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against int variable."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate int variable in an appropriate java context.",
+      "explanation": "Use a minimal example that makes int variable's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply int variable in java work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why int variable is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying int variable without checking its defining constraint.",
+          "solution": "Re-check int variable's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.722705Z"
+}

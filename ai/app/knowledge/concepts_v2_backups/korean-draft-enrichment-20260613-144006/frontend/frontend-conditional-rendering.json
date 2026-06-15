@@ -1,0 +1,119 @@
+{
+  "card_id": "frontend-conditional-rendering",
+  "category": "frontend",
+  "term": "conditional-rendering",
+  "aliases": [
+    "cr",
+    "프론트엔드 cr",
+    "rendering",
+    "conditional rendering",
+    "conditional",
+    "conditional-rendering",
+    "frontend conditional rendering",
+    "프론트엔드 conditional rendering",
+    "react conditional rendering"
+  ],
+  "source_question_ids": [
+    "frontend:67"
+  ],
+  "retrieval": {
+    "embedding_text": "conditional-rendering cr 프론트엔드 cr rendering frontend conditional conditional rendering frontend conditional rendering",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "cr",
+      "프론트엔드 cr",
+      "rendering",
+      "conditional",
+      "conditional rendering",
+      "conditional-rendering",
+      "frontend conditional rendering"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "conditional rendering is a frontend concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as conditional-rendering, frontend-conditional-rendering, conditional rendering.",
+      "examples": [
+        "Explain when conditional rendering should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of conditional rendering, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals conditional-rendering, frontend-conditional-rendering, conditional rendering.",
+      "key_points": [
+        "conditional-rendering",
+        "frontend",
+        "conditional rendering"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy conditional rendering's defining behavior.",
+        "Confusing conditional rendering with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "삼항 연산자 (? :)",
+          "reason": "삼항 연산자 (? :) is not the best answer because it does not satisfy the defining behavior or constraint of conditional rendering. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "&& 연산자",
+          "reason": "&& 연산자 is not the best answer because it does not satisfy the defining behavior or constraint of conditional rendering. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "조건 함수 호출",
+          "reason": "조건 함수 호출 is not the best answer because it does not satisfy the defining behavior or constraint of conditional rendering. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against conditional rendering."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate conditional rendering in an appropriate frontend context.",
+      "explanation": "Use a minimal example that makes conditional rendering's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply conditional rendering in frontend work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why conditional rendering is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying conditional rendering without checking its defining constraint.",
+          "solution": "Re-check conditional rendering's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.633542Z"
+}

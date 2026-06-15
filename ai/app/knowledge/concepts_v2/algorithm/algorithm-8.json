@@ -1,0 +1,113 @@
+{
+  "card_id": "algorithm-8",
+  "category": "algorithm",
+  "term": "algorithm-question-136",
+  "aliases": [
+    "algorithm-question-136",
+    "최적 부분 구조와 중복 부분 문제",
+    "다이나믹 프로그래밍(DP)의 핵심 조건 2가지는?",
+    "DP)",
+    "algorithm question 136",
+    "algorithm algorithm question 136"
+  ],
+  "source_question_ids": [
+    "algorithm:136"
+  ],
+  "retrieval": {
+    "embedding_text": "algorithm-question-136 최적 부분 구조와 중복 부분 문제 다이나믹 프로그래밍(DP)의 핵심 조건 2가지는? algorithm 다이나믹 프로그래밍 DP) 핵심 조건 가지는",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "algorithm-question-136",
+      "다이나믹",
+      "프로그래밍",
+      "DP)",
+      "핵심",
+      "조건",
+      "가지는"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "다이나믹 프로그래밍(DP)은 중복 계산되는 부분 문제의 결과를 저장해 재사용하는 문제 해결 방식이다. 전체 최적해가 부분 문제의 최적해로 구성되는 최적 부분 구조가 함께 있을 때 효과적이다.",
+      "examples": [
+        "예: 작은 입력에서 핵심 동작을 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "같은 부분 문제가 반복되고 그 최적해를 조합해 전체 최적해를 만들 수 있어야 저장한 결과가 의미를 갖는다. 정렬·탐색, 분할·병합, 그리디·백트래킹은 별도 기법 조합이다.",
+      "key_points": [
+        "최적 부분 구조와 중복 부분 문제",
+        "algorithm-8"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "기술 용어의 적용 범위와 유사 개념의 역할을 구분하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "정렬과 탐색",
+          "reason": "정렬과 탐색은 데이터 처리 작업의 종류이며 DP 적용 조건이 아니다. DP는 중복 부분 문제와 최적 부분 구조를 확인해야 한다."
+        },
+        "option_2": {
+          "text": "분할과 병합",
+          "reason": "분할과 병합은 분할 정복의 전형적인 절차다. 부분 문제가 서로 겹치지 않아도 사용할 수 있다는 점에서 DP의 중복 부분 문제 조건과 다르다."
+        },
+        "option_3": {
+          "text": "그리디와 백트래킹",
+          "reason": "그리디와 백트래킹은 서로 다른 탐색 전략이다. 지역 최적 선택이나 후보 탐색 자체는 DP 적용의 두 핵심 조건이 아니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "DP는 겹치는 부분 문제 결과를 저장해 재사용하고, 분할 정복은 보통 서로 독립적인 부분 문제를 나누어 해결한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "dp = [0, 1]\nfor n in range(2, 6):\n    dp.append(dp[n - 1] + dp[n - 2])\nassert dp[5] == 5",
+      "explanation": "피보나치의 앞선 부분 결과를 배열에 저장하고 다음 값을 계산할 때 재사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "최단 경로, 배낭 문제, 문자열 정렬처럼 동일한 하위 상태가 반복되는 최적화 문제에 사용한다.",
+      "best_practices": [
+        "문제의 전제와 실제 동작을 작은 실행 예제로 먼저 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사한 용어의 적용 범위를 구분하지 않아 잘못된 구현을 선택한다.",
+          "solution": "입력 조건, 핵심 동작, 결과를 각각 확인하고 비교 대상과 차이를 검증한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

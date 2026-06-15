@@ -113,14 +113,18 @@ def should_capture_auto_candidate(
     confidence_score: float | None,
     retrieved_concept_ids: list[str],
     fallback_used: bool | None,
+    v2_miss_reason: str | None = None,
 ) -> str | None:
     if mode != "free-question":
         return None
     if fallback_used:
-        return "fallback_used"
+        return None
+    if v2_miss_reason:
+        allowed = {"retrieval_miss", "score_gate", "anchor_miss", "payload_not_approved", "payload_empty"}
+        return v2_miss_reason if v2_miss_reason in allowed else None
     if route == "static_fast_path" and not retrieved_concept_ids:
         return "static_answer_unapproved"
-    if route in {"generation", "fallback_template"}:
+    if route == "generation":
         return "no_match"
     if confidence_score is not None and confidence_score < 0.6:
         return "low_confidence"

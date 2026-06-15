@@ -1,14 +1,27 @@
 import unittest
+import os
+from unittest.mock import patch
 from app.prompts.registry import compute_prompt_hash, lookup_prompt_version, PROMPT_REGISTRY
 from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_for_mode
 from app.schemas import AiGenerateRequest
 from app.workflow.intent import FreeQuestionIntent
+from app.workflow.judge import LITE_SEMANTIC_JUDGE_PROMPT_VERSION
 from app.workflow.state import ReviewWorkflowState
 from app.workflow.nodes import generate_answer_node
 from app.workflow.runner import run_review_workflow
 
 
 class PromptVersioningTest(unittest.TestCase):
+    def setUp(self):
+        self._env = patch.dict(os.environ, {
+            "AI_REVIEW_SEMANTIC_JUDGE_ENABLED": "true",
+            "AI_REVIEW_GROUNDING_JUDGE_ENABLED": "true",
+        })
+        self._env.start()
+
+    def tearDown(self):
+        self._env.stop()
+
     def test_deterministic_hash(self):
         # 1. deterministic hash: 동일한 프롬프트는 항상 동일한 해시 반환
         prompt1 = "Hello, this is a test prompt."
@@ -105,7 +118,7 @@ class PromptVersioningTest(unittest.TestCase):
         self.assertIsNotNone(state.retry_prompt_hash)
         self.assertNotEqual(state.prompt_hash, state.retry_prompt_hash)
         self.assertEqual(state.retry_prompt_version, "retry_v1")
-        self.assertEqual(state.semantic_judge_prompt_version, "semantic_judge_v1")
+        self.assertEqual(state.semantic_judge_prompt_version, LITE_SEMANTIC_JUDGE_PROMPT_VERSION)
         self.assertIsNotNone(state.semantic_judge_prompt_hash)
 
     def test_observability_metadata_emission(self):
@@ -142,7 +155,10 @@ class PromptVersioningTest(unittest.TestCase):
         # judge_event 필드 검증
         self.assertEqual(judge_event["prompt_version"], "concept_definition_v1")
         self.assertIsNotNone(judge_event["prompt_hash"])
-        self.assertEqual(judge_event["semantic_judge_prompt_version"], "semantic_judge_v1")
+        self.assertEqual(
+            judge_event["semantic_judge_prompt_version"],
+            LITE_SEMANTIC_JUDGE_PROMPT_VERSION,
+        )
         self.assertIsNotNone(judge_event["semantic_judge_prompt_hash"])
 
 

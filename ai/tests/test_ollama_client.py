@@ -42,11 +42,11 @@ class OllamaClientTest(unittest.TestCase):
         self.assertEqual(OLLAMA_MAX_CONCURRENT_GENERATIONS, 1)
 
     def test_request_timeout_defaults_to_bounded_value(self):
-        self.assertEqual(OLLAMA_REQUEST_TIMEOUT_SECONDS, 30)
+        self.assertEqual(OLLAMA_REQUEST_TIMEOUT_SECONDS, 50)
 
     def test_request_timeout_zero_is_bounded_instead_of_unbounded(self):
-        self.assertEqual(bounded_ollama_request_timeout_seconds(0), 30)
-        self.assertEqual(bounded_ollama_request_timeout_seconds(-1), 30)
+        self.assertEqual(bounded_ollama_request_timeout_seconds(0), 50)
+        self.assertEqual(bounded_ollama_request_timeout_seconds(-1), 50)
         self.assertEqual(bounded_ollama_request_timeout_seconds(12), 12)
 
     def test_queue_wait_timeout_defaults_to_bounded_value(self):

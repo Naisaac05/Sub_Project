@@ -1,0 +1,72 @@
+{
+  "card_id": "algorithm-lcs",
+  "category": "algorithm",
+  "term": "lcs",
+  "aliases": [
+    "algorithm lcs"
+  ],
+  "source_question_ids": [
+    "algorithm:147"
+  ],
+  "retrieval": {
+    "embedding_text": "lcs algorithm lcs lcs은(는) LCS(Longest Common Subsequence)의 시간 복잡도는? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "lcs",
+      "algorithm"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "lcs은(는) LCS(Longest Common Subsequence)의 시간 복잡도는? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "lcs 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "lcs"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q147_option_2": {
+          "text": "O(n log n)",
+          "reason": "lcs의 특성과 일치하지 않는 오답입니다."
+        },
+        "q147_option_3": {
+          "text": "O(n * m)",
+          "reason": "lcs의 특성과 일치하지 않는 오답입니다."
+        },
+        "q147_option_4": {
+          "text": "O(2^n)",
+          "reason": "lcs의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.066841Z",
+  "updated_at": "2026-06-10T11:01:08.066841Z"
+}

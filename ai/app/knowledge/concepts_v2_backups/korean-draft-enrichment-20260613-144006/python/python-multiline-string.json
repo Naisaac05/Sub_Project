@@ -1,0 +1,119 @@
+{
+  "card_id": "python-multiline-string",
+  "category": "python",
+  "term": "multiline-string",
+  "aliases": [
+    "ms",
+    "string",
+    "파이썬 ms",
+    "multiline string",
+    "multiline",
+    "multiline-string",
+    "python multiline string",
+    "파이썬 multiline string",
+    "python triple quoted string"
+  ],
+  "source_question_ids": [
+    "python:94"
+  ],
+  "retrieval": {
+    "embedding_text": "multiline-string ms string 파이썬 ms python multiline multiline string python multiline string",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "ms",
+      "string",
+      "파이썬 ms",
+      "multiline",
+      "multiline string",
+      "multiline-string",
+      "python multiline string"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "multiline string is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as multiline-string, python-multiline-string, multiline string.",
+      "examples": [
+        "Explain when multiline string should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of multiline string, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals multiline-string, python-multiline-string, multiline string.",
+      "key_points": [
+        "multiline-string",
+        "python",
+        "multiline string"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy multiline string's defining behavior.",
+        "Confusing multiline string with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "\"\"\"텍스트\"\"\"",
+          "reason": "\"\"\"텍스트\"\"\" is not the best answer because it does not satisfy the defining behavior or constraint of multiline string. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "'''텍스트'''",
+          "reason": "'''텍스트''' is not the best answer because it does not satisfy the defining behavior or constraint of multiline string. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "<<텍스트>>",
+          "reason": "<<텍스트>> is not the best answer because it does not satisfy the defining behavior or constraint of multiline string. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against multiline string."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate multiline string in an appropriate python context.",
+      "explanation": "Use a minimal example that makes multiline string's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply multiline string in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why multiline string is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying multiline string without checking its defining constraint.",
+          "solution": "Re-check multiline string's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:23.058581Z"
+}

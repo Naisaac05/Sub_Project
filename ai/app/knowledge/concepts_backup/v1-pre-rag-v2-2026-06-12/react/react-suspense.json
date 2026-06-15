@@ -1,0 +1,72 @@
+{
+  "card_id": "react-suspense",
+  "category": "react",
+  "term": "suspense",
+  "aliases": [
+    "react suspense"
+  ],
+  "source_question_ids": [
+    "react:84"
+  ],
+  "retrieval": {
+    "embedding_text": "suspense react suspense suspense은(는) Suspense의 역할은? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "suspense",
+      "react"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "suspense은(는) Suspense의 역할은? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "suspense 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "suspense"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q84_option_2": {
+          "text": "비동기 작업이 완료될 때까지 fallback UI를 보여준다",
+          "reason": "suspense의 특성과 일치하지 않는 오답입니다."
+        },
+        "q84_option_3": {
+          "text": "컴포넌트를 지연 로딩한다",
+          "reason": "suspense의 특성과 일치하지 않는 오답입니다."
+        },
+        "q84_option_4": {
+          "text": "상태를 초기화한다",
+          "reason": "suspense의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.060659Z",
+  "updated_at": "2026-06-10T11:01:08.060659Z"
+}

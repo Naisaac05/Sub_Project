@@ -1,0 +1,113 @@
+{
+  "card_id": "python-multiprocessing",
+  "category": "python",
+  "term": "multiprocessing",
+  "aliases": [
+    "multiprocessing",
+    "CPU-bound → multiprocessing, I/O-bound → threading",
+    "multiprocessing과 threading의 사용 시나리오로 올바른 것은?",
+    "threading",
+    "CPU-bound",
+    "O-bound",
+    "python multiprocessing"
+  ],
+  "source_question_ids": [
+    "python:119"
+  ],
+  "retrieval": {
+    "embedding_text": "multiprocessing CPU-bound → multiprocessing, I/O-bound → threading multiprocessing과 threading의 사용 시나리오로 올바른 것은? python threading 사용 시나리오로 것은 CPU-bound",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "multiprocessing",
+      "threading",
+      "사용",
+      "시나리오로",
+      "것은",
+      "CPU-bound"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "multiprocessing은 별도 프로세스로 여러 CPU 코어를 활용하고, threading은 한 프로세스 안에서 I/O 대기 시간을 겹쳐 처리한다. CPython GIL 때문에 순수 Python CPU 작업은 프로세스가 유리하다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "CPU-bound 작업은 multiprocessing으로 병렬화하고 I/O-bound 작업은 threading으로 대기 시간을 활용하는 구분이 적절하다. 반대 조합이나 한 방식이 모든 작업에 적합하다는 설명은 자원 특성을 무시한다.",
+      "key_points": [
+        "CPU-bound → multiprocessing, I/O-bound → threading",
+        "python-multiprocessing"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "CPU-bound → threading, I/O-bound → multiprocessing",
+          "reason": "CPU 작업에 threading을 쓰면 GIL로 병렬 실행 이점이 제한되고 I/O 작업에 프로세스는 비용이 크다."
+        },
+        "option_2": {
+          "text": "둘 다 CPU-bound에 적합",
+          "reason": "둘 다 CPU-bound에 적합하다고 하면 threading의 GIL 제약을 무시한다."
+        },
+        "option_3": {
+          "text": "둘 다 I/O-bound에 적합",
+          "reason": "둘 다 I/O-bound에 적합하다고 하면 multiprocessing의 생성·통신 비용을 고려하지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "프로세스는 CPU 병렬성에, 스레드는 공유 메모리와 I/O 동시성에 유리하다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor\ncpu_pool = ProcessPoolExecutor(2)\nio_pool = ThreadPoolExecutor(4)\nassert cpu_pool._max_workers == 2 && io_pool._max_workers == 4",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "이미지 계산은 프로세스 풀, 네트워크 요청은 스레드 풀로 분리해 처리량을 높인다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

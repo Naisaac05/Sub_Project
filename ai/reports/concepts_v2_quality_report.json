@@ -1,0 +1,227 @@
+{
+  "total_cards": 142,
+  "draft_cards": 137,
+  "modified_cards": 0,
+  "modified_files": [],
+  "quality_distribution": {
+    "90+": 137,
+    "80-89": 0,
+    "70-79": 2,
+    "60-69": 3,
+    "59 이하": 0
+  },
+  "top_10": [
+    {
+      "card_id": "algorithm",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "algorithm-10",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "algorithm-11",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "algorithm-12",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "algorithm-13",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "algorithm-14",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "algorithm-2",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "algorithm-3",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "algorithm-4",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "algorithm-5",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    }
+  ],
+  "bottom_10": [
+    {
+      "card_id": "python-with",
+      "retrieval_quality": 40,
+      "payload_quality": 15,
+      "alias_boost_quality": 10,
+      "card_quality_score": 65,
+      "improvement_needs": [
+        "payload depth",
+        "alias/boost distinctiveness"
+      ]
+    },
+    {
+      "card_id": "java-extends",
+      "retrieval_quality": 40,
+      "payload_quality": 15,
+      "alias_boost_quality": 10,
+      "card_quality_score": 65,
+      "improvement_needs": [
+        "payload depth",
+        "alias/boost distinctiveness"
+      ]
+    },
+    {
+      "card_id": "frontend-react-key",
+      "retrieval_quality": 34,
+      "payload_quality": 15,
+      "alias_boost_quality": 17,
+      "card_quality_score": 66,
+      "improvement_needs": [
+        "retrieval specificity",
+        "payload depth",
+        "alias/boost distinctiveness"
+      ]
+    },
+    {
+      "card_id": "java-equals",
+      "retrieval_quality": 40,
+      "payload_quality": 15,
+      "alias_boost_quality": 17,
+      "card_quality_score": 72,
+      "improvement_needs": [
+        "payload depth",
+        "alias/boost distinctiveness"
+      ]
+    },
+    {
+      "card_id": "spring-spring-question-59",
+      "retrieval_quality": 40,
+      "payload_quality": 20,
+      "alias_boost_quality": 17,
+      "card_quality_score": 77,
+      "improvement_needs": [
+        "payload depth",
+        "alias/boost distinctiveness"
+      ]
+    },
+    {
+      "card_id": "spring-valid",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "spring-transactional",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "spring-spring-bean-scope",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "spring-service",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    },
+    {
+      "card_id": "spring-security",
+      "retrieval_quality": 40,
+      "payload_quality": 32,
+      "alias_boost_quality": 20,
+      "card_quality_score": 92,
+      "improvement_needs": [
+        "payload depth"
+      ]
+    }
+  ],
+  "average_score_before": 66.17,
+  "average_score_after": 91.19,
+  "estimated_fast_path_improvement_percentage_points": 8.76,
+  "backup_root": null
+}

@@ -1,0 +1,113 @@
+{
+  "card_id": "python-cpython",
+  "category": "python",
+  "term": "cpython",
+  "aliases": [
+    "cpython",
+    "자주 사용되는 정수의 객체 생성 비용을 줄이기 위해",
+    "CPython에서 작은 정수(-5~256)가 캐싱되는 이유는?",
+    "CPython",
+    "python cpython"
+  ],
+  "source_question_ids": [
+    "python:117"
+  ],
+  "retrieval": {
+    "embedding_text": "cpython 자주 사용되는 정수의 객체 생성 비용을 줄이기 위해 CPython에서 작은 정수(-5~256)가 캐싱되는 이유는? python CPython 에서 작은 정수 캐싱되는 이유는",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "cpython",
+      "CPython",
+      "에서",
+      "작은",
+      "정수",
+      "캐싱되는",
+      "이유는"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "CPython은 자주 쓰이는 작은 정수 객체를 미리 만들고 재사용한다. 기본 빌드에서 -5부터 256 범위가 대표적이며 반복적인 객체 생성과 메모리 할당 비용을 줄인다.",
+      "examples": [
+        "객체 정체성과 값 동등성을 구분해 디버깅할 때 구현 세부사항에 의존하지 않도록 주의하는 사례로 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "작은 정수 캐시는 빈번한 값의 객체 생성 비용을 줄이는 구현 최적화다. Python 문법 규칙이나 가비지 컬렉션·스레드 안전성 보장을 위한 기능은 아니다.",
+      "key_points": [
+        "CPython",
+        "작은 정수 캐시",
+        "객체 재사용"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "표면적인 문법이나 용어만 보고 내부 원리와 선택 기준을 확인하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "문법 규칙이다",
+          "reason": "문법 규칙이다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 작은 정수 캐시는 빈번한 값의 객체 생성 비용을 줄이는 구현 최적화다."
+        },
+        "option_2": {
+          "text": "가비지 컬렉션을 위해",
+          "reason": "가비지 컬렉션을 위해은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 작은 정수 캐시는 빈번한 값의 객체 생성 비용을 줄이는 구현 최적화다."
+        },
+        "option_3": {
+          "text": "멀티스레드 안전성을 위해",
+          "reason": "멀티스레드 안전성을 위해은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 작은 정수 캐시는 빈번한 값의 객체 생성 비용을 줄이는 구현 최적화다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`자주 사용되는 정수의 객체 생성 비용을 줄이기 위해`는 질문의 조건을 충족하지만 다른 선택지는 `cpython`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "first = 100\nsecond = 100\nsame_object = first is second\nsame_value = first == second",
+      "explanation": "객체 정체성과 값 동등성을 구분해 디버깅할 때 구현 세부사항에 의존하지 않도록 주의하는 사례로 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "객체 정체성과 값 동등성을 구분해 디버깅할 때 구현 세부사항에 의존하지 않도록 주의하는 사례로 사용한다.",
+      "best_practices": [
+        "경계 사례를 작은 실행 예제로 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`cpython`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `자주 사용되는 정수의 객체 생성 비용을 줄이기 위해`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

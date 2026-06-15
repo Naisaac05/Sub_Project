@@ -1,0 +1,77 @@
+{
+  "card_id": "python-mro",
+  "category": "python",
+  "term": "mro",
+  "aliases": [
+    "mro",
+    "python mro"
+  ],
+  "source_question_ids": [
+    "python:104"
+  ],
+  "retrieval": {
+    "embedding_text": "mro python mro python class.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "mro",
+      "python",
+      "python mro",
+      "class."
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "mro의 핵심 개념과 책임을 설명합니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 mro의 핵심 특성을 충족합니다.",
+      "key_points": [
+        "mro",
+        "python",
+        "python mro"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q104_option_0": {
+          "text": "Class.order()",
+          "reason": "mro 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q104_option_2": {
+          "text": "Class.inheritance()",
+          "reason": "mro 개념의 기준과 일치하지 않는 선택지입니다."
+        },
+        "q104_option_3": {
+          "text": "Class.__bases_order__",
+          "reason": "mro 개념의 기준과 일치하지 않는 선택지입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-12T14:34:33.649093Z"
+}

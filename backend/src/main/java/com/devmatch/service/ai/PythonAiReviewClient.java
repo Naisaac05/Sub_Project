@@ -68,7 +68,9 @@ public class PythonAiReviewClient {
             String selectedAnswer,
             String userAnswer,
             AiReviewEvaluation evaluation,
-            int nextStep
+            int nextStep,
+            String previousAiQuestion,
+            String activeConcept
     ) {
         if (providerSelector.selectProvider() != AiReviewProviderType.PYTHON) {
             return Optional.empty();
@@ -82,6 +84,9 @@ public class PythonAiReviewClient {
                 userAnswer,
                 evaluation.name(),
                 nextStep,
+                "DIAGNOSTIC_FOLLOW_UP",
+                previousAiQuestion,
+                activeConcept,
                 properties.python().model(),
                 properties.python().temperature(),
                 properties.python().maxTokens(),
@@ -129,6 +134,9 @@ public class PythonAiReviewClient {
                 request.user_answer(),
                 request.evaluation(),
                 request.step(),
+                request.follow_up_type(),
+                request.previous_ai_question(),
+                request.active_concept(),
                 request.model(),
                 request.temperature(),
                 request.max_tokens(),
@@ -255,6 +263,9 @@ public class PythonAiReviewClient {
             String user_answer,
             String evaluation,
             int step,
+            String follow_up_type,
+            String previous_ai_question,
+            String active_concept,
             String model,
             double temperature,
             int max_tokens,
@@ -270,13 +281,51 @@ public class PythonAiReviewClient {
                 String user_answer,
                 String evaluation,
                 int step,
+                String followUpType,
+                String previousAiQuestion,
+                String activeConcept,
                 String model,
                 double temperature,
                 int max_tokens,
                 int num_ctx,
                 int num_thread
         ) {
-            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step, model, temperature, max_tokens, num_ctx, num_thread, false);
+            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step, followUpType, previousAiQuestion, activeConcept, model, temperature, max_tokens, num_ctx, num_thread, false);
+        }
+
+        public PythonAiRequest(
+                String question,
+                List<String> options,
+                String correct_answer,
+                String selected_answer,
+                String user_answer,
+                String evaluation,
+                int step,
+                String model,
+                double temperature,
+                int max_tokens,
+                int num_ctx,
+                int num_thread
+        ) {
+            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step, "", "", "", model, temperature, max_tokens, num_ctx, num_thread, false);
+        }
+
+        public PythonAiRequest(
+                String question,
+                List<String> options,
+                String correct_answer,
+                String selected_answer,
+                String user_answer,
+                String evaluation,
+                int step,
+                String model,
+                double temperature,
+                int max_tokens,
+                int num_ctx,
+                int num_thread,
+                Boolean stream
+        ) {
+            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step, "", "", "", model, temperature, max_tokens, num_ctx, num_thread, stream);
         }
     }
 

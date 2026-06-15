@@ -46,8 +46,16 @@ export type ReviewCandidateRequest = {
 };
 
 export type AiReviewCandidateV2Status = 'PENDING' | 'APPROVED' | 'REJECTED' | 'MERGED';
+export type AiReviewCandidateWorkflowPhase =
+  | 'CAPTURED'
+  | 'DRAFTED'
+  | 'HUMAN_REVIEW'
+  | 'PUBLISH_FAILED'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'MERGED';
 export type AiReviewCandidateV2Source = 'COURSE' | 'AUTO' | 'MANUAL';
-export type AiReviewCandidateV2Action = 'APPROVE' | 'EDIT_AND_APPROVE' | 'REJECT' | 'MERGE';
+export type AiReviewCandidateV2Action = 'START_REVIEW' | 'APPROVE' | 'EDIT_AND_APPROVE' | 'REJECT' | 'MERGE';
 
 export type AiReviewCandidateV2 = {
   id: number;
@@ -56,6 +64,7 @@ export type AiReviewCandidateV2 = {
   category: string;
   source: AiReviewCandidateV2Source;
   status: AiReviewCandidateV2Status;
+  workflowPhase: AiReviewCandidateWorkflowPhase;
   definition: string | null;
   definitionDraft: string | null;
   reviewerEditedAnswer: string | null;
@@ -66,6 +75,9 @@ export type AiReviewCandidateV2 = {
   route: string | null;
   confidenceScore: number | null;
   needsReviewReason: string | null;
+  publishError: string | null;
+  publishedCardId: string | null;
+  publishedCardPath: string | null;
   reviewer: string | null;
   reviewedAt: string | null;
   retentionUntil: string | null;

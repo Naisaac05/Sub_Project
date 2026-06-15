@@ -1,0 +1,115 @@
+{
+  "card_id": "algorithm-binary",
+  "category": "algorithm",
+  "term": "binary",
+  "aliases": [
+    "b",
+    "binary",
+    "알고리즘 b",
+    "algorithm binary",
+    "알고리즘 binary"
+  ],
+  "source_question_ids": [
+    "algorithm:131"
+  ],
+  "retrieval": {
+    "embedding_text": "binary b 알고리즘 b algorithm 데이터가 정렬되어 알고리즘 binary algorithm binary algorithm-binary",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "데이터가",
+      "정렬되어",
+      "binary",
+      "알고리즘 b",
+      "알고리즘 binary",
+      "algorithm binary",
+      "algorithm-binary"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "binary is a algorithm concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as binary, algorithm-binary, algorithm binary.",
+      "examples": [
+        "Explain when binary should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of binary, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals binary, algorithm-binary, algorithm binary.",
+      "key_points": [
+        "binary",
+        "algorithm",
+        "algorithm binary"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy binary's defining behavior.",
+        "Confusing binary with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "데이터가 연결 리스트에 저장",
+          "reason": "데이터가 연결 리스트에 저장 is not the best answer because it does not satisfy the defining behavior or constraint of binary. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "데이터가 해시 테이블에 저장",
+          "reason": "데이터가 해시 테이블에 저장 is not the best answer because it does not satisfy the defining behavior or constraint of binary. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "데이터 크기가 2의 거듭제곱",
+          "reason": "데이터 크기가 2의 거듭제곱 is not the best answer because it does not satisfy the defining behavior or constraint of binary. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against binary."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate binary in an appropriate algorithm context.",
+      "explanation": "Use a minimal example that makes binary's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply binary in algorithm work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why binary is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying binary without checking its defining constraint.",
+          "solution": "Re-check binary's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:22.518715Z"
+}

@@ -1,0 +1,115 @@
+{
+  "card_id": "spring-profile",
+  "category": "spring",
+  "term": "profile",
+  "aliases": [
+    "profile",
+    "환경별(dev/prod) 설정 분리",
+    "Spring에서 프로파일(Profile)의 용도는?",
+    "Spring",
+    "Profile)",
+    "dev",
+    "prod)",
+    "spring profile"
+  ],
+  "source_question_ids": [
+    "spring:47"
+  ],
+  "retrieval": {
+    "embedding_text": "profile 환경별(dev/prod) 설정 분리 Spring에서 프로파일(Profile)의 용도는? spring 에서 프로파일 Profile) 용도는 환경별 dev",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "profile",
+      "에서",
+      "프로파일",
+      "Profile)",
+      "용도는",
+      "환경별",
+      "dev"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Spring Profile은 환경 이름에 따라 Bean과 설정을 선택적으로 활성화하는 기능이다. dev, test, prod별 외부 시스템 주소나 구현체를 분리할 수 있다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "프로파일은 환경별 설정과 Bean 구성을 분리하는 용도다. 성능 분석, 사용자 프로필, 로깅 레벨은 프로파일로 선택할 수는 있어도 기능 자체의 목적은 아니다.",
+      "key_points": [
+        "환경별(dev/prod) 설정 분리",
+        "spring-profile"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "코드 성능 분석",
+          "reason": "코드 성능 분석은 프로파일러 도구의 역할이며 Spring Profile과 이름만 비슷하다."
+        },
+        "option_2": {
+          "text": "사용자 프로필 관리",
+          "reason": "사용자 프로필은 도메인 데이터로 애플리케이션 실행 환경 선택과 다르다."
+        },
+        "option_3": {
+          "text": "로깅 레벨 설정",
+          "reason": "로깅 레벨도 환경 설정 일부일 수 있지만 프로파일의 전체 용도를 대표하지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "Profile은 설정 묶음을 선택하고 프로퍼티 파일은 선택된 환경의 값을 제공한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "@Profile(\"dev\")\n@Bean DataSource devDataSource() { return new H2DataSource(); }\nassert environment.acceptsProfiles(Profiles.of(\"dev\"));",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "개발 환경은 H2, 운영 환경은 관리형 DB처럼 환경별 Bean을 교체할 때 사용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

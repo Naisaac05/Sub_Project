@@ -18,7 +18,8 @@ def lint_cards(
     cards: list[ConceptCard] | None = None,
     approved_qa_root: Path | None = None,
 ) -> list[str]:
-    concept_cards = cards if cards is not None else load_concept_cards()
+    loaded_cards = cards if cards is not None else load_concept_cards()
+    concept_cards = [card for card in loaded_cards if isinstance(card, ConceptCard)]
     approved_root = approved_qa_root or KNOWLEDGE_ROOT / "approved_qa"
     errors: list[str] = []
     seen: set[str] = set()

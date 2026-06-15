@@ -39,6 +39,10 @@ MAX_CACHE_ENTRIES = 512
 TTL_SECONDS = 300
 
 
+def semantic_judge_enabled() -> bool:
+    return os.getenv("AI_REVIEW_SEMANTIC_JUDGE_ENABLED", "false").lower() in {"1", "true", "yes", "on"}
+
+
 def clear_answer_cache():
     with _JUDGE_CACHE_LOCK:
         _JUDGE_CACHE.clear()
@@ -52,6 +56,8 @@ def judge_answer(
     intent: FreeQuestionIntent | None = None,
     generator=call_ollama,
 ) -> SemanticJudgeResult:
+    if not semantic_judge_enabled():
+        return SemanticJudgeResult(1.0, 0.0, "low", False, "Skipped judge: disabled by configuration")
     if mode != "free-question" or not answer:
         return SemanticJudgeResult(
             1.0,

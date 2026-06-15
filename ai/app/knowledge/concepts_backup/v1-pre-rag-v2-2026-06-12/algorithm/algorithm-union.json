@@ -1,0 +1,72 @@
+{
+  "card_id": "algorithm-union",
+  "category": "algorithm",
+  "term": "union",
+  "aliases": [
+    "algorithm union"
+  ],
+  "source_question_ids": [
+    "algorithm:148"
+  ],
+  "retrieval": {
+    "embedding_text": "union algorithm union union은(는) Union-Find에서 경로 압축(Path Compression)의 효과는? 주제를 다루는 주요 개념입니다.",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "union",
+      "algorithm"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "union은(는) Union-Find에서 경로 압축(Path Compression)의 효과는? 주제를 다루는 주요 개념입니다.",
+      "examples": []
+    },
+    "ANSWER_REASON": {
+      "why_correct": "union 개념에 대한 이해도를 평가하는 문제입니다.",
+      "key_points": [
+        "union"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [],
+      "per_option": {
+        "q148_option_2": {
+          "text": "Find 연산의 시간 복잡도를 거의 O(1)에 근접하게 한다",
+          "reason": "union의 특성과 일치하지 않는 오답입니다."
+        },
+        "q148_option_3": {
+          "text": "Union 연산을 빠르게 한다",
+          "reason": "union의 특성과 일치하지 않는 오답입니다."
+        },
+        "q148_option_4": {
+          "text": "사이클을 자동으로 감지한다",
+          "reason": "union의 특성과 일치하지 않는 오답입니다."
+        }
+      }
+    },
+    "COMPARISON": null,
+    "EXAMPLE_REQUEST": null,
+    "PRACTICAL_USAGE": null,
+    "DEBUG_OR_ERROR": null
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-10T11:01:08.066841Z",
+  "updated_at": "2026-06-10T11:01:08.066841Z"
+}

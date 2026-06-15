@@ -1,0 +1,111 @@
+{
+  "card_id": "python-generator",
+  "category": "python",
+  "term": "generator",
+  "aliases": [
+    "generator",
+    "python generator",
+    "파이썬 generator"
+  ],
+  "source_question_ids": [
+    "python:103"
+  ],
+  "retrieval": {
+    "embedding_text": "generator python generator 파이썬 generator python python-generator yield",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "generator",
+      "python-generator",
+      "python generator",
+      "파이썬 generator",
+      "yield"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "generator is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as generator, python-generator, python generator.",
+      "examples": [
+        "Explain when generator should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of generator, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals generator, python-generator, python generator.",
+      "key_points": [
+        "generator",
+        "python",
+        "python generator"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy generator's defining behavior.",
+        "Confusing generator with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "return",
+          "reason": "return is not the best answer because it does not satisfy the defining behavior or constraint of generator. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "emit",
+          "reason": "emit is not the best answer because it does not satisfy the defining behavior or constraint of generator. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "send",
+          "reason": "send is not the best answer because it does not satisfy the defining behavior or constraint of generator. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against generator."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate generator in an appropriate python context.",
+      "explanation": "Use a minimal example that makes generator's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply generator in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why generator is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying generator without checking its defining constraint.",
+          "solution": "Re-check generator's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.843451Z"
+}

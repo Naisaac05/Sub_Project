@@ -1,0 +1,118 @@
+{
+  "card_id": "python-with-statement",
+  "category": "python",
+  "term": "with-statement",
+  "aliases": [
+    "with-statement",
+    "with open('file.txt') as f:",
+    "Python에서 파일을 안전하게 읽는 방법은?",
+    "Python",
+    "with",
+    "open(",
+    "file.txt",
+    "as",
+    "with statement",
+    "python with statement"
+  ],
+  "source_question_ids": [
+    "python:100"
+  ],
+  "retrieval": {
+    "embedding_text": "with-statement with open('file.txt') as f: Python에서 파일을 안전하게 읽는 방법은? python 에서 파일을 안전하게 읽는 with open(",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "with-statement",
+      "에서",
+      "파일을",
+      "안전하게",
+      "읽는",
+      "with",
+      "open("
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "with open(...)은 파일 컨텍스트 매니저를 사용해 블록 종료 시 파일을 자동으로 닫는다.",
+      "examples": [
+        "with open 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "예외가 발생해도 정리 단계가 실행되어 직접 close 호출 누락을 줄인다.",
+      "key_points": [
+        "with open",
+        "파일 닫기",
+        "컨텍스트 매니저"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "f = open('file.txt')",
+          "reason": "open만 호출하면 직접 닫는 책임이 남는다."
+        },
+        "option_2": {
+          "text": "file.read('file.txt')",
+          "reason": "file.read는 파일 경로를 열어 주는 표준 호출이 아니다."
+        },
+        "option_3": {
+          "text": "read('file.txt')",
+          "reason": "read 단독 호출은 파일 객체 없이 사용할 수 없다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`with open('file.txt') as f:`는 질문의 조건을 충족하지만 다른 선택지는 `with-statement`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "from io import StringIO\nwith StringIO(\"data\") as file:\n    content = file.read()\nclosed = file.closed",
+      "explanation": "with open 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "with open 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`with-statement`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `with open('file.txt') as f:`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

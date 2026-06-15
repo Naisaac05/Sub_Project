@@ -1,0 +1,115 @@
+{
+  "card_id": "spring-requiresnew",
+  "category": "spring",
+  "term": "requiresnew",
+  "aliases": [
+    "r",
+    "스프링 r",
+    "requiresnew",
+    "spring requiresnew",
+    "스프링 requiresnew"
+  ],
+  "source_question_ids": [
+    "spring:51"
+  ],
+  "retrieval": {
+    "embedding_text": "requiresnew r 스프링 r spring 항상 새로운 스프링 requiresnew spring requiresnew spring-requiresnew",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "항상",
+      "새로운",
+      "스프링 r",
+      "requiresnew",
+      "스프링 requiresnew",
+      "spring requiresnew",
+      "spring-requiresnew"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "requiresnew is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as requiresnew, spring-requiresnew, spring requiresnew.",
+      "examples": [
+        "Explain when requiresnew should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of requiresnew, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals requiresnew, spring-requiresnew, spring requiresnew.",
+      "key_points": [
+        "requiresnew",
+        "spring",
+        "spring requiresnew"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy requiresnew's defining behavior.",
+        "Confusing requiresnew with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "기존 트랜잭션에 참여한다",
+          "reason": "기존 트랜잭션에 참여한다 is not the best answer because it does not satisfy the defining behavior or constraint of requiresnew. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "트랜잭션 없이 실행한다",
+          "reason": "트랜잭션 없이 실행한다 is not the best answer because it does not satisfy the defining behavior or constraint of requiresnew. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "기존 트랜잭션이 없으면 예외를 발생시킨다",
+          "reason": "기존 트랜잭션이 없으면 예외를 발생시킨다 is not the best answer because it does not satisfy the defining behavior or constraint of requiresnew. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against requiresnew."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate requiresnew in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes requiresnew's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply requiresnew in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why requiresnew is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying requiresnew without checking its defining constraint.",
+          "solution": "Re-check requiresnew's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:23.256312Z"
+}

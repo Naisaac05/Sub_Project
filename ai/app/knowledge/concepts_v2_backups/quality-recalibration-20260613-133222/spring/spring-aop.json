@@ -1,0 +1,113 @@
+{
+  "card_id": "spring-aop",
+  "category": "spring",
+  "term": "aop",
+  "aliases": [
+    "aop",
+    "spring aop",
+    "스프링 aop"
+  ],
+  "source_question_ids": [
+    "spring:46"
+  ],
+  "retrieval": {
+    "embedding_text": "aop spring aop 스프링 aop spring spring-aop 메서드 실행 전후",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "aop",
+      "spring-aop",
+      "spring aop",
+      "스프링 aop",
+      "메서드",
+      "실행",
+      "전후"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "aop is a spring concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as aop, spring-aop, spring aop.",
+      "examples": [
+        "Explain when aop should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of aop, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals aop, spring-aop, spring aop.",
+      "key_points": [
+        "aop",
+        "spring",
+        "spring aop"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy aop's defining behavior.",
+        "Confusing aop with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "메서드 실행 전에만 동작한다",
+          "reason": "메서드 실행 전에만 동작한다 is not the best answer because it does not satisfy the defining behavior or constraint of aop. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "메서드 실행 후에만 동작한다",
+          "reason": "메서드 실행 후에만 동작한다 is not the best answer because it does not satisfy the defining behavior or constraint of aop. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "예외 발생 시에만 동작한다",
+          "reason": "예외 발생 시에만 동작한다 is not the best answer because it does not satisfy the defining behavior or constraint of aop. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against aop."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate aop in an appropriate spring context.",
+      "explanation": "Use a minimal example that makes aop's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply aop in spring work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why aop is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying aop without checking its defining constraint.",
+          "solution": "Re-check aop's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:30:24.943483Z"
+}

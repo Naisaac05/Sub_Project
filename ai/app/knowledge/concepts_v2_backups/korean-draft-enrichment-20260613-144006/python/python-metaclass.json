@@ -1,0 +1,115 @@
+{
+  "card_id": "python-metaclass",
+  "category": "python",
+  "term": "metaclass",
+  "aliases": [
+    "m",
+    "파이썬 m",
+    "metaclass",
+    "python metaclass",
+    "파이썬 metaclass"
+  ],
+  "source_question_ids": [
+    "python:112"
+  ],
+  "retrieval": {
+    "embedding_text": "metaclass m 파이썬 m python 생성하는 클래스를 파이썬 metaclass python metaclass python-metaclass",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "생성하는",
+      "클래스를",
+      "파이썬 m",
+      "metaclass",
+      "파이썬 metaclass",
+      "python metaclass",
+      "python-metaclass"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "metaclass is a python concept that describes a specific behavior or responsibility. Understand it by identifying when it applies, what guarantee it provides, and which trade-offs distinguish it from nearby concepts such as metaclass, python-metaclass, python metaclass.",
+      "examples": [
+        "Explain when metaclass should be used and name one important constraint."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "The answer is correct because it matches the defining behavior of metaclass, not merely its wording. Verify the answer against the concept's responsibility, constraints, and the distinguishing signals metaclass, python-metaclass, python metaclass.",
+      "key_points": [
+        "metaclass",
+        "python",
+        "python metaclass"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "Choosing an option that mentions related terminology but does not satisfy metaclass's defining behavior.",
+        "Confusing metaclass with a neighboring concept that has a different responsibility or constraint."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "추상 클래스의 다른 이름",
+          "reason": "추상 클래스의 다른 이름 is not the best answer because it does not satisfy the defining behavior or constraint of metaclass. Compare the option's responsibility directly with the concept."
+        },
+        "option_1": {
+          "text": "인스턴스를 생성하는 함수",
+          "reason": "인스턴스를 생성하는 함수 is not the best answer because it does not satisfy the defining behavior or constraint of metaclass. Compare the option's responsibility directly with the concept."
+        },
+        "option_2": {
+          "text": "데코레이터의 일종",
+          "reason": "데코레이터의 일종 is not the best answer because it does not satisfy the defining behavior or constraint of metaclass. Compare the option's responsibility directly with the concept."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "related concept",
+          "diff": "Compare responsibilities, constraints, and use cases against metaclass."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "# Demonstrate metaclass in an appropriate python context.",
+      "explanation": "Use a minimal example that makes metaclass's defining behavior and boundary visible."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "Apply metaclass in python work when its responsibility and constraints match the problem.",
+      "best_practices": [
+        "State why metaclass is appropriate before applying it.",
+        "Verify edge cases and trade-offs with a focused test."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "Applying metaclass without checking its defining constraint.",
+          "solution": "Re-check metaclass's responsibility, inputs, outputs, and boundary conditions."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T04:32:23.042739Z"
+}

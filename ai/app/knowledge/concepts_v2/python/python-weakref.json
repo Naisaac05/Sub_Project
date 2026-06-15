@@ -1,0 +1,113 @@
+{
+  "card_id": "python-weakref",
+  "category": "python",
+  "term": "weakref",
+  "aliases": [
+    "weakref",
+    "참조 카운트를 증가시키지 않는 약한 참조를 만들어 순환 참조를 방지한다",
+    "Python에서 weakref의 용도는?",
+    "Python",
+    "python weakref"
+  ],
+  "source_question_ids": [
+    "python:120"
+  ],
+  "retrieval": {
+    "embedding_text": "weakref 참조 카운트를 증가시키지 않는 약한 참조를 만들어 순환 참조를 방지한다 Python에서 weakref의 용도는? python 에서 용도는 참조 카운트를 증가시키지 않는",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "weakref",
+      "에서",
+      "용도는",
+      "참조",
+      "카운트를",
+      "증가시키지",
+      "않는"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "weakref는 객체를 소유하지 않는 약한 참조를 만든다. 강한 참조가 모두 사라지면 약한 참조가 남아 있어도 객체를 회수할 수 있어 캐시와 참조 순환 관리에 유용하다.",
+      "examples": [
+        "객체 수명을 소유하지 않는 캐시나 관찰자 목록을 구현할 때 메모리 잔존을 줄이는 데 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "약한 참조는 참조 카운트를 늘리지 않아 대상의 수명을 불필요하게 연장하지 않는다. 즉시 해제하거나 가비지 컬렉션을 끄는 기능과는 다르다.",
+      "key_points": [
+        "weakref",
+        "약한 참조",
+        "참조 카운트"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "표면적인 문법이나 용어만 보고 내부 원리와 선택 기준을 확인하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "참조 카운트를 증가시킨다",
+          "reason": "참조 카운트를 증가시킨다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 약한 참조는 참조 카운트를 늘리지 않아 대상의 수명을 불필요하게 연장하지 않는다."
+        },
+        "option_2": {
+          "text": "메모리를 즉시 해제한다",
+          "reason": "메모리를 즉시 해제한다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 약한 참조는 참조 카운트를 늘리지 않아 대상의 수명을 불필요하게 연장하지 않는다."
+        },
+        "option_3": {
+          "text": "가비지 컬렉션을 비활성화한다",
+          "reason": "가비지 컬렉션을 비활성화한다은 해당 원리의 핵심 처리 방식을 설명하지 못한다. 반면 약한 참조는 참조 카운트를 늘리지 않아 대상의 수명을 불필요하게 연장하지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`참조 카운트를 증가시키지 않는 약한 참조를 만들어 순환 참조를 방지한다`는 질문의 조건을 충족하지만 다른 선택지는 `weakref`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import weakref\nclass Item: pass\nitem = Item()\nreference = weakref.ref(item)",
+      "explanation": "객체 수명을 소유하지 않는 캐시나 관찰자 목록을 구현할 때 메모리 잔존을 줄이는 데 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "객체 수명을 소유하지 않는 캐시나 관찰자 목록을 구현할 때 메모리 잔존을 줄이는 데 사용한다.",
+      "best_practices": [
+        "경계 사례를 작은 실행 예제로 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`weakref`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `참조 카운트를 증가시키지 않는 약한 참조를 만들어 순환 참조를 방지한다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}
