@@ -1036,7 +1036,7 @@ export default function AiReviewPage() {
                             }`}
                           >
                             {isAi ? (
-                              <div className="prose prose-sm max-w-none prose-p:my-1 prose-pre:my-2 prose-pre:p-2 prose-pre:bg-gray-800 prose-pre:text-gray-100 prose-code:text-blue-600 prose-code:before:content-none prose-code:after:content-none">
+                              <div className="prose prose-sm max-w-none prose-p:my-1 prose-pre:my-2 prose-pre:rounded-xl prose-pre:border prose-pre:border-slate-200 prose-pre:bg-slate-50 prose-pre:p-3 prose-pre:text-slate-700 prose-code:text-blue-700 prose-code:before:content-none prose-code:after:content-none">
                                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                   {message.content}
                                 </ReactMarkdown>
@@ -1073,7 +1073,7 @@ export default function AiReviewPage() {
                       </div>
                       <div className="max-w-[82%]">
                         <div className="rounded-2xl px-4 py-3 text-sm leading-6 bg-gray-100 text-gray-800">
-                          <div className="prose prose-sm max-w-none prose-p:my-1 prose-pre:my-2 prose-pre:p-2 prose-pre:bg-gray-800 prose-pre:text-gray-100 prose-code:text-blue-600 prose-code:before:content-none prose-code:after:content-none">
+                          <div className="prose prose-sm max-w-none prose-p:my-1 prose-pre:my-2 prose-pre:rounded-xl prose-pre:border prose-pre:border-slate-200 prose-pre:bg-slate-50 prose-pre:p-3 prose-pre:text-slate-700 prose-code:text-blue-700 prose-code:before:content-none prose-code:after:content-none">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {streamingContent}
                             </ReactMarkdown>

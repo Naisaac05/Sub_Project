@@ -27,6 +27,36 @@ class EmbeddingIntentClassifierTest(unittest.TestCase):
         self.assertEqual(result.sub_intent, "definition")
         self.assertEqual(result.topic, "useEffect")
 
+    def test_polite_technical_definition_skips_embedding(self):
+        with patch(
+            "app.workflow.embedding_intent.EmbeddingIntentClassifier.classify",
+            side_effect=AssertionError("polite definition must not call embedding"),
+        ):
+            result = classify_free_question_with_embeddings("useEffect가 뭔가요?")
+
+        self.assertEqual(result.intent, "concept_definition")
+        self.assertEqual(result.sub_intent, "definition")
+        self.assertEqual(result.topic, "useEffect")
+
+    def test_obvious_life_advice_questions_are_off_topic_without_embedding(self):
+        questions = [
+            "점심 뭐 먹을까?",
+            "저녁 식사 뭐로 할까요?",
+            "핸드폰 뭐로 바꿀까요?",
+            "핸드폰줄 두고 올까요?",
+            "우산 가져갈까요?",
+        ]
+        with patch(
+            "app.workflow.embedding_intent.EmbeddingIntentClassifier.classify",
+            side_effect=AssertionError("obvious off-topic must not call embedding"),
+        ):
+            results = [classify_free_question_with_embeddings(question) for question in questions]
+
+        for result in results:
+            self.assertEqual(result.intent, "off_topic")
+            self.assertEqual(result.rag_policy, "no_rag")
+            self.assertEqual(result.sub_intent, "off_topic")
+
     def test_classifies_by_nearest_bge_embedding_and_maps_workflow_intent(self):
         vectors = {
             "definition prototype": [1.0, 0.0],

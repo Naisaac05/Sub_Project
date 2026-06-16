@@ -189,6 +189,9 @@ _DEFAULT_CLASSIFIER: EmbeddingIntentClassifier | None = None
 
 def classify_free_question_with_embeddings(text: str) -> FreeQuestionIntent:
     global _DEFAULT_CLASSIFIER
+    off_topic_intent = _obvious_off_topic_intent(text)
+    if off_topic_intent is not None:
+        return off_topic_intent
     rule_intent = _obvious_rule_intent(text)
     if rule_intent is not None:
         return rule_intent
@@ -197,13 +200,78 @@ def classify_free_question_with_embeddings(text: str) -> FreeQuestionIntent:
     return _DEFAULT_CLASSIFIER.classify(text)
 
 
+def _obvious_off_topic_intent(text: str) -> FreeQuestionIntent | None:
+    if not isinstance(text, str):
+        return None
+    normalized = re.sub(r"\s+", "", text).lower()
+    if not normalized:
+        return None
+    if _has_strong_technical_signal(text):
+        return None
+
+    meal_terms = ("점심", "저녁", "아침", "식사", "메뉴", "밥")
+    meal_actions = ("뭐먹", "뭐로", "먹을까", "먹을까요", "추천", "골라")
+    if any(term in normalized for term in meal_terms) and any(action in normalized for action in meal_actions):
+        return intent_from_label("OFF_TOPIC", text, confidence=0.99)
+
+    device_terms = ("핸드폰", "휴대폰", "스마트폰", "아이폰", "갤럭시")
+    purchase_actions = ("바꿀", "살까", "살까요", "추천", "구매")
+    if any(term in normalized for term in device_terms) and any(action in normalized for action in purchase_actions):
+        return intent_from_label("OFF_TOPIC", text, confidence=0.99)
+
+    entertainment_terms = ("영화", "드라마", "게임", "여행")
+    advice_actions = ("뭐볼", "볼까", "추천", "갈까", "할까")
+    if any(term in normalized for term in entertainment_terms) and any(action in normalized for action in advice_actions):
+        return intent_from_label("OFF_TOPIC", text, confidence=0.99)
+
+    life_objects = (
+        "핸드폰줄",
+        "우산",
+        "가방",
+        "옷",
+        "신발",
+        "지갑",
+        "이어폰",
+        "충전기",
+        "약",
+        "물병",
+    )
+    life_advice_actions = (
+        "두고올까",
+        "두고올까요",
+        "가져갈까",
+        "가져갈까요",
+        "챙길까",
+        "챙길까요",
+        "입을까",
+        "입을까요",
+        "살까",
+        "살까요",
+        "갈까",
+        "갈까요",
+        "할까",
+        "할까요",
+        "괜찮을까",
+        "괜찮을까요",
+    )
+    if any(term in normalized for term in life_objects) and any(
+        action in normalized for action in life_advice_actions
+    ):
+        return intent_from_label("OFF_TOPIC", text, confidence=0.99)
+
+    return None
+
+
 def _obvious_rule_intent(text: str) -> FreeQuestionIntent | None:
     if not isinstance(text, str):
         return None
     normalized = re.sub(r"\s+", "", text).lower()
     if not re.search(r"[a-z][a-z0-9+#.-]{1,}", text, re.IGNORECASE):
         return None
-    if re.search(r"(?:가|이|은|는)?(?:뭐야|무엇이야|무엇인가|뭔데|란)\??$", normalized):
+    if re.search(
+        r"(?:가|이|은|는)?(?:뭐야|뭔가요|뭐예요|뭐에요|무엇이야|무엇인가|무엇인가요|뭔데|란)\??$",
+        normalized,
+    ):
         intent = classify_free_question_rule_based(text)
         return FreeQuestionIntent(
             "concept_definition",
@@ -214,6 +282,44 @@ def _obvious_rule_intent(text: str) -> FreeQuestionIntent | None:
             "definition",
         )
     return None
+
+
+def _has_strong_technical_signal(text: str) -> bool:
+    lowered = text.lower()
+    if re.search(r"@[a-z][a-z0-9_]*(?:\([^)]*\))?", text, re.IGNORECASE):
+        return True
+    if re.search(r"[a-z][a-z0-9+#.-]{1,}", text, re.IGNORECASE):
+        return True
+    technical_terms = (
+        "알고리즘",
+        "자료구조",
+        "배열",
+        "리스트",
+        "스택",
+        "큐",
+        "트리",
+        "그래프",
+        "정렬",
+        "탐색",
+        "코드",
+        "함수",
+        "메서드",
+        "클래스",
+        "객체",
+        "컴포넌트",
+        "렌더링",
+        "상태",
+        "훅",
+        "서버",
+        "클라이언트",
+        "데이터베이스",
+        "쿼리",
+        "트랜잭션",
+        "API",
+        "CSS",
+        "HTML",
+    )
+    return any(term.lower() in lowered for term in technical_terms)
 
 
 def clear_embedding_intent_cache() -> None:

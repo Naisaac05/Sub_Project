@@ -5,11 +5,14 @@ import time
 
 from app.ollama.client import FALLBACK_MODEL, call_ollama
 from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_for_mode, compute_prompt_hash
+from app.rag.documents import load_concept_cards
 from app.rag.retriever import retrieve_context
 from app.schemas import AiGenerateRequest
+from app.schemas.rag_card import CardStatus
 from app.scoring import ConfidenceInputs, ConfidenceResult, calculate_confidence
 from app.validation.text import compact_answer, contains_korean, korean_fallback
 from app.workflow.answer_cache import cache_key_for, get_cached_answer
+from app.workflow.course_scope import CourseScopeDecision, resolve_course_scope
 from app.workflow.degraded import lightweight_only_enabled, lightweight_only_miss_state
 from app.workflow.embedding_intent import classify_free_question_with_embeddings
 from app.workflow.intent import FreeQuestionIntent, normalize_question
@@ -30,10 +33,6 @@ FORBIDDEN_CLAIMS = (
     "네트워크 지연 문제",
 )
 
-OFF_TOPIC_REJECTION_MESSAGE = (
-    "이 질문은 프로그래밍 학습과 관련이 없어 답변드리기 어렵습니다. "
-    "학습 중인 개념이나 문제에 대해 질문해주세요!"
-)
 
 
 def should_use_workflow_context(context) -> bool:
@@ -82,25 +81,26 @@ def generate_answer_node(
 ) -> ReviewWorkflowState:
     learner_query = _learner_query_for_state(state)
 
-    # Off-topic / unknown intent 차단
-    if (
-        state.mode == "free-question"
-        and state.free_question_intent
-        and state.free_question_intent.intent in {"off_topic", "unknown"}
-    ):
-        state.answer = OFF_TOPIC_REJECTION_MESSAGE
-        state.prompt_version = prompt_version_for_mode(state.mode)
-        state.model_used = "template"
-        state.fallback_used = False
-        state.route = "off_topic_rejected"
-        state.answer_style = _answer_style_for_state(state)
-        state.contexts = []
-        return state
+    if _is_off_topic_free_question(state):
+        return _off_topic_redirect_state(state)
+
+    scope_decision = None
+    if state.mode == "free-question":
+        scope_decision = _course_scope_for_state(state)
+        if scope_decision.scope == "out_of_course_tech":
+            return _out_of_course_redirect_state(state, scope_decision.matched_card_id)
+        if scope_decision.scope == "scope_unknown":
+            _append_quality_flag(state, "scope_unknown")
+        elif scope_decision.scope in {"course_card_hit", "course_card_miss"}:
+            _append_quality_flag(state, "course_scope_applied")
 
     v2_decision = resolve_v2_approved_fast_path(
         learner_query,
         state.free_question_intent,
         selected_answer=state.request.selected_answer,
+        allowed_card_ids=scope_decision.allowed_card_ids
+        if scope_decision and scope_decision.allowed_card_ids
+        else None,
     )
     state.v2_fast_path_decision = v2_decision.metadata()
     if state.mode == "free-question" and v2_decision.mode == "serve" and v2_decision.hit:
@@ -404,6 +404,21 @@ def generate_answer_node(
 
 
 def validate_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
+    if state.route in {"off_topic_redirect", "out_of_course_redirect"}:
+        state.validation = ValidationResult(
+            korean_ok=True,
+            required_keywords_ok=True,
+            forbidden_claims_ok=True,
+            relevance_ok=True,
+            score=1.0,
+            reasons=state.quality_flags.copy(),
+        )
+        return state
+
+    preserved_flags = [
+        flag for flag in state.quality_flags
+        if flag in {"scope_unknown", "course_scope_applied"}
+    ]
     korean_ok = contains_korean(state.answer)
     required_keywords_ok = _required_keywords_ok(state)
     forbidden_claims_ok = not any(claim in state.answer for claim in FORBIDDEN_CLAIMS)
@@ -426,7 +441,7 @@ def validate_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
         reasons.append("incomplete_answer")
 
     score = sum((korean_ok, required_keywords_ok, forbidden_claims_ok, relevance_ok, topic_ok, complete_ok)) / 6
-    state.quality_flags = reasons.copy()
+    state.quality_flags = preserved_flags + [reason for reason in reasons if reason not in preserved_flags]
     state.validation = ValidationResult(
         korean_ok=korean_ok,
         required_keywords_ok=required_keywords_ok,
@@ -546,6 +561,78 @@ def _fallback_for_state(state: ReviewWorkflowState) -> str:
         return _contextual_free_question_fallback(topic, state.request)
 
     return korean_fallback(state.mode, state.request)
+
+
+def _is_off_topic_free_question(state: ReviewWorkflowState) -> bool:
+    return (
+        state.mode == "free-question"
+        and state.free_question_intent is not None
+        and state.free_question_intent.intent == "off_topic"
+    )
+
+
+def _off_topic_redirect_state(state: ReviewWorkflowState) -> ReviewWorkflowState:
+    state.answer = (
+        "이 화면은 현재 틀린 문제를 복습하는 공간이라 해당 질문에는 답변하지 않을게요. "
+        "현재 문제의 개념, 정답 근거, 오답 이유처럼 학습과 직접 관련된 질문을 해 주세요."
+    )
+    state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+    state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
+    state.model_used = "template"
+    state.fallback_used = False
+    state.route = "off_topic_redirect"
+    state.answer_style = "off_topic"
+    state.quality_flags = ["off_topic"]
+    state.contexts = []
+    state.v2_fast_path_decision = {"mode": "skipped", "hit": False, "reason": "off_topic"}
+    return state
+
+
+def _approved_cards_for_scope():
+    return [
+        card for card in load_concept_cards()
+        if getattr(card.review, "card_status", None) == CardStatus.APPROVED
+    ]
+
+
+def _course_scope_for_state(state: ReviewWorkflowState) -> CourseScopeDecision:
+    return resolve_course_scope(
+        query=_learner_query_for_state(state),
+        course_id=state.request.course_id,
+        intent=state.free_question_intent,
+        approved_cards=_approved_cards_for_scope(),
+    )
+
+
+def _out_of_course_redirect_state(
+    state: ReviewWorkflowState,
+    matched_card_id: str | None,
+) -> ReviewWorkflowState:
+    state.answer = (
+        "이 질문은 현재 코스 복습 범위 밖의 기술 주제라 여기서는 답변하지 않을게요. "
+        "현재 문제의 개념, 정답 근거, 오답 이유를 질문해 주세요."
+    )
+    state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+    state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
+    state.model_used = "template"
+    state.fallback_used = False
+    state.route = "out_of_course_redirect"
+    state.answer_style = "out_of_course"
+    state.quality_flags = ["out_of_course"]
+    state.contexts = []
+    state.matched_concept_id_override = matched_card_id
+    state.v2_fast_path_decision = {
+        "mode": "skipped",
+        "hit": False,
+        "reason": "out_of_course",
+        "card_id": matched_card_id,
+    }
+    return state
+
+
+def _append_quality_flag(state: ReviewWorkflowState, flag: str) -> None:
+    if flag not in state.quality_flags:
+        state.quality_flags.append(flag)
 
 
 def _topic_specific_fallback(topic: str, user_answer: str) -> str | None:

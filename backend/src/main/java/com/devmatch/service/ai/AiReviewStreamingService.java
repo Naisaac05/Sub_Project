@@ -196,6 +196,13 @@ public class AiReviewStreamingService {
                 normalizedAnswer,
                 "",
                 1,
+                "",
+                "",
+                "",
+                courseId(currentQuestion),
+                testId(currentQuestion),
+                questionId(currentQuestion),
+                sourceQuestionId(currentQuestion),
                 properties.python().model(),
                 properties.python().temperature(),
                 properties.python().maxTokens(),
@@ -480,6 +487,35 @@ public class AiReviewStreamingService {
 
     private String optionAt(Question question, int index) {
         return AiReviewContextSupport.optionAt(question, index);
+    }
+
+    private String courseId(Question question) {
+        if (question == null || question.getTest() == null || question.getTest().getCategory() == null) {
+            return "";
+        }
+        return question.getTest().getCategory();
+    }
+
+    private String testId(Question question) {
+        if (question == null || question.getTest() == null || question.getTest().getId() == null) {
+            return "";
+        }
+        return String.valueOf(question.getTest().getId());
+    }
+
+    private String questionId(Question question) {
+        if (question == null || question.getId() == null) {
+            return "";
+        }
+        return String.valueOf(question.getId());
+    }
+
+    private String sourceQuestionId(Question question) {
+        String courseId = courseId(question);
+        if (courseId.isBlank() || question == null || question.getOrderIndex() == null) {
+            return "";
+        }
+        return courseId + ":" + question.getOrderIndex();
     }
 
     private AiReviewMessage ensureUserMessageSaved(

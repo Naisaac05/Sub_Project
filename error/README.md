@@ -40,6 +40,8 @@
 ```
 
 ## 인덱스
+- [2026-06-16 AI review off-topic free question and repeated follow-up](2026-06-16-ai-review-off-topic-follow-up-repeat.md)
+- [2026-06-16 AI review polite concept question missed fast path and off-topic advice leaked](2026-06-16-ai-review-politeness-offtopic-codeblock.md)
 - [2026-06-16 lightweight_only 강등 모드가 off-topic/unknown 차단에 가로채여 lightweight_only_miss 미반환 (PR #69 회귀)](2026-06-16-lightweight-only-offtopic-gate-bypass.md)
 - [2026-06-15 v2 Fast Path 도입 후에도 v1 RAG 운영 경로가 남음](2026-06-15-v1-rag-runtime-path-survived-v2-fast-path.md)
 - [2026-06-15 승인 전 dry-run 품질 통과 집계 범위 오류](2026-06-15-approval-dryrun-quality-summary-scope.md)
