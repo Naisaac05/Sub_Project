@@ -224,7 +224,75 @@ class V2ApprovedFastPathPolicyTest(unittest.TestCase):
 
         self.assertTrue(decision.hit)
         self.assertEqual(decision.mode, "serve")
-        self.assertEqual(decision.answer, "react-key definition")
+    def test_close_runner_up_score_is_rejected_as_margin_gate(self):
+        from app.rag.retriever import RetrievedContext
+
+        close_results = [
+            RetrievedContext("python-fstring", "fstring", "", 9.0, {}),
+            RetrievedContext("java-string", "string", "", 8.5, {}),
+        ]
+
+        class _StubRetriever:
+            def __init__(self, *args, **kwargs):
+                pass
+
+            def retrieve(self, *args, **kwargs):
+                return close_results
+
+        with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true"}), patch(
+            "app.workflow.v2_approved_fast_path.load_parallel_rag_config",
+            return_value=ParallelRagConfig(shadow_mode=False, v2_percentage=10),
+        ), patch(
+            "app.workflow.v2_approved_fast_path.LexicalRetrieverAdapter", _StubRetriever
+        ):
+            decision = resolve_v2_approved_fast_path(
+                "fstring 이란 무엇인가요?",
+                intent_from_label("CONCEPT_DEFINITION", "fstring 이란 무엇인가요?", 0.99),
+                card_loader=lambda _: [_card("python-fstring"), _card("java-string")],
+                random_value=0.05,
+            )
+
+        self.assertFalse(decision.hit)
+        self.assertEqual(decision.reason, "margin_gate")
+        self.assertEqual(decision.card_id, "python-fstring")
+        self.assertEqual(decision.reason_message, "후보 카드 간 점수 차이가 부족합니다")
+
+    def test_margin_gate_is_disabled_when_min_margin_is_zero(self):
+        from app.rag.retriever import RetrievedContext
+
+        close_results = [
+            RetrievedContext("python-fstring", "fstring", "", 9.0, {}),
+            RetrievedContext("java-string", "string", "", 8.5, {}),
+        ]
+
+        class _StubRetriever:
+            def __init__(self, *args, **kwargs):
+                pass
+
+            def retrieve(self, *args, **kwargs):
+                return close_results
+
+        with patch.dict(
+            os.environ,
+            {
+                "AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true",
+                "AI_REVIEW_V2_APPROVED_FAST_PATH_MIN_MARGIN": "0",
+            },
+        ), patch(
+            "app.workflow.v2_approved_fast_path.load_parallel_rag_config",
+            return_value=ParallelRagConfig(shadow_mode=False, v2_percentage=10),
+        ), patch(
+            "app.workflow.v2_approved_fast_path.LexicalRetrieverAdapter", _StubRetriever
+        ):
+            decision = resolve_v2_approved_fast_path(
+                "fstring 이란 무엇인가요?",
+                intent_from_label("CONCEPT_DEFINITION", "fstring 이란 무엇인가요?", 0.99),
+                card_loader=lambda _: [_card("python-fstring"), _card("java-string")],
+                random_value=0.05,
+            )
+
+        self.assertTrue(decision.hit)
+        self.assertEqual(decision.card_id, "python-fstring")
 
 
 class V2ApprovedFastPathWorkflowTest(unittest.TestCase):
