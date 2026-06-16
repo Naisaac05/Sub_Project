@@ -54,6 +54,7 @@ class V2FastPathDecision:
             "no_approved_cards": "승인된 Fast Path 카드가 없습니다",
             "unsupported_intent": "현재 지원하지 않는 intent입니다",
             "score_gate": "카드 매칭 점수가 부족합니다",
+            "margin_gate": "후보 카드 간 점수 차이가 부족합니다",
             "empty_allowlist": "승인된 Fast Path 카드가 없습니다",
             "retrieval_miss": "승인된 Fast Path 카드가 없습니다",
             "payload_not_approved": "승인된 Fast Path 카드가 없습니다",
@@ -104,7 +105,7 @@ def resolve_v2_approved_fast_path(
     if not cards:
         return V2FastPathDecision(mode, False, "no_approved_cards", payload_intent=payload_intent)
 
-    top = LexicalRetrieverAdapter(card_loader=lambda: cards).retrieve(query, limit=1)
+    top = LexicalRetrieverAdapter(card_loader=lambda: cards).retrieve(query, limit=2)
     if not top:
         return V2FastPathDecision(mode, False, "retrieval_miss", payload_intent=payload_intent)
     result = top[0]
@@ -112,6 +113,15 @@ def resolve_v2_approved_fast_path(
     if result.score < min_score:
         return V2FastPathDecision(
             mode, False, "score_gate", result.concept_id, payload_intent, score=result.score
+        )
+
+    # margin 게이트: 1위와 2위 점수가 너무 가까우면(닮은 카드끼리 혼동) 즉답을 포기하고 Ollama로 넘긴다.
+    # 절대 점수(min_score)는 1위 실력만 보지만, margin은 1·2위 격차를 봐서 순위 뒤집힘 위험을 막는다.
+    runner_up_score = top[1].score if len(top) > 1 else 0.0
+    min_margin = _env_float("AI_REVIEW_V2_APPROVED_FAST_PATH_MIN_MARGIN", 1.0)
+    if result.score - runner_up_score < min_margin:
+        return V2FastPathDecision(
+            mode, False, "margin_gate", result.concept_id, payload_intent, score=result.score
         )
 
     card = next(card for card in cards if card.card_id == result.concept_id)
