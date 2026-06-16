@@ -140,6 +140,14 @@ class AutoCandidateTest(unittest.TestCase):
 
         self.assertEqual(reason, "static_answer_unapproved")
 
+    def test_out_of_course_and_scope_unknown_do_not_create_candidates(self):
+        self.assertIsNone(
+            should_capture_auto_candidate("free-question", "out_of_course_redirect", 0.9, [], False)
+        )
+        self.assertIsNone(
+            should_capture_auto_candidate("free-question", "scope_unknown", 0.9, [], False)
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

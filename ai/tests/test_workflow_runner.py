@@ -136,6 +136,79 @@ class WorkflowRunnerTest(unittest.TestCase):
             retrieve.assert_not_called()
             self.assertEqual(result.contexts, [])
 
+    def test_off_topic_free_question_redirects_without_generation(self):
+        def forbidden_generator(**kwargs):
+            raise AssertionError("off-topic free-question must not call Ollama generation")
+
+        with patch(
+            "app.workflow.nodes.classify_free_question_with_embeddings",
+            return_value=intent_from_label("OFF_TOPIC", "점심 뭐 먹을까?", confidence=0.95),
+        ):
+            response = run_review_workflow(
+                mode="free-question",
+                request=AiGenerateRequest(
+                    question="useEffect dependency array problem",
+                    correct_answer="필요한 값 변화에 반응하지 않는다",
+                    selected_answer="CSS가 서버에서만 적용된다",
+                    user_answer="점심 뭐 먹을까?",
+                ),
+                generator=forbidden_generator,
+            )
+
+        self.assertEqual(response.route, "off_topic_redirect")
+        self.assertEqual(response.model_used, "template")
+        self.assertFalse(response.fallback_used)
+        self.assertIn("off_topic", response.quality_flags)
+        self.assertIn("학습", response.answer)
+        self.assertIsNone(response.candidate_id)
+
+    def test_out_of_course_technical_question_redirects_without_generation(self):
+        def forbidden_generator(**kwargs):
+            raise AssertionError("out-of-course technical question must not call Ollama")
+
+        course_scope = __import__(
+            "app.workflow.course_scope",
+            fromlist=["CourseScopeDecision"],
+        )
+        with patch(
+            "app.workflow.nodes.classify_free_question_with_embeddings",
+            return_value=intent_from_label("CONCEPT_DEFINITION", "@Transactional이 뭐야?", confidence=0.95),
+        ), patch(
+            "app.workflow.nodes.resolve_course_scope",
+            return_value=course_scope.CourseScopeDecision(
+                "out_of_course_tech",
+                "frontend",
+                frozenset({"frontend-useeffect"}),
+                "spring-transactional",
+                "matched_other_course_card",
+            ),
+        ):
+            response = run_review_workflow(
+                mode="free-question",
+                request=AiGenerateRequest(
+                    user_answer="@Transactional이 뭐야?",
+                    course_id="frontend",
+                    question="useEffect dependency problem",
+                ),
+                generator=forbidden_generator,
+            )
+
+        self.assertEqual(response.route, "out_of_course_redirect")
+        self.assertEqual(response.model_used, "template")
+        self.assertFalse(response.fallback_used)
+        self.assertIn("out_of_course", response.quality_flags)
+        self.assertEqual(response.matched_concept_id, "spring-transactional")
+
+    def test_scope_unknown_keeps_answer_path_but_reports_flag(self):
+        response = run_review_workflow(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="새 frontend 개념이 뭐야?"),
+            generator=lambda **kwargs: "새 frontend 개념은 현재 코스에서 확인할 수 있는 기술 주제입니다.",
+        )
+
+        self.assertIn("scope_unknown", response.quality_flags)
+        self.assertNotEqual(response.route, "out_of_course_redirect")
+
     def test_non_korean_generation_uses_template_fallback(self):
         response = run_review_workflow(
             mode="free-question",

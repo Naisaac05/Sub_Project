@@ -311,6 +311,10 @@ class AiReviewStreamingServiceTest {
         assertThat(request.correct_answer()).isEqualTo("A");
         assertThat(request.selected_answer()).isEqualTo("B");
         assertThat(request.user_answer()).isEqualTo("What is it?");
+        assertThat(request.course_id()).isEqualTo("java-backend");
+        assertThat(request.test_id()).isEqualTo("30");
+        assertThat(request.question_id()).isEqualTo("100");
+        assertThat(request.source_question_id()).isEqualTo("java-backend:1");
         assertThat(request.stream()).isTrue();
 
         verify(metricSink).streamFirstToken(
@@ -999,6 +1003,7 @@ class AiReviewStreamingServiceTest {
                 .passingScore(70)
                 .questionCount(questionCount)
                 .build();
+        ReflectionTestUtils.setField(test, "id", 30L);
 
         TestResult result = TestResult.builder()
                 .user(user)

@@ -237,7 +237,7 @@ Rules:
 - Explain with a small concrete example if helpful.
 - Do not grade the learner.
 - Stop after the answer.
-- If the question is completely unrelated to programming, IT, or software development, do not answer it. Instead, reply: "이 질문은 프로그래밍 학습과 관련이 없어 답변드리기 어렵습니다. 학습 중인 개념이나 문제에 대해 질문해주세요!"
+
 {context_block}
 """.strip()
 
@@ -256,7 +256,7 @@ Rules:
 - Explain with a small concrete example if helpful.
 - Do not grade the learner.
 - Stop after the answer.
-- If the question is completely unrelated to programming, IT, or software development, do not answer it. Instead, reply: "이 질문은 프로그래밍 학습과 관련이 없어 답변드리기 어렵습니다. 학습 중인 개념이나 문제에 대해 질문해주세요!"
+
 
 Background original test question: {request.question}
 Background options:

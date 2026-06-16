@@ -173,9 +173,9 @@ export default function AdminAiReviewCandidatesPage() {
             </label>
             <div className="flex flex-wrap gap-2">
               {selected.status === 'PENDING' && selected.workflowPhase !== 'HUMAN_REVIEW' && (
-                <Button variant="outline" onClick={() => review('START_REVIEW')} disabled={saving}>검토 시작</Button>
+                <Button variant="outline" onClick={() => review('START_REVIEW')} disabled={saving}>검토</Button>
               )}
-              <Button onClick={() => review('EDIT_AND_APPROVE')} disabled={saving || !definition.trim()}><Check className="mr-2 h-4 w-4" />정의 승인 및 v2 반영</Button>
+              <Button onClick={() => review('EDIT_AND_APPROVE')} disabled={saving || !definition.trim()}><Check className="mr-2 h-4 w-4" />승인 및 반영</Button>
               <Button variant="outline" onClick={() => review('MERGE')} disabled={saving || !Number(mergeId)}><GitMerge className="mr-2 h-4 w-4" />병합</Button>
               <Button variant="destructive" onClick={() => review('REJECT')} disabled={saving}><X className="mr-2 h-4 w-4" />거절</Button>
             </div>
