@@ -22,6 +22,10 @@ BROAD_TERMS = {
     "api", "key", "cache", "loading", "latency", "concept", "data", "test",
     "server", "java", "spring", "react", "frontend", "python", "algorithm",
     "function", "class", "method", "에서", "중", "다음",
+    # 너무 일반적인 자료형/컨테이너 단어 — 단독 term이면 다른 주제와 검색 충돌을 일으킨다
+    # (예: term="string" 인 java-string 이 파이썬 f-string 질문에 끼어든 0.5점 충돌)
+    "string", "list", "array", "object", "value", "type",
+    "variable", "number", "boolean", "integer",
 }
 GENERIC_TOKENS = BROAD_TERMS | {
     "역할", "방법", "설명", "올바른", "의미", "사용", "개념", "질문", "card",

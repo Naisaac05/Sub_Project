@@ -27,6 +27,11 @@ def degraded_state_for(mode: str, request: AiGenerateRequest) -> ReviewWorkflowS
     if template_fallback_only_enabled():
         return _template_state(mode, request, route="template_fallback_only")
 
+    # lightweight_only 는 다른 강등 모드와 마찬가지로 분류/off-topic 이전에 조기 반환한다.
+    # (분류기를 거치면 off_topic/unknown 차단 분기에 가로채여 lightweight_only_miss 가 안 나온다)
+    if lightweight_only_enabled():
+        return lightweight_only_miss_state(mode, request)
+
     if not cache_only_enabled():
         return None
 
