@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 from app.schemas import AiGenerateRequest
 from app.workflow.answer_cache import cache_key_for, clear_answer_cache, put_cached_answer
+from app.workflow.degraded import degraded_state_for
 from app.workflow.embedding_intent import intent_from_label
 from app.workflow.runner import run_review_workflow, run_review_workflow_stream
 
@@ -113,6 +114,19 @@ class WorkflowDegradedModesTest(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(response.fallback_used)
         self.assertEqual(response.model_used, "template")
         self.assertEqual(response.route, "lightweight_only_miss")
+
+    def test_degraded_state_for_handles_lightweight_only_as_early_template_miss(self):
+        os.environ["AI_REVIEW_LIGHTWEIGHT_ONLY"] = "true"
+
+        state = degraded_state_for(
+            "free-question", AiGenerateRequest(user_answer="아무 질문이나")
+        )
+
+        self.assertIsNotNone(state)
+        self.assertEqual(state.route, "lightweight_only_miss")
+        self.assertTrue(state.fallback_used)
+        self.assertEqual(state.model_used, "template")
+        self.assertIn("lightweight_only_miss", state.quality_flags)
 
     def test_lightweight_only_miss_uses_template_without_cache_or_generator(self):
         os.environ["AI_REVIEW_LIGHTWEIGHT_ONLY"] = "true"
