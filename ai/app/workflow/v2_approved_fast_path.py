@@ -71,6 +71,7 @@ def resolve_v2_approved_fast_path(
     intent: FreeQuestionIntent | None,
     *,
     selected_answer: str | None = None,
+    allowed_card_ids: Iterable[str] | None = None,
     card_loader: CardLoader | None = None,
     random_value: float | None = None,
 ) -> V2FastPathDecision:
@@ -86,6 +87,8 @@ def resolve_v2_approved_fast_path(
         return V2FastPathDecision(mode, False, "unsupported_intent")
 
     eligible_ids = _runtime_allowlist()
+    if allowed_card_ids is not None:
+        eligible_ids = frozenset(eligible_ids & set(allowed_card_ids))
     if not eligible_ids:
         return V2FastPathDecision(mode, False, "empty_allowlist", payload_intent=payload_intent)
 

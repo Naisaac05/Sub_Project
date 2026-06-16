@@ -117,6 +117,8 @@ def should_capture_auto_candidate(
 ) -> str | None:
     if mode != "free-question":
         return None
+    if route in {"off_topic_redirect", "out_of_course_redirect", "scope_unknown"}:
+        return None
     if fallback_used:
         return None
     if v2_miss_reason:

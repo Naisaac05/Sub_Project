@@ -70,4 +70,5 @@ class ReviewWorkflowState:
     semantic_judge_cache_hit: bool = False
     semantic_judge_cache_key_hash: str | None = None
     v2_fast_path_decision: dict[str, object] = field(default_factory=dict)
+    matched_concept_id_override: str | None = None
 

@@ -87,6 +87,10 @@ public class PythonAiReviewClient {
                 "DIAGNOSTIC_FOLLOW_UP",
                 previousAiQuestion,
                 activeConcept,
+                "",
+                "",
+                "",
+                "",
                 properties.python().model(),
                 properties.python().temperature(),
                 properties.python().maxTokens(),
@@ -109,10 +113,17 @@ public class PythonAiReviewClient {
                 question.getContent(),
                 question.getOptions(),
                 correctAnswer,
-                selectedAnswer,
+            selectedAnswer,
                 userQuestion,
                 "",
                 1,
+                "",
+                "",
+                "",
+                courseId(question),
+                testId(question),
+                questionId(question),
+                sourceQuestionId(question),
                 properties.python().model(),
                 properties.python().temperature(),
                 properties.python().maxTokens(),
@@ -137,6 +148,10 @@ public class PythonAiReviewClient {
                 request.follow_up_type(),
                 request.previous_ai_question(),
                 request.active_concept(),
+                request.course_id(),
+                request.test_id(),
+                request.question_id(),
+                request.source_question_id(),
                 request.model(),
                 request.temperature(),
                 request.max_tokens(),
@@ -255,6 +270,35 @@ public class PythonAiReviewClient {
         }
     }
 
+    private String courseId(Question question) {
+        if (question == null || question.getTest() == null || question.getTest().getCategory() == null) {
+            return "";
+        }
+        return question.getTest().getCategory();
+    }
+
+    private String testId(Question question) {
+        if (question == null || question.getTest() == null || question.getTest().getId() == null) {
+            return "";
+        }
+        return String.valueOf(question.getTest().getId());
+    }
+
+    private String questionId(Question question) {
+        if (question == null || question.getId() == null) {
+            return "";
+        }
+        return String.valueOf(question.getId());
+    }
+
+    private String sourceQuestionId(Question question) {
+        String courseId = courseId(question);
+        if (courseId.isBlank() || question == null || question.getOrderIndex() == null) {
+            return "";
+        }
+        return courseId + ":" + question.getOrderIndex();
+    }
+
     public record PythonAiRequest(
             String question,
             List<String> options,
@@ -266,6 +310,10 @@ public class PythonAiReviewClient {
             String follow_up_type,
             String previous_ai_question,
             String active_concept,
+            String course_id,
+            String test_id,
+            String question_id,
+            String source_question_id,
             String model,
             double temperature,
             int max_tokens,
@@ -284,13 +332,19 @@ public class PythonAiReviewClient {
                 String followUpType,
                 String previousAiQuestion,
                 String activeConcept,
+                String courseId,
+                String testId,
+                String questionId,
+                String sourceQuestionId,
                 String model,
                 double temperature,
                 int max_tokens,
                 int num_ctx,
                 int num_thread
         ) {
-            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step, followUpType, previousAiQuestion, activeConcept, model, temperature, max_tokens, num_ctx, num_thread, false);
+            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step,
+                    followUpType, previousAiQuestion, activeConcept, courseId, testId, questionId, sourceQuestionId,
+                    model, temperature, max_tokens, num_ctx, num_thread, false);
         }
 
         public PythonAiRequest(
@@ -307,7 +361,9 @@ public class PythonAiReviewClient {
                 int num_ctx,
                 int num_thread
         ) {
-            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step, "", "", "", model, temperature, max_tokens, num_ctx, num_thread, false);
+            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step,
+                    "", "", "", "", "", "", "",
+                    model, temperature, max_tokens, num_ctx, num_thread, false);
         }
 
         public PythonAiRequest(
@@ -325,7 +381,9 @@ public class PythonAiReviewClient {
                 int num_thread,
                 Boolean stream
         ) {
-            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step, "", "", "", model, temperature, max_tokens, num_ctx, num_thread, stream);
+            this(question, options, correct_answer, selected_answer, user_answer, evaluation, step,
+                    "", "", "", "", "", "", "",
+                    model, temperature, max_tokens, num_ctx, num_thread, stream);
         }
     }
 

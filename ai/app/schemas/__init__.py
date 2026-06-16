@@ -18,6 +18,10 @@ class AiGenerateRequest(BaseModel):
     follow_up_type: str = ""
     previous_ai_question: str = ""
     active_concept: str = ""
+    course_id: str = ""
+    test_id: str = ""
+    question_id: str = ""
+    source_question_id: str = ""
     step: int = 1
     model: str = DEFAULT_MODEL
     temperature: float = 0.2
@@ -35,6 +39,10 @@ class AiGenerateRequest(BaseModel):
         "follow_up_type",
         "previous_ai_question",
         "active_concept",
+        "course_id",
+        "test_id",
+        "question_id",
+        "source_question_id",
         mode="before",
     )
     @classmethod
