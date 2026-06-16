@@ -10,6 +10,9 @@ final class AiReviewFollowUpSupport {
     }
 
     static String buildFreeQuestionFollowUp(Question question, String userQuestion, AiGeneratedAnswer answer) {
+        if (shouldSkipFollowUp(answer)) {
+            return "";
+        }
         return buildFreeQuestionFollowUp(
                 question,
                 userQuestion,
@@ -34,7 +37,7 @@ final class AiReviewFollowUpSupport {
         if ("comparison".equals(style)) {
             return topic + "에서 정답과 헷갈리는 선택지를 가르는 차이는 무엇일까요?";
         }
-        return topic + "의 핵심을 한 문장으로 다시 설명하면 어떻게 말할 수 있을까요?";
+        return definitionFollowUp(topic);
     }
 
     static String appendFollowUp(String answer, String followUpQuestion) {
@@ -82,5 +85,28 @@ final class AiReviewFollowUpSupport {
         }
         String compact = value.replaceAll("\\s+", " ").strip();
         return compact.length() <= 80 ? compact : compact.substring(0, 80) + "...";
+    }
+
+    private static String definitionFollowUp(String topic) {
+        return switch (Math.floorMod(topic.hashCode(), 3)) {
+            case 0 -> topic + "가 실제 코드에서 드러나는 신호를 하나 고르면 무엇일까요?";
+            case 1 -> topic + "가 필요한 상황과 그렇지 않은 상황을 어떻게 구분할 수 있을까요?";
+            default -> "현재 문제의 보기 중 " + topic + "와 직접 연결되는 단서는 무엇일까요?";
+        };
+    }
+
+    private static boolean shouldSkipFollowUp(AiGeneratedAnswer answer) {
+        if (answer == null) {
+            return false;
+        }
+        if ("off_topic_redirect".equals(answer.route())
+                || "out_of_course_redirect".equals(answer.route())
+                || "off_topic".equals(answer.answerStyle())
+                || "out_of_course".equals(answer.answerStyle())) {
+            return true;
+        }
+        return answer.qualityFlags() != null
+                && (answer.qualityFlags().contains("off_topic")
+                || answer.qualityFlags().contains("out_of_course"));
     }
 }

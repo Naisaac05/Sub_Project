@@ -19,6 +19,11 @@ from app.workflow.nodes import (
     _fallback_message,
     _fallback_reason_from_exception,
     _should_retry_fallback_model,
+    _is_off_topic_free_question,
+    _off_topic_redirect_state,
+    _course_scope_for_state,
+    _out_of_course_redirect_state,
+    _append_quality_flag,
     max_tokens_for_mode,
 )
 from app.workflow.state import ReviewWorkflowState
@@ -44,7 +49,8 @@ def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> A
         route=state.route,
         resolved_query=state.resolved_query.resolved_query if state.resolved_query else None,
         correction_type=state.resolved_query.correction_type if state.resolved_query else None,
-        matched_concept_id=state.resolved_query.matched_concept_id if state.resolved_query else None,
+        matched_concept_id=state.matched_concept_id_override
+        or (state.resolved_query.matched_concept_id if state.resolved_query else None),
         answer_style=state.answer_style,
         quality_flags=state.quality_flags,
         candidate_id=state.candidate_id,
@@ -302,32 +308,42 @@ async def run_review_workflow_stream(
     state = retrieve_context_node(state)
     state = rule_evaluate_node(state)
 
-    learner_query = _learner_query_for_state(state)
-
-    # Off-topic / unknown intent 차단 (스트리밍 경로)
-    from app.workflow.nodes import OFF_TOPIC_REJECTION_MESSAGE
-    if (
-        state.mode == "free-question"
-        and state.free_question_intent
-        and state.free_question_intent.intent in {"off_topic", "unknown"}
-    ):
-        state.answer = OFF_TOPIC_REJECTION_MESSAGE
-        state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
-        state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
-        state.model_used = "template"
-        state.fallback_used = False
-        state.route = "off_topic_rejected"
-        state.answer_style = _answer_style_for_state(state)
-        state.contexts = []
+    if _is_off_topic_free_question(state):
+        state = _off_topic_redirect_state(state)
         yield {"type": "start"}
         yield {"type": "chunk", "chunk": state.answer}
-        yield {"type": "done", "response": _build_response_from_state(state, 0)}
+        state = validate_answer_node(state)
+        state = confidence_gate_node(state)
+        response = _build_response_from_state(state, 0)
+        yield {"type": "done", "response": response}
         return
+
+    scope_decision = None
+    if state.mode == "free-question":
+        scope_decision = _course_scope_for_state(state)
+        if scope_decision.scope == "out_of_course_tech":
+            state = _out_of_course_redirect_state(state, scope_decision.matched_card_id)
+            yield {"type": "start"}
+            yield {"type": "chunk", "chunk": state.answer}
+            state = validate_answer_node(state)
+            state = confidence_gate_node(state)
+            response = _build_response_from_state(state, 0)
+            yield {"type": "done", "response": response}
+            return
+        if scope_decision.scope == "scope_unknown":
+            _append_quality_flag(state, "scope_unknown")
+        elif scope_decision.scope in {"course_card_hit", "course_card_miss"}:
+            _append_quality_flag(state, "course_scope_applied")
+
+    learner_query = _learner_query_for_state(state)
 
     v2_decision = resolve_v2_approved_fast_path(
         learner_query,
         state.free_question_intent,
         selected_answer=state.request.selected_answer,
+        allowed_card_ids=scope_decision.allowed_card_ids
+        if scope_decision and scope_decision.allowed_card_ids
+        else None,
     )
     state.v2_fast_path_decision = v2_decision.metadata()
     if state.mode == "free-question" and v2_decision.mode == "serve" and v2_decision.hit:
