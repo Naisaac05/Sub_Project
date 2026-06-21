@@ -1,0 +1,69 @@
+# `plans` 폴더 인덱스
+
+이 문서는 `plans` 폴더의 자동 생성된 네비게이션입니다.
+
+## 문서 목록
+- 📄 [20260409_lms_implementation.md](./20260409_lms_implementation.md) — *LMS 도입 계획 및 마이그레이션 방향*
+- 📄 [20260412_lms_dashboard-dday-navigation.md](./20260412_lms_dashboard-dday-navigation.md) — *LMS 대시보드 D-day 표시 및 카드 네비게이션 구현 계획 도입 계획 및 마이그레이션 작업 방향*
+- 📄 [20260412_lms_mypage-calendar-crud.md](./20260412_lms_mypage-calendar-crud.md) — *LMS 마이페이지 캘린더 CRUD 연동 구현 계획*
+- 📄 [20260418_mentor_application-flow.md](./20260418_mentor_application-flow.md) — *멘토 등록 신청서 + 멘토링 코스 DB 승격 구현 플랜 도입 계획 및 마이그레이션 작업 방향*
+- 📄 [20260422_admin_console-common.md](./20260422_admin_console-common.md) — *관리자 콘솔 Phase II — Common Implementation Plan 도입 계획 및 마이그레이션 작업 방향*
+- 📄 [20260423_admin_payments.md](./20260423_admin_payments.md) — *관리자 결제 관리 시스템 (Phase II) 구현 계획*
+- 📄 [20260423_admin_users.md](./20260423_admin_users.md) — *관리자 회원 관리 시스템 (Phase II) 구현 계획*
+- 📄 [20260424_admin_dashboard.md](./20260424_admin_dashboard.md) — *관리자 콘솔 홈 대시보드 (Phase III) 구현 계획*
+- 📄 [20260424_admin_payment-refund-concurrency.md](./20260424_admin_payment-refund-concurrency.md) — *AdminPayment 환불 동시성 제어 Implementation Plan 도입 계획 및 마이그레이션 작업 방향*
+- 📄 [20260424_admin_posts.md](./20260424_admin_posts.md) — *관리자 게시물 관리 기능 구현 계획*
+- 📄 [20260425_admin_faq.md](./20260425_admin_faq.md) — *관리자 FAQ 관리 시스템 (Phase III) 구현 계획*
+- 📄 [20260425_mentor_change-request.md](./20260425_mentor_change-request.md) — *멘토 교체 신청 및 심사 프로세스 구현 계획*
+- 📄 [20260516_ai_review-lightweight-phase-47.md](./20260516_ai_review-lightweight-phase-47.md) — *AI 리뷰 Lightweight Phase 4.7 도입 및 아키텍처 연동 계획*
+- 📄 [20260516_ai_review-ollama-speed.md](./20260516_ai_review-ollama-speed.md) — *AI 리뷰 Ollama 추론 속도 최적화 및 개선 계획*
+- 📄 [20260516_ai_review-rag-phase-1.md](./20260516_ai_review-rag-phase-1.md) — *AI 리뷰 RAG Phase 1 파이프라인 도입 계획*
+- 📄 [20260516_lightweight_free-question-intent-routing.md](./20260516_lightweight_free-question-intent-routing.md) — *Lightweight 자유 질문 의도 라우팅(Intent Routing) 구현 계획*
+- 📄 [20260517_ai_review-lightweight-speed-evaluator-hardening.md](./20260517_ai_review-lightweight-speed-evaluator-hardening.md) — *AI 리뷰 Lightweight 속도 및 평가기 성능 강화 계획*
+- 📄 [20260518_ai_review-candidate-approval-expansion.md](./20260518_ai_review-candidate-approval-expansion.md) — *AI 리뷰 답변 후보 승인 프로세스 확장 플랜*
+- 📄 [20260518_ai_review-concept-fast-path-expansion.md](./20260518_ai_review-concept-fast-path-expansion.md) — *AI 리뷰 개념(Concept) Fast Path 확장 구현 계획*
+- 📄 [20260518_ai_review-feedback-loop-integration.md](./20260518_ai_review-feedback-loop-integration.md) — *AI 리뷰 유저 피드백 루프 연동 및 고도화 계획*
+- 📄 [20260518_ai_review-observability-reindex-golden-hybrid.md](./20260518_ai_review-observability-reindex-golden-hybrid.md) — *AI 관측성 강화 및 골든 하이브리드 재색인 계획*
+- 📄 [20260518_ai_review-quality-auto-candidates-hybrid.md](./20260518_ai_review-quality-auto-candidates-hybrid.md) — *AI 리뷰 품질 향상 및 하이브리드 자동 후보 파이프라인 계획*
+- 📄 [20260518_ai_review-typo-alias-resolver.md](./20260518_ai_review-typo-alias-resolver.md) — *AI 리뷰 오타 및 별칭 리졸버(Typo Alias Resolver) 구현 계획*
+- 📄 [20260518_course_question-concept-extraction.md](./20260518_course_question-concept-extraction.md) — *코스 질문 기반 개념 추출 및 후보 승인 파이프라인 계획*
+- 📄 [20260518_generated_concept-card-fast-path.md](./20260518_generated_concept-card-fast-path.md) — *생성된 개념 카드(Generated Concept Card) Fast Path 구현 계획*
+- 📄 [20260519_ai_pipeline-final-md-alignment.md](./20260519_ai_pipeline-final-md-alignment.md) — *AI 파이프라인 final.md 문서 포맷 정렬 작업 플랜*
+- 📄 [20260519_ai_review-auto-candidate-admin-queue.md](./20260519_ai_review-auto-candidate-admin-queue.md) — *AI 리뷰 자동 후보 관리자 대기열(Admin Queue) 구현 계획*
+- 📄 [20260519_ai_review-candidate-approval-v2.md](./20260519_ai_review-candidate-approval-v2.md) — *AI 리뷰 후보 승인 파이프라인 v2 전면 개편 계획*
+- 📄 [20260519_ai_review-chroma-bge-smoke.md](./20260519_ai_review-chroma-bge-smoke.md) — *AI 리뷰 Chroma DB 및 bge-m3 스모크 테스트 구현 계획*
+- 📄 [20260519_ai_review-golden-evaluator-e2e-docs.md](./20260519_ai_review-golden-evaluator-e2e-docs.md) — *골든 평가기, 프로모션 E2E 검증 및 파이프라인 문서화 계획*
+- 📄 [20260519_ai_review-hybrid-rag-runtime.md](./20260519_ai_review-hybrid-rag-runtime.md) — *AI 리뷰 하이브리드 RAG 런타임 도입 및 전환 계획*
+- 📄 [20260519_ai_review-hybrid-retriever-adapter.md](./20260519_ai_review-hybrid-retriever-adapter.md) — *AI 리뷰 하이브리드 리트리버 어댑터 패턴 구현 계획*
+- 📄 [20260519_ai_review-langgraph-stategraph.md](./20260519_ai_review-langgraph-stategraph.md) — *AI 리뷰 LangGraph StateGraph 도입 및 워크플로우 제어 계획*
+- 📄 [20260519_ai_review-model-runtime-policy.md](./20260519_ai_review-model-runtime-policy.md) — *AI 리뷰 모델 런타임 폴리시 및 프로바이더 정책 수립 계획*
+- 📄 [20260519_ai_review-observability-output.md](./20260519_ai_review-observability-output.md) — *AI 리뷰 관측성(Observability) 출력 지표 구현 계획*
+- 📄 [20260519_ai_review-production-closeout.md](./20260519_ai_review-production-closeout.md) — *AI 리뷰 프로덕션 마무리 및 클로즈아웃 프로세스 계획*
+- 📄 [20260519_ai_review-security-guardrails.md](./20260519_ai_review-security-guardrails.md) — *AI 리뷰 시스템 보안 가드레일 적용 및 구현 계획*
+- 📄 [20260520_ai_review-approved-candidate-knowledge-sync.md](./20260520_ai_review-approved-candidate-knowledge-sync.md) — *AI 리뷰 승인 후보 데이터 지식 베이스 동기화 플랜*
+- 📄 [20260526_ai_candidate-approval-workflow-phase.md](./20260526_ai_candidate-approval-workflow-phase.md) — *AI 답변 후보 승인 워크플로우 페이즈(Phase) 연동 계획*
+- 📄 [20260526_ai_candidate-durable-queue.md](./20260526_ai_candidate-durable-queue.md) — *AI 후보 내구성 대기열(Durable Queue) 안정성 강화 플랜*
+- 📄 [20260526_ai_immutable-vector-index.md](./20260526_ai_immutable-vector-index.md) — *AI 시스템 불변(Immutable) 벡터 인덱스 마이그레이션 계획*
+- 📄 [20260526_ai_production-config-hardening.md](./20260526_ai_production-config-hardening.md) — *AI 프로덕션 환경 설정 강화(Config Hardening) 플랜*
+- 📄 [20260526_ai_redis-introduction.md](./20260526_ai_redis-introduction.md) — *AI 인프라 레이어 Redis 캐싱/큐 도입 계획*
+- 📄 [20260527_ai_distributed-single-flight.md](./20260527_ai_distributed-single-flight.md) — *AI 중복 호출 방지를 위한 분산 Single-Flight 패턴 구현 계획*
+- 📄 [20260527_ai_full-rag-evaluation-pipeline.md](./20260527_ai_full-rag-evaluation-pipeline.md) — *AI Full RAG End-to-End 평가 파이프라인 구축 계획*
+- 📄 [20260527_ai_inference-gateway-model-pool.md](./20260527_ai_inference-gateway-model-pool.md) — *AI 인퍼런스 게이트웨이 및 LLM 모델 풀 구현 플랜*
+- 📄 [20260527_ai_review-test-session-reset.md](./20260527_ai_review-test-session-reset.md) — *AI Review Test Session Reset Implementation Plan 도입 계획 및 마이그레이션 작업 방향*
+- 📄 [20260527_ai_semantic-evaluation.md](./20260527_ai_semantic-evaluation.md) — *AI 시스템 시맨틱(의미론적) 자동 평가 모델 도입 계획*
+- 📄 [20260601_flab_knowledge-cards-batch-1.md](./20260601_flab_knowledge-cards-batch-1.md) — *F-Lab 면접 지식카드 + 골든셋 (배치 1) Implementation Plan 도입 계획 및 마이그레이션 작업 방향*
+- 📄 [20260608_intent_poc-pattern-bank.md](./20260608_intent_poc-pattern-bank.md) — *의도 분류(Intent PoC) 패턴 뱅크 및 룰셋 구축 계획*
+- 📄 [20260608_intent_poc-three-stage-eval.md](./20260608_intent_poc-three-stage-eval.md) — *의도 분류(Intent) PoC 3단계 파이프라인 평가 도입 플랜*
+- 📄 [20260608_ollama_bge-m3-rag-retrieval.md](./20260608_ollama_bge-m3-rag-retrieval.md) — *Ollama 환경 BGE-M3 RAG 검색 파이프라인 구현 계획*
+- 📄 [20260609_bge_m3-runtime-intent-classifier.md](./20260609_bge_m3-runtime-intent-classifier.md) — *BGE-M3 기반 런타임 의도 분류기(Intent Classifier) 구현 플랜*
+- 📄 [20260609_exaone_live-e2e-quality-evaluation.md](./20260609_exaone_live-e2e-quality-evaluation.md) — *EXAONE 모델 대상 Live E2E 품질 평가 파이프라인 구현 플랜*
+- 📄 [20260612_rag_cards-v2-isolated-migration.md](./20260612_rag_cards-v2-isolated-migration.md) — *RAG Cards v2 레거시 분리 및 격리 마이그레이션 플랜*
+- 📄 [20260612_rag_cards-v2-priority-quality-fixes.md](./20260612_rag_cards-v2-priority-quality-fixes.md) — *RAG Cards v2 우선순위 기반 품질 개선 및 버그 수정 계획*
+- 📄 [20260612_rag_v2-shadow-fast-path-validation.md](./20260612_rag_v2-shadow-fast-path-validation.md) — *RAG v2 도입 전 Shadow Fast Path 검증 및 적용 계획*
+- 📄 [20260613_card_quality-v214-adaptive-batch.md](./20260613_card_quality-v214-adaptive-batch.md) — *Card Quality v2.1.4 Adaptive Batch Implementation Plan 도입 계획 및 마이그레이션 작업 방향*
+- 📄 [20260613_rag_v2-approved-fast-path-connection.md](./20260613_rag_v2-approved-fast-path-connection.md) — *RAG v2 승인된 페이로드를 위한 Fast Path 연동 계획*
+- 📄 [20260615_ai_review-v2-admin-learning-loop.md](./20260615_ai_review-v2-admin-learning-loop.md) — *Ollama 기반 AI Review v2 Admin Learning Loop Implementation Plan 도입 계획 및 마이그레이션...*
+- 📄 [20260615_concept_verification-and-next40.md](./20260615_concept_verification-and-next40.md) — *Concept Verification Infrastructure and Next 40 Implementation Plan 도입 계획 및 마...*
+- 📄 [20260615_remove_v1-rag-and-use-v2-ollama.md](./20260615_remove_v1-rag-and-use-v2-ollama.md) — *v1 RAG 파이프라인 제거 및 v2 승인 Fast Path 전환 플랜*
+- 📄 [20260616_ai_review-course-scope-gate.md](./20260616_ai_review-course-scope-gate.md) — *AI 리뷰 특정 코스 답변 범위를 제한하는 Scope Gate 구현 계획*
+- 📄 [20260618_ai_시스템-구조-상세-분석-리포트-code-level-analysis.md](./20260618_ai_시스템-구조-상세-분석-리포트-code-level-analysis.md) — *AI 시스템 구조 상세 분석 리포트 (Code-level Analysis) 도입 계획 및 마이그레이션 작업 방향*

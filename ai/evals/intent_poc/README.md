@@ -1,3 +1,10 @@
+---
+type: eval
+category: evaluation
+status: active
+updated: 2026-06-18
+---
+
 # 의도분류 PoC (intent classification)
 
 AI 꼬리질문에서 학습자 질문의 **의도분류 성능**을 측정하는 독립 실행 PoC.

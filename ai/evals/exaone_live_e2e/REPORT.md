@@ -1,3 +1,12 @@
+---
+type: eval
+category: evaluation
+status: active
+updated: 2026-06-18
+description: "EXAONE Live E2E Quality Evaluation 모델 성능 평가 및 POC 실험 결과 분석"
+
+---
+
 # EXAONE Live E2E Quality Evaluation
 
 Semantic Judge is disabled for this live evaluation. Human review is required for factual quality.

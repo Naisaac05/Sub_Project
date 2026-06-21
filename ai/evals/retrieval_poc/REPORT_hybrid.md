@@ -1,3 +1,12 @@
+---
+type: eval
+category: evaluation
+status: active
+updated: 2026-06-18
+description: "검색 비교 PoC 리포트 — hybridqueries.jsonl 모델 성능 평가 및 POC 실험 결과 분석"
+
+---
+
 # 검색 비교 PoC 리포트 — `hybrid_queries.jsonl`
 
 > 자동 생성. `python evals/retrieval_poc/evaluate.py --dataset ...`
