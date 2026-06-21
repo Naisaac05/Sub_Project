@@ -1,3 +1,10 @@
+---
+type: eval
+category: evaluation
+status: active
+updated: 2026-06-18
+---
+
 # 검색 비교 PoC (retrieval)
 
 RAG 검색 단계에서 **bm25(단어) vs bge(의미) vs hybrid(RRF 융합)**를 같은 정답지로 비교한다.

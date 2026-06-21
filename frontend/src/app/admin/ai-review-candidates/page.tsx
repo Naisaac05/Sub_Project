@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Check, GitMerge, RefreshCw, Search, X } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, GitMerge, RefreshCw, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   fetchAiReviewCandidatesV2,
@@ -33,6 +33,8 @@ export default function AdminAiReviewCandidatesPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -63,6 +65,23 @@ export default function AdminAiReviewCandidatesPage() {
     const text = `${row.term} ${row.category} ${row.sourceQuestion ?? ''}`.toLowerCase();
     return phaseMatch && text.includes(query.trim().toLowerCase());
   }), [rows, filter, query]);
+
+  // Reset page when filter or search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, query]);
+
+  const totalPages = Math.max(1, Math.ceil(visible.length / ITEMS_PER_PAGE));
+  const paginated = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return visible.slice(start, start + ITEMS_PER_PAGE);
+  }, [visible, currentPage, ITEMS_PER_PAGE]);
+
+  const PAGE_BLOCK_SIZE = 5;
+  const currentBlock = Math.ceil(currentPage / PAGE_BLOCK_SIZE);
+  const startPage = (currentBlock - 1) * PAGE_BLOCK_SIZE + 1;
+  const endPage = Math.min(startPage + PAGE_BLOCK_SIZE - 1, totalPages);
+  const visiblePages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
   async function review(action: 'START_REVIEW' | 'EDIT_AND_APPROVE' | 'REJECT' | 'MERGE') {
     if (!selected) return;
@@ -123,13 +142,17 @@ export default function AdminAiReviewCandidatesPage() {
 
       <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
         <section className="overflow-hidden rounded-lg border bg-white">
-          {loading ? <p className="p-8 text-center text-slate-500">불러오는 중...</p> : (
-            <table className="w-full text-sm">
+          {loading ? <p className="p-8 text-center text-slate-500">불러오는 중...</p> : (<>
+            <table className="w-full table-fixed text-sm">
               <thead className="bg-slate-50 text-left text-slate-500">
-                <tr><th className="p-3">개념</th><th className="p-3">상태</th><th className="p-3">출처</th></tr>
+                <tr>
+                  <th className="w-[45%] p-3">개념</th>
+                  <th className="w-[20%] p-3">상태</th>
+                  <th className="w-[35%] p-3">출처</th>
+                </tr>
               </thead>
               <tbody>
-                {visible.map((row) => (
+                {paginated.map((row) => (
                   <tr key={row.id} onClick={() => setSelectedId(row.id)}
                     className={`cursor-pointer border-t ${selectedId === row.id ? 'bg-blue-50' : 'hover:bg-slate-50'}`}>
                     <td className="p-3"><strong>{row.term}</strong><div className="text-xs text-slate-500">{row.category}</div></td>
@@ -139,7 +162,38 @@ export default function AdminAiReviewCandidatesPage() {
                 ))}
               </tbody>
             </table>
-          )}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-1 border-t bg-white px-4 py-3">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="rounded p-1.5 text-slate-500 hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                {visiblePages.map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`min-w-[32px] rounded px-2 py-1 text-sm font-medium ${
+                      currentPage === page
+                        ? 'bg-slate-900 text-white'
+                        : 'text-slate-600 hover:bg-slate-100'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="rounded p-1.5 text-slate-500 hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            )}
+          </>)}
         </section>
 
         <section className="space-y-5 rounded-lg border bg-white p-5">

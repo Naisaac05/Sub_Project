@@ -1,0 +1,73 @@
+# `troubleshooting/by-component` 폴더 인덱스
+
+이 문서는 `troubleshooting/by-component` 폴더의 자동 생성된 네비게이션입니다.
+
+## 문서 목록
+- 📄 [20260412_lms_curriculum-week-add-fails.md](./20260412_lms_curriculum-week-add-fails.md) — *LMS 커리큘럼에서 주차 추가 시 *
+- 📄 [20260423_subagent_committed-to-main.md](./20260423_subagent_committed-to-main.md) — *Subagent 가 feature 브랜치 대신 main 브랜치에 커밋 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260424_admin_post-detail-nan-id-infinite-skeleton.md](./20260424_admin_post-detail-nan-id-infinite-skeleton.md) — *새로고침 이외 방법이 없다*
+- 📄 [20260425_mentor_application-detail-and-course-availability.md](./20260425_mentor_application-detail-and-course-availability.md) — *멘토 매칭 검토 불가 및 비활성 코스 제출 가능 문제 발생 원인 분석 및 해결 기록*
+- 📄 [20260425_mentor_matching-application-detail.md](./20260425_mentor_matching-application-detail.md) — *멘토 매칭 내역에서 멘티 신청서를 확인할 수 없던 문제 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260429_diagnostic_test-result-showed-pass-fail.md](./20260429_diagnostic_test-result-showed-pass-fail.md) — *Diagnostic test result showed pass/fail wording 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260430_ai_review-submit-full-message-payload.md](./20260430_ai_review-submit-full-message-payload.md) — *AI review submit full message payload 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260512_ai_review-auto-provider-python-blocked-ollama.md](./20260512_ai_review-auto-provider-python-blocked-ollama.md) — *AI review AUTO provider selected stopped Python before Ollama fallback 발생 원인 ...*
+- 📄 [20260512_ollama_repeated-ai-review-answer.md](./20260512_ollama_repeated-ai-review-answer.md) — *Ollama repeated AI review answer paragraphs 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260512_python_ai-options-null-422.md](./20260512_python_ai-options-null-422.md) — *Python AI rejected null request fields with 422 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260513_ai_review-summary-message-submit-500.md](./20260513_ai_review-summary-message-submit-500.md) — *AI review submit failed after summary message 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260513_ai_review-undefined-summary-helper.md](./20260513_ai_review-undefined-summary-helper.md) — *AI review undefined summary helper 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260515_ai_review-free-question-count-included-ai-prompts.md](./20260515_ai_review-free-question-count-included-ai-prompts.md) — *AI review free question count included AI prompts 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260515_ai_review-free-question-limit-bypass.md](./20260515_ai_review-free-question-limit-bypass.md) — *AI review free question limit bypass 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260515_ai_review-misleading-backend-500-message.md](./20260515_ai_review-misleading-backend-500-message.md) — *AI review misleading backend 500 message 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260515_ai_review-response-duration-not-shown.md](./20260515_ai_review-response-duration-not-shown.md) — *AI review response duration not shown 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260516_ai_requirements-chromadb-build-tools.md](./20260516_ai_requirements-chromadb-build-tools.md) — *AI requirements ChromaDB Build Tools install failure 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260516_ai_review-free-question-intent-routing.md](./20260516_ai_review-free-question-intent-routing.md) — *AI 리뷰 자유 질문 처리 시 의도 라우팅(Intent Routing) 누락 문제 원인 분석 및 해결 기록*
+- 📄 [20260516_ai_review-free-question-original-context-dominance.md](./20260516_ai_review-free-question-original-context-dominance.md) — *AI 리뷰 자유 질문 답변이 RAG 원본 컨텍스트에 편향되는 문제 원인 분석 및 해결 기록*
+- 📄 [20260516_ai_review-korean-free-question-rag-drift.md](./20260516_ai_review-korean-free-question-rag-drift.md) — *한국어 자유 질문이 문맥을 잃고 원래 RAG 컨텍스트로 표류(Drift)하는 현상 해결 기록*
+- 📄 [20260516_ai_review-rag-generic-token-false-positive.md](./20260516_ai_review-rag-generic-token-false-positive.md) — *AI review RAG generic token false positive 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260517_ai_review-workflow-cache-test-contamination.md](./20260517_ai_review-workflow-cache-test-contamination.md) — *AI review workflow cache contaminated later tests 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260518_ai_review-auto-candidate-queue-write-failure.md](./20260518_ai_review-auto-candidate-queue-write-failure.md) — *AI review auto candidate queue write failure 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260518_ai_review-candidate-service-constructor-injection.md](./20260518_ai_review-candidate-service-constructor-injection.md) — *AI review candidate service constructor injection failure 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260518_ai_review-fast-path-rag-context-leak.md](./20260518_ai_review-fast-path-rag-context-leak.md) — *AI review fast path RAG context leak 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260519_ai_review-generated-answer-metadata-compile.md](./20260519_ai_review-generated-answer-metadata-compile.md) — *AI 리뷰에서 자동 생성된 답변의 메타데이터 컴파일 실패 오류 원인 분석 및 해결 기록*
+- 📄 [20260519_ai_review-graph-route-overwrite.md](./20260519_ai_review-graph-route-overwrite.md) — *AI review graph route overwrite 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260520_ai_approved-card-not-applied-lru-cache.md](./20260520_ai_approved-card-not-applied-lru-cache.md) — *승인한 지식 카드가 실행 중인 AI 서비스에 반영되지 않음 (lrucache 로 카드 목록 고정) 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260520_ai_review-admin-candidate-review-cors-and-import-filter.md](./20260520_ai_review-admin-candidate-review-cors-and-import-filter.md) — *AI review admin candidate review CORS and import filter 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260520_ai_review-approval-fails-on-chroma-skip.md](./20260520_ai_review-approval-fails-on-chroma-skip.md) — *AI 지식 후보 승인이 chroma reindex skip(optional chromadb 미설치) 때문에 실패 발생 원인 분석 및 트러블...*
+- 📄 [20260520_ai_review-auto-candidate-answer-draft-missing.md](./20260520_ai_review-auto-candidate-answer-draft-missing.md) — *AI review auto candidate answer draft missing 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260520_ai_review-auto-candidate-default-queue-disabled.md](./20260520_ai_review-auto-candidate-default-queue-disabled.md) — *AI review auto candidate default queue disabled 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260520_ai_review-http-status-question-drift.md](./20260520_ai_review-http-status-question-drift.md) — *AI review HTTP status question drift 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260520_ai_review-reindexer-spring-constructor.md](./20260520_ai_review-reindexer-spring-constructor.md) — *AI review reindexer Spring constructor injection failure 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260520_ai_review-specific-question-definition-template.md](./20260520_ai_review-specific-question-definition-template.md) — *AI review free-question 특정 의문사 질문이 정의 템플릿으로 비응답 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260520_ai_review-workflow-context-gate-weak-overlap.md](./20260520_ai_review-workflow-context-gate-weak-overlap.md) — *RAG 기반 AI review 워크플로 컨텍스트 게이트가 본문 우연 겹침을 통과시킴 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260520_ai_server-keep-alive-invalid-duration.md](./20260520_ai_server-keep-alive-invalid-duration.md) — *AI 서버 모든 generate 호출이 Ollama 400으로 실패 — keepalive 문자열 *
+- 📄 [20260521_ai_fast-path-alias-boundary-provenance.md](./20260521_ai_fast-path-alias-boundary-provenance.md) — *AI fast path alias boundary and generated-card provenance 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260521_ai_free-question-token-budget-truncation.md](./20260521_ai_free-question-token-budget-truncation.md) — *AI free-question answers truncated by low token budget 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260521_ai_intent-clarification-english-topic.md](./20260521_ai_intent-clarification-english-topic.md) — *AI intent clarification and English topic routing 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260521_ai_recyclerview-card-lint-schema.md](./20260521_ai_recyclerview-card-lint-schema.md) — *AI RecyclerView generated card failed knowledge lint schema 발생 원인 분석 및 트러블슈팅 ...*
+- 📄 [20260521_ai_review-streaming-service-test-failures.md](./20260521_ai_review-streaming-service-test-failures.md) — *AiReviewStreamingServiceTest NullPointerException 및 UnnecessaryStubbingExcept...*
+- 📄 [20260521_ai_workflow-test-candidate-pollution-topic.md](./20260521_ai_workflow-test-candidate-pollution-topic.md) — *AI workflow tests polluted auto-candidate queue and saved discourse marker as...*
+- 📄 [20260525_ai_review-streaming-context-bypass.md](./20260525_ai_review-streaming-context-bypass.md) — *AI review streaming context bypass 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260525_ai_review-streaming-duplicate-save-done-dto.md](./20260525_ai_review-streaming-duplicate-save-done-dto.md) — *AI review streaming duplicate save and done DTO gap 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260526_ai_candidate-capture-write-failure-isolation.md](./20260526_ai_candidate-capture-write-failure-isolation.md) — *AI candidate capture write failure isolation 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260526_ai_stream-terminal-idempotency.md](./20260526_ai_stream-terminal-idempotency.md) — *AI stream terminal idempotency guard 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260527_ai_json-question-static-fast-path.md](./20260527_ai_json-question-static-fast-path.md) — *AI JSON free question used static fast path instead of model generation 발생 원인...*
+- 📄 [20260527_ai_python-tests-wrong-runtime.md](./20260527_ai_python-tests-wrong-runtime.md) — *AI Python tests run with wrong runtime 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260527_ai_review-micrometer-classpath-and-warning-cleanup.md](./20260527_ai_review-micrometer-classpath-and-warning-cleanup.md) — *AI review Micrometer classpath and Java warning cleanup 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260527_ai_review-properties-constructor-binding.md](./20260527_ai_review-properties-constructor-binding.md) — *AiReviewProperties constructor binding bootRun failure 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260527_ai_semantic-judge-mock-contamination-and-lint-failures.md](./20260527_ai_semantic-judge-mock-contamination-and-lint-failures.md) — *AI Semantic Judge 도입 시 Mock 호출 횟수 오염, Knowledge Lint 오류 및 Retry 프롬프트 검증 우회 해결...*
+- 📄 [20260529_ai_eval-and-knowledge-card-quality.md](./20260529_ai_eval-and-knowledge-card-quality.md) — *AI 품질 감사 — golden eval intent-enum 불일치 + 생성 지식카드 검토 누락 (해결 2026-05-29) 발생 원인 ...*
+- 📄 [20260609_ai_lightweight-evaluator-rule-intent-import.md](./20260609_ai_lightweight-evaluator-rule-intent-import.md) — *M3 전용으로 변경한 뒤 전체 AI 테스트 수집이 중단됐다*
+- 📄 [20260609_ai_semantic-judge-lite-prompt-version-drift.md](./20260609_ai_semantic-judge-lite-prompt-version-drift.md) — *AI semantic judge lite prompt version drift 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260609_ai_workflow-fast-path-context-mismatch.md](./20260609_ai_workflow-fast-path-context-mismatch.md) — *AI workflow fast path context mismatch 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260612_rag_v2-follow-up-v1-context-regression.md](./20260612_rag_v2-follow-up-v1-context-regression.md) — *RAG v2 intent regression changed the existing follow-up context behavior 발생 원...*
+- 📄 [20260612_rag_v2-generic-term-and-false-merge.md](./20260612_rag_v2-generic-term-and-false-merge.md) — *RAG v2 generic term extraction and false concept merges 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260612_rag_v2-sql-options-escape.md](./20260612_rag_v2-sql-options-escape.md) — *RAG v2 migration skipped all SQL questions because option JSON remained escap...*
+- 📄 [20260613_draft_retrieval-enrichment-shadow-regression.md](./20260613_draft_retrieval-enrichment-shadow-regression.md) — *RAG 기반 Draft retrieval enrichment caused Shadow ranking regression 발생 원인 분석 및...*
+- 📄 [20260613_rag_v2-lexical-ranking-and-json-bom.md](./20260613_rag_v2-lexical-ranking-and-json-bom.md) — *RAG v2 lexical ranking ties and JSON BOM 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260613_v2_1-3-retrieval-evaluation-scope-split.md](./20260613_v2_1-3-retrieval-evaluation-scope-split.md) — *v2.1.3 검색 평가 범위 분리 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260614_ai_python-command-path-missing.md](./20260614_ai_python-command-path-missing.md) — *AI Python 명령 PATH 누락 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260615_ai_review-admin-approved-v1-card.md](./20260615_ai_review-admin-approved-v1-card.md) — *RAG 기반 관리자 후보 승인이 삭제된 v1 카드를 발행함 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260615_ai_v2-only-test-contract-and-lightweight-mode.md](./20260615_ai_v2-only-test-contract-and-lightweight-mode.md) — *AI v2-only 전환 후 테스트 계약 및 lightweight-only 우회 오류 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260615_v1_rag-runtime-path-survived-v2-fast-path.md](./20260615_v1_rag-runtime-path-survived-v2-fast-path.md) — *v2 Fast Path 도입 후에도 v1 RAG 운영 경로가 남음 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260616_ai_review-off-topic-follow-up-repeat.md](./20260616_ai_review-off-topic-follow-up-repeat.md) — *AI review off-topic free question and repeated follow-up 발생 원인 분석 및 트러블슈팅 해결 기록*
+- 📄 [20260616_ai_review-politeness-offtopic-codeblock.md](./20260616_ai_review-politeness-offtopic-codeblock.md) — *AI review polite concept question missed fast path and off-topic advice leake...*

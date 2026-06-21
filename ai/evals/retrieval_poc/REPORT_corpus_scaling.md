@@ -1,3 +1,12 @@
+---
+type: eval
+category: evaluation
+status: active
+updated: 2026-06-18
+description: "코퍼스 규모/구성 실험 — 30장 DENSE vs DIVERSE 모델 성능 평가 및 POC 실험 결과 분석"
+
+---
+
 # 코퍼스 규모/구성 실험 — 30장 DENSE vs DIVERSE
 
 > 자동 생성. `python evals/retrieval_poc/corpus_scaling.py`

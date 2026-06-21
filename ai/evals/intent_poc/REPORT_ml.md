@@ -1,3 +1,12 @@
+---
+type: eval
+category: evaluation
+status: active
+updated: 2026-06-18
+description: "의도분류 PoC 리포트 — classifier=ml 모델 성능 평가 및 POC 실험 결과 분석"
+
+---
+
 # 의도분류 PoC 리포트 — classifier=`ml`
 
 > 자동 생성 파일. `python evals/intent_poc/evaluate.py` 로 재생성된다.
