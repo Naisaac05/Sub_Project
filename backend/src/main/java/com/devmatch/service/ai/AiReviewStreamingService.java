@@ -55,9 +55,12 @@ public class AiReviewStreamingService {
     private final AiReviewMessageRepository messageRepository;
     private final AiReviewMetricSink metricSink;
 
-    @Autowired
-    @Lazy
     private AiReviewStreamingService self;
+
+    @Autowired
+    public void setSelf(@Lazy AiReviewStreamingService self) {
+        this.self = self;
+    }
 
     public enum StreamingState {
         INIT, ACTIVE, COMPLETED, DISCONNECTED, ERROR

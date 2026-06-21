@@ -1,0 +1,206 @@
+[DRY RUN] Moved: 02-devmatch-springboot-roadmap.md -> docs\plans\20260618_02_devmatch-springboot-roadmap.md
+  + [Frontmatter added] type: plan, category: backend
+[DRY RUN] Moved: 03-phase2-backend-auth-plan.md -> docs\plans\20260618_03_phase2-backend-auth-plan.md
+  + [Frontmatter added] type: plan, category: auth
+[DRY RUN] Moved: 04-phase3-test-matching-plan.md -> docs\plans\20260618_04_phase3-test-matching-plan.md
+  + [Frontmatter added] type: plan, category: general
+[DRY RUN] Moved: 05-phase4-calendar-meet-plan.md -> docs\plans\20260618_05_phase4-calendar-meet-plan.md
+  + [Frontmatter added] type: plan, category: general
+[DRY RUN] Moved: 06-post-phase3-roadmap.md -> docs\plans\20260618_06_post-phase3-roadmap.md
+  + [Frontmatter added] type: plan, category: general
+[DRY RUN] Moved: AI_Integration_Plan.md -> docs\plans\20260618_ai_integration-plan.md
+  + [Frontmatter added] type: plan, category: general
+[DRY RUN] Moved: course-skill-test-question-design.md -> docs\plans\20260618_course_skill-test-question-design.md
+  + [Frontmatter added] type: plan, category: general
+[DRY RUN] Moved: 2026-04-23-admin-users-smoke.md -> docs\testing\20260423_admin_users-smoke.md
+  + [Frontmatter added] type: testing, category: general
+[DRY RUN] Moved: 2026-04-24-admin-payments-smoke.md -> docs\testing\20260424_admin_payments-smoke.md
+  + [Frontmatter added] type: testing, category: general
+[DRY RUN] Moved: 2026-04-24-admin-posts-smoke.md -> docs\testing\20260424_admin_posts-smoke.md
+  + [Frontmatter added] type: testing, category: general
+[DRY RUN] Moved: 2026-05-26-ai-ollama-streaming-baseline-qwen3-1.7b.md -> docs\testing\20260526_ai_ollama-streaming-baseline-qwen3-1-7b.md
+  + [Frontmatter added] type: testing, category: general
+[DRY RUN] Moved: admin-console-overview.md -> docs\mockups\20260618_admin_console-overview.md
+  + [Frontmatter added] type: mockup, category: general
+[DRY RUN] Moved: admin-dashboard.md -> docs\mockups\20260618_admin_dashboard.md
+  + [Frontmatter added] type: mockup, category: general
+[DRY RUN] Moved: admin-mentor.md -> docs\mockups\20260618_admin_mentor.md
+  + [Frontmatter added] type: mockup, category: general
+[DRY RUN] Moved: admin-payments.md -> docs\mockups\20260618_admin_payments.md
+  + [Frontmatter added] type: mockup, category: general
+[DRY RUN] Moved: admin-posts.md -> docs\mockups\20260618_admin_posts.md
+  + [Frontmatter added] type: mockup, category: general
+[DRY RUN] Moved: admin-users.md -> docs\mockups\20260618_admin_users.md
+  + [Frontmatter added] type: mockup, category: general
+[DRY RUN] Moved: phase-e-mentor.md -> docs\mockups\20260618_phase_e-mentor.md
+  + [Frontmatter added] type: mockup, category: general
+[DRY RUN] Moved: 2026-05-21-spring-sse-proxy-design.md -> docs\plans\20260521_spring_sse-proxy-design.md
+  + [Frontmatter added] type: plan, category: backend
+[DRY RUN] Moved: 2026-05-21-spring-sse-proxy-implementation-plan.md -> docs\plans\20260521_spring_sse-proxy-implementation-plan.md
+  + [Frontmatter added] type: plan, category: backend
+[DRY RUN] Moved: 2026-05-27-adaptive-judge-optimization.md -> docs\plans\20260527_adaptive_judge-optimization.md
+  + [Frontmatter added] type: plan, category: general
+[DRY RUN] Moved: 2026-05-27-prompt-artifact-versioning.md -> docs\plans\20260527_prompt_artifact-versioning.md
+  + [Frontmatter added] type: plan, category: general
+[DRY RUN] Moved: 2026-06-01-free-question-follow-up-design.md -> docs\plans\20260601_free_question-follow-up-design.md
+  + [Frontmatter added] type: plan, category: general
+[DRY RUN] Moved: 2026-06-01-free-question-follow-up.md -> docs\plans\20260601_free_question-follow-up.md
+  + [Frontmatter added] type: plan, category: general
+[DRY RUN] Moved: task.md -> docs\plans\20260618_general-task.md
+  + [Frontmatter added] type: plan, category: general
+[DRY RUN] Moved: 2026-04-12-auth-refresh-token-session-redesign.md -> error\by-component\20260412_auth_refresh-token-session-redesign.md
+  + [Frontmatter added] type: troubleshooting, category: auth
+[DRY RUN] Moved: 2026-04-12-fullcalendar-event-click-no-dateclick.md -> error\by-component\20260412_fullcalendar_event-click-no-dateclick.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-12-lms-assignments-select-option-invisible.md -> error\by-component\20260412_lms_assignments-select-option-invisible.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-12-lms-curriculum-weeks-persist-restart.md -> error\by-component\20260412_lms_curriculum-weeks-persist-restart.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-12-mentor-seed-password-mismatch.md -> error\by-component\20260412_mentor_seed-password-mismatch.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-12-mypage-mentor-matchings-missing.md -> error\by-component\20260412_mypage_mentor-matchings-missing.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-18-community-category-filter-delete-and-image-upload.md -> error\by-component\20260418_community_category-filter-delete-and-image-upload.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-18-community-category-form-and-image-preview.md -> error\by-component\20260418_community_category-form-and-image-preview.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-18-community-dummy-posts-replaced-with-real-posting.md -> error\by-component\20260418_community_dummy-posts-replaced-with-real-posting.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-18-course-api-review-fixes.md -> error\by-component\20260418_course_api-review-fixes.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-18-lms-assignments-route-and-empty-video-meeting-lookup.md -> error\by-component\20260418_lms_assignments-route-and-empty-video-meeting-lookup.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-18-lms-video-meetings-missing-matching-id.md -> error\by-component\20260418_lms_video-meetings-missing-matching-id.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-18-mentor-refactor-jpa-fixes.md -> error\by-component\20260418_mentor_refactor-jpa-fixes.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-18-mentoring-course-page-cleanup.md -> error\by-component\20260418_mentoring_course-page-cleanup.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-18-signup-role-always-mentee-stale-build.md -> error\by-component\20260418_signup_role-always-mentee-stale-build.md
+  + [Frontmatter added] type: troubleshooting, category: frontend
+[DRY RUN] Moved: 2026-04-18-video-meeting-edit-state-sync.md -> error\by-component\20260418_video_meeting-edit-state-sync.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-18-video-meetings-secondary-lookup-alert.md -> error\by-component\20260418_video_meetings-secondary-lookup-alert.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-20-icon-map-lucide-type-mismatch.md -> error\by-component\20260420_icon_map-lucide-type-mismatch.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-20-login-redirect-race-mentor-to-landing.md -> error\by-component\20260420_login_redirect-race-mentor-to-landing.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-20-mentor-apply-courses-empty-backend-wrong-folder.md -> error\by-component\20260420_mentor_apply-courses-empty-backend-wrong-folder.md
+  + [Frontmatter added] type: troubleshooting, category: backend
+[DRY RUN] Moved: 2026-04-20-mentor-profile-rejected-reason-backend-missing.md -> error\by-component\20260420_mentor_profile-rejected-reason-backend-missing.md
+  + [Frontmatter added] type: troubleshooting, category: backend
+[DRY RUN] Moved: 2026-04-21-lms-assignments-suspense-prerender.md -> error\by-component\20260421_lms_assignments-suspense-prerender.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-21-pencil-mcp-new-inserts-render-blank.md -> error\by-component\20260421_pencil_mcp-new-inserts-render-blank.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-21-windows-worktree-remove-file-lock.md -> error\by-component\20260421_windows_worktree-remove-file-lock.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-24-community-category-slug-normalization.md -> error\by-component\20260424_community_category-slug-normalization.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-admin-audit-log-target-type-too-short.md -> error\by-component\20260425_admin_audit-log-target-type-too-short.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-admin-dashboard-action-switch-missing.md -> error\by-component\20260425_admin_dashboard-action-switch-missing.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-admin-dashboard-double-api-prefix.md -> error\by-component\20260425_admin_dashboard-double-api-prefix.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-admin-layout-rejects-super-admin.md -> error\by-component\20260425_admin_layout-rejects-super-admin.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-application-auto-matching-mentor-reject.md -> error\by-component\20260425_application_auto-matching-mentor-reject.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-apply-course-guide-english-and-time-select.md -> error\by-component\20260425_apply_course-guide-english-and-time-select.md
+  + [Frontmatter added] type: troubleshooting, category: frontend
+[DRY RUN] Moved: 2026-04-25-course-driven-application-entry.md -> error\by-component\20260425_course_driven-application-entry.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-course-specific-auto-matching.md -> error\by-component\20260425_course_specific-auto-matching.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-faq-public-page-category-order-mismatch.md -> error\by-component\20260425_faq_public-page-category-order-mismatch.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-matching-application-mojibake-text.md -> error\by-component\20260425_matching_application-mojibake-text.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-mentor-course-mapping-missing.md -> error\by-component\20260425_mentor_course-mapping-missing.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-25-payment-success-token-confirm-matching.md -> error\by-component\20260425_payment_success-token-confirm-matching.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-26-course-skill-tests-stuck-preparing.md -> error\by-component\20260426_course_skill-tests-stuck-preparing.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-26-header-conditional-render-blocked-course-navigation.md -> error\by-component\20260426_header_conditional-render-blocked-course-navigation.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-04-26-test-page-mojibake-labels.md -> error\by-component\20260426_test_page-mojibake-labels.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-05-16-backend-bootrun-port-8080-in-use.md -> error\by-component\20260516_backend_bootrun-port-8080-in-use.md
+  + [Frontmatter added] type: troubleshooting, category: backend
+[DRY RUN] Moved: 2026-05-25-powershell-set-content-java-encoding-corruption.md -> error\by-component\20260525_powershell_set-content-java-encoding-corruption.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-05-25-python-streaming-test-environment.md -> error\by-component\20260525_python_streaming-test-environment.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-05-27-backend-bootrun-stale-8080-process.md -> error\by-component\20260527_backend_bootrun-stale-8080-process.md
+  + [Frontmatter added] type: troubleshooting, category: backend
+[DRY RUN] Moved: 2026-05-27-experiment-compare-script-keep-alive-regression.md -> error\by-component\20260527_experiment_compare-script-keep-alive-regression.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-05-27-global-exception-handler-404-swallowed-as-500.md -> error\by-component\20260527_global_exception-handler-404-swallowed-as-500.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-05-29-security-audit-hardening.md -> error\by-component\20260529_security_audit-hardening.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-12-markdown-json-card-loader-compatibility.md -> error\by-component\20260612_markdown_json-card-loader-compatibility.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-12-v2-knowledge-lint-legacy-conceptcard-import.md -> ai\troubleshooting\by-issue\20260612_v2_knowledge-lint-legacy-conceptcard-import.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-priority-v2-enrichment-duplicate-embedding-tokens.md -> ai\troubleshooting\by-issue\20260613_priority_v2-enrichment-duplicate-embedding-tokens.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-priority-v2-enrichment-import-path.md -> ai\troubleshooting\by-issue\20260613_priority_v2-enrichment-import-path.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-shadow-fast-path-counted-draft-payloads.md -> error\by-component\20260613_shadow_fast-path-counted-draft-payloads.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-1-1-approval-changed-searchable-text.md -> ai\changes\20260613_v2_1-1-approval-changed-searchable-text.md
+  + [Frontmatter added] type: change, category: general
+[DRY RUN] Moved: 2026-06-13-v2-1-1-canonical-technical-name-normalization.md -> ai\troubleshooting\by-issue\20260613_v2_1-1-canonical-technical-name-normalization.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-1-2-batch-loo-regression-rollback.md -> ai\troubleshooting\by-issue\20260613_v2_1-2-batch-loo-regression-rollback.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-1-4-null-optional-payload-scoring.md -> ai\troubleshooting\by-issue\20260613_v2_1-4-null-optional-payload-scoring.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-1-5-indirect-print-answer-detection.md -> ai\troubleshooting\by-issue\20260613_v2_1-5-indirect-print-answer-detection.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-1-quality-check-value-scope-and-repetition.md -> ai\troubleshooting\by-issue\20260613_v2_1-quality-check-value-scope-and-repetition.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-course-enrichment-compact-and-audit-false-positive.md -> ai\troubleshooting\by-issue\20260613_v2_course-enrichment-compact-and-audit-false-positive.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-fast-path-streaming-bypass.md -> ai\troubleshooting\by-issue\20260613_v2_fast-path-streaming-bypass.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-korean-enrichment-direct-import.md -> ai\troubleshooting\by-issue\20260613_v2_korean-enrichment-direct-import.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-partial-approval-lint-policy.md -> ai\troubleshooting\by-issue\20260613_v2_partial-approval-lint-policy.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-quality-improver-compact-embedding.md -> ai\troubleshooting\by-issue\20260613_v2_quality-improver-compact-embedding.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-quality-improver-default-root.md -> ai\troubleshooting\by-issue\20260613_v2_quality-improver-default-root.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-shadow-evaluation-write-race.md -> ai\troubleshooting\by-issue\20260613_v2_shadow-evaluation-write-race.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-13-v2-shadow-miss-overrode-v1-fallback.md -> ai\troubleshooting\by-issue\20260613_v2_shadow-miss-overrode-v1-fallback.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-14-payload-answer-comparison-validator-false-negative.md -> error\by-component\20260614_payload_answer-comparison-validator-false-negative.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-14-payload-duplicate-score-option-text-false-positive.md -> error\by-component\20260614_payload_duplicate-score-option-text-false-positive.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-15-approval-dryrun-quality-summary-scope.md -> error\by-component\20260615_approval_dryrun-quality-summary-scope.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-15-approved-useeffect-fast-path-miss-and-answer-truncation.md -> error\by-component\20260615_approved_useeffect-fast-path-miss-and-answer-truncation.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-15-gradle-concept-verifier-sandbox-cache.md -> error\by-component\20260615_gradle_concept-verifier-sandbox-cache.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-15-java-example-executable-but-low-quality.md -> error\by-component\20260615_java_example-executable-but-low-quality.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-15-next40-preparation-self-exclusion.md -> error\by-component\20260615_next40_preparation-self-exclusion.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-15-powershell-utf8-json-pipeline-mojibake.md -> ai\troubleshooting\by-issue\20260615_powershell_utf8-json-pipeline-mojibake.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: 2026-06-16-lightweight-only-offtopic-gate-bypass.md -> error\by-component\20260616_lightweight_only-offtopic-gate-bypass.md
+  + [Frontmatter added] type: troubleshooting, category: general
+[DRY RUN] Moved: brainstorm.md -> workflows\20260618_brainstorm_doc.md
+  + [Frontmatter added] type: workflow, category: agent
+[DRY RUN] Moved: execute-plan.md -> workflows\20260618_execute_plan.md
+  + [Frontmatter added] type: workflow, category: agent
+[DRY RUN] Moved: write-plan.md -> workflows\20260618_write_plan.md
+  + [Frontmatter added] type: workflow, category: agent

@@ -1,3 +1,12 @@
+---
+type: eval
+category: evaluation
+status: active
+updated: 2026-06-18
+description: "검색(RAG Retrieval) 비교 PoC 실험 보고서 모델 성능 평가 및 POC 실험 결과 분석"
+
+---
+
 # 검색(RAG Retrieval) 비교 PoC 실험 보고서
 
 > 학습자 질문이 들어왔을 때 **어느 지식카드를 찾아올지**를 결정하는 "검색" 단계를

@@ -1,3 +1,12 @@
+---
+type: experiment
+category: inference
+status: active
+updated: 2026-06-18
+description: "follow-up 프롬프트 v1/v2 비교 실험 — 최종 보고서 모델 성능 평가 및 POC 실험 결과 분석"
+
+---
+
 # follow-up 프롬프트 v1/v2 비교 실험 — 최종 보고서
 
 - 작성일: 2026-05-27

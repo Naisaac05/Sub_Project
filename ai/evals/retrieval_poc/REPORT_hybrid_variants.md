@@ -1,3 +1,12 @@
+---
+type: eval
+category: evaluation
+status: active
+updated: 2026-06-18
+description: "hybrid 변형 비교 — bge를 안 깎는 hybrid가 있는가? 모델 성능 평가 및 POC 실험 결과 분석"
+
+---
+
 # hybrid 변형 비교 — bge를 안 깎는 hybrid가 있는가?
 
 > 자동 생성. `python evals/retrieval_poc/hybrid_variants.py`

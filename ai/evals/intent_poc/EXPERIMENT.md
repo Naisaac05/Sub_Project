@@ -1,3 +1,12 @@
+---
+type: eval
+category: evaluation
+status: active
+updated: 2026-06-18
+description: "의도분류 PoC 실험 보고서 모델 성능 평가 및 POC 실험 결과 분석"
+
+---
+
 # 의도분류 PoC 실험 보고서
 
 > AI 학습 복습 서비스에서 **학습자가 꼬리질문을 했을 때 그 "의도"를 자동으로 분류**하는

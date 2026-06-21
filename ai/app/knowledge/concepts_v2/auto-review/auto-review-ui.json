@@ -1,0 +1,32 @@
+{
+  "card_id" : "auto-review-ui",
+  "category" : "auto-review",
+  "term" : "UI",
+  "aliases" : [ "UI" ],
+  "source_question_ids" : [ "auto:auto-e4cd5a6adf1f" ],
+  "retrieval" : {
+    "embedding_text" : "UI UI의 정의가 뭐지? UI의 정의",
+    "embedding_hash" : "",
+    "boost_keywords" : [ "UI" ],
+    "intent_types" : [ "CONCEPT_DEFINITION" ]
+  },
+  "payloads" : {
+    "CONCEPT_DEFINITION" : {
+      "content" : "UI(User Interface)란 사용자와 디지털 기기 간 상호작용을 위한 시각적 및 기능적 요소들의 집합입니다. 예를 들어, 스마트폰 앱에서 버튼 클릭이나 메뉴 선택 등은 UI의 핵심 부분으로 작용합니다. 이를 통해 사람들이 쉽게 정보에 접근하고 명령을 내릴 수 있습니다.",
+      "examples" : [ ]
+    }
+  },
+  "review" : {
+    "reviewer" : "admin-ui",
+    "rejected_reason" : "",
+    "approved_at" : "2026-06-16T08:12:58.197161400Z",
+    "payload_status" : {
+      "CONCEPT_DEFINITION" : "approved"
+    },
+    "card_status" : "approved"
+  },
+  "related_card_ids" : [ ],
+  "tags" : [ ],
+  "created_at" : "2026-06-16T08:12:58.197161400Z",
+  "updated_at" : "2026-06-16T08:12:58.197161400Z"
+}
