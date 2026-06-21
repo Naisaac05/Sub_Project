@@ -1,0 +1,51 @@
+# `specs` 폴더 인덱스
+
+이 문서는 `specs` 폴더의 자동 생성된 네비게이션입니다.
+
+## 문서 목록
+- 📄 [20260408_lms_implementation-design.md](./20260408_lms_implementation-design.md) — *DevMatch LMS 구현 설계서 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260411_lms_mypage-integration-design.md](./20260411_lms_mypage-integration-design.md) — *LMS 마이페이지 진입 + 실사용 가능화 설계 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260412_lms_dashboard-dday-navigation-design.md](./20260412_lms_dashboard-dday-navigation-design.md) — *LMS 대시보드 D-day 표시 및 카드 네비게이션 설계 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260418_mentor_application-flow-design.md](./20260418_mentor_application-flow-design.md) — *멘토 등록 신청서 + 멘토링 코스 DB 승격 설계 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260422_admin_console-common-design.md](./20260422_admin_console-common-design.md) — *관리자 콘솔 Phase II — Common 설계 (Design Spec) 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260423_admin_payments-design.md](./20260423_admin_payments-design.md) — *관리자 콘솔 Phase II — 결제 관리 (Feature 2) 설계 (Design Spec) 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260423_admin_users-design.md](./20260423_admin_users-design.md) — *관리자 콘솔 Phase II — 회원 관리 (Feature 1) 설계 (Design Spec) 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260424_admin_dashboard-design.md](./20260424_admin_dashboard-design.md) — *관리자 콘솔 홈 대시보드 설계 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260424_admin_payment-refund-concurrency-design.md](./20260424_admin_payment-refund-concurrency-design.md) — *AdminPayment 환불 동시성 제어 설계 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260425_admin_faq-design.md](./20260425_admin_faq-design.md) — *Phase III Feature 2 — FAQ 관리 (admin-faq) 디자인 스펙 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260425_mentor_change-request-design.md](./20260425_mentor_change-request-design.md) — *멘토 교체 신청·심사 설계 (Design Spec) 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260516_ai_review-lightweight-phase-47-design.md](./20260516_ai_review-lightweight-phase-47-design.md) — *AI 리뷰 Lightweight Phase 4.7 시스템 구조 및 상세 설계서*
+- 📄 [20260516_ai_review-ollama-speed-design.md](./20260516_ai_review-ollama-speed-design.md) — *AI 리뷰 Ollama 추론 속도 최적화를 위한 상세 아키텍처 명세서*
+- 📄 [20260516_ai_review-rag-phase-1-design.md](./20260516_ai_review-rag-phase-1-design.md) — *LangGraph 기반 AI 리뷰 RAG Phase 1 데이터 플로우 및 설계서*
+- 📄 [20260518_ai_review-typo-alias-resolver-design.md](./20260518_ai_review-typo-alias-resolver-design.md) — *AI 리뷰 오타 및 별칭 리졸버 기능 구조 설계서*
+- 📄 [20260519_ai_review-candidate-approval-v2-design.md](./20260519_ai_review-candidate-approval-v2-design.md) — *AI 리뷰 답변 후보 승인 시스템 v2 아키텍처 및 플로우 설계서*
+- 📄 [20260519_ai_review-langgraph-stategraph-design.md](./20260519_ai_review-langgraph-stategraph-design.md) — *AI 리뷰 워크플로우 제어를 위한 LangGraph StateGraph 명세서*
+- 📄 [20260519_ai_review-observability-output-design.md](./20260519_ai_review-observability-output-design.md) — *AI 시스템 운영 상태 파악을 위한 관측성(Observability) 출력 설계서*
+- 📄 [20260519_ai_review-production-closeout-design.md](./20260519_ai_review-production-closeout-design.md) — *LangGraph 기반 AI 리뷰 프로덕션 클로즈아웃 상세 절차 설계서*
+- 📄 [20260519_ai_review-security-guardrails-design.md](./20260519_ai_review-security-guardrails-design.md) — *AI 시스템 보호를 위한 보안 가드레일 정책 및 아키텍처 명세서*
+- 📄 [20260520_ai_review-approved-candidate-knowledge-sync-design.md](./20260520_ai_review-approved-candidate-knowledge-sync-design.md) — *AI 리뷰 승인 후보 데이터와 메인 지식 베이스 동기화 설계서*
+- 📄 [20260521_ai_review-streaming-evaluation-summary-spikes.md](./20260521_ai_review-streaming-evaluation-summary-spikes.md) — *AI Review Streaming, Evaluation, and Summary Spikes 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260526_ai_candidate-approval-workflow-phase-design.md](./20260526_ai_candidate-approval-workflow-phase-design.md) — *AI 시스템 후보 승인 워크플로우 페이즈(Phase) 연동 상세 설계서*
+- 📄 [20260526_ai_candidate-durable-queue-design.md](./20260526_ai_candidate-durable-queue-design.md) — *안정적인 데이터 처리를 위한 AI 후보 내구성 대기열(Durable Queue) 설계서*
+- 📄 [20260526_ai_production-config-hardening-design.md](./20260526_ai_production-config-hardening-design.md) — *AI 운영 시스템 환경 설정 보호 및 강화(Hardening) 명세서*
+- 📄 [20260526_ai_redis-introduction-design.md](./20260526_ai_redis-introduction-design.md) — *AI 파이프라인 내 Redis 캐시 및 큐 인프라 도입 설계서*
+- 📄 [20260527_ai_distributed-single-flight-design.md](./20260527_ai_distributed-single-flight-design.md) — *중복 요청 최소화를 위한 분산 Single-Flight 패턴 상세 명세서*
+- 📄 [20260527_ai_full-rag-evaluation-pipeline-design.md](./20260527_ai_full-rag-evaluation-pipeline-design.md) — *End-to-End 성능 측정을 위한 AI Full RAG 평가 파이프라인 설계서*
+- 📄 [20260527_ai_inference-gateway-model-pool-design.md](./20260527_ai_inference-gateway-model-pool-design.md) — *Ollama 인퍼런스 게이트웨이 로드밸런싱 및 모델 풀 시스템 설계서*
+- 📄 [20260527_ai_review-test-session-reset-design.md](./20260527_ai_review-test-session-reset-design.md) — *AI 리뷰 테스트용 세션 초기화 — 설계 문서 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260527_ai_semantic-evaluation-design.md](./20260527_ai_semantic-evaluation-design.md) — *의미론적 유사도 기반 AI 시스템 자동 평가(Semantic Evaluation) 명세서*
+- 📄 [20260601_ai_review-fast-accurate-architecture-design.md](./20260601_ai_review-fast-accurate-architecture-design.md) — *RAG 기반 DevMatch AI 복습 — *
+- 📄 [20260607_ollama_bge-m3-rag-retrieval-design.md](./20260607_ollama_bge-m3-rag-retrieval-design.md) — *Ollama BGE-M3 RAG Retrieval Design 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260608_no_rag-ollama-self-knowledge-evaluation-design.md](./20260608_no_rag-ollama-self-knowledge-evaluation-design.md) — *No-RAG Ollama Self-Knowledge Evaluation Design 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260609_bge_m3-runtime-intent-classifier-design.md](./20260609_bge_m3-runtime-intent-classifier-design.md) — *Ollama 기반 BGE-M3 런타임 의도 분류기(Intent Classifier) 구조 설계서*
+- 📄 [20260609_exaone_live-e2e-quality-evaluation-design.md](./20260609_exaone_live-e2e-quality-evaluation-design.md) — *RAG 환경 하 EXAONE 모델 Live E2E 품질 평가 시스템 설계서*
+- 📄 [20260612_rag_cards-v2-dry-run-completion-summary.md](./20260612_rag_cards-v2-dry-run-completion-summary.md) — *RAG Cards v2 전환 전 드라이런(Dry-Run) 완료 상태 및 명세 요약서*
+- 📄 [20260612_rag_cards-v2-isolated-migration-design.md](./20260612_rag_cards-v2-isolated-migration-design.md) — *기존 시스템 영향 최소화를 위한 RAG Cards v2 격리 마이그레이션 설계서*
+- 📄 [20260612_rag_cards-v2-quality-audit-summary.md](./20260612_rag_cards-v2-quality-audit-summary.md) — *RAG Cards v2 데이터 정합성 검증을 위한 품질 감사(Quality Audit) 요약서*
+- 📄 [20260612_rag_cards-v2-shadow-validation-summary.md](./20260612_rag_cards-v2-shadow-validation-summary.md) — *프로덕션 반영 전 RAG Cards v2 Shadow Fast Path 검증 명세서*
+- 📄 [20260613_rag_cards-v2-partial-approval-dry-run-plan.md](./20260613_rag_cards-v2-partial-approval-dry-run-plan.md) — *RAG Cards v2 데이터에 대한 부분 승인 드라이런 진행 명세서*
+- 📄 [20260613_rag_cards-v2-retrieval-calibration-summary.md](./20260613_rag_cards-v2-retrieval-calibration-summary.md) — *RAG Cards v2 검색 정확도 향상을 위한 보정(Calibration) 모델 명세서*
+- 📄 [20260613_v1_to-v2-replacement-readiness.md](./20260613_v1_to-v2-replacement-readiness.md) — *v1 → v2 교체 준비 기준 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260615_ai_review-v2-admin-learning-loop-design.md](./20260615_ai_review-v2-admin-learning-loop-design.md) — *Ollama 기반 AI Review v2 Admin Learning Loop Design 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260615_v2_approved-fast-path-ollama-fallback-design.md](./20260615_v2_approved-fast-path-ollama-fallback-design.md) — *v2 Approved Fast Path와 Ollama Fallback 단일 운영 설계 상세 요구사항 및 기능 동작 명세서*
+- 📄 [20260616_ai_review-course-scope-gate-design.md](./20260616_ai_review-course-scope-gate-design.md) — *과목별 허용 범위를 제어하는 AI 리뷰 코스 Scope Gate 아키텍처 설계서*

@@ -1,0 +1,32 @@
+{
+  "card_id" : "auto-review-",
+  "category" : "auto-review",
+  "term" : "반응형",
+  "aliases" : [ "반응형" ],
+  "source_question_ids" : [ "auto:auto-cf1980f590a4" ],
+  "retrieval" : {
+    "embedding_text" : "반응형 반응형 레이아웃을 왜 써야 하나요? 반응형",
+    "embedding_hash" : "",
+    "boost_keywords" : [ "반응형" ],
+    "intent_types" : [ "CONCEPT_DEFINITION" ]
+  },
+  "payloads" : {
+    "CONCEPT_DEFINITION" : {
+      "content" : "반응형 디자인의 핵심은 다양한 기기 크기에 맞춰 웹사이트가 유연하게 적응되도록 하는 것입니다. 옵션 중 **flexbox**나 **그리드 시스템**(CSS Grid)과 함께 미디어 쿼리(breakpoint 활용)를 결합하면 화면 사이즈 변화에 따라 레이아웃이 자동으로 조정되어 최적의 사용자 경험을 제공합니다. 예를 들어, 큰 데스크톱에서는 그리드 구조로 정교한 배치를 유지하고, 모바일 장치에서는 flexbox 요소들이 더 효율적으로 재배치됩니다.",
+      "examples" : [ ]
+    }
+  },
+  "review" : {
+    "reviewer" : "admin-ui",
+    "rejected_reason" : "",
+    "approved_at" : "2026-06-16T08:11:18.015136200Z",
+    "payload_status" : {
+      "CONCEPT_DEFINITION" : "approved"
+    },
+    "card_status" : "approved"
+  },
+  "related_card_ids" : [ ],
+  "tags" : [ ],
+  "created_at" : "2026-06-16T08:11:18.015136200Z",
+  "updated_at" : "2026-06-16T08:11:18.015136200Z"
+}

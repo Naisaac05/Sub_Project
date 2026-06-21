@@ -201,6 +201,7 @@ function aiMetadataBadges(message: AiReviewSessionResponse['messages'][number]) 
 
 export default function AiReviewPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const questionCardRef = useRef<HTMLDivElement>(null);
   const params = useParams();
   const router = useRouter();
   const { isLoggedIn, isLoading: authLoading } = useAuth();
@@ -253,6 +254,7 @@ export default function AiReviewPage() {
 
   // Auto-scrolling is intentionally disabled per user request.
   // The user prefers the chat window to remain fixed when a new question or answer arrives.
+
 
   useEffect(() => {
     if (!authLoading && !isLoggedIn) {
@@ -343,6 +345,13 @@ export default function AiReviewPage() {
       ?? null,
     [activeWrongQuestion, selectedQuestionId, session?.wrongQuestions]
   );
+
+  // Scroll to the question card when the displayed question changes (e.g. next question)
+  useEffect(() => {
+    if (displayedQuestion?.questionId != null && questionCardRef.current) {
+      questionCardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [displayedQuestion?.questionId]);
 
   const isViewingCurrentQuestion = displayedQuestion?.questionId === activeWrongQuestion?.questionId;
 
@@ -882,7 +891,7 @@ export default function AiReviewPage() {
                 </div>
 
                 {displayedQuestion ? (
-                  <div className="mb-5 rounded-xl border border-blue-100 bg-white p-4">
+                  <div ref={questionCardRef} className="mb-5 rounded-xl border border-blue-100 bg-white p-4">
                     <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                       <span className="text-xs font-bold text-blue-600">
                         {isViewingCurrentQuestion ? LABELS.currentQuestion : LABELS.selectedQuestion} · Q{displayedQuestionIndex + 1}

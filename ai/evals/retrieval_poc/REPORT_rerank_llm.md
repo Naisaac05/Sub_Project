@@ -1,3 +1,12 @@
+---
+type: eval
+category: evaluation
+status: active
+updated: 2026-06-18
+description: "LLM-리랭커 실측 — bge top-3 재정렬 (모델 qwen2.5:3b) 모델 성능 평가 및 POC 실험 결과 분석"
+
+---
+
 # LLM-리랭커 실측 — bge top-3 재정렬 (모델 qwen2.5:3b)
 
 > 자동 생성. `python evals/retrieval_poc/rerank_llm.py`

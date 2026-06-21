@@ -1,3 +1,10 @@
+---
+type: experiment
+category: inference
+status: active
+updated: 2026-06-18
+---
+
 # 프롬프트 v2 비교 실험
 
 `follow_up` 프롬프트 v1 (현재 운영) 과 v2 (개선안) 을 같은 입력에 돌려서 결과를 비교하는 격리된 실험 폴더입니다.
