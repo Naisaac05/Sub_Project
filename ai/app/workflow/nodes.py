@@ -8,13 +8,21 @@ from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_f
 from app.rag.documents import load_concept_cards
 from app.rag.retriever import retrieve_context
 from app.schemas import AiGenerateRequest
-from app.schemas.rag_card import CardStatus
+from app.schemas.rag_card import CardStatus, RagCard
 from app.scoring import ConfidenceInputs, ConfidenceResult, calculate_confidence
 from app.validation.text import compact_answer, contains_korean, korean_fallback
 from app.workflow.answer_cache import cache_key_for, get_cached_answer
 from app.workflow.course_scope import CourseScopeDecision, resolve_course_scope
 from app.workflow.degraded import lightweight_only_enabled, lightweight_only_miss_state
 from app.workflow.embedding_intent import classify_free_question_with_embeddings
+from app.workflow.grounded_fallback import (
+    SAFE_GROUNDED_FALLBACK_ANSWER,
+    build_grounded_answer_from_evidence,
+    grounded_fallback_enabled,
+    grounded_prompt_context,
+    select_grounded_evidence,
+    validate_grounded_answer,
+)
 from app.workflow.intent import FreeQuestionIntent, normalize_question
 from app.workflow.lightweight_answers import LIGHTWEIGHT_MODEL_NAME, resolve_lightweight_answer
 from app.workflow.query_resolver import resolve_learner_query
@@ -88,6 +96,10 @@ def generate_answer_node(
     if state.mode == "free-question":
         scope_decision = _course_scope_for_state(state)
         if scope_decision.scope == "out_of_course_tech":
+            v2_decision = _resolve_unscoped_v2_fast_path_for_exact_hit(state, learner_query, scope_decision)
+            state.v2_fast_path_decision = v2_decision.metadata()
+            if v2_decision.mode == "serve" and v2_decision.hit:
+                return _v2_approved_fast_path_state(state, v2_decision)
             return _out_of_course_redirect_state(state, scope_decision.matched_card_id)
         if scope_decision.scope == "scope_unknown":
             _append_quality_flag(state, "scope_unknown")
@@ -104,14 +116,28 @@ def generate_answer_node(
     )
     state.v2_fast_path_decision = v2_decision.metadata()
     if state.mode == "free-question" and v2_decision.mode == "serve" and v2_decision.hit:
-        state.answer = v2_decision.answer or ""
-        state.prompt_version = prompt_version_for_mode(state.mode)
-        state.model_used = "v2-approved-payload"
-        state.fallback_used = False
-        state.route = "v2_approved_fast_path"
-        state.answer_style = _answer_style_for_state(state)
-        state.contexts = []
-        return state
+        return _v2_approved_fast_path_state(state, v2_decision)
+
+    grounded_evidence = None
+    if state.mode == "free-question" and grounded_fallback_enabled():
+        grounded_evidence = select_grounded_evidence(
+            learner_query,
+            allowed_card_ids=scope_decision.allowed_card_ids
+            if scope_decision and scope_decision.allowed_card_ids
+            else None,
+        )
+        if grounded_evidence is None:
+            return _grounded_safe_response(state, ("missing_approved_evidence",))
+        from app.rag.retriever import RetrievedContext
+        state.contexts = [
+            RetrievedContext(
+                concept_id=grounded_evidence.card_id,
+                title=grounded_evidence.term,
+                content=grounded_prompt_context(grounded_evidence),
+                score=grounded_evidence.score,
+                metadata={"retriever": "approved_grounded_fallback", "version": "v2-approved"},
+            )
+        ]
 
     if lightweight_only_enabled():
         return lightweight_only_miss_state(state.mode, state.request)
@@ -119,11 +145,15 @@ def generate_answer_node(
     cache_key = cache_key_for(state.mode, state.request)
     cached_answer = get_cached_answer(cache_key)
     if cached_answer:
+        if grounded_evidence is not None:
+            cached_quality = validate_grounded_answer(learner_query, cached_answer, grounded_evidence)
+            if not cached_quality.passed:
+                return _grounded_safe_response(state, cached_quality.reasons)
         state.answer = cached_answer
         state.prompt_version = prompt_version_for_mode(state.mode)
         state.model_used = f"{state.request.model}:cache"
         state.fallback_used = False
-        state.route = "cache"
+        state.route = "grounded_fallback_cache" if grounded_evidence is not None else "cache"
         return state
 
     prompt = build_prompt(state.mode, state.request, context=_context_text(state), intent=state.free_question_intent)
@@ -162,6 +192,7 @@ def generate_answer_node(
             state.retry_generation_ms = int((time.perf_counter() - retry_started) * 1000)
     except Exception as exc:
         state.generation_ms = int((time.perf_counter() - started) * 1000)
+        retry_succeeded = False
         if _should_retry_fallback_model(state):
             retry_started = time.perf_counter()
             try:
@@ -179,7 +210,9 @@ def generate_answer_node(
                 state.answer_style = _answer_style_for_state(state)
                 state.error = None
                 state.retry_generation_ms = int((time.perf_counter() - retry_started) * 1000)
-                return state
+                retry_succeeded = True
+                if grounded_evidence is None:
+                    return state
             except Exception as fallback_exc:
                 state.retry_generation_ms = int((time.perf_counter() - retry_started) * 1000)
                 state.error = f"{exc}; fallback model failed: {fallback_exc}"
@@ -187,11 +220,29 @@ def generate_answer_node(
         else:
             state.error = str(exc)
             state.fallback_reason = _fallback_reason_from_exception(exc)
-        state.answer = _fallback_message(state.fallback_reason)
-        state.model_used = "template"
-        state.fallback_used = True
-        state.route = "fallback_template"
-        state.answer_style = _answer_style_for_state(state)
+        if not retry_succeeded:
+            state.answer = _fallback_message(state.fallback_reason)
+            state.model_used = "template"
+            state.fallback_used = True
+            state.route = "fallback_template"
+            state.answer_style = _answer_style_for_state(state)
+
+    if grounded_evidence is not None:
+        if state.route not in {"generation", "rag_generation"}:
+            return _grounded_safe_response(state, ("grounded_generation_error",))
+        grounded_quality = validate_grounded_answer(learner_query, state.answer, grounded_evidence)
+        if not grounded_quality.passed:
+            grounded_answer = build_grounded_answer_from_evidence(learner_query, grounded_evidence)
+            grounded_answer_quality = validate_grounded_answer(learner_query, grounded_answer, grounded_evidence)
+            if grounded_answer_quality.passed:
+                state.answer = grounded_answer
+                state.model_used = "approved-evidence-grounded-answer"
+                state.fallback_used = False
+                state.route = "grounded_fallback_generation"
+                state.answer_style = _answer_style_for_state(state)
+                return state
+            return _grounded_safe_response(state, grounded_quality.reasons)
+        state.route = "grounded_fallback_generation"
 
     # Semantic Judge 사후 평가 검증 레이어 연동
     from app.workflow.judge import semantic_judge_enabled
@@ -404,6 +455,16 @@ def generate_answer_node(
 
 
 def validate_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
+    if state.route == "grounded_fallback_safe_response":
+        state.validation = ValidationResult(
+            korean_ok=True,
+            required_keywords_ok=True,
+            forbidden_claims_ok=True,
+            relevance_ok=True,
+            score=1.0,
+            reasons=state.quality_flags.copy(),
+        )
+        return state
     if state.route in {"off_topic_redirect", "out_of_course_redirect"}:
         state.validation = ValidationResult(
             korean_ok=True,
@@ -417,7 +478,16 @@ def validate_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
 
     preserved_flags = [
         flag for flag in state.quality_flags
-        if flag in {"scope_unknown", "course_scope_applied"}
+        if flag in {
+            "scope_unknown",
+            "course_scope_applied",
+            "course_scope_exact_approved_hit",
+            "missing_approved_evidence",
+            "non_korean",
+            "incomplete_answer",
+            "missing_topic",
+            "insufficient_evidence_overlap",
+        }
     ]
     korean_ok = contains_korean(state.answer)
     required_keywords_ok = _required_keywords_ok(state)
@@ -475,6 +545,8 @@ def confidence_gate_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
 
 
 def fallback_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
+    if state.route in {"grounded_fallback_generation", "grounded_fallback_safe_response"}:
+        return state
     graph_route = state.route if state.route in {"dead_end_state", "error_state"} else None
     relevance_ok = state.validation.relevance_ok if state.validation else True
     topic_ok = "missing_topic" not in state.quality_flags
@@ -591,7 +663,7 @@ def _off_topic_redirect_state(state: ReviewWorkflowState) -> ReviewWorkflowState
 def _approved_cards_for_scope():
     return [
         card for card in load_concept_cards()
-        if getattr(card.review, "card_status", None) == CardStatus.APPROVED
+        if isinstance(card, RagCard) and card.review.card_status == CardStatus.APPROVED
     ]
 
 
@@ -602,6 +674,38 @@ def _course_scope_for_state(state: ReviewWorkflowState) -> CourseScopeDecision:
         intent=state.free_question_intent,
         approved_cards=_approved_cards_for_scope(),
     )
+
+
+def _resolve_unscoped_v2_fast_path_for_exact_hit(
+    state: ReviewWorkflowState,
+    learner_query: str,
+    scope_decision: CourseScopeDecision,
+):
+    v2_decision = resolve_v2_approved_fast_path(
+        learner_query,
+        state.free_question_intent,
+        selected_answer=state.request.selected_answer,
+    )
+    if v2_decision.mode == "serve" and v2_decision.hit:
+        _append_quality_flag(state, "course_scope_applied")
+        _append_quality_flag(state, "course_scope_exact_approved_hit")
+        state.matched_concept_id_override = v2_decision.card_id or scope_decision.matched_card_id
+    return v2_decision
+
+
+def _v2_approved_fast_path_state(
+    state: ReviewWorkflowState,
+    v2_decision,
+) -> ReviewWorkflowState:
+    state.answer = v2_decision.answer or ""
+    state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
+    state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
+    state.model_used = "v2-approved-payload"
+    state.fallback_used = False
+    state.route = "v2_approved_fast_path"
+    state.answer_style = _answer_style_for_state(state)
+    state.contexts = []
+    return state
 
 
 def _out_of_course_redirect_state(
@@ -805,6 +909,21 @@ def _fallback_message(reason: str | None) -> str:
     if reason == "quality_validation":
         return "더 정확한 답변을 준비하고 있습니다. 질문을 조금 더 구체적으로 작성해 다시 시도해주세요."
     return "지금은 답변을 준비하지 못했습니다. 잠시 후 다시 시도해주세요."
+
+
+def _grounded_safe_response(
+    state: ReviewWorkflowState,
+    reasons: tuple[str, ...],
+) -> ReviewWorkflowState:
+    state.answer = SAFE_GROUNDED_FALLBACK_ANSWER
+    state.model_used = "approved-evidence-safety-gate"
+    state.fallback_used = True
+    state.fallback_reason = "grounded_quality_validation"
+    state.route = "grounded_fallback_safe_response"
+    state.answer_style = state.answer_style or _answer_style_for_state(state)
+    for reason in reasons:
+        _append_quality_flag(state, reason)
+    return state
 
 
 def _generation_model_for_state(state: ReviewWorkflowState) -> str:

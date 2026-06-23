@@ -278,6 +278,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--allow-model-download", action="store_true")
     parser.add_argument("--bm25-weight", type=float, default=0.5)
     parser.add_argument("--dense-weight", type=float, default=0.5)
+    parser.add_argument("--output", type=Path)
     return parser.parse_args(argv)
 
 
@@ -295,6 +296,9 @@ def main(argv: list[str] | None = None) -> int:
         dense_weight=args.dense_weight,
     )
     reports = [evaluate_candidate(candidate, cases, k_values, args.limit) for candidate in candidates]
+    if args.output:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(reports, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(reports, ensure_ascii=False, indent=2))
     return 0
 

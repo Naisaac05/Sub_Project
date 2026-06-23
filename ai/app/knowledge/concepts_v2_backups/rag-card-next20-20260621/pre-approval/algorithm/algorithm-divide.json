@@ -1,0 +1,116 @@
+{
+  "card_id": "algorithm-divide",
+  "category": "algorithm",
+  "term": "divide",
+  "aliases": [
+    "divide",
+    "병합 정렬(Merge Sort)",
+    "분할 정복(Divide and Conquer)을 사용하는 정렬은?",
+    "Divide",
+    "and",
+    "Conquer)",
+    "Merge",
+    "Sort)",
+    "algorithm divide"
+  ],
+  "source_question_ids": [
+    "algorithm:140"
+  ],
+  "retrieval": {
+    "embedding_text": "divide 병합 정렬(Merge Sort) 분할 정복(Divide and Conquer)을 사용하는 정렬은? algorithm 분할 정복 Divide and Conquer) 정렬은",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "divide",
+      "분할",
+      "정복",
+      "Divide",
+      "and",
+      "Conquer)",
+      "정렬은"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "분할 정복(Divide and Conquer)은 문제를 독립적인 작은 문제로 나누어 해결한 뒤 결과를 결합하는 방식이다. 병합 정렬은 배열을 절반씩 분할하고 정렬된 두 부분 배열을 병합한다.",
+      "examples": [
+        "예: 작은 입력에서 핵심 동작을 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "병합 정렬은 배열을 재귀적으로 절반씩 나누고 정렬된 결과를 병합하므로 분할 정복 구조를 직접 사용한다. 버블·삽입·선택 정렬은 반복 비교와 이동으로 정렬한다.",
+      "key_points": [
+        "병합 정렬(Merge Sort)",
+        "algorithm-divide"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "기술 용어의 적용 범위와 유사 개념의 역할을 구분하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "버블 정렬",
+          "reason": "버블 정렬은 인접 원소를 반복 비교하고 교환한다. 문제를 하위 배열로 분할한 뒤 결과를 결합하는 단계가 없다."
+        },
+        "option_1": {
+          "text": "삽입 정렬",
+          "reason": "삽입 정렬은 정렬된 앞부분의 알맞은 위치에 현재 원소를 삽입한다. 독립 부분 문제의 분할과 병합을 수행하지 않는다."
+        },
+        "option_3": {
+          "text": "선택 정렬",
+          "reason": "선택 정렬은 남은 구간에서 최솟값을 골라 앞쪽과 교환한다. 재귀적 분할과 결과 결합을 사용하는 병합 정렬과 다르다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "병합 정렬은 분할과 병합으로 O(n log n)을 보장하고, 단순 비교 정렬인 버블·삽입·선택 정렬은 평균적으로 O(n²)이다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "def merge(left, right):\n    result = []\n    while left and right: result.append(left.pop(0) if left[0] <= right[0] else right.pop(0))\n    return result + left + right\nmerged = merge([1, 4], [2, 3])\nassert merged == [1, 2, 3, 4]",
+      "explanation": "직접 구현한 병합 단계가 정렬된 두 부분 배열을 하나의 정렬 결과로 결합하는지 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "대용량 데이터를 안정적으로 정렬하거나 외부 정렬처럼 분할된 결과를 순차 병합해야 할 때 사용한다.",
+      "best_practices": [
+        "문제의 전제와 실제 동작을 작은 실행 예제로 먼저 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사한 용어의 적용 범위를 구분하지 않아 잘못된 구현을 선택한다.",
+          "solution": "입력 조건, 핵심 동작, 결과를 각각 확인하고 비교 대상과 차이를 검증한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

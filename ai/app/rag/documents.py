@@ -34,6 +34,8 @@ def load_concept_cards(root: Path | None = None) -> list[ConceptCard | RagCard]:
     cards = []
     for path in sorted(concept_root.rglob("*")):
         if path.is_file():
+            if path.name.lower() == "index.md":
+                continue
             try:
                 if path.suffix.lower() == ".md":
                     cards.append(parse_markdown_concept_card(path))

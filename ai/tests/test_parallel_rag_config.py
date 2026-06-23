@@ -34,6 +34,19 @@ class ParallelRagConfigTest(unittest.TestCase):
         self.assertTrue(config.shadow_mode)
         self.assertEqual(config.v2_percentage, 10)
 
+    def test_shadow_mode_environment_override_supports_synthetic_validation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "parallel.json"
+            path.write_text(json.dumps({
+                "AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": True,
+                "SHADOW_MODE": False,
+                "V2_PERCENTAGE": 100,
+            }), encoding="utf-8")
+            with patch.dict("os.environ", {"SHADOW_MODE": "true"}, clear=False):
+                config = load_parallel_rag_config(path)
+
+        self.assertTrue(config.shadow_mode)
+
 
 if __name__ == "__main__":
     unittest.main()

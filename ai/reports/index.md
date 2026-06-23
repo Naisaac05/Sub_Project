@@ -3,6 +3,22 @@
 이 문서는 `reports` 폴더의 자동 생성된 네비게이션입니다.
 
 ## 문서 목록
+- [operational_missing_candidate_extraction_2026-06-23.md](./operational_missing_candidate_extraction_2026-06-23.md) - 운영 Shadow 반복 missing 질문 기반 신규 RAG 카드 후보 추출 준비 결과
+- [rag_card_term_alignment_2026-06-23.md](./rag_card_term_alignment_2026-06-23.md) - approved RAG 카드 term alignment 보강 결과
+- [precommit_change_sets_2026-06-23.md](./precommit_change_sets_2026-06-23.md) - RAG 카드 증진 작업 커밋 전 변경 묶음 제안
+- [operational_shadow_runbook_2026-06-23.md](./operational_shadow_runbook_2026-06-23.md) - 근거 기반 fallback 운영 Shadow 검증 실행 방법
+- [operational_shadow_sample_2026-06-23.json](./operational_shadow_sample_2026-06-23.json) - 운영 Shadow 스크립트 샘플 입력 실행 결과
+- [grounded_fallback_transition_readiness_2026-06-23.md](./grounded_fallback_transition_readiness_2026-06-23.md) - 근거 기반 fallback 운영 Shadow 확장 검증과 전환 판정
+- [grounded_fallback_live_2026-06-23.json](./grounded_fallback_live_2026-06-23.json) - 승인 근거 케이스는 `grounded_fallback_generation`, 근거 없음 케이스는 안전 응답으로 검증
+- [grounded_fallback_live_2026-06-22.json](./grounded_fallback_live_2026-06-22.json) - 실제 Ollama grounded fallback과 안전 응답 검증
+- [v2_approved_ollama_e2e_2026-06-22.json](./v2_approved_ollama_e2e_2026-06-22.json) - 평균 품질 4.52 달성 Shadow 평가
+- [live_ollama_fallback_2026-06-22.json](./live_ollama_fallback_2026-06-22.json) - 기존 EXAONE 모델 실제 fallback 품질 평가
+- [synthetic_shadow_traffic_2026-06-22.json](./synthetic_shadow_traffic_2026-06-22.json) - `SHADOW_MODE=true` 합성 트래픽 평가
+- [rag_card_expansion_baseline_2026-06-21.json](./rag_card_expansion_baseline_2026-06-21.json) - RAG 카드 확장 전 기준선
+- [course_balanced_next20_candidates_2026-06-21.json](./course_balanced_next20_candidates_2026-06-21.json) - 코스별 후보 20장 선정 결과
+- [rag_card_next20_approval_dryrun_2026-06-21.json](./rag_card_next20_approval_dryrun_2026-06-21.json) - 승인 dry-run 및 검토 근거
+- [rag_card_expansion_retrieval_2026-06-21.json](./rag_card_expansion_retrieval_2026-06-21.json) - Java equals·React key 검색 평가
+- [v2_approved_ollama_e2e_2026-06-21.json](./v2_approved_ollama_e2e_2026-06-21.json) - approved 82장 Shadow 라우팅 E2E
 - 📄 [20260526_ai_project-critical-mlops-review.md](./20260526_ai_project-critical-mlops-review.md) — *RAG 기반 Ollama 기반 AI 프로젝트 냉정 분석 리포트 관련 주요 기능 및 가이드라인*
 - 📄 [20260526_ai_review-candidate-approval-workflow.md](./20260526_ai_review-candidate-approval-workflow.md) — *AI 리뷰 답변 후보 승인 워크플로우 구성 및 테스트 보고서*
 - 📄 [20260526_ai_review-candidate-durable-queue.md](./20260526_ai_review-candidate-durable-queue.md) — *AI 리뷰 후보 데이터의 내구성 대기열(Durable Queue) 적용 결과*

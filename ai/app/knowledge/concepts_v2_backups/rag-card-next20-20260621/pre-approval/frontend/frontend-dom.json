@@ -1,0 +1,118 @@
+{
+  "card_id": "frontend-dom",
+  "category": "frontend",
+  "term": "dom",
+  "aliases": [
+    "dom",
+    "변경된 부분만 계산(diff)하여 실제 DOM에 최소한의 업데이트를 적용한다",
+    "React의 가상 DOM(Virtual DOM)이 성능에 기여하는 방식은?",
+    "React",
+    "DOM(Virtual",
+    "DOM)",
+    "diff)",
+    "DOM",
+    "frontend dom"
+  ],
+  "source_question_ids": [
+    "frontend:81"
+  ],
+  "retrieval": {
+    "embedding_text": "dom 변경된 부분만 계산(diff)하여 실제 DOM에 최소한의 업데이트를 적용한다 React의 가상 DOM(Virtual DOM)이 성능에 기여하는 방식은? frontend 가상 DOM(Virtual DOM) 성능에 기여하는 방식은",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "dom",
+      "가상",
+      "DOM(Virtual",
+      "DOM)",
+      "성능에",
+      "기여하는",
+      "방식은"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "React의 가상 DOM은 UI 트리를 메모리 객체로 표현하고 이전 렌더 결과와 새 결과를 비교해 실제 DOM에 반영할 변경을 계산하는 방식이다.",
+      "examples": [
+        "상태가 바뀌면 React는 새 엘리먼트 트리를 만들고 reconciliation 결과에 따라 필요한 DOM 속성이나 텍스트만 갱신한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 diff와 실제 DOM의 제한적 반영을 함께 설명한다. 반면 DOM을 없애거나 매 렌더마다 전체 노드를 교체하거나 WebWorker가 DOM을 직접 조작한다는 설명은 브라우저 동작과 다르다.",
+      "key_points": [
+        "가상 트리 비교",
+        "reconciliation",
+        "필요한 DOM 변경 반영"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "정답 표현을 외우기보다 각 선택지가 보장하는 동작과 제한을 따로 확인한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "DOM을 사용하지 않는다",
+          "reason": "React도 최종 화면을 표시하려면 브라우저의 실제 DOM을 사용하며 가상 DOM은 변경 계산을 돕는 중간 표현이다."
+        },
+        "option_2": {
+          "text": "모든 DOM을 매번 다시 생성한다",
+          "reason": "재조정 과정은 유지 가능한 노드를 재사용하고 달라진 속성·텍스트·구조만 실제 DOM에 반영한다."
+        },
+        "option_3": {
+          "text": "WebWorker에서 DOM을 처리한다",
+          "reason": "일반 WebWorker는 실제 DOM에 직접 접근할 수 없고 React DOM 반영은 메인 스레드의 렌더러가 수행한다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "관련 개념",
+          "diff": "직접 DOM 조작은 명령형 변경을 수행하지만 React 렌더링은 선언한 UI의 이전·다음 상태 차이를 계산한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "const before = { type: 'p', text: '이전' };\nconst after = { type: 'p', text: '변경' };\nconst changed = before.text !== after.text;\nif (!changed) throw new Error('diff failed');",
+      "explanation": "두 UI 표현의 텍스트를 비교해 실제 반영이 필요한 변경이 감지되는지 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "상태 변화가 잦은 목록과 폼에서 UI를 선언적으로 유지하면서 브라우저 DOM 갱신 범위를 관리할 때 사용한다.",
+      "best_practices": [
+        "렌더 함수에서 DOM을 직접 수정하지 않는다.",
+        "목록 항목에는 안정적인 key를 부여한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "가상 DOM이 항상 수동 DOM 코드보다 빠르다고 단정하는 오류",
+          "solution": "성능은 변경 패턴과 컴포넌트 구조에 따라 측정하고 불필요한 렌더 원인을 프로파일링한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

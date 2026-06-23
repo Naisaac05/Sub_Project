@@ -1,0 +1,114 @@
+{
+  "card_id": "python-tryexceptelsefinally",
+  "category": "python",
+  "term": "tryexceptelsefinally",
+  "aliases": [
+    "tryexceptelsefinally",
+    "예외가 발생하지 않았을 때",
+    "try-except-else-finally에서 else 블록이 실행되는 조건은?",
+    "try-except-else-finally",
+    "else",
+    "python tryexceptelsefinally"
+  ],
+  "source_question_ids": [
+    "python:110"
+  ],
+  "retrieval": {
+    "embedding_text": "tryexceptelsefinally 예외가 발생하지 않았을 때 try-except-else-finally에서 else 블록이 실행되는 조건은? python try-except-else-finally 에서 else 블록이 실행되는 조건은",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "tryexceptelsefinally",
+      "try-except-else-finally",
+      "에서",
+      "else",
+      "블록이",
+      "실행되는",
+      "조건은"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "try-except의 else 블록은 try 블록에서 예외가 발생하지 않았을 때 실행된다.",
+      "examples": [
+        "try-except-else 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "finally는 예외 발생 여부와 관계없이 정리 목적으로 실행된다.",
+      "key_points": [
+        "try-except-else",
+        "정상 완료",
+        "finally"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "예외가 발생했을 때",
+          "reason": "예외가 발생하면 일치하는 except가 실행되고 else는 건너뛴다."
+        },
+        "option_2": {
+          "text": "항상 실행된다",
+          "reason": "else는 항상 실행되지 않고 정상 완료 때만 실행된다."
+        },
+        "option_3": {
+          "text": "finally 후에 실행된다",
+          "reason": "else는 finally보다 먼저 실행된다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`예외가 발생하지 않았을 때`는 질문의 조건을 충족하지만 다른 선택지는 `tryexceptelsefinally`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "events = []\ntry: value = 10 / 2\nexcept ZeroDivisionError: events.append(\"except\")\nelse: events.append(\"else\")\nfinally: events.append(\"finally\")",
+      "explanation": "try-except-else 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "try-except-else 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`tryexceptelsefinally`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `예외가 발생하지 않았을 때`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

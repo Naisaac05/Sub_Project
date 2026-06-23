@@ -1,0 +1,113 @@
+{
+  "card_id": "python-asyncio",
+  "category": "python",
+  "term": "asyncio",
+  "aliases": [
+    "asyncio",
+    "코루틴의 실행을 일시 중단하고 완료를 기다린다",
+    "asyncio에서 await 키워드의 역할은?",
+    "await",
+    "python asyncio"
+  ],
+  "source_question_ids": [
+    "python:114"
+  ],
+  "retrieval": {
+    "embedding_text": "asyncio 코루틴의 실행을 일시 중단하고 완료를 기다린다 asyncio에서 await 키워드의 역할은? python 에서 await 키워드의 역할은 코루틴의 실행을",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "asyncio",
+      "에서",
+      "await",
+      "키워드의",
+      "역할은",
+      "코루틴의",
+      "실행을"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "asyncio의 await는 awaitable 작업이 완료될 때까지 현재 코루틴 실행을 일시 중단하고 이벤트 루프에 제어권을 돌려준다. 대기 중에는 다른 준비된 코루틴이 실행될 수 있다.",
+      "examples": [
+        "네트워크와 파일 대기처럼 I/O 동안 다른 코루틴을 진행해 동시성을 높일 때 사용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "await는 코루틴을 일시 중단해 awaitable 완료를 기다리고 결과를 받는다. 새 스레드를 만들거나 함수를 동기식으로 변환하거나 예외를 의도적으로 발생시키는 키워드가 아니다.",
+      "key_points": [
+        "asyncio",
+        "await",
+        "이벤트 루프"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기의 용어만 확인하지 말고 각 보기의 실제 책임과 정답 개념의 선택 기준을 비교한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "스레드를 생성한다",
+          "reason": "await는 이벤트 루프에 제어권을 넘기며 새로운 운영체제 스레드를 생성하지 않는다."
+        },
+        "option_2": {
+          "text": "함수를 동기 함수로 변환한다",
+          "reason": "await를 사용한 함수는 여전히 async 코루틴이며 동기 함수로 변환되지 않는다."
+        },
+        "option_3": {
+          "text": "예외를 발생시킨다",
+          "reason": "awaitable이 실패하면 예외가 전파될 수 있지만 await 자체의 목적은 예외 발생이 아니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`코루틴의 실행을 일시 중단하고 완료를 기다린다`는 질문의 조건을 충족하지만 다른 선택지는 `asyncio`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import asyncio\nasync def load():\n    await asyncio.sleep(0.01)\n    return 1\nresult = asyncio.run(load())",
+      "explanation": "네트워크와 파일 대기처럼 I/O 동안 다른 코루틴을 진행해 동시성을 높일 때 사용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "네트워크와 파일 대기처럼 I/O 동안 다른 코루틴을 진행해 동시성을 높일 때 사용한다.",
+      "best_practices": [
+        "작은 실행 예제와 경계 사례로 동작을 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`asyncio`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `코루틴의 실행을 일시 중단하고 완료를 기다린다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

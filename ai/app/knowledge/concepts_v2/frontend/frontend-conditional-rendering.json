@@ -39,7 +39,7 @@
   },
   "payloads": {
     "CONCEPT_DEFINITION": {
-      "content": "React 조건부 렌더링은 JavaScript 조건에 따라 반환할 JSX를 선택하는 방식이다. JSX 표현식 내부에서는 삼항식, 논리 AND, 함수 호출을 사용할 수 있지만 문(statement)인 if-else를 직접 넣을 수 없다.",
+      "content": "React 조건부 렌더링은 상태나 props 같은 JavaScript 조건에 따라 반환할 JSX를 선택하는 방식이다. 컴포넌트 본문의 반환문 앞에서는 일반 `if`와 조기 반환을 사용할 수 있고, JSX 표현식 내부에서는 삼항 연산자나 논리 AND를 사용한다. `if-else`는 값을 만드는 표현식이 아니라 문(statement)이므로 JSX 중괄호 안에 직접 넣을 수 없다. 조건이 false일 때 아무것도 렌더링하지 않으려면 `null`을 반환하며, 같은 조건 계산을 여러 곳에 복제하지 않아야 UI 분기와 상태가 일관된다.",
       "examples": [
         "핵심 원리를 작은 입력으로 확인한다."
       ]
