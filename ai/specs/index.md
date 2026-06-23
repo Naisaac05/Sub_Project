@@ -3,6 +3,10 @@
 이 문서는 `specs` 폴더의 자동 생성된 네비게이션입니다.
 
 ## 문서 목록
+- [20260623_grounded-fallback-transition-criteria.md](./20260623_grounded-fallback-transition-criteria.md) - 근거 기반 fallback 운영 Shadow 성공 기준과 전환 판정 기준
+- [20260622_grounded-fallback-safety-design.md](./20260622_grounded-fallback-safety-design.md) - 근거 기반 fallback과 fail-closed 안전 응답 설계
+- [20260622_rag-quality-fallback-shadow-design.md](./20260622_rag-quality-fallback-shadow-design.md) - RAG 품질·실제 fallback·합성 Shadow 검증 설계
+- [20260621_v2-replacement-readiness.md](./20260621_v2-replacement-readiness.md) - approved 82장 기준 v2 전환 준비도 재판정
 - 📄 [20260408_lms_implementation-design.md](./20260408_lms_implementation-design.md) — *DevMatch LMS 구현 설계서 상세 요구사항 및 기능 동작 명세서*
 - 📄 [20260411_lms_mypage-integration-design.md](./20260411_lms_mypage-integration-design.md) — *LMS 마이페이지 진입 + 실사용 가능화 설계 상세 요구사항 및 기능 동작 명세서*
 - 📄 [20260412_lms_dashboard-dday-navigation-design.md](./20260412_lms_dashboard-dday-navigation-design.md) — *LMS 대시보드 D-day 표시 및 카드 네비게이션 설계 상세 요구사항 및 기능 동작 명세서*

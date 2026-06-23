@@ -1,5 +1,17 @@
 # 🤖 AI 시스템 전체 개요 (AI Knowledge Base)
 
+## RAG v2 최신 상태 (2026-06-21)
+
+- approved 82장, draft 62장
+- 50문항 Shadow Top1 100%, Fast Path 100%, fallback 0%
+- 평균 응답 품질 4.52/5와 합성 Shadow 라우팅은 통과했습니다.
+- 근거 기반 fallback 운영 Shadow 확장 검증 8/8 통과로 `shadow_readiness=READY`입니다.
+- 실제 운영 트래픽 Shadow 미검증으로 serve 전환 판정은 `serve_readiness=NOT_READY`입니다.
+- 상세 근거: [v2 전환 준비도 재판정](./specs/20260621_v2-replacement-readiness.md)
+- 근거 기반 fallback은 approved 근거가 있을 때만 모델을 호출하며, 품질 실패 원문은 승인 근거 추출 답변으로 복구하고 근거가 없을 때는 안전 응답으로 대체합니다.
+- 운영 Shadow 실행 방법은 [operational shadow runbook](./reports/operational_shadow_runbook_2026-06-23.md)을 따릅니다.
+- 커밋 전 변경 묶음은 [precommit change sets](./reports/precommit_change_sets_2026-06-23.md)에 정리했습니다.
+
 이 폴더는 프로젝트 내의 모든 AI 관련 기술 문서(아키텍처, 파이프라인, 프롬프트, 트러블슈팅 등)를 모아놓은 중앙 저장소입니다.
 LLM, RAG, Ollama, Qwen, Exaone 등 AI/ML 기능과 관련된 모든 작업 내역과 설계가 이곳에서 관리됩니다.
 

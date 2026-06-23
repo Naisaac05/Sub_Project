@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import json
+import os
 from pathlib import Path
 
 
@@ -18,9 +19,13 @@ def load_parallel_rag_config(path: Path = DEFAULT_CONFIG_PATH) -> ParallelRagCon
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError):
         return ParallelRagConfig()
+    shadow_value = os.getenv("SHADOW_MODE")
+    shadow_mode = bool(data.get("SHADOW_MODE", True))
+    if shadow_value is not None:
+        shadow_mode = shadow_value.lower() in {"1", "true", "yes", "on"}
     return ParallelRagConfig(
         enabled=bool(data.get("AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED", False)),
-        shadow_mode=bool(data.get("SHADOW_MODE", True)),
+        shadow_mode=shadow_mode,
         v2_percentage=max(0, min(100, int(data.get("V2_PERCENTAGE", 10)))),
     )
 

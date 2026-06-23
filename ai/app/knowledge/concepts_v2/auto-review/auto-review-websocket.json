@@ -1,0 +1,32 @@
+{
+  "card_id" : "auto-review-websocket",
+  "category" : "auto-review",
+  "term" : "WebSocket",
+  "aliases" : [ "WebSocket" ],
+  "source_question_ids" : [ "auto:auto-67c371fd204f" ],
+  "retrieval" : {
+    "intent_types" : [ "CONCEPT_DEFINITION" ],
+    "boost_keywords" : [ "WebSocket" ],
+    "embedding_hash" : "",
+    "embedding_text" : "WebSocket WebSocket 핸드셰이크가 뭔가요? WebSocket"
+  },
+  "payloads" : {
+    "CONCEPT_DEFINITION" : {
+      "content" : "WebSocket 핸드셰이크는 HTTP 연결을 WebSocket 연결로 전환하기 위해 클라이언트와 서버가 처음에 주고받는 약속입니다.",
+      "examples" : [ ]
+    }
+  },
+  "review" : {
+    "rejected_reason" : "",
+    "reviewer" : "admin-ui",
+    "card_status" : "approved",
+    "payload_status" : {
+      "CONCEPT_DEFINITION" : "approved"
+    },
+    "approved_at" : "2026-06-23T08:52:25.293656500Z"
+  },
+  "related_card_ids" : [ ],
+  "tags" : [ ],
+  "created_at" : "2026-06-23T08:52:25.293656500Z",
+  "updated_at" : "2026-06-23T08:52:25.293656500Z"
+}

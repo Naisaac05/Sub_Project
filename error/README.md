@@ -40,6 +40,19 @@
 ```
 
 ## 인덱스
+
+- [2026-06-23 승인 Fast Path가 코스 범위 제한에 먼저 차단됨](2026-06-23-approved-fast-path-blocked-by-course-scope.md)
+- [2026-06-23 Grounded answer가 질문형 alias를 topic 표시명으로 사용함](2026-06-23-grounded-answer-picked-question-alias-as-topic.md)
+- [2026-06-23 Grounded generation 응답이 fallback 노드에서 템플릿으로 덮어써짐](2026-06-23-grounded-generation-overwritten-by-fallback-node.md)
+- [2026-06-23 Grounded retry 성공 답변이 템플릿 fallback으로 덮어써짐](2026-06-23-grounded-retry-success-overwritten-by-template.md)
+- [2026-06-22 Grounded 안전 응답이 LangGraph 후속 노드에서 덮어써짐](2026-06-22-grounded-safe-response-overwritten-by-langgraph.md)
+- [2026-06-22 EXAONE 실제 fallback의 최신 지식 혼동과 응답 잘림](2026-06-22-exaone-live-fallback-knowledge-and-completion-limit.md)
+- [2026-06-22 RAG 정규식 토크나이저의 한국어 조사 결합 검색 공백](2026-06-22-rag-regex-tokenizer-korean-particle-gap.md)
+- [2026-06-21 RAG BM25 코스 질의 별칭 누락](2026-06-21-rag-bm25-course-query-alias-gap.md)
+- [2026-06-21 RAG 후보 선정 상태·우선순위 오류](2026-06-21-rag-candidate-selection-state-and-priority.md)
+- [2026-06-21 RAG next20 보고서 스키마 오인](2026-06-21-rag-next20-report-schema-assumption.md)
+- [2026-06-21 RAG course scope가 Markdown 카드의 review 속성에 접근함](2026-06-21-rag-course-scope-markdown-card-review-attribute.md)
+- [2026-06-21 AI 스크립트 도움말 확인이 실제 평가를 실행함](2026-06-21-ai-script-help-triggered-evaluation.md)
 - [2026-06-16 AI review off-topic free question and repeated follow-up](2026-06-16-ai-review-off-topic-follow-up-repeat.md)
 - [2026-06-16 AI review polite concept question missed fast path and off-topic advice leaked](2026-06-16-ai-review-politeness-offtopic-codeblock.md)
 - [2026-06-16 lightweight_only 강등 모드가 off-topic/unknown 차단에 가로채여 lightweight_only_miss 미반환 (PR #69 회귀)](2026-06-16-lightweight-only-offtopic-gate-bypass.md)

@@ -37,6 +37,11 @@ class WorkflowRunnerTest(unittest.TestCase):
         )
         self._intent_classifier_patch.start()
         self._judge_env_patch = None
+        self._grounded_fallback_patch = patch.dict(
+            os.environ,
+            {"AI_REVIEW_GROUNDED_FALLBACK_ENABLED": "false"},
+        )
+        self._grounded_fallback_patch.start()
         if self._testMethodName.startswith(("test_judge_", "test_metric_", "test_grounding_")):
             self._judge_env_patch = patch.dict(os.environ, {
                 "AI_REVIEW_SEMANTIC_JUDGE_ENABLED": "true",
@@ -53,6 +58,7 @@ class WorkflowRunnerTest(unittest.TestCase):
         self._intent_classifier_patch.stop()
         if self._judge_env_patch is not None:
             self._judge_env_patch.stop()
+        self._grounded_fallback_patch.stop()
         self._auto_candidate_tmp.cleanup()
         clear_answer_cache()
 

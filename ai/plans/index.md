@@ -3,6 +3,8 @@
 이 문서는 `plans` 폴더의 자동 생성된 네비게이션입니다.
 
 ## 문서 목록
+- [20260622_grounded-fallback-safety.md](./20260622_grounded-fallback-safety.md) - 근거 기반 fallback 안전 구현 계획
+- [20260622_rag-quality-fallback-shadow.md](./20260622_rag-quality-fallback-shadow.md) - 품질 4.5와 fallback·Shadow 검증 계획
 - 📄 [20260409_lms_implementation.md](./20260409_lms_implementation.md) — *LMS 도입 계획 및 마이그레이션 방향*
 - 📄 [20260412_lms_dashboard-dday-navigation.md](./20260412_lms_dashboard-dday-navigation.md) — *LMS 대시보드 D-day 표시 및 카드 네비게이션 구현 계획 도입 계획 및 마이그레이션 작업 방향*
 - 📄 [20260412_lms_mypage-calendar-crud.md](./20260412_lms_mypage-calendar-crud.md) — *LMS 마이페이지 캘린더 CRUD 연동 구현 계획*
@@ -67,3 +69,4 @@
 - 📄 [20260615_remove_v1-rag-and-use-v2-ollama.md](./20260615_remove_v1-rag-and-use-v2-ollama.md) — *v1 RAG 파이프라인 제거 및 v2 승인 Fast Path 전환 플랜*
 - 📄 [20260616_ai_review-course-scope-gate.md](./20260616_ai_review-course-scope-gate.md) — *AI 리뷰 특정 코스 답변 범위를 제한하는 Scope Gate 구현 계획*
 - 📄 [20260618_ai_시스템-구조-상세-분석-리포트-code-level-analysis.md](./20260618_ai_시스템-구조-상세-분석-리포트-code-level-analysis.md) — *AI 시스템 구조 상세 분석 리포트 (Code-level Analysis) 도입 계획 및 마이그레이션 작업 방향*
+- 📄 [20260621_rag-card-quality-expansion.md](./20260621_rag-card-quality-expansion.md) — *approved 80장 달성과 검색·payload·실행 검증을 위한 작업 리스트*

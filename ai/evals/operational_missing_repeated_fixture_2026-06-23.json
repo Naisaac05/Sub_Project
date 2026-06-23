@@ -1,0 +1,24 @@
+{
+  "evaluation_date": "2026-06-23",
+  "production_traffic_validated": false,
+  "rows": [
+    {
+      "id": "copy-1",
+      "question": "Java CopyOnWriteArrayList overview",
+      "expected_route": "grounded_fallback_safe_response",
+      "route": "grounded_fallback_safe_response"
+    },
+    {
+      "id": "copy-2",
+      "question": "Java CopyOnWriteArrayList behavior",
+      "expected_route": "grounded_fallback_safe_response",
+      "route": "grounded_fallback_safe_response"
+    },
+    {
+      "id": "next-1",
+      "question": "Next.js Server Action security concerns",
+      "expected_route": "grounded_fallback_safe_response",
+      "route": "grounded_fallback_safe_response"
+    }
+  ]
+}

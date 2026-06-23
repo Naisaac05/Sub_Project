@@ -37,74 +37,79 @@
   },
   "payloads": {
     "CONCEPT_DEFINITION": {
-      "content": "try-except의 else 블록은 try 블록에서 예외가 발생하지 않았을 때 실행된다.",
+      "content": "`try-except-else-finally`에서 `else`는 try 블록이 예외 없이 끝났을 때 실행되고, `finally`는 예외 발생 여부와 관계없이 정리 단계에서 실행된다.",
       "examples": [
-        "try-except-else 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        "파일 파싱이 성공한 경우에만 else에서 후속 처리를 하고 finally에서 열린 자원을 정리할 수 있다."
       ]
     },
     "ANSWER_REASON": {
-      "why_correct": "finally는 예외 발생 여부와 관계없이 정리 목적으로 실행된다.",
+      "why_correct": "정답은 try의 정상 완료 조건을 설명한다. 다른 보기는 except가 담당하는 예외 경로, finally의 무조건 실행, 실제 실행 순서를 혼동한다.",
       "key_points": [
-        "try-except-else",
-        "정상 완료",
-        "finally"
+        "else는 정상 완료 시 실행",
+        "except는 일치 예외 처리",
+        "finally는 정리 단계"
       ]
     },
     "WRONG_ANSWER_REASON": {
       "common_mistakes": [
-        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+        "정답 표현을 외우기보다 각 선택지가 보장하는 동작과 제한을 따로 확인한다."
       ],
       "per_option": {
         "option_0": {
           "text": "예외가 발생했을 때",
-          "reason": "예외가 발생하면 일치하는 except가 실행되고 else는 건너뛴다."
+          "reason": "try에서 일치하는 예외가 발생하면 해당 except로 이동하고 else 블록은 건너뛴다."
         },
         "option_2": {
           "text": "항상 실행된다",
-          "reason": "else는 항상 실행되지 않고 정상 완료 때만 실행된다."
+          "reason": "항상 실행되는 정리 블록은 finally이며 else는 예외가 없었던 경로에서만 실행된다."
         },
         "option_3": {
           "text": "finally 후에 실행된다",
-          "reason": "else는 finally보다 먼저 실행된다."
+          "reason": "성공 전용 후속 처리가 먼저 수행되고 자원 해제 같은 공통 정리 구문이 제어 흐름의 마지막에 놓인다."
         }
       }
     },
     "COMPARISON": {
       "comparisons": [
         {
-          "with": "유사한 선택지",
-          "diff": "`예외가 발생하지 않았을 때`는 질문의 조건을 충족하지만 다른 선택지는 `tryexceptelsefinally`의 적용 조건이나 실행 결과가 다릅니다."
+          "with": "관련 개념",
+          "diff": "else는 성공 후속 처리, finally는 성공·실패 공통 정리에 사용한다는 책임 차이가 있다."
         }
       ]
     },
     "EXAMPLE_REQUEST": {
-      "code_example": "events = []\ntry: value = 10 / 2\nexcept ZeroDivisionError: events.append(\"except\")\nelse: events.append(\"else\")\nfinally: events.append(\"finally\")",
-      "explanation": "try-except-else 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      "code_example": "events = []\ntry:\n    value = 10 / 2\nexcept ZeroDivisionError:\n    events.append('except')\nelse:\n    events.append('else')\nfinally:\n    events.append('finally')\nassert events == ['else', 'finally']",
+      "explanation": "정상 나눗셈에서 else가 먼저, finally가 마지막에 기록되는지 실행 순서로 검증한다."
     },
     "PRACTICAL_USAGE": {
-      "real_world": "try-except-else 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "real_world": "검증 성공 후 데이터 저장은 else에 두고 파일 닫기·락 해제처럼 반드시 필요한 정리는 finally에 둔다.",
       "best_practices": [
-        "작은 실행 예제로 핵심 동작을 확인한다."
+        "try 범위를 필요한 연산으로 좁힌다.",
+        "except에서 처리할 예외 유형을 구체적으로 지정한다."
       ]
     },
     "DEBUG_OR_ERROR": {
       "common_errors": [
         {
-          "error": "`tryexceptelsefinally`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
-          "solution": "문항의 조건을 재현하고 결과가 `예외가 발생하지 않았을 때`와 일치하는지 단계별로 확인합니다."
+          "error": "else 내부에서 발생한 예외도 앞의 except가 처리한다고 오해하는 오류",
+          "solution": "else의 실패는 같은 try의 except로 돌아가지 않으므로 필요한 경우 별도 예외 경계를 둔다."
         }
       ]
     }
   },
   "review": {
-    "card_status": "draft",
+    "card_status": "approved",
     "payload_status": {
-      "CONCEPT_DEFINITION": "draft",
-      "ANSWER_REASON": "draft",
-      "WRONG_ANSWER_REASON": "draft"
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved",
+      "COMPARISON": "approved",
+      "EXAMPLE_REQUEST": "approved",
+      "PRACTICAL_USAGE": "approved",
+      "DEBUG_OR_ERROR": "approved"
     },
-    "approved_at": null,
-    "reviewer": null,
+    "approved_at": "2026-06-21T13:39:37.748233Z",
+    "reviewer": "codex-assisted-human-review",
     "rejected_reason": null
   },
   "related_card_ids": [],

@@ -1,0 +1,113 @@
+{
+  "card_id": "spring-aop",
+  "category": "spring",
+  "term": "aop",
+  "aliases": [
+    "aop",
+    "메서드 실행 전후 모두 동작하며 실행 자체를 제어할 수 있다",
+    "AOP에서 @Around 어드바이스의 특징은?",
+    "AOP",
+    "@Around",
+    "spring aop"
+  ],
+  "source_question_ids": [
+    "spring:46"
+  ],
+  "retrieval": {
+    "embedding_text": "aop 메서드 실행 전후 모두 동작하며 실행 자체를 제어할 수 있다 AOP에서 @Around 어드바이스의 특징은? spring AOP 에서 @Around 어드바이스의 특징은 메서드",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "aop",
+      "AOP",
+      "에서",
+      "@Around",
+      "어드바이스의",
+      "특징은",
+      "메서드"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "`@Around`는 대상 메서드 호출을 감싸 실행 전후 로직과 실제 호출 여부를 모두 제어하는 AOP 어드바이스다. `ProceedingJoinPoint.proceed()` 호출 시점과 반환값·예외 처리를 직접 결정한다.",
+      "examples": [
+        "예: 작은 입력에서 핵심 동작을 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "`@Around`는 `proceed()` 전후에 코드를 배치하고 호출 자체도 생략하거나 대체할 수 있다. 실행 전·후·예외 시점 하나에만 반응하는 다른 어드바이스보다 제어 범위가 넓다.",
+      "key_points": [
+        "메서드 실행 전후 모두 동작하며 실행 자체를 제어할 수 있다",
+        "spring-aop"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "기술 용어의 적용 범위와 유사 개념의 역할을 구분하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "메서드 실행 전에만 동작한다",
+          "reason": "실행 전에만 동작하는 것은 `@Before`의 특징이다. `@Around`는 대상 호출 전 로직 뒤에 `proceed()`와 호출 후 로직까지 포함할 수 있다."
+        },
+        "option_1": {
+          "text": "메서드 실행 후에만 동작한다",
+          "reason": "실행 후에만 동작하는 것은 `@After` 또는 `@AfterReturning`에 가깝다. `@Around`는 호출 이전부터 반환 이후까지 감싼다."
+        },
+        "option_3": {
+          "text": "예외 발생 시에만 동작한다",
+          "reason": "예외 발생 시에만 동작하는 것은 `@AfterThrowing`의 역할이다. `@Around`는 정상 실행과 예외 흐름을 모두 제어할 수 있다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "`@Around`는 호출 자체를 제어하고 실행 시간을 측정할 수 있으며, `@Before`와 `@After` 계열은 특정 시점의 부가 동작에 집중한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "@Around(\"execution(* service.*.*(..))\")\nObject measure(ProceedingJoinPoint joinPoint) throws Throwable {\n    long started = System.nanoTime();\n    Object result = joinPoint.proceed();\n    assert System.nanoTime() >= started;\n    return result;\n}",
+      "explanation": "대상 메서드를 실제 호출하고 전후 시각 차이로 실행 시간을 측정하는 흐름을 보여준다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "트랜잭션, 실행 시간 측정, 재시도처럼 메서드 호출 전후와 실행 여부를 함께 제어해야 할 때 사용한다.",
+      "best_practices": [
+        "문제의 전제와 실제 동작을 작은 실행 예제로 먼저 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사한 용어의 적용 범위를 구분하지 않아 잘못된 구현을 선택한다.",
+          "solution": "입력 조건, 핵심 동작, 결과를 각각 확인하고 비교 대상과 차이를 검증한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

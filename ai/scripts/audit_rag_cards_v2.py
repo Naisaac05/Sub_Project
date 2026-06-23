@@ -141,6 +141,7 @@ def card_details(cards: list[RagCard], ids: list[str]) -> list[dict[str, object]
 
 
 def build_payload(cards: list[RagCard]) -> dict[str, object]:
+    cards = [card for card in cards if isinstance(card, RagCard)]
     report = audit_cards(cards)
     return {
         "card_count": len(cards),

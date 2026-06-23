@@ -1,0 +1,186 @@
+{
+  "case_count": 10,
+  "shadow_mode_rate": 1.0,
+  "top1_relevance_rate": 1.0,
+  "fast_path_hit_rate": 0.9,
+  "fallback_rate": 0.1,
+  "irrelevant_hit_count": 0,
+  "rows": [
+    {
+      "id": "java-equals",
+      "question": "Java equals가 뭐야?",
+      "expected_card_id": "java-equals",
+      "top1_relevant": true,
+      "irrelevant_hit": false,
+      "fallback_expected": false,
+      "decision": {
+        "mode": "shadow",
+        "hit": true,
+        "reason": "hit",
+        "card_id": "java-equals",
+        "payload_intent": "CONCEPT_DEFINITION",
+        "score": 9.5,
+        "reason_message": "hit"
+      }
+    },
+    {
+      "id": "java-arraylist",
+      "question": "Java ArrayList가 뭐야?",
+      "expected_card_id": "java-arraylist",
+      "top1_relevant": true,
+      "irrelevant_hit": false,
+      "fallback_expected": false,
+      "decision": {
+        "mode": "shadow",
+        "hit": true,
+        "reason": "hit",
+        "card_id": "java-arraylist",
+        "payload_intent": "CONCEPT_DEFINITION",
+        "score": 9.5,
+        "reason_message": "hit"
+      }
+    },
+    {
+      "id": "spring-valid",
+      "question": "Spring Valid가 뭐야?",
+      "expected_card_id": "spring-valid",
+      "top1_relevant": true,
+      "irrelevant_hit": false,
+      "fallback_expected": false,
+      "decision": {
+        "mode": "shadow",
+        "hit": true,
+        "reason": "hit",
+        "card_id": "spring-valid",
+        "payload_intent": "CONCEPT_DEFINITION",
+        "score": 9.5,
+        "reason_message": "hit"
+      }
+    },
+    {
+      "id": "spring-aop",
+      "question": "Spring AOP가 뭐야?",
+      "expected_card_id": "spring-aop",
+      "top1_relevant": true,
+      "irrelevant_hit": false,
+      "fallback_expected": false,
+      "decision": {
+        "mode": "shadow",
+        "hit": true,
+        "reason": "hit",
+        "card_id": "spring-aop",
+        "payload_intent": "CONCEPT_DEFINITION",
+        "score": 9.5,
+        "reason_message": "hit"
+      }
+    },
+    {
+      "id": "frontend-key",
+      "question": "React key가 뭐야?",
+      "expected_card_id": "frontend-react-key",
+      "top1_relevant": true,
+      "irrelevant_hit": false,
+      "fallback_expected": false,
+      "decision": {
+        "mode": "shadow",
+        "hit": true,
+        "reason": "hit",
+        "card_id": "frontend-react-key",
+        "payload_intent": "CONCEPT_DEFINITION",
+        "score": 11.0,
+        "reason_message": "hit"
+      }
+    },
+    {
+      "id": "frontend-usestate",
+      "question": "React useState가 뭐야?",
+      "expected_card_id": "frontend-usestate",
+      "top1_relevant": true,
+      "irrelevant_hit": false,
+      "fallback_expected": false,
+      "decision": {
+        "mode": "shadow",
+        "hit": true,
+        "reason": "hit",
+        "card_id": "frontend-usestate",
+        "payload_intent": "CONCEPT_DEFINITION",
+        "score": 9.5,
+        "reason_message": "hit"
+      }
+    },
+    {
+      "id": "python-range",
+      "question": "Python range가 뭐야?",
+      "expected_card_id": "python-range",
+      "top1_relevant": true,
+      "irrelevant_hit": false,
+      "fallback_expected": false,
+      "decision": {
+        "mode": "shadow",
+        "hit": true,
+        "reason": "hit",
+        "card_id": "python-range",
+        "payload_intent": "CONCEPT_DEFINITION",
+        "score": 9.5,
+        "reason_message": "hit"
+      }
+    },
+    {
+      "id": "python-dictionary",
+      "question": "Python dictionary가 뭐야?",
+      "expected_card_id": "python-dictionary",
+      "top1_relevant": true,
+      "irrelevant_hit": false,
+      "fallback_expected": false,
+      "decision": {
+        "mode": "shadow",
+        "hit": true,
+        "reason": "hit",
+        "card_id": "python-dictionary",
+        "payload_intent": "CONCEPT_DEFINITION",
+        "score": 9.5,
+        "reason_message": "hit"
+      }
+    },
+    {
+      "id": "algorithm-stack",
+      "question": "stack이 뭐야?",
+      "expected_card_id": "algorithm-stack",
+      "top1_relevant": true,
+      "irrelevant_hit": false,
+      "fallback_expected": false,
+      "decision": {
+        "mode": "shadow",
+        "hit": true,
+        "reason": "hit",
+        "card_id": "algorithm-stack",
+        "payload_intent": "CONCEPT_DEFINITION",
+        "score": 8.5,
+        "reason_message": "hit"
+      }
+    },
+    {
+      "id": "approved-miss",
+      "question": "Java CopyOnWriteArrayList가 뭐야?",
+      "expected_card_id": null,
+      "top1_relevant": false,
+      "irrelevant_hit": false,
+      "fallback_expected": true,
+      "decision": {
+        "mode": "shadow",
+        "hit": false,
+        "reason": "margin_gate",
+        "card_id": "java-array-length",
+        "payload_intent": "CONCEPT_DEFINITION",
+        "score": 5.0,
+        "reason_message": "후보 카드 간 점수 차이가 부족합니다"
+      }
+    }
+  ],
+  "evaluation_date": "2026-06-22",
+  "traffic_source": "local_synthetic",
+  "routing_gate_passed": true,
+  "live_fallback_gate_passed": false,
+  "overall_gate_passed": false,
+  "production_traffic_validated": false
+}

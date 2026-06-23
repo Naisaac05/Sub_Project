@@ -32,6 +32,11 @@ TOKEN_ALIASES = {
     "pagenation": ("pagination",),
 }
 
+QUERY_PHRASE_ALIASES = (
+    (("java", "문자열", "비교"), ("java", "equals")),
+    (("react", "리스트", "요소", "속성"), ("react", "key", "react-key")),
+)
+
 Reranker = Callable[[list["RetrievedContext"], str], list["RetrievedContext"]]
 RetrieverCallable = Callable[[str, int], list["RetrievedContext"]]
 _KIWI = None
@@ -72,7 +77,7 @@ class LexicalRetrieverAdapter(RetrieverAdapter):
         limit: int = 5,
         reranker: Reranker | None = None,
     ) -> list[RetrievedContext]:
-        query_token_list = tokenize(query)
+        query_token_list = tokenize_query(query)
         query_tokens = set(query_token_list)
         if not query_tokens:
             return []
@@ -109,6 +114,7 @@ class BM25RetrieverAdapter(RetrieverAdapter):
     ):
         self.card_loader = card_loader
         self.tokenizer = tokenizer or (lambda text: select_tokenizer()(text))
+        self.query_tokenizer = tokenizer or (lambda text: tokenize_query(text))
         self.k1 = k1
         self.b = b
 
@@ -118,7 +124,7 @@ class BM25RetrieverAdapter(RetrieverAdapter):
         limit: int = 5,
         reranker: Reranker | None = None,
     ) -> list[RetrievedContext]:
-        query_tokens = self.tokenizer(query)
+        query_tokens = self.query_tokenizer(query)
         if not query_tokens:
             return []
 
@@ -540,6 +546,15 @@ def tokenize(text: str) -> list[str]:
         expanded.extend(TOKEN_ALIASES.get(token, ()))
         if token == "n":
             expanded.append("n+1")
+    return expanded
+
+
+def tokenize_query(text: str) -> list[str]:
+    expanded = tokenize(text)
+    lowered = text.lower()
+    for markers, aliases in QUERY_PHRASE_ALIASES:
+        if all(marker in lowered for marker in markers):
+            expanded.extend(aliases)
     return expanded
 
 
