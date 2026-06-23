@@ -23,7 +23,10 @@ from app.workflow.nodes import (
     _off_topic_redirect_state,
     _course_scope_for_state,
     _out_of_course_redirect_state,
+    _resolve_unscoped_v2_fast_path_for_exact_hit,
+    _v2_approved_fast_path_state,
     _append_quality_flag,
+    _grounded_safe_response,
     max_tokens_for_mode,
 )
 from app.workflow.state import ReviewWorkflowState
@@ -33,6 +36,13 @@ from app.workflow.semantic_gate import semantic_evaluate_node, should_store_answ
 from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_for_mode
 from app.validation.text import compact_answer, korean_fallback
 from app.ollama.client import FALLBACK_MODEL
+from app.workflow.grounded_fallback import (
+    build_grounded_answer_from_evidence,
+    grounded_fallback_enabled,
+    grounded_prompt_context,
+    select_grounded_evidence,
+    validate_grounded_answer,
+)
 
 
 def _build_response_from_state(state: ReviewWorkflowState, latency_ms: int) -> AiGenerateResponse:
@@ -322,13 +332,25 @@ async def run_review_workflow_stream(
     if state.mode == "free-question":
         scope_decision = _course_scope_for_state(state)
         if scope_decision.scope == "out_of_course_tech":
-            state = _out_of_course_redirect_state(state, scope_decision.matched_card_id)
-            yield {"type": "start"}
-            yield {"type": "chunk", "chunk": state.answer}
-            state = validate_answer_node(state)
-            state = confidence_gate_node(state)
-            response = _build_response_from_state(state, 0)
-            yield {"type": "done", "response": response}
+            v2_decision = _resolve_unscoped_v2_fast_path_for_exact_hit(
+                state,
+                _learner_query_for_state(state),
+                scope_decision,
+            )
+            state.v2_fast_path_decision = v2_decision.metadata()
+            if v2_decision.mode == "serve" and v2_decision.hit:
+                state = _v2_approved_fast_path_state(state, v2_decision)
+                yield {"type": "start"}
+                yield {"type": "chunk", "chunk": state.answer}
+                yield {"type": "done", "response": _build_response_from_state(state, 0)}
+            else:
+                state = _out_of_course_redirect_state(state, scope_decision.matched_card_id)
+                yield {"type": "start"}
+                yield {"type": "chunk", "chunk": state.answer}
+                state = validate_answer_node(state)
+                state = confidence_gate_node(state)
+                response = _build_response_from_state(state, 0)
+                yield {"type": "done", "response": response}
             return
         if scope_decision.scope == "scope_unknown":
             _append_quality_flag(state, "scope_unknown")
@@ -347,18 +369,36 @@ async def run_review_workflow_stream(
     )
     state.v2_fast_path_decision = v2_decision.metadata()
     if state.mode == "free-question" and v2_decision.mode == "serve" and v2_decision.hit:
-        state.answer = v2_decision.answer or ""
-        state.prompt_version = prompt_version_for_mode(state.mode, state.free_question_intent)
-        state.prompt_strategy = prompt_strategy_for_mode(state.mode, state.free_question_intent)
-        state.model_used = "v2-approved-payload"
-        state.fallback_used = False
-        state.route = "v2_approved_fast_path"
-        state.answer_style = _answer_style_for_state(state)
-        state.contexts = []
+        state = _v2_approved_fast_path_state(state, v2_decision)
         yield {"type": "start"}
         yield {"type": "chunk", "chunk": state.answer}
         yield {"type": "done", "response": _build_response_from_state(state, 0)}
         return
+
+    grounded_evidence = None
+    if state.mode == "free-question" and grounded_fallback_enabled():
+        grounded_evidence = select_grounded_evidence(
+            learner_query,
+            allowed_card_ids=scope_decision.allowed_card_ids
+            if scope_decision and scope_decision.allowed_card_ids
+            else None,
+        )
+        if grounded_evidence is None:
+            state = _grounded_safe_response(state, ("missing_approved_evidence",))
+            yield {"type": "start"}
+            yield {"type": "chunk", "chunk": state.answer}
+            yield {"type": "done", "response": _build_response_from_state(state, 0)}
+            return
+        from app.rag.retriever import RetrievedContext
+        state.contexts = [
+            RetrievedContext(
+                concept_id=grounded_evidence.card_id,
+                title=grounded_evidence.term,
+                content=grounded_prompt_context(grounded_evidence),
+                score=grounded_evidence.score,
+                metadata={"retriever": "approved_grounded_fallback", "version": "v2-approved"},
+            )
+        ]
 
     if lightweight_only_enabled():
         state = lightweight_only_miss_state(state.mode, state.request)
@@ -419,7 +459,8 @@ async def run_review_workflow_stream(
             num_thread=state.request.num_thread,
         ):
             chunks.append(chunk)
-            yield {"type": "chunk", "chunk": chunk}
+            if grounded_evidence is None:
+                yield {"type": "chunk", "chunk": chunk}
 
         state.answer = "".join(chunks)
         state.generation_ms = int((time.perf_counter() - started) * 1000)
@@ -442,7 +483,8 @@ async def run_review_workflow_stream(
                     num_thread=state.request.num_thread,
                 ):
                     chunks.append(chunk)
-                    yield {"type": "chunk", "chunk": chunk}
+                    if grounded_evidence is None:
+                        yield {"type": "chunk", "chunk": chunk}
 
                 state.answer = "".join(chunks)
                 state.answer = compact_answer(state.answer, state.mode)
@@ -460,7 +502,8 @@ async def run_review_workflow_stream(
                 state.fallback_used = True
                 state.route = "fallback_template"
                 state.answer_style = _answer_style_for_state(state)
-                yield {"type": "chunk", "chunk": state.answer}
+                if grounded_evidence is None:
+                    yield {"type": "chunk", "chunk": state.answer}
         else:
             state.error = str(exc)
             state.fallback_reason = _fallback_reason_from_exception(exc)
@@ -469,7 +512,31 @@ async def run_review_workflow_stream(
             state.fallback_used = True
             state.route = "fallback_template"
             state.answer_style = _answer_style_for_state(state)
+            if grounded_evidence is None:
+                yield {"type": "chunk", "chunk": state.answer}
+
+    if grounded_evidence is not None:
+        if state.route not in {"generation", "rag_generation"}:
+            state = _grounded_safe_response(state, ("grounded_generation_error",))
             yield {"type": "chunk", "chunk": state.answer}
+            yield {"type": "done", "response": _build_response_from_state(state, 0)}
+            return
+        grounded_quality = validate_grounded_answer(learner_query, state.answer, grounded_evidence)
+        if not grounded_quality.passed:
+            grounded_answer = build_grounded_answer_from_evidence(learner_query, grounded_evidence)
+            grounded_answer_quality = validate_grounded_answer(learner_query, grounded_answer, grounded_evidence)
+            if grounded_answer_quality.passed:
+                state.answer = grounded_answer
+                state.model_used = "approved-evidence-grounded-answer"
+                state.fallback_used = False
+                state.route = "grounded_fallback_generation"
+            else:
+                state = _grounded_safe_response(state, grounded_quality.reasons)
+                yield {"type": "chunk", "chunk": state.answer}
+                yield {"type": "done", "response": _build_response_from_state(state, 0)}
+                return
+        else:
+            state.route = "grounded_fallback_generation"
 
     state = validate_answer_node(state)
     state = confidence_gate_node(state)
@@ -478,6 +545,9 @@ async def run_review_workflow_stream(
     if should_store_answer_cache(state):
         put_cached_answer(cache_key_for(state.mode, state.request), state.answer)
     state = candidate_save_node(state)
+
+    if grounded_evidence is not None:
+        yield {"type": "chunk", "chunk": state.answer}
 
     latency_ms = int((time.perf_counter() - started) * 1000)
     response = _build_response_from_state(state, latency_ms)

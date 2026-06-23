@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -22,19 +23,35 @@ def _checksums() -> dict[str, str]:
 
 def _priority(card: dict) -> tuple:
     quality = validate_payload_quality(card)
-    return (-len(quality["reasons"]), -quality["same_reason_ratio"], -quality["fake_example_score"], quality["payload_length"], card["card_id"])
+    return _priority_from_quality(card, quality)
 
 
-def build_report(cards: list[dict], questions: dict[str, dict], excluded_ids: set[str]) -> dict:
+def _priority_from_quality(card: dict, quality: dict) -> tuple:
+    return (
+        len(quality["reasons"]),
+        quality["fake_example_score"],
+        quality["same_reason_ratio"],
+        -quality["payload_length"],
+        card["card_id"],
+    )
+
+
+def build_report(
+    cards: list[dict],
+    questions: dict[str, dict],
+    excluded_ids: set[str],
+    *,
+    per_course: int = 8,
+) -> dict:
     prepared: dict[str, dict] = {}
     skipped: dict[str, str] = {}
     by_course = {course: {"candidate": 0, "prepared": 0, "source_missing": 0, "factcheck_not_ready": 0} for course in COURSES}
     for course in COURSES:
         ranked = sorted((c for c in cards if c.get("category") == course and c["card_id"] not in excluded_ids), key=_priority)
         for card in ranked:
-            if by_course[course]["prepared"] >= 8:
+            if by_course[course]["prepared"] >= per_course:
                 break
-            if card.get("review", {}).get("card_status") not in ELIGIBLE:
+            if card.get("review", {}).get("card_status") != "draft":
                 skipped[card["card_id"]] = "ineligible_status"
                 continue
             by_course[course]["candidate"] += 1
@@ -75,28 +92,47 @@ def build_report(cards: list[dict], questions: dict[str, dict], excluded_ids: se
     }
 
 
-def _previous_ids() -> set[str]:
+def processed_ids_from_report(report: dict) -> set[str]:
+    ids: set[str] = set()
+    for key in ("approved_cards", "approved_card_ids"):
+        value = report.get(key, [])
+        ids.update(value if isinstance(value, list) else value.keys() if isinstance(value, dict) else [])
+    return ids
+
+
+def _previous_ids(current_report: Path = REPORT) -> set[str]:
     ids: set[str] = set()
     for path in (ROOT / "reports").glob("*.json"):
-        if path.resolve() == REPORT.resolve():
+        if path.resolve() == current_report.resolve():
             continue
         try:
             report = json.loads(path.read_text(encoding="utf-8-sig"))
         except (json.JSONDecodeError, UnicodeDecodeError):
             continue
-        for key in ("patched_cards", "approved_cards", "candidate_cards", "PATCHES_READY", "FACTCHECK_PREPARATION", "PREPARATION_BACKLOG"):
-            value = report.get(key, [])
-            ids.update(value if isinstance(value, list) else value.keys() if isinstance(value, dict) else [])
+        ids.update(processed_ids_from_report(report))
     return ids
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Prepare a balanced, read-only RAG card candidate batch")
+    parser.add_argument("--per-course", type=int, default=8)
+    parser.add_argument("--output", type=Path, default=REPORT)
+    args = parser.parse_args()
+    if args.per_course <= 0:
+        parser.error("--per-course must be positive")
+
     before = _checksums()
     cards = [json.loads(path.read_text(encoding="utf-8-sig")) for path in CARD_ROOT.rglob("*.json")]
-    report = build_report(cards, build_question_index(extract_questions()), _previous_ids())
+    report = build_report(
+        cards,
+        build_question_index(extract_questions()),
+        _previous_ids(args.output),
+        per_course=args.per_course,
+    )
     serialized = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     json.loads(serialized)
-    REPORT.write_text(serialized, encoding="utf-8")
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(serialized, encoding="utf-8")
     report["card_files_modified"] = before != _checksums()
     if report["card_files_modified"]:
         raise RuntimeError("concepts_v2 modified during preparation")

@@ -46,6 +46,22 @@ class RagDocumentsTest(unittest.TestCase):
         self.assertIsInstance(legacy, ConceptCard)
         self.assertEqual(legacy.sections["핵심 설명"], "Legacy body.")
 
+    def test_ignores_generated_index_markdown(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "index.md").write_text(
+                "# Generated navigation\n\nThis is not a knowledge card.",
+                encoding="utf-8",
+            )
+            (root / "concept.md").write_text(
+                "---\nid: real-card\ncategory: java\n---\n\n# Real Card",
+                encoding="utf-8",
+            )
+
+            cards = load_concept_cards(root)
+
+        self.assertEqual([card.concept_id for card in cards], ["real-card"])
+
 
 if __name__ == "__main__":
     unittest.main()

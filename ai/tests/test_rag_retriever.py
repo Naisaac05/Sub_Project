@@ -270,5 +270,32 @@ class RagRetrieverTest(unittest.TestCase):
 
         self.assertEqual(results, [])
 
+    def test_java_string_comparison_question_ranks_equals_first(self):
+        results = LexicalRetrieverAdapter().retrieve(
+            "Java에서 문자열을 비교할 때 올바른 방법은?",
+            limit=3,
+        )
+
+        self.assertEqual(results[0].concept_id, "java-equals")
+
+    def test_react_list_attribute_question_ranks_react_key_first(self):
+        results = LexicalRetrieverAdapter().retrieve(
+            "React에서 리스트를 렌더링할 때 각 요소에 필요한 속성은?",
+            limit=3,
+        )
+
+        self.assertEqual(results[0].concept_id, "frontend-react-key")
+
+    def test_bm25_uses_course_gap_query_expansion(self):
+        cases = (
+            ("Java에서 문자열을 비교할 때 올바른 방법은?", "java-equals"),
+            ("React에서 리스트를 렌더링할 때 각 요소에 필요한 속성은?", "frontend-react-key"),
+        )
+        retriever = BM25RetrieverAdapter()
+        for query, expected in cases:
+            with self.subTest(query=query):
+                self.assertEqual(retriever.retrieve(query, limit=3)[0].concept_id, expected)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,32 @@
+{
+  "card_id" : "auto-review-dto",
+  "category" : "auto-review",
+  "term" : "DTO 개념",
+  "aliases" : [ "DTO 개념" ],
+  "source_question_ids" : [ "auto:auto-afcd2b0a7e87" ],
+  "retrieval" : {
+    "intent_types" : [ "CONCEPT_DEFINITION" ],
+    "boost_keywords" : [ "DTO 개념" ],
+    "embedding_hash" : "",
+    "embedding_text" : "DTO 개념 DTO 개념이 뭐야? DTO 개념"
+  },
+  "payloads" : {
+    "CONCEPT_DEFINITION" : {
+      "content" : "DTO는 계층 사이에서 필요한 데이터만 담아 전달하는 객체입니다. 엔티티를 API 응답으로 그대로 노출하지 않고 화면에 필요한 필드만 보내기 위해 자주 사용합니다.",
+      "examples" : [ ]
+    }
+  },
+  "review" : {
+    "rejected_reason" : "",
+    "reviewer" : "admin-ui",
+    "card_status" : "approved",
+    "payload_status" : {
+      "CONCEPT_DEFINITION" : "approved"
+    },
+    "approved_at" : "2026-06-23T08:53:14.314381900Z"
+  },
+  "related_card_ids" : [ ],
+  "tags" : [ ],
+  "created_at" : "2026-06-23T08:53:14.314381900Z",
+  "updated_at" : "2026-06-23T08:53:14.314381900Z"
+}

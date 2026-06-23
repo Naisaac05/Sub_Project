@@ -40,7 +40,7 @@
   },
   "payloads": {
     "CONCEPT_DEFINITION": {
-      "content": "React 함수형 컴포넌트는 props를 입력받고 JSX 요소를 반환하는 JavaScript 함수다. 일반 함수 선언 또는 화살표 함수 문법으로 정의한다.",
+      "content": "React 함수형 컴포넌트는 props를 입력받아 화면 구조를 나타내는 React 요소를 반환하는 JavaScript 함수다. 일반 함수 선언이나 화살표 함수로 정의하며 컴포넌트 이름은 대문자로 시작해야 JSX가 사용자 컴포넌트로 인식한다. 렌더링은 같은 props와 state에 대해 예측 가능한 결과를 내는 순수 계산으로 유지하고, 상태와 생명주기 동작은 Hook으로 구성한다. 렌더링 중 props를 변경하거나 외부 부작용을 실행하지 말고, 이벤트 처리나 `useEffect`처럼 명시된 단계로 분리해야 재렌더링과 Strict Mode에서도 안정적으로 동작한다.",
       "examples": [
         "핵심 원리를 작은 입력으로 확인한다."
       ]

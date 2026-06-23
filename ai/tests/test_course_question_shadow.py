@@ -1,7 +1,9 @@
 import unittest
 from collections import Counter
 
-from scripts.evaluate_v2_approved_ollama_e2e import select_course_questions
+from app.rag.documents import CONCEPT_ROOT, load_concept_cards
+from app.schemas.rag_card import CardStatus, RagCard
+from scripts.evaluate_v2_approved_ollama_e2e import evaluate, select_course_questions
 
 
 class CourseQuestionShadowTest(unittest.TestCase):
@@ -15,6 +17,16 @@ class CourseQuestionShadowTest(unittest.TestCase):
             "python": 10,
             "algorithm": 10,
         })
+
+    def test_approved_shadow_average_response_quality_reaches_target(self):
+        cards = [
+            card for card in load_concept_cards(CONCEPT_ROOT)
+            if isinstance(card, RagCard) and card.review.card_status == CardStatus.APPROVED
+        ]
+
+        report = evaluate(cards, select_course_questions())
+
+        self.assertGreaterEqual(report["average_response_quality_score"], 4.5)
 
 
 if __name__ == "__main__":

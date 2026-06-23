@@ -1,0 +1,116 @@
+{
+  "card_id": "frontend-functional-component",
+  "category": "frontend",
+  "term": "functional-component",
+  "aliases": [
+    "functional-component",
+    "function App() { return <div/> }",
+    "함수형 컴포넌트의 올바른 선언 방법은?",
+    "function",
+    "App()",
+    "return",
+    "div",
+    "functional component",
+    "frontend functional component"
+  ],
+  "source_question_ids": [
+    "frontend:66"
+  ],
+  "retrieval": {
+    "embedding_text": "functional-component function App() { return <div/> } 함수형 컴포넌트의 올바른 선언 방법은? frontend 함수형 컴포넌트의 선언 function App() return",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "functional-component",
+      "함수형",
+      "컴포넌트의",
+      "선언",
+      "function",
+      "App()",
+      "return"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "React 함수형 컴포넌트는 props를 입력받고 JSX 요소를 반환하는 JavaScript 함수다. 일반 함수 선언 또는 화살표 함수 문법으로 정의한다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "`function App() { return <div/> }`는 괄호가 있는 올바른 JavaScript 함수 선언이며 JSX를 반환한다. 나머지는 함수 선언 문법이 아니거나 JavaScript가 아닌 문법이다.",
+      "key_points": [
+        "function App() { return <div/> }",
+        "frontend-functional-component"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "function App { return <div/> }",
+          "reason": "함수 이름 뒤 매개변수 괄호가 없으면 올바른 JavaScript 함수 선언이 아니다."
+        },
+        "option_2": {
+          "text": "class App() { return <div/> }",
+          "reason": "`class App()` 형태는 JavaScript 클래스 선언 문법이 아니며 render 메서드도 없다."
+        },
+        "option_3": {
+          "text": "def App(): return <div/>",
+          "reason": "`def`는 Python 문법으로 React JavaScript 컴포넌트를 선언하지 못한다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "함수형 컴포넌트는 함수를 사용하고 클래스 컴포넌트는 render 메서드를 사용한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "function App() { return <div>안녕</div>; }\nconst tree = TestRenderer.create(<App />).toJSON();\nassert(tree.children[0] === '안녕');",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "작은 UI 단위를 props와 Hook으로 구성할 때 함수형 컴포넌트를 사용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": "2026-06-13T06:51:47.613334Z",
+    "reviewer": "codex-assisted-quality-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

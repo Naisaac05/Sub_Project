@@ -1,0 +1,1603 @@
+{
+  "captured_at": "2026-06-21T11:30:11.837531Z",
+  "card_root": "C:\\Users\\User\\Desktop\\Sub_Project\\ai\\app\\knowledge\\concepts_v2",
+  "total_card_count": 144,
+  "status_counts": {
+    "approved": 63,
+    "draft": 81
+  },
+  "category_counts": {
+    "algorithm": 30,
+    "auto-review": 2,
+    "frontend": 28,
+    "java": 28,
+    "python": 30,
+    "spring": 26
+  },
+  "cards": [
+    {
+      "card_id": "algorithm-10",
+      "path": "algorithm/algorithm-10.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "83a9fb2669a32812ecf15e40fa790150f9b85e79be480bbd1bdf3a8c0daf4b8e",
+      "searchable_checksum": "f3a0a70fe53f3315458d8b5f08200806ce0e19974c40c79724ec078ee76d62b4"
+    },
+    {
+      "card_id": "algorithm-11",
+      "path": "algorithm/algorithm-11.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "7eb5533f4363f16970740e2ae27b4d061faf01b3aa5bdd2d558bd275d7220436",
+      "searchable_checksum": "069435415b4a2b23ef54a43b0b342d09af72b1b9ac5c77038e273aa5ea44f9f9"
+    },
+    {
+      "card_id": "algorithm-12",
+      "path": "algorithm/algorithm-12.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "92342fb9bc755f47398137fcc5b2a53b7924c75de3621f7b67af79874b5536d1",
+      "searchable_checksum": "bcb6eabccfa51886a2423d1b33ea5aff1cd8cceb56df021e49647558328c14f4"
+    },
+    {
+      "card_id": "algorithm-13",
+      "path": "algorithm/algorithm-13.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "9c72243b93b5778f240a1fd77fc7c7184245d68cea96dc9f635e4ca71f4425f7",
+      "searchable_checksum": "d73a4e2d4d0d37b772cc27b67032541ea89820306e4157d3a9ba47217fec8a30"
+    },
+    {
+      "card_id": "algorithm-14",
+      "path": "algorithm/algorithm-14.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "c636ce72b8c8da206c83b991e988fc80cb4e1afd8d40c8f93c0e3667c6a6d863",
+      "searchable_checksum": "9ebfbc0ce5e4ce0dea56cbf3f53ab55e049429a7b7c3a5651966751507186d0e"
+    },
+    {
+      "card_id": "algorithm-2",
+      "path": "algorithm/algorithm-2.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "e80783177f53011f41c3fa15021790406cf1594ce5fbdc8ffea09ae81b65873a",
+      "searchable_checksum": "d353dab2f12459ef89d085116364cc30d98630838ae032502e403035f58a99ae"
+    },
+    {
+      "card_id": "algorithm-3",
+      "path": "algorithm/algorithm-3.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "097979de08284435dd7cb900d4c914b072ed02fb1277314c69b0768bb8469231",
+      "searchable_checksum": "970680f8bc2c26f2f5a1d6c73b2c5bf2ffcf25ec8f9e4b544c2e4072dfd66a55"
+    },
+    {
+      "card_id": "algorithm-4",
+      "path": "algorithm/algorithm-4.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "71de784625283913ec09a1f06b07156fc5bf84386a8f7e71f9ab596ed1545993",
+      "searchable_checksum": "7cc02e07afcda12a581ade18fb157741da9cb3f250c34983b940b2880b31d769"
+    },
+    {
+      "card_id": "algorithm-5",
+      "path": "algorithm/algorithm-5.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "40050eb61c457a8f5229fc197a33d0683df4016748f751ca429181606c60cd26",
+      "searchable_checksum": "9e0c5d9452ea25300e6190a4e76a033f5d1208ee5c9b81dbdb7723aaf18dbdc5"
+    },
+    {
+      "card_id": "algorithm-6",
+      "path": "algorithm/algorithm-6.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "61c1a10a6a4b69bfa229a59e8ec237bec4149e023b55f6bed8a5560cfc4200fd",
+      "searchable_checksum": "c6c130e952e1c99e0740ca203be6bb1152b624268a0ec7e43e2717323c5a12c3"
+    },
+    {
+      "card_id": "algorithm-7",
+      "path": "algorithm/algorithm-7.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "03550eff22aaa2d91025438508d12b7e3db5623551a3a2ffa2288833c55e59ca",
+      "searchable_checksum": "c20931b4a4482aad1cc2f57a475eea7be5596ae2f38b5ede757e513548fc7412"
+    },
+    {
+      "card_id": "algorithm-8",
+      "path": "algorithm/algorithm-8.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "7a4d84539dfd87685d42d37bbfdf94a184ff142f1c8096d3a9ced88d9e4663c9",
+      "searchable_checksum": "ba28c73231c9507c863e13a6fc76ac42e9dce97cdb084e95dc5c2efe35722d88"
+    },
+    {
+      "card_id": "algorithm-9",
+      "path": "algorithm/algorithm-9.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "d8cec2cbfb1c83a3ed3126d127c801e7910b8638f25e7362c9942d17e3fc4426",
+      "searchable_checksum": "e8c1be12b63fa2e59af59673b8163cfc38516702ce112dca9b3bc0e03bb3690e"
+    },
+    {
+      "card_id": "algorithm-binary",
+      "path": "algorithm/algorithm-binary.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "702482808a3e7f17408dc0f8e836f86b8867162b4c1bd16a7fb8d2530fe9c6e4",
+      "searchable_checksum": "7d52a2272f961ecf1589c6e61828fb734daa56962e0987f64161619147ef1862"
+    },
+    {
+      "card_id": "algorithm-breadth-first-search",
+      "path": "algorithm/algorithm-breadth-first-search.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "b136eb94d738a0dea3a5e9a04ab8db5391fbc5de4e90d16ec7a823156cf6b8fc",
+      "searchable_checksum": "14f6e9cf27d0cbb1fb591fb244e9a4097e4a9d6f5eb58fb605dacbd519050a84"
+    },
+    {
+      "card_id": "algorithm-bst",
+      "path": "algorithm/algorithm-bst.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "9e4878a8bdb541f0d4327c6d6298e6ee14c6b1ab5db369fbe5312d5b47e113f4",
+      "searchable_checksum": "b9dcb86073165dc2ea0382eb4e1b68e93a2c2cc12386a36180968ce03742c91e"
+    },
+    {
+      "card_id": "algorithm-collision",
+      "path": "algorithm/algorithm-collision.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "b38048583933c76b0141a9af6b3920b793e20fbe7e90b31ccef8eb60a5be6579",
+      "searchable_checksum": "3b8abb45b58eae91d342ec300411a803fdaf68d2ac2eaabe07cbb7565fea5258"
+    },
+    {
+      "card_id": "algorithm-dfs",
+      "path": "algorithm/algorithm-dfs.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "287a94f9d8b95841a71a72f5710a969371b6848ebdc38f81aa10901782cc3941",
+      "searchable_checksum": "fbf5ff4964c56f2a4f4346f21b1298ea8e12cbdedb2dbf236824eacff0118caf"
+    },
+    {
+      "card_id": "algorithm-divide",
+      "path": "algorithm/algorithm-divide.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "fa7c951fd377a4e3f0061614ab72010147105444561e5346663b7b6757732168",
+      "searchable_checksum": "483fbea6a48bd529e0466a0153c3c8f86dc85984b1226775636114100c3d2f43"
+    },
+    {
+      "card_id": "algorithm-heap",
+      "path": "algorithm/algorithm-heap.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "dcdb0f109fbf00499962655a891dca679bce9b65274ef846b6801901ad0cb074",
+      "searchable_checksum": "4311c783df27785da1c2c3ef6575ac89e35cc85c2d11889b28dea73a2a7c786a"
+    },
+    {
+      "card_id": "algorithm-knapsack",
+      "path": "algorithm/algorithm-knapsack.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "6e92d83123fee27a4e8b3cb49648b9d42d0386c69e55ca0d2ef6af3415440a78",
+      "searchable_checksum": "b9602a1b8e7f976dacc825c87f36c51b257806764bac4afe373332f00a2eb96b"
+    },
+    {
+      "card_id": "algorithm-lcs",
+      "path": "algorithm/algorithm-lcs.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "8563e505590886f663c84dde7b53a878c4d44c737768a21fc91ac8e205a3f01c",
+      "searchable_checksum": "354c296b8829871ca19794d23c6c5463f6b1b67c1fd64dda760b4b63f6263fb2"
+    },
+    {
+      "card_id": "algorithm-linked",
+      "path": "algorithm/algorithm-linked.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "d0f5d69701e8cbc94e5613ba8aa4772faec1e7f3351de80371fec3c5a17b1dac",
+      "searchable_checksum": "8cfde7bb2bb2e1df8625ab594f3292b20925201eca4e5145af14e08c7537c102"
+    },
+    {
+      "card_id": "algorithm-mst",
+      "path": "algorithm/algorithm-mst.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "2e50a1e4859cf6f8f20a82c27a00bb9bdddcb80b46236e702f4b50540dc0d5dc",
+      "searchable_checksum": "326c8a49963cda599c9acac7d31c85235cdaa110b1d5cc8f73ecc5fde2a358b9"
+    },
+    {
+      "card_id": "algorithm-np",
+      "path": "algorithm/algorithm-np.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "7b244c123acd7a968d7a87d53dc9f32f6c1c6a1183ce14d26b8d13730ec57491",
+      "searchable_checksum": "b3bdf4110031a664ea5886ee21ab28a196eeb06a3c42048d9ef3d096ae6fad14"
+    },
+    {
+      "card_id": "algorithm-queue",
+      "path": "algorithm/algorithm-queue.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "4d06a778f763f25d878f834a4a54fe9e91694a56975c553eca4b47587331b630",
+      "searchable_checksum": "1065cb3accbf7135704b72208c13a078ceb9f0088397d6193c460c821118d590"
+    },
+    {
+      "card_id": "algorithm-stack",
+      "path": "algorithm/algorithm-stack.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "830322043338e196d08c9ed5eae8a8576cf43bed4cf03fe7f2ff140dfc774fa7",
+      "searchable_checksum": "8422311e5ca556882ce2e7b148936b202c48bc43d12001603698d73f1f30ace7"
+    },
+    {
+      "card_id": "algorithm-topological",
+      "path": "algorithm/algorithm-topological.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "0ff60a7114928f2928bd5604b7fb1305c25b9c2a1e35629a04e9e8f6a0f50e71",
+      "searchable_checksum": "931ba918dfe190b2e84e9a5771710d5a0edfe044b47cb5c2efc54aaf4917cdf3"
+    },
+    {
+      "card_id": "algorithm-unionfind",
+      "path": "algorithm/algorithm-unionfind.json",
+      "category": "algorithm",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "babc2647a9072e65e59990812efc9842e63d5aad923fd0e457093f743dc5acad",
+      "searchable_checksum": "79e2e9f9d3697695e2a9e9d2d7beb473c82a868bd6da5b3cbbfea792747fb526"
+    },
+    {
+      "card_id": "algorithm",
+      "path": "algorithm/algorithm.json",
+      "category": "algorithm",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "a18599ac5fa3eda9997b8105a2f35f9447306598970da37c2065521929737bf0",
+      "searchable_checksum": "4ab398b1dad233886ebc8020f51941121e6a7a38eedf243cea2430c1fb0c263f"
+    },
+    {
+      "card_id": "auto-review-",
+      "path": "auto-review/auto-review-.json",
+      "category": "auto-review",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 1
+      },
+      "file_sha256": "1ffda9584ba3f513e42a1ef1281eaf72fde1df263610326f447c0dce22137c07",
+      "searchable_checksum": "53c79f159c727cf03884ab9fd6fffc8e27bfe89db0db4fd4a47c6d718155ab6b"
+    },
+    {
+      "card_id": "auto-review-ui",
+      "path": "auto-review/auto-review-ui.json",
+      "category": "auto-review",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 1
+      },
+      "file_sha256": "7d99fe51ef9130d1dc5d786eab942d3d41cea0bd4c27598ce22cc51b56fd43d4",
+      "searchable_checksum": "a1db69fc49f7e29659e62d5127616870f546a735277c6ab9965232e6f6bb452c"
+    },
+    {
+      "card_id": "frontend-2",
+      "path": "frontend/frontend-2.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "dbcaca3b7188d888781927cb8595dbae339b9818df2207da4f303b9f4e2aa194",
+      "searchable_checksum": "7b2fe5acac15dae681b282c688e76a8a6c0078a25b672fa128f62567d54a4d75"
+    },
+    {
+      "card_id": "frontend-button",
+      "path": "frontend/frontend-button.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "47f207d8942a2f044bf94e39c33b74aaa4d721d25456c0d8169fa77954dacaef",
+      "searchable_checksum": "41299eee4763d4accfb14517b5ea8b27646321147a24412ced65c68e1785f7be"
+    },
+    {
+      "card_id": "frontend-code",
+      "path": "frontend/frontend-code.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "b13ae6df65ca854d391deff60bdcc9e3a186e50e8f86e8252a6c549ac3f48abf",
+      "searchable_checksum": "ccaca818bc32d094d5e3be15ed5a727537cd3ac30e14e4183c4a9d502216722e"
+    },
+    {
+      "card_id": "frontend-concurrent",
+      "path": "frontend/frontend-concurrent.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "11a46d5852131d8dc1ac8c2f732209be2c78426c3c4c20e25e247defbf841ac5",
+      "searchable_checksum": "f9bd802b9ffb31df7c211970e76fd84ff538e63df8852de2fb80e3875aa0c437"
+    },
+    {
+      "card_id": "frontend-conditional-rendering",
+      "path": "frontend/frontend-conditional-rendering.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "c060949f3d38e99e506cb6634a76cbc53f3fb5c6003dce8e7ef478b03c722609",
+      "searchable_checksum": "ad91d34189f292fee461fa735c8c95db9b93c0922469d1fadef45e48bf22ce5a"
+    },
+    {
+      "card_id": "frontend-context",
+      "path": "frontend/frontend-context.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "4b4ea16c07bb1bec2dff6de01bb12db298d71cbe57d258e7381abace4849ff60",
+      "searchable_checksum": "e63aee0f44ecc9b241c015072a9af539f2fb5a097fd3f818702e2d9f0c3d09a1"
+    },
+    {
+      "card_id": "frontend-controlled-uncontrolled-components",
+      "path": "frontend/frontend-controlled-uncontrolled-components.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "8bc9ed0fa1e33ebc818d23f119c7415e3f75e7da9f7e85a9b26c42d5b5ae39ff",
+      "searchable_checksum": "12af2cb4daa8c3ce6d1a26e2e899b9358a398d0287946c47c38eaf4d7c533f72"
+    },
+    {
+      "card_id": "frontend-custom",
+      "path": "frontend/frontend-custom.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "b7d5a3d7bd1f400e9b1fbcffd45c38460724dd12ff8c6cb511b6792a87f52818",
+      "searchable_checksum": "a5dc182a37da6717c27c3ca42f2dae0ef48639e785915ff892bd772694c3867c"
+    },
+    {
+      "card_id": "frontend-dom",
+      "path": "frontend/frontend-dom.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "f3adf19539ea28ada85047e45284f2079b28fb00745195fcf481adee3c390124",
+      "searchable_checksum": "4c95ad29dc8281eb175611bdba86e156acc2d89330183383e88efc3b9622a5ef"
+    },
+    {
+      "card_id": "frontend-error",
+      "path": "frontend/frontend-error.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "f6195317157bc80934f2f1edefe1d2e30950798edb2b09d37289cc67e08cb75d",
+      "searchable_checksum": "89299850539947468f254da998a6553796c629720a7b7517367adbdea23571f8"
+    },
+    {
+      "card_id": "frontend-fiber",
+      "path": "frontend/frontend-fiber.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "8d5bf8decf0fe59714d71bab78830b010c5c12069bc6c279672d02f5c1fa4abf",
+      "searchable_checksum": "8866ad24c70bfd034304e75e0429ee5cb17f4c45489eba54160f94ef676a1040"
+    },
+    {
+      "card_id": "frontend-functional-component",
+      "path": "frontend/frontend-functional-component.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "e95535ed57ed33c7ae0baa2fe2fd6a2660ce0ef9965096fb8d26c1d2ee66afb3",
+      "searchable_checksum": "4a02e5dd154d6078a5e548dc558fd716b4365bd3377f780bee07b554025c9104"
+    },
+    {
+      "card_id": "frontend-hook",
+      "path": "frontend/frontend-hook.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "7fcc86b6e2b094d91d6c327626a676ee79f0e936172b1592612961bae8b5482f",
+      "searchable_checksum": "1bc3c87ec7ddb21da86ea0e63b5dcde7d3b676b4cb6acf4c7d84476048b3b65f"
+    },
+    {
+      "card_id": "frontend-hydration",
+      "path": "frontend/frontend-hydration.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "4b6338313876fd514faad350a49c4c6e0f35dc3fbec9134166034e02e8dd936c",
+      "searchable_checksum": "afdcbb8a1be5221dfa5735b8398813dbc3d9dcc8d477c43ede06d6b41baffa16"
+    },
+    {
+      "card_id": "frontend-jsx-expression",
+      "path": "frontend/frontend-jsx-expression.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "7d2fc2a7b464bfa6b644f4eb297ae3b1f71746aed85c2a98a8eaadf07b98e1a9",
+      "searchable_checksum": "02ef01833f753314deca0505da3507f2ffc179971e55aeb50fad34a47738cdca"
+    },
+    {
+      "card_id": "frontend-nextjs",
+      "path": "frontend/frontend-nextjs.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "a325981a530d10d8667e56ff6d2fb76296facac307e95d5acfc0a4ed96da88f5",
+      "searchable_checksum": "896bc2d72e58941320ad7923374e9a1f6017bc603c13d1426ccc23227770104b"
+    },
+    {
+      "card_id": "frontend-react-key",
+      "path": "frontend/frontend-react-key.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "0ef33e9e4914cd6f84a270ea423b2e5fe4a9391d0c691eb2e72e394596956852",
+      "searchable_checksum": "f152f7ef43c2c40b80a7772363d7fb69086303e4b9597c7ee846f3d6426ef456"
+    },
+    {
+      "card_id": "frontend-react-project-tool",
+      "path": "frontend/frontend-react-project-tool.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "ba4e7b1096f366e5d18b6a204aa12f8cf5135ff4c2ff1415d35d829782915be1",
+      "searchable_checksum": "17b31b10117b96262dd552b113b7f911912c5506aebbc2c56181a12ff642add8"
+    },
+    {
+      "card_id": "frontend-react-server-components",
+      "path": "frontend/frontend-react-server-components.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "6c0153fd91c556beb110ebb9bc36dc170db8ec23d0e3e9d0bb94dbdbf7f3a790",
+      "searchable_checksum": "2e5b522ead3aab79cf1bedd0567b9163439980528466a217591af6103dd42851"
+    },
+    {
+      "card_id": "frontend-reactmemo",
+      "path": "frontend/frontend-reactmemo.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "f7ae737cce8b6854e2a089fc1f32a7857dd82da19dca5967174c8123b137c0dc",
+      "searchable_checksum": "226db63d32cde536b475919da9e9a2e898df9888a03fae90b3738c84174ce130"
+    },
+    {
+      "card_id": "frontend-router",
+      "path": "frontend/frontend-router.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "464ae242675425717b55783780bff8c7a8078e4b6f7f9a1dff7e49188f0edfab",
+      "searchable_checksum": "5a61bb1ed79dc45a300b48db4e6c97c4c2e31cb88aa55a736fb9ffdcb649add6"
+    },
+    {
+      "card_id": "frontend-streaming",
+      "path": "frontend/frontend-streaming.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "02241df137cf5da4ab7db3aa73e168616a06d600658bbfdff23ddfdfab2ad3b7",
+      "searchable_checksum": "1bc293aedbaafce48c4eca95c8bc6d1bef9492311d8626545ee509fa03331090"
+    },
+    {
+      "card_id": "frontend-suspense",
+      "path": "frontend/frontend-suspense.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "35ea324beb9d3f5cea44be01c0d3522cfed5875bdad1b7909b175e77aec73cf3",
+      "searchable_checksum": "c3674b73c14c735b7889bb89ca13a8e1914335f69dcc1ed914afc983bd7922bb"
+    },
+    {
+      "card_id": "frontend-usecallback",
+      "path": "frontend/frontend-usecallback.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "71c59c5f0bf35cc9655d7270cb7cac78360c2fa908d5704ed4ed5a69b55c871b",
+      "searchable_checksum": "d726ef93be46c7f61c99d3b672589f4a5622c5bfc3d9fb23d9f020861cfce553"
+    },
+    {
+      "card_id": "frontend-useeffect",
+      "path": "frontend/frontend-useeffect.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "a95ba1cd92fb7152722e1a74842e3175fd1b258bfb12f7eef86cbd6b7f57c26a",
+      "searchable_checksum": "aa2439d077c69134bb8d7a0d9cd271672822a599c7eb851c62a66daf81b14ca7"
+    },
+    {
+      "card_id": "frontend-useref",
+      "path": "frontend/frontend-useref.json",
+      "category": "frontend",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "5c4dffd9c183c32826a272153eeda367a218f6f08c7844ecda919e72fae63bf2",
+      "searchable_checksum": "513d4d8a02505b7559871426f638e97e0d6168d5b15626f1d2172a069ccfdb4d"
+    },
+    {
+      "card_id": "frontend-usestate",
+      "path": "frontend/frontend-usestate.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "5294cd096ff0230561f07f9040316e5adfed6b7e6a4c1929e96c9cd1af941190",
+      "searchable_checksum": "e23bd07fc1ac3996351e7c34e3bb7a00aacd5308cf4d9523ac5351a4c176d852"
+    },
+    {
+      "card_id": "frontend",
+      "path": "frontend/frontend.json",
+      "category": "frontend",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "8f7a0eef5d99f470ad0f15abb9f18444131dfba4ed53f5d5abe0a3111600947a",
+      "searchable_checksum": "93bcdcd2b2091d79abe54ddd2ef91011769c9930c0b1dc4e376e06daac27f430"
+    },
+    {
+      "card_id": "java-access-modifier",
+      "path": "java/java-access-modifier.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "ea8520f8551b8af8abe5489cf94ead998b93abc04eec7cd18c9a8059fe25b453",
+      "searchable_checksum": "311a2d2779e3c787be37c842ee21ab93f7fc45eeec71f2cde584fc3bdb6d9325"
+    },
+    {
+      "card_id": "java-array-length",
+      "path": "java/java-array-length.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "0c02b6b5432e581f2f6b781e678218c63722e504bf24c73eb321324070824831",
+      "searchable_checksum": "eabf0dd818438e881954d1dcde50148cfe8ada2905b491c946dd9a6ea7c868fb"
+    },
+    {
+      "card_id": "java-arraylist",
+      "path": "java/java-arraylist.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "788cd3d11da77dfc1e0773da93b1fe4314a3cde8488a9c2d137e7e5fa018fe17",
+      "searchable_checksum": "1f5b78a79f108e6b977abc81acf40370c855fca6c9e1fe220c816e209a58d0aa"
+    },
+    {
+      "card_id": "java-checked",
+      "path": "java/java-checked.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 4
+      },
+      "file_sha256": "12b1c0e351af37a0527a6a3a61f57769541e803df17bf035259c0d122ab48cc5",
+      "searchable_checksum": "15406e2f4a28eb2320706ed0ecf443f5e4ebdd3a30b52b5af2cb56c8fdff77fe"
+    },
+    {
+      "card_id": "java-completablefuture",
+      "path": "java/java-completablefuture.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "4eac71b576ca6869af01bf9496ea362aaeea8c64ec11ddcb9e778628e70237d6",
+      "searchable_checksum": "9f33ffd5ff1950ce206f5f03d2c3106d1e49ee13667cc318a81fcf3235715643"
+    },
+    {
+      "card_id": "java-concurrenthashmap",
+      "path": "java/java-concurrenthashmap.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "174ae989457177a93ce5db24791e8d69e069a84e8a4e132a1b8d19733b047909",
+      "searchable_checksum": "4490d5b0dc9f5593c94ebe64a7014c2d4884975880a27e1ef38dc6dd309abb6a"
+    },
+    {
+      "card_id": "java-default",
+      "path": "java/java-default.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "ddb8c7e384c9c70a379de9f307bcd8f2ab663fd567415124eb0c024ef6f4c8ef",
+      "searchable_checksum": "08f191ddd0fc570d1be7a8df322a16b7dc4e83e2e642099096dcddbb77e903f7"
+    },
+    {
+      "card_id": "java-delegation",
+      "path": "java/java-delegation.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 4
+      },
+      "file_sha256": "1775950d37469f66a1906cbd27bec171d8ff1551bb7d5cdbf5504a60f295b39a",
+      "searchable_checksum": "dcf7bdb7f4eb3ceb10019070bf3775d12931f4a9449002a6b7b31698d180f7c6"
+    },
+    {
+      "card_id": "java-equals",
+      "path": "java/java-equals.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "31df652551e2c0d18ec9955d46ab52f42b358b8aa6c7bf46fde15d5d117db7dc",
+      "searchable_checksum": "695d325a303dc508f7eb4c3260990ceca77dfdbea9c89bf742f3e6d2359cdc09"
+    },
+    {
+      "card_id": "java-extends-keyword",
+      "path": "java/java-extends-keyword.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "0bf6e848fd60271a059d7e80a2d8151bac61d570f11db4b95521664d80ede747",
+      "searchable_checksum": "07b63a33d89f190cf01550180a7d8c0e58b9cb6f3f4dbc03538111cc684fd7fe"
+    },
+    {
+      "card_id": "java-extends",
+      "path": "java/java-extends.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "539db687e41f8710ddbc7ea18a5a1bc615f9893388e825340d6e2ff00ad79c2c",
+      "searchable_checksum": "88878b856c37ca97e98a7828b19c2ec7175c381ee98374bb5b7cb2e0eb1b30d6"
+    },
+    {
+      "card_id": "java-final-keyword",
+      "path": "java/java-final-keyword.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "2c6c8761b447f9523387b498e3f69ad0c35fa9954b6502a32b9cc3ca29071326",
+      "searchable_checksum": "df19be6bf62580cbbf7d735620c46e9b71138c5df37ac7c8a888eb5023772c17"
+    },
+    {
+      "card_id": "java-functional-interface",
+      "path": "java/java-functional-interface.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "6d9be454d138ff459f0cbd5e521746b91ca29a62ed8d131bdad27d665122862a",
+      "searchable_checksum": "ef9495158366bc1cf8308ac663d2c67e64d04260892b1f84a2f879ab66ab844a"
+    },
+    {
+      "card_id": "java-g1-gc",
+      "path": "java/java-g1-gc.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 4
+      },
+      "file_sha256": "a5a015e8bdd0d868b8408ba73a208b06bfa8cd3241c36354460c94a64a2d7e39",
+      "searchable_checksum": "e6fbc3b04b223e39dc2e8a59991a02ca864f28eadb9f9465f47335fce71a4da0"
+    },
+    {
+      "card_id": "java-hashmap",
+      "path": "java/java-hashmap.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "d0e32dfb4f25ed2a366292b42b3af3b6a6c32658d5871ce0135a09d9403013a9",
+      "searchable_checksum": "1a04847aef69c408035613a159c0340d2b512dbd5855d43addfffa59f50ae854"
+    },
+    {
+      "card_id": "java-int-variable",
+      "path": "java/java-int-variable.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "81ac15f8a7b5e75993e35010f3d90053acd14262a9d35f74734a113921f136f0",
+      "searchable_checksum": "09df5b35a390f4bea7f6d15d76427f876aa60b61ca60ce8e1d2b97b9d04473fc"
+    },
+    {
+      "card_id": "java-jvm",
+      "path": "java/java-jvm.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "7d23c25639385a1b1f5332a8e4547f0343895b4fac8168ad04f593bcf869f749",
+      "searchable_checksum": "8957c7eebfcea4368e5dc67fef44a21e85a7bf964ac13fa72651d516bdcc43cc"
+    },
+    {
+      "card_id": "java-loop-control",
+      "path": "java/java-loop-control.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "2e4e96446130c04a846bed117751e171dea609b39d342f2cd22bf9d9555db199",
+      "searchable_checksum": "6bab58e8435a24b741c52a735e61f13271a8e87303b1f270cc37fab80db71c85"
+    },
+    {
+      "card_id": "java-main",
+      "path": "java/java-main.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "b62cc4efc4e4ea41abe9e4fd76e306220c294837c625d57bb3fff898b4e72322",
+      "searchable_checksum": "43d85bb9ac912fb00ae8bf91908a8ec4775380edb9f8696c78abc6de8dd8f6a1"
+    },
+    {
+      "card_id": "java-optional",
+      "path": "java/java-optional.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "93ce7b0e42f990f13bf7389c282220eb4236ce243752b47a932b18f940dd4c0c",
+      "searchable_checksum": "9810b8f077f3129b6b43c1dccc9b78706faded62b27088a083f636277183b063"
+    },
+    {
+      "card_id": "java-primitive",
+      "path": "java/java-primitive.json",
+      "category": "java",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "b7e4f86f3ea5143c5264c7ea680e44fc200424f60302667203004fd65d789ffd",
+      "searchable_checksum": "de75fb3f730c053dad1ae5a9e0fe37065aa063c283e2d87ddf47bbaab81bc94b"
+    },
+    {
+      "card_id": "java-reflection",
+      "path": "java/java-reflection.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "f0799e0ec3e25090a510eeeaefa9312fe29868be8eb61d612f24062635855d5c",
+      "searchable_checksum": "568b84735587ef5d012cf3664c5c85873eec56705f52220da59b2df0bc95d935"
+    },
+    {
+      "card_id": "java-solid",
+      "path": "java/java-solid.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "7c24068e042ae6f2d750b799c9b1ecb4b66db467bcdd87953f6aae8ef04a313c",
+      "searchable_checksum": "18dc57ac7179ea7bca40cef8cb1ffc000b9a5c6a1ac2ceece72c5b4e855ac4e2"
+    },
+    {
+      "card_id": "java-stream",
+      "path": "java/java-stream.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "6978fe97aad3eb96d78079018ab406e113c8457ee30c695af1706fa3b8fc99ac",
+      "searchable_checksum": "d69f08db5e531ee625ac8581e7929ecc1ef65b618bc2d3bba72c43c0255b1d45"
+    },
+    {
+      "card_id": "java-string",
+      "path": "java/java-string.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "0aeb9bdb1e925f2585342bcd8159ee0363a11ac3fd95b7122a0ab9b4f4bc8b83",
+      "searchable_checksum": "19723f2c3005c1d8b1cdce08e9352bc52a4eeeb551a45696a4a274617a7f5a2c"
+    },
+    {
+      "card_id": "java-synchronized",
+      "path": "java/java-synchronized.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "37587e4f232988a34473bdb197af9ba829ddb5f513bd6078851620f97eeac109",
+      "searchable_checksum": "9c6ed52288703596bc98f2eed5216b60900c3fd6862a61b4075d348f65ad5b49"
+    },
+    {
+      "card_id": "java-threadsafe",
+      "path": "java/java-threadsafe.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "c0e5327be71b6d7a0f9df271dda8359d494b0c2bf1eb2c0f369cba188f036bb6",
+      "searchable_checksum": "2375d4724c2603fb47745a4b1dffc45eef5af1a510b6e42b3b81f2dd499e9cc4"
+    },
+    {
+      "card_id": "java-volatile",
+      "path": "java/java-volatile.json",
+      "category": "java",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "f3c3e068af28a7c8964c71ef7aae57eb9b1ac17f7b6e04650d52a04cdfab2c88",
+      "searchable_checksum": "2d42660c0eddb1d1cbcb4efe2c10cf46694ccd8c38a271e420ec8961158611be"
+    },
+    {
+      "card_id": "python-2",
+      "path": "python/python-2.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "222071b19bdeb823fb098b70bfa4ff074150d2c4ed774dd816e8936e95d936d6",
+      "searchable_checksum": "e6357b48312caa5e85d68efa8d4e98cf232b45379caae578a215f6666b970545"
+    },
+    {
+      "card_id": "python-3",
+      "path": "python/python-3.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "2f35e75f87e68ab06c46180d381456df8121f386eac5855d8db88c7f1288f875",
+      "searchable_checksum": "9010c8ce7f6d5dd8a7223a4d43934f7a82d99964947384ac7e979381f5fa85ab"
+    },
+    {
+      "card_id": "python-args",
+      "path": "python/python-args.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "acf8bac0379e3aa30398b1e72534a6bce079c6b7fde5c2ef874fe3c5733c70f1",
+      "searchable_checksum": "daa51d18308d2d85ea4af260e78450032a90e0326d1fde71fe1210a6464d5123"
+    },
+    {
+      "card_id": "python-asyncio",
+      "path": "python/python-asyncio.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "8918e5d60d57f6afb8ce715172b66e31a33d2f142c700d7ba6fa3bbbc49e04f4",
+      "searchable_checksum": "4a61e73696193f5984aad9b46044ea12be832f7a1654fc5f3ddf586e2536e41b"
+    },
+    {
+      "card_id": "python-cpython",
+      "path": "python/python-cpython.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "b300b515f058b4c05d5909eeaf2e62d01d8e01a9fd797a9c6cec54bfd725d9fa",
+      "searchable_checksum": "7b142ee17473be90b13c22ac7bd37d4dc7a681f092edf86e57a1eb1195398a2e"
+    },
+    {
+      "card_id": "python-decorator",
+      "path": "python/python-decorator.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "eafed8f1bf6b3bc8ce6ceccd66dbe12c8ee116aa529924647fbcb755f1d3edfc",
+      "searchable_checksum": "b9bc50f316693bd4d560ba73b952ab85063f74a8a421e1410984c965b040b47f"
+    },
+    {
+      "card_id": "python-def",
+      "path": "python/python-def.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "2ae2450ecdc65f36126259530c05e6269b6dbf8b73e6939c47bf61f1a86eba30",
+      "searchable_checksum": "dcba64064513ea875e07ccb031d584024fa28ba2fe543279ff63a8d9ae51c509"
+    },
+    {
+      "card_id": "python-dictionary",
+      "path": "python/python-dictionary.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "da0100c4171722e83e6fbde7a4610bc19ba90f51845c27f634cf5a118e9479e5",
+      "searchable_checksum": "2e9d733f5b8315dad76f5e8685f00ef4d2a852710b48fe96da294bf77848da56"
+    },
+    {
+      "card_id": "python-fstring",
+      "path": "python/python-fstring.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "f4bd18bf09f6825b64f935b11d6e91e40adf69488c946811cea236ceba32d0b8",
+      "searchable_checksum": "35a20e8c22b7ef8ee485b107112f902d7b3a36000995c74638346eb24011138d"
+    },
+    {
+      "card_id": "python-function-definition",
+      "path": "python/python-function-definition.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "b3fab64e90e308d8332545db3fd4bb2972501803321a20ff8368708abd44ecaf",
+      "searchable_checksum": "fd867f0cc709fcb857bb72cf649de501e29abaff112339a20ae9ab8132b5aeb8"
+    },
+    {
+      "card_id": "python-generator",
+      "path": "python/python-generator.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "76f481f744ef2e9f9acd60a9349260131793b169b8dd320e8f3793075f3777d7",
+      "searchable_checksum": "45426c6a89b5817ee5ea9d82e584cbab0fc3417491096e783e4eea4bcf145fd4"
+    },
+    {
+      "card_id": "python-gil",
+      "path": "python/python-gil.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "b7bdd4503913ab2bc020a288fe3d79b0c851fe546c061fc01cf8a498fde91522",
+      "searchable_checksum": "118383c8c4d995fb30cb5959fe95b73d431ca209ad1b968ff4ae35ff6e25423a"
+    },
+    {
+      "card_id": "python-immutable",
+      "path": "python/python-immutable.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "6172cde054035e9be6a4449e6ee8112ef1faf1ffe3f0356207d81351e2156095",
+      "searchable_checksum": "1a85e9adaf853100aa6ca4813c658e0da8c71fc7e0d7facada4dc10ed0a9f3e3"
+    },
+    {
+      "card_id": "python-list-comprehension",
+      "path": "python/python-list-comprehension.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "fea7ed50d3534d859fa65ff3185269f79c13b3cf34b5ce64b0e70b85bbcd8e30",
+      "searchable_checksum": "c1bb9bea98bf6f396325703a836f3cee906b5cc05da9cd4412993cec46b5b0fc"
+    },
+    {
+      "card_id": "python-metaclass",
+      "path": "python/python-metaclass.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "fde3940d99c4b583968d24e868f1e3971c3f31c0b0968d606efdb132cd34b9e6",
+      "searchable_checksum": "7ed29804cf2e547554d53f679e59421a831da35b30f230f41169294295577e7b"
+    },
+    {
+      "card_id": "python-mro",
+      "path": "python/python-mro.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "520cb5f66ae6c349e08a6cc14c7321fc9abd18ff325e0e97f76e9630d1fcf1e4",
+      "searchable_checksum": "53ce8793c29482ef6da49946ed9c904bcd4e4f0cd87c9ceb76ebe417dddf6297"
+    },
+    {
+      "card_id": "python-multiline-string",
+      "path": "python/python-multiline-string.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "159a2fb034c3cc856b017fa719094fd12edc173b7011cdd6e2a74632c91f31de",
+      "searchable_checksum": "364f16481556cc12fba1e9a19a551b61bd8ee115fad9fdcf04496747fc95b866"
+    },
+    {
+      "card_id": "python-multiprocessing",
+      "path": "python/python-multiprocessing.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 4
+      },
+      "file_sha256": "2fb86d1d584c890a8917756a3ff508a4eea1080db74048690ab3d0cf4f3bc69d",
+      "searchable_checksum": "415c97a2bd2d06c8517a6938754f61d9c65ad009b1bcba66b03ccefb29304f66"
+    },
+    {
+      "card_id": "python-negative-indexing",
+      "path": "python/python-negative-indexing.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "f72784f66316ded63ec04cf90cab481be244a130a1259c08b950106a29eaaeaf",
+      "searchable_checksum": "06528950f4b817186f50557a9b23d1fbff4fa595828e4a638f5060db10a453e0"
+    },
+    {
+      "card_id": "python-none",
+      "path": "python/python-none.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "b5e1bec59cbba7971bcf52b079b0f9456e1fc224e587db1e419adae425c19955",
+      "searchable_checksum": "72cde5f6f42ffac3cd9764a45ceb7f25ea07ef5de95e9015356ce30323020f16"
+    },
+    {
+      "card_id": "python-private",
+      "path": "python/python-private.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "903b1817583e3d3cf884b116bab13281d12d50e85a69ebf1d033c0650b44ba9f",
+      "searchable_checksum": "156746a60234bd9ec9c66fc662677cbaf9e3a7dfe0f0383fd7359016d4d6a94c"
+    },
+    {
+      "card_id": "python-range",
+      "path": "python/python-range.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "9de3af21635cbefac1d61477e7181415a5d8e7b11c887cbfe5ac324abedad42c",
+      "searchable_checksum": "fe411b2167902a0161df357323e709104bb36ec06dfaae32ca238b5ca6a58cd5"
+    },
+    {
+      "card_id": "python-slots",
+      "path": "python/python-slots.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "64a63746677999bb5db97465dd88a6f5bde715df2e03e0955adc2727f785093b",
+      "searchable_checksum": "f28e9b3698e9c06b6959ede13affa55afd906bbaac3ad2294d5ac82350461351"
+    },
+    {
+      "card_id": "python-staticmethod",
+      "path": "python/python-staticmethod.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "4f9fd2fdbd9a7092d09e029edef00b979ed80db9cfebdf7a1592de97e00e3938",
+      "searchable_checksum": "c5ba933f168b8891b9ebd7ab49d622ec5eecfe47d597066cf970422da8e89eb8"
+    },
+    {
+      "card_id": "python-tryexceptelsefinally",
+      "path": "python/python-tryexceptelsefinally.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "e6a951129be306ef5e3dd8292a1d03bfa46311776862a1e8fdacbb073ee7d77d",
+      "searchable_checksum": "3eb103069e4de6c096798c44fef9556f59a0efc0695d6edbca889b1b7240e24d"
+    },
+    {
+      "card_id": "python-typing",
+      "path": "python/python-typing.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "3d8915f60d00f2828b2ad1fcd2f267de9e90790f207a528558f0478f7ce22335",
+      "searchable_checksum": "9444c2c88c243e2c59c8e5ba0724b3fb1d3e541a1ea642b9855f79fdda41e95c"
+    },
+    {
+      "card_id": "python-weakref",
+      "path": "python/python-weakref.json",
+      "category": "python",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "042567dc950879b9e2f58534d02bc2cbb741b53163963893f4c3e5983710550e",
+      "searchable_checksum": "1754e6fb6f6053bef58a3de726dbc0b54dabd4eac8bf9f2e8b6aaa7a88bdfab2"
+    },
+    {
+      "card_id": "python-with-statement",
+      "path": "python/python-with-statement.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "ceba9c35bd59ac2ec00922ada566d87858e1e50b5f72ca633e3ef35659ad9236",
+      "searchable_checksum": "4c28cc885e057aae478ba03de8462fcf783451b61fd8ce0545cbecf4e7cb8966"
+    },
+    {
+      "card_id": "python-with",
+      "path": "python/python-with.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "2798814a1d4434a58a70eddb6ea5a36b613d69dd5a0ce407c09f696f1177821e",
+      "searchable_checksum": "81b6dfed7c6590f9b297f2df4677ebc0e28699fae48e9d8abec502cf2a865e14"
+    },
+    {
+      "card_id": "python",
+      "path": "python/python.json",
+      "category": "python",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "9e6d18d683a4a9c9acb2eae4549ab5a1b18d42284f8fa75f18ec4425feca70f6",
+      "searchable_checksum": "1332fdc4e13fae68ab4d38083c297f7844fe1f5c494938ea60aa19dcb30bdb40"
+    },
+    {
+      "card_id": "spring-aop",
+      "path": "spring/spring-aop.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "6e213c3583e59bb72fb9cea6a53756131f7cdf4cbd7a4044a5b3e3ad01a29cab",
+      "searchable_checksum": "3e37fdcc34e0007a8fbfad6dc368880424fda8e60fac1cbf6904d96d98150b6a"
+    },
+    {
+      "card_id": "spring-applicationyml",
+      "path": "spring/spring-applicationyml.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "fcc47c76d63c5ddfd6da380673064f10a944f95f981ff182edd6ea8643e3063e",
+      "searchable_checksum": "7c72987dcbc8db5a1862894b90dbe68d70094f93f6490286b1c200e8befe3e1c"
+    },
+    {
+      "card_id": "spring-async",
+      "path": "spring/spring-async.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "ac7721692b3441fdc384504d4c413718615b976c9564b657d50bccb426d2e0d8",
+      "searchable_checksum": "e7b76eeb8b72f471625e0a2ce600d84c34151094e461ba4a808f544e49f1641f"
+    },
+    {
+      "card_id": "spring-autowired",
+      "path": "spring/spring-autowired.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "8c2ec87c7a2c7d975b38e1d0378b1c1ef278ecb01fd579754b29774be71f2fc5",
+      "searchable_checksum": "674496a17660166b3850b384d0343e7c6ed7a19ebe46365e6e8da3cc21509781"
+    },
+    {
+      "card_id": "spring-batch",
+      "path": "spring/spring-batch.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "976270b74b806dd4d1e4541650abb41d5bd19aa95675ebfb9328512547055d3b",
+      "searchable_checksum": "a8837accd48281348f60a989c1147299dec60764aec62b32e545fc5fa1bdff1d"
+    },
+    {
+      "card_id": "spring-boot",
+      "path": "spring/spring-boot.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "ef9fcadfa6ff78210c16acca3dc7822a402b80883ddde5db2587041a150024ee",
+      "searchable_checksum": "61468182909f89965e580b7bf8377bef96db857bc1bae6522ef7f16426e9002c"
+    },
+    {
+      "card_id": "spring-circuit",
+      "path": "spring/spring-circuit.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "8f0b4e4ba7d821464db06a70932aa6f6101b8cfd5e9e6d293280eb252ea5951b",
+      "searchable_checksum": "075ea7d8b49384894f79f2306947ebce5fc786a27f91d53d164129ea1944e2ae"
+    },
+    {
+      "card_id": "spring-controller",
+      "path": "spring/spring-controller.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "5bbb27e9ad43e80b471688d21cb2b6f4cb11aed02a2683b4f39c66e90005d9aa",
+      "searchable_checksum": "81393c1e4099b49a8fca02fc96bf87272d272e114d29481b1c5c91543a06bb22"
+    },
+    {
+      "card_id": "spring-dependency-injection",
+      "path": "spring/spring-dependency-injection.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "3f8eebd05e483454acf180805ee2e7cf4f119c0c1a4ca599fe97a6fef5314bac",
+      "searchable_checksum": "bfe3e5db3b098fb73aa0a287c76527819fad15f79f425bab91a3449fc8344315"
+    },
+    {
+      "card_id": "spring-embedded-tomcat",
+      "path": "spring/spring-embedded-tomcat.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "a4c47d57963d0b1482bcacaf0ababe8888d2cb81e32034387bfc776cc786137c",
+      "searchable_checksum": "6f39e3b727b0ab23a694b3d0e9474b21c4bee9f34de3077c5b705695821ff123"
+    },
+    {
+      "card_id": "spring-ioc",
+      "path": "spring/spring-ioc.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "3320dd2b603ecaac5e6e8810a072dfcefb1e8b438b15552722f71779f17a7e29",
+      "searchable_checksum": "7756713a20c0d8b04e48a81e4ec9d6ae1b1ae21c70daa39a585975d7c40aded6"
+    },
+    {
+      "card_id": "spring-jpa",
+      "path": "spring/spring-jpa.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "6b9a60163346db9c9e582c72ac336a7d2737173a14b362e9dc26934105b0e934",
+      "searchable_checksum": "4ca024bf5e704b45c2cecd35747ac863795114097293b261d11738e3f0c724a3"
+    },
+    {
+      "card_id": "spring-msa",
+      "path": "spring/spring-msa.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "9128539a0d480e7dcc3ec642973762ee79fe5cad13b9e1c1742e1b2387f37bed",
+      "searchable_checksum": "8afc67f1a2f986a426d91a092c1936e9cb225da8ef2c7bb9ccc5cc4e5c42c542"
+    },
+    {
+      "card_id": "spring-mvc",
+      "path": "spring/spring-mvc.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "1e57e3d456e3c5f7684e39a6e5772263d3c64df858e25d2817f8369a624a4605",
+      "searchable_checksum": "04ee4321f344c600f5da4acc9a4bb5b7e67242d99bb4b551de9ca8ac559175bd"
+    },
+    {
+      "card_id": "spring-phantom",
+      "path": "spring/spring-phantom.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "00b21aa67b0f2f75b82b1455e8c12c48e588ee206e12bbbbfc729cdb70fb80d4",
+      "searchable_checksum": "751102d10b7793f0e30aa598218c1e0c159c3fab2ba26cd157f26ec412b3824c"
+    },
+    {
+      "card_id": "spring-profile",
+      "path": "spring/spring-profile.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "f8c1f8bf755b952c247a44260649443d3ba0a4bce72b25fd4f3818e1fa6516d4",
+      "searchable_checksum": "32bcb0a26643b8300fae66d9280b60377641dfaaffb3bf8688de60c33a1ae35a"
+    },
+    {
+      "card_id": "spring-querydsl",
+      "path": "spring/spring-querydsl.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "341a93e4390312d6b37cf65d4b6ef8f2a8607d657394fe26a0aea290c67828fa",
+      "searchable_checksum": "fb377922cfd83cce4a883bc134547538897789461ae012ff1a057728d0cf0b05"
+    },
+    {
+      "card_id": "spring-requestmapping",
+      "path": "spring/spring-requestmapping.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "48d69786799e016b13517d5450fc234b99561e8e2c12d538776086e6c02f1ccb",
+      "searchable_checksum": "fa5f2d7a7fac9c4df0ea8b8b5131743645f6fca0688df98c43f10d2b86f23d4e"
+    },
+    {
+      "card_id": "spring-requiresnew",
+      "path": "spring/spring-requiresnew.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "b92d55c5ddd0691555371762aa652835b7bdf1b5b90a046977613b30148465cc",
+      "searchable_checksum": "7adcc0368e28bd489b86886a1c7061b11e1699893996f63f4ce42dd5106f5a81"
+    },
+    {
+      "card_id": "spring-responseentity",
+      "path": "spring/spring-responseentity.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "dab8e2b769ae99673afe3f28dedd08c9eea3c1b103a5b73fa266dcf16ccd4044",
+      "searchable_checksum": "e7a8ee4906ac10e163c2948c5d7d21f5c58f92797fd5a9dbda9ef32d1b72895c"
+    },
+    {
+      "card_id": "spring-security",
+      "path": "spring/spring-security.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "f9754a75ede4c82fdff005a651cb81aef6c563b7bf9babcbf8a2a15bffacd22e",
+      "searchable_checksum": "39eaf39f44adb3d5cf4d794e94ef1410afad043e730c251fd148649fc5f4f08c"
+    },
+    {
+      "card_id": "spring-service",
+      "path": "spring/spring-service.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "26e8ea52a651c37240ec253b8ec703f082731d897c77ea69702b10cdc3211c1f",
+      "searchable_checksum": "cc275ebb69460c6027e5a5c7d02a4529affdf17fe8a69eb6c207fc29148d3d07"
+    },
+    {
+      "card_id": "spring-spring-bean-scope",
+      "path": "spring/spring-spring-bean-scope.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "5d11e1ee2fb9afece453ff702055864c5ffe7968e723a8a1701bdf0bb8471ddc",
+      "searchable_checksum": "10b6b8a313be34978e6a0a5244064da331fc6cbd754d563d192e6f7ace9df795"
+    },
+    {
+      "card_id": "spring-spring-question-59",
+      "path": "spring/spring-spring-question-59.json",
+      "category": "spring",
+      "card_status": "approved",
+      "payload_status_counts": {
+        "approved": 3
+      },
+      "file_sha256": "66ac2344e0546ef3e73d1c96e19c8d508c9729490a5f1ff9dcb6195bee1753b5",
+      "searchable_checksum": "5fc18ed89edbe91a5e359ec233e1de3c30e58e0a6f04b9c453205a085b2eea19"
+    },
+    {
+      "card_id": "spring-transactional",
+      "path": "spring/spring-transactional.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "01acc45ff467542a2ea8f152369251aab3cf56df1aeb62d0991cae722d0b6c7e",
+      "searchable_checksum": "6232d75cf180c4940ae16021f35caebe33d5981e681e30b14ee20454c9f239f4"
+    },
+    {
+      "card_id": "spring-valid",
+      "path": "spring/spring-valid.json",
+      "category": "spring",
+      "card_status": "draft",
+      "payload_status_counts": {
+        "draft": 3
+      },
+      "file_sha256": "1d45776a7026ee95490c0eecda6b64ec25cee1942316a71bb4a7b1b98eef8424",
+      "searchable_checksum": "76943a29344db8fa684bb7bdd47b36cfc7d28b27f9d6e790975f2cb7fb1a6501"
+    }
+  ]
+}

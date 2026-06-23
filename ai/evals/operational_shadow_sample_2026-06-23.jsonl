@@ -1,0 +1,8 @@
+{"id":"frontend-react-key-list","question":"React key를 실무 리스트에서 사용할 때 주의점을 설명해줘.","expected":"approved"}
+{"id":"frontend-usestate-update","question":"React useState로 상태를 바꿀 때 주의점을 설명해줘.","expected":"approved"}
+{"id":"java-equals-compare","question":"Java equals를 비교 로직에서 사용할 때 핵심을 설명해줘.","expected":"approved"}
+{"id":"java-arraylist-usage","question":"Java ArrayList를 실무에서 사용할 때 특징을 설명해줘.","expected":"approved"}
+{"id":"spring-valid-input","question":"Spring Valid를 입력 검증에 사용할 때 핵심을 설명해줘.","expected":"approved"}
+{"id":"python-asyncio-usage","question":"Python asyncio를 비동기 작업에서 사용할 때 핵심을 설명해줘.","expected":"approved"}
+{"id":"missing-approved-evidence","question":"Java CopyOnWriteArrayList가 뭐야?","expected":"missing"}
+{"id":"missing-new-framework","question":"Next.js Server Action 보안 주의점을 설명해줘.","expected":"missing"}

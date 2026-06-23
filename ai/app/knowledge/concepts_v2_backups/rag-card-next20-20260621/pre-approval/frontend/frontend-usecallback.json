@@ -1,0 +1,113 @@
+{
+  "card_id": "frontend-usecallback",
+  "category": "frontend",
+  "term": "usecallback",
+  "aliases": [
+    "usecallback",
+    "useCallback은 함수를 메모이제이션, useMemo는 값을 메모이제이션",
+    "useCallback과 useMemo의 차이는?",
+    "useCallback",
+    "useMemo",
+    "frontend usecallback"
+  ],
+  "source_question_ids": [
+    "frontend:74"
+  ],
+  "retrieval": {
+    "embedding_text": "usecallback useCallback은 함수를 메모이제이션, useMemo는 값을 메모이제이션 useCallback과 useMemo의 차이는? frontend useCallback useMemo 차이는 함수를 메모이제이션 값을",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "usecallback",
+      "useCallback",
+      "useMemo",
+      "차이는",
+      "함수를",
+      "메모이제이션",
+      "값을"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "useCallback은 의존성이 바뀔 때까지 함수 참조를 재사용하고, useMemo는 계산 결과 값을 재사용하는 React Hook이다. 둘 다 불필요한 재계산이나 자식 렌더를 줄이는 최적화 수단이다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "useCallback은 함수 자체를, useMemo는 함수 실행 결과 값을 메모이제이션한다. 역할이 같거나 서로 반대라는 설명, 클래스 컴포넌트 전용이라는 설명은 Hook의 사용 방식과 다르다.",
+      "key_points": [
+        "useCallback은 함수를 메모이제이션, useMemo는 값을 메모이제이션",
+        "frontend-usecallback"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "차이 없다",
+          "reason": "두 Hook은 보존 대상이 함수 참조와 계산 값으로 서로 다르다."
+        },
+        "option_2": {
+          "text": "useMemo는 함수를 메모이제이션, useCallback은 값을 메모이제이션",
+          "reason": "useMemo가 값을, useCallback이 함수를 보존하므로 반대로 설명한 선택지는 틀리다."
+        },
+        "option_3": {
+          "text": "useCallback은 클래스 컴포넌트 전용",
+          "reason": "Hook은 함수형 컴포넌트에서 사용하며 클래스 컴포넌트 전용이 아니다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "useCallback은 함수 참조 안정화, useMemo는 계산 결과 캐시에 사용한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import React from 'react';\nimport { renderToStaticMarkup } from 'react-dom/server';\nfunction Demo() {\n  const callback = React.useCallback(() => 2 * 3, []);\n  const value = React.useMemo(() => 2 * 3, []);\n  return React.createElement('p', null, `${callback()}:${value}`);\n}\nconst html = renderToStaticMarkup(React.createElement(Demo));\nif (html !== '<p>6:6</p>') throw new Error(html);",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "memo로 감싼 자식에 콜백을 전달하거나 비용이 큰 계산 값을 재사용할 때 선택한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

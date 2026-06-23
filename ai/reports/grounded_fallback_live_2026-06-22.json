@@ -1,0 +1,44 @@
+{
+  "case_count": 2,
+  "passed_count": 2,
+  "gate_passed": true,
+  "rows": [
+    {
+      "id": "approved-evidence-generation",
+      "question": "React key를 실무 리스트에서 사용할 때 주의점을 설명해줘.",
+      "passed": true,
+      "route": "grounded_fallback_safe_response",
+      "fallback_used": true,
+      "model_used": "approved-evidence-safety-gate",
+      "quality_flags": [
+        "scope_unknown",
+        "missing_topic",
+        "candidate_capture_disabled"
+      ],
+      "answer": "현재 승인된 학습 근거만으로는 정확한 답변을 제공하기 어렵습니다. 기술명과 확인하려는 동작을 조금 더 구체적으로 작성해 주세요."
+    },
+    {
+      "id": "missing-approved-evidence",
+      "question": "Java CopyOnWriteArrayList가 뭐야?",
+      "passed": true,
+      "route": "grounded_fallback_safe_response",
+      "fallback_used": true,
+      "model_used": "approved-evidence-safety-gate",
+      "quality_flags": [
+        "scope_unknown",
+        "missing_approved_evidence",
+        "candidate_capture_disabled"
+      ],
+      "answer": "현재 승인된 학습 근거만으로는 정확한 답변을 제공하기 어렵습니다. 기술명과 확인하려는 동작을 조금 더 구체적으로 작성해 주세요."
+    }
+  ],
+  "evaluation_date": "2026-06-22",
+  "model_calls_by_case": {
+    "approved-evidence-generation": 1,
+    "missing-approved-evidence": 0
+  },
+  "model_download_performed": false,
+  "actual_model_call_verified": true,
+  "missing_evidence_skipped_model": true,
+  "overall_gate_passed": true
+}

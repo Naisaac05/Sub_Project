@@ -35,74 +35,79 @@
   },
   "payloads": {
     "CONCEPT_DEFINITION": {
-      "content": "@classmethod는 클래스 객체 cls를 첫 인자로 받고 @staticmethod는 자동 인자를 받지 않는다.",
+      "content": "`@classmethod`는 클래스 객체 `cls`를 첫 인자로 자동 전달받고, `@staticmethod`는 인스턴스나 클래스 인자를 자동으로 받지 않는 클래스 네임스페이스의 함수다.",
       "examples": [
-        "@classmethod 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+        "대체 생성자는 `cls(...)`가 필요하므로 classmethod가 적합하고 단순 값 검사는 staticmethod로 둘 수 있다."
       ]
     },
     "ANSWER_REASON": {
-      "why_correct": "클래스 상태가 필요하면 classmethod, 클래스와 무관한 보조 기능이면 staticmethod가 적합하다.",
+      "why_correct": "정답은 자동 전달 인자의 차이를 정확히 짚는다. 다른 보기는 두 데코레이터가 같다고 보거나 `self` 전달과 인스턴스 메서드 규칙을 뒤바꾼 설명이다.",
       "key_points": [
-        "@classmethod",
-        "@staticmethod",
-        "cls"
+        "classmethod의 cls",
+        "staticmethod의 자동 인자 없음",
+        "용도에 따른 선택"
       ]
     },
     "WRONG_ANSWER_REASON": {
       "common_mistakes": [
-        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+        "정답 표현을 외우기보다 각 선택지가 보장하는 동작과 제한을 따로 확인한다."
       ],
       "per_option": {
         "option_0": {
           "text": "차이 없다",
-          "reason": "두 데코레이터는 자동으로 전달받는 인자가 다르다."
+          "reason": "호출 문법은 비슷해 보여도 classmethod에는 소유 클래스가 전달되고 staticmethod에는 아무 객체도 자동 전달되지 않는다."
         },
         "option_2": {
           "text": "@staticmethod는 self를 받는다",
-          "reason": "staticmethod는 self를 자동 전달받지 않는다."
+          "reason": "`self`는 일반 인스턴스 메서드가 받는 값이며 staticmethod가 필요하면 인자를 명시적으로 선언해야 한다."
         },
         "option_3": {
           "text": "@classmethod는 인스턴스 메서드이다",
-          "reason": "classmethod는 인스턴스가 아니라 클래스를 받는다."
+          "reason": "classmethod의 첫 인자는 특정 인스턴스가 아니라 실제 호출에 사용된 클래스이므로 상속 시 하위 클래스도 반영된다."
         }
       }
     },
     "COMPARISON": {
       "comparisons": [
         {
-          "with": "유사한 선택지",
-          "diff": "`@classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다`는 질문의 조건을 충족하지만 다른 선택지는 `staticmethod`의 적용 조건이나 실행 결과가 다릅니다."
+          "with": "관련 개념",
+          "diff": "인스턴스 메서드는 `self`, 클래스 메서드는 `cls`, 정적 메서드는 자동 수신자 없이 선언된다."
         }
       ]
     },
     "EXAMPLE_REQUEST": {
-      "code_example": "class Factory:\n    @classmethod\n    def name(cls): return cls.__name__\n    @staticmethod\n    def add(a, b): return a + b",
-      "explanation": "@classmethod 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      "code_example": "class Factory:\n    @classmethod\n    def name(cls): return cls.__name__\n    @staticmethod\n    def add(a, b): return a + b\nassert Factory.name() == 'Factory' and Factory.add(1, 2) == 3",
+      "explanation": "두 호출 결과를 단언해 classmethod의 클래스 접근과 staticmethod의 독립 계산을 함께 확인한다."
     },
     "PRACTICAL_USAGE": {
-      "real_world": "@classmethod 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "real_world": "상속을 고려한 대체 생성자는 classmethod로, 클래스 상태가 필요 없는 형식 변환·검증 도우미는 staticmethod로 배치한다.",
       "best_practices": [
-        "작은 실행 예제로 핵심 동작을 확인한다."
+        "클래스 상태 의존 여부를 먼저 판단한다.",
+        "단순 네임스페이스 목적이면 모듈 함수도 고려한다."
       ]
     },
     "DEBUG_OR_ERROR": {
       "common_errors": [
         {
-          "error": "`staticmethod`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
-          "solution": "문항의 조건을 재현하고 결과가 `@classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다`와 일치하는지 단계별로 확인합니다."
+          "error": "하위 클래스 생성자에서 클래스명을 고정해 classmethod의 다형성을 잃는 오류",
+          "solution": "구현 클래스 대신 `cls`를 사용하고 하위 클래스 호출 결과를 테스트한다."
         }
       ]
     }
   },
   "review": {
-    "card_status": "draft",
+    "card_status": "approved",
     "payload_status": {
-      "CONCEPT_DEFINITION": "draft",
-      "ANSWER_REASON": "draft",
-      "WRONG_ANSWER_REASON": "draft"
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved",
+      "COMPARISON": "approved",
+      "EXAMPLE_REQUEST": "approved",
+      "PRACTICAL_USAGE": "approved",
+      "DEBUG_OR_ERROR": "approved"
     },
-    "approved_at": null,
-    "reviewer": null,
+    "approved_at": "2026-06-21T13:39:37.748233Z",
+    "reviewer": "codex-assisted-human-review",
     "rejected_reason": null
   },
   "related_card_ids": [],

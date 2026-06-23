@@ -1,0 +1,111 @@
+{
+  "card_id": "java-completablefuture",
+  "category": "java",
+  "term": "completablefuture",
+  "aliases": [
+    "completablefuture",
+    "thenApply는 값 변환, thenCompose는 비동기 체이닝",
+    "CompletableFuture에서 thenApply와 thenCompose의 차이는?",
+    "CompletableFuture",
+    "thenApply",
+    "thenCompose",
+    "java completablefuture"
+  ],
+  "source_question_ids": [
+    "java:28"
+  ],
+  "retrieval": {
+    "embedding_text": "completablefuture thenApply는 값 변환, thenCompose는 비동기 체이닝 CompletableFuture에서 thenApply와 thenCompose의 차이는? java CompletableFuture 에서 thenApply",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "completablefuture",
+      "CompletableFuture",
+      "에서",
+      "thenApply"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "CompletableFuture의 `thenApply`는 완료 값을 동기 함수로 변환하고, `thenCompose`는 함수가 반환한 새 CompletionStage를 평탄화해 비동기 작업을 연결한다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "`thenApply` 결과는 변환된 값이고 `thenCompose` 결과는 중첩 Future 없이 다음 비동기 단계로 이어진다. 두 메서드의 차이는 동기·비동기 실행 여부나 예외 처리 가능 여부가 아니라 반환 구조다.",
+      "key_points": [
+        "thenApply는 값 변환, thenCompose는 비동기 체이닝",
+        "java-completablefuture"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "차이 없다",
+          "reason": "차이가 없다면 중첩 Future를 평탄화하는 compose의 역할을 설명하지 못한다."
+        },
+        "option_2": {
+          "text": "thenCompose는 동기, thenApply는 비동기",
+          "reason": "두 메서드 모두 비동기 단계에 사용할 수 있으며 compose만 동기라는 설명은 틀리다."
+        },
+        "option_3": {
+          "text": "thenApply만 예외 처리 가능",
+          "reason": "예외 처리는 exceptionally·handle 등으로 둘 모두에 연결할 수 있다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "thenApply는 `T→U`, thenCompose는 `T→CompletionStage<U>` 함수를 받는다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import java.util.concurrent.CompletableFuture;\nCompletableFuture<Integer> base = CompletableFuture.completedFuture(2);\nint mapped = base.thenApply(v -> v * 2).join();\nint chained = base.thenCompose(v -> CompletableFuture.completedFuture(v * 3)).join();\nassert mapped == 4 && chained == 6;",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "비동기 API 결과로 다음 비동기 요청을 이어갈 때 thenCompose를 사용해 중첩 Future를 피한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

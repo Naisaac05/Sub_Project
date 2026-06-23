@@ -1,12 +1,16 @@
 import os
 import unittest
+from pathlib import Path
 from unittest.mock import Mock, patch
 
 from app.schemas import AiGenerateRequest
 from app.schemas.rag_card import RagCard
 from app.workflow.embedding_intent import intent_from_label
-from app.workflow.nodes import generate_answer_node
-from app.workflow.runner import _build_response_from_state, run_review_workflow_stream
+from app.rag.documents import ConceptCard
+from app.workflow.answer_cache import clear_answer_cache
+from app.workflow.nodes import _approved_cards_for_scope, fallback_answer_node, generate_answer_node
+from app.workflow.grounded_fallback import SAFE_GROUNDED_FALLBACK_ANSWER
+from app.workflow.runner import _build_response_from_state, run_review_workflow, run_review_workflow_stream
 from app.workflow.state import ReviewWorkflowState
 from app.workflow.v2_approved_fast_path import (
     APPROVED_V2_CARD_IDS,
@@ -296,6 +300,30 @@ class V2ApprovedFastPathPolicyTest(unittest.TestCase):
 
 
 class V2ApprovedFastPathWorkflowTest(unittest.TestCase):
+    def setUp(self):
+        clear_answer_cache()
+
+    def tearDown(self):
+        clear_answer_cache()
+
+    def test_course_scope_ignores_markdown_cards_from_mixed_loader(self):
+        markdown_card = ConceptCard(
+            path=Path("index.md"),
+            concept_id="index",
+            metadata={},
+            title="index",
+            sections={},
+        )
+        approved_card = _card("java-equals")
+
+        with patch(
+            "app.workflow.nodes.load_concept_cards",
+            return_value=[markdown_card, approved_card],
+        ):
+            cards = _approved_cards_for_scope()
+
+        self.assertEqual(cards, [approved_card])
+
     def _state(self) -> ReviewWorkflowState:
         return ReviewWorkflowState(
             mode="free-question",
@@ -322,10 +350,13 @@ class V2ApprovedFastPathWorkflowTest(unittest.TestCase):
             "app.workflow.nodes.resolve_lightweight_answer",
             return_value=None,
         ):
-            state = generate_answer_node(self._state(), generator=lambda **_: "existing answer")
+            state = generate_answer_node(
+                self._state(),
+                generator=lambda **_: "React key는 리스트 요소를 안정적으로 식별해 렌더링 사이에 컴포넌트 상태를 유지합니다.",
+            )
 
-        self.assertEqual(state.answer, "existing answer")
-        self.assertEqual(state.route, "generation")
+        self.assertIn("React key", state.answer)
+        self.assertEqual(state.route, "grounded_fallback_generation")
         self.assertEqual(state.v2_fast_path_decision["mode"], "shadow")
         self.assertTrue(state.v2_fast_path_decision["hit"])
 
@@ -351,17 +382,166 @@ class V2ApprovedFastPathWorkflowTest(unittest.TestCase):
         self.assertEqual(state.model_used, "v2-approved-payload")
         self.assertFalse(state.fallback_used)
 
-    def test_serve_mode_miss_skips_lightweight_and_calls_ollama(self):
+    def test_exact_approved_hit_bypasses_course_scope_limit_in_serve_mode(self):
+        state = ReviewWorkflowState(
+            mode="free-question",
+            request=AiGenerateRequest(
+                user_answer="What is Java equals?",
+                course_id="frontend",
+            ),
+            free_question_intent=intent_from_label(
+                "CONCEPT_DEFINITION",
+                "What is Java equals?",
+                0.99,
+            ),
+        )
+
+        def parse_by_path(path):
+            return _card(Path(path).stem)
+
+        with patch.dict(
+            os.environ,
+            {
+                "AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true",
+                "AI_REVIEW_V2_APPROVED_FAST_PATH_CARD_IDS": "frontend-react-key,java-equals",
+            },
+        ), patch(
+            "app.workflow.nodes.load_concept_cards",
+            return_value=[_card("frontend-react-key"), _card("java-equals")],
+        ), patch(
+            "app.workflow.v2_approved_fast_path.load_parallel_rag_config",
+            return_value=ParallelRagConfig(enabled=True, shadow_mode=False, v2_percentage=100),
+        ), patch(
+            "app.workflow.v2_approved_fast_path.parse_concept_card",
+            side_effect=parse_by_path,
+        ):
+            state = generate_answer_node(
+                state,
+                generator=lambda **_: (_ for _ in ()).throw(AssertionError("generator called")),
+            )
+
+        self.assertEqual(state.route, "v2_approved_fast_path")
+        self.assertEqual(state.answer, "equals definition")
+        self.assertEqual(state.v2_fast_path_decision["card_id"], "java-equals")
+        self.assertIn("course_scope_applied", state.quality_flags)
+
+    def test_serve_mode_miss_without_approved_evidence_skips_ollama(self):
         decision = V2FastPathDecision(mode="serve", hit=False, reason="retrieval_miss")
+        state = ReviewWorkflowState(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="Java CopyOnWriteArrayList가 뭐야?"),
+            free_question_intent=intent_from_label(
+                "CONCEPT_DEFINITION", "Java CopyOnWriteArrayList가 뭐야?", 0.99
+            ),
+        )
+
+        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision):
+            state = generate_answer_node(
+                state,
+                generator=lambda **_: (_ for _ in ()).throw(AssertionError("generator called")),
+            )
+
+        self.assertEqual(state.answer, SAFE_GROUNDED_FALLBACK_ANSWER)
+        self.assertEqual(state.route, "grounded_fallback_safe_response")
+        self.assertTrue(state.fallback_used)
+        self.assertIn("missing_approved_evidence", state.quality_flags)
+
+    def test_serve_mode_miss_uses_approved_evidence_in_prompt(self):
+        decision = V2FastPathDecision(mode="serve", hit=False, reason="unsupported_intent")
+        prompts = []
+        state = self._state()
+
+        def generator(**kwargs):
+            prompts.append(kwargs["prompt"])
+            return "React key는 리스트 요소를 안정적으로 식별해 렌더링 사이에 컴포넌트 상태를 유지합니다."
+
+        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision):
+            state = generate_answer_node(state, generator=generator)
+
+        self.assertEqual(state.route, "grounded_fallback_generation")
+        self.assertFalse(state.fallback_used)
+        self.assertIn("승인된 근거", prompts[0])
+        self.assertIn("frontend-react-key", prompts[0])
+
+    def test_serve_mode_miss_recovers_low_quality_generation_with_grounded_answer(self):
+        decision = V2FastPathDecision(mode="serve", hit=False, reason="unsupported_intent")
+
+        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision):
+            state = generate_answer_node(
+                self._state(),
+                generator=lambda **_: "React key는 Spring 트랜잭션 기능으로",
+            )
+
+        self.assertNotEqual(state.answer, SAFE_GROUNDED_FALLBACK_ANSWER)
+        self.assertNotIn("Spring", state.answer)
+        self.assertIn("React key", state.answer)
+        self.assertEqual(state.route, "grounded_fallback_generation")
+        self.assertFalse(state.fallback_used)
+        self.assertNotIn("insufficient_evidence_overlap", state.quality_flags)
+
+    def test_grounded_retry_also_passes_quality_gate(self):
+        decision = V2FastPathDecision(mode="serve", hit=False, reason="unsupported_intent")
+        attempts = 0
+
+        def generator(**_):
+            nonlocal attempts
+            attempts += 1
+            if attempts == 1:
+                raise TimeoutError("primary timeout")
+            return "React key는 Spring 트랜잭션 기능으로"
+
+        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision):
+            state = generate_answer_node(self._state(), generator=generator)
+
+        self.assertEqual(attempts, 2)
+        self.assertNotEqual(state.answer, SAFE_GROUNDED_FALLBACK_ANSWER)
+        self.assertNotIn("Spring", state.answer)
+        self.assertIn("React key", state.answer)
+        self.assertEqual(state.route, "grounded_fallback_generation")
+
+    def test_cached_fallback_answer_must_pass_grounded_quality_gate(self):
+        decision = V2FastPathDecision(mode="serve", hit=False, reason="unsupported_intent")
 
         with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision), patch(
-            "app.workflow.nodes.resolve_lightweight_answer",
-            side_effect=AssertionError("free-question v2 miss must not use lightweight answers"),
+            "app.workflow.nodes.get_cached_answer",
+            return_value="React key는 Spring 트랜잭션 기능으로",
         ):
-            state = generate_answer_node(self._state(), generator=lambda **_: "Ollama 생성 답변")
+            state = generate_answer_node(
+                self._state(),
+                generator=lambda **_: (_ for _ in ()).throw(AssertionError("generator called")),
+            )
 
-        self.assertEqual(state.answer, "Ollama 생성 답변")
-        self.assertEqual(state.route, "generation")
+        self.assertEqual(state.answer, SAFE_GROUNDED_FALLBACK_ANSWER)
+        self.assertEqual(state.route, "grounded_fallback_safe_response")
+
+    def test_state_graph_recovers_low_quality_generation_with_grounded_answer(self):
+        decision = V2FastPathDecision(mode="serve", hit=False, reason="unsupported_intent")
+        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision):
+            response = run_review_workflow(
+                "free-question",
+                AiGenerateRequest(user_answer="What is React key?"),
+                generator=lambda **_: "React key는 Spring 트랜잭션 기능으로",
+            )
+
+        self.assertNotEqual(response.answer, SAFE_GROUNDED_FALLBACK_ANSWER)
+        self.assertNotIn("Spring", response.answer)
+        self.assertEqual(response.route, "grounded_fallback_generation")
+        self.assertFalse(response.fallback_used)
+
+    def test_fallback_node_preserves_grounded_generation_route(self):
+        state = ReviewWorkflowState(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="Python asyncio를 비동기 작업에서 사용할 때 핵심을 설명해줘."),
+        )
+        state.answer = "asyncio는 승인된 근거로 생성된 답변입니다."
+        state.route = "grounded_fallback_generation"
+        state.quality_flags = ["missing_topic"]
+
+        result = fallback_answer_node(state)
+
+        self.assertEqual(result.answer, "asyncio는 승인된 근거로 생성된 답변입니다.")
+        self.assertEqual(result.route, "grounded_fallback_generation")
+        self.assertFalse(result.fallback_used)
 
     def test_shadow_decision_is_recorded_in_workflow_event(self):
         state = self._state()
@@ -388,6 +568,45 @@ class V2ApprovedFastPathWorkflowTest(unittest.TestCase):
 
 
 class V2ApprovedFastPathStreamingTest(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        clear_answer_cache()
+
+    def tearDown(self):
+        clear_answer_cache()
+
+    async def test_stream_miss_without_evidence_skips_generator(self):
+        decision = V2FastPathDecision(mode="serve", hit=False, reason="retrieval_miss")
+
+        async def generator(**_):
+            raise AssertionError("generator called")
+            yield "unreachable"
+
+        request = AiGenerateRequest(user_answer="Java CopyOnWriteArrayList가 뭐야?", stream=True)
+        with patch("app.workflow.runner.resolve_v2_approved_fast_path", return_value=decision):
+            events = [event async for event in run_review_workflow_stream("free-question", request, generator)]
+
+        chunks = "".join(event["chunk"] for event in events if event["type"] == "chunk")
+        response = next(event["response"] for event in events if event["type"] == "done")
+        self.assertEqual(chunks, SAFE_GROUNDED_FALLBACK_ANSWER)
+        self.assertEqual(response.route, "grounded_fallback_safe_response")
+
+    async def test_stream_recovers_low_quality_generation_with_grounded_answer(self):
+        decision = V2FastPathDecision(mode="serve", hit=False, reason="unsupported_intent")
+
+        async def generator(**_):
+            yield "React key는 Spring 트랜잭션 기능으로"
+
+        request = AiGenerateRequest(user_answer="What is React key?", stream=True)
+        with patch("app.workflow.runner.resolve_v2_approved_fast_path", return_value=decision):
+            events = [event async for event in run_review_workflow_stream("free-question", request, generator)]
+
+        chunks = "".join(event["chunk"] for event in events if event["type"] == "chunk")
+        response = next(event["response"] for event in events if event["type"] == "done")
+        self.assertNotEqual(chunks, SAFE_GROUNDED_FALLBACK_ANSWER)
+        self.assertNotIn("Spring", chunks)
+        self.assertIn("React key", chunks)
+        self.assertEqual(response.route, "grounded_fallback_generation")
+
     async def test_fast_path_miss_retries_ollama_once_before_fallback(self):
         decision = V2FastPathDecision(mode="serve", hit=False, reason="retrieval_miss")
         attempts = 0

@@ -1,0 +1,24 @@
+[
+  {
+    "retriever": "bm25",
+    "available": true,
+    "total": 2,
+    "avg_latency_ms": 86.1,
+    "forbidden_hit@1": 0.0,
+    "forbidden_hit@3": 0.0,
+    "forbidden_hit@5": 0.0,
+    "hit@1": 1.0,
+    "hit@3": 1.0,
+    "hit@5": 1.0,
+    "mrr": 1.0,
+    "ndcg@1": 1.0,
+    "ndcg@3": 1.0,
+    "ndcg@5": 1.0,
+    "precision@1": 1.0,
+    "precision@3": 0.333,
+    "precision@5": 0.2,
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0
+  }
+]

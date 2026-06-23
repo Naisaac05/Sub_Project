@@ -1,0 +1,107 @@
+{
+  "card_id": "java-equals",
+  "category": "java",
+  "term": "equals",
+  "aliases": [
+    "java equals",
+    "자바 equals",
+    "object equality",
+    "logical equality",
+    "equals method",
+    "객체 동등성"
+  ],
+  "source_question_ids": [
+    "java:2"
+  ],
+  "retrieval": {
+    "embedding_text": "equals java equals 자바 equals object equality java java-equals logical-equality object-equality equals-method hashcode-contract",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "java-equals",
+      "logical-equality",
+      "object-equality",
+      "equals-method",
+      "hashcode-contract"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "`equals`는 Java 객체의 논리적 동등성을 비교하는 메서드다. String은 문자열 내용을 기준으로 이를 재정의하므로 서로 다른 객체라도 문자 순서가 같으면 true를 반환한다.",
+      "examples": [
+        "예: 작은 입력에서 핵심 동작을 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "`str1.equals(str2)`는 String이 재정의한 내용 비교를 수행한다. `==`는 참조 동일성을 비교하며, `compare`, `match`는 String의 동등성 비교 메서드가 아니다.",
+      "key_points": [
+        "str1.equals(str2)",
+        "java-equals"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "기술 용어의 적용 범위와 유사 개념의 역할을 구분하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "str1 == str2",
+          "reason": "`==`는 두 변수가 같은 객체를 가리키는지 비교한다. 문자열 내용이 같아도 별도 객체라면 false가 될 수 있어 논리적 문자열 비교와 다르다."
+        },
+        "option_2": {
+          "text": "str1.compare(str2)",
+          "reason": "String에는 `compare` 메서드가 없다. 정렬 순서를 비교하려면 `compareTo`를 쓰지만, 동일성 확인에는 `equals`가 직접적이다."
+        },
+        "option_3": {
+          "text": "str1.match(str2)",
+          "reason": "String에는 `match` 메서드가 없다. 정규식 일치에는 `matches`를 사용하지만 전체 문자열의 논리적 동등성 비교와 목적이 다르다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "`equals`는 객체의 논리적 값이 같은지 확인하고, `==`는 두 참조가 같은 객체를 가리키는지 확인한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "String left = new String(\"Java\");\nString right = new String(\"Java\");\nassert left.equals(right) && left != right;",
+      "explanation": "서로 다른 String 객체가 참조는 다르지만 내용 비교에서는 같음을 검증한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "사용자 입력, 식별자, 상태 코드처럼 문자열 내용 자체를 비교해야 하는 조건문과 검증 로직에서 사용한다.",
+      "best_practices": [
+        "문제의 전제와 실제 동작을 작은 실행 예제로 먼저 검증한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사한 용어의 적용 범위를 구분하지 않아 잘못된 구현을 선택한다.",
+          "solution": "입력 조건, 핵심 동작, 결과를 각각 확인하고 비교 대상과 차이를 검증한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "WRONG_ANSWER_REASON": "approved"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T05:03:46.229958Z"
+}

@@ -1,0 +1,116 @@
+{
+  "card_id": "frontend-react-server-components",
+  "category": "frontend",
+  "term": "react-server-components",
+  "aliases": [
+    "react-server-components",
+    "useState를 사용할 수 있다",
+    "React Server Components(RSC)의 특징이 아닌 것은?",
+    "React",
+    "Server",
+    "Components(RSC)",
+    "useState",
+    "react server components",
+    "frontend react server components"
+  ],
+  "source_question_ids": [
+    "frontend:83"
+  ],
+  "retrieval": {
+    "embedding_text": "react-server-components useState를 사용할 수 있다 React Server Components(RSC)의 특징이 아닌 것은? frontend Server Components(RSC) 특징이 아닌 것은 useState",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "react-server-components",
+      "Server",
+      "Components(RSC)",
+      "특징이",
+      "아닌",
+      "것은",
+      "useState"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "React Server Components는 서버에서만 실행되어 결과를 클라이언트에 전달하는 컴포넌트다. 클라이언트 번들에 포함되지 않고 서버 자원에 직접 접근할 수 있지만 상태·효과 같은 클라이언트 Hook은 사용할 수 없다.",
+      "examples": [
+        "핵심 원리를 작은 입력으로 확인한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "RSC에서 useState를 사용할 수 있다는 설명은 서버 전용 실행 모델과 맞지 않아 특징이 아니다. 서버 실행, 번들 제외, DB 직접 접근은 RSC의 장점이다.",
+      "key_points": [
+        "useState를 사용할 수 있다",
+        "frontend-react-server-components"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "선택지의 용어만 보고 실제 원리와 적용 범위를 비교하지 않는 실수"
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "서버에서만 실행된다",
+          "reason": "서버에서 실행되는 것은 RSC의 핵심 특성이므로 틀린 설명이 아니다."
+        },
+        "option_1": {
+          "text": "클라이언트 번들에 포함되지 않는다",
+          "reason": "RSC 코드는 클라이언트 번들에 포함되지 않아 번들 크기를 줄일 수 있다."
+        },
+        "option_3": {
+          "text": "데이터베이스에 직접 접근 가능하다",
+          "reason": "서버 컴포넌트는 서버에서 DB나 파일 시스템에 직접 접근할 수 있다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사 개념",
+          "diff": "Server Component는 서버 자원 접근에, Client Component는 useState와 이벤트 처리에 적합하다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import React from 'react';\nimport { renderToStaticMarkup } from 'react-dom/server';\nconst loadUsers = async () => [{ id: 1, name: 'Ada' }];\nasync function Users() {\n  const users = await loadUsers();\n  return React.createElement('ul', null, users.map(user => React.createElement('li', { key: user.id }, user.name)));\n}\nconst html = renderToStaticMarkup(await Users());\nif (!html.includes('<li>Ada</li>')) throw new Error(html);",
+      "explanation": "코드의 상태 변화와 검증 결과로 개념의 실제 동작을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "DB 조회 중심 화면을 서버에서 구성해 클라이언트 JavaScript를 줄일 때 사용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작과 경계 조건을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "유사 개념의 역할을 혼동해 잘못된 구현을 선택한다.",
+          "solution": "입력 조건과 실행 결과를 비교해 개념의 적용 범위를 구분한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

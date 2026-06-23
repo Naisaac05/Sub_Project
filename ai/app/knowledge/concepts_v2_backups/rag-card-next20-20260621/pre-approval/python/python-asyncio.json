@@ -1,0 +1,114 @@
+{
+  "card_id": "python-asyncio",
+  "category": "python",
+  "term": "asyncio",
+  "aliases": [
+    "asyncio",
+    "코루틴의 실행을 일시 중단하고 완료를 기다린다",
+    "asyncio에서 await 키워드의 역할은?",
+    "await",
+    "python asyncio"
+  ],
+  "source_question_ids": [
+    "python:114"
+  ],
+  "retrieval": {
+    "embedding_text": "asyncio 코루틴의 실행을 일시 중단하고 완료를 기다린다 asyncio에서 await 키워드의 역할은? python 에서 await 키워드의 역할은 코루틴의 실행을",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "asyncio",
+      "에서",
+      "await",
+      "키워드의",
+      "역할은",
+      "코루틴의",
+      "실행을"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "`await`는 awaitable이 완료될 때까지 현재 코루틴을 일시 중단하고 이벤트 루프에 제어권을 돌려줘 다른 준비된 작업이 실행될 수 있게 한다.",
+      "examples": [
+        "두 코루틴이 각각 I/O를 기다리면 한 코루틴의 대기 시간 동안 이벤트 루프가 다른 코루틴을 진행할 수 있다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 코루틴의 일시 중단과 완료 결과 수신을 설명한다. 다른 보기는 새 스레드 생성, 동기 함수 변환, 의도적 예외 발생처럼 `await`가 직접 수행하지 않는 동작이다.",
+      "key_points": [
+        "awaitable 대기",
+        "코루틴 일시 중단",
+        "이벤트 루프 제어권"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "정답 표현을 외우기보다 각 선택지가 보장하는 동작과 제한을 따로 확인한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "스레드를 생성한다",
+          "reason": "`await` 자체는 운영체제 스레드를 만들지 않고 같은 이벤트 루프가 실행 가능한 코루틴을 협력적으로 전환한다."
+        },
+        "option_2": {
+          "text": "함수를 동기 함수로 변환한다",
+          "reason": "`await`를 포함한 `async def` 함수는 계속 코루틴 함수이며 호출 결과도 awaitable 객체다."
+        },
+        "option_3": {
+          "text": "예외를 발생시킨다",
+          "reason": "대상 awaitable의 실패가 예외로 전파될 수는 있지만 키워드의 목적은 비동기 완료를 기다리는 것이다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "관련 개념",
+          "diff": "스레드 선점과 달리 asyncio 코루틴은 `await` 지점에서 명시적으로 제어권을 양보한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import asyncio\nasync def load():\n    await asyncio.sleep(0)\n    return 1\nassert asyncio.run(load()) == 1",
+      "explanation": "일시 중단 지점을 거친 코루틴이 다시 실행돼 반환값 1을 전달하는지 검증한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "네트워크 요청, 데이터베이스 드라이버, 비동기 스트림처럼 대기 시간이 큰 I/O를 한 스레드에서 동시 처리할 때 적합하다.",
+      "best_practices": [
+        "블로킹 함수를 이벤트 루프에서 직접 호출하지 않는다.",
+        "취소와 타임아웃 경로를 명시적으로 처리한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "CPU 집약 루프에 `async`만 붙이면 자동으로 병렬화된다고 기대하는 오류",
+          "solution": "CPU 작업은 별도 프로세스나 실행기로 분리하고 이벤트 루프에는 짧은 비동기 작업만 남긴다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}
