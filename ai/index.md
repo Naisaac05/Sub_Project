@@ -1,4 +1,5 @@
 # AI 시스템 문서 인덱스
+> 최신 판정: [RAG v2 전환 준비도 재판정](./specs/20260621_v2-replacement-readiness.md) - approved 82장, 현재 `NOT_READY`
 
 **2026-06-18 기준 최종 정리 완료**
 

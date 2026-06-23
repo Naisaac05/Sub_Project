@@ -1,0 +1,115 @@
+{
+  "card_id": "java-hashmap",
+  "category": "java",
+  "term": "hashmap",
+  "aliases": [
+    "hashmap",
+    "검색 O(1), 삽입 O(1)",
+    "HashMap의 시간 복잡도로 올바른 것은? (평균)",
+    "HashMap",
+    "O(1)",
+    "java hashmap"
+  ],
+  "source_question_ids": [
+    "java:17"
+  ],
+  "retrieval": {
+    "embedding_text": "hashmap 검색 O(1), 삽입 O(1) HashMap의 시간 복잡도로 올바른 것은? (평균) java HashMap 시간 복잡도로 것은 평균 검색",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "hashmap",
+      "HashMap",
+      "시간",
+      "복잡도로",
+      "것은",
+      "평균",
+      "검색"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Java `HashMap`은 키의 `hashCode()`로 버킷을 찾고 `equals()`로 같은 키인지 판별하는 해시 테이블 구현이다. 해시가 적절히 분산된 평균 상황에서 조회와 삽입은 O(1)이다.",
+      "examples": [
+        "`put`으로 키를 저장한 뒤 같은 키를 `get`하면 해시 버킷 탐색을 통해 연결된 값을 반환한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 평균 조회·삽입 비용이 O(1)임을 설명한다. 다른 보기는 선형 탐색, 균형 트리, 삽입만 선형이라는 서로 다른 자료구조나 최악 상황의 비용을 평균값으로 혼동한다.",
+      "key_points": [
+        "평균 O(1)",
+        "hashCode 버킷",
+        "equals 키 비교"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "정답 표현을 외우기보다 각 선택지가 보장하는 동작과 제한을 따로 확인한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "검색 O(n), 삽입 O(n)",
+          "reason": "모든 원소를 순서대로 검사하는 선형 구조의 비용이며 해시가 분산된 HashMap의 평균 버킷 접근을 반영하지 않는다."
+        },
+        "option_2": {
+          "text": "검색 O(log n), 삽입 O(log n)",
+          "reason": "O(log n)은 균형 탐색 트리의 대표 비용이고 일반 HashMap은 키 해시로 버킷 위치를 계산한다."
+        },
+        "option_3": {
+          "text": "검색 O(1), 삽입 O(n)",
+          "reason": "정상적인 분산 상태에서는 삽입도 대상 버킷을 바로 찾아 평균 O(1)에 처리하며 항상 전체 항목을 순회하지 않는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "관련 개념",
+          "diff": "`TreeMap`은 키 정렬을 제공하며 O(log n), `HashMap`은 순서를 보장하지 않는 대신 평균 O(1) 접근을 목표로 한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import java.util.HashMap;\nvar scores = new HashMap<String, Integer>();\nscores.put(\"A\", 10);\nassert scores.get(\"A\") == 10;",
+      "explanation": "키 `A`를 삽입하고 같은 키로 값 10을 조회해 put/get의 해시 기반 연결을 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "ID 기반 캐시와 빠른 멤버 조회에 사용하며, 키 객체가 변경 가능한 상태를 hashCode에 포함하지 않도록 설계한다.",
+      "best_practices": [
+        "equals와 hashCode 계약을 함께 구현한다.",
+        "순회 순서가 필요하면 적절한 Map 구현을 선택한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "키 삽입 뒤 hashCode 계산에 쓰인 필드를 변경해 같은 키를 다시 찾지 못하는 오류",
+          "solution": "키를 불변으로 만들고 동등한 객체가 같은 hashCode를 반환하는지 단위 테스트한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

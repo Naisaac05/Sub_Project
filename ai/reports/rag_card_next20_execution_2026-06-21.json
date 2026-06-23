@@ -1,0 +1,170 @@
+{
+  "candidate_count": 20,
+  "passed_count": 19,
+  "unavailable_count": 1,
+  "failed_count": 0,
+  "results": {
+    "algorithm-8": {
+      "category": "algorithm",
+      "validator": "python",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "algorithm-divide": {
+      "category": "algorithm",
+      "validator": "python",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "algorithm-heap": {
+      "category": "algorithm",
+      "validator": "python",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "algorithm-np": {
+      "category": "algorithm",
+      "validator": "python",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "frontend-dom": {
+      "category": "frontend",
+      "validator": "node",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "frontend-react-server-components": {
+      "category": "frontend",
+      "validator": "node",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "frontend-usecallback": {
+      "category": "frontend",
+      "validator": "node",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "frontend-useref": {
+      "category": "frontend",
+      "validator": "node",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "java-completablefuture": {
+      "category": "java",
+      "validator": "java",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "java-hashmap": {
+      "category": "java",
+      "validator": "java",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "java-synchronized": {
+      "category": "java",
+      "validator": "java",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "java-volatile": {
+      "category": "java",
+      "validator": "java",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "python-asyncio": {
+      "category": "python",
+      "validator": "python",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "python-metaclass": {
+      "category": "python",
+      "validator": "python",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "python-staticmethod": {
+      "category": "python",
+      "validator": "python",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "python-tryexceptelsefinally": {
+      "category": "python",
+      "validator": "python",
+      "passed": true,
+      "status": "verified",
+      "reason": null,
+      "stderr": ""
+    },
+    "spring-aop": {
+      "category": "spring",
+      "validator": "card_mapping",
+      "passed": true,
+      "status": "verified_external",
+      "reason": null,
+      "stderr": "",
+      "command": ".\\gradlew.bat test --tests com.devmatch.ragverify.ConceptExampleVerificationTest"
+    },
+    "spring-circuit": {
+      "category": "spring",
+      "validator": "card_mapping",
+      "passed": false,
+      "status": "unavailable",
+      "reason": "dependency_missing:resilience4j"
+    },
+    "spring-responseentity": {
+      "category": "spring",
+      "validator": "card_mapping",
+      "passed": true,
+      "status": "verified_external",
+      "reason": null,
+      "stderr": "",
+      "command": ".\\gradlew.bat test --tests com.devmatch.ragverify.ConceptExampleVerificationTest"
+    },
+    "spring-valid": {
+      "category": "spring",
+      "validator": "card_mapping",
+      "passed": true,
+      "status": "verified_external",
+      "reason": null,
+      "stderr": "",
+      "command": ".\\gradlew.bat test --tests com.devmatch.ragverify.ConceptExampleVerificationTest"
+    }
+  }
+}

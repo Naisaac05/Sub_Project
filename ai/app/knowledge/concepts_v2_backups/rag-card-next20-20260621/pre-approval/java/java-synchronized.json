@@ -1,0 +1,115 @@
+{
+  "card_id": "java-synchronized",
+  "category": "java",
+  "term": "synchronized",
+  "aliases": [
+    "synchronized",
+    "ReentrantLock은 tryLock으로 타임아웃이 가능하다",
+    "synchronized와 ReentrantLock의 차이로 올바른 것은?",
+    "ReentrantLock",
+    "tryLock",
+    "java synchronized"
+  ],
+  "source_question_ids": [
+    "java:24"
+  ],
+  "retrieval": {
+    "embedding_text": "synchronized ReentrantLock은 tryLock으로 타임아웃이 가능하다 synchronized와 ReentrantLock의 차이로 올바른 것은? java ReentrantLock 차이로 것은 tryLock 으로 타임아웃이",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "synchronized",
+      "ReentrantLock",
+      "차이로",
+      "것은",
+      "tryLock",
+      "으로",
+      "타임아웃이"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "`synchronized`는 JVM 모니터를 사용하는 구조화된 잠금이고 `ReentrantLock`은 명시적 lock/unlock API와 `tryLock`, 인터럽트 가능 대기, 공정성 같은 선택 기능을 제공한다.",
+      "examples": [
+        "정해진 시간만 잠금을 기다리려면 `tryLock(timeout, unit)` 결과를 확인해 대체 경로로 빠질 수 있다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 ReentrantLock의 시간 제한 잠금 획득 기능을 설명한다. 다른 보기는 synchronized가 더 유연하다고 뒤집거나 인터럽트와 암묵적 해제 특성을 두 구현에 잘못 배치한다.",
+      "key_points": [
+        "tryLock 타임아웃",
+        "명시적 unlock",
+        "JVM 모니터"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "정답 표현을 외우기보다 각 선택지가 보장하는 동작과 제한을 따로 확인한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "synchronized가 더 유연하다",
+          "reason": "synchronized는 문법이 단순하고 자동 해제되지만 타임아웃·공정성·여러 Condition 같은 제어는 ReentrantLock이 더 다양하다."
+        },
+        "option_2": {
+          "text": "둘 다 인터럽트 처리가 불가능하다",
+          "reason": "ReentrantLock은 `lockInterruptibly()`로 잠금 대기 중 인터럽트에 반응할 수 있어 두 방식이 모두 불가능하다는 설명은 틀리다."
+        },
+        "option_3": {
+          "text": "ReentrantLock은 암묵적 잠금이다",
+          "reason": "ReentrantLock은 코드에서 직접 `lock()`과 `unlock()`을 호출하며 보통 finally에서 해제를 보장해야 하는 명시적 잠금이다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "관련 개념",
+          "diff": "synchronized는 블록 종료 시 모니터를 자동 해제하고 ReentrantLock은 개발자가 finally에서 해제해야 한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "import java.util.concurrent.locks.ReentrantLock;\nvar lock = new ReentrantLock();\nboolean acquired = lock.tryLock();\nif (acquired) {\n    try { assert lock.isHeldByCurrentThread(); } finally { lock.unlock(); }\n}",
+      "explanation": "`tryLock` 성공 여부를 분기하고 현재 스레드 소유를 확인한 뒤 finally에서 잠금을 해제한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "잠금 대기 시간 제한이나 복수 조건 큐가 필요한 동시성 제어에서 ReentrantLock을 선택하고 단순 임계 구역은 synchronized를 고려한다.",
+      "best_practices": [
+        "unlock은 반드시 finally에서 호출한다.",
+        "공유 상태를 보호하는 잠금 범위를 문서화한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "예외가 발생한 경로에서 unlock을 건너뛰어 다른 스레드가 영구 대기하는 오류",
+          "solution": "잠금 획득 직후 try/finally를 배치하고 타임아웃·인터럽트 테스트를 추가한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

@@ -1,7 +1,9 @@
 import unittest
+from pathlib import Path
 
+from app.rag.documents import ConceptCard
 from app.schemas.rag_card import RagCard, RagRetrieval
-from scripts.audit_rag_cards_v2 import audit_cards, audit_retrieval_queries
+from scripts.audit_rag_cards_v2 import audit_cards, audit_retrieval_queries, build_payload
 
 
 def card(card_id, category, term, aliases=None, keywords=None, source_question_ids=None):
@@ -19,6 +21,20 @@ def card(card_id, category, term, aliases=None, keywords=None, source_question_i
 
 
 class AuditRagCardsV2Test(unittest.TestCase):
+    def test_build_payload_ignores_markdown_cards_from_mixed_loader(self):
+        markdown_card = ConceptCard(Path("index.md"), "index", {}, "index", {})
+        rag_card = card(
+            "java-object-equals",
+            "java",
+            "object-equals",
+            ["java equals"],
+            ["java", "equals", "equality"],
+        )
+
+        payload = build_payload([markdown_card, rag_card])
+
+        self.assertEqual(payload["card_count"], 1)
+
     def test_holds_broad_and_duplicate_terms(self):
         cards = [
             card("frontend-key", "frontend", "key", ["react key"], ["key", "react", "reconciliation"]),

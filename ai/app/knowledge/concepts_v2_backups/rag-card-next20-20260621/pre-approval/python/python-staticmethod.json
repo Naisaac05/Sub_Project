@@ -1,0 +1,113 @@
+{
+  "card_id": "python-staticmethod",
+  "category": "python",
+  "term": "staticmethod",
+  "aliases": [
+    "staticmethod",
+    "@classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다",
+    "다음 중 @staticmethod와 @classmethod의 차이로 올바른 것은?",
+    "@staticmethod",
+    "@classmethod",
+    "cls",
+    "python staticmethod"
+  ],
+  "source_question_ids": [
+    "python:105"
+  ],
+  "retrieval": {
+    "embedding_text": "staticmethod @classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다 다음 중 @staticmethod와 @classmethod의 차이로 올바른 것은? python @staticmethod @classmethod 차이로",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "staticmethod",
+      "@staticmethod",
+      "@classmethod",
+      "차이로"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "`@classmethod`는 클래스 객체 `cls`를 첫 인자로 자동 전달받고, `@staticmethod`는 인스턴스나 클래스 인자를 자동으로 받지 않는 클래스 네임스페이스의 함수다.",
+      "examples": [
+        "대체 생성자는 `cls(...)`가 필요하므로 classmethod가 적합하고 단순 값 검사는 staticmethod로 둘 수 있다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 자동 전달 인자의 차이를 정확히 짚는다. 다른 보기는 두 데코레이터가 같다고 보거나 `self` 전달과 인스턴스 메서드 규칙을 뒤바꾼 설명이다.",
+      "key_points": [
+        "classmethod의 cls",
+        "staticmethod의 자동 인자 없음",
+        "용도에 따른 선택"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "정답 표현을 외우기보다 각 선택지가 보장하는 동작과 제한을 따로 확인한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "차이 없다",
+          "reason": "호출 문법은 비슷해 보여도 classmethod에는 소유 클래스가 전달되고 staticmethod에는 아무 객체도 자동 전달되지 않는다."
+        },
+        "option_2": {
+          "text": "@staticmethod는 self를 받는다",
+          "reason": "`self`는 일반 인스턴스 메서드가 받는 값이며 staticmethod가 필요하면 인자를 명시적으로 선언해야 한다."
+        },
+        "option_3": {
+          "text": "@classmethod는 인스턴스 메서드이다",
+          "reason": "classmethod의 첫 인자는 특정 인스턴스가 아니라 실제 호출에 사용된 클래스이므로 상속 시 하위 클래스도 반영된다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "관련 개념",
+          "diff": "인스턴스 메서드는 `self`, 클래스 메서드는 `cls`, 정적 메서드는 자동 수신자 없이 선언된다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "class Factory:\n    @classmethod\n    def name(cls): return cls.__name__\n    @staticmethod\n    def add(a, b): return a + b\nassert Factory.name() == 'Factory' and Factory.add(1, 2) == 3",
+      "explanation": "두 호출 결과를 단언해 classmethod의 클래스 접근과 staticmethod의 독립 계산을 함께 확인한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "상속을 고려한 대체 생성자는 classmethod로, 클래스 상태가 필요 없는 형식 변환·검증 도우미는 staticmethod로 배치한다.",
+      "best_practices": [
+        "클래스 상태 의존 여부를 먼저 판단한다.",
+        "단순 네임스페이스 목적이면 모듈 함수도 고려한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "하위 클래스 생성자에서 클래스명을 고정해 classmethod의 다형성을 잃는 오류",
+          "solution": "구현 클래스 대신 `cls`를 사용하고 하위 클래스 호출 결과를 테스트한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

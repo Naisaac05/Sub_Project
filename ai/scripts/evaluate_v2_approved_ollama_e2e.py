@@ -103,6 +103,9 @@ def main() -> int:
         if isinstance(card, RagCard) and card.review.card_status == CardStatus.APPROVED
     ]
     report = {
+        "evaluation_mode": "shadow_retrieval_routing_simulation",
+        "ollama_fallback_executed": False,
+        "ollama_fallback_note": "이번 표본은 fallback 0건이므로 Ollama 호출이 발생하지 않았습니다.",
         "evaluation_note": "v2 approved 카드가 답하지 못한 질문은 Ollama fallback 대상으로 집계합니다.",
         "runtime_policy": "v2_approved_then_ollama",
         "v2_approved_card_count": len(v2),

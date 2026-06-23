@@ -1,0 +1,114 @@
+{
+  "card_id": "java-volatile",
+  "category": "java",
+  "term": "volatile",
+  "aliases": [
+    "volatile",
+    "변수의 가시성(visibility)을 보장한다",
+    "volatile 키워드의 역할은?",
+    "visibility)",
+    "java volatile"
+  ],
+  "source_question_ids": [
+    "java:23"
+  ],
+  "retrieval": {
+    "embedding_text": "volatile 변수의 가시성(visibility)을 보장한다 volatile 키워드의 역할은? java 키워드의 역할은 변수의 가시성 visibility) 보장한다",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "volatile",
+      "키워드의",
+      "역할은",
+      "변수의",
+      "가시성",
+      "visibility)",
+      "보장한다"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Java `volatile` 필드는 한 스레드의 쓰기를 다른 스레드가 최신 값으로 관찰하도록 가시성과 happens-before 관계를 제공한다. 여러 연산으로 이루어진 증감의 원자성은 보장하지 않는다.",
+      "examples": [
+        "한 스레드가 volatile 종료 플래그를 `true`로 쓰면 반복 확인 중인 다른 스레드는 캐시된 과거 값 대신 변경을 관찰할 수 있다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "정답은 스레드 간 가시성 보장을 설명한다. 다른 보기는 상수 선언, 복합 연산의 원자성, 객체 직렬화처럼 volatile과 별개의 기능이다.",
+      "key_points": [
+        "메모리 가시성",
+        "happens-before",
+        "복합 연산 비원자성"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "정답 표현을 외우기보다 각 선택지가 보장하는 동작과 제한을 따로 확인한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "변수를 상수로 만든다",
+          "reason": "재할당을 막는 키워드는 `final`이며 volatile 필드는 여러 스레드가 값을 변경할 수 있다."
+        },
+        "option_2": {
+          "text": "원자성(atomicity)을 보장한다",
+          "reason": "단일 읽기·쓰기의 가시성은 제공하지만 `count++` 같은 읽기-수정-쓰기 복합 연산 전체를 원자적으로 만들지 않는다."
+        },
+        "option_3": {
+          "text": "변수를 직렬화 가능하게 한다",
+          "reason": "객체 직렬화 포함 여부는 `Serializable`과 `transient`가 다루며 volatile은 동시성 메모리 의미를 지정한다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "관련 개념",
+          "diff": "`final`은 재할당 제한, `synchronized`는 상호 배제와 가시성, `volatile`은 잠금 없는 단일 상태 공유의 가시성에 초점이 있다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "class Worker {\n    volatile boolean running = true;\n    void stop() { running = false; }\n    boolean isRunning() { return running; }\n}\nvar worker = new Worker();\nworker.stop();\nassert !worker.isRunning();",
+      "explanation": "종료 메서드가 volatile 플래그를 바꾸고 이후 읽기에서 변경된 값을 확인하는지 단언한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "단일 쓰기 스레드와 여러 읽기 스레드가 공유하는 상태 플래그에 사용하며 복합 불변식에는 잠금이나 원자 클래스를 사용한다.",
+      "best_practices": [
+        "복합 연산에는 AtomicInteger 등을 검토한다.",
+        "volatile로 보호할 상태를 하나의 불변식으로 제한한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`volatile int count`에 `count++`를 사용하면 증가가 유실되지 않는다고 가정하는 오류",
+          "solution": "경쟁 증가에는 `AtomicInteger.incrementAndGet()` 또는 synchronized 임계 구역을 적용한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

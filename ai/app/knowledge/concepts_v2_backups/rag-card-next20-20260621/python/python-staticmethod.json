@@ -1,0 +1,112 @@
+{
+  "card_id": "python-staticmethod",
+  "category": "python",
+  "term": "staticmethod",
+  "aliases": [
+    "staticmethod",
+    "@classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다",
+    "다음 중 @staticmethod와 @classmethod의 차이로 올바른 것은?",
+    "@staticmethod",
+    "@classmethod",
+    "cls",
+    "python staticmethod"
+  ],
+  "source_question_ids": [
+    "python:105"
+  ],
+  "retrieval": {
+    "embedding_text": "staticmethod @classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다 다음 중 @staticmethod와 @classmethod의 차이로 올바른 것은? python @staticmethod @classmethod 차이로",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "staticmethod",
+      "@staticmethod",
+      "@classmethod",
+      "차이로"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "WRONG_ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "@classmethod는 클래스 객체 cls를 첫 인자로 받고 @staticmethod는 자동 인자를 받지 않는다.",
+      "examples": [
+        "@classmethod 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "클래스 상태가 필요하면 classmethod, 클래스와 무관한 보조 기능이면 staticmethod가 적합하다.",
+      "key_points": [
+        "@classmethod",
+        "@staticmethod",
+        "cls"
+      ]
+    },
+    "WRONG_ANSWER_REASON": {
+      "common_mistakes": [
+        "보기별 실제 동작과 정답 개념의 선택 기준을 구분한다."
+      ],
+      "per_option": {
+        "option_0": {
+          "text": "차이 없다",
+          "reason": "두 데코레이터는 자동으로 전달받는 인자가 다르다."
+        },
+        "option_2": {
+          "text": "@staticmethod는 self를 받는다",
+          "reason": "staticmethod는 self를 자동 전달받지 않는다."
+        },
+        "option_3": {
+          "text": "@classmethod는 인스턴스 메서드이다",
+          "reason": "classmethod는 인스턴스가 아니라 클래스를 받는다."
+        }
+      }
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "유사한 선택지",
+          "diff": "`@classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다`는 질문의 조건을 충족하지만 다른 선택지는 `staticmethod`의 적용 조건이나 실행 결과가 다릅니다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "class Factory:\n    @classmethod\n    def name(cls): return cls.__name__\n    @staticmethod\n    def add(a, b): return a + b",
+      "explanation": "@classmethod 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "@classmethod 개념을 실제 구현과 디버깅에서 선택 기준으로 사용할 때 적용한다.",
+      "best_practices": [
+        "작은 실행 예제로 핵심 동작을 확인한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "`staticmethod`과 관련된 용어만 보고 실제 실행 조건을 확인하지 않는 실수",
+          "solution": "문항의 조건을 재현하고 결과가 `@classmethod는 cls를 첫 번째 인자로 받고, @staticmethod는 받지 않는다`와 일치하는지 단계별로 확인합니다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "draft",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "draft",
+      "ANSWER_REASON": "draft",
+      "WRONG_ANSWER_REASON": "draft"
+    },
+    "approved_at": null,
+    "reviewer": null,
+    "rejected_reason": null
+  },
+  "related_card_ids": [],
+  "tags": [],
+  "created_at": "2026-06-12T14:34:33.649093Z",
+  "updated_at": "2026-06-13T06:39:08.888004Z"
+}

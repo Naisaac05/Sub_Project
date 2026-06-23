@@ -1,0 +1,32 @@
+{
+  "card_id" : "auto-review-pagination",
+  "category" : "auto-review",
+  "term" : "pagination",
+  "aliases" : [ "pagination" ],
+  "source_question_ids" : [ "auto:auto-31fbb9d2e0d1" ],
+  "retrieval" : {
+    "intent_types" : [ "CONCEPT_DEFINITION" ],
+    "boost_keywords" : [ "pagination" ],
+    "embedding_hash" : "",
+    "embedding_text" : "pagination pagination이 뭐야? pagination"
+  },
+  "payloads" : {
+    "CONCEPT_DEFINITION" : {
+      "content" : "Pagination(페이지네이션)은 많은 양의 데이터를 여러 페이지로 나누어 보여주는 기능입니다.\n(예: 검색 결과, 게시판, 상품 목록에서 \"1 2 3 ... 다음\" 버튼)",
+      "examples" : [ ]
+    }
+  },
+  "review" : {
+    "rejected_reason" : "",
+    "reviewer" : "admin-ui",
+    "card_status" : "approved",
+    "payload_status" : {
+      "CONCEPT_DEFINITION" : "approved"
+    },
+    "approved_at" : "2026-06-23T08:57:27.620744900Z"
+  },
+  "related_card_ids" : [ ],
+  "tags" : [ ],
+  "created_at" : "2026-06-23T08:57:27.620744900Z",
+  "updated_at" : "2026-06-23T08:57:27.620744900Z"
+}

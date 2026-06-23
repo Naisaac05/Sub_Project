@@ -15,10 +15,27 @@ class ConceptExampleVerifiersTest(unittest.TestCase):
     def test_spring_cards_have_real_harness_mappings(self):
         self.assertEqual(verifiers.verifier_readiness("spring-valid"), "ready")
         self.assertEqual(verifiers.verifier_readiness("spring-profile"), "ready")
+        self.assertEqual(verifiers.verifier_readiness("spring-aop"), "ready")
+        self.assertEqual(verifiers.verifier_readiness("spring-responseentity"), "ready")
+
+    def test_java_verifier_wraps_and_executes_statement_snippet(self):
+        result = verifiers.verify("java", "int value = 2 + 3;\nassert value == 5;")
+
+        self.assertTrue(result["passed"], result)
+
+    def test_node_verifier_executes_javascript_module(self):
+        result = verifiers.verify("node", "const value = 2 + 3;\nif (value !== 5) throw new Error('bad');")
+
+        self.assertTrue(result["passed"], result)
 
     def test_known_dependency_gaps_remain_backlog(self):
         self.assertEqual(verifiers.verifier_readiness("spring-circuit"), "dependency_missing")
-        self.assertEqual(verifiers.verifier_readiness("frontend-react-server-components"), "harness_missing")
+
+    def test_frontend_cards_use_node_harness(self):
+        self.assertEqual(verifiers.verifier_readiness("frontend-react-server-components"), "ready")
+        self.assertEqual(verifiers.verifier_readiness("frontend-usecallback"), "ready")
+        self.assertEqual(verifiers.verifier_readiness("frontend-useref"), "ready")
+        self.assertEqual(verifiers.verifier_readiness("frontend-dom"), "ready")
 
 
 if __name__ == "__main__":
