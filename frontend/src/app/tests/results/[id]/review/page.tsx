@@ -14,6 +14,7 @@ import {
   summarizeAiReviewQuestion,
   summarizeAiReviewSession,
 } from '@/lib/ai-review';
+import { finishSuccessfulStream } from '@/lib/ai-review-stream';
 import type { AiReviewSessionResponse } from '@/lib/types';
 // 🧪 테스트 전용 (제거 시 본 import + 아래 렌더 라인 함께 삭제)
 import { TestResetButton } from '@/components/ai-review/TestResetButton';
@@ -246,6 +247,16 @@ export default function AiReviewPage() {
     }
   };
 
+  const finishActiveStream = () => {
+    if (batchTimerRef.current) {
+      window.clearInterval(batchTimerRef.current);
+      batchTimerRef.current = null;
+    }
+    finishSuccessfulStream(activeReaderRef.current, activeAbortControllerRef.current);
+    activeReaderRef.current = null;
+    activeAbortControllerRef.current = null;
+  };
+
   useEffect(() => {
     return () => {
       cleanupActiveStream();
@@ -441,6 +452,7 @@ export default function AiReviewPage() {
     accumulatedContentRef.current = '';
 
     let hasReceivedChunk = false;
+    let hasReceivedTerminalEvent = false;
     const startedAt = performance.now();
 
     const slowNoticeTimer = window.setTimeout(() => {
@@ -494,7 +506,7 @@ export default function AiReviewPage() {
                       hasReceivedChunk = true;
                       accumulatedContentRef.current += event.chunk || '';
                     } else if (event.type === 'done') {
-                      cleanupActiveStream();
+                      hasReceivedTerminalEvent = true;
                       setStreamingContent('');
 
                       if (event.response && event.response.messages) {
@@ -521,7 +533,6 @@ export default function AiReviewPage() {
                       setAiRequestState('SUCCESS');
                       setSubmitting(false);
                       window.clearTimeout(slowNoticeTimer);
-                      return;
                     } else if (event.type === 'error') {
                       cleanupActiveStream();
                       setStreamingContent('');
@@ -543,8 +554,11 @@ export default function AiReviewPage() {
             }
           }
 
-          cleanupActiveStream();
+          finishActiveStream();
           setStreamingContent('');
+          if (hasReceivedTerminalEvent) {
+            return;
+          }
           if (!hasReceivedChunk) {
             throw new Error('스트림이 완료 이벤트 없이 종료되었습니다.');
           } else {
@@ -555,6 +569,11 @@ export default function AiReviewPage() {
             return;
           }
         } catch (streamReadErr: any) {
+          if (hasReceivedTerminalEvent) {
+            finishActiveStream();
+            setStreamingContent('');
+            return;
+          }
           cleanupActiveStream();
           setStreamingContent('');
           if (streamReadErr.name === 'AbortError') {
