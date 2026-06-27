@@ -5,11 +5,10 @@ import json
 import os
 from pathlib import Path
 import random
-import re
 
 from app.rag.documents import parse_concept_card
 from app.rag.parallel_config import load_parallel_rag_config, should_serve_v2
-from app.rag.retriever import LexicalRetrieverAdapter
+from app.rag.retriever import LexicalRetrieverAdapter, tokenize_query
 from app.schemas.rag_card import CardStatus, PayloadStatus, RagCard
 from app.workflow.intent import FreeQuestionIntent
 
@@ -208,7 +207,7 @@ def _has_specific_anchor(card: RagCard, query: str) -> bool:
 
 
 def _tokens(value: str) -> list[str]:
-    return re.findall(r"[a-z0-9+#.]+|[가-힣]{2,}", value.lower())
+    return tokenize_query(value)
 
 
 def _contains_tokens(query_tokens: list[str], phrase_tokens: list[str]) -> bool:
