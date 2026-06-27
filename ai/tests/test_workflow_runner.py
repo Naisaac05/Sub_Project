@@ -205,6 +205,138 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertIn("out_of_course", response.quality_flags)
         self.assertEqual(response.matched_concept_id, "spring-transactional")
 
+    def test_exact_approved_card_from_another_course_is_blocked_for_every_course(self):
+        cases = (
+            ("frontend", "spring-bean-scope", "spring-spring-bean-scope"),
+            ("spring", "react-server-components", "frontend-react-server-components"),
+            ("java", "asyncio", "python-asyncio"),
+            ("python", "dfs", "algorithm-dfs"),
+            ("algorithm", "g1-gc", "java-g1-gc"),
+        )
+
+        def forbidden_generator(**_kwargs):
+            raise AssertionError("cross-course approved question must not call Ollama")
+
+        with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true"}):
+            for course_id, target_term, expected_card_id in cases:
+                with self.subTest(course_id=course_id, target_term=target_term):
+                    response = run_review_workflow(
+                        mode="free-question",
+                        request=AiGenerateRequest(
+                            user_answer=f"{target_term}\ub780 \ubb34\uc5c7\uc778\uac00\uc694?",
+                            course_id=course_id,
+                        ),
+                        generator=forbidden_generator,
+                    )
+
+                    self.assertEqual(response.route, "out_of_course_redirect")
+                    self.assertEqual(response.model_used, "template")
+                    self.assertFalse(response.fallback_used)
+                    self.assertIn("out_of_course", response.quality_flags)
+                    self.assertEqual(response.matched_concept_id, expected_card_id)
+
+    def test_current_problem_topic_is_not_redirected_as_out_of_course(self):
+        with patch.dict(os.environ, {"AI_REVIEW_GROUNDED_FALLBACK_ENABLED": "true"}):
+            response = run_review_workflow(
+                mode="free-question",
+                request=AiGenerateRequest(
+                    question="JPA의 N+1 문제를 줄이기 위한 방법으로 가장 적절한 것은 무엇인가요?",
+                    options=[
+                        "fetch join 또는 EntityGraph 사용",
+                        "모든 컬럼을 String으로 저장",
+                        "트랜잭션 제거",
+                        "테이블명을 짧게 변경",
+                    ],
+                    correct_answer="fetch join 또는 EntityGraph 사용",
+                    selected_answer="테이블명을 짧게 변경",
+                    user_answer="N+1이 뭐야?",
+                    course_id="java-backend",
+                    source_question_id="java-backend:3",
+                ),
+                generator=lambda **kwargs: "This answer fails Korean validation.",
+            )
+
+        self.assertNotEqual(response.route, "out_of_course_redirect")
+        self.assertNotEqual(response.route, "grounded_fallback_safe_response")
+        self.assertIn("current_problem_context", response.quality_flags)
+        self.assertIn("N+1", response.answer)
+        self.assertIn("fetch join", response.answer)
+
+    def test_current_problem_spring_security_topic_uses_problem_context_fallback(self):
+        with patch.dict(os.environ, {"AI_REVIEW_GROUNDED_FALLBACK_ENABLED": "true"}):
+            response = run_review_workflow(
+                mode="free-question",
+                request=AiGenerateRequest(
+                    question="Spring Security에서 인증된 사용자 정보를 컨트롤러에서 가져올 때 자주 사용하는 방식은 무엇인가요?",
+                    options=["@RequestBody", "@AuthenticationPrincipal", "@Scheduled", "@EntityGraph"],
+                    correct_answer="@AuthenticationPrincipal",
+                    selected_answer="@RequestBody",
+                    user_answer="Spring Security가 뭐지?",
+                    course_id="java-backend",
+                    source_question_id="java-backend:4",
+                ),
+                generator=lambda **kwargs: "This answer fails Korean validation.",
+            )
+
+        self.assertNotEqual(response.route, "out_of_course_redirect")
+        self.assertNotEqual(response.route, "grounded_fallback_safe_response")
+        self.assertIn("current_problem_context", response.quality_flags)
+        self.assertIn("Spring Security", response.answer)
+        self.assertIn("@AuthenticationPrincipal", response.answer)
+
+    def test_unknown_intent_current_problem_overlap_allows_problem_context(self):
+        unknown_intent = __import__(
+            "app.workflow.intent",
+            fromlist=["FreeQuestionIntent"],
+        ).FreeQuestionIntent(
+            intent="unknown",
+            rag_policy="fallback",
+            topic="Spring Security",
+            confidence=0.42,
+            sub_intent="unknown",
+        )
+        with patch.dict(os.environ, {"AI_REVIEW_GROUNDED_FALLBACK_ENABLED": "true"}):
+            with patch(
+                "app.workflow.nodes.classify_free_question_with_embeddings",
+                return_value=unknown_intent,
+            ):
+                response = run_review_workflow(
+                    mode="free-question",
+                    request=AiGenerateRequest(
+                        question="Spring Security에서 인증된 사용자 정보를 컨트롤러에서 가져올 때 자주 사용하는 방식은 무엇인가요?",
+                        options=["@RequestBody", "@AuthenticationPrincipal", "DTO", "Service"],
+                        correct_answer="@AuthenticationPrincipal",
+                        selected_answer="@RequestBody",
+                        user_answer="Spring Security가 뭐지?",
+                        course_id="java-backend",
+                        source_question_id="java-backend:4",
+                    ),
+                    generator=lambda **kwargs: "This answer fails Korean validation.",
+                )
+
+        self.assertNotEqual(response.route, "out_of_course_redirect")
+        self.assertNotEqual(response.route, "grounded_fallback_safe_response")
+        self.assertIn("course_scope_applied", response.quality_flags)
+        self.assertIn("current_problem_context", response.quality_flags)
+        self.assertIn("Spring Security", response.answer)
+        self.assertIn("@AuthenticationPrincipal", response.answer)
+
+    def test_missing_approved_evidence_uses_ollama_before_fallback(self):
+        with patch.dict(os.environ, {"AI_REVIEW_GROUNDED_FALLBACK_ENABLED": "true"}):
+            response = run_review_workflow(
+                mode="free-question",
+                request=AiGenerateRequest(
+                    user_answer="CQRS가 뭐야?",
+                    course_id="java-backend",
+                ),
+                generator=lambda **kwargs: "CQRS는 명령과 조회 책임을 분리해서 쓰기 모델과 읽기 모델을 다르게 설계하는 패턴입니다.",
+            )
+
+        self.assertEqual(response.route, "generation")
+        self.assertFalse(response.fallback_used)
+        self.assertIn("missing_approved_evidence", response.quality_flags)
+        self.assertIn("CQRS", response.answer)
+
     def test_scope_unknown_keeps_answer_path_but_reports_flag(self):
         response = run_review_workflow(
             mode="free-question",
@@ -282,7 +414,9 @@ class WorkflowRunnerTest(unittest.TestCase):
     def test_quality_validation_failure_uses_accuracy_fallback_message(self):
         response = run_review_workflow(
             mode="free-question",
-            request=AiGenerateRequest(user_answer="Java에서 equals와 ==는 무엇이 다른가요?"),
+            request=AiGenerateRequest(
+                user_answer="Kotlin coroutine dispatcher\uac00 \ubb34\uc5c7\uc778\uac00\uc694?"
+            ),
             generator=lambda **kwargs: "This answer fails Korean validation.",
         )
 
@@ -293,6 +427,35 @@ class WorkflowRunnerTest(unittest.TestCase):
             if event["event"] == "ai_review.workflow_completed"
         )
         self.assertEqual(completed["fallback_reason"], "quality_validation")
+
+    def test_sync_v2_approved_fast_path_hit_is_not_overwritten_by_quality_fallback(self):
+        decision = V2FastPathDecision(
+            mode="serve",
+            hit=True,
+            reason="hit",
+            card_id="frontend-conditional-rendering",
+            payload_intent="CONCEPT_DEFINITION",
+            answer="React 조건부 렌더링은 조건에 따라 JSX를 선택하는 방식입니다.",
+            score=11.0,
+        )
+
+        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision):
+            response = run_review_workflow(
+                mode="free-question",
+                request=AiGenerateRequest(
+                    question="Java에서 equals와 hashCode를 함께 재정의해야 하는 가장 중요한 이유는 무엇인가요?",
+                    correct_answer="HashMap, HashSet 같은 컬렉션에서 객체 동등성을 올바르게 처리하기 위해",
+                    selected_answer="상속을 금지하기 위해",
+                    user_answer="conditional-rendering이 뭔가요?",
+                    course_id="frontend",
+                ),
+                generator=lambda **kwargs: (_ for _ in ()).throw(AssertionError("generator must not be called")),
+            )
+
+        self.assertFalse(response.fallback_used)
+        self.assertEqual(response.route, "v2_approved_fast_path")
+        self.assertEqual(response.matched_concept_id, "frontend-conditional-rendering")
+        self.assertEqual(response.answer, "React 조건부 렌더링은 조건에 따라 JSX를 선택하는 방식입니다.")
 
     def test_incomplete_numbered_ollama_answer_uses_quality_fallback(self):
         response = run_review_workflow(
@@ -1120,8 +1283,8 @@ class WorkflowRunnerTest(unittest.TestCase):
             if len(calls) == 1:
                 raise RuntimeError("primary model unavailable")
             return (
-                "WebSocket \ud578\ub4dc\uc170\uc774\ud06c\ub294 HTTP \uc5f0\uacb0\uc744 WebSocket \uc5f0\uacb0\ub85c "
-                "\uc804\ud658\ud558\uae30 \uc704\ud574 \ud074\ub77c\uc774\uc5b8\ud2b8\uc640 \uc11c\ubc84\uac00 \ucc98\uc74c\uc5d0 \uc8fc\uace0\ubc1b\ub294 \uc57d\uc18d\uc785\ub2c8\ub2e4."
+                "Kotlin coroutine dispatcher\ub294 coroutine\uc774 \uc5b4\ub5a4 \uc2a4\ub808\ub4dc\ub098 \uc2e4\ud589 \ud658\uacbd\uc5d0\uc11c "
+                "\ub3d9\uc791\ud560\uc9c0 \uacb0\uc815\ud569\ub2c8\ub2e4. \uc791\uc5c5 \uc131\uaca9\uc5d0 \ub9de\ub294 dispatcher\ub97c \uc120\ud0dd\ud574 CPU\uc640 I/O \uc791\uc5c5\uc744 \ubd84\ub9ac\ud569\ub2c8\ub2e4."
             )
 
         response = run_review_workflow(
@@ -1129,7 +1292,7 @@ class WorkflowRunnerTest(unittest.TestCase):
             request=AiGenerateRequest(
                 question="\ub85c\uceec \uc800\uc7a5\uc18c\uc640 \uc11c\ubc84 \ub3d9\uae30\ud654 \uc815\ucc45\uc740?",
                 correct_answer="\ub85c\uceec \uc800\uc7a5\uc18c\uc640 \uc11c\ubc84 \ub3d9\uae30\ud654 \uc815\ucc45",
-                user_answer="WebSocket \ud578\ub4dc\uc170\uc774\ud06c\uac00 \ubb54\uac00\uc694?",
+                user_answer="Kotlin coroutine dispatcher\uac00 \ubb34\uc5c7\uc778\uac00\uc694?",
                 model="legacy-test-model",
             ),
             generator=fallback_model_generator,
@@ -1139,7 +1302,7 @@ class WorkflowRunnerTest(unittest.TestCase):
         self.assertFalse(response.fallback_used)
         self.assertEqual(response.route, "generation")
         self.assertEqual(response.model_used, "exaone3.5:2.4b")
-        self.assertIn("WebSocket", response.answer)
+        self.assertIn("dispatcher", response.answer)
         self.assertNotIn("\uc2b9\uc778\ub41c \uc9c0\uc2dd \uce74\ub4dc", response.answer)
 
     def test_non_korean_free_question_retries_fallback_model_before_template(self):

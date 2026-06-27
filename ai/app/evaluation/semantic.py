@@ -48,7 +48,7 @@ def judge_answer_semantics(
         _append_flag(flags, "evidence_missing")
         _append_flag(flags, "hallucination_suspected")
 
-    if _mentions_unretrieved_known_concept(answer, retrieved_concept_ids):
+    if "current_problem_context" not in flags and _mentions_unretrieved_known_concept(answer, retrieved_concept_ids):
         _append_flag(flags, "contradiction_suspected")
 
     return flags

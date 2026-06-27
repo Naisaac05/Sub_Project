@@ -15,6 +15,7 @@ from app.rag.retriever import (
     retrieve_context,
     select_retriever_adapter,
     select_tokenizer,
+    tokenize,
 )
 from app.schemas.rag_card import RagCard, RagPayloads, RagReview, CardStatus, PayloadStatus, ConceptDefinitionPayload
 
@@ -216,6 +217,10 @@ class RagRetrieverTest(unittest.TestCase):
 
         self.assertEqual(results[0].concept_id, "spring-n-plus-one")
         self.assertEqual(results[0].metadata["retriever"], "bm25")
+
+    def test_tokenize_preserves_n_plus_one_without_expanding_plain_n(self):
+        self.assertIn("n+1", tokenize("N+1이 뭐야?"))
+        self.assertNotIn("n+1", tokenize("O(n^2) complexity"))
 
     def test_lexical_retriever_copies_card_metadata(self):
         source_card = card("spring-n-plus-one", "N+1", "fetch join", "n+1")
