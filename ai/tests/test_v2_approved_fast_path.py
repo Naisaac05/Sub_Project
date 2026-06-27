@@ -382,7 +382,7 @@ class V2ApprovedFastPathWorkflowTest(unittest.TestCase):
         self.assertEqual(state.model_used, "v2-approved-payload")
         self.assertFalse(state.fallback_used)
 
-    def test_exact_approved_hit_bypasses_course_scope_limit_in_serve_mode(self):
+    def test_exact_approved_hit_from_another_course_is_redirected_in_serve_mode(self):
         state = ReviewWorkflowState(
             mode="free-question",
             request=AiGenerateRequest(
@@ -420,13 +420,13 @@ class V2ApprovedFastPathWorkflowTest(unittest.TestCase):
                 generator=lambda **_: (_ for _ in ()).throw(AssertionError("generator called")),
             )
 
-        self.assertEqual(state.route, "v2_approved_fast_path")
-        self.assertEqual(state.answer, "equals definition")
-        self.assertEqual(state.v2_fast_path_decision["card_id"], "java-equals")
-        self.assertIn("course_scope_applied", state.quality_flags)
+        self.assertEqual(state.route, "out_of_course_redirect")
+        self.assertIn("out_of_course", state.quality_flags)
+        self.assertEqual(state.matched_concept_id_override, "java-equals")
 
-    def test_serve_mode_miss_without_approved_evidence_skips_ollama(self):
+    def test_serve_mode_miss_without_approved_evidence_uses_ollama(self):
         decision = V2FastPathDecision(mode="serve", hit=False, reason="retrieval_miss")
+        generator_called = False
         state = ReviewWorkflowState(
             mode="free-question",
             request=AiGenerateRequest(user_answer="Java CopyOnWriteArrayList가 뭐야?"),
@@ -435,15 +435,21 @@ class V2ApprovedFastPathWorkflowTest(unittest.TestCase):
             ),
         )
 
-        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision):
-            state = generate_answer_node(
-                state,
-                generator=lambda **_: (_ for _ in ()).throw(AssertionError("generator called")),
+        def generator(**_kwargs):
+            nonlocal generator_called
+            generator_called = True
+            return (
+                "CopyOnWriteArrayList\ub294 \uc4f0\uae30 \uc2dc \ub0b4\ubd80 \ubc30\uc5f4\uc744 \ubcf5\uc0ac\ud574 "
+                "\uc77d\uae30 \uc791\uc5c5\uacfc\uc758 \ub3d9\uc2dc\uc131 \ucda9\ub3cc\uc744 \uc904\uc774\ub294 Java collection\uc785\ub2c8\ub2e4."
             )
 
-        self.assertEqual(state.answer, SAFE_GROUNDED_FALLBACK_ANSWER)
-        self.assertEqual(state.route, "grounded_fallback_safe_response")
-        self.assertTrue(state.fallback_used)
+        with patch("app.workflow.nodes.resolve_v2_approved_fast_path", return_value=decision):
+            state = generate_answer_node(state, generator=generator)
+
+        self.assertTrue(generator_called)
+        self.assertIn("CopyOnWriteArrayList", state.answer)
+        self.assertEqual(state.route, "generation")
+        self.assertFalse(state.fallback_used)
         self.assertIn("missing_approved_evidence", state.quality_flags)
 
     def test_serve_mode_miss_uses_approved_evidence_in_prompt(self):
@@ -574,12 +580,40 @@ class V2ApprovedFastPathStreamingTest(unittest.IsolatedAsyncioTestCase):
     def tearDown(self):
         clear_answer_cache()
 
-    async def test_stream_miss_without_evidence_skips_generator(self):
+    async def test_stream_blocks_exact_approved_card_from_another_course(self):
+        async def generator(**_kwargs):
+            raise AssertionError("cross-course approved question must not call Ollama")
+            yield "unreachable"
+
+        request = AiGenerateRequest(
+            user_answer="Spring IoC\ub780 \ubb34\uc5c7\uc778\uac00\uc694?",
+            course_id="frontend",
+            stream=True,
+        )
+        with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "true"}):
+            events = [
+                event
+                async for event in run_review_workflow_stream("free-question", request, generator)
+            ]
+
+        chunks = "".join(event["chunk"] for event in events if event["type"] == "chunk")
+        response = next(event["response"] for event in events if event["type"] == "done")
+        self.assertEqual(response.route, "out_of_course_redirect")
+        self.assertEqual(response.model_used, "template")
+        self.assertIn("out_of_course", response.quality_flags)
+        self.assertIn("\ucf54\uc2a4 \ubcf5\uc2b5 \ubc94\uc704 \ubc16", chunks)
+
+    async def test_stream_miss_without_evidence_uses_generator_before_quality_fallback(self):
         decision = V2FastPathDecision(mode="serve", hit=False, reason="retrieval_miss")
+        generator_called = False
 
         async def generator(**_):
-            raise AssertionError("generator called")
-            yield "unreachable"
+            nonlocal generator_called
+            generator_called = True
+            yield (
+                "CopyOnWriteArrayList\ub294 \uc4f0\uae30 \uc2dc \ub0b4\ubd80 \ubc30\uc5f4\uc744 \ubcf5\uc0ac\ud574 "
+                "\uc77d\uae30 \uc791\uc5c5\uacfc\uc758 \ub3d9\uc2dc\uc131 \ucda9\ub3cc\uc744 \uc904\uc774\ub294 Java collection\uc785\ub2c8\ub2e4."
+            )
 
         request = AiGenerateRequest(user_answer="Java CopyOnWriteArrayList가 뭐야?", stream=True)
         with patch("app.workflow.runner.resolve_v2_approved_fast_path", return_value=decision):
@@ -587,8 +621,10 @@ class V2ApprovedFastPathStreamingTest(unittest.IsolatedAsyncioTestCase):
 
         chunks = "".join(event["chunk"] for event in events if event["type"] == "chunk")
         response = next(event["response"] for event in events if event["type"] == "done")
-        self.assertEqual(chunks, SAFE_GROUNDED_FALLBACK_ANSWER)
-        self.assertEqual(response.route, "grounded_fallback_safe_response")
+        self.assertTrue(generator_called)
+        self.assertIn("CopyOnWriteArrayList", chunks)
+        self.assertEqual(response.route, "fallback_template")
+        self.assertTrue(response.fallback_used)
 
     async def test_stream_recovers_low_quality_generation_with_grounded_answer(self):
         decision = V2FastPathDecision(mode="serve", hit=False, reason="unsupported_intent")

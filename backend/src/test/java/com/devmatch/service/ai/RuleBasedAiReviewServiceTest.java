@@ -108,6 +108,108 @@ class RuleBasedAiReviewServiceTest {
     }
 
     @Test
+    void generateFirstQuestion_usesOllamaWhenPythonThrows() {
+        Fixtures fixtures = fixtures(1);
+        Question question = question(
+                fixtures.test(),
+                100L,
+                "Why override equals and hashCode together?",
+                List.of("inheritance", "collection equality"),
+                1,
+                1
+        );
+        when(pythonAiReviewClient.generateFirstQuestion(question, "collection equality", "inheritance"))
+                .thenThrow(new RuntimeException("python unavailable"));
+        when(ollamaAiReviewClient.generateFirstQuestion(question, "collection equality", "inheritance"))
+                .thenReturn(Optional.of("Ollama first question"));
+
+        Optional<String> answer = ReflectionTestUtils.invokeMethod(
+                service,
+                "generateFirstQuestion",
+                question,
+                "collection equality",
+                "inheritance"
+        );
+
+        assertThat(answer).contains("Ollama first question");
+    }
+
+    @Test
+    void generateFollowUp_usesOllamaWhenPythonThrows() {
+        Fixtures fixtures = fixtures(1);
+        Question question = question(
+                fixtures.test(),
+                100L,
+                "Why override equals and hashCode together?",
+                List.of("inheritance", "collection equality"),
+                1,
+                1
+        );
+        when(pythonAiReviewClient.generateFollowUp(
+                eq(question),
+                eq("collection equality"),
+                eq("inheritance"),
+                eq("I am not sure"),
+                eq(AiReviewEvaluation.NEEDS_REVIEW),
+                eq(2),
+                eq("previous"),
+                eq("equals/hashCode")
+        )).thenThrow(new RuntimeException("python unavailable"));
+        when(ollamaAiReviewClient.generateFollowUp(
+                question,
+                "collection equality",
+                "inheritance",
+                "I am not sure",
+                AiReviewEvaluation.NEEDS_REVIEW,
+                2
+        )).thenReturn(Optional.of("Ollama follow-up"));
+
+        Optional<String> answer = ReflectionTestUtils.invokeMethod(
+                service,
+                "generateFollowUp",
+                question,
+                "collection equality",
+                "inheritance",
+                "I am not sure",
+                AiReviewEvaluation.NEEDS_REVIEW,
+                2,
+                "previous",
+                "equals/hashCode"
+        );
+
+        assertThat(answer).contains("Ollama follow-up");
+    }
+
+    @Test
+    void generateFreeQuestionAnswer_usesOllamaWhenPythonThrows() {
+        Fixtures fixtures = fixtures(1);
+        Question question = question(
+                fixtures.test(),
+                100L,
+                "Why override equals and hashCode together?",
+                List.of("inheritance", "collection equality"),
+                1,
+                1
+        );
+        when(pythonAiReviewClient.answerFreeQuestion(question, "collection equality", "inheritance", "hashmap이 무엇인가요?"))
+                .thenThrow(new RuntimeException("python unavailable"));
+        when(ollamaAiReviewClient.answerFreeQuestion(question, "collection equality", "inheritance", "hashmap이 무엇인가요?"))
+                .thenReturn(Optional.of("Ollama free-question answer"));
+
+        Optional<AiGeneratedAnswer> answer = ReflectionTestUtils.invokeMethod(
+                service,
+                "generateFreeQuestionAnswer",
+                question,
+                "collection equality",
+                "inheritance",
+                "hashmap이 무엇인가요?"
+        );
+
+        assertThat(answer).isPresent();
+        assertThat(answer.orElseThrow().answer()).isEqualTo("Ollama free-question answer");
+    }
+
+    @Test
     void submitAnswer_saves_python_freeQuestionMetadataOnAiMessage() {
         Fixtures fixtures = fixtures(1);
         Question question = question(fixtures.test(), 100L, "aria-label이 필요한 상황은?", List.of("화면에 보이는 텍스트가 충분함", "아이콘 버튼에 접근 가능한 이름이 필요함"), 1, 1);

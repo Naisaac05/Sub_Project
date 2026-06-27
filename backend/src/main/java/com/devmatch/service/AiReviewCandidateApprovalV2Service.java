@@ -13,34 +13,95 @@ import com.devmatch.entity.AiReviewCandidateWorkflowPhase;
 import com.devmatch.repository.AiReviewCandidateAuditRepository;
 import com.devmatch.repository.AiReviewCandidateRepository;
 import com.devmatch.service.ai.AiReviewMetricSink;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 @Service
-@RequiredArgsConstructor
 public class AiReviewCandidateApprovalV2Service {
 
     private static final Logger log = LoggerFactory.getLogger(AiReviewCandidateApprovalV2Service.class);
     private static final int DEFAULT_RETENTION_DAYS = 365;
+    private static final TypeReference<LinkedHashMap<String, Object>> MAP_TYPE = new TypeReference<>() {
+    };
 
     private final AiReviewCandidateRepository candidateRepository;
     private final AiReviewCandidateAuditRepository auditRepository;
     private final AiReviewCandidateAdminService jsonlService;
     private final AiReviewMetricSink metricSink;
     private final AiReviewKnowledgeReindexer knowledgeReindexer;
+    private final ObjectMapper objectMapper;
+    private final Path conceptsV2Root;
+
+    @Autowired
+    public AiReviewCandidateApprovalV2Service(
+            AiReviewCandidateRepository candidateRepository,
+            AiReviewCandidateAuditRepository auditRepository,
+            AiReviewCandidateAdminService jsonlService,
+            AiReviewMetricSink metricSink,
+            AiReviewKnowledgeReindexer knowledgeReindexer,
+            @Value("${app.ai-review.concepts-v2-path:../ai/app/knowledge/concepts_v2}") String conceptsV2Root
+    ) {
+        this(candidateRepository, auditRepository, jsonlService, metricSink, knowledgeReindexer, new ObjectMapper(), Path.of(conceptsV2Root));
+    }
+
+    AiReviewCandidateApprovalV2Service(
+            AiReviewCandidateRepository candidateRepository,
+            AiReviewCandidateAuditRepository auditRepository,
+            AiReviewCandidateAdminService jsonlService,
+            AiReviewMetricSink metricSink,
+            AiReviewKnowledgeReindexer knowledgeReindexer
+    ) {
+        this(candidateRepository, auditRepository, jsonlService, metricSink, knowledgeReindexer, new ObjectMapper(), Path.of("../ai/app/knowledge/concepts_v2"));
+    }
+
+    AiReviewCandidateApprovalV2Service(
+            AiReviewCandidateRepository candidateRepository,
+            AiReviewCandidateAuditRepository auditRepository,
+            AiReviewCandidateAdminService jsonlService,
+            AiReviewMetricSink metricSink,
+            AiReviewKnowledgeReindexer knowledgeReindexer,
+            ObjectMapper objectMapper,
+            Path conceptsV2Root
+    ) {
+        this.candidateRepository = candidateRepository;
+        this.auditRepository = auditRepository;
+        this.jsonlService = jsonlService;
+        this.metricSink = metricSink;
+        this.knowledgeReindexer = knowledgeReindexer;
+        this.objectMapper = objectMapper;
+        this.conceptsV2Root = conceptsV2Root;
+    }
 
     @Transactional(readOnly = true)
     public List<AiReviewCandidateV2Response> listCandidates() {
         logCandidateBacklog("list");
-        return candidateRepository.findAllByOrderByCreatedAtDesc().stream()
+        List<AiReviewCandidateV2Response> responses = new ArrayList<>(candidateRepository.findAllByOrderByCreatedAtDesc().stream()
                 .map(this::toResponse)
-                .toList();
+                .toList());
+        responses.addAll(listApprovedConceptCards(responses));
+        return responses;
     }
 
     @Transactional
@@ -254,6 +315,153 @@ public class AiReviewCandidateApprovalV2Service {
                 candidate.getCreatedAt(),
                 candidate.getUpdatedAt()
         );
+    }
+
+    private List<AiReviewCandidateV2Response> listApprovedConceptCards(List<AiReviewCandidateV2Response> existing) {
+        if (!Files.isDirectory(conceptsV2Root)) {
+            return List.of();
+        }
+        Set<String> existingCardIds = new HashSet<>();
+        for (AiReviewCandidateV2Response response : existing) {
+            if (response.status() == AiReviewCandidateStatus.APPROVED
+                    && response.workflowPhase() == AiReviewCandidateWorkflowPhase.APPROVED
+                    && !isBlank(response.publishedCardId())) {
+                existingCardIds.add(response.publishedCardId());
+            }
+        }
+
+        try (Stream<Path> paths = Files.walk(conceptsV2Root)) {
+            List<Path> jsonPaths = paths
+                    .filter(Files::isRegularFile)
+                    .filter(path -> path.getFileName().toString().endsWith(".json"))
+                    .sorted(Comparator.comparing(path -> conceptsV2Root.relativize(path).toString()))
+                    .toList();
+            List<AiReviewCandidateV2Response> responses = new ArrayList<>();
+            long syntheticId = -1L;
+            for (Path path : jsonPaths) {
+                AiReviewCandidateV2Response response = approvedCardResponse(path, syntheticId);
+                if (response == null) {
+                    continue;
+                }
+                if (existingCardIds.add(response.publishedCardId())) {
+                    responses.add(response);
+                    syntheticId--;
+                }
+            }
+            return responses;
+        } catch (IOException ex) {
+            log.warn("Failed to list approved concepts_v2 cards for AI review candidates", ex);
+            return List.of();
+        }
+    }
+
+    private AiReviewCandidateV2Response approvedCardResponse(Path path, long id) {
+        try {
+            Map<String, Object> card = objectMapper.readValue(path.toFile(), MAP_TYPE);
+            Map<String, Object> review = objectMap(card.get("review"));
+            if (!"approved".equalsIgnoreCase(stringValue(review.get("card_status")))) {
+                return null;
+            }
+            String cardId = requiredString(card.get("card_id"));
+            String category = blankToDefault(stringValue(card.get("category")), "uncategorized");
+            String term = blankToDefault(stringValue(card.get("term")), cardId);
+            String definition = conceptDefinition(card);
+            String reviewer = blankToDefault(stringValue(review.get("reviewer")), "concepts_v2");
+            LocalDateTime reviewedAt = parseDateTime(stringValue(review.get("approved_at")));
+            String publishedPath = "ai/app/knowledge/concepts_v2/" + conceptsV2Root.relativize(path).toString().replace('\\', '/');
+
+            return new AiReviewCandidateV2Response(
+                    id,
+                    cardId,
+                    term,
+                    category,
+                    AiReviewCandidateSource.MANUAL,
+                    AiReviewCandidateStatus.APPROVED,
+                    AiReviewCandidateWorkflowPhase.APPROVED,
+                    definition,
+                    "",
+                    null,
+                    null,
+                    null,
+                    displaySourceQuestion(card),
+                    term,
+                    "concepts_v2",
+                    null,
+                    "approved_concepts_v2_card",
+                    null,
+                    cardId,
+                    publishedPath,
+                    reviewer,
+                    reviewedAt,
+                    null,
+                    reviewedAt,
+                    reviewedAt
+            );
+        } catch (RuntimeException | IOException ex) {
+            log.warn("Skipping unreadable approved concepts_v2 card: {}", path, ex);
+            return null;
+        }
+    }
+
+    private static String conceptDefinition(Map<String, Object> card) {
+        Map<String, Object> payloads = objectMap(card.get("payloads"));
+        Map<String, Object> definition = objectMap(payloads.get("CONCEPT_DEFINITION"));
+        return blankToDefault(stringValue(definition.get("content")), "");
+    }
+
+    private static String displaySourceQuestion(Map<String, Object> card) {
+        String readableSourceQuestion = blankToDefault(
+                stringValue(card.get("source_question")),
+                stringValue(card.get("source_question_text"))
+        );
+        if (!isBlank(readableSourceQuestion)) {
+            return readableSourceQuestion;
+        }
+        Object values = card.get("source_question_ids");
+        if (values instanceof List<?> list && !list.isEmpty()) {
+            return stringValue(list.get(0));
+        }
+        return "";
+    }
+
+    private static Map<String, Object> objectMap(Object value) {
+        if (value instanceof Map<?, ?> map) {
+            Map<String, Object> result = new LinkedHashMap<>();
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                if (entry.getKey() instanceof String key) {
+                    result.put(key, entry.getValue());
+                }
+            }
+            return result;
+        }
+        return Map.of();
+    }
+
+    private static String requiredString(Object value) {
+        String result = stringValue(value);
+        if (result.isBlank()) {
+            throw new IllegalArgumentException("Required card field is blank");
+        }
+        return result;
+    }
+
+    private static String stringValue(Object value) {
+        return value == null ? "" : String.valueOf(value);
+    }
+
+    private static LocalDateTime parseDateTime(String value) {
+        if (isBlank(value)) {
+            return null;
+        }
+        try {
+            return Instant.parse(value).atOffset(ZoneOffset.UTC).toLocalDateTime();
+        } catch (DateTimeParseException ignored) {
+            try {
+                return LocalDateTime.parse(value);
+            } catch (DateTimeParseException ex) {
+                return null;
+            }
+        }
     }
 
     private static int retentionDays(AiReviewCandidateReviewV2Request request) {

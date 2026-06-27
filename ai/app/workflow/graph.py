@@ -77,7 +77,15 @@ def build_review_state_graph(generator: Generator = call_ollama):
     graph.set_entry_point("retrieve_context")
     _add_error_aware_edge(graph, "retrieve_context", "rule_evaluate")
     _add_error_aware_edge(graph, "rule_evaluate", "generate_answer")
-    _add_error_aware_edge(graph, "generate_answer", "validate_answer")
+    graph.add_conditional_edges(
+        "generate_answer",
+        _next_after_generate_answer,
+        {
+            "error_state": "error_state",
+            "validate_answer": "validate_answer",
+            "cache_answer": "cache_answer",
+        },
+    )
     _add_error_aware_edge(graph, "validate_answer", "confidence_gate")
     _add_error_aware_edge(graph, "confidence_gate", "fallback_answer")
     graph.add_conditional_edges(
@@ -201,6 +209,14 @@ def _add_error_aware_edge(graph, source: str, target: str) -> None:
             target: target,
         },
     )
+
+
+def _next_after_generate_answer(state: ReviewWorkflowState) -> str:
+    if state.route == "error_state":
+        return "error_state"
+    if state.route in {"v2_approved_fast_path", "lightweight_only_miss"}:
+        return "cache_answer"
+    return "validate_answer"
 
 
 def _next_after_fallback(state: ReviewWorkflowState) -> str:
