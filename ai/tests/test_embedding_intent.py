@@ -27,6 +27,32 @@ class EmbeddingIntentClassifierTest(unittest.TestCase):
         self.assertEqual(result.sub_intent, "definition")
         self.assertEqual(result.topic, "useEffect")
 
+    def test_korean_approved_card_definition_skips_embedding(self):
+        with patch(
+            "app.workflow.embedding_intent.EmbeddingIntentClassifier.classify",
+            side_effect=AssertionError("approved Korean definition must not call embedding"),
+        ):
+            result = classify_free_question_with_embeddings(
+                "\ubc18\uc751\ud615\uc774\ub780 \ubb34\uc5c7\uc778\uac00\uc694?"
+            )
+
+        self.assertEqual(result.intent, "concept_definition")
+        self.assertEqual(result.sub_intent, "definition")
+        self.assertEqual(result.topic, "\ubc18\uc751\ud615")
+
+    def test_korean_non_card_definition_is_not_forced_to_technical_intent(self):
+        fallback = intent_from_label("UNKNOWN", "\uc0ac\ub791\uc774\ub780 \ubb34\uc5c7\uc778\uac00\uc694?", 0.4)
+        with patch(
+            "app.workflow.embedding_intent.EmbeddingIntentClassifier.classify",
+            return_value=fallback,
+        ) as classify:
+            result = classify_free_question_with_embeddings(
+                "\uc0ac\ub791\uc774\ub780 \ubb34\uc5c7\uc778\uac00\uc694?"
+            )
+
+        classify.assert_called_once()
+        self.assertEqual(result.intent, "unknown")
+
     def test_polite_technical_definition_skips_embedding(self):
         with patch(
             "app.workflow.embedding_intent.EmbeddingIntentClassifier.classify",

@@ -40,6 +40,7 @@ QUERY_PHRASE_ALIASES = (
 Reranker = Callable[[list["RetrievedContext"], str], list["RetrievedContext"]]
 RetrieverCallable = Callable[[str, int], list["RetrievedContext"]]
 _KIWI = None
+_KOREAN_QUERY_SUFFIXES = ("이라는", "라는", "이란", "란", "에서", "으로", "은", "는", "이", "가", "을", "를", "와", "과", "의")
 
 @dataclass(frozen=True)
 class RetrievedContext:
@@ -544,13 +545,18 @@ def tokenize(text: str) -> list[str]:
             continue
         expanded.append(token)
         expanded.extend(TOKEN_ALIASES.get(token, ()))
-        if token == "n":
-            expanded.append("n+1")
     return expanded
 
 
 def tokenize_query(text: str) -> list[str]:
     expanded = tokenize(text)
+    for index, token in enumerate(tuple(expanded)):
+        if not re.fullmatch(r"[가-힣]+", token):
+            continue
+        for suffix in _KOREAN_QUERY_SUFFIXES:
+            if token.endswith(suffix) and len(token) > len(suffix) + 1:
+                expanded[index] = token[:-len(suffix)]
+                break
     lowered = text.lower()
     for markers, aliases in QUERY_PHRASE_ALIASES:
         if all(marker in lowered for marker in markers):

@@ -6,7 +6,7 @@ import time
 from app.ollama.client import FALLBACK_MODEL, call_ollama
 from app.prompts import build_prompt, prompt_version_for_mode, prompt_strategy_for_mode, compute_prompt_hash
 from app.rag.documents import load_concept_cards
-from app.rag.retriever import retrieve_context
+from app.rag.retriever import retrieve_context, tokenize_query
 from app.schemas import AiGenerateRequest
 from app.schemas.rag_card import CardStatus, RagCard
 from app.scoring import ConfidenceInputs, ConfidenceResult, calculate_confidence
@@ -96,10 +96,6 @@ def generate_answer_node(
     if state.mode == "free-question":
         scope_decision = _course_scope_for_state(state)
         if scope_decision.scope == "out_of_course_tech":
-            v2_decision = _resolve_unscoped_v2_fast_path_for_exact_hit(state, learner_query, scope_decision)
-            state.v2_fast_path_decision = v2_decision.metadata()
-            if v2_decision.mode == "serve" and v2_decision.hit:
-                return _v2_approved_fast_path_state(state, v2_decision)
             return _out_of_course_redirect_state(state, scope_decision.matched_card_id)
         if scope_decision.scope == "scope_unknown":
             _append_quality_flag(state, "scope_unknown")
@@ -127,17 +123,20 @@ def generate_answer_node(
             else None,
         )
         if grounded_evidence is None:
-            return _grounded_safe_response(state, ("missing_approved_evidence",))
+            _append_quality_flag(state, "missing_approved_evidence")
+            if _allows_current_problem_generation(scope_decision):
+                _append_quality_flag(state, "current_problem_context")
         from app.rag.retriever import RetrievedContext
-        state.contexts = [
-            RetrievedContext(
-                concept_id=grounded_evidence.card_id,
-                title=grounded_evidence.term,
-                content=grounded_prompt_context(grounded_evidence),
-                score=grounded_evidence.score,
-                metadata={"retriever": "approved_grounded_fallback", "version": "v2-approved"},
-            )
-        ]
+        if grounded_evidence is not None:
+            state.contexts = [
+                RetrievedContext(
+                    concept_id=grounded_evidence.card_id,
+                    title=grounded_evidence.term,
+                    content=grounded_prompt_context(grounded_evidence),
+                    score=grounded_evidence.score,
+                    metadata={"retriever": "approved_grounded_fallback", "version": "v2-approved"},
+                )
+            ]
 
     if lightweight_only_enabled():
         return lightweight_only_miss_state(state.mode, state.request)
@@ -482,6 +481,7 @@ def validate_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
             "scope_unknown",
             "course_scope_applied",
             "course_scope_exact_approved_hit",
+            "current_problem_context",
             "missing_approved_evidence",
             "non_korean",
             "incomplete_answer",
@@ -563,8 +563,11 @@ def fallback_answer_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
 
     state.fallback_reason = state.fallback_reason or "quality_validation"
     reason_message = _fallback_message(state.fallback_reason)
+    fallback_body = _fallback_for_state(state)
     state.answer = (
-        f"{reason_message} {_fallback_for_state(state)}"
+        fallback_body
+        if "current_problem_context" in state.quality_flags and state.fallback_reason == "quality_validation"
+        else f"{reason_message} {fallback_body}"
         if state.fallback_reason == "quality_validation"
         else reason_message
     )
@@ -621,15 +624,13 @@ def _full_context_query(request: AiGenerateRequest, learner_query: str | None = 
 
 
 def _fallback_for_state(state: ReviewWorkflowState) -> str:
-    if (
-        state.mode == "free-question"
-        and state.free_question_intent
-        and state.free_question_intent.rag_policy == "latest_question_only"
-    ):
+    if state.mode == "free-question" and state.free_question_intent:
         topic = state.free_question_intent.topic or state.request.user_answer.strip()
         specific = _topic_specific_fallback(topic, state.request.user_answer)
         if specific:
             return specific
+        if state.free_question_intent.rag_policy != "latest_question_only":
+            return korean_fallback(state.mode, state.request)
         return _contextual_free_question_fallback(topic, state.request)
 
     return korean_fallback(state.mode, state.request)
@@ -668,29 +669,62 @@ def _approved_cards_for_scope():
 
 
 def _course_scope_for_state(state: ReviewWorkflowState) -> CourseScopeDecision:
-    return resolve_course_scope(
+    decision = resolve_course_scope(
         query=_learner_query_for_state(state),
         course_id=state.request.course_id,
         intent=state.free_question_intent,
         approved_cards=_approved_cards_for_scope(),
     )
+    if (
+        decision.scope in {"out_of_course_tech", "course_card_miss", "not_applicable"}
+        and _learner_query_matches_current_problem(state)
+    ):
+        return CourseScopeDecision(
+            "course_card_miss",
+            decision.current_course,
+            decision.allowed_card_ids,
+            decision.matched_card_id,
+            "current_problem_context",
+        )
+    return decision
 
 
-def _resolve_unscoped_v2_fast_path_for_exact_hit(
-    state: ReviewWorkflowState,
-    learner_query: str,
-    scope_decision: CourseScopeDecision,
-):
-    v2_decision = resolve_v2_approved_fast_path(
-        learner_query,
-        state.free_question_intent,
-        selected_answer=state.request.selected_answer,
-    )
-    if v2_decision.mode == "serve" and v2_decision.hit:
-        _append_quality_flag(state, "course_scope_applied")
-        _append_quality_flag(state, "course_scope_exact_approved_hit")
-        state.matched_concept_id_override = v2_decision.card_id or scope_decision.matched_card_id
-    return v2_decision
+def _allows_current_problem_generation(scope_decision: CourseScopeDecision | None) -> bool:
+    return bool(scope_decision and scope_decision.reason == "current_problem_context")
+
+
+def _learner_query_matches_current_problem(state: ReviewWorkflowState) -> bool:
+    query_tokens = _meaningful_scope_tokens(_learner_query_for_state(state))
+    if not query_tokens:
+        return False
+    request = state.request
+    context_parts = [
+        request.question,
+        request.correct_answer,
+        request.selected_answer,
+        request.active_concept,
+        *(request.options or []),
+    ]
+    context_tokens = _meaningful_scope_tokens(" ".join(part for part in context_parts if part))
+    return bool(query_tokens & context_tokens)
+
+
+def _meaningful_scope_tokens(text: str) -> set[str]:
+    generic = {
+        "what",
+        "why",
+        "how",
+        "the",
+        "and",
+        "or",
+        "is",
+        "are",
+    }
+    return {
+        token
+        for token in tokenize_query(text)
+        if token not in generic and (len(token) > 1 or any(char in token for char in "+#@"))
+    }
 
 
 def _v2_approved_fast_path_state(
@@ -704,6 +738,7 @@ def _v2_approved_fast_path_state(
     state.fallback_used = False
     state.route = "v2_approved_fast_path"
     state.answer_style = _answer_style_for_state(state)
+    state.matched_concept_id_override = v2_decision.card_id
     state.contexts = []
     return state
 
@@ -742,6 +777,23 @@ def _append_quality_flag(state: ReviewWorkflowState, flag: str) -> None:
 def _topic_specific_fallback(topic: str, user_answer: str) -> str | None:
     normalized = normalize_question(" ".join((topic, user_answer))).lower()
     compact = normalized.replace(" ", "")
+    if "n+1" in normalized or "n+1" in compact:
+        return (
+            "N+1 문제는 목록을 조회하는 1번의 쿼리 이후, 각 항목의 연관 데이터를 가져오려고 N번의 추가 쿼리가 반복되는 성능 문제입니다. "
+            "이 문제에서는 연관 데이터를 한 번에 함께 조회하는 `fetch join` 또는 `EntityGraph`가 N+1을 줄이는 대표적인 방법이라 정답 기준이 됩니다."
+        )
+    if "springsecurity" in compact or ("spring" in normalized and "security" in normalized):
+        return (
+            "Spring Security는 Spring 애플리케이션에서 인증과 인가를 처리하는 보안 프레임워크입니다. "
+            "로그인한 사용자가 누구인지 확인하고, 그 사용자가 특정 기능에 접근할 권한이 있는지를 검사합니다. "
+            "이 문제에서는 이미 인증된 사용자 정보를 컨트롤러 메서드에서 꺼내 쓰는 방식이 핵심이므로 `@AuthenticationPrincipal`이 정답 기준입니다. "
+            "`@RequestBody`는 HTTP 요청 본문을 객체로 받는 용도라 현재 로그인 사용자 정보를 가져오는 책임과 다릅니다."
+        )
+    if "@authenticationprincipal" in normalized or "authenticationprincipal" in normalized:
+        return (
+            "`@AuthenticationPrincipal`은 Spring Security가 인증해 둔 현재 사용자 정보를 컨트롤러 파라미터로 주입받을 때 사용하는 애너테이션입니다. "
+            "요청 본문을 읽는 `@RequestBody`와 달리, 보안 컨텍스트에 저장된 로그인 사용자 주체를 꺼내는 역할을 합니다."
+        )
     if "equals" in normalized and "==" in normalized:
         return (
             "Java에서 `equals()`는 객체의 논리적 동등성, 즉 내용이나 값이 같은지를 비교합니다. "
