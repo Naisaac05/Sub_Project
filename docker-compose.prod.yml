@@ -1,0 +1,66 @@
+# DevMatch 운영용 compose
+# - MySQL은 RDS(외부)이므로 여기 없음. DB_HOST 로 RDS 엔드포인트 지정.
+# - 토폴로지성 env(서비스명 주소)는 여기, 비밀/값성 env는 .env.prod 에.
+# 사용: docker compose -f docker-compose.prod.yml up -d --build
+services:
+  backend:
+    build: ./backend # backend/Dockerfile 이 prod 프로필 강제
+    env_file: [.env.prod]
+    environment:
+      REDIS_HOST: redis
+      PYTHON_AI_BASE_URL: http://ai:8001 # 백엔드 → AI(FastAPI)
+      FILE_UPLOAD_DIR: /app/uploads
+    volumes:
+      - uploads_data:/app/uploads # 업로드 영속(EBS)
+    depends_on: [redis, ai]
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        BACKEND_URL: http://backend:8080 # rewrites는 빌드타임에 구워짐 → build arg
+    depends_on: [backend]
+    restart: unless-stopped
+
+  ai:
+    build: ./ai
+    env_file: [.env.prod]
+    environment:
+      ENVIRONMENT: prod # production_config 검증 활성화
+      OLLAMA_BASE_URL: http://ollama:11434 # AI → Ollama
+    volumes:
+      - chroma_index:/app/app/vectorstore # 인덱스 영속
+    depends_on: [ollama]
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_models:/root/.ollama # 모델 영속(재다운로드 방지)
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --appendfsync everysec --save 900 1
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data # 발급된 TLS 인증서 영속
+      - caddy_config:/config
+    depends_on: [frontend, backend]
+    restart: unless-stopped
+
+volumes:
+  uploads_data:
+  chroma_index:
+  ollama_models:
+  redis_data:
+  caddy_data:
+  caddy_config:
