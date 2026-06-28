@@ -1,0 +1,23 @@
+# =====================================================================
+# terraform.tfvars.example — 변수 값 채우는 예시
+# ---------------------------------------------------------------------
+# 사용법: 이 파일을 terraform.tfvars 로 복사한 뒤 본인 값으로 채운다.
+#   cp terraform.tfvars.example terraform.tfvars
+# terraform.tfvars 는 .gitignore 에 의해 커밋되지 않는다(비밀번호 보호).
+# Terraform 은 terraform.tfvars 를 자동으로 읽어 변수를 채운다.
+# =====================================================================
+
+region       = "ap-northeast-2"
+project_name = "devmatch"
+
+# SSH(22번)를 허용할 내 공인 IP. https://ifconfig.me 등에서 확인 후 /32 를 붙인다.
+my_ip_cidr = "1.2.3.4/32"
+
+# 미리 만들어 둔 EC2 Key Pair 이름. 없으면 빈 문자열로 두고 SSM 으로 접속.
+ec2_ssh_key_name = ""
+
+# RDS 마스터 비밀번호 (8자 이상, 따옴표 안에)
+db_password = "CHANGE_ME_strong_password"
+
+# 고가용성 체험용. 비용 약 2배라 학습 땐 false 권장.
+db_multi_az = false
