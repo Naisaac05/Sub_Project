@@ -10,9 +10,9 @@ COPY requirements.txt requirements-rag.txt ./
 RUN pip install --no-cache-dir -r requirements.txt -r requirements-rag.txt
 
 COPY . .
-
-# Chroma 인덱스를 이미지에 baking (실패해도 빌드는 진행 — 볼륨/런타임 재생성 가능)
-RUN python scripts/reindex_knowledge.py || true
+# Chroma 인덱스는 app/vectorstore/ 에 사전 빌드되어 git 추적됨 → 위 COPY 로 이미지에 포함된다.
+# (재생성 스크립트 scripts/ 는 ai/.dockerignore 로 제외되므로 런타임/빌드에 의존하지 않음)
+# 참고: 쿼리 임베딩(bge-m3)은 첫 호출 시 런타임 다운로드됨(EC2 네트워크 필요).
 
 EXPOSE 8001
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
