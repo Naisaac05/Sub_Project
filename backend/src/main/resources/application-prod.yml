@@ -6,7 +6,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      # 운영 기본은 validate(스키마 검증만). 최초 배포 1회만 JPA_DDL_AUTO=update 로 생성.
+      ddl-auto: ${JPA_DDL_AUTO:validate}
     show-sql: false
 
   data:
