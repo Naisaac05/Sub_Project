@@ -18,6 +18,8 @@ ENV NODE_ENV=production
 # output: 'standalone' 산출물만 복사 (경량)
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
-COPY --from=build /app/public ./public
+# 참고: 이 프로젝트엔 public/ 디렉터리가 없어 복사하지 않음.
+# 추후 frontend/public 을 추가하면 아래 줄을 살릴 것:
+#   COPY --from=build /app/public ./public
 EXPOSE 3000
 CMD ["node", "server.js"]
