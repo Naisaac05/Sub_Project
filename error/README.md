@@ -40,7 +40,7 @@
 ```
 
 ## 인덱스
-
+- [2026-06-29 AWS(EC2 ARM) 첫 배포 빌드/부팅 함정 7건 — 로컬 amd64에선 안 보이던 것들](2026-06-29-aws-arm-prod-deploy-gotchas.md)
 - [2026-06-27 타 코스 approved 카드가 코스 범위 제한을 우회함](2026-06-27-cross-course-approved-card-bypassed-scope.md)
 - [2026-06-27 Approved 한국어 카드 정의 질문 의도 오분류](2026-06-27-approved-korean-card-intent-misclassification.md)
 - [2026-06-27 AI review 정상 스트림 강제 취소와 approved 카드 한국어 조사 검색 누락](2026-06-27-ai-review-stream-abort-and-approved-card-query-gap.md)

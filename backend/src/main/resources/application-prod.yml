@@ -6,7 +6,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      # 운영 기본은 validate(스키마 검증만). 최초 배포 1회만 JPA_DDL_AUTO=update 로 생성.
+      ddl-auto: ${JPA_DDL_AUTO:validate}
     show-sql: false
 
   data:
@@ -16,6 +17,8 @@ spring:
 
 server:
   port: 8080
+  # Caddy/ALB 뒤에서 X-Forwarded-* 를 신뢰해 HTTPS 스킴·호스트를 정확히 인식
+  forward-headers-strategy: framework
 
 jwt:
   secret: ${JWT_SECRET}
@@ -23,7 +26,8 @@ jwt:
 # 관리자 환불 — prod 는 실제 토스 API 호출
 app:
   payment:
-    toss-cancel-enabled: true
+    # 학생 포트폴리오 정책: 기본 false. 실호출이 필요할 때만 env 로 true + test 키 사용.
+    toss-cancel-enabled: ${TOSS_CANCEL_ENABLED:false}
   auth:
     refresh-cookie:
       # 운영은 HTTPS 전제 — REFRESH_COOKIE_SECURE 환경변수 누락과 무관하게 Secure 플래그를 항상 강제

@@ -1,0 +1,18 @@
+# DevMatch 리버스 프록시 + 자동 HTTPS (Let's Encrypt)
+# 도메인 교체 지점: 아래 호스트명을 본인 도메인으로.
+devmatch.duckdns.org {
+	encode gzip
+
+	# API / 업로드는 백엔드로
+	handle /api/* {
+		reverse_proxy backend:8080
+	}
+	handle /uploads/* {
+		reverse_proxy backend:8080
+	}
+
+	# 그 외 전부 프론트(Next.js)로
+	handle {
+		reverse_proxy frontend:3000
+	}
+}
