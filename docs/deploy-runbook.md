@@ -107,6 +107,34 @@ terraform output      # ec2_public_ip, rds_endpoint 기록
 
 ---
 
+## ⚡ 빠른 길 (권장): `deploy.ps1` 한 줄 배포
+
+§1 사전준비 + §3 Terraform 으로 인프라가 있고, 루트에 `.env.prod` 만 만들면
+이후 코드 전송·빌드·기동(§4~7)을 **한 줄**로 자동 실행할 수 있다. (스크립트엔 비밀값 없음 — `.env.prod`에서 읽어 전송)
+
+**1) `.env.prod` 준비** (루트, gitignored — 본인 값으로 채움)
+```bash
+cp .env.prod.example .env.prod
+# 편집기로 열어 §11 표대로 본인 값 입력 (DB_HOST, DB_PASSWORD, JWT_SECRET, AI_REVIEW_SERVICE_TOKEN 등)
+```
+> ⚠️ 실제 비밀값은 `.env.prod` 에만. `.gitignore` 로 커밋 안 됨.
+
+**2) 실행** (PowerShell, 프로젝트 루트)
+```powershell
+.\deploy.ps1                  # 코드 재배포(빌드+기동) — 가장 흔함
+.\deploy.ps1 -Infra           # terraform apply 먼저(인프라 생성/갱신) 후 배포
+.\deploy.ps1 -Models          # 배포 + Ollama 모델 pull
+.\deploy.ps1 -Infra -Models   # 최초 전체 배포
+
+# terraform 이 PATH에 없으면:  .\deploy.ps1 -Terraform "C:\...\terraform.exe"
+# SSH 키 경로가 다르면:        .\deploy.ps1 -Key "C:\path\to\key.pem"
+```
+스크립트(`deploy.ps1` + EC2측 `remote-build.sh`)가 하는 일: EC2 IP를 `terraform output`에서 읽고 → 코드 `git archive`→`scp` → `.env.prod` 전송 → 원격 빌드(클래식 빌더)→`docker compose up -d`. 모델 pull은 `-Models`.
+
+> 아래 §4~7 은 이 스크립트가 자동으로 하는 일을 **수동으로 풀어쓴 것**(이해·디버깅용).
+
+---
+
 ## 4. 코드를 EC2로 전송 (방법 A — scp)
 
 > 방법 B(GitHub push→clone)는 [deploy-guide.md](deploy-guide.md) 부록 참고. 첫 배포는 A가 간단.
@@ -212,7 +240,7 @@ PY
 | 다시 켜기(앱 자동복구, IP 유지) | `aws ec2 start-instances --instance-ids <id> --region ap-northeast-2` |
 | 전부 삭제(~$0) | `terraform -chdir=infra/terraform/aws destroy` |
 | 로그 | `docker compose -f docker-compose.prod.yml logs --tail=50 <service>` |
-| 재배포(방법 A) | §4 다시 → EC2서 `docker build ...` + `docker compose ... up -d` |
+| 재배포 | **`.\deploy.ps1`** (한 줄) — 또는 수동 §4~6 |
 | **스키마 굳히기** | 첫 부팅 성공 후 `.env.prod` 의 `JPA_DDL_AUTO=validate` 로 변경 → backend 재생성 |
 
 - EIP 덕분에 stop/start 해도 IP·DuckDNS 유지. EC2 stop 중에도 RDS는 소액 과금(며칠↑ 미사용이면 destroy).
