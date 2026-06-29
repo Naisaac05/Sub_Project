@@ -19,7 +19,12 @@ def semantic_evaluate_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
     )
     if "contradiction_suspected" in state.quality_flags and not state.fallback_used:
         state.fallback_reason = "quality_validation"
-        state.answer = f"{_fallback_message(state.fallback_reason)} {_fallback_for_state(state)}"
+        fallback_body = _fallback_for_state(state)
+        state.answer = (
+            fallback_body
+            if "current_problem_context" in state.quality_flags
+            else f"{_fallback_message(state.fallback_reason)} {fallback_body}"
+        )
         state.model_used = "template"
         state.fallback_used = True
         state.route = "fallback_template"

@@ -82,7 +82,7 @@ app:
     auto-candidates-path: ${AI_REVIEW_AUTO_CANDIDATES_PATH:../ai/app/knowledge/candidates/auto_candidates.jsonl}
     concepts-v2-path: ${AI_REVIEW_CONCEPTS_V2_PATH:../ai/app/knowledge/concepts_v2}
     streaming-enabled: ${AI_REVIEW_STREAMING_ENABLED:false}
-    stream-timeout-seconds: ${AI_REVIEW_STREAM_TIMEOUT_SECONDS:45}
+    stream-timeout-seconds: ${AI_REVIEW_STREAM_TIMEOUT_SECONDS:120}
     openai:
       api-key: ${OPENAI_API_KEY:}
       model: ${OPENAI_MODEL:gpt-4.1-mini}

@@ -266,22 +266,41 @@ def _obvious_rule_intent(text: str) -> FreeQuestionIntent | None:
     if not isinstance(text, str):
         return None
     normalized = re.sub(r"\s+", "", text).lower()
-    if not re.search(r"[a-z][a-z0-9+#.-]{1,}", text, re.IGNORECASE):
-        return None
+    has_ascii_technical_token = bool(
+        re.search(r"[a-z][a-z0-9+#.-]{1,}", text, re.IGNORECASE)
+    )
     if re.search(
         r"(?:가|이|은|는)?(?:뭐야|뭔가요|뭐예요|뭐에요|무엇이야|무엇인가|무엇인가요|뭔데|란)\??$",
         normalized,
     ):
+        approved_topic = None if has_ascii_technical_token else _approved_card_topic(text)
+        if not has_ascii_technical_token and approved_topic is None:
+            return None
         intent = classify_free_question_rule_based(text)
         return FreeQuestionIntent(
             "concept_definition",
             "latest_question_only",
-            intent.topic,
+            approved_topic or intent.topic,
             max(intent.confidence, 0.95),
             False,
             "definition",
         )
     return None
+
+
+def _approved_card_topic(text: str) -> str | None:
+    from app.workflow.v2_approved_fast_path import (
+        _has_specific_anchor,
+        approved_v2_card_ids,
+        load_allowlisted_v2_cards,
+    )
+
+    matches = {
+        card.term
+        for card in load_allowlisted_v2_cards(approved_v2_card_ids())
+        if _has_specific_anchor(card, text)
+    }
+    return next(iter(matches)) if len(matches) == 1 else None
 
 
 def _has_strong_technical_signal(text: str) -> bool:

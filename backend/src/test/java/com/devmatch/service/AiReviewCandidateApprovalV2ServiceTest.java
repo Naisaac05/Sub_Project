@@ -3,6 +3,7 @@ package com.devmatch.service;
 import com.devmatch.dto.aireview.candidate.AiReviewCandidateResponse;
 import com.devmatch.dto.aireview.candidate.AiReviewCandidateCaptureRequest;
 import com.devmatch.dto.aireview.candidate.AiReviewCandidateReviewV2Request;
+import com.devmatch.dto.aireview.candidate.AiReviewCandidateV2Response;
 import com.devmatch.entity.AiReviewCandidate;
 import com.devmatch.entity.AiReviewCandidateAudit;
 import com.devmatch.entity.AiReviewCandidateReviewAction;
@@ -12,8 +13,12 @@ import com.devmatch.entity.AiReviewCandidateWorkflowPhase;
 import com.devmatch.repository.AiReviewCandidateAuditRepository;
 import com.devmatch.repository.AiReviewCandidateRepository;
 import com.devmatch.service.ai.AiReviewMetricSink;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +40,118 @@ class AiReviewCandidateApprovalV2ServiceTest {
     private final AiReviewKnowledgeReindexer knowledgeReindexer = mock(AiReviewKnowledgeReindexer.class);
     private final AiReviewCandidateApprovalV2Service service =
             new AiReviewCandidateApprovalV2Service(candidateRepository, auditRepository, jsonlService, metricSink, knowledgeReindexer);
+
+    @TempDir
+    Path tempDir;
+
+    @Test
+    void listCandidates_includesApprovedConceptsV2Cards() {
+        when(candidateRepository.findAllByOrderByCreatedAtDesc()).thenReturn(List.of());
+
+        List<AiReviewCandidateV2Response> responses = service.listCandidates();
+
+        List<AiReviewCandidateV2Response> approvedCards = responses.stream()
+                .filter(response -> response.workflowPhase() == AiReviewCandidateWorkflowPhase.APPROVED)
+                .filter(response -> response.status() == AiReviewCandidateStatus.APPROVED)
+                .filter(response -> response.publishedCardId() != null)
+                .toList();
+        assertThat(approvedCards).hasSize(85);
+        assertThat(approvedCards)
+                .extracting(AiReviewCandidateV2Response::publishedCardId)
+                .contains("algorithm-2", "spring-aop", "python-asyncio");
+    }
+
+    @Test
+    void listCandidates_usesReadableSourceQuestionForApprovedConceptsV2Cards() throws Exception {
+        Path frontendDir = Files.createDirectories(tempDir.resolve("frontend"));
+        Files.writeString(frontendDir.resolve("frontend-conditional-rendering.json"), """
+                {
+                  "card_id": "frontend-conditional-rendering",
+                  "category": "frontend",
+                  "term": "conditional-rendering",
+                  "source_question": "React에서 조건부 렌더링에 사용할 수 없는 방법은?",
+                  "source_question_ids": ["frontend:67"],
+                  "payloads": {
+                    "CONCEPT_DEFINITION": {
+                      "content": "React 조건부 렌더링은 조건에 따라 JSX를 선택하는 방식이다."
+                    }
+                  },
+                  "review": {
+                    "card_status": "approved",
+                    "approved_at": "2026-06-13T06:51:47.613334Z",
+                    "reviewer": "codex-assisted-quality-review"
+                  }
+                }
+                """);
+        AiReviewCandidateApprovalV2Service tempService = new AiReviewCandidateApprovalV2Service(
+                candidateRepository,
+                auditRepository,
+                jsonlService,
+                metricSink,
+                knowledgeReindexer,
+                new ObjectMapper(),
+                tempDir
+        );
+        when(candidateRepository.findAllByOrderByCreatedAtDesc()).thenReturn(List.of());
+
+        List<AiReviewCandidateV2Response> responses = tempService.listCandidates();
+
+        assertThat(responses).singleElement()
+                .extracting(AiReviewCandidateV2Response::sourceQuestion)
+                .isEqualTo("React에서 조건부 렌더링에 사용할 수 없는 방법은?");
+    }
+
+    @Test
+    void listCandidates_keepsPublishedCardWhenDbExternalIdMatchesCardId() {
+        AiReviewCandidate candidate = AiReviewCandidate.builder()
+                .id(999L)
+                .externalCandidateId("auto-review-dto")
+                .term("DTO")
+                .category("auto-review")
+                .source(AiReviewCandidateSource.AUTO)
+                .status(AiReviewCandidateStatus.APPROVED)
+                .workflowPhase(AiReviewCandidateWorkflowPhase.APPROVED)
+                .definition("DB approved candidate")
+                .definitionDraft("")
+                .build();
+        when(candidateRepository.findAllByOrderByCreatedAtDesc()).thenReturn(List.of(candidate));
+
+        List<AiReviewCandidateV2Response> responses = service.listCandidates();
+
+        assertThat(responses)
+                .filteredOn(response -> "auto-review-dto".equals(response.publishedCardId()))
+                .hasSize(1);
+        assertThat(responses)
+                .filteredOn(response -> "auto-review-dto".equals(response.externalCandidateId()))
+                .hasSize(2);
+    }
+
+    @Test
+    void listCandidates_keepsPublishedCardWhenDbDuplicateIsNotApproved() {
+        AiReviewCandidate candidate = AiReviewCandidate.builder()
+                .id(998L)
+                .externalCandidateId("auto-rejected-websocket")
+                .term("WebSocket")
+                .category("auto-review")
+                .source(AiReviewCandidateSource.AUTO)
+                .status(AiReviewCandidateStatus.REJECTED)
+                .workflowPhase(AiReviewCandidateWorkflowPhase.REJECTED)
+                .definition("")
+                .definitionDraft("")
+                .publishedCardId("auto-review-websocket")
+                .build();
+        when(candidateRepository.findAllByOrderByCreatedAtDesc()).thenReturn(List.of(candidate));
+
+        List<AiReviewCandidateV2Response> responses = service.listCandidates();
+
+        assertThat(responses)
+                .filteredOn(response -> "auto-review-websocket".equals(response.publishedCardId()))
+                .hasSize(2);
+        assertThat(responses)
+                .filteredOn(response -> "auto-review-websocket".equals(response.publishedCardId()))
+                .filteredOn(response -> response.workflowPhase() == AiReviewCandidateWorkflowPhase.APPROVED)
+                .hasSize(1);
+    }
 
     @Test
     void captureCandidate_savesPendingAutoCandidate() {

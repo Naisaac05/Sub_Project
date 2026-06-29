@@ -74,6 +74,19 @@ class SemanticEvaluationTest(unittest.TestCase):
         self.assertIn("contradiction_suspected", flags)
         self.assertFalse(should_cache_answer(flags))
 
+    def test_current_problem_context_does_not_flag_unretrieved_known_concept_as_contradiction(self):
+        flags = judge_answer_semantics(
+            answer="N+1 문제는 목록 조회 후 연관 데이터를 가져오며 추가 쿼리가 반복되는 문제이고, fetch join으로 줄일 수 있습니다.",
+            route="generation",
+            fallback_used=False,
+            retrieved_concept_ids=[],
+            context_text="",
+            existing_quality_flags=["current_problem_context", "missing_approved_evidence"],
+        )
+
+        self.assertNotIn("contradiction_suspected", flags)
+        self.assertIn("current_problem_context", flags)
+
 
 if __name__ == "__main__":
     unittest.main()

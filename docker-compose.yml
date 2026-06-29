@@ -48,6 +48,14 @@ services:
       DB_USERNAME: root
       REDIS_HOST: redis
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      AI_REVIEW_SERVICE_TOKEN: ${AI_REVIEW_SERVICE_TOKEN:-devmatch-local-ai-review-token}
+      AI_REVIEW_CANDIDATES_PATH: /tmp/course-candidates
+      AI_REVIEW_AUTO_CANDIDATES_PATH: /tmp/auto-candidates
+      AI_REVIEW_CONCEPTS_V2_PATH: /app/ai/app/knowledge/concepts_v2
+      PYTHON_AI_BASE_URL: http://host.docker.internal:8001
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+    volumes:
+      - ./ai/app/knowledge/concepts_v2:/app/ai/app/knowledge/concepts_v2:ro
     depends_on:
       - mysql
       - redis
