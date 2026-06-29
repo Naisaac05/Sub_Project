@@ -28,7 +28,7 @@ resource "aws_security_group" "ec2" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    description = "SSH (내 IP만)"
+    description = "SSH (my IP only)"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -49,7 +49,7 @@ resource "aws_security_group" "ec2" {
 # ----- RDS용 방화벽: 3306을 "EC2 보안그룹"에서 오는 것만 허용 -----
 resource "aws_security_group" "rds" {
   name        = "${var.project_name}-rds-sg"
-  description = "DevMatch MySQL - EC2 에서만 접근"
+  description = "DevMatch MySQL - from EC2 only"
   vpc_id      = aws_vpc.main.id
 
   ingress {
