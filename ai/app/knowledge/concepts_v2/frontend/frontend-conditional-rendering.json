@@ -15,6 +15,7 @@
   "source_question_ids": [
     "frontend:67"
   ],
+  "source_question": "React에서 조건부 렌더링에 사용할 수 없는 방법은?",
   "retrieval": {
     "embedding_text": "conditional-rendering if-else (JSX 내부에서 직접) React에서 조건부 렌더링에 사용할 수 없는 방법은? frontend 에서 조건부 렌더링에 사용할 없는 if-else",
     "embedding_hash": "",

@@ -384,18 +384,23 @@ public class RuleBasedAiReviewService {
     }
 
     private Optional<String> generateFirstQuestion(Question question, String correctAnswer, String selectedAnswer) {
+        Optional<String> pythonAnswer = Optional.empty();
         try {
-            Optional<String> pythonAnswer = pythonAiReviewClient.generateFirstQuestion(
+            pythonAnswer = pythonAiReviewClient.generateFirstQuestion(
                     question,
                     correctAnswer,
                     selectedAnswer
             ).map(AiGeneratedAnswer::answer);
-            if (pythonAnswer.isPresent()) {
-                return pythonAnswer;
-            }
+        } catch (RuntimeException ex) {
+            log.warn("Python AI first question generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
+        }
+        if (pythonAnswer.isPresent()) {
+            return pythonAnswer;
+        }
+        try {
             return ollamaAiReviewClient.generateFirstQuestion(question, correctAnswer, selectedAnswer);
         } catch (RuntimeException ex) {
-            log.warn("AI first question generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
+            log.warn("Ollama AI first question generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
             return Optional.empty();
         }
     }
@@ -410,8 +415,9 @@ public class RuleBasedAiReviewService {
             String previousAiQuestion,
             String activeConcept
     ) {
+        Optional<String> pythonAnswer = Optional.empty();
         try {
-            Optional<String> pythonAnswer = pythonAiReviewClient.generateFollowUp(
+            pythonAnswer = pythonAiReviewClient.generateFollowUp(
                     question,
                     correctAnswer,
                     selectedAnswer,
@@ -421,9 +427,13 @@ public class RuleBasedAiReviewService {
                     previousAiQuestion,
                     activeConcept
             ).map(AiGeneratedAnswer::answer);
-            if (pythonAnswer.isPresent()) {
-                return pythonAnswer;
-            }
+        } catch (RuntimeException ex) {
+            log.warn("Python AI follow-up generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
+        }
+        if (pythonAnswer.isPresent()) {
+            return pythonAnswer;
+        }
+        try {
             return ollamaAiReviewClient.generateFollowUp(
                     question,
                     correctAnswer,
@@ -433,7 +443,7 @@ public class RuleBasedAiReviewService {
                     nextStep
             );
         } catch (RuntimeException ex) {
-            log.warn("AI follow-up generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
+            log.warn("Ollama AI follow-up generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
             return Optional.empty();
         }
     }
@@ -454,20 +464,25 @@ public class RuleBasedAiReviewService {
             String selectedAnswer,
             String userQuestion
     ) {
+        Optional<AiGeneratedAnswer> pythonAnswer = Optional.empty();
         try {
-            Optional<AiGeneratedAnswer> pythonAnswer = pythonAiReviewClient.answerFreeQuestion(
+            pythonAnswer = pythonAiReviewClient.answerFreeQuestion(
                     question,
                     correctAnswer,
                     selectedAnswer,
                     userQuestion
             );
-            if (pythonAnswer.isPresent()) {
-                return pythonAnswer;
-            }
+        } catch (RuntimeException ex) {
+            log.warn("Python AI free-question generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
+        }
+        if (pythonAnswer.isPresent()) {
+            return pythonAnswer;
+        }
+        try {
             return ollamaAiReviewClient.answerFreeQuestion(question, correctAnswer, selectedAnswer, userQuestion)
                     .map(AiGeneratedAnswer::plain);
         } catch (RuntimeException ex) {
-            log.warn("AI free-question generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
+            log.warn("Ollama AI free-question generation failed. questionId={}, message={}", question.getId(), ex.getMessage());
             return Optional.empty();
         }
     }

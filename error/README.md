@@ -40,8 +40,18 @@
 ```
 
 ## 인덱스
-
 - [2026-06-29 AWS(EC2 ARM) 첫 배포 빌드/부팅 함정 7건 — 로컬 amd64에선 안 보이던 것들](2026-06-29-aws-arm-prod-deploy-gotchas.md)
+- [2026-06-27 타 코스 approved 카드가 코스 범위 제한을 우회함](2026-06-27-cross-course-approved-card-bypassed-scope.md)
+- [2026-06-27 Approved 한국어 카드 정의 질문 의도 오분류](2026-06-27-approved-korean-card-intent-misclassification.md)
+- [2026-06-27 AI review 정상 스트림 강제 취소와 approved 카드 한국어 조사 검색 누락](2026-06-27-ai-review-stream-abort-and-approved-card-query-gap.md)
+- [2026-06-25 AI review current problem semantic false contradiction](2026-06-25-ai-review-current-problem-semantic-false-contradiction.md)
+- [2026-06-25 AI review missing approved evidence preempted Ollama](2026-06-25-ai-review-missing-evidence-preempted-ollama.md)
+- [2026-06-25 AI review current problem N+1 blocked](2026-06-25-ai-review-current-problem-n-plus-one-blocked.md)
+- [2026-06-25 Local bootRun shadowed Docker backend](2026-06-25-local-bootrun-shadowed-docker-backend.md)
+- [2026-06-25 AI review v2 hit overwritten and source ID shown](2026-06-25-ai-review-v2-hit-overwritten-and-source-id.md)
+- [2026-06-25 Docker Python AI localhost and Ollama fallback](2026-06-25-docker-python-ai-localhost-and-ollama-fallback.md)
+- [2026-06-25 AI review approved cards hidden from admin candidates](2026-06-25-ai-review-approved-cards-hidden-from-admin.md)
+- [2026-06-25 AI review Docker prod config blocked candidate E2E](2026-06-25-ai-review-docker-prod-config-e2e.md)
 - [2026-06-23 승인 Fast Path가 코스 범위 제한에 먼저 차단됨](2026-06-23-approved-fast-path-blocked-by-course-scope.md)
 - [2026-06-23 Grounded answer가 질문형 alias를 topic 표시명으로 사용함](2026-06-23-grounded-answer-picked-question-alias-as-topic.md)
 - [2026-06-23 Grounded generation 응답이 fallback 노드에서 템플릿으로 덮어써짐](2026-06-23-grounded-generation-overwritten-by-fallback-node.md)

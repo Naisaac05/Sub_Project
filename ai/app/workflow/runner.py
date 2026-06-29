@@ -23,8 +23,8 @@ from app.workflow.nodes import (
     _off_topic_redirect_state,
     _course_scope_for_state,
     _out_of_course_redirect_state,
-    _resolve_unscoped_v2_fast_path_for_exact_hit,
     _v2_approved_fast_path_state,
+    _allows_current_problem_generation,
     _append_quality_flag,
     _grounded_safe_response,
     max_tokens_for_mode,
@@ -332,25 +332,13 @@ async def run_review_workflow_stream(
     if state.mode == "free-question":
         scope_decision = _course_scope_for_state(state)
         if scope_decision.scope == "out_of_course_tech":
-            v2_decision = _resolve_unscoped_v2_fast_path_for_exact_hit(
-                state,
-                _learner_query_for_state(state),
-                scope_decision,
-            )
-            state.v2_fast_path_decision = v2_decision.metadata()
-            if v2_decision.mode == "serve" and v2_decision.hit:
-                state = _v2_approved_fast_path_state(state, v2_decision)
-                yield {"type": "start"}
-                yield {"type": "chunk", "chunk": state.answer}
-                yield {"type": "done", "response": _build_response_from_state(state, 0)}
-            else:
-                state = _out_of_course_redirect_state(state, scope_decision.matched_card_id)
-                yield {"type": "start"}
-                yield {"type": "chunk", "chunk": state.answer}
-                state = validate_answer_node(state)
-                state = confidence_gate_node(state)
-                response = _build_response_from_state(state, 0)
-                yield {"type": "done", "response": response}
+            state = _out_of_course_redirect_state(state, scope_decision.matched_card_id)
+            yield {"type": "start"}
+            yield {"type": "chunk", "chunk": state.answer}
+            state = validate_answer_node(state)
+            state = confidence_gate_node(state)
+            response = _build_response_from_state(state, 0)
+            yield {"type": "done", "response": response}
             return
         if scope_decision.scope == "scope_unknown":
             _append_quality_flag(state, "scope_unknown")
@@ -384,21 +372,20 @@ async def run_review_workflow_stream(
             else None,
         )
         if grounded_evidence is None:
-            state = _grounded_safe_response(state, ("missing_approved_evidence",))
-            yield {"type": "start"}
-            yield {"type": "chunk", "chunk": state.answer}
-            yield {"type": "done", "response": _build_response_from_state(state, 0)}
-            return
+            _append_quality_flag(state, "missing_approved_evidence")
+            if _allows_current_problem_generation(scope_decision):
+                _append_quality_flag(state, "current_problem_context")
         from app.rag.retriever import RetrievedContext
-        state.contexts = [
-            RetrievedContext(
-                concept_id=grounded_evidence.card_id,
-                title=grounded_evidence.term,
-                content=grounded_prompt_context(grounded_evidence),
-                score=grounded_evidence.score,
-                metadata={"retriever": "approved_grounded_fallback", "version": "v2-approved"},
-            )
-        ]
+        if grounded_evidence is not None:
+            state.contexts = [
+                RetrievedContext(
+                    concept_id=grounded_evidence.card_id,
+                    title=grounded_evidence.term,
+                    content=grounded_prompt_context(grounded_evidence),
+                    score=grounded_evidence.score,
+                    metadata={"retriever": "approved_grounded_fallback", "version": "v2-approved"},
+                )
+            ]
 
     if lightweight_only_enabled():
         state = lightweight_only_miss_state(state.mode, state.request)
@@ -565,7 +552,7 @@ def _run_sequential_workflow(
     state = retrieve_context_node(state)
     state = rule_evaluate_node(state)
     state = generate_answer_node(state, generator=generator)
-    if state.route == "lightweight_only_miss":
+    if state.route in {"v2_approved_fast_path", "lightweight_only_miss"}:
         return state
     state = validate_answer_node(state)
     state = confidence_gate_node(state)
