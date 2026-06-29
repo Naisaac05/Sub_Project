@@ -41,6 +41,7 @@
 
 ## 인덱스
 
+- [2026-06-29 AWS(EC2 ARM) 첫 배포 빌드/부팅 함정 7건 — 로컬 amd64에선 안 보이던 것들](2026-06-29-aws-arm-prod-deploy-gotchas.md)
 - [2026-06-23 승인 Fast Path가 코스 범위 제한에 먼저 차단됨](2026-06-23-approved-fast-path-blocked-by-course-scope.md)
 - [2026-06-23 Grounded answer가 질문형 alias를 topic 표시명으로 사용함](2026-06-23-grounded-answer-picked-question-alias-as-topic.md)
 - [2026-06-23 Grounded generation 응답이 fallback 노드에서 템플릿으로 덮어써짐](2026-06-23-grounded-generation-overwritten-by-fallback-node.md)
