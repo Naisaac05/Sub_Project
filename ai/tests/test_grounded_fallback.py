@@ -54,6 +54,12 @@ class GroundedFallbackTest(unittest.TestCase):
 
         self.assertIsNone(evidence)
 
+    def test_hashcode_definition_selects_dedicated_approved_card(self):
+        evidence = select_grounded_evidence("hashCode가 뭐지?")
+
+        self.assertIsNotNone(evidence)
+        self.assertEqual(evidence.card_id, "java-hashcode")
+
     def test_quality_gate_accepts_grounded_complete_answer(self):
         evidence = select_grounded_evidence(
             "CopyOnWriteArrayList가 뭐야?",

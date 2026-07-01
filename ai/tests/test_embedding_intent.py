@@ -27,6 +27,17 @@ class EmbeddingIntentClassifierTest(unittest.TestCase):
         self.assertEqual(result.sub_intent, "definition")
         self.assertEqual(result.topic, "useEffect")
 
+    def test_casual_hashcode_definition_skips_embedding(self):
+        with patch(
+            "app.workflow.embedding_intent.EmbeddingIntentClassifier.classify",
+            side_effect=AssertionError("casual definition must not call embedding"),
+        ):
+            result = classify_free_question_with_embeddings("hashCode가 뭐지?")
+
+        self.assertEqual(result.intent, "concept_definition")
+        self.assertEqual(result.sub_intent, "definition")
+        self.assertEqual(result.topic, "hashCode")
+
     def test_korean_approved_card_definition_skips_embedding(self):
         with patch(
             "app.workflow.embedding_intent.EmbeddingIntentClassifier.classify",

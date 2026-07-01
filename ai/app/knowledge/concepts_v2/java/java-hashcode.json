@@ -1,0 +1,102 @@
+{
+  "card_id": "java-hashcode",
+  "category": "java",
+  "term": "hashCode",
+  "aliases": [
+    "hash code",
+    "자바 hashCode",
+    "해시 코드",
+    "equals hashCode 계약",
+    "hashCode method"
+  ],
+  "source_question_ids": [
+    "java:2",
+    "java:17"
+  ],
+  "retrieval": {
+    "embedding_text": "Java hashCode 해시 코드 equals hashCode contract HashMap HashSet bucket object equality",
+    "embedding_hash": "",
+    "boost_keywords": [
+      "hashcode",
+      "hash-code",
+      "equals-hashcode-contract",
+      "hashmap-bucket",
+      "hashset"
+    ],
+    "intent_types": [
+      "CONCEPT_DEFINITION",
+      "ANSWER_REASON",
+      "COMPARISON",
+      "EXAMPLE_REQUEST",
+      "PRACTICAL_USAGE",
+      "DEBUG_OR_ERROR"
+    ]
+  },
+  "payloads": {
+    "CONCEPT_DEFINITION": {
+      "content": "Java의 `hashCode()`는 객체를 해시 기반 자료구조의 버킷에 배치하기 위한 정수 해시값을 반환하는 메서드다. `equals()`가 true인 두 객체는 반드시 같은 hashCode를 반환해야 한다. 반대로 hashCode가 같더라도 해시 충돌이 가능하므로 두 객체가 반드시 같은 것은 아니다. 따라서 값 객체에서 equals를 재정의하면 같은 필드를 기준으로 hashCode도 함께 재정의해야 한다.",
+      "examples": [
+        "같은 ID를 가진 두 값 객체가 equals에서 같다면 두 객체의 hashCode도 같아야 한다."
+      ]
+    },
+    "ANSWER_REASON": {
+      "why_correct": "HashMap과 HashSet은 먼저 hashCode로 후보 버킷을 찾고, 같은 버킷 안에서 equals로 실제 동등성을 확인한다. 이 때문에 equals와 hashCode의 계약을 함께 지켜야 한다.",
+      "key_points": [
+        "equals가 true이면 hashCode도 동일",
+        "같은 hashCode가 equals true를 보장하지 않음",
+        "HashMap과 HashSet의 버킷 탐색"
+      ]
+    },
+    "COMPARISON": {
+      "comparisons": [
+        {
+          "with": "equals",
+          "diff": "hashCode는 해시 버킷 후보를 좁히고 equals는 후보 객체가 논리적으로 같은지 최종 판별한다."
+        }
+      ]
+    },
+    "EXAMPLE_REQUEST": {
+      "code_example": "record UserId(long value) {}\nvar left = new UserId(7L);\nvar right = new UserId(7L);\nassert left.equals(right);\nassert left.hashCode() == right.hashCode();",
+      "explanation": "Java record는 구성 요소를 기준으로 equals와 hashCode를 함께 생성하므로 동일한 값을 가진 객체가 계약을 만족한다."
+    },
+    "PRACTICAL_USAGE": {
+      "real_world": "HashMap의 키나 HashSet의 원소로 사용하는 값 객체에서 논리적 동등성과 해시값의 기준을 일치시키는 데 사용한다.",
+      "best_practices": [
+        "equals와 hashCode를 항상 함께 재정의한다.",
+        "객체가 컬렉션에 들어간 뒤 변경될 수 있는 필드는 hashCode 계산에서 피한다."
+      ]
+    },
+    "DEBUG_OR_ERROR": {
+      "common_errors": [
+        {
+          "error": "equals만 재정의하고 hashCode는 기본 구현을 사용해 HashSet에 논리적으로 같은 객체가 중복 저장되는 오류",
+          "solution": "equals와 동일한 필드를 사용해 hashCode를 구현하고 동등한 객체의 해시값이 같은지 단위 테스트한다."
+        }
+      ]
+    }
+  },
+  "review": {
+    "card_status": "approved",
+    "payload_status": {
+      "CONCEPT_DEFINITION": "approved",
+      "ANSWER_REASON": "approved",
+      "COMPARISON": "approved",
+      "EXAMPLE_REQUEST": "approved",
+      "PRACTICAL_USAGE": "approved",
+      "DEBUG_OR_ERROR": "approved"
+    },
+    "approved_at": "2026-06-29T00:00:00Z",
+    "reviewer": "codex-assisted-human-review",
+    "rejected_reason": null
+  },
+  "related_card_ids": [
+    "java-equals",
+    "java-hashmap"
+  ],
+  "tags": [
+    "object-contract",
+    "hash-collection"
+  ],
+  "created_at": "2026-06-29T00:00:00Z",
+  "updated_at": "2026-06-29T00:00:00Z"
+}

@@ -1,5 +1,7 @@
 # 에러 기록 가이드
 
+- [2026-06-30 Caddy DuckDNS 도메인 불일치로 TLS 인증서 발급 실패](2026-06-30-caddy-duckdns-domain-mismatch.md)
+- [2026-06-29 AWS AI fallback 모델·카드·의도 분류 불일치](2026-06-29-aws-ai-fallback-model-and-card-gap.md)
 - [2026-06-15 승인된 useEffect 카드 Fast Path 미스 및 기술 식별자 답변 잘림](2026-06-15-approved-useeffect-fast-path-miss-and-answer-truncation.md)
 - [2026-06-15 AI v2-only 전환 후 테스트 계약 및 lightweight-only 우회 오류](2026-06-15-ai-v2-only-test-contract-and-lightweight-mode.md)
 - [2026-06-15 v2 Fast Path 도입 후에도 v1 RAG 운영 경로가 남음](2026-06-15-v1-rag-runtime-path-survived-v2-fast-path.md)

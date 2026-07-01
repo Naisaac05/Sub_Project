@@ -9,6 +9,9 @@ NON_CACHEABLE_MODELS = {"template", "lightweight-template"}
 
 
 def semantic_evaluate_node(state: ReviewWorkflowState) -> ReviewWorkflowState:
+    if state.route == "v2_approved_fast_path":
+        return state
+
     state.quality_flags = judge_answer_semantics(
         answer=state.answer,
         route=state.route,
