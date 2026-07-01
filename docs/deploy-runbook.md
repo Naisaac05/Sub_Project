@@ -205,8 +205,10 @@ docker compose -f docker-compose.prod.yml ps
 ```bash
 docker compose -f docker-compose.prod.yml exec -T ollama ollama pull exaone3.5:2.4b
 docker compose -f docker-compose.prod.yml exec -T ollama ollama pull bge-m3
+docker compose -f docker-compose.prod.yml exec -T ollama ollama list
 ```
 - `exaone3.5:2.4b` = 리뷰 LLM, `bge-m3` = RAG 임베딩. 둘 다 없으면 AI 리뷰 실패.
+- `.env.prod`의 `PYTHON_AI_MODEL`, `PYTHON_AI_FALLBACK_MODEL`, `OLLAMA_MODEL`은 모두 `exaone3.5:2.4b`로 맞춘다.
 
 ---
 
@@ -229,6 +231,30 @@ print(urllib.request.urlopen(r,timeout=240).read().decode()[:600])
 PY
 ```
 기대: AI 응답 JSON 에 `"model_used":"exaone3.5:2.4b"`, `"fallback_used":false`, `retrieved_concept_ids`(RAG) 포함.
+
+자유 질문은 승인 카드 hit와 카드 없는 Ollama 생성을 따로 검사한다.
+
+```bash
+docker compose -f docker-compose.prod.yml exec -T ai python - <<'PY'
+import json, os, urllib.request
+
+token = os.environ["AI_REVIEW_SERVICE_TOKEN"]
+for question in ("hashCode가 뭐지?", "Java CopyOnWriteArrayList가 뭐야?"):
+    payload = json.dumps({"user_answer": question, "model": "exaone3.5:2.4b"}).encode()
+    request = urllib.request.Request(
+        "http://localhost:8001/api/review/free-question",
+        data=payload,
+        headers={"Content-Type": "application/json", "X-AI-Service-Token": token},
+    )
+    response = json.loads(urllib.request.urlopen(request, timeout=240).read())
+    print({key: response.get(key) for key in ("route", "model_used", "fallback_used", "matched_concept_id")})
+PY
+```
+
+기대:
+
+- `hashCode가 뭐지?` → `route=v2_approved_fast_path`, `matched_concept_id=java-hashcode`, `fallback_used=false`
+- 카드 없는 질문 → Ollama 호출 후 `model_used=exaone3.5:2.4b`; 정상 답변이면 `route=generation`, `fallback_used=false`
 
 ---
 
