@@ -1,6 +1,6 @@
 # DevMatch 리버스 프록시 + 자동 HTTPS (Let's Encrypt)
 # 도메인 교체 지점: 아래 호스트명을 본인 도메인으로.
-devmatch.duckdns.org {
+devmatch132.duckdns.org {
 	encode gzip
 
 	# API / 업로드는 백엔드로

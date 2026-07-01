@@ -9,6 +9,25 @@ from app.evaluation.semantic import judge_answer_semantics, should_cache_answer
 
 
 class SemanticEvaluationTest(unittest.TestCase):
+    def test_approved_v2_fast_path_skips_semantic_fallback(self):
+        state = ReviewWorkflowState(
+            mode="free-question",
+            request=AiGenerateRequest(user_answer="hashCode가 뭐지?"),
+            answer="Java의 hashCode는 해시 기반 자료구조의 버킷을 찾는 데 사용됩니다.",
+            route="v2_approved_fast_path",
+            model_used="v2-approved-payload",
+        )
+
+        with patch(
+            "app.workflow.semantic_gate.judge_answer_semantics",
+            side_effect=AssertionError("approved payload must not be judged again"),
+        ):
+            result = semantic_evaluate_node(state)
+
+        self.assertEqual(result.route, "v2_approved_fast_path")
+        self.assertFalse(result.fallback_used)
+        self.assertEqual(result.model_used, "v2-approved-payload")
+
     def test_contradiction_suspected_answer_becomes_quality_fallback(self):
         state = ReviewWorkflowState(
             mode="free-question",

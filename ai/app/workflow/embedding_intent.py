@@ -270,7 +270,7 @@ def _obvious_rule_intent(text: str) -> FreeQuestionIntent | None:
         re.search(r"[a-z][a-z0-9+#.-]{1,}", text, re.IGNORECASE)
     )
     if re.search(
-        r"(?:가|이|은|는)?(?:뭐야|뭔가요|뭐예요|뭐에요|무엇이야|무엇인가|무엇인가요|뭔데|란)\??$",
+        r"(?:가|이|은|는)?(?:뭐야|뭐지|뭐죠|뭔가요|뭐예요|뭐에요|무엇이야|무엇인가|무엇인가요|뭔데|란)\??$",
         normalized,
     ):
         approved_topic = None if has_ascii_technical_token else _approved_card_topic(text)

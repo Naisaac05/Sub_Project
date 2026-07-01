@@ -1,9 +1,15 @@
 package com.devmatch.config;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.env.YamlPropertySourceLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.PropertySource;
+import org.springframework.core.io.ClassPathResource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -99,6 +105,17 @@ class AiReviewPropertiesTest {
                     assertThat(properties.streamingEnabled()).isTrue();
                     assertThat(properties.streamTimeoutSeconds()).isEqualTo(60);
                 });
+    }
+
+    @Test
+    void applicationYamlUsesTheProductionOllamaModelDefaults() throws IOException {
+        List<PropertySource<?>> sources = new YamlPropertySourceLoader()
+                .load("application.yml", new ClassPathResource("application.yml"));
+
+        assertThat(sources.get(0).getProperty("app.ai-review.python.model"))
+                .isEqualTo("${PYTHON_AI_MODEL:exaone3.5:2.4b}");
+        assertThat(sources.get(0).getProperty("app.ai-review.ollama.model"))
+                .isEqualTo("${OLLAMA_MODEL:exaone3.5:2.4b}");
     }
 
     @Configuration(proxyBeanMethods = false)
