@@ -40,6 +40,7 @@
 ```
 
 ## 인덱스
+- [2026-07-01 운영 AI 카드 경로와 후보 수집 URL 연결 누락](2026-07-01-prod-ai-card-path-and-candidate-capture-url.md)
 - [2026-06-29 AWS(EC2 ARM) 첫 배포 빌드/부팅 함정 7건 — 로컬 amd64에선 안 보이던 것들](2026-06-29-aws-arm-prod-deploy-gotchas.md)
 - [2026-06-27 타 코스 approved 카드가 코스 범위 제한을 우회함](2026-06-27-cross-course-approved-card-bypassed-scope.md)
 - [2026-06-27 Approved 한국어 카드 정의 질문 의도 오분류](2026-06-27-approved-korean-card-intent-misclassification.md)
