@@ -70,6 +70,22 @@ class CandidateSinkLoggingTest(unittest.TestCase):
         self.assertNotIn("SENSITIVE_QUERY_SECRET", message)
         self.assertNotIn("SENSITIVE_FRAGMENT", message)
 
+    def test_malformed_capture_url_logs_value_error_without_raw_url(self):
+        malformed_url = "https://SENSITIVE_USERNAME:SENSITIVE_PASSWORD@[invalid/candidates?token=SENSITIVE_QUERY_SECRET"
+
+        with patch.dict(os.environ, {"AI_REVIEW_CANDIDATE_CAPTURE_URL": malformed_url}):
+            with self.assertLogs("app.knowledge.candidate_sink", level="WARNING") as captured:
+                result = save_auto_candidate(self.candidate)
+
+        message = "\n".join(captured.output)
+        self.assertFalse(result)
+        self.assertIn("ValueError", message)
+        self.assertIn("url=<invalid-url>", message)
+        self.assertNotIn(malformed_url, message)
+        self.assertNotIn("SENSITIVE_USERNAME", message)
+        self.assertNotIn("SENSITIVE_PASSWORD", message)
+        self.assertNotIn("SENSITIVE_QUERY_SECRET", message)
+
 
 if __name__ == "__main__":
     unittest.main()

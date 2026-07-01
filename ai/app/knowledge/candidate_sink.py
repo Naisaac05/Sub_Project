@@ -54,7 +54,7 @@ def _post_candidate(candidate: dict[str, Any]) -> bool:
             exc.code,
         )
         return False
-    except (OSError, error.URLError, TimeoutError) as exc:
+    except (OSError, error.URLError, TimeoutError, ValueError) as exc:
         logger.warning(
             "candidate capture failed url=%s error=%s",
             _sanitized_url(url),
@@ -64,14 +64,14 @@ def _post_candidate(candidate: dict[str, Any]) -> bool:
 
 
 def _sanitized_url(url: str) -> str:
-    parsed = urlsplit(url)
-    host = parsed.hostname or ""
-    if ":" in host:
-        host = f"[{host}]"
     try:
+        parsed = urlsplit(url)
+        host = parsed.hostname or ""
+        if ":" in host:
+            host = f"[{host}]"
         port = parsed.port
     except ValueError:
-        port = None
+        return "<invalid-url>"
     netloc = f"{host}:{port}" if port is not None else host
     return urlunsplit((parsed.scheme, netloc, parsed.path, "", ""))
 

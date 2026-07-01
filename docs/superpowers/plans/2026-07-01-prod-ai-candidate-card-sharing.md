@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
 - [ ] **Step 2: Run the test and verify RED**
 
-Run: `ai/.venv/Scripts/python.exe -m pytest ai/tests/test_prod_deployment_wiring.py -q`
+Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_prod_deployment_wiring.py -q`
 
 Expected: FAIL because the backend card mount and candidate capture URL are absent.
 
@@ -67,7 +67,7 @@ Add to `ai.environment` and `ai.volumes`:
 
 - [ ] **Step 4: Verify the test and rendered compose configuration**
 
-Run: `ai/.venv/Scripts/python.exe -m pytest ai/tests/test_prod_deployment_wiring.py -q`
+Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_prod_deployment_wiring.py -q`
 
 Expected: `1 passed`.
 
@@ -116,7 +116,7 @@ class CandidateSinkTest(unittest.TestCase):
 
 - [ ] **Step 2: Run tests and verify RED**
 
-Run: `ai/.venv/Scripts/python.exe -m pytest ai/tests/test_candidate_sink.py -q`
+Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_candidate_sink.py -q`
 
 Expected: FAIL because no warning is logged.
 
@@ -139,7 +139,7 @@ logger = logging.getLogger(__name__)
 
 - [ ] **Step 4: Verify candidate sink and workflow tests**
 
-Run: `ai/.venv/Scripts/python.exe -m pytest ai/tests/test_candidate_sink.py ai/tests/test_workflow_runner.py -q`
+Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_candidate_sink.py tests/test_workflow_runner.py -q`
 
 Expected: all selected tests pass.
 
@@ -172,7 +172,7 @@ Create the error entry with symptoms, the two root causes, changed files using `
 
 - [ ] **Step 4: Run final verification**
 
-Run: `ai/.venv/Scripts/python.exe -m pytest ai/tests/test_prod_deployment_wiring.py ai/tests/test_candidate_sink.py ai/tests/test_workflow_runner.py -q`
+Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_prod_deployment_wiring.py tests/test_candidate_sink.py tests/test_workflow_runner.py -q`
 
 Run: `docker compose --env-file .env.prod.example -f docker-compose.prod.yml config --quiet`
 

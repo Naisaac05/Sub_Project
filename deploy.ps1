@@ -17,7 +17,7 @@
 #>
 param(
   [string]$Key       = "$env:USERPROFILE\.ssh\devmatch-key.pem",
-  [string]$Branch    = "chore/deploy-aws",
+  [string]$Branch    = "HEAD",
   [string]$Terraform = "terraform",   # PATH에 없으면 terraform.exe 풀경로로 교체
   [switch]$Infra,
   [switch]$Models

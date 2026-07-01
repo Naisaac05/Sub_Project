@@ -75,7 +75,7 @@
 ```bash
 git clone <repo-url> Sub_Project
 cd Sub_Project
-git checkout chore/deploy-aws   # 배포용 브랜치(코드 env화 + Dockerfile + compose + Terraform 포함)
+git checkout <deployment-branch>   # 배포할 커밋이 체크아웃된 브랜치
 ```
 
 ---
@@ -126,6 +126,10 @@ cp .env.prod.example .env.prod
 .\deploy.ps1 -Models          # 배포 + Ollama 모델 pull
 .\deploy.ps1 -Infra -Models   # 최초 전체 배포
 
+# 기본값은 현재 체크아웃된 커밋(HEAD)을 아카이브합니다.
+# 다른 브랜치/태그/커밋을 배포할 때만 명시적으로 ref를 지정합니다.
+.\deploy.ps1 -Branch <ref>
+
 # terraform 이 PATH에 없으면:  .\deploy.ps1 -Terraform "C:\...\terraform.exe"
 # SSH 키 경로가 다르면:        .\deploy.ps1 -Key "C:\path\to\key.pem"
 ```
@@ -143,7 +147,7 @@ cp .env.prod.example .env.prod
 KEY=~/.ssh/devmatch-key.pem
 EC2=<ec2_public_ip>
 # 추적 파일만 묶어 전송 (node_modules 제외, Chroma 인덱스 포함)
-git archive --format=tar.gz -o /tmp/devmatch.tar.gz chore/deploy-aws
+git archive --format=tar.gz -o /tmp/devmatch.tar.gz HEAD
 scp -i $KEY /tmp/devmatch.tar.gz ec2-user@$EC2:~/devmatch.tar.gz
 ssh -i $KEY ec2-user@$EC2 "mkdir -p ~/devmatch && tar -xzf ~/devmatch.tar.gz -C ~/devmatch"
 ```
