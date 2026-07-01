@@ -69,11 +69,9 @@ Add to `ai.environment` and `ai.volumes`:
 
 Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_prod_deployment_wiring.py -q`
 
-Expected: `1 passed`.
+The test safely copies the compose inputs into a temporary directory, creates an empty temporary `.env.prod`, and renders the Compose model as JSON. This avoids requiring a real deployment env file in a clean checkout.
 
-Run: `docker compose --env-file .env.prod.example -f docker-compose.prod.yml config --quiet`
-
-Expected: exit code 0.
+Expected: `1 passed`, including the temporary-directory Compose JSON rendering assertion.
 
 ### Task 2: Make candidate capture failures observable
 
@@ -174,8 +172,8 @@ Create the error entry with symptoms, the two root causes, changed files using `
 
 Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_prod_deployment_wiring.py tests/test_candidate_sink.py tests/test_workflow_runner.py -q`
 
-Run: `docker compose --env-file .env.prod.example -f docker-compose.prod.yml config --quiet`
-
 Run: `git diff --check`
 
-Expected: tests pass, compose exits 0, and diff check reports no whitespace errors.
+The production wiring test is the reproducible Compose validation: it renders Compose JSON in a temporary directory with an empty temporary `.env.prod`.
+
+Expected: tests pass, including safe Compose JSON rendering, and diff check reports no whitespace errors.
