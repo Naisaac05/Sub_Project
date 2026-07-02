@@ -13,6 +13,7 @@
     { "name": "jwt.refresh-token-expiration", "type": "java.lang.Long", "description": "Refresh token lifetime in milliseconds." },
     { "name": "app.cors.allowed-origins", "type": "java.util.List<java.lang.String>", "description": "Comma-separated allowed CORS origins." },
     { "name": "app.ai-review.concepts-v2-path", "type": "java.lang.String", "description": "Approved concepts_v2 card directory." },
+    { "name": "app.ai-review.test-reset.enabled", "type": "java.lang.Boolean", "description": "Enable the test-only AI review session reset endpoint." },
     { "name": "toss.payments.secret-key", "type": "java.lang.String", "description": "Toss Payments secret key." },
     { "name": "toss.payments.client-key", "type": "java.lang.String", "description": "Toss Payments client key." },
     { "name": "toss.payments.base-url", "type": "java.lang.String", "description": "Toss Payments API base URL." },
