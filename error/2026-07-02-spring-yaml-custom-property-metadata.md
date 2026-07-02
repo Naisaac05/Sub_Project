@@ -21,3 +21,4 @@ Spring Boot configuration processor를 annotation processor로 추가했다 (`ba
 - 새 사용자 정의 설정을 추가할 때는 가능하면 `@ConfigurationProperties`로 묶어 자동 메타데이터 생성 대상에 포함한다.
 - `@Value`를 유지해야 하는 설정은 additional metadata에도 함께 등록한다.
 - Spring Boot 3.5 OSS 지원 종료 경고는 이 YAML 메타데이터 문제와 별개이며, Boot 4 전환은 별도 호환성 작업으로 진행한다.
+- 삭제된 `.worktrees` 프로젝트가 계속 Problems에 보이면 Java 언어 서버의 프로젝트 캐시가 남은 상태다. 로컬 `.vscode/settings.json`에서 `.worktrees` import/watcher를 제외하고 `Java: Clean Java Language Server Workspace`를 한 번 실행한다.

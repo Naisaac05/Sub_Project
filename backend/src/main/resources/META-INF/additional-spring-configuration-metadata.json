@@ -1,6 +1,8 @@
 {
   "groups": [
     { "name": "jwt", "type": "java.lang.Object", "description": "JWT token settings." },
+    { "name": "app.cors", "type": "java.lang.Object", "description": "Application CORS settings." },
+    { "name": "app.ai-review", "type": "com.devmatch.config.AiReviewProperties", "description": "AI review settings." },
     { "name": "toss.payments", "type": "java.lang.Object", "description": "Toss Payments API settings." },
     { "name": "google.calendar", "type": "java.lang.Object", "description": "Google Calendar integration settings." },
     { "name": "file", "type": "java.lang.Object", "description": "File storage settings." }
@@ -9,6 +11,8 @@
     { "name": "jwt.secret", "type": "java.lang.String", "description": "JWT signing secret." },
     { "name": "jwt.access-token-expiration", "type": "java.lang.Long", "description": "Access token lifetime in milliseconds." },
     { "name": "jwt.refresh-token-expiration", "type": "java.lang.Long", "description": "Refresh token lifetime in milliseconds." },
+    { "name": "app.cors.allowed-origins", "type": "java.util.List<java.lang.String>", "description": "Comma-separated allowed CORS origins." },
+    { "name": "app.ai-review.concepts-v2-path", "type": "java.lang.String", "description": "Approved concepts_v2 card directory." },
     { "name": "toss.payments.secret-key", "type": "java.lang.String", "description": "Toss Payments secret key." },
     { "name": "toss.payments.client-key", "type": "java.lang.String", "description": "Toss Payments client key." },
     { "name": "toss.payments.base-url", "type": "java.lang.String", "description": "Toss Payments API base URL." },
