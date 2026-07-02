@@ -1,0 +1,19 @@
+{
+  "groups": [
+    { "name": "jwt", "type": "java.lang.Object", "description": "JWT token settings." },
+    { "name": "toss.payments", "type": "java.lang.Object", "description": "Toss Payments API settings." },
+    { "name": "google.calendar", "type": "java.lang.Object", "description": "Google Calendar integration settings." },
+    { "name": "file", "type": "java.lang.Object", "description": "File storage settings." }
+  ],
+  "properties": [
+    { "name": "jwt.secret", "type": "java.lang.String", "description": "JWT signing secret." },
+    { "name": "jwt.access-token-expiration", "type": "java.lang.Long", "description": "Access token lifetime in milliseconds." },
+    { "name": "jwt.refresh-token-expiration", "type": "java.lang.Long", "description": "Refresh token lifetime in milliseconds." },
+    { "name": "toss.payments.secret-key", "type": "java.lang.String", "description": "Toss Payments secret key." },
+    { "name": "toss.payments.client-key", "type": "java.lang.String", "description": "Toss Payments client key." },
+    { "name": "toss.payments.base-url", "type": "java.lang.String", "description": "Toss Payments API base URL." },
+    { "name": "google.calendar.credentials-path", "type": "java.lang.String", "description": "Google Calendar credentials resource path." },
+    { "name": "google.calendar.application-name", "type": "java.lang.String", "description": "Google Calendar API application name." },
+    { "name": "file.upload-dir", "type": "java.lang.String", "description": "Uploaded file storage directory." }
+  ]
+}
