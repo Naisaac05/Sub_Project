@@ -75,7 +75,7 @@
 ```bash
 git clone <repo-url> Sub_Project
 cd Sub_Project
-git checkout chore/deploy-aws   # 배포용 브랜치(코드 env화 + Dockerfile + compose + Terraform 포함)
+git checkout <deployment-branch>   # 배포할 커밋이 체크아웃된 브랜치
 ```
 
 ---
@@ -126,6 +126,10 @@ cp .env.prod.example .env.prod
 .\deploy.ps1 -Models          # 배포 + Ollama 모델 pull
 .\deploy.ps1 -Infra -Models   # 최초 전체 배포
 
+# 기본값은 현재 체크아웃된 커밋(HEAD)을 아카이브합니다.
+# 다른 브랜치/태그/커밋을 배포할 때만 명시적으로 ref를 지정합니다.
+.\deploy.ps1 -Branch <ref>
+
 # terraform 이 PATH에 없으면:  .\deploy.ps1 -Terraform "C:\...\terraform.exe"
 # SSH 키 경로가 다르면:        .\deploy.ps1 -Key "C:\path\to\key.pem"
 ```
@@ -143,7 +147,7 @@ cp .env.prod.example .env.prod
 KEY=~/.ssh/devmatch-key.pem
 EC2=<ec2_public_ip>
 # 추적 파일만 묶어 전송 (node_modules 제외, Chroma 인덱스 포함)
-git archive --format=tar.gz -o /tmp/devmatch.tar.gz chore/deploy-aws
+git archive --format=tar.gz -o /tmp/devmatch.tar.gz HEAD
 scp -i $KEY /tmp/devmatch.tar.gz ec2-user@$EC2:~/devmatch.tar.gz
 ssh -i $KEY ec2-user@$EC2 "mkdir -p ~/devmatch && tar -xzf ~/devmatch.tar.gz -C ~/devmatch"
 ```
@@ -255,6 +259,26 @@ PY
 
 - `hashCode가 뭐지?` → `route=v2_approved_fast_path`, `matched_concept_id=java-hashcode`, `fallback_used=false`
 - 카드 없는 질문 → Ollama 호출 후 `model_used=exaone3.5:2.4b`; 정상 답변이면 `route=generation`, `fallback_used=false`
+
+### 배포 후 AI 카드·후보 연결 확인
+
+EC2의 `~/devmatch`에서 다음을 실행한다. 앞의 두 명령은 백엔드와 AI 컨테이너에서 카드 디렉터리를 읽을 수 있는지만 확인한다. 세 번째 명령은 AI가 localhost가 아닌 백엔드 서비스로 후보를 전송하는지 확인하고, 네 번째 명령은 최근 수집 실패를 확인한다.
+
+```bash
+docker compose -f docker-compose.prod.yml exec -T backend test -d /app/ai/knowledge/concepts_v2
+docker compose -f docker-compose.prod.yml exec -T ai test -d /app/app/knowledge/concepts_v2
+docker compose -f docker-compose.prod.yml exec -T ai printenv AI_REVIEW_CANDIDATE_CAPTURE_URL
+docker compose -f docker-compose.prod.yml logs --tail=100 ai | grep 'candidate capture failed'
+```
+
+앞의 두 명령은 종료 코드 0, URL은 `http://backend:8080/api/internal/ai-review/candidates/capture`여야 한다. 마지막 명령은 후보 생성 후에도 출력이 없어야 한다. 디렉터리가 이미지에 포함된 경우도 있으므로, 실제로 같은 호스트 디렉터리를 bind했는지는 이어서 mount source를 확인한다.
+
+```bash
+docker inspect --format '{{range .Mounts}}{{if eq .Destination "/app/ai/knowledge/concepts_v2"}}{{println .Source}}{{end}}{{end}}' "$(docker compose -f docker-compose.prod.yml ps -q backend)"
+docker inspect --format '{{range .Mounts}}{{if eq .Destination "/app/app/knowledge/concepts_v2"}}{{println .Source}}{{end}}{{end}}' "$(docker compose -f docker-compose.prod.yml ps -q ai)"
+```
+
+두 출력은 서로 같은 호스트 source 경로여야 하며, 경로 끝은 `/ai/app/knowledge/concepts_v2`여야 한다.
 
 ---
 

@@ -10,8 +10,10 @@ services:
       REDIS_HOST: redis
       PYTHON_AI_BASE_URL: http://ai:8001 # 백엔드 → AI(FastAPI)
       FILE_UPLOAD_DIR: /app/uploads
+      AI_REVIEW_CONCEPTS_V2_PATH: /app/ai/knowledge/concepts_v2
     volumes:
       - uploads_data:/app/uploads # 업로드 영속(EBS)
+      - ./ai/app/knowledge/concepts_v2:/app/ai/knowledge/concepts_v2
     depends_on: [redis, ai]
     restart: unless-stopped
 
@@ -29,8 +31,10 @@ services:
     environment:
       ENVIRONMENT: prod # production_config 검증 활성화
       OLLAMA_BASE_URL: http://ollama:11434 # AI → Ollama
+      AI_REVIEW_CANDIDATE_CAPTURE_URL: http://backend:8080/api/internal/ai-review/candidates/capture
     volumes:
       - chroma_index:/app/app/vectorstore # 인덱스 영속
+      - ./ai/app/knowledge/concepts_v2:/app/app/knowledge/concepts_v2
     depends_on: [ollama]
     restart: unless-stopped
 

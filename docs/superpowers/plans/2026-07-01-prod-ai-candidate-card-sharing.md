@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
 - [ ] **Step 2: Run the test and verify RED**
 
-Run: `ai/.venv/Scripts/python.exe -m pytest ai/tests/test_prod_deployment_wiring.py -q`
+Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_prod_deployment_wiring.py -q`
 
 Expected: FAIL because the backend card mount and candidate capture URL are absent.
 
@@ -67,13 +67,11 @@ Add to `ai.environment` and `ai.volumes`:
 
 - [ ] **Step 4: Verify the test and rendered compose configuration**
 
-Run: `ai/.venv/Scripts/python.exe -m pytest ai/tests/test_prod_deployment_wiring.py -q`
+Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_prod_deployment_wiring.py -q`
 
-Expected: `1 passed`.
+The test safely copies the compose inputs into a temporary directory, creates an empty temporary `.env.prod`, and renders the Compose model as JSON. This avoids requiring a real deployment env file in a clean checkout.
 
-Run: `docker compose --env-file .env.prod.example -f docker-compose.prod.yml config --quiet`
-
-Expected: exit code 0.
+Expected: `1 passed`, including the temporary-directory Compose JSON rendering assertion.
 
 ### Task 2: Make candidate capture failures observable
 
@@ -116,7 +114,7 @@ class CandidateSinkTest(unittest.TestCase):
 
 - [ ] **Step 2: Run tests and verify RED**
 
-Run: `ai/.venv/Scripts/python.exe -m pytest ai/tests/test_candidate_sink.py -q`
+Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_candidate_sink.py -q`
 
 Expected: FAIL because no warning is logged.
 
@@ -139,7 +137,7 @@ logger = logging.getLogger(__name__)
 
 - [ ] **Step 4: Verify candidate sink and workflow tests**
 
-Run: `ai/.venv/Scripts/python.exe -m pytest ai/tests/test_candidate_sink.py ai/tests/test_workflow_runner.py -q`
+Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_candidate_sink.py tests/test_workflow_runner.py -q`
 
 Expected: all selected tests pass.
 
@@ -172,10 +170,10 @@ Create the error entry with symptoms, the two root causes, changed files using `
 
 - [ ] **Step 4: Run final verification**
 
-Run: `ai/.venv/Scripts/python.exe -m pytest ai/tests/test_prod_deployment_wiring.py ai/tests/test_candidate_sink.py ai/tests/test_workflow_runner.py -q`
-
-Run: `docker compose --env-file .env.prod.example -f docker-compose.prod.yml config --quiet`
+Run from the repository root: `cd ai; .\.venv\Scripts\python.exe -m pytest tests/test_prod_deployment_wiring.py tests/test_candidate_sink.py tests/test_workflow_runner.py -q`
 
 Run: `git diff --check`
 
-Expected: tests pass, compose exits 0, and diff check reports no whitespace errors.
+The production wiring test is the reproducible Compose validation: it renders Compose JSON in a temporary directory with an empty temporary `.env.prod`.
+
+Expected: tests pass, including safe Compose JSON rendering, and diff check reports no whitespace errors.
