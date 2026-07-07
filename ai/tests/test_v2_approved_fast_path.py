@@ -79,6 +79,17 @@ class V2ApprovedFastPathPolicyTest(unittest.TestCase):
         self.assertEqual(decision.card_id, "java-equals")
         self.assertEqual(decision.payload_intent, "CONCEPT_DEFINITION")
 
+    def test_react_props_question_selects_approved_props_card(self):
+        question = "React props가 뭐야?"
+
+        decision = resolve_v2_approved_fast_path(
+            question,
+            intent_from_label("CONCEPT_DEFINITION", question, 0.99),
+        )
+
+        self.assertTrue(decision.hit)
+        self.assertEqual(decision.card_id, "frontend")
+
     def test_disabled_reason_has_clear_message(self):
         with patch.dict(os.environ, {"AI_REVIEW_V2_APPROVED_FAST_PATH_ENABLED": "false"}):
             decision = resolve_v2_approved_fast_path(

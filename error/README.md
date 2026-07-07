@@ -48,6 +48,8 @@
 - [2026-06-27 타 코스 approved 카드가 코스 범위 제한을 우회함](2026-06-27-cross-course-approved-card-bypassed-scope.md)
 - [2026-06-27 Approved 한국어 카드 정의 질문 의도 오분류](2026-06-27-approved-korean-card-intent-misclassification.md)
 - [2026-06-27 AI review 정상 스트림 강제 취소와 approved 카드 한국어 조사 검색 누락](2026-06-27-ai-review-stream-abort-and-approved-card-query-gap.md)
+- [2026-07-07 React props 카드 미매칭과 free-question 답변 잘림](2026-07-07-react-props-match-and-free-question-truncation.md)
+- [2026-07-07 푸시 전 AI 회귀 테스트와 승인 카드 개수 테스트 실패](2026-07-07-pre-push-regression-test-failures.md)
 - [2026-06-25 AI review current problem semantic false contradiction](2026-06-25-ai-review-current-problem-semantic-false-contradiction.md)
 - [2026-06-25 AI review missing approved evidence preempted Ollama](2026-06-25-ai-review-missing-evidence-preempted-ollama.md)
 - [2026-06-25 AI review current problem N+1 blocked](2026-06-25-ai-review-current-problem-n-plus-one-blocked.md)

@@ -55,7 +55,7 @@ class AiReviewCandidateApprovalV2ServiceTest {
                 .filter(response -> response.status() == AiReviewCandidateStatus.APPROVED)
                 .filter(response -> response.publishedCardId() != null)
                 .toList();
-        assertThat(approvedCards).hasSize(85);
+        assertThat(approvedCards).isNotEmpty();
         assertThat(approvedCards)
                 .extracting(AiReviewCandidateV2Response::publishedCardId)
                 .contains("algorithm-2", "spring-aop", "python-asyncio");

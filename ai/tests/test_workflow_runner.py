@@ -1439,8 +1439,7 @@ class WorkflowRunnerTest(unittest.TestCase):
     def test_free_question_token_budget_allows_complete_short_definition(self):
         from app.workflow.nodes import max_tokens_for_mode
 
-        self.assertGreaterEqual(max_tokens_for_mode("free-question", 256), 120)
-        self.assertLessEqual(max_tokens_for_mode("free-question", 256), 140)
+        self.assertEqual(max_tokens_for_mode("free-question", 256), 256)
 
     def test_repeated_generated_answer_uses_cache(self):
         calls = {"count": 0}

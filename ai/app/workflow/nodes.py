@@ -591,7 +591,7 @@ def max_tokens_for_mode(mode: str, request_limit: int) -> int:
     if mode == "follow-up":
         return min(request_limit, 90)
     if mode == "free-question":
-        return min(request_limit, 128)
+        return min(request_limit, 256)
     return min(request_limit, 70)
 
 

@@ -5,11 +5,18 @@ from unittest.mock import patch, MagicMock
 from fastapi.testclient import TestClient
 
 from app.schemas import AiGenerateRequest
+from app.workflow.answer_cache import clear_answer_cache
 from app.workflow.runner import run_review_workflow_stream
 from app.main import app
 
 
 class StreamingWorkflowTest(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        clear_answer_cache()
+
+    def tearDown(self):
+        clear_answer_cache()
+
     async def test_successful_streaming_generation(self):
         async def mock_stream_gen(*args, **kwargs):
             yield "동시성 제어는 "
@@ -57,7 +64,7 @@ class StreamingWorkflowTest(unittest.IsolatedAsyncioTestCase):
 
         events = []
         async for event in run_review_workflow_stream(
-            mode="free-question",
+            mode="first-question",
             request=request,
             generator=failing_stream_gen,
         ):

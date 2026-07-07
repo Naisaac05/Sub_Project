@@ -33,6 +33,7 @@ TOKEN_ALIASES = {
 }
 
 QUERY_PHRASE_ALIASES = (
+    (("react", "props"), ("frontend", "question", "63", "props")),
     (("java", "문자열", "비교"), ("java", "equals")),
     (("react", "리스트", "요소", "속성"), ("react", "key", "react-key")),
 )
@@ -558,6 +559,8 @@ def tokenize_query(text: str) -> list[str]:
                 expanded[index] = token[:-len(suffix)]
                 break
     lowered = text.lower()
+    if "부모로부터" in lowered and "데이터" in lowered and "전달" in lowered:
+        expanded.extend(("props", "frontend", "question", "63"))
     for markers, aliases in QUERY_PHRASE_ALIASES:
         if all(marker in lowered for marker in markers):
             expanded.extend(aliases)
