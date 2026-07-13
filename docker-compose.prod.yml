@@ -11,10 +11,22 @@ services:
       PYTHON_AI_BASE_URL: http://ai:8001 # 백엔드 → AI(FastAPI)
       FILE_UPLOAD_DIR: /app/uploads
       AI_REVIEW_CONCEPTS_V2_PATH: /app/ai/knowledge/concepts_v2
+      AI_REVIEW_RATE_LIMIT_ENABLED: ${AI_REVIEW_RATE_LIMIT_ENABLED:-true}
+      AI_REVIEW_RATE_LIMIT_PER_USER_PER_MINUTE: ${AI_REVIEW_RATE_LIMIT_PER_USER_PER_MINUTE:-12}
+      AI_REVIEW_RATE_LIMIT_PER_IP_PER_MINUTE: ${AI_REVIEW_RATE_LIMIT_PER_IP_PER_MINUTE:-60}
+      AI_REVIEW_RATE_LIMIT_WINDOW_SECONDS: ${AI_REVIEW_RATE_LIMIT_WINDOW_SECONDS:-60}
+      AI_REVIEW_STREAM_TIMEOUT_SECONDS: ${AI_REVIEW_STREAM_TIMEOUT_SECONDS:-120}
+      PYTHON_AI_READ_TIMEOUT_SECONDS: ${PYTHON_AI_READ_TIMEOUT_SECONDS:-30}
     volumes:
       - uploads_data:/app/uploads # 업로드 영속(EBS)
       - ./ai/app/knowledge/concepts_v2:/app/ai/knowledge/concepts_v2
-    depends_on: [redis, ai]
+    depends_on:
+      redis:
+        condition: service_healthy
+      ai:
+        condition: service_healthy
+    cpus: "1.0"
+    mem_limit: 768m
     restart: unless-stopped
 
   frontend:
@@ -22,7 +34,11 @@ services:
       context: ./frontend
       args:
         BACKEND_URL: http://backend:8080 # rewrites는 빌드타임에 구워짐 → build arg
-    depends_on: [backend]
+    depends_on:
+      backend:
+        condition: service_healthy
+    cpus: "0.5"
+    mem_limit: 512m
     restart: unless-stopped
 
   ai:
@@ -32,16 +48,49 @@ services:
       ENVIRONMENT: prod # production_config 검증 활성화
       OLLAMA_BASE_URL: http://ollama:11434 # AI → Ollama
       AI_REVIEW_CANDIDATE_CAPTURE_URL: http://backend:8080/api/internal/ai-review/candidates/capture
+      OLLAMA_MODEL_POOL: ${OLLAMA_MODEL_POOL:-exaone3.5:2.4b=http://ollama:11434}
+      OLLAMA_MODEL_CAPACITY: ${OLLAMA_MODEL_CAPACITY:-exaone3.5:2.4b=1}
+      OLLAMA_MAX_CONCURRENT_GENERATIONS: ${OLLAMA_MAX_CONCURRENT_GENERATIONS:-1}
+      OLLAMA_QUEUE_WAIT_TIMEOUT_SECONDS: ${OLLAMA_QUEUE_WAIT_TIMEOUT_SECONDS:-30}
+      OLLAMA_REQUEST_TIMEOUT_SECONDS: ${OLLAMA_REQUEST_TIMEOUT_SECONDS:-60}
+      AI_REVIEW_MAX_IN_FLIGHT_REQUESTS: ${AI_REVIEW_MAX_IN_FLIGHT_REQUESTS:-8}
     volumes:
       - chroma_index:/app/app/vectorstore # 인덱스 영속
       - ./ai/app/knowledge/concepts_v2:/app/app/knowledge/concepts_v2
-    depends_on: [ollama]
+    depends_on:
+      ollama:
+        condition: service_healthy
+    cpus: "2.0"
+    mem_limit: 2g
     restart: unless-stopped
 
   ollama:
     image: ollama/ollama:latest
     volumes:
       - ollama_models:/root/.ollama # 모델 영속(재다운로드 방지)
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+    cpus: "2.0"
+    mem_limit: 4g
+    restart: unless-stopped
+
+  ollama-secondary:
+    image: ollama/ollama:latest
+    profiles: [model-pool]
+    volumes:
+      - ollama_models_secondary:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+    cpus: "2.0"
+    mem_limit: 4g
     restart: unless-stopped
 
   redis:
@@ -49,6 +98,13 @@ services:
     command: redis-server --appendonly yes --appendfsync everysec --save 900 1
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    cpus: "0.25"
+    mem_limit: 256m
     restart: unless-stopped
 
   caddy:
@@ -58,13 +114,25 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data # 발급된 TLS 인증서 영속
       - caddy_config:/config
-    depends_on: [frontend, backend]
+    depends_on:
+      frontend:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "caddy", "version"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    cpus: "0.25"
+    mem_limit: 128m
     restart: unless-stopped
 
 volumes:
   uploads_data:
   chroma_index:
   ollama_models:
+  ollama_models_secondary:
   redis_data:
   caddy_data:
   caddy_config:

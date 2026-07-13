@@ -51,8 +51,9 @@ class ModelPoolGateway:
         self.default_base_url = default_base_url
         self.default_capacity = max(1, default_capacity)
         self._lock = threading.Lock()
-        self._semaphores: dict[str, threading.BoundedSemaphore] = {}
-        self._in_flight: dict[str, int] = {}
+        self._semaphores: dict[tuple[str, str], threading.BoundedSemaphore] = {}
+        self._in_flight: dict[tuple[str, str], int] = {}
+        self._route_cursor: dict[str, int] = {}
 
     @classmethod
     def from_env(
@@ -78,30 +79,41 @@ class ModelPoolGateway:
         endpoints = self.model_pool.get(model) or [OllamaEndpoint(model=model, base_url=self.default_base_url)]
         active = [endpoint for endpoint in endpoints if endpoint.base_url not in self.draining_endpoints]
         all_draining = not active and bool(endpoints)
-        endpoint = (active or endpoints)[0]
+        candidates = active or endpoints
+        with self._lock:
+            minimum = min(self._in_flight.get((model, item.base_url), 0) for item in candidates)
+            least_busy = [
+                item for item in candidates
+                if self._in_flight.get((model, item.base_url), 0) == minimum
+            ]
+            cursor = self._route_cursor.get(model, 0)
+            endpoint = least_busy[cursor % len(least_busy)]
+            self._route_cursor[model] = cursor + 1
+            endpoint_in_flight = self._in_flight.get((model, endpoint.base_url), 0)
         capacity = self.capacity_for(model)
         return RouteDecision(
             model=model,
             endpoint=endpoint,
             capacity=capacity,
-            in_flight=self.in_flight_for(model),
+            in_flight=endpoint_in_flight,
             all_draining=all_draining,
         )
 
     def acquire(self, model: str, timeout_seconds: float) -> AcquireResult:
         route = self.route_for(model)
-        semaphore = self._semaphore_for(model, route.capacity)
+        semaphore = self._semaphore_for(model, route.endpoint.base_url, route.capacity)
         started_at = time.perf_counter()
         acquired = semaphore.acquire(timeout=max(timeout_seconds, 0))
         queue_wait_ms = int((time.perf_counter() - started_at) * 1000)
         if acquired:
             with self._lock:
-                self._in_flight[model] = self._in_flight.get(model, 0) + 1
+                key = (model, route.endpoint.base_url)
+                self._in_flight[key] = self._in_flight.get(key, 0) + 1
         return AcquireResult(
             model=model,
             endpoint=route.endpoint,
             capacity=route.capacity,
-            in_flight=self.in_flight_for(model),
+            in_flight=self._endpoint_in_flight(model, route.endpoint.base_url),
             queue_wait_ms=queue_wait_ms,
             acquired=acquired,
             all_draining=route.all_draining,
@@ -111,9 +123,11 @@ class ModelPoolGateway:
         if acquisition is None or not acquisition.acquired:
             return
         model = acquisition.model
+        base_url = acquisition.endpoint.base_url
         with self._lock:
-            self._in_flight[model] = max(self._in_flight.get(model, 0) - 1, 0)
-            semaphore = self._semaphores.get(model)
+            key = (model, base_url)
+            self._in_flight[key] = max(self._in_flight.get(key, 0) - 1, 0)
+            semaphore = self._semaphores.get(key)
         if semaphore is not None:
             semaphore.release()
 
@@ -122,14 +136,19 @@ class ModelPoolGateway:
 
     def in_flight_for(self, model: str) -> int:
         with self._lock:
-            return self._in_flight.get(model, 0)
+            return sum(value for (key_model, _), value in self._in_flight.items() if key_model == model)
 
-    def _semaphore_for(self, model: str, capacity: int) -> threading.BoundedSemaphore:
+    def _endpoint_in_flight(self, model: str, base_url: str) -> int:
         with self._lock:
-            semaphore = self._semaphores.get(model)
+            return self._in_flight.get((model, base_url), 0)
+
+    def _semaphore_for(self, model: str, base_url: str, capacity: int) -> threading.BoundedSemaphore:
+        with self._lock:
+            key = (model, base_url)
+            semaphore = self._semaphores.get(key)
             if semaphore is None:
                 semaphore = threading.BoundedSemaphore(capacity)
-                self._semaphores[model] = semaphore
+                self._semaphores[key] = semaphore
             return semaphore
 
 

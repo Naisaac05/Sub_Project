@@ -8,6 +8,9 @@ import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   getAiReviewSession,
+  isAiReviewRateLimitError,
+  rateLimitMessage,
+  retryAfterFromError,
   startAiReview,
   submitAiReviewAnswer,
   submitAiReviewAnswerStream,
@@ -93,6 +96,10 @@ function resolveAiReviewError(error: unknown) {
     response?: { status?: number; data?: { message?: string } };
   };
   const serverMessage = maybeError.response?.data?.message;
+
+  if (maybeError.response?.status === 429 || isAiReviewRateLimitError(error)) {
+    return rateLimitMessage(retryAfterFromError(error));
+  }
 
   if (maybeError.code === 'ECONNABORTED') {
     return '\uB85C\uCEEC AI \uC751\uB2F5\uC774 \uC9C0\uC5F0\uB418\uC5B4 \uC2DC\uAC04\uC744 \uCD08\uACFC\uD588\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD558\uAC70\uB098 \uB2E4\uC74C \uBB38\uC81C\uB85C \uB118\uC5B4\uAC00\uC138\uC694.';
@@ -289,8 +296,8 @@ export default function AiReviewPage() {
         } else {
           setError(res.message || LABELS.loading);
         }
-      } catch {
-        setError('\uBCF5\uC2B5 \uC138\uC158\uC744 \uC2DC\uC791\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.');
+      } catch (startError) {
+        setError(resolveAiReviewError(startError));
       } finally {
         setLoading(false);
       }
@@ -602,6 +609,15 @@ export default function AiReviewPage() {
 
       if (err.name === 'AbortError') {
         setAiRequestState('CANCELLED');
+        setSubmitting(false);
+        return;
+      }
+
+      if (isAiReviewRateLimitError(err)) {
+        setAiRequestState('ERROR');
+        setError(rateLimitMessage(err.retryAfterSeconds));
+        setAnswer(currentAnswer);
+        setOptimisticUserMessage(null);
         setSubmitting(false);
         return;
       }

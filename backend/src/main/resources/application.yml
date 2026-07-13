@@ -113,6 +113,11 @@ app:
       semantic-enabled: ${AI_REVIEW_SEMANTIC_EVALUATION_ENABLED:false}
     degraded:
       streaming-off: ${AI_REVIEW_STREAMING_OFF:false}
+    rate-limit:
+      enabled: ${AI_REVIEW_RATE_LIMIT_ENABLED:true}
+      per-user-per-minute: ${AI_REVIEW_RATE_LIMIT_PER_USER_PER_MINUTE:12}
+      per-ip-per-minute: ${AI_REVIEW_RATE_LIMIT_PER_IP_PER_MINUTE:60}
+      window-seconds: ${AI_REVIEW_RATE_LIMIT_WINDOW_SECONDS:60}
     rule-based:
       enabled: ${AI_REVIEW_RULE_BASED_ENABLED:true}
     limits:

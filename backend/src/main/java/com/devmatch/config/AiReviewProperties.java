@@ -14,6 +14,7 @@ public record AiReviewProperties(
         Limits limits,
         Evaluation evaluation,
         Degraded degraded,
+        RateLimit rateLimit,
         boolean streamingEnabled,
         int streamTimeoutSeconds,
         String candidatesPath,
@@ -44,6 +45,9 @@ public record AiReviewProperties(
         }
         if (degraded == null) {
             degraded = new Degraded(false);
+        }
+        if (rateLimit == null) {
+            rateLimit = new RateLimit(true, 12, 60, 60);
         }
         if (streamTimeoutSeconds == 0) {
             streamTimeoutSeconds = 45;
@@ -79,10 +83,44 @@ public record AiReviewProperties(
                 limits,
                 evaluation,
                 degraded,
+                null,
                 streamingEnabled,
                 streamTimeoutSeconds,
                 "",
                 ""
+        );
+    }
+
+    public AiReviewProperties(
+            boolean enabled,
+            Provider provider,
+            OpenAi openai,
+            PythonAi python,
+            Ollama ollama,
+            RuleBased ruleBased,
+            Limits limits,
+            Evaluation evaluation,
+            Degraded degraded,
+            boolean streamingEnabled,
+            int streamTimeoutSeconds,
+            String candidatesPath,
+            String autoCandidatesPath
+    ) {
+        this(
+                enabled,
+                provider,
+                openai,
+                python,
+                ollama,
+                ruleBased,
+                limits,
+                evaluation,
+                degraded,
+                null,
+                streamingEnabled,
+                streamTimeoutSeconds,
+                candidatesPath,
+                autoCandidatesPath
         );
     }
 
@@ -147,6 +185,14 @@ public record AiReviewProperties(
 
     public record Degraded(
             boolean streamingOff
+    ) {
+    }
+
+    public record RateLimit(
+            boolean enabled,
+            int perUserPerMinute,
+            int perIpPerMinute,
+            int windowSeconds
     ) {
     }
 }

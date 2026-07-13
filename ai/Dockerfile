@@ -3,7 +3,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # 빌드 도구(arm64에서 kiwipiepy 등 소스 컴파일에 필요: g++, cmake)
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential cmake \
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential cmake curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt requirements-rag.txt ./
@@ -21,4 +21,6 @@ COPY . .
 # 참고: 쿼리 임베딩(bge-m3)은 첫 호출 시 런타임 다운로드됨(EC2 네트워크 필요).
 
 EXPOSE 8001
+HEALTHCHECK --interval=30s --timeout=5s --start-period=45s --retries=3 \
+    CMD curl -fsS http://localhost:8001/health >/dev/null || exit 1
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]

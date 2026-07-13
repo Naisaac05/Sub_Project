@@ -68,6 +68,48 @@ class OllamaGatewayTest(unittest.TestCase):
             gateway.release(small)
             gateway.release(large)
 
+    def test_replicas_receive_requests_by_least_in_flight(self):
+        gateway = ModelPoolGateway(
+            model_pool=parse_model_pool(
+                "small=http://ollama-a:11434,small=http://ollama-b:11434",
+                default_base_url="http://fallback:11434",
+            ),
+            capacities={"small": 1},
+        )
+
+        first = gateway.acquire("small", timeout_seconds=0.001)
+        second = gateway.acquire("small", timeout_seconds=0.001)
+        third = gateway.acquire("small", timeout_seconds=0.001)
+
+        try:
+            self.assertTrue(first.acquired)
+            self.assertTrue(second.acquired)
+            self.assertNotEqual(first.endpoint.base_url, second.endpoint.base_url)
+            self.assertFalse(third.acquired)
+        finally:
+            gateway.release(first)
+            gateway.release(second)
+
+    def test_equal_load_routes_rotate_between_replicas(self):
+        gateway = ModelPoolGateway(
+            model_pool=parse_model_pool(
+                "small=http://ollama-a:11434,small=http://ollama-b:11434",
+                default_base_url="http://fallback:11434",
+            )
+        )
+
+        routes = [gateway.route_for("small").endpoint.base_url for _ in range(4)]
+
+        self.assertEqual(
+            routes,
+            [
+                "http://ollama-a:11434",
+                "http://ollama-b:11434",
+                "http://ollama-a:11434",
+                "http://ollama-b:11434",
+            ],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
