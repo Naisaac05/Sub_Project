@@ -183,8 +183,9 @@ class AdaptiveJudgeTest(unittest.TestCase):
             state = generate_answer_node(state, generator=call_ollama)
             elapsed = time.perf_counter() - start_time
             
-            # Main response should be returned immediately (< 0.5s)
-            self.assertLess(elapsed, 0.5)
+            # Main response should be returned immediately and not wait for the 2s grounding judge.
+            # Coverage instrumentation can add a small amount of overhead on slower machines.
+            self.assertLess(elapsed, 1.0)
             self.assertEqual(state.judge_tier, "tier2")
             self.assertEqual(state.grounding_async_executed, True)
             self.assertIsNotNone(state.grounding_thread)

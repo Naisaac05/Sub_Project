@@ -65,7 +65,7 @@ function AdminMentorListInner() {
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState('');
 
-  const applications = page?.content ?? [];
+  const applications = useMemo(() => page?.content ?? [], [page?.content]);
 
   async function load(status: AdminMentorStatus, pageIndex: number) {
     setLoading(true);

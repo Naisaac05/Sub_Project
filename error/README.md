@@ -42,6 +42,10 @@
 ```
 
 ## 인덱스
+- [2026-07-10 Ollama model pool first endpoint only](2026-07-10-ollama-model-pool-first-endpoint-only.md)
+- [2026-07-10 Spring multiple constructors autowire](2026-07-10-spring-multiple-constructors-autowire.md)
+- [2026-07-10 Payment confirm auto match and application phone](2026-07-10-payment-confirm-auto-match-and-application-phone.md)
+- [2026-07-10 Coverage gates test config and timing](2026-07-10-coverage-gates-test-config-and-timing.md)
 - [2026-07-02 Spring YAML 사용자 정의 설정 경고](2026-07-02-spring-yaml-custom-property-metadata.md)
 - [2026-07-01 운영 AI 카드 경로와 후보 수집 URL 연결 누락](2026-07-01-prod-ai-card-path-and-candidate-capture-url.md)
 - [2026-06-29 AWS(EC2 ARM) 첫 배포 빌드/부팅 함정 7건 — 로컬 amd64에선 안 보이던 것들](2026-06-29-aws-arm-prod-deploy-gotchas.md)

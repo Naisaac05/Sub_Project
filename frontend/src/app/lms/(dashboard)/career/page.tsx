@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Briefcase, FileUp, Plus, Loader2, Star, MessageSquare, ExternalLink } from 'lucide-react';
@@ -31,7 +31,7 @@ export default function CareerPage() {
   const [fbContent, setFbContent] = useState('');
   const [interviewForm, setInterviewForm] = useState({ interviewDate: '', topic: '', questionsAndAnswers: '', mentorFeedback: '', rating: 3 });
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!matchingId) return;
     try {
       const [rRes, iRes] = await Promise.all([getResumes(matchingId), getMockInterviews(matchingId)]);
@@ -39,9 +39,9 @@ export default function CareerPage() {
       setInterviews(iRes.data.data || []);
     } catch { /* ignore */ }
     finally { setLoading(false); }
-  };
+  }, [matchingId]);
 
-  useEffect(() => { fetchData(); }, [matchingId]);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const handleUpload = async () => {
     if (!selectedFile) return;
