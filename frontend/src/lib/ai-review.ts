@@ -9,6 +9,53 @@ import type {
 
 const AI_REVIEW_TIMEOUT_MS = 45000;
 
+export class AiReviewRateLimitError extends Error {
+  constructor(public readonly retryAfterSeconds: number | null) {
+    super(rateLimitMessage(retryAfterSeconds));
+    this.name = 'AiReviewRateLimitError';
+  }
+}
+
+export function rateLimitMessage(retryAfterSeconds: number | null) {
+  if (retryAfterSeconds && retryAfterSeconds > 0) {
+    return `AI 요청이 많습니다. ${retryAfterSeconds}초 후 다시 시도해주세요.`;
+  }
+  return 'AI 요청이 많습니다. 잠시 후 다시 시도해주세요.';
+}
+
+export function isAiReviewRateLimitError(error: unknown): error is AiReviewRateLimitError {
+  return error instanceof AiReviewRateLimitError;
+}
+
+export function retryAfterFromError(error: unknown): number | null {
+  if (isAiReviewRateLimitError(error)) {
+    return error.retryAfterSeconds;
+  }
+  const maybeAxiosError = error as {
+    response?: { status?: number; headers?: Record<string, unknown> };
+  };
+  if (maybeAxiosError.response?.status !== 429) {
+    return null;
+  }
+  const value = maybeAxiosError.response.headers?.['retry-after'];
+  return parseRetryAfter(typeof value === 'string' || typeof value === 'number' ? String(value) : null);
+}
+
+function parseRetryAfter(value: string | null): number | null {
+  if (!value) {
+    return null;
+  }
+  const seconds = Number(value);
+  if (Number.isFinite(seconds)) {
+    return Math.max(1, Math.ceil(seconds));
+  }
+  const retryAt = Date.parse(value);
+  if (Number.isNaN(retryAt)) {
+    return null;
+  }
+  return Math.max(1, Math.ceil((retryAt - Date.now()) / 1000));
+}
+
 export async function startAiReview(testResultId: number): Promise<ApiResponse<AiReviewSessionResponse>> {
   const res = await apiClient.post<ApiResponse<AiReviewSessionResponse>>(
     `/ai-review/test-results/${testResultId}/start`,
@@ -49,7 +96,7 @@ export async function submitAiReviewAnswerStream(
 ): Promise<Response> {
   const token = getAccessToken();
   const url = `${process.env.NEXT_PUBLIC_API_BASE_URL || '/api'}/ai-review/sessions/${sessionId}/messages/stream`;
-  return fetch(url, {
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -59,6 +106,10 @@ export async function submitAiReviewAnswerStream(
     body: JSON.stringify({ answer, mode, questionId }),
     signal
   });
+  if (response.status === 429) {
+    throw new AiReviewRateLimitError(parseRetryAfter(response.headers.get('retry-after')));
+  }
+  return response;
 }
 
 export async function summarizeAiReviewQuestion(

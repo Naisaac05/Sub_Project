@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { BookOpen, CheckCircle, Circle, Plus, Loader2, ExternalLink } from 'lucide-react';
@@ -28,24 +28,24 @@ export default function CurriculumPage() {
   const [topicInput, setTopicInput] = useState('');
   const [resourceInput, setResourceInput] = useState('');
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!matchingId) return;
     try {
       const res = await getCurriculum(matchingId);
       setCurriculum(res.data.data);
     } catch { setCurriculum(null); }
     finally { setLoading(false); }
-  };
+  }, [matchingId]);
 
-  const fetchLimit = async () => {
+  const fetchLimit = useCallback(async () => {
     if (!matchingId) return;
     try {
       const res = await getCurriculumLimit(matchingId);
       setLimit(res.data.data);
     } catch { setLimit(null); }
-  };
+  }, [matchingId]);
 
-  useEffect(() => { fetchData(); fetchLimit(); }, [matchingId]);
+  useEffect(() => { fetchData(); fetchLimit(); }, [fetchData, fetchLimit]);
 
   const maxWeeks = limit?.maxWeeks ?? 0;
   const atLimit = maxWeeks > 0 && (curriculum?.weeks.length ?? 0) >= maxWeeks;

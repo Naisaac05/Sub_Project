@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { NotebookPen, Plus, Loader2, Star, MessageSquare, ChevronDown, ChevronUp, Send } from 'lucide-react';
@@ -25,16 +25,16 @@ export default function NotesPage() {
   const [createForm, setCreateForm] = useState({ type: 'SESSION_REVIEW' as NoteType, title: '', content: '', weekNumber: 1, selfRating: 3 });
   const [commentInput, setCommentInput] = useState('');
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!matchingId) return;
     try {
       const res = await getNotes(matchingId, filter || undefined);
       setNotes(res.data.data || []);
     } catch { /* ignore */ }
     finally { setLoading(false); }
-  };
+  }, [matchingId, filter]);
 
-  useEffect(() => { fetchData(); }, [matchingId, filter]);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const handleCreate = async () => {
     setSubmitting(true); setError('');

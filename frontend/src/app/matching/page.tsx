@@ -199,6 +199,7 @@ function ApplicationDetailModal({
                 <div className="grid gap-4">
                   <DetailRow label="멘토링 목표">{application.goal}</DetailRow>
                   <DetailRow label="희망 멘토 스타일">{application.personality}</DetailRow>
+                  <DetailRow label="연락처">{application.phone}</DetailRow>
                   <DetailRow label="자기소개">{application.selfIntroduction}</DetailRow>
                 </div>
               </section>

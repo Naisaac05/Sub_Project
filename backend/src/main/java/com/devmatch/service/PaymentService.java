@@ -29,6 +29,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final ApplicationRepository applicationRepository;
     private final TossPaymentService tossPaymentService;
+    private final ApplicationService applicationService;
 
     // ===== 가격 정책 상수 =====
     private static final int BASE_PRICE = 990_000;           // 기본 1개월 가격: 99만원
@@ -137,6 +138,7 @@ public class PaymentService {
 
         if (confirmed) {
             payment.confirm(request.getPaymentKey());
+            applicationService.confirmPayment(userId, payment.getApplicationId());
             log.info("[Payment] 결제 승인 완료 — orderId: {}, paymentKey: {}",
                     request.getOrderId(), request.getPaymentKey());
         } else {

@@ -282,6 +282,7 @@ export interface ApplicationResponse {
   weekendStudyHours: string;
   goal: string;
   personality: string;
+  phone: string;
   selfIntroduction: string;
   referralSources: string[];
   referralCode: string;

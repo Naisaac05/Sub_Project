@@ -36,6 +36,7 @@ public class ApplicationResponse {
     private String weekendStudyHours;
     private String goal;
     private String personality;
+    private String phone;
     private String selfIntroduction;
     private List<String> referralSources;
     private String referralCode;

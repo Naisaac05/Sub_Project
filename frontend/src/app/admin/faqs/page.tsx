@@ -245,7 +245,7 @@ export default function AdminFaqsPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>FAQ 를 삭제하시겠습니까?</AlertDialogTitle>
             <AlertDialogDescription>
-              "{deleteTarget?.question}" 항목이 영구 삭제됩니다. 되돌릴 수 없습니다.
+              &quot;{deleteTarget?.question}&quot; 항목이 영구 삭제됩니다. 되돌릴 수 없습니다.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
