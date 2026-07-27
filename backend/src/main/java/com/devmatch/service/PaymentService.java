@@ -4,6 +4,7 @@ import com.devmatch.dto.payment.PaymentConfirmRequest;
 import com.devmatch.dto.payment.PaymentCreateRequest;
 import com.devmatch.dto.payment.PaymentResponse;
 import com.devmatch.entity.Application;
+import com.devmatch.entity.EnrollmentPlan;
 import com.devmatch.entity.Payment;
 import com.devmatch.entity.PaymentStatus;
 import com.devmatch.exception.DuplicatePaymentException;
@@ -24,6 +25,7 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -46,11 +48,16 @@ public class PaymentService {
     private static final Duration CONFIRM_LOCK_TTL = Duration.ofSeconds(10);
     private static final String CONFIRM_LOCK_PREFIX = "pay:confirm:lock:";
 
+    /** 외부 토스 승인을 거치지 않은 결제의 paymentKey 접두사 (감사 시 실제 승인 건과 구분용) */
+    public static final String MOCK_PAYMENT_KEY_PREFIX = "MOCK-";
+
     // ===== 가격 정책 상수 =====
-    private static final int BASE_PRICE = 990_000;           // 기본 1개월 가격: 99만원
-    private static final int FIRST_RENEWAL_PRICE = 990_000;  // 1회 연장: 99만원
-    private static final int SECOND_RENEWAL_PRICE = 890_000; // 2회 연장: 89만원
-    private static final int MAX_RENEWAL_PRICE = 790_000;    // 3회+ 연장: 79만원
+    // 이 상수들은 프론트엔드 결제 플랜 카드에 그대로 노출된다(GET /api/payments/pricing).
+    // 값을 바꾸면 PaymentServiceTest 의 플랜별 기대 금액도 함께 갱신해야 한다.
+    private static final int BASE_PRICE = 1_300_000;           // 기본 1개월 가격: 130만원
+    private static final int FIRST_RENEWAL_PRICE = 1_300_000;  // 1회 연장: 동일가
+    private static final int SECOND_RENEWAL_PRICE = 1_170_000; // 2회 연장: -10%
+    private static final int MAX_RENEWAL_PRICE = 1_040_000;    // 3회+ 연장: -20%
 
     // 묶음 할인율 (3개월 이상)
     private static final double BUNDLE_3_DISCOUNT = 0.05;   // 3개월: 5%
@@ -62,17 +69,38 @@ public class PaymentService {
      * 결제 가격 미리보기 (결제 생성 전 가격 확인용)
      * 프론트엔드에서 개월 수 슬라이더 조절 시 호출하여 실시간 가격을 보여줍니다.
      */
-    public PricingResult calculatePricing(Long userId, int monthsBundled) {
-        long confirmedCount = paymentRepository.countByUserIdAndStatus(userId, PaymentStatus.CONFIRMED);
-        int renewalCount = (int) confirmedCount;
+    public PricingResult calculatePricing(Long userId, EnrollmentPlan plan, int monthsBundled) {
+        // userId 가 null = 비로그인 미리보기. 연장 이력이 없으므로 최초 결제 기준가를 보여준다.
+        int renewalCount = userId == null
+                ? 0
+                : (int) paymentRepository.countByUserIdAndStatus(userId, PaymentStatus.CONFIRMED);
 
         int unitPrice = getUnitPrice(renewalCount);
         int rawTotal = unitPrice * monthsBundled;
         double discountRate = getBundleDiscountRate(monthsBundled);
-        int discountAmount = (int) Math.round(rawTotal * discountRate);
+        int bundleDiscount = (int) Math.round(rawTotal * discountRate);
+        int planDiscount = plan.discountFor(monthsBundled);
+        int discountAmount = bundleDiscount + planDiscount;
         int finalAmount = rawTotal - discountAmount;
 
-        return new PricingResult(unitPrice, monthsBundled, renewalCount, discountRate, discountAmount, finalAmount);
+        return new PricingResult(plan, unitPrice, monthsBundled, renewalCount, rawTotal,
+                discountRate, bundleDiscount, planDiscount, discountAmount, finalAmount);
+    }
+
+    /**
+     * 모든 플랜의 가격 미리보기.
+     * 프론트엔드 결제 플랜 카드가 이 결과를 그대로 표시하므로, 화면 표시가와 청구액이 갈라질 수 없다.
+     */
+    public List<PricingResult> previewAllPlans(Long userId, int monthsBundled) {
+        return Arrays.stream(EnrollmentPlan.values())
+                .map(plan -> calculatePricing(userId, plan, monthsBundled))
+                .collect(Collectors.toList());
+    }
+
+    private EnrollmentPlan parsePlan(String rawCourseType) {
+        return EnrollmentPlan.parse(rawCourseType)
+                .orElseThrow(() -> new PaymentFailedException(
+                        "알 수 없는 수강 방식입니다: " + rawCourseType));
     }
 
     /**
@@ -81,6 +109,10 @@ public class PaymentService {
      */
     @Transactional
     public PaymentResponse createPayment(Long userId, PaymentCreateRequest request) {
+        // 수강 방식(플랜) 검증 — 저장소를 건드리기 전에 입력부터 확정한다
+        EnrollmentPlan plan = parsePlan(request.getCourseType());
+        int months = request.getMonthsBundled() != null ? request.getMonthsBundled() : 1;
+
         // 중복 결제 확인
         if (paymentRepository.existsByApplicationId(request.getApplicationId())) {
             throw new DuplicatePaymentException("이미 해당 신청서에 대한 결제가 존재합니다");
@@ -90,19 +122,8 @@ public class PaymentService {
         Application application = applicationRepository.findById(request.getApplicationId())
                 .orElseThrow(() -> new PaymentFailedException("신청서를 찾을 수 없습니다: " + request.getApplicationId()));
 
-        // 연장 회차 자동 계산
-        long confirmedCount = paymentRepository.countByUserIdAndStatus(userId, PaymentStatus.CONFIRMED);
-        int renewalCount = (int) confirmedCount;
-
-        // 동적 금액 계산
-        // 아래 null 체크는 남겨둔다 — request 는 클라이언트가 보낸 JSON 이라 필드가 생략되거나
-        // 명시적 null 로 올 수 있다. (엔티티 필드와 달리 DB 제약으로 보장되지 않는다.)
-        int months = request.getMonthsBundled() != null ? request.getMonthsBundled() : 1;
-        int unitPrice = getUnitPrice(renewalCount);
-        int rawTotal = unitPrice * months;
-        double discountRate = getBundleDiscountRate(months);
-        int discountAmount = (int) Math.round(rawTotal * discountRate);
-        int finalAmount = rawTotal - discountAmount;
+        // 금액은 미리보기와 완전히 같은 경로로 계산한다 (표시가 ≠ 청구액 방지)
+        PricingResult pricing = calculatePricing(userId, plan, months);
 
         // orderId 자동 생성
         String orderId = "DEVMATCH-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
@@ -111,11 +132,11 @@ public class PaymentService {
                 .userId(userId)
                 .applicationId(request.getApplicationId())
                 .orderId(orderId)
-                .amount(finalAmount)
-                .courseType(request.getCourseType())
+                .amount(pricing.finalAmount())
+                .courseType(plan.name())
                 .monthsBundled(months)
-                .renewalCount(renewalCount)
-                .discountApplied(discountAmount)
+                .renewalCount(pricing.renewalCount())
+                .discountApplied(pricing.discountAmount())
                 .installmentMonths(request.getInstallmentMonths() != null ? request.getInstallmentMonths() : 0)
                 .build();
 
@@ -132,8 +153,8 @@ public class PaymentService {
         // 신청서 상태 업데이트
         application.markPaid();
 
-        log.info("[Payment] 결제 생성 — orderId: {}, amount: {} (할인: {}원, 연장 {}회차, {}개월)",
-                orderId, finalAmount, discountAmount, renewalCount, months);
+        log.info("[Payment] 결제 생성 — orderId: {}, plan: {}, amount: {} (할인: {}원, 연장 {}회차, {}개월)",
+                orderId, plan, pricing.finalAmount(), pricing.discountAmount(), pricing.renewalCount(), months);
         return PaymentResponse.from(saved);
     }
 
@@ -188,18 +209,21 @@ public class PaymentService {
 
         // 실호출 차단 플래그 (환불 경로와 대칭). 기본 false — 학생 포트폴리오 정책상 실결제 금지.
         // 키를 잘못 넣어도(live_sk_...) 코드가 한 번 더 막아준다.
-        boolean confirmed;
-        if (tossPaymentProperties.tossConfirmEnabled()) {
-            confirmed = tossPaymentService.confirmPayment(
-                    request.getPaymentKey(),
-                    request.getOrderId(),
-                    request.getAmount()
-            );
-        } else {
-            log.warn("[Payment] toss-confirm-enabled=false — 토스 호출 skip, 내부 상태만 전이 (orderId={})",
-                    request.getOrderId());
-            confirmed = true;
+        // 이 경우에도 위 금액 검증은 이미 통과한 상태이며, 실제 승인 건과 구분할 수 있도록
+        // paymentKey 에 MOCK- 접두사를 남긴다.
+        if (!tossPaymentProperties.tossConfirmEnabled()) {
+            payment.confirm(MOCK_PAYMENT_KEY_PREFIX + request.getPaymentKey());
+            applicationService.confirmPayment(userId, payment.getApplicationId());
+            log.warn("[Payment] toss-confirm-enabled=false — 토스 호출 skip, 내부 상태만 CONFIRMED (orderId: {}, amount: {})",
+                    request.getOrderId(), request.getAmount());
+            return PaymentResponse.from(payment);
         }
+
+        boolean confirmed = tossPaymentService.confirmPayment(
+                request.getPaymentKey(),
+                request.getOrderId(),
+                request.getAmount()
+        );
 
         if (confirmed) {
             payment.confirm(request.getPaymentKey());
@@ -289,10 +313,14 @@ public class PaymentService {
      * 가격 계산 결과 DTO (내부용)
      */
     public record PricingResult(
+            EnrollmentPlan plan,
             int unitPrice,
             int monthsBundled,
             int renewalCount,
-            double discountRate,
+            int rawTotal,
+            double bundleDiscountRate,
+            int bundleDiscount,
+            int planDiscount,
             int discountAmount,
             int finalAmount
     ) {}

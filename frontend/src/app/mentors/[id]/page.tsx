@@ -25,11 +25,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { getMyMatchingsAsMentee } from '@/lib/matching';
 import {
   getCourseBySlug,
-  getEnrollmentPlans,
   matchesCourseCategory,
   type CourseCatalogItem,
   type CourseReview,
 } from '@/lib/course-catalog';
+import { formatWon, useEnrollmentPlans } from '@/lib/use-enrollment-plans';
 import type { MatchingResponse } from '@/lib/types';
 
 const iconMap = {
@@ -121,7 +121,7 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
   const { user, isLoading: authLoading } = useAuth();
   const course = useMemo(() => getCourseBySlug(params?.id) ?? FALLBACK_COURSE, [params?.id]);
   const Icon = iconMap[course.iconKey];
-  const enrollmentPlans = useMemo(() => getEnrollmentPlans(), []);
+  const { plans: enrollmentPlans, isLoading: plansLoading } = useEnrollmentPlans();
 
   const [reviews, setReviews] = useState<CourseReview[]>([]);
   const [reviewForm, setReviewForm] = useState<ReviewFormState>({ rating: 5, content: '' });
@@ -444,13 +444,22 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                 </div>
 
                 <div className="mt-6 border-t border-white/5 pt-6">
-                  <p className="text-sm text-gray-500 line-through">
-                    {plan.originalPrice.toLocaleString('ko-KR')}원
-                  </p>
-                  <p className="mt-2 text-3xl font-extrabold tracking-tight text-white">
-                    {plan.price.toLocaleString('ko-KR')}원
-                  </p>
-                  <p className="mt-2 text-sm text-gray-400">{plan.monthly}</p>
+                  {plan.pricing ? (
+                    <>
+                      <p className="text-sm text-gray-500 line-through">{formatWon(plan.pricing.rawTotal)}</p>
+                      <p className="mt-2 text-3xl font-extrabold tracking-tight text-white">
+                        {formatWon(plan.pricing.finalAmount)}
+                      </p>
+                      <p className="mt-2 text-sm text-gray-400">
+                        월 {formatWon(plan.pricing.unitPrice - plan.pricing.planDiscount)} 기준 ·{' '}
+                        {formatWon(plan.pricing.discountAmount)} 할인
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-sm font-semibold text-gray-500">
+                      {plansLoading ? '가격 확인 중...' : '가격 문의'}
+                    </p>
+                  )}
                 </div>
 
                 <button

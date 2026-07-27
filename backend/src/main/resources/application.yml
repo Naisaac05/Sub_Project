@@ -85,6 +85,8 @@ app:
   payment:
     # 외부 토스 API 실호출 차단 플래그 — 승인/취소 모두 기본 false.
     # 학생 포트폴리오 정책상 실결제·실환불 금지. 실호출이 필요하면 test_ 접두사 키와 함께 true 로.
+    # 승인이 false 면 토스 호출 없이 내부 상태만 CONFIRMED 로 두고 paymentKey 에 MOCK- 접두사를 남긴다.
+    # 금액 검증은 이 플래그와 무관하게 항상 수행된다.
     toss-confirm-enabled: ${TOSS_CONFIRM_ENABLED:false}
     toss-cancel-enabled: ${TOSS_CANCEL_ENABLED:false}
 

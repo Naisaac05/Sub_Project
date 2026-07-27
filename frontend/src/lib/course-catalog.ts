@@ -1,3 +1,5 @@
+import { DEFAULT_ENROLLMENT_MONTHS, type EnrollmentPlanId } from './payment';
+
 export type CourseSection = {
   title: string;
   summary: string;
@@ -534,11 +536,24 @@ function formatDeadlineBadge(deadline: Date) {
   return '다음 차수 준비 중';
 }
 
-function buildMonthlyPrice(monthlyPrice: number) {
-  return `${monthlyPrice.toLocaleString('ko-KR')}원 / 12개월(무이자 기준)`;
+export interface EnrollmentPlanPresentation {
+  id: EnrollmentPlanId;
+  title: string;
+  badge: string;
+  badgeTone: 'blue' | 'red' | 'orange';
+  desc: string;
+  duration: string;
 }
 
-export function getEnrollmentPlans(now = new Date()) {
+/**
+ * 결제 플랜의 **표시 정보만** 반환한다 (차수 이름 / 마감 배지 / 설명).
+ *
+ * 가격은 여기 없다. 금액은 전적으로 백엔드 가격 정책 엔진이 소유하며
+ * `fetchPlanPricing()` 으로 받아 온다. 예전에는 이 파일이 플랜 가격을 하드코딩하고
+ * 있었는데, 백엔드 계산식과 갈라져 카드 표시가와 실제 청구액이 약 111만원 차이 나는
+ * 버그가 있었다 (error/2026-07-27-payment-price-mismatch.md 참고).
+ */
+export function getEnrollmentPlans(now = new Date()): EnrollmentPlanPresentation[] {
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth();
   const nextStart = new Date(currentYear, currentMonth + 1, 1);
@@ -546,40 +561,32 @@ export function getEnrollmentPlans(now = new Date()) {
 
   const firstDeadline = new Date(nextStart.getFullYear(), nextStart.getMonth(), 10);
   const secondDeadline = new Date(secondStart.getFullYear(), secondStart.getMonth(), 10);
+  const duration = `${DEFAULT_ENROLLMENT_MONTHS}개월 집중 과정`;
 
   return [
     {
       id: 'IMMEDIATE',
       title: '즉시 시작',
       badge: '신청 즉시 매칭 시작',
-      badgeTone: 'blue' as const,
+      badgeTone: 'blue',
       desc: '결제 후 바로 멘토 매칭을 시작하고, 일정 조율이 끝나는 대로 멘토링을 진행합니다.',
-      duration: '4개월 집중 과정',
-      originalPrice: 5_980_000,
-      price: 4_680_000,
-      monthly: buildMonthlyPrice(390_000),
+      duration,
     },
     {
       id: 'EARLY_BIRD_1',
       title: formatMonthLabel(nextStart),
       badge: formatDeadlineBadge(firstDeadline),
-      badgeTone: 'red' as const,
+      badgeTone: 'red',
       desc: `${nextStart.getMonth() + 1}월 차수에 맞춰 멘토를 미리 매칭하고 시작 일정을 안정적으로 확보합니다.`,
-      duration: '4개월 집중 과정',
-      originalPrice: 4_980_000,
-      price: 4_580_000,
-      monthly: buildMonthlyPrice(381_000),
+      duration,
     },
     {
       id: 'EARLY_BIRD_2',
       title: formatMonthLabel(secondStart),
       badge: formatDeadlineBadge(secondDeadline),
-      badgeTone: 'orange' as const,
+      badgeTone: 'orange',
       desc: `${secondStart.getMonth() + 1}월 차수를 여유 있게 준비하고 커리큘럼 계획까지 먼저 맞춥니다.`,
-      duration: '4개월 집중 과정',
-      originalPrice: 4_980_000,
-      price: 4_480_000,
-      monthly: buildMonthlyPrice(373_000),
+      duration,
     },
   ];
 }
