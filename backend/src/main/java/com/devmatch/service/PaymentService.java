@@ -8,14 +8,21 @@ import com.devmatch.entity.Payment;
 import com.devmatch.entity.PaymentStatus;
 import com.devmatch.exception.DuplicatePaymentException;
 import com.devmatch.exception.PaymentFailedException;
+import com.devmatch.exception.PaymentInProgressException;
 import com.devmatch.exception.PaymentNotFoundException;
+import com.devmatch.exception.QueueNotAdmittedException;
 import com.devmatch.repository.ApplicationRepository;
 import com.devmatch.repository.PaymentRepository;
+import com.devmatch.support.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,6 +37,12 @@ public class PaymentService {
     private final ApplicationRepository applicationRepository;
     private final TossPaymentService tossPaymentService;
     private final ApplicationService applicationService;
+    private final DistributedLock distributedLock;
+    private final WaitingQueueService waitingQueueService;
+
+    // 결제 승인 분산 락 TTL — 토스 응답 지연을 넉넉히 덮되, 홀더 크래시 시 자동 해제되도록 짧게.
+    private static final Duration CONFIRM_LOCK_TTL = Duration.ofSeconds(10);
+    private static final String CONFIRM_LOCK_PREFIX = "pay:confirm:lock:";
 
     // ===== 가격 정책 상수 =====
     private static final int BASE_PRICE = 990_000;           // 기본 1개월 가격: 99만원
@@ -102,7 +115,15 @@ public class PaymentService {
                 .installmentMonths(request.getInstallmentMonths() != null ? request.getInstallmentMonths() : 0)
                 .build();
 
-        Payment saved = paymentRepository.save(payment);
+        Payment saved;
+        try {
+            saved = paymentRepository.save(payment);
+            paymentRepository.flush(); // 유니크 제약 위반을 이 지점에서 즉시 검출
+        } catch (DataIntegrityViolationException e) {
+            // existsByApplicationId 선검사를 통과한 동시 요청이 여기서 유니크 제약(application_id)에 막힌 경우.
+            // check-then-act 경쟁의 최후 방어 — 두 번째 INSERT 는 DB 가 물리적으로 거부한다.
+            throw new DuplicatePaymentException("이미 해당 신청서에 대한 결제가 존재합니다");
+        }
 
         // 신청서 상태 업데이트
         application.markPaid();
@@ -113,15 +134,46 @@ public class PaymentService {
     }
 
     /**
-     * 결제 승인 (토스페이먼츠 API 호출)
+     * 결제 승인 (토스페이먼츠 API 호출).
+     *
+     * <p><b>3중 중복 방어:</b>
+     * <ol>
+     *   <li><b>분산 락</b>({@code pay:confirm:lock:{orderId}}) — 같은 주문의 동시 요청(버튼 더블클릭 등)을
+     *       직렬화한다. 두 번째 요청은 즉시 {@link PaymentInProgressException}(409) 로 컷.</li>
+     *   <li><b>멱등성(status) 체크</b> — 이미 {@code CONFIRMED} 인 결제면 토스 재호출 없이 기존 결과를 그대로 반환.
+     *       시간차 재시도(타임아웃 후 재요청)를 흡수한다.</li>
+     *   <li><b>DB 유니크 제약</b>(order_id 등) — 위 둘이 뚫려도 물리적으로 중복을 거부.</li>
+     * </ol>
+     *
+     * <p>락은 반드시 <b>트랜잭션 커밋 이후</b>에 해제한다. 커밋 전에 풀면, 대기하던 다른 요청이
+     * 아직 반영되지 않은 {@code PENDING} 상태를 읽고 토스를 재호출할 수 있다.
+     * (자세한 배경은 {@link DistributedLock} 참고.)
      */
     @Transactional
     public PaymentResponse confirmPayment(Long userId, PaymentConfirmRequest request) {
+        // 대기열이 켜져 있으면 입장권 보유자만 통과 (비활성 시 항상 true).
+        if (!waitingQueueService.isActive(userId)) {
+            throw new QueueNotAdmittedException("대기열 입장 후 결제를 진행해주세요");
+        }
+
+        String lockKey = CONFIRM_LOCK_PREFIX + request.getOrderId();
+        String lockOwner = distributedLock.tryLock(lockKey, CONFIRM_LOCK_TTL);
+        if (lockOwner == null) {
+            throw new PaymentInProgressException("이미 처리 중인 결제입니다. 잠시 후 다시 시도해주세요");
+        }
+        releaseLockAfterCommit(lockKey, lockOwner);
+
         Payment payment = paymentRepository.findByOrderId(request.getOrderId())
                 .orElseThrow(() -> new PaymentNotFoundException("결제 정보를 찾을 수 없습니다: " + request.getOrderId()));
 
         if (!payment.getUserId().equals(userId)) {
             throw new PaymentFailedException("본인의 결제만 승인할 수 있습니다");
+        }
+
+        // 멱등성: 이미 승인된 결제면 토스를 다시 부르지 않고 저장된 결과를 그대로 반환한다.
+        if (payment.getStatus() == PaymentStatus.CONFIRMED) {
+            log.info("[Payment] 멱등 반환 — 이미 승인된 결제 orderId: {}", request.getOrderId());
+            return PaymentResponse.from(payment);
         }
 
         if (!payment.getAmount().equals(request.getAmount())) {
@@ -147,6 +199,24 @@ public class PaymentService {
         }
 
         return PaymentResponse.from(payment);
+    }
+
+    /**
+     * 분산 락 해제를 트랜잭션 완료(커밋 또는 롤백) 이후로 지연시킨다.
+     * 트랜잭션 동기화가 활성인 일반 실행에서는 {@code afterCompletion} 콜백으로,
+     * (단위 테스트처럼) 동기화가 없으면 즉시 해제한다. 어느 경우든 TTL 이 최후의 안전망이다.
+     */
+    private void releaseLockAfterCommit(String lockKey, String lockOwner) {
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCompletion(int status) {
+                    distributedLock.unlock(lockKey, lockOwner);
+                }
+            });
+        } else {
+            distributedLock.unlock(lockKey, lockOwner);
+        }
     }
 
     // [보안] 사용자向 결제 취소(cancelPayment)는 제거되었습니다.

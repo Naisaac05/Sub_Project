@@ -22,7 +22,10 @@ public class Payment {
     private Long userId;
 
     // 신청서 연결 (결제는 신청서 기반으로 생성됨)
-    @Column(name = "application_id", nullable = false)
+    // unique=true — 신청서 1건당 결제 1건 불변식의 최후 보루(DB 레벨).
+    // PaymentService.createPayment 의 existsByApplicationId 선검사(check-then-act)는
+    // 동시 요청 경쟁에 취약하므로, 이 제약이 실제 중복 INSERT 를 물리적으로 거부한다.
+    @Column(name = "application_id", nullable = false, unique = true)
     private Long applicationId;
 
     // 매칭 연결 (결제 후 추천→선택 완료 시 세팅됨, 처음에는 null)

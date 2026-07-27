@@ -1,5 +1,6 @@
 # 에러 기록 가이드
 
+- [2026-07-27 결제 중복 방어 공백 — application_id 유니크 제약 부재 + 멱등성 키 미적용](2026-07-27-payment-idempotency-and-application-id-unique.md)
 - [2026-06-30 Caddy DuckDNS 도메인 불일치로 TLS 인증서 발급 실패](2026-06-30-caddy-duckdns-domain-mismatch.md)
 - [2026-06-29 AWS AI fallback 모델·카드·의도 분류 불일치](2026-06-29-aws-ai-fallback-model-and-card-gap.md)
 - [2026-06-15 승인된 useEffect 카드 Fast Path 미스 및 기술 식별자 답변 잘림](2026-06-15-approved-useeffect-fast-path-miss-and-answer-truncation.md)

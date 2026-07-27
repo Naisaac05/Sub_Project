@@ -39,7 +39,9 @@ public class TossPaymentService {
         );
 
         try {
-            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, tossConfig.createTossHeaders());
+            // 멱등키 = orderId. 같은 주문의 재시도는 항상 같은 키를 보내야 토스가 중복 승인을 막아준다.
+            HttpEntity<Map<String, Object>> request =
+                    new HttpEntity<>(body, tossConfig.createTossHeaders("confirm:" + orderId));
 
             ResponseEntity<String> response = tossRestTemplate.exchange(
                     url, HttpMethod.POST, request, String.class);
@@ -81,7 +83,9 @@ public class TossPaymentService {
         );
 
         try {
-            HttpEntity<Map<String, String>> request = new HttpEntity<>(body, tossConfig.createTossHeaders());
+            // 멱등키 = paymentKey 기준. 동일 결제의 취소 재시도는 같은 키가 되어 중복 환불이 차단된다.
+            HttpEntity<Map<String, String>> request =
+                    new HttpEntity<>(body, tossConfig.createTossHeaders("cancel:" + paymentKey));
 
             ResponseEntity<String> response = tossRestTemplate.exchange(
                     url, HttpMethod.POST, request, String.class);

@@ -72,6 +72,14 @@ app:
   payment:
     toss-cancel-enabled: ${TOSS_CANCEL_ENABLED:false} # 기본 false (local/dev). prod 는 application-prod.yml 에서 true.
 
+  # 결제 대기열(Waiting Room). 기본 false — 켜면 결제 진입이 대기열을 거친다.
+  # promote-batch-size / promote-interval-ms 의 비율이 하류로 흘리는 초당 처리량이 된다.
+  waiting-queue:
+    enabled: ${WAITING_QUEUE_ENABLED:false}
+    promote-batch-size: ${WAITING_QUEUE_PROMOTE_BATCH_SIZE:100}
+    promote-interval-ms: ${WAITING_QUEUE_PROMOTE_INTERVAL_MS:1000}
+    active-ttl-seconds: ${WAITING_QUEUE_ACTIVE_TTL_SECONDS:300}
+
   cors:
     # 콤마 구분 다중 도메인 허용. 운영에서는 APP_CORS_ALLOWED_ORIGINS 로 배포 도메인 지정.
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000}
