@@ -26,14 +26,16 @@ function SuccessContent() {
 
     const run = async () => {
       try {
-        // ① 결제 승인 — 서버에서 분산 락 + 멱등성 체크 + 토스 Idempotency-Key 를 거친다.
-        //    새로고침 등으로 이 페이지가 다시 실행돼도 중복 승인되지 않고 기존 결과가 돌아온다.
         if (paymentKey && orderId && amount) {
+          // 결제 승인 — 서버에서 분산 락 + 멱등성 체크 + 토스 Idempotency-Key 를 거친다.
+          // 새로고침 등으로 이 페이지가 다시 실행돼도 중복 승인되지 않고 기존 결과가 돌아온다.
+          // 승인 성공 시 서버가 신청서 확정 + 자동 매칭까지 이어서 처리하므로
+          // 여기서 confirmApplicationPayment 를 또 부르지 않는다(중복 호출 방지).
           await confirmTossPayment({ paymentKey, orderId, amount: Number(amount) });
+        } else {
+          // 토스 파라미터 없이 이 페이지에 도달한 경우(예: 예전 링크) — 신청서 확정만 수행한다.
+          await confirmApplicationPayment(Number(applicationId));
         }
-
-        // ② 신청서 상태 전이 + 자동 매칭
-        await confirmApplicationPayment(Number(applicationId));
         setLoading(false);
         setTimeout(() => {
           router.push('/mypage');
