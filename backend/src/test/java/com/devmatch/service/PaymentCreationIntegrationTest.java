@@ -34,6 +34,23 @@ class PaymentCreationIntegrationTest {
     @Autowired private PaymentService paymentService;
     @Autowired private ApplicationRepository applicationRepository;
     @Autowired private UserRepository userRepository;
+    @Autowired private com.devmatch.config.TossPaymentProperties tossPaymentProperties;
+
+    /**
+     * 실결제 차단이 <b>기본값</b>으로 걸려 있는지 고정한다.
+     *
+     * <p>학생 포트폴리오 정책상 토스 실호출은 금지다. 누군가 설정에서 기본값을 true 로 바꾸면
+     * 이 테스트가 깨져서 알려준다 — 안전의 근거를 "아무도 안 건드리겠지"가 아니라 테스트에 둔다.
+     */
+    @Test
+    void 토스_실호출은_승인_취소_모두_기본_차단이어야_한다() {
+        assertThat(tossPaymentProperties.tossConfirmEnabled())
+                .as("app.payment.toss-confirm-enabled 기본값은 false 여야 한다 (실결제 차단)")
+                .isFalse();
+        assertThat(tossPaymentProperties.tossCancelEnabled())
+                .as("app.payment.toss-cancel-enabled 기본값은 false 여야 한다 (실환불 차단)")
+                .isFalse();
+    }
 
     private Application persistApplication() {
         User mentee = userRepository.save(User.builder()

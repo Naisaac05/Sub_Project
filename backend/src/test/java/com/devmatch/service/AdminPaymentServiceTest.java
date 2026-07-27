@@ -1,6 +1,6 @@
 package com.devmatch.service;
 
-import com.devmatch.config.TossCancelProperties;
+import com.devmatch.config.TossPaymentProperties;
 import com.devmatch.dto.admin.payment.AdminPaymentFilter;
 import com.devmatch.dto.admin.payment.AdminPaymentListItemResponse;
 import com.devmatch.dto.admin.payment.AdminPaymentSummaryResponse;
@@ -49,8 +49,9 @@ class AdminPaymentServiceTest {
     @Mock private TossPaymentService tossPaymentService;
     @Mock private AdminAuditLogService auditLogService;
 
-    private TossCancelProperties props(boolean enabled) {
-        return new TossCancelProperties(enabled);
+    /** 환불 플래그만 제어한다 (승인 플래그는 이 테스트와 무관하므로 false 고정). */
+    private TossPaymentProperties props(boolean cancelEnabled) {
+        return new TossPaymentProperties(false, cancelEnabled);
     }
 
     private com.devmatch.entity.User mentor(String name) {

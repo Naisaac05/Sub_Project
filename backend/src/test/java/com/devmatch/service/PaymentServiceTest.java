@@ -10,6 +10,7 @@ import com.devmatch.exception.PaymentFailedException;
 import com.devmatch.exception.PaymentInProgressException;
 import com.devmatch.exception.QueueNotAdmittedException;
 import com.devmatch.repository.ApplicationRepository;
+import com.devmatch.config.TossPaymentProperties;
 import com.devmatch.repository.PaymentRepository;
 import com.devmatch.support.DistributedLock;
 import org.junit.jupiter.api.Test;
@@ -41,17 +42,22 @@ class PaymentServiceTest {
     @Mock private DistributedLock distributedLock;
     @Mock private WaitingQueueService waitingQueueService;
 
-    /** 대기열 통과 상태(기본)로 서비스를 만든다. */
+    /** 대기열 통과 + 토스 실호출 허용 상태로 서비스를 만든다(승인 흐름 검증용). */
     private PaymentService service() {
         when(waitingQueueService.isActive(any())).thenReturn(true);
+        return service(true);
+    }
+
+    /** 토스 실호출 플래그를 지정해 서비스를 만든다. */
+    private PaymentService service(boolean tossConfirmEnabled) {
         return new PaymentService(paymentRepository, applicationRepository, tossPaymentService,
-                applicationService, distributedLock, waitingQueueService);
+                applicationService, distributedLock, waitingQueueService,
+                new TossPaymentProperties(tossConfirmEnabled, false));
     }
 
     /** 대기열 검사를 스텁하지 않는(=createPayment 등 미사용 경로) 서비스. */
     private PaymentService serviceWithoutQueueStub() {
-        return new PaymentService(paymentRepository, applicationRepository, tossPaymentService,
-                applicationService, distributedLock, waitingQueueService);
+        return service(true);
     }
 
     private Payment pending(Long userId, String orderId, int amount) {
@@ -137,6 +143,21 @@ class PaymentServiceTest {
     }
 
     // ===== createPayment =====
+
+    @Test
+    void confirm_플래그_false_면_토스_미호출하고_내부상태만_CONFIRMED() {
+        // 학생 포트폴리오 정책: 실결제 차단. 키를 잘못 넣어도 코드가 막아야 한다.
+        Payment p = pending(10L, "ord_1", 990_000);
+        when(waitingQueueService.isActive(any())).thenReturn(true);
+        when(distributedLock.tryLock(anyString(), any(Duration.class))).thenReturn("owner-1");
+        when(paymentRepository.findByOrderId("ord_1")).thenReturn(Optional.of(p));
+
+        PaymentResponse res = service(false).confirmPayment(10L,
+                new PaymentConfirmRequest("pk_1", "ord_1", 990_000));
+
+        assertThat(res.getStatus()).isEqualTo(PaymentStatus.CONFIRMED);
+        verifyNoInteractions(tossPaymentService);   // 외부 호출이 일어나지 않아야 한다
+    }
 
     @Test
     void confirm_대기열_입장권_없으면_QueueNotAdmittedException_락도_시도안함() {

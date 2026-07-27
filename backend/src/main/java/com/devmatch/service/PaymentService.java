@@ -12,6 +12,7 @@ import com.devmatch.exception.PaymentInProgressException;
 import com.devmatch.exception.PaymentNotFoundException;
 import com.devmatch.exception.QueueNotAdmittedException;
 import com.devmatch.repository.ApplicationRepository;
+import com.devmatch.config.TossPaymentProperties;
 import com.devmatch.repository.PaymentRepository;
 import com.devmatch.support.DistributedLock;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class PaymentService {
     private final ApplicationService applicationService;
     private final DistributedLock distributedLock;
     private final WaitingQueueService waitingQueueService;
+    private final TossPaymentProperties tossPaymentProperties;
 
     // 결제 승인 분산 락 TTL — 토스 응답 지연을 넉넉히 덮되, 홀더 크래시 시 자동 해제되도록 짧게.
     private static final Duration CONFIRM_LOCK_TTL = Duration.ofSeconds(10);
@@ -184,11 +186,20 @@ public class PaymentService {
                     + request.getAmount() + ", 실제: " + payment.getAmount());
         }
 
-        boolean confirmed = tossPaymentService.confirmPayment(
-                request.getPaymentKey(),
-                request.getOrderId(),
-                request.getAmount()
-        );
+        // 실호출 차단 플래그 (환불 경로와 대칭). 기본 false — 학생 포트폴리오 정책상 실결제 금지.
+        // 키를 잘못 넣어도(live_sk_...) 코드가 한 번 더 막아준다.
+        boolean confirmed;
+        if (tossPaymentProperties.tossConfirmEnabled()) {
+            confirmed = tossPaymentService.confirmPayment(
+                    request.getPaymentKey(),
+                    request.getOrderId(),
+                    request.getAmount()
+            );
+        } else {
+            log.warn("[Payment] toss-confirm-enabled=false — 토스 호출 skip, 내부 상태만 전이 (orderId={})",
+                    request.getOrderId());
+            confirmed = true;
+        }
 
         if (confirmed) {
             payment.confirm(request.getPaymentKey());

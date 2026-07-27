@@ -46,6 +46,25 @@ DB 유니크 제약      →  위 둘이 뚫린 중복 INSERT 를 거부
 크래시는 정확히 그 저장 직전에 일어난다. 토스에는 돈이 빠졌으나 우리 DB 엔 흔적이 없는 이 틈은
 **내부 잠금으로는 구조적으로 닫을 수 없고**, 같은 멱등키를 받은 토스만 막아줄 수 있다.
 
+## 2.5 실호출 차단 — 안전의 근거를 설정이 아니라 코드에 둔다
+
+토스는 키 접두사로 샌드박스와 실운영을 분리한다: `test_` = 가상 결제, `live_` = 실제 청구.
+학생 포트폴리오 정책상 **실결제·실환불은 금지**이므로 모든 키를 `test_` 로 유지한다.
+
+그러나 "키가 테스트 키라서 안전하다"는 **설정에 의존하는 방어**다. 누군가 `live_sk_...` 를
+넣는 순간 무너진다. 그래서 코드 레벨에서 한 번 더 막는다.
+
+`TossPaymentProperties` — 승인/취소 양방향 플래그, **둘 다 기본 false**:
+
+| 플래그 | false 일 때 | 대상 |
+|---|---|---|
+| `app.payment.toss-confirm-enabled` | 토스 호출 skip, 내부 상태만 `CONFIRMED` | `PaymentService.confirmPayment` |
+| `app.payment.toss-cancel-enabled` | 토스 호출 skip, 내부 상태만 `CANCELLED` | `AdminPaymentService.refundPayment` |
+
+> **이력**: 원래 취소 경로에만 플래그가 있었고 승인 경로는 무방비였다. 프론트가 아직
+> `POST /api/payments/confirm` 을 호출하지 않아 드러나지 않았을 뿐, 연동하는 순간
+> 실호출 경로가 열린다. 프론트 연동 전에 대칭을 맞췄다.
+
 ## 3. 구현 — 결제 정합성
 
 ### 3.1 DB 유니크 제약

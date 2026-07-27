@@ -517,6 +517,81 @@ ERROR 1048 (23000): Column 'matching_id' cannot be null
 
 ---
 
+## 10.5 실결제 차단 — "설정이 안전하다"와 "코드가 안전하다"는 다르다
+
+프론트 연동을 검토하다 나온 질문: **"연동하면 실제로 돈이 빠지나?"**
+
+### 먼저 사실 확인
+
+토스는 **키 접두사**로 환경이 완전히 갈린다.
+
+| 접두사 | 의미 |
+|---|---|
+| `test_` | 샌드박스 — 가상 결제, 실제 돈이 절대 안 움직인다 |
+| `live_` | 실운영 — 진짜 청구 |
+
+프로젝트의 모든 키가 `test_` 였다(프론트 `test_gck_docs_...`, 백엔드 `.env` 는 placeholder).
+**따라서 연동해도 실결제는 일어나지 않는다.**
+
+### 그런데 여기서 멈추면 안 됐다
+
+안전의 근거가 **"키가 테스트 키라서"** 뿐이었다. 이건 **설정에 의존하는 방어**다.
+누군가(미래의 나 포함) `TOSS_SECRET_KEY=live_sk_...` 를 넣는 순간 무너진다.
+
+게다가 두 경로의 보호 수준이 **비대칭**이었다.
+
+| 경로 | 플래그 가드 |
+|---|---|
+| 환불 `cancelPayment` | ✅ `toss-cancel-enabled` |
+| 승인 `confirmPayment` | ❌ **없음 — 무조건 호출** |
+
+승인 경로가 무방비인 게 그동안 드러나지 않은 이유는 단순하다 —
+**프론트가 아직 그 API 를 부르지 않아서**다. 연동하는 순간 그 경로가 열린다.
+
+### 조치 — 대칭 맞추기
+
+`TossPaymentProperties` 로 통합하고 **양방향 모두 기본 false**:
+
+```java
+@ConfigurationProperties("app.payment")
+public record TossPaymentProperties(
+        boolean tossConfirmEnabled,   // 신규
+        boolean tossCancelEnabled
+) {}
+```
+
+```java
+if (tossPaymentProperties.tossConfirmEnabled()) {
+    confirmed = tossPaymentService.confirmPayment(...);
+} else {
+    log.warn("[Payment] toss-confirm-enabled=false — 토스 호출 skip, 내부 상태만 전이");
+    confirmed = true;   // 내부 상태만 CONFIRMED 로 전이 (시연에는 충분)
+}
+```
+
+이제 **키를 잘못 넣어도 코드가 한 번 더 막는다.**
+
+### 기본값을 테스트로 고정했다
+
+플래그를 만든 것만으로는 부족하다. 누군가 기본값을 `true` 로 바꾸면 그만이니까.
+
+```java
+@Test
+void 토스_실호출은_승인_취소_모두_기본_차단이어야_한다() {
+    assertThat(tossPaymentProperties.tossConfirmEnabled()).isFalse();
+    assertThat(tossPaymentProperties.tossCancelEnabled()).isFalse();
+}
+```
+
+`@SpringBootTest` 라 **실제 설정 파일이 바인딩된 값**을 검증한다.
+기본값이 바뀌면 이 테스트가 깨져서 알려준다.
+
+> **교훈**: 안전장치는 세 겹으로 생각한다.
+> ① 설정(테스트 키) → ② 코드(플래그) → ③ 테스트(기본값 고정).
+> ①만 있으면 "아무도 안 건드리겠지"에 기대는 것이다.
+
+---
+
 ## 11. 역방향 드리프트 정리 — 같은 병, 다른 증상
 
 6장의 드리프트가 "DB 는 NOT NULL, 엔티티는 nullable"이었다면, 반대 방향도 있다.

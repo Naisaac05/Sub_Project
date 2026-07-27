@@ -83,7 +83,10 @@ app:
       same-site: Strict
     reuse-window-seconds: 300 # 재사용 탐지 윈도우 (5분)
   payment:
-    toss-cancel-enabled: ${TOSS_CANCEL_ENABLED:false} # 기본 false (local/dev). prod 는 application-prod.yml 에서 true.
+    # 외부 토스 API 실호출 차단 플래그 — 승인/취소 모두 기본 false.
+    # 학생 포트폴리오 정책상 실결제·실환불 금지. 실호출이 필요하면 test_ 접두사 키와 함께 true 로.
+    toss-confirm-enabled: ${TOSS_CONFIRM_ENABLED:false}
+    toss-cancel-enabled: ${TOSS_CANCEL_ENABLED:false}
 
   # 결제 대기열(Waiting Room). 기본 false — 켜면 결제 진입이 대기열을 거친다.
   # promote-batch-size / promote-interval-ms 의 비율이 하류로 흘리는 초당 처리량이 된다.

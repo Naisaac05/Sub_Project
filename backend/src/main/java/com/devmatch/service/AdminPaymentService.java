@@ -1,6 +1,6 @@
 package com.devmatch.service;
 
-import com.devmatch.config.TossCancelProperties;
+import com.devmatch.config.TossPaymentProperties;
 import com.devmatch.dto.admin.payment.*;
 import com.devmatch.entity.AdminActionType;
 import com.devmatch.entity.MatchingStatus;
@@ -39,7 +39,7 @@ public class AdminPaymentService {
     private final UserRepository userRepository;
     private final TossPaymentService tossPaymentService;
     private final AdminAuditLogService auditLogService;
-    private final TossCancelProperties tossCancelProperties;
+    private final TossPaymentProperties tossPaymentProperties;
 
     // 이름/이메일 검색 시 관리자 목록 필터용 userId 집합 상한.
     // 과도한 매칭으로 IN(...) 절이 폭주하는 것을 방지한다.
@@ -167,7 +167,7 @@ public class AdminPaymentService {
         }
 
         // 2) 토스 호출 (플래그 on + paymentKey 존재)
-        if (tossCancelProperties.tossCancelEnabled()) {
+        if (tossPaymentProperties.tossCancelEnabled()) {
             if (payment.getPaymentKey() == null || payment.getPaymentKey().isBlank()) {
                 throw new PaymentFailedException("환불을 위한 결제키가 없습니다 (paymentKey NULL)");
             }
