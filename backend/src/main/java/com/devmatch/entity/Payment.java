@@ -51,22 +51,24 @@ public class Payment {
     private String courseType;
 
     // 묶음 결제 개월 수
-    @Column(name = "months_bundled")
+    // nullable = false — @Builder.Default 기본값이 곧 "항상 값이 있다"는 의도다.
+    // DB 도 V4 마이그레이션에서 NOT NULL DEFAULT 로 맞췄다.
+    @Column(name = "months_bundled", nullable = false)
     @Builder.Default
     private Integer monthsBundled = 1;
 
     // 연장 회차 (0=최초 결제, 1=1회 연장, 2=2회 연장...)
-    @Column(name = "renewal_count")
+    @Column(name = "renewal_count", nullable = false)
     @Builder.Default
     private Integer renewalCount = 0;
 
     // 적용된 할인 금액 (원)
-    @Column(name = "discount_applied")
+    @Column(name = "discount_applied", nullable = false)
     @Builder.Default
     private Integer discountApplied = 0;
 
     // 할부 개월 수
-    @Column(name = "installment_months")
+    @Column(name = "installment_months", nullable = false)
     @Builder.Default
     private Integer installmentMonths = 0;
 

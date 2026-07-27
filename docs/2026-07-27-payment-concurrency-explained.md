@@ -515,8 +515,102 @@ ERROR 1048 (23000): Column 'matching_id' cannot be null
 | 유니크 제약 (V2) | 중복 INSERT → `ERROR 1062` 거부 |
 | 드리프트 수정 (V3) | 이전에 실패하던 NULL INSERT 성공 |
 
-### 남은 것 — 역방향 드리프트
+---
 
-전수 조사에서 **DB 는 nullable 인데 엔티티는 기본값이 있는** 반대 방향 케이스도 몇 건 보였다
-(`matchings.swap_count`, `payments.course_type`, `payments.months_bundled` 등).
-INSERT 실패로 이어지진 않아 이번 범위 밖으로 뒀지만, 의도적인지 확인해둘 가치는 있다.
+## 11. 역방향 드리프트 정리 — 같은 병, 다른 증상
+
+6장의 드리프트가 "DB 는 NOT NULL, 엔티티는 nullable"이었다면, 반대 방향도 있다.
+**"DB 는 NULL 허용, 엔티티는 값이 항상 있다고 가정"** — 이쪽은 증상이 다르다.
+
+| 방향 | 증상 | 언제 터지나 |
+|---|---|---|
+| DB NOT NULL ↔ 엔티티 nullable | `Column 'x' cannot be null` | **저장할 때** |
+| DB NULL 허용 ↔ 엔티티 non-null | NPE, 또는 기본값이 무시됨 | **읽은 뒤 사용할 때** |
+
+38개 테이블 × 36개 엔티티를 세 유형으로 나눠 다시 훑었다.
+
+| 유형 | 정의 | 위험 | 결과 |
+|---|---|---|---|
+| **A** | 엔티티가 `int`/`boolean` 등 **primitive** | 조회 자체가 예외 (가장 위험) | **0건** |
+| **B** | 엔티티 `@Column(nullable = false)` | 선언과 실제가 다름 | 5건 |
+| **C** | `@Builder.Default` 로 기본값 부여 | 기본값이 무시되고 null 유입 | (B 와 같은 5건) |
+
+### ★ 실제 NPE 지뢰 — `matchings.swap_count`
+
+```java
+public void swap() {
+    this.swapCount++;   // ← Integer 언박싱. null 이면 NPE
+}
+```
+
+개발 DB 를 열어보니 **`ACCEPTED`(활성) 상태이면서 `swap_count` 가 NULL 인 매칭이 1건** 있었다.
+그 멘티가 멘토 교체를 누르면(`MentorSwapService.java:54`) 그 자리에서 죽는다.
+
+```
+id | status    | swap_count
+ 4 | ACCEPTED  | NULL        ← 지뢰
+```
+
+### 방어 코드로 위장하고 있던 부채 — `payments.*`
+
+```java
+// CurriculumService.java:105
+int months = p.getMonthsBundled() != null ? p.getMonthsBundled() : 1;
+```
+
+엔티티는 `@Builder.Default private Integer monthsBundled = 1;` 로 "항상 1 이상"이라고 선언한다.
+그런데 호출부는 null 을 체크하고 있다. **선언을 믿지 못해서 생긴 우회 코드**다.
+이런 방어 코드가 여기저기 쌓이면, 나중엔 아무도 "이 필드가 null 일 수 있나?"를 확신하지 못하게 된다.
+
+### 조치 — 엔티티의 의도에 DB 를 맞춘다
+
+기본값이 선언돼 있다는 건 곧 **"항상 값이 있다"는 의도**다. 그러니 DB 를 그 의도에 맞춘다.
+
+```sql
+-- V4: 백필 후 조이기
+UPDATE matchings SET swap_count = 0 WHERE swap_count IS NULL;
+ALTER TABLE matchings MODIFY COLUMN swap_count INT NOT NULL DEFAULT 0;
+```
+
+**순서가 중요하다.** NULL 행이 남아 있으면 `NOT NULL` 로 바꾸는 순간 실패한다.
+그래서 반드시 **백필 먼저, 제약 나중**이다.
+
+엔티티에도 `@Column(nullable = false)` 를 붙여 선언과 DB 가 같은 말을 하게 했다.
+
+### 의도적으로 남긴 nullable — 전부 조이는 게 정답은 아니다
+
+| 컬럼 | 남긴 이유 |
+|---|---|
+| `matchings.trial_end_date` | 체험 시작 시에만 세팅. `isInTrialPeriod()` 가 null 을 **명시적으로 검사**한다 |
+| `payments.course_type` | `@Builder.Default` 가 없어 엔티티도 선택 값으로 취급 |
+| `applications.is_cs_major` | 미응답/예/아니오 **3-state** 의도일 수 있음 → 제품 결정 사항 |
+
+> **판단 기준**: "값이 없다"가 **의미를 갖는가?** 체험이 시작되지 않았다는 사실은 정보다.
+> 반면 "할인 없음"은 NULL 이 아니라 **0** 이 정확한 표현이다.
+
+### ★ Flyway 규칙을 실제로 만났다
+
+`application_rejected_mentors.mentor_id`(컬렉션 원소 컬럼)도 같은 문제였다.
+V4 에 넣고 싶었지만 — **V4 는 이미 적용된 뒤였다.**
+
+파일을 고치면 checksum 이 달라져 다음 기동이 막힌다. 그래서 **V5 로 추가**했다.
+
+```
+V4__fix_reverse_nullability_drift.sql          (적용됨 — 수정 불가)
+V5__not_null_on_element_collection_column.sql  (새로 추가)
+```
+
+> 마이그레이션은 **forward-only** 다. 고칠 일이 생기면 되돌리는 게 아니라 앞으로 나아간다.
+> 문서로 읽을 땐 규칙이지만, 직접 겪으면 몸에 남는다.
+
+### 최종 상태
+
+| version | description |
+|---|---|
+| 1 | << Flyway Baseline >> |
+| 2 | add unique application id on payments |
+| 3 | make payments matching id nullable |
+| 4 | fix reverse nullability drift |
+| 5 | not null on element collection column |
+
+전체 테스트 통과, 기존 DB·빈 DB 양쪽 기동 확인.
