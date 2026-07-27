@@ -19,7 +19,7 @@ public record AdminPostCommentResponse(
     public static AdminPostCommentResponse from(Comment comment) {
         return new AdminPostCommentResponse(
                 comment.getId(),
-                comment.getAuthor() != null ? comment.getAuthor().getId() : null,
+                comment.getAuthor().getId(),
                 UserDisplay.displayName(comment.getAuthor()),
                 comment.getContent(),
                 comment.getCreatedAt(),

@@ -102,11 +102,12 @@ public class CurriculumService {
                     .build();
         }
         Payment p = payment.get();
-        int months = p.getMonthsBundled() != null ? p.getMonthsBundled() : 1;
+        // monthsBundled / createdAt 은 DB NOT NULL + 엔티티 기본값으로 보장된다 (V4 마이그레이션).
+        int months = p.getMonthsBundled();
         return CurriculumLimitResponse.builder()
                 .maxWeeks(months * WEEKS_PER_MONTH)
                 .monthsBundled(months)
-                .paymentDate(p.getCreatedAt() != null ? p.getCreatedAt().toLocalDate() : null)
+                .paymentDate(p.getCreatedAt().toLocalDate())
                 .hasConfirmedPayment(true)
                 .build();
     }
@@ -114,7 +115,7 @@ public class CurriculumService {
     private int resolveMaxWeeks(Long matchingId) {
         return paymentRepository.findByMatchingId(matchingId)
                 .filter(p -> p.getStatus() == PaymentStatus.CONFIRMED)
-                .map(p -> (p.getMonthsBundled() != null ? p.getMonthsBundled() : 1) * WEEKS_PER_MONTH)
+                .map(p -> p.getMonthsBundled() * WEEKS_PER_MONTH)
                 .orElse(FALLBACK_MAX_WEEKS);
     }
 

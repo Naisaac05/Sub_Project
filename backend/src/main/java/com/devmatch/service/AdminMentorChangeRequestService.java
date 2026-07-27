@@ -115,8 +115,10 @@ public class AdminMentorChangeRequestService {
     private AdminMentorChangeListItemResponse toListItem(MentorChangeRequest r) {
         Optional<User> mentee = userRepository.findById(r.getMenteeId());
         Optional<User> mentor = userRepository.findById(r.getCurrentMentorId());
-        String preview = r.getReason() == null ? ""
-                : r.getReason().length() > 40 ? r.getReason().substring(0, 40) + "…" : r.getReason();
+        // reason 은 nullable = false 이므로 길이만 다듬는다.
+        String preview = r.getReason().length() > 40
+                ? r.getReason().substring(0, 40) + "…"
+                : r.getReason();
         return new AdminMentorChangeListItemResponse(
                 r.getId(),
                 r.getMenteeId(),

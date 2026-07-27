@@ -53,6 +53,10 @@ class AdminPaymentServiceTest {
         return new TossCancelProperties(enabled);
     }
 
+    private com.devmatch.entity.User mentor(String name) {
+        return com.devmatch.entity.User.builder().id(900L).name(name).build();
+    }
+
     @Test
     void getSummary_확정_환불_0건이면_환불률은_0() {
         when(paymentRepository.sumAmountByStatusAndCreatedBetween(eq(PaymentStatus.CONFIRMED), any(), any()))
@@ -168,7 +172,10 @@ class AdminPaymentServiceTest {
                 .id(1L).userId(10L).applicationId(100L).matchingId(50L)
                 .orderId("ord_1").paymentKey("pk_live_abc").amount(150_000)
                 .status(PaymentStatus.CONFIRMED).build();
-        Matching m = Matching.builder().id(50L).status(MatchingStatus.ACCEPTED).build();
+        // mentor 는 DB 에서 NOT NULL + FK 이므로 멘토 없는 Matching 은 존재할 수 없다.
+        // 픽스처도 실제 제약에 맞춰 멘토를 채운다.
+        Matching m = Matching.builder().id(50L).status(MatchingStatus.ACCEPTED)
+                .mentor(mentor("김멘토")).build();
         when(paymentRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(p));
         when(paymentRepository.findById(1L)).thenReturn(Optional.of(p)); // getDetail 응답용
         when(matchingRepository.findById(50L)).thenReturn(Optional.of(m));
@@ -221,7 +228,8 @@ class AdminPaymentServiceTest {
                 .id(3L).userId(10L).applicationId(100L).matchingId(70L)
                 .orderId("ord_3").paymentKey("pk_3").amount(990_000)
                 .status(PaymentStatus.CONFIRMED).build();
-        Matching m = Matching.builder().id(70L).status(MatchingStatus.REJECTED).build();
+        Matching m = Matching.builder().id(70L).status(MatchingStatus.REJECTED)
+                .mentor(mentor("박멘토")).build();
         when(paymentRepository.findByIdForUpdate(3L)).thenReturn(Optional.of(p));
         when(paymentRepository.findById(3L)).thenReturn(Optional.of(p)); // getDetail 응답용
         when(matchingRepository.findById(70L)).thenReturn(Optional.of(m));

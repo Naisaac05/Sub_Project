@@ -93,6 +93,8 @@ public class PaymentService {
         int renewalCount = (int) confirmedCount;
 
         // 동적 금액 계산
+        // 아래 null 체크는 남겨둔다 — request 는 클라이언트가 보낸 JSON 이라 필드가 생략되거나
+        // 명시적 null 로 올 수 있다. (엔티티 필드와 달리 DB 제약으로 보장되지 않는다.)
         int months = request.getMonthsBundled() != null ? request.getMonthsBundled() : 1;
         int unitPrice = getUnitPrice(renewalCount);
         int rawTotal = unitPrice * months;

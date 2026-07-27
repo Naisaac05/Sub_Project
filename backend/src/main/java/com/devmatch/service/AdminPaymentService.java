@@ -118,7 +118,7 @@ public class AdminPaymentService {
         AdminPaymentDetailResponse.MatchingSection matchingSection = matching == null ? null
                 : new AdminPaymentDetailResponse.MatchingSection(
                         matching.getId(),
-                        matching.getMentor() != null ? matching.getMentor().getName() : "",
+                        matching.getMentor().getName(),
                         matching.getStatus().name());
 
         AdminPaymentDetailResponse.RefundSection refundSection =

@@ -23,7 +23,7 @@ public record AdminPostListItemResponse(
                 post.getId(),
                 post.getTitle(),
                 post.getCategory(),
-                post.getAuthor() != null ? post.getAuthor().getId() : null,
+                post.getAuthor().getId(),
                 UserDisplay.displayName(post.getAuthor()),
                 post.getLikeCount(),
                 post.getCommentCount(),

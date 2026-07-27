@@ -614,3 +614,102 @@ V5__not_null_on_element_collection_column.sql  (새로 추가)
 | 5 | not null on element collection column |
 
 전체 테스트 통과, 기존 DB·빈 DB 양쪽 기동 확인.
+
+---
+
+## 12. 마무리 — 방어 코드 정리와 "어떤 null 체크가 부채인가"
+
+스키마가 정합해졌으니, 그동안 스키마를 믿지 못해 쌓인 우회 코드를 걷어냈다.
+그런데 여기서 **모든 null 체크가 부채는 아니다.** 구분 기준이 핵심이다.
+
+### 판단 기준 — 그 값의 **출처**가 어디인가
+
+| 출처 | null 가능? | 체크가 필요한가 |
+|---|---|---|
+| **DB 에서 로드한 엔티티**의 `nullable = false` 필드 | ❌ DB 제약이 보장 | **불필요 — 죽은 코드** |
+| **DTO(클라이언트 JSON)** | ✅ 필드 생략·명시적 null 가능 | **필요 — 정당한 방어** |
+| 외부 API 응답, 환경변수, 파일 | ✅ | 필요 |
+| 엔티티의 진짜 nullable 필드 | ✅ | 필요 |
+
+같은 `getMonthsBundled()` 호출이라도 **누구의 것이냐**에 따라 판정이 갈린다.
+
+```java
+// ❌ 죽은 코드 — p 는 DB 에서 로드한 Payment 엔티티. DB 가 NOT NULL 을 보장한다.
+int months = p.getMonthsBundled() != null ? p.getMonthsBundled() : 1;
+
+// ✅ 정당한 방어 — request 는 클라이언트가 보낸 JSON. 필드가 없거나 null 로 올 수 있다.
+int months = request.getMonthsBundled() != null ? request.getMonthsBundled() : 1;
+```
+
+전자는 제거하고(`CurriculumService.java:105,117`), 후자는 남기되 **왜 남기는지 주석을 달았다**
+(`PaymentService.java:95`). 주석이 없으면 다음 사람이 "일관성 없네" 하고 지울 수 있기 때문이다.
+
+### 죽은 코드임을 어떻게 증명했나
+
+"NOT NULL 로 바꿨으니 괜찮겠지"는 추측이다. DB 에 직접 물어 확인했다.
+
+```sql
+-- ① 컬럼 제약이 실제로 걸렸나
+SELECT IS_NULLABLE, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS
+ WHERE TABLE_NAME='payments' AND COLUMN_NAME='months_bundled';   -- NO, 1
+
+-- ② 남아 있는 NULL 행이 없나
+SELECT COUNT(*) FROM payments WHERE months_bundled IS NULL;      -- 0
+
+-- ③ 제약이 실효성이 있나 (거부되어야 정상)
+UPDATE payments SET months_bundled = NULL WHERE id = 1;
+-- ERROR 1048 (23000): Column 'months_bundled' cannot be null ✅
+```
+
+세 가지가 모두 맞아야 "이 null 체크는 도달 불가"라고 말할 수 있다.
+
+### ⚠️ 남은 리스크 — 테스트 공백
+
+`CurriculumService` 와 `LmsDashboardService` 에는 **테스트가 하나도 없다.**
+즉 전체 테스트가 통과했다는 사실이 이 변경을 검증해주지 않는다.
+안전성의 근거는 테스트가 아니라 **DB 제약**이다.
+
+방어 코드를 걷어낼 때는 이 점을 분명히 해야 한다 —
+"테스트가 통과했으니 괜찮다"가 아니라 **"제약이 보장하므로 괜찮다"** 가 정확한 근거다.
+장기적으로는 해당 서비스에 테스트를 추가하는 게 맞다.
+
+### 전수 조사로 15곳을 더 찾았다
+
+같은 기준으로 코드베이스 전체를 훑으니, 스키마와 무관하게 습관적으로 붙어 있던
+방어 코드가 더 나왔다. 대부분 **`@JoinColumn(nullable = false)` 연관관계**에 대한 것이다.
+
+```java
+// AdminPostService — posts.user_id 는 NOT NULL + FK 라 author 는 절대 null 이 아니다
+if (post.getAuthor() != null) {
+    metadata.put("authorId", post.getAuthor().getId());
+}
+```
+
+같은 엔티티를 다루는 비-admin 경로(`PostService`, `PostResponse`)는 **이미 null 체크 없이**
+직접 역참조하고 있었다. 즉 admin 쪽 방어 코드만 잔재로 남아 있었던 것 —
+**일관성 없는 방어 코드는 "이 필드가 null 일 수 있나?"를 아무도 확신하지 못하게 만든다.**
+
+정리 대상: `AdminPostService`(3), admin post DTO(5), `LmsDashboardService`(4),
+`AdminMentorChangeRequestService`(1), `AiReviewContextSupport`(1), `AdminPaymentService`(1).
+
+### ★ 테스트가 알려준 것 — 비현실적인 픽스처
+
+`AdminPaymentService` 에서 `matching.getMentor() != null` 을 제거하자 테스트 2건이 깨졌다.
+
+```java
+// 테스트 픽스처 — mentor 가 없다
+Matching m = Matching.builder().id(50L).status(MatchingStatus.ACCEPTED).build();
+```
+
+그런데 DB 는 `matchings.mentor_id` 가 **NOT NULL + FK** 다. 즉 **멘토 없는 매칭은 존재할 수 없다.**
+프로덕션 코드가 틀린 게 아니라 **테스트 픽스처가 비현실적**이었다.
+
+여기서 판단이 갈린다:
+- ❌ "테스트가 깨졌으니 프로덕션 코드를 되돌린다" → 잘못된 픽스처에 코드를 맞추는 것
+- ✅ "픽스처를 실제 제약에 맞춘다" → `.mentor(mentor("김멘토"))` 추가
+
+**테스트 실패가 항상 프로덕션 코드의 잘못을 뜻하진 않는다.** 어느 쪽이 현실을 반영하는지를
+따져야 하고, 이때 판단 근거는 **DB 제약**이었다.
+
+> 실제로 이 픽스처는 "DB 가 허용하지 않는 상태"를 만들어 테스트하고 있었다.
+> 이런 테스트는 통과해도 의미가 약하다 — 존재할 수 없는 상황을 검증하기 때문이다.
