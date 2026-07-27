@@ -7,16 +7,20 @@ import { ArrowRight, CreditCard } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useAuth } from '@/contexts/AuthContext';
-import { getEnrollmentPlans } from '@/lib/course-catalog';
 import WaitingRoom from '@/components/payment/WaitingRoom';
-import { createPayment, enterQueue, type PaymentResponse, type QueueStatus } from '@/lib/payment';
+import {
+  createPayment,
+  enterQueue,
+  DEFAULT_ENROLLMENT_MONTHS,
+  type EnrollmentPlanId,
+  type PaymentResponse,
+  type QueueStatus,
+} from '@/lib/payment';
+import { formatWon, useEnrollmentPlans } from '@/lib/use-enrollment-plans';
 
 // 토스 테스트 키(test_ 접두사) — 샌드박스라 실제 청구가 일어나지 않는다.
 const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 const customerKey = 'test_customer_key_123';
-
-/** 현재 모든 플랜이 4개월 집중 과정이다. */
-const PLAN_MONTHS = 4;
 
 function formatPrice(amount: number) {
   return amount.toLocaleString('ko-KR');
@@ -28,8 +32,10 @@ function PaymentContent() {
   const applicationId = searchParams.get('applicationId');
   const { user } = useAuth();
 
-  const plans = useMemo(() => getEnrollmentPlans(), []);
-  const [selectedPlanId, setSelectedPlanId] = useState(plans[0].id);
+  // 플랜 가격은 서버 정책 엔진이 계산한 값을 그대로 쓴다 (표시가 ≠ 청구액 방지).
+  const { plans, isLoading: pricingLoading, error: pricingError } =
+    useEnrollmentPlans(DEFAULT_ENROLLMENT_MONTHS);
+  const [selectedPlanId, setSelectedPlanId] = useState<EnrollmentPlanId>('IMMEDIATE');
   const [isReady, setIsReady] = useState(false);
 
   // 단계: plan(플랜 선택) → queue(대기열) → payment(결제 위젯)
@@ -83,8 +89,8 @@ function PaymentContent() {
       const res = await createPayment({
         applicationId: Number(applicationId),
         // 백엔드는 IMMEDIATE / EARLY_BIRD 두 가지만 구분한다.
-        courseType: selectedPlanId.startsWith('EARLY_BIRD') ? 'EARLY_BIRD' : 'IMMEDIATE',
-        monthsBundled: PLAN_MONTHS,
+        courseType: selectedPlanId,
+        monthsBundled: DEFAULT_ENROLLMENT_MONTHS,
       });
       setPayment(res.data);
       setStep('payment');
@@ -123,7 +129,7 @@ function PaymentContent() {
     try {
       await paymentWidgetRef.current?.requestPayment({
         orderId: payment.orderId,
-        orderName: `${categoryLabel} ${selectedPlan.title}`,
+        orderName: `${categoryLabel} ${selectedPlan?.title ?? ''}`.trim(),
         successUrl: `${window.location.origin}/payment/success?applicationId=${applicationId}`,
         failUrl: `${window.location.origin}/apply/payment?applicationId=${applicationId}`,
         customerEmail: user?.email || 'customer@example.com',
@@ -203,11 +209,22 @@ function PaymentContent() {
             </div>
 
             <div className="mt-6 border-t border-gray-100 pt-6">
-              <p className="text-xs text-gray-400 line-through">{formatPrice(plan.originalPrice)}원</p>
-              <p className="mt-2 text-3xl font-black tracking-tighter text-blue-600">
-                {formatPrice(plan.price)}원
-              </p>
-              <p className="mt-2 text-sm text-gray-500">{plan.monthly}</p>
+              {plan.pricing ? (
+                <>
+                  <p className="text-xs text-gray-400 line-through">{formatWon(plan.pricing.rawTotal)}</p>
+                  <p className="mt-2 text-3xl font-black tracking-tighter text-blue-600">
+                    {formatWon(plan.pricing.finalAmount)}
+                  </p>
+                  <p className="mt-2 text-sm text-gray-500">
+                    월 {formatWon(plan.pricing.unitPrice - plan.pricing.planDiscount)} 기준 ·{' '}
+                    {formatWon(plan.pricing.discountAmount)} 할인
+                  </p>
+                </>
+              ) : (
+                <p className="text-sm font-semibold text-gray-400">
+                  {pricingLoading ? '가격 확인 중...' : '가격 문의'}
+                </p>
+              )}
             </div>
 
             <div
@@ -230,9 +247,9 @@ function PaymentContent() {
             결제 정보
           </h2>
 
-          {errorMessage && (
+          {(errorMessage || pricingError) && (
             <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-600">
-              {errorMessage}
+              {errorMessage || pricingError}
             </div>
           )}
 
@@ -278,15 +295,22 @@ function PaymentContent() {
         ) : (
           <button
             onClick={handleProceed}
-            disabled={submitting}
+            // 서버 가격을 못 받았으면 진행하지 않는다 — 표시가 없이 결제로 넘어가면 안 된다.
+            disabled={submitting || !selectedPlan?.pricing}
             className={`flex w-full items-center justify-center gap-2 rounded-2xl py-5 text-lg font-bold shadow-xl transition-all duration-300 ${
-              submitting
+              submitting || !selectedPlan?.pricing
                 ? 'cursor-not-allowed bg-gray-200 text-gray-400'
                 : 'bg-gray-900 text-white hover:bg-black'
             }`}
           >
-            {submitting ? '확인 중...' : '결제 진행하기'}
-            {!submitting && <ArrowRight size={20} />}
+            {submitting
+              ? '확인 중...'
+              : selectedPlan?.pricing
+                ? '결제 진행하기'
+                : pricingLoading
+                  ? '가격 확인 중...'
+                  : '가격 정보를 불러올 수 없습니다'}
+            {!submitting && selectedPlan?.pricing && <ArrowRight size={20} />}
           </button>
         )}
 

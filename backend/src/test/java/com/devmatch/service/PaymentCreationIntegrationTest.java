@@ -84,7 +84,8 @@ class PaymentCreationIntegrationTest {
         assertThat(res.getMatchingId()).isNull();
         assertThat(res.getStatus()).isEqualTo(PaymentStatus.PENDING);
         assertThat(res.getOrderId()).startsWith("DEVMATCH-");
-        assertThat(res.getAmount()).isEqualTo(990_000);
+        // 1개월 IMMEDIATE = 기본 단가(묶음 할인 없음). 가격 정책은 PaymentServiceTest 가 상세 검증한다.
+        assertThat(res.getAmount()).isEqualTo(1_300_000);
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.devmatch.dto.common.ApiResponse;
 import com.devmatch.dto.payment.PaymentConfirmRequest;
 import com.devmatch.dto.payment.PaymentCreateRequest;
 import com.devmatch.dto.payment.PaymentResponse;
+import com.devmatch.dto.payment.PlanPricingResponse;
 import com.devmatch.security.CustomUserDetails;
 import com.devmatch.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +25,21 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
+
+    @Operation(summary = "결제 플랜 가격 조회",
+            description = "플랜별 가격을 조회합니다. 결제 플랜 카드는 이 값을 그대로 표시해야 화면 표시가와 실제 청구액이 일치합니다. "
+                    + "비로그인 시 최초 결제 기준가, 로그인 시 본인 연장 회차가 반영됩니다.")
+    @GetMapping("/pricing")
+    public ResponseEntity<ApiResponse<List<PlanPricingResponse>>> getPlanPricing(
+            @AuthenticationPrincipal CustomUserDetails user,
+            @RequestParam(defaultValue = "4") int months
+    ) {
+        Long userId = user != null ? user.getUserId() : null;
+        List<PlanPricingResponse> pricing = paymentService.previewAllPlans(userId, months).stream()
+                .map(PlanPricingResponse::from)
+                .toList();
+        return ResponseEntity.ok(ApiResponse.success(pricing));
+    }
 
     @Operation(summary = "결제 생성", description = "결제를 생성합니다. orderId가 자동 생성되며, 프론트엔드에서 토스 SDK 호출에 사용됩니다.")
     @PostMapping

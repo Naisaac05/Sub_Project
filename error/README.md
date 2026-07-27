@@ -44,6 +44,7 @@
 ```
 
 ## 인덱스
+- [2026-07-27 결제 플랜 표시가와 백엔드 청구액이 약 111만원 차이 (가격 정책이 두 곳에 따로 존재)](2026-07-27-payment-price-mismatch.md)
 - [2026-07-10 Ollama model pool first endpoint only](2026-07-10-ollama-model-pool-first-endpoint-only.md)
 - [2026-07-10 Spring multiple constructors autowire](2026-07-10-spring-multiple-constructors-autowire.md)
 - [2026-07-10 Payment confirm auto match and application phone](2026-07-10-payment-confirm-auto-match-and-application-phone.md)

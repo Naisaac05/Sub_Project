@@ -27,6 +27,7 @@ jwt:
 app:
   payment:
     # 학생 포트폴리오 정책: 승인·취소 모두 기본 false. 실호출이 필요할 때만 env 로 true + test 키 사용.
+    # false 인 동안 승인된 결제는 paymentKey 가 MOCK- 로 시작하므로 실제 승인 건과 구분된다.
     toss-confirm-enabled: ${TOSS_CONFIRM_ENABLED:false}
     toss-cancel-enabled: ${TOSS_CANCEL_ENABLED:false}
   auth:
