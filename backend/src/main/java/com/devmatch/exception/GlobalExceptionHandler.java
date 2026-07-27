@@ -213,6 +213,18 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(e.getMessage()));
     }
 
+    @ExceptionHandler(PaymentInProgressException.class)
+    public ResponseEntity<ApiResponse<Void>> handlePaymentInProgress(PaymentInProgressException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(QueueNotAdmittedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleQueueNotAdmitted(QueueNotAdmittedException e) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(ApiResponse.error(e.getMessage()));
+    }
+
     @ExceptionHandler(PostNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handlePostNotFound(PostNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)

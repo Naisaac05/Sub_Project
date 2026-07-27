@@ -22,7 +22,10 @@ public class Payment {
     private Long userId;
 
     // 신청서 연결 (결제는 신청서 기반으로 생성됨)
-    @Column(name = "application_id", nullable = false)
+    // unique=true — 신청서 1건당 결제 1건 불변식의 최후 보루(DB 레벨).
+    // PaymentService.createPayment 의 existsByApplicationId 선검사(check-then-act)는
+    // 동시 요청 경쟁에 취약하므로, 이 제약이 실제 중복 INSERT 를 물리적으로 거부한다.
+    @Column(name = "application_id", nullable = false, unique = true)
     private Long applicationId;
 
     // 매칭 연결 (결제 후 추천→선택 완료 시 세팅됨, 처음에는 null)
@@ -48,22 +51,24 @@ public class Payment {
     private String courseType;
 
     // 묶음 결제 개월 수
-    @Column(name = "months_bundled")
+    // nullable = false — @Builder.Default 기본값이 곧 "항상 값이 있다"는 의도다.
+    // DB 도 V4 마이그레이션에서 NOT NULL DEFAULT 로 맞췄다.
+    @Column(name = "months_bundled", nullable = false)
     @Builder.Default
     private Integer monthsBundled = 1;
 
     // 연장 회차 (0=최초 결제, 1=1회 연장, 2=2회 연장...)
-    @Column(name = "renewal_count")
+    @Column(name = "renewal_count", nullable = false)
     @Builder.Default
     private Integer renewalCount = 0;
 
     // 적용된 할인 금액 (원)
-    @Column(name = "discount_applied")
+    @Column(name = "discount_applied", nullable = false)
     @Builder.Default
     private Integer discountApplied = 0;
 
     // 할부 개월 수
-    @Column(name = "installment_months")
+    @Column(name = "installment_months", nullable = false)
     @Builder.Default
     private Integer installmentMonths = 0;
 

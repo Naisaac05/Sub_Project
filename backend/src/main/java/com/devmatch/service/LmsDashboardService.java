@@ -40,7 +40,7 @@ public class LmsDashboardService {
                 progressRate = (int) ((completedWeeks * 100) / curriculum.getTotalWeeks());
             }
             discordUrl = curriculum.getDiscordUrl();
-            mentoringEndDate = curriculum.getEndDate() != null ? curriculum.getEndDate().toString() : null;
+            mentoringEndDate = curriculum.getEndDate().toString();
         }
 
         // 출석률: 완료 세션 / 전체 세션 (CANCELLED 제외)
@@ -92,14 +92,14 @@ public class LmsDashboardService {
                 activities.add(DashboardResponse.ActivityItem.builder()
                         .type("ASSIGNMENT")
                         .title(a.getTitle())
-                        .createdAt(a.getCreatedAt() != null ? a.getCreatedAt().toString() : "N/A")
+                        .createdAt(a.getCreatedAt().toString())
                         .build()));
 
         noteRepository.findByMatchingIdOrderByCreatedAtDesc(matchingId).stream().limit(3).forEach(n ->
                 activities.add(DashboardResponse.ActivityItem.builder()
                         .type("NOTE")
                         .title(n.getTitle())
-                        .createdAt(n.getCreatedAt() != null ? n.getCreatedAt().toString() : "N/A")
+                        .createdAt(n.getCreatedAt().toString())
                         .build()));
 
         matchingSessions.stream()
@@ -108,14 +108,12 @@ public class LmsDashboardService {
                 .forEach(s -> activities.add(DashboardResponse.ActivityItem.builder()
                         .type("SESSION")
                         .title(s.getCategory() + " 세션 완료")
-                        .createdAt(s.getUpdatedAt() != null ? s.getUpdatedAt().toString() : "N/A")
+                        .createdAt(s.getUpdatedAt().toString())
                         .build()));
 
-        activities.sort((a, b) -> {
-            if (a.getCreatedAt().equals("N/A")) return 1;
-            if (b.getCreatedAt().equals("N/A")) return -1;
-            return b.getCreatedAt().compareTo(a.getCreatedAt());
-        });
+        // createdAt 은 항상 실제 타임스탬프 문자열이다(엔티티 감사 필드, DB NOT NULL).
+        // ISO-8601 문자열이라 사전순 정렬 = 시간순 정렬이므로 최신순으로 뒤집는다.
+        activities.sort(Comparator.comparing(DashboardResponse.ActivityItem::getCreatedAt).reversed());
         List<DashboardResponse.ActivityItem> topActivities = activities.stream().limit(5).toList();
 
         // 멘토 정보

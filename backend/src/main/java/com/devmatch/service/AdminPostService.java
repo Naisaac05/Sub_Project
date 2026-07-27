@@ -84,9 +84,7 @@ public class AdminPostService {
         Map<String, Object> metadata = new HashMap<>();
         metadata.put("title", post.getTitle());
         metadata.put("category", post.getCategory());
-        if (post.getAuthor() != null) {
-            metadata.put("authorId", post.getAuthor().getId());
-        }
+        metadata.put("authorId", post.getAuthor().getId());
         metadata.put("commentCount", post.getCommentCount());
 
         auditLogService.record(adminId, AdminActionType.POST_DELETE,
@@ -105,7 +103,8 @@ public class AdminPostService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("댓글을 찾을 수 없습니다."));
 
-        if (comment.getPost() == null || !comment.getPost().getId().equals(postId)) {
+        // comment.post 는 nullable = false 이므로 소유권만 검사한다.
+        if (!comment.getPost().getId().equals(postId)) {
             throw new IllegalArgumentException("해당 게시글의 댓글이 아닙니다.");
         }
 
@@ -114,9 +113,7 @@ public class AdminPostService {
 
         Map<String, Object> metadata = new HashMap<>();
         metadata.put("postId", postId);
-        if (comment.getAuthor() != null) {
-            metadata.put("authorId", comment.getAuthor().getId());
-        }
+        metadata.put("authorId", comment.getAuthor().getId());
         metadata.put("content", comment.getContent());
 
         auditLogService.record(adminId, AdminActionType.COMMENT_DELETE,

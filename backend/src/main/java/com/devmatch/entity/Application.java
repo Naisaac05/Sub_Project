@@ -128,9 +128,11 @@ public class Application {
     @JoinColumn(name = "assigned_mentor_id")
     private User assignedMentor;
 
+    // nullable = false — 조인 테이블의 원소 컬럼에 NULL 은 의미가 없다.
+    // 허용하면 Set 안에 null 원소가 섞여 들어온다. DB 도 V5 마이그레이션에서 NOT NULL 로 맞췄다.
     @ElementCollection
     @CollectionTable(name = "application_rejected_mentors", joinColumns = @JoinColumn(name = "application_id"))
-    @Column(name = "mentor_id")
+    @Column(name = "mentor_id", nullable = false)
     @Builder.Default
     private Set<Long> rejectedMentors = new HashSet<>();
 

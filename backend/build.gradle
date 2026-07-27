@@ -59,6 +59,10 @@ dependencies {
     // Database
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    // DB 마이그레이션 (스키마 변경의 단일 창구 — ddl-auto 는 validate 로만 사용)
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

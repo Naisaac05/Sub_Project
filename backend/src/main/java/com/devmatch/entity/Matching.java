@@ -59,7 +59,9 @@ public class Matching {
     private LocalDate trialEndDate;
 
     // 멘토 변경 횟수 (체험 기간 내 무료 변경 추적용)
-    @Column(name = "swap_count")
+    // nullable = false — swap() 이 swapCount++ 로 언박싱하므로 NULL 이면 NPE 다.
+    // DB 도 V4 마이그레이션에서 NOT NULL DEFAULT 0 으로 맞췄다.
+    @Column(name = "swap_count", nullable = false)
     @Builder.Default
     private Integer swapCount = 0;
 

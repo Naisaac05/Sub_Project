@@ -53,3 +53,4 @@
 - 📄 [20260615_ai_review-v2-admin-learning-loop-design.md](./20260615_ai_review-v2-admin-learning-loop-design.md) — *Ollama 기반 AI Review v2 Admin Learning Loop Design 상세 요구사항 및 기능 동작 명세서*
 - 📄 [20260615_v2_approved-fast-path-ollama-fallback-design.md](./20260615_v2_approved-fast-path-ollama-fallback-design.md) — *v2 Approved Fast Path와 Ollama Fallback 단일 운영 설계 상세 요구사항 및 기능 동작 명세서*
 - 📄 [20260616_ai_review-course-scope-gate-design.md](./20260616_ai_review-course-scope-gate-design.md) — *과목별 허용 범위를 제어하는 AI 리뷰 코스 Scope Gate 아키텍처 설계서*
+- 📄 [20260727_payment_idempotency-and-waiting-queue-design.md](./20260727_payment_idempotency-and-waiting-queue-design.md) — *결제 중복 방어 3계층(분산 락·멱등성·유니크 제약)과 Redis 대기열 아키텍처 설계 및 구현 기록*

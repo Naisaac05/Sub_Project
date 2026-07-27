@@ -22,7 +22,8 @@ final class AiReviewContextSupport {
     static AiReviewSession requireOwnedSession(Optional<AiReviewSession> session, Long userId) {
         AiReviewSession resolved = session
                 .orElseThrow(() -> new TestNotFoundException("AI 복습 세션을 찾을 수 없습니다."));
-        Long ownerId = resolved.getUser() == null ? null : resolved.getUser().getId();
+        // session.user 는 nullable = false 이므로 직접 역참조한다.
+        Long ownerId = resolved.getUser().getId();
         if (!Objects.equals(ownerId, userId)) {
             throw new TestNotFoundException("AI 복습 세션을 찾을 수 없습니다.");
         }
