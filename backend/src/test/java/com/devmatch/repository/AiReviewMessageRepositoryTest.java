@@ -16,7 +16,15 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
+/**
+ * 이 테스트는 H2 임베디드 DB 에서 돈다. Flyway 마이그레이션(V1 베이스라인)은 MySQL 전용 DDL 이라
+ * H2 에서 실행하면 문법 오류가 나므로 끄고, 스키마는 Hibernate 가 엔티티로부터 생성하게 한다
+ * (@DataJpaTest 기본값 create-drop).
+ */
+@DataJpaTest(properties = {
+        "spring.flyway.enabled=false",
+        "spring.jpa.hibernate.ddl-auto=create-drop"
+})
 @Import(JpaAuditingConfig.class)
 class AiReviewMessageRepositoryTest {
 

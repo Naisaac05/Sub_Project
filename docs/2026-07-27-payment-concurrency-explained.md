@@ -402,3 +402,121 @@ db/migration/
 도입 시 `ddl-auto` 를 `validate` 로 바꾸는 게 **역할 분담의 선언**이다:
 Flyway 가 구조 변경의 유일한 주체, Hibernate 는 검사만. 그러면 오늘 같은
 "코드엔 있는데 DB 엔 없는" 상태가 **구조적으로 불가능**해진다.
+
+---
+
+## 10. Flyway 도입 실행 — 점검 루프에서 나온 것들
+
+9장의 계획대로 실제 도입했다. **"바꾸고 → 띄우고 → 깨진 걸 고치고 → 다시 띄우는"** 점검 루프를
+돌렸는데, 그 과정에서 **숨어 있던 결함 3건**이 드러났다. 이게 도입의 진짜 수확이다.
+
+### 구성
+
+```
+backend/src/main/resources/db/migration/
+  V1__baseline_schema.sql                      기존 스키마 스냅샷 (38개 테이블)
+  V2__add_unique_application_id_on_payments.sql 유니크 제약
+  V3__make_payments_matching_id_nullable.sql    드리프트 교정
+```
+
+```yaml
+flyway:
+  enabled: true
+  baseline-on-migrate: true   # 기존 DB 는 V1 을 "적용됨" 표시만 하고 건너뜀
+  baseline-version: 1
+jpa:
+  hibernate:
+    ddl-auto: validate        # 구조 변경은 Flyway, Hibernate 는 검사만
+```
+
+`baseline-on-migrate` 덕분에 **기존 DB 와 신규 DB 가 같은 파일로 다르게 동작**한다.
+- 기존 DB(테이블 이미 있음): V1 을 실행하지 않고 "적용됨"으로 기록 → V2, V3 만 실행
+- 빈 DB(신규 환경): V1 이 실제로 38개 테이블을 만들고 → V2, V3 순서로 진행
+
+실제 히스토리 테이블:
+
+| version | description | type | success |
+|---|---|---|---|
+| 1 | << Flyway Baseline >> | BASELINE | ✓ |
+| 2 | add unique application id on payments | SQL | ✓ |
+| 3 | make payments matching id nullable | SQL | ✓ |
+
+### 발견 1 — 베이스라인이 빈 DB 에서 실패했다 (FK 순서)
+
+`mysqldump` 는 테이블을 **알파벳순**으로 출력한다. 그래서 `ai_review_candidate_audits` 가
+아직 만들어지지 않은 `ai_review_candidates` 를 외래키로 참조하면서 터졌다.
+
+```
+ERROR 1824 (HY000): Failed to open the referenced table 'ai_review_candidates'
+```
+
+기존 DB 에서는 V1 이 아예 실행되지 않으니 **아무도 몰랐을** 문제다. 신규 환경 배포에서만 터진다.
+해결은 생성 구간에만 FK 검사를 끄는 것:
+
+```sql
+SET FOREIGN_KEY_CHECKS = 0;
+-- ... CREATE TABLE 38개 ...
+SET FOREIGN_KEY_CHECKS = 1;
+```
+
+> **교훈**: 베이스라인은 만들어만 두면 안 되고 **빈 DB 에 실제로 적용해봐야** 한다.
+
+### 발견 2 — H2 테스트가 MySQL 마이그레이션을 실행하려 했다
+
+`@DataJpaTest` 는 H2 임베디드 DB 를 쓰는데, Flyway 를 켜자 H2 에 MySQL 전용 DDL 을 실행하려다
+문법 오류로 깨졌다.
+
+```java
+@DataJpaTest(properties = {
+        "spring.flyway.enabled=false",
+        "spring.jpa.hibernate.ddl-auto=create-drop"   // 스키마는 엔티티로부터 생성
+})
+```
+
+> **교훈**: 마이그레이션 SQL 은 **특정 DB 방언에 묶인다.** 테스트가 다른 DB 를 쓰면 분리해야 한다.
+
+### ★ 발견 3 — `validate` 도 못 잡는 드리프트 (진짜 버그)
+
+`ddl-auto: validate` 로 바꿨는데 앱이 **그냥 떴다.** 그런데 안심하면 안 됐다.
+
+> **`validate` 는 테이블/컬럼 존재와 타입만 검사한다. NOT NULL 여부·유니크 제약·기본값은 안 본다.**
+
+그래서 38개 테이블 × 36개 엔티티를 직접 대조했더니 **1건**이 나왔다.
+
+| 테이블.컬럼 | DB | 엔티티 | 결과 |
+|---|---|---|---|
+| `payments.matching_id` | `NOT NULL` | `Long` (nullable) | 결제 생성이 **항상 실패** |
+
+`PaymentService.createPayment` 는 `matchingId` 를 세팅하지 않으므로 NULL 로 INSERT 된다.
+
+```
+ERROR 1048 (23000): Column 'matching_id' cannot be null
+```
+
+`DataInitializer` 도 시드 결제 5건을 `matchingId(null)` 로 저장하므로, **빈 DB 부팅 시 시드 단계에서
+먼저 터진다.**
+
+원인은 전형적인 드리프트다. 엔티티는 처음부터 nullable 을 의도했지만
+(주석 "처음에는 null" + `linkMatching()` 메서드), DB 컬럼은 과거 `ddl-auto` 가 NOT NULL 로
+만들어놓은 뒤 **`update` 모드가 제약을 완화하지 않아 그대로 굳었다.**
+
+수정 방향은 **DB 를 엔티티 의도에 맞추는 것**(V3). 엔티티에 `nullable = false` 를 붙이는 게 아니다.
+
+> **교훈**: `validate` 통과 = 안전이 아니다. `validate` 가 보는 범위를 알고,
+> 나머지는 사람이 확인해야 한다.
+
+### 검증 결과
+
+| 항목 | 결과 |
+|---|---|
+| 전체 테스트 | 236개 전량 통과 |
+| 기존 DB 기동 | V2 → V3 자동 적용 후 정상 기동 |
+| 빈 DB 에서 V1 적용 | 38개 테이블 생성 확인 |
+| 유니크 제약 (V2) | 중복 INSERT → `ERROR 1062` 거부 |
+| 드리프트 수정 (V3) | 이전에 실패하던 NULL INSERT 성공 |
+
+### 남은 것 — 역방향 드리프트
+
+전수 조사에서 **DB 는 nullable 인데 엔티티는 기본값이 있는** 반대 방향 케이스도 몇 건 보였다
+(`matchings.swap_count`, `payments.course_type`, `payments.months_bundled` 등).
+INSERT 실패로 이어지진 않아 이번 범위 밖으로 뒀지만, 의도적인지 확인해둘 가치는 있다.

@@ -177,9 +177,25 @@ List 로도 큐는 되지만 "앞에 몇 명" 조회가 불가능해 대기 화�
 > 검증 중 수동 Redis 테스트가 계속 비워지는 현상이 있었는데, 원인은 **실행 중인 앱의 승격
 > 스케줄러가 실제로 큐를 소비하고 있었기 때문**이었다. 기능이 정상 동작한다는 반증이 된 셈이다.
 
-## 7. 배포 주의 — dev/prod 모두 수동 DDL 필요
+## 7. 스키마 반영 — Flyway 로 전환됨 (2026-07-27 후속)
 
-**`ddl-auto: update` 는 기존 테이블 컬럼에 유니크 제약을 추가하지 않는다.** 실측 결과 Hibernate 는
-`application_id` 유니크 DDL 을 아예 생성하지 않았고(중복 데이터가 없었음에도), 인덱스는 수동
-`ALTER TABLE` 로 생성한 뒤에야 적용됐다. prod(`validate`)는 물론 **dev 도 수동 실행이 필요**하다.
-절차와 검증 SQL 은 에러 기록 문서 참조.
+최초에는 `ddl-auto: update` 가 기존 테이블 컬럼에 유니크 제약을 추가하지 않아 **dev/prod 모두
+수동 `ALTER TABLE` 이 필요**했다. 이 문제를 근본 해결하기 위해 같은 날 Flyway 를 도입했다.
+
+```
+backend/src/main/resources/db/migration/
+  V1__baseline_schema.sql                        기존 38개 테이블 스냅샷
+  V2__add_unique_application_id_on_payments.sql  본 설계의 유니크 제약
+  V3__make_payments_matching_id_nullable.sql     도입 중 발견한 드리프트 교정
+```
+
+- `ddl-auto` 를 `validate` 로 전환 — 구조 변경은 Flyway 가 유일한 주체, Hibernate 는 검사만.
+- `baseline-on-migrate: true` — 기존 DB 는 V1 을 건너뛰고, 빈 DB 는 V1 부터 전체 적용.
+- **수동 DDL 절차는 더 이상 필요 없다.** 앱 기동 시 자동 적용된다.
+
+도입 과정에서 결함 3건(베이스라인 FK 순서, H2 테스트 충돌, `payments.matching_id` NOT NULL
+드리프트로 인한 **결제 생성 상시 실패**)이 드러나 함께 수정했다.
+자세한 내용은 `error/2026-07-27-flyway-adoption-schema-drift.md` 참조.
+
+> 주의: `ddl-auto: validate` 는 테이블/컬럼 존재와 타입만 검사하고 **nullability·유니크 제약은
+> 검사하지 않는다.** 통과했다고 스키마가 정합하다는 뜻이 아니다.

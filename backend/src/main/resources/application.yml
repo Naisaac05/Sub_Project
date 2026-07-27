@@ -9,10 +9,23 @@ spring:
     password: ${DB_PASSWORD:adminuser}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  # ===== DB 마이그레이션 (Flyway) =====
+  # 스키마 변경의 단일 창구. db/migration 의 V*.sql 을 순서대로 적용하고
+  # flyway_schema_history 테이블에 이력을 남긴다.
+  # baseline-on-migrate: 이미 테이블이 있는 기존 DB 는 V1(baseline) 을 "적용됨"으로 표시만 하고
+  # 실행하지 않는다. 빈 DB(신규 환경)에서는 V1 이 실제로 스키마를 생성한다.
+  flyway:
+    enabled: ${FLYWAY_ENABLED:true}
+    baseline-on-migrate: true
+    baseline-version: 1
+    locations: classpath:db/migration
+
   # ===== JPA / Hibernate =====
   jpa:
     hibernate:
-      ddl-auto: update
+      # validate — 스키마 생성/변경은 Flyway 담당, Hibernate 는 엔티티와 DB 가 맞는지 검사만 한다.
+      # 어긋나면 기동이 중단되므로 "코드엔 있는데 DB 엔 없는" 상태가 구조적으로 불가능해진다.
+      ddl-auto: ${JPA_DDL_AUTO:validate}
     show-sql: true
     properties:
       hibernate:
